@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>instanceType — scene-render 1.1.1 schema</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body data-root="../">
+<header><div class="bar"><a class="brand" href="../index.html">scene-render 1.1.1 schema</a>
+<nav><a href="../index.html">Overview</a> <a href="../elements.html">Elements</a> <a href="../types.html">Types</a> <a href="../simple-types.html">Simple types</a> <a href="../groups.html">Groups</a> <a href="../rules.html">Rules</a></nav>
+<div class="search"><input id="q" type="search" placeholder="Search elements, attributes, types  ( / )" autocomplete="off" aria-label="Search"><ul id="res" class="results"></ul></div></div></header>
+<main>
+<h1>instanceType</h1>
+<div class="sub">Type of <code>&lt;instance&gt;</code> in <a href="../type/groupType.html"><code>groupType</code></a>, <a href="../type/sequenceType.html"><code>sequenceType</code></a>, <a href="../type/repeatType.html"><code>repeatType</code></a>, <a href="../type/compositionType.html"><code>compositionType</code></a>, <a href="../type/symbolType.html"><code>symbolType</code></a></div>
+<div class="doc"><p>Instantiates a symbol (precomposition / component). The symbol runs on its own clock: local time = (t - start) * speed + clipIn, looped/reversed as for layers, or mapped by timeRemap. override children change attributes of elements inside this instance only; ids inside a symbol are scoped to the instance (effective id = instanceId/innerId).</p></div>
+<h2>Content</h2>
+<ul class="model"><li><span class="lbl">one of</span><span class="occ">any number</span><ul class="model"><li><details><summary>group <a href="../groups.html#nodeBehaviour"><code>nodeBehaviour</code></a></summary><ul class="model"><li><span class="lbl">one of</span><ul class="model"><li><details><summary>group <a href="../groups.html#animationElements"><code>animationElements</code></a></summary><ul class="model"><li><span class="lbl">one of</span><ul class="model"><li><a href="../type/animateType.html"><code>&lt;animate&gt;</code></a></li><li><a href="../type/expressionType.html"><code>&lt;expression&gt;</code></a></li><li><a href="../type/motionPathType.html"><code>&lt;motionPath&gt;</code></a></li><li><a href="../type/linkType.html"><code>&lt;link&gt;</code></a></li></ul></li></ul></details></li><li><a href="../type/maskType.html"><code>&lt;mask&gt;</code></a></li><li><a href="../type/transformConstraintType.html"><code>&lt;transformConstraint&gt;</code></a></li></ul></li></ul></details></li><li><a href="../type/overrideType.html"><code>&lt;override&gt;</code></a></li><li><a href="../type/timeRemapType.html"><code>&lt;timeRemap&gt;</code></a></li></ul></li></ul>
+<h2>Attributes</h2>
+<div class="wrap"><table><thead><tr><th>Attribute</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr class="from"><td colspan="4">declared here</td></tr>
+<tr id="a-symbol"><td class="n"><code>symbol</code> <span class="req">required</span></td><td><code>xs:IDREF</code></td><td></td><td></td></tr>
+<tr id="a-blend"><td class="n"><code>blend</code></td><td><a href="../simple-types.html#blendType"><code>blendType</code></a></td><td><code>normal</code></td><td></td></tr>
+<tr id="a-effects"><td class="n"><code>effects</code></td><td><code>xs:IDREFS</code></td><td></td><td></td></tr>
+<tr id="a-clipIn"><td class="n"><code>clipIn</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-clipOut"><td class="n"><code>clipOut</code></td><td><code>xs:double</code></td><td></td><td></td></tr>
+<tr id="a-loop"><td class="n"><code>loop</code></td><td><code>xs:nonNegativeInteger</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-reverse"><td class="n"><code>reverse</code></td><td><code>xs:boolean</code></td><td><code>false</code></td><td></td></tr>
+<tr id="a-speed"><td class="n"><code>speed</code></td><td><code>xs:double</code></td><td><code>1</code></td><td></td></tr>
+<tr id="a-fit"><td class="n"><code>fit</code></td><td><a href="../simple-types.html#fitType"><code>fitType</code></a></td><td><code>none</code></td><td></td></tr>
+<tr id="a-boxWidth"><td class="n"><code>boxWidth</code></td><td><a href="../simple-types.html#positiveLengthType"><code>positiveLengthType</code></a></td><td></td><td></td></tr>
+<tr id="a-boxHeight"><td class="n"><code>boxHeight</code></td><td><a href="../simple-types.html#positiveLengthType"><code>positiveLengthType</code></a></td><td></td><td></td></tr>
+<tr class="from"><td colspan="4">from attribute group <a href="../groups.html#nodeAttributes"><code>nodeAttributes</code></a></td></tr>
+<tr id="a-id"><td class="n"><code>id</code> <span class="req">required</span></td><td><code>xs:ID</code></td><td></td><td></td></tr>
+<tr id="a-name"><td class="n"><code>name</code></td><td><code>xs:string</code></td><td></td><td></td></tr>
+<tr id="a-tags"><td class="n"><code>tags</code></td><td><code>xs:NMTOKENS</code></td><td></td><td></td></tr>
+<tr id="a-z"><td class="n"><code>z</code></td><td><code>xs:int</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-visible"><td class="n"><code>visible</code></td><td><code>xs:boolean</code></td><td><code>true</code></td><td></td></tr>
+<tr id="a-opacity"><td class="n"><code>opacity</code></td><td><a href="../simple-types.html#unitDecimal"><code>unitDecimal</code></a></td><td><code>1</code></td><td></td></tr>
+<tr id="a-start"><td class="n"><code>start</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-end"><td class="n"><code>end</code></td><td><code>xs:double</code></td><td></td><td></td></tr>
+<tr id="a-startMarker"><td class="n"><code>startMarker</code></td><td><code>xs:IDREF</code></td><td></td><td></td></tr>
+<tr id="a-endMarker"><td class="n"><code>endMarker</code></td><td><code>xs:IDREF</code></td><td></td><td></td></tr>
+<tr id="a-condition"><td class="n"><code>condition</code></td><td><a href="../simple-types.html#expressionString"><code>expressionString</code></a></td><td></td><td><div class="doc"><p>Node is rendered only when the expression is truthy (e.g. &quot;param(&#x27;showPrice&#x27;)&quot;).</p></div></td></tr>
+<tr id="a-parent"><td class="n"><code>parent</code></td><td><code>xs:IDREF</code></td><td></td><td><div class="doc"><p>Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type=&quot;parent&quot;.</p></div></td></tr>
+<tr id="a-motionBlur"><td class="n"><code>motionBlur</code></td><td><a href="../simple-types.html#triStateType"><code>triStateType</code></a></td><td><code>inherit</code></td><td></td></tr>
+<tr id="a-threeD"><td class="n"><code>threeD</code></td><td><code>xs:boolean</code></td><td><code>false</code></td><td><div class="doc"><p>2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.</p></div></td></tr>
+<tr id="a-zDepth"><td class="n"><code>zDepth</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-rotationX"><td class="n"><code>rotationX</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-rotationY"><td class="n"><code>rotationY</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-matte"><td class="n"><code>matte</code></td><td><code>xs:IDREF</code></td><td></td><td><div class="doc"><p>Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible=&quot;true&quot;.</p></div></td></tr>
+<tr id="a-matteMode"><td class="n"><code>matteMode</code></td><td><a href="../simple-types.html#matteModeType"><code>matteModeType</code></a></td><td><code>alpha</code></td><td></td></tr>
+<tr id="a-matteVisible"><td class="n"><code>matteVisible</code></td><td><code>xs:boolean</code></td><td><code>false</code></td><td></td></tr>
+<tr id="a-alignX"><td class="n"><code>alignX</code></td><td>one of <span class="chip"><code>left</code></span> <span class="chip"><code>center</code></span> <span class="chip"><code>right</code></span> <span class="chip"><code>stretch</code></span></td><td></td><td><div class="doc"><p>Responsive anchoring: overrides x so the node&#x27;s box aligns within alignTo.</p></div></td></tr>
+<tr id="a-alignY"><td class="n"><code>alignY</code></td><td>one of <span class="chip"><code>top</code></span> <span class="chip"><code>middle</code></span> <span class="chip"><code>bottom</code></span> <span class="chip"><code>stretch</code></span></td><td></td><td></td></tr>
+<tr id="a-alignTo"><td class="n"><code>alignTo</code></td><td>one of <span class="chip"><code>parent</code></span> <span class="chip"><code>frame</code></span> <span class="chip"><code>safe-area</code></span></td><td><code>parent</code></td><td></td></tr>
+<tr id="a-margin"><td class="n"><code>margin</code></td><td><a href="../simple-types.html#lengthType"><code>lengthType</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-x"><td class="n"><code>x</code></td><td><a href="../simple-types.html#lengthType"><code>lengthType</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-y"><td class="n"><code>y</code></td><td><a href="../simple-types.html#lengthType"><code>lengthType</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-rotation"><td class="n"><code>rotation</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-scaleX"><td class="n"><code>scaleX</code></td><td><code>xs:double</code></td><td><code>1</code></td><td></td></tr>
+<tr id="a-scaleY"><td class="n"><code>scaleY</code></td><td><code>xs:double</code></td><td><code>1</code></td><td></td></tr>
+<tr id="a-anchorX"><td class="n"><code>anchorX</code></td><td><a href="../simple-types.html#lengthType"><code>lengthType</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-anchorY"><td class="n"><code>anchorY</code></td><td><a href="../simple-types.html#lengthType"><code>lengthType</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-skewX"><td class="n"><code>skewX</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-skewY"><td class="n"><code>skewY</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr></tbody></table></div>
+<h2>Schematron rules</h2>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>layer[@fit and @fit!=&#x27;none&#x27;] | instance[@fit and @fit!=&#x27;none&#x27;]</code> <a class="lbl" href="../rules.html#p10">p10</a></div><div class="assert"><span class="id">C16</span>fit=&quot;<code>{@fit}</code>&quot; requires @boxWidth and @boxHeight.<code class="test">test: @boxWidth and @boxHeight</code></div></div>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>*[@effects]</code> <a class="lbl" href="../rules.html#p27">p27</a></div><div class="assert"><span class="id">R6</span>every id in @effects of &quot;<code>{@id}</code>&quot; must name an effect.<code class="test">test: count(str:tokenize(normalize-space(@effects),&#x27; &#x27;)) = count(/scene/effects/effect[contains(concat(&#x27; &#x27;,normalize-space(current()/@effects),&#x27; &#x27;), concat(&#x27; &#x27;,@id,&#x27; &#x27;))])</code></div></div>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>*[@matte][not(self::transition)]</code> <a class="lbl" href="../rules.html#p29">p29</a></div><div class="assert"><span class="id">R8</span>@matte must name a composition node.<code class="test">test: /scene/composition//*[@id=current()/@matte] or /scene/symbols//*[@id=current()/@matte]</code></div><div class="assert"><span class="id">R9</span>a node cannot be its own matte.<code class="test">test: @matte != @id</code></div></div>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>*[@parent][self::layer or self::shape or self::group or self::sequence or self::instance or self::repeat or self::particleEmitter or self::object3D or self::adjustment or self::include]</code> <a class="lbl" href="../rules.html#p30">p30</a></div><div class="assert"><span class="id">R10</span>a node cannot parent itself.<code class="test">test: @parent != @id</code></div></div>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>instance</code> <a class="lbl" href="../rules.html#p31">p31</a></div><div class="assert"><span class="id">R11</span>instance/@symbol must name a symbol.<code class="test">test: /scene/symbols/symbol[@id=current()/@symbol]</code></div></div>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>*[@startMarker] | *[@endMarker] | key[@marker]</code> <a class="lbl" href="../rules.html#p37">p37</a></div><div class="assert"><span class="id">R21</span>marker references must name markers.<code class="test">test: (not(@startMarker) or /scene/markers/marker[@id=current()/@startMarker]) and (not(@endMarker) or /scene/markers/marker[@id=current()/@endMarker]) and (not(@marker) or /scene/markers/marker[@id=current()/@marker])</code></div></div>
+</main>
+<footer>Generated by sr-schemadoc from <a href="../scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>dff44fe7a1bedc518985b84f4afe59942cdd0d84350e8c5fcafe6bf0b60a27f9</code>) and <a href="../scene-render.sch">scene-render.sch</a> (SHA-256 <code>d56520fbcd0135324f1f76daf462579774502c4e3b8c0f8f359b155352c33fad</code>).</footer>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+</body>
+</html>

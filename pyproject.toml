@@ -1,0 +1,37 @@
+[project]
+name = "sr-core"
+dynamic = ["version"]
+description = "scene-render core: the canonical schema, its HTML reference, the SREP process, and scene video packages (SREP 1)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Pedro Anisio Silva"}]
+dependencies = []
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Multimedia :: Video",
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[project.scripts]
+# Scene video packages (.vpkg.zip, SREP 1); standard library only, no engine import.
+scenerender-vpkg = "sr_core.vpkg.cli:main"
+# Canonical static HTML reference of the scene-render XSD and Schematron.
+sr-schemadoc = "sr_core.schemadoc.cli:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = {attr = "sr_core.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["sr_core*"]
+
+[tool.setuptools.package-data]
+sr_core = ["vpkg/schema/*.json"]

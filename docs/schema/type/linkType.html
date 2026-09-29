@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>linkType — scene-render 1.1.1 schema</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body data-root="../">
+<header><div class="bar"><a class="brand" href="../index.html">scene-render 1.1.1 schema</a>
+<nav><a href="../index.html">Overview</a> <a href="../elements.html">Elements</a> <a href="../types.html">Types</a> <a href="../simple-types.html">Simple types</a> <a href="../groups.html">Groups</a> <a href="../rules.html">Rules</a></nav>
+<div class="search"><input id="q" type="search" placeholder="Search elements, attributes, types  ( / )" autocomplete="off" aria-label="Search"><ul id="res" class="results"></ul></div></div></header>
+<main>
+<h1>linkType</h1>
+<div class="sub">Type of <code>&lt;link&gt;</code> <details><summary>in 51 types</summary><a href="../type/animatedType.html"><code>animatedType</code></a>, <a href="../type/maskType.html"><code>maskType</code></a>, <a href="../type/transformConstraintType.html"><code>transformConstraintType</code></a>, <a href="../type/stopType.html"><code>stopType</code></a>, <a href="../type/gradientBaseType.html"><code>gradientBaseType</code></a>, <a href="../type/linearGradientType.html"><code>linearGradientType</code></a>, <a href="../type/radialGradientType.html"><code>radialGradientType</code></a>, <a href="../type/conicGradientType.html"><code>conicGradientType</code></a>, <a href="../type/meshPointType.html"><code>meshPointType</code></a>, <a href="../type/meshGradientType.html"><code>meshGradientType</code></a>, <a href="../type/patternPaintType.html"><code>patternPaintType</code></a>, <a href="../type/generatorAssetType.html"><code>generatorAssetType</code></a>, <a href="../type/chartAssetType.html"><code>chartAssetType</code></a>, <a href="../type/featureStyleType.html"><code>featureStyleType</code></a>, <a href="../type/geoLayerType.html"><code>geoLayerType</code></a>, <a href="../type/graticuleType.html"><code>graticuleType</code></a>, <a href="../type/pinType.html"><code>pinType</code></a>, <a href="../type/routeType.html"><code>routeType</code></a>, <a href="../type/mapAssetType.html"><code>mapAssetType</code></a>, <a href="../type/materialType.html"><code>materialType</code></a>, <a href="../type/warpPointType.html"><code>warpPointType</code></a>, <a href="../type/puppetPinType.html"><code>puppetPinType</code></a>, <a href="../type/modifierType.html"><code>modifierType</code></a>, <a href="../type/boneType.html"><code>boneType</code></a>, <a href="../type/textAnimatorType.html"><code>textAnimatorType</code></a>, <a href="../type/textPathType.html"><code>textPathType</code></a>, <a href="../type/shapeModifierType.html"><code>shapeModifierType</code></a>, <a href="../type/layerType.html"><code>layerType</code></a>, <a href="../type/shapeType.html"><code>shapeType</code></a>, <a href="../type/particleEmitterType.html"><code>particleEmitterType</code></a>, <a href="../type/object3DType.html"><code>object3DType</code></a>, <a href="../type/cameraType.html"><code>cameraType</code></a>, <a href="../type/groupType.html"><code>groupType</code></a>, <a href="../type/sequenceType.html"><code>sequenceType</code></a>, <a href="../type/instanceType.html"><code>instanceType</code></a>, <a href="../type/includeType.html"><code>includeType</code></a>, <a href="../type/repeatType.html"><code>repeatType</code></a>, <a href="../type/adjustmentType.html"><code>adjustmentType</code></a>, <a href="../type/transitionType.html"><code>transitionType</code></a>, <a href="../type/flockType.html"><code>flockType</code></a>, <a href="../type/fluidType.html"><code>fluidType</code></a>, <a href="../type/slimeType.html"><code>slimeType</code></a>, <a href="../type/erosionType.html"><code>erosionType</code></a>, <a href="../type/clayBlobType.html"><code>clayBlobType</code></a>, <a href="../type/effectType.html"><code>effectType</code></a>, <a href="../type/lightType.html"><code>lightType</code></a>, <a href="../type/forceFieldType.html"><code>forceFieldType</code></a>, <a href="../type/audioEffectType.html"><code>audioEffectType</code></a>, <a href="../type/audioTrackType.html"><code>audioTrackType</code></a>, <a href="../type/busType.html"><code>busType</code></a>, <a href="../type/masterType.html"><code>masterType</code></a></details></div>
+<div class="doc"><p>Drives @property from another value without writing an expression: source is &quot;nodeId.property&quot;, &quot;param:name&quot;, &quot;audio:trackId[:low|mid|high]&quot; or &quot;marker:id&quot;. output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.</p></div>
+<h2>Content</h2>
+<p>Empty: attributes only.</p>
+<h2>Attributes</h2>
+<div class="wrap"><table><thead><tr><th>Attribute</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr class="from"><td colspan="4">declared here</td></tr>
+<tr id="a-property"><td class="n"><code>property</code> <span class="req">required</span></td><td><code>xs:string</code></td><td></td><td></td></tr>
+<tr id="a-source"><td class="n"><code>source</code> <span class="req">required</span></td><td><code>xs:string</code></td><td></td><td></td></tr>
+<tr id="a-scale"><td class="n"><code>scale</code></td><td><code>xs:double</code></td><td><code>1</code></td><td></td></tr>
+<tr id="a-offset"><td class="n"><code>offset</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-min"><td class="n"><code>min</code></td><td><code>xs:double</code></td><td></td><td></td></tr>
+<tr id="a-max"><td class="n"><code>max</code></td><td><code>xs:double</code></td><td></td><td></td></tr>
+<tr id="a-delay"><td class="n"><code>delay</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-smoothing"><td class="n"><code>smoothing</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td><code>0</code></td><td></td></tr></tbody></table></div>
+</main>
+<footer>Generated by sr-schemadoc from <a href="../scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>dff44fe7a1bedc518985b84f4afe59942cdd0d84350e8c5fcafe6bf0b60a27f9</code>) and <a href="../scene-render.sch">scene-render.sch</a> (SHA-256 <code>d56520fbcd0135324f1f76daf462579774502c4e3b8c0f8f359b155352c33fad</code>).</footer>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+</body>
+</html>

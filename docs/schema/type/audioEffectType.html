@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>audioEffectType — scene-render 1.1.1 schema</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body data-root="../">
+<header><div class="bar"><a class="brand" href="../index.html">scene-render 1.1.1 schema</a>
+<nav><a href="../index.html">Overview</a> <a href="../elements.html">Elements</a> <a href="../types.html">Types</a> <a href="../simple-types.html">Simple types</a> <a href="../groups.html">Groups</a> <a href="../rules.html">Rules</a></nav>
+<div class="search"><input id="q" type="search" placeholder="Search elements, attributes, types  ( / )" autocomplete="off" aria-label="Search"><ul id="res" class="results"></ul></div></div></header>
+<main>
+<h1>audioEffectType</h1>
+<div class="sub">Type of <code>&lt;audioEffect&gt;</code> in <a href="../type/audioTrackType.html"><code>audioTrackType</code></a>, <a href="../type/busType.html"><code>busType</code></a>, <a href="../type/masterType.html"><code>masterType</code></a></div>
+
+<h2>Content</h2>
+<ul class="model"><li><span class="lbl">one of</span><span class="occ">any number</span><ul class="model"><li><a href="../type/eqBandType.html"><code>&lt;band&gt;</code></a></li><li><details><summary>group <a href="../groups.html#animationElements"><code>animationElements</code></a></summary><ul class="model"><li><span class="lbl">one of</span><ul class="model"><li><a href="../type/animateType.html"><code>&lt;animate&gt;</code></a></li><li><a href="../type/expressionType.html"><code>&lt;expression&gt;</code></a></li><li><a href="../type/motionPathType.html"><code>&lt;motionPath&gt;</code></a></li><li><a href="../type/linkType.html"><code>&lt;link&gt;</code></a></li></ul></li></ul></details></li><li><a href="../type/paramValueType.html"><code>&lt;param&gt;</code></a></li></ul></li></ul>
+<h2>Attributes</h2>
+<div class="wrap"><table><thead><tr><th>Attribute</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr class="from"><td colspan="4">declared here</td></tr>
+<tr id="a-type"><td class="n"><code>type</code> <span class="req">required</span></td><td><details><summary>one of 16 values</summary><span class="chip"><code>eq</code></span> <span class="chip"><code>highpass</code></span> <span class="chip"><code>lowpass</code></span> <span class="chip"><code>compressor</code></span> <span class="chip"><code>limiter</code></span> <span class="chip"><code>gate</code></span> <span class="chip"><code>de-esser</code></span> <span class="chip"><code>reverb</code></span> <span class="chip"><code>delay</code></span> <span class="chip"><code>chorus</code></span> <span class="chip"><code>pitch-shift</code></span> <span class="chip"><code>noise-reduction</code></span> <span class="chip"><code>stereo-width</code></span> <span class="chip"><code>gain</code></span> <span class="chip"><code>distortion</code></span> <span class="chip"><code>telephone</code></span></details></td><td></td><td></td></tr>
+<tr id="a-enabled"><td class="n"><code>enabled</code></td><td><code>xs:boolean</code></td><td><code>true</code></td><td></td></tr>
+<tr id="a-mix"><td class="n"><code>mix</code></td><td><a href="../simple-types.html#unitDecimal"><code>unitDecimal</code></a></td><td><code>1</code></td><td></td></tr>
+<tr id="a-frequency"><td class="n"><code>frequency</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td></td><td></td></tr>
+<tr id="a-gain"><td class="n"><code>gain</code></td><td><a href="../simple-types.html#decibelType"><code>decibelType</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-threshold"><td class="n"><code>threshold</code></td><td><a href="../simple-types.html#decibelType"><code>decibelType</code></a></td><td><code>-18</code></td><td></td></tr>
+<tr id="a-ratio"><td class="n"><code>ratio</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td><code>4</code></td><td></td></tr>
+<tr id="a-attack"><td class="n"><code>attack</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td><code>0.01</code></td><td></td></tr>
+<tr id="a-release"><td class="n"><code>release</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td><code>0.1</code></td><td></td></tr>
+<tr id="a-knee"><td class="n"><code>knee</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td><code>3</code></td><td></td></tr>
+<tr id="a-time"><td class="n"><code>time</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td></td><td></td></tr>
+<tr id="a-feedback"><td class="n"><code>feedback</code></td><td><a href="../simple-types.html#unitDecimal"><code>unitDecimal</code></a></td><td><code>0.3</code></td><td></td></tr>
+<tr id="a-roomSize"><td class="n"><code>roomSize</code></td><td><a href="../simple-types.html#unitDecimal"><code>unitDecimal</code></a></td><td><code>0.5</code></td><td></td></tr>
+<tr id="a-width"><td class="n"><code>width</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td><code>1</code></td><td></td></tr>
+<tr id="a-semitones"><td class="n"><code>semitones</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-amount"><td class="n"><code>amount</code></td><td><a href="../simple-types.html#unitDecimal"><code>unitDecimal</code></a></td><td><code>0.5</code></td><td></td></tr>
+<tr id="a-sidechain"><td class="n"><code>sidechain</code></td><td><code>xs:IDREF</code></td><td></td><td></td></tr></tbody></table></div>
+</main>
+<footer>Generated by sr-schemadoc from <a href="../scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>dff44fe7a1bedc518985b84f4afe59942cdd0d84350e8c5fcafe6bf0b60a27f9</code>) and <a href="../scene-render.sch">scene-render.sch</a> (SHA-256 <code>d56520fbcd0135324f1f76daf462579774502c4e3b8c0f8f359b155352c33fad</code>).</footer>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>modifierType — scene-render 1.1.1 schema</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body data-root="../">
+<header><div class="bar"><a class="brand" href="../index.html">scene-render 1.1.1 schema</a>
+<nav><a href="../index.html">Overview</a> <a href="../elements.html">Elements</a> <a href="../types.html">Types</a> <a href="../simple-types.html">Simple types</a> <a href="../groups.html">Groups</a> <a href="../rules.html">Rules</a></nav>
+<div class="search"><input id="q" type="search" placeholder="Search elements, attributes, types  ( / )" autocomplete="off" aria-label="Search"><ul id="res" class="results"></ul></div></div></header>
+<main>
+<h1>modifierType</h1>
+<div class="sub">Type of <code>&lt;modifier&gt;</code> in <a href="../type/deformType.html"><code>deformType</code></a></div>
+
+<h2>Content</h2>
+<ul class="model"><li><span class="lbl">one of</span><span class="occ">any number</span><ul class="model"><li><details><summary>group <a href="../groups.html#animationElements"><code>animationElements</code></a></summary><ul class="model"><li><span class="lbl">one of</span><ul class="model"><li><a href="../type/animateType.html"><code>&lt;animate&gt;</code></a></li><li><a href="../type/expressionType.html"><code>&lt;expression&gt;</code></a></li><li><a href="../type/motionPathType.html"><code>&lt;motionPath&gt;</code></a></li><li><a href="../type/linkType.html"><code>&lt;link&gt;</code></a></li></ul></li></ul></details></li><li><a href="../type/warpPointType.html"><code>&lt;point&gt;</code></a></li><li><a href="../type/puppetPinType.html"><code>&lt;pin&gt;</code></a></li></ul></li></ul>
+<h2>Attributes</h2>
+<div class="wrap"><table><thead><tr><th>Attribute</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr class="from"><td colspan="4">declared here</td></tr>
+<tr id="a-type"><td class="n"><code>type</code> <span class="req">required</span></td><td><details><summary>one of 14 values</summary><span class="chip"><code>bend</code></span> <span class="chip"><code>twist</code></span> <span class="chip"><code>wave</code></span> <span class="chip"><code>squash</code></span> <span class="chip"><code>stretch</code></span> <span class="chip"><code>mesh-warp</code></span> <span class="chip"><code>puppet</code></span> <span class="chip"><code>skin</code></span> <span class="chip"><code>bulge</code></span> <span class="chip"><code>pinch</code></span> <span class="chip"><code>spherize</code></span> <span class="chip"><code>ripple</code></span> <span class="chip"><code>turbulence</code></span> <span class="chip"><code>corner-pin</code></span></details></td><td></td><td></td></tr>
+<tr id="a-amount"><td class="n"><code>amount</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-frequency"><td class="n"><code>frequency</code></td><td><code>xs:double</code></td><td><code>1</code></td><td></td></tr>
+<tr id="a-phase"><td class="n"><code>phase</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-axis"><td class="n"><code>axis</code></td><td><code>xs:string</code></td><td><code>y</code></td><td></td></tr>
+<tr id="a-rows"><td class="n"><code>rows</code></td><td><a href="../simple-types.html#gridSizeType"><code>gridSizeType</code></a></td><td><code>4</code></td><td></td></tr>
+<tr id="a-cols"><td class="n"><code>cols</code></td><td><a href="../simple-types.html#gridSizeType"><code>gridSizeType</code></a></td><td><code>4</code></td><td></td></tr>
+<tr id="a-centerX"><td class="n"><code>centerX</code></td><td><code>xs:double</code></td><td></td><td></td></tr>
+<tr id="a-centerY"><td class="n"><code>centerY</code></td><td><code>xs:double</code></td><td></td><td></td></tr>
+<tr id="a-radius"><td class="n"><code>radius</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td></td><td></td></tr>
+<tr id="a-seed"><td class="n"><code>seed</code></td><td><code>xs:unsignedLong</code></td><td></td><td></td></tr>
+<tr id="a-skeleton"><td class="n"><code>skeleton</code></td><td><code>xs:IDREF</code></td><td></td><td></td></tr>
+<tr id="a-corners"><td class="n"><code>corners</code></td><td><a href="../simple-types.html#numberListType"><code>numberListType</code></a></td><td></td><td><div class="doc"><p>corner-pin: 8 numbers x0 y0 x1 y1 x2 y2 x3 y3 (TL, TR, BR, BL).</p></div></td></tr></tbody></table></div>
+<h2>Schematron rules</h2>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>modifier</code> <a class="lbl" href="../rules.html#p14">p14</a></div><div class="assert"><span class="id">C25</span>modifier type=&quot;skin&quot; requires @skeleton.<code class="test">test: not(@type=&#x27;skin&#x27;) or @skeleton</code></div><div class="assert"><span class="id">C26</span>modifier type=&quot;corner-pin&quot; requires 8 numbers in @corners.<code class="test">test: not(@type=&#x27;corner-pin&#x27;) or count(str:tokenize(normalize-space(@corners),&#x27; &#x27;))=8</code></div></div>
+</main>
+<footer>Generated by sr-schemadoc from <a href="../scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>dff44fe7a1bedc518985b84f4afe59942cdd0d84350e8c5fcafe6bf0b60a27f9</code>) and <a href="../scene-render.sch">scene-render.sch</a> (SHA-256 <code>d56520fbcd0135324f1f76daf462579774502c4e3b8c0f8f359b155352c33fad</code>).</footer>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+</body>
+</html>

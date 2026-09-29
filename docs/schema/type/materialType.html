@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>materialType — scene-render 1.1.1 schema</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body data-root="../">
+<header><div class="bar"><a class="brand" href="../index.html">scene-render 1.1.1 schema</a>
+<nav><a href="../index.html">Overview</a> <a href="../elements.html">Elements</a> <a href="../types.html">Types</a> <a href="../simple-types.html">Simple types</a> <a href="../groups.html">Groups</a> <a href="../rules.html">Rules</a></nav>
+<div class="search"><input id="q" type="search" placeholder="Search elements, attributes, types  ( / )" autocomplete="off" aria-label="Search"><ul id="res" class="results"></ul></div></div></header>
+<main>
+<h1>materialType</h1>
+<div class="sub">Type of <code>&lt;material&gt;</code> in <a href="../type/materialsType.html"><code>materialsType</code></a></div>
+<div class="doc"><p>glTF 2.0 metallic-roughness plus the ratified KHR_materials_* extensions (clearcoat, transmission, ior, sheen, volume, specular, iridescence, anisotropy, dispersion, emissive_strength, unlit). @materialX points to a MaterialX/OpenPBR document that replaces these parameters when present.</p></div>
+<h2>Content</h2>
+<ul class="model"><li><details><summary>group <a href="../groups.html#animationElements"><code>animationElements</code></a><span class="occ">any number</span></summary><ul class="model"><li><span class="lbl">one of</span><ul class="model"><li><a href="../type/animateType.html"><code>&lt;animate&gt;</code></a></li><li><a href="../type/expressionType.html"><code>&lt;expression&gt;</code></a></li><li><a href="../type/motionPathType.html"><code>&lt;motionPath&gt;</code></a></li><li><a href="../type/linkType.html"><code>&lt;link&gt;</code></a></li></ul></li></ul></details></li></ul>
+<h2>Attributes</h2>
+<div class="wrap"><table><thead><tr><th>Attribute</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr class="from"><td colspan="4">declared here</td></tr>
+<tr id="a-id"><td class="n"><code>id</code> <span class="req">required</span></td><td><code>xs:ID</code></td><td></td><td></td></tr>
+<tr id="a-baseColor"><td class="n"><code>baseColor</code></td><td><a href="../simple-types.html#colorType"><code>colorType</code></a></td><td><code>#FFFFFFFF</code></td><td></td></tr>
+<tr id="a-metallic"><td class="n"><code>metallic</code></td><td><a href="../simple-types.html#unitDecimal"><code>unitDecimal</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-roughness"><td class="n"><code>roughness</code></td><td><a href="../simple-types.html#unitDecimal"><code>unitDecimal</code></a></td><td><code>0.5</code></td><td></td></tr>
+<tr id="a-emissive"><td class="n"><code>emissive</code></td><td><a href="../simple-types.html#colorType"><code>colorType</code></a></td><td><code>#000000FF</code></td><td></td></tr>
+<tr id="a-emissiveStrength"><td class="n"><code>emissiveStrength</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td><code>1</code></td><td></td></tr>
+<tr id="a-opacity"><td class="n"><code>opacity</code></td><td><a href="../simple-types.html#unitDecimal"><code>unitDecimal</code></a></td><td><code>1</code></td><td></td></tr>
+<tr id="a-alphaMode"><td class="n"><code>alphaMode</code></td><td>one of <span class="chip"><code>opaque</code></span> <span class="chip"><code>mask</code></span> <span class="chip"><code>blend</code></span></td><td><code>opaque</code></td><td></td></tr>
+<tr id="a-alphaCutoff"><td class="n"><code>alphaCutoff</code></td><td><a href="../simple-types.html#unitDecimal"><code>unitDecimal</code></a></td><td><code>0.5</code></td><td></td></tr>
+<tr id="a-doubleSided"><td class="n"><code>doubleSided</code></td><td><code>xs:boolean</code></td><td><code>false</code></td><td></td></tr>
+<tr id="a-unlit"><td class="n"><code>unlit</code></td><td><code>xs:boolean</code></td><td><code>false</code></td><td></td></tr>
+<tr id="a-clearcoat"><td class="n"><code>clearcoat</code></td><td><a href="../simple-types.html#unitDecimal"><code>unitDecimal</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-clearcoatRoughness"><td class="n"><code>clearcoatRoughness</code></td><td><a href="../simple-types.html#unitDecimal"><code>unitDecimal</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-transmission"><td class="n"><code>transmission</code></td><td><a href="../simple-types.html#unitDecimal"><code>unitDecimal</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-ior"><td class="n"><code>ior</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td><code>1.5</code></td><td></td></tr>
+<tr id="a-thickness"><td class="n"><code>thickness</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-attenuationColor"><td class="n"><code>attenuationColor</code></td><td><a href="../simple-types.html#colorType"><code>colorType</code></a></td><td><code>#FFFFFFFF</code></td><td></td></tr>
+<tr id="a-attenuationDistance"><td class="n"><code>attenuationDistance</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td></td><td></td></tr>
+<tr id="a-sheenColor"><td class="n"><code>sheenColor</code></td><td><a href="../simple-types.html#colorType"><code>colorType</code></a></td><td><code>#000000FF</code></td><td></td></tr>
+<tr id="a-sheenRoughness"><td class="n"><code>sheenRoughness</code></td><td><a href="../simple-types.html#unitDecimal"><code>unitDecimal</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-specular"><td class="n"><code>specular</code></td><td><a href="../simple-types.html#unitDecimal"><code>unitDecimal</code></a></td><td><code>1</code></td><td></td></tr>
+<tr id="a-specularColor"><td class="n"><code>specularColor</code></td><td><a href="../simple-types.html#colorType"><code>colorType</code></a></td><td><code>#FFFFFFFF</code></td><td></td></tr>
+<tr id="a-iridescence"><td class="n"><code>iridescence</code></td><td><a href="../simple-types.html#unitDecimal"><code>unitDecimal</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-iridescenceIor"><td class="n"><code>iridescenceIor</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td><code>1.3</code></td><td></td></tr>
+<tr id="a-anisotropy"><td class="n"><code>anisotropy</code></td><td><a href="../simple-types.html#signedUnitDecimal"><code>signedUnitDecimal</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-anisotropyRotation"><td class="n"><code>anisotropyRotation</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-dispersion"><td class="n"><code>dispersion</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-baseColorMap"><td class="n"><code>baseColorMap</code></td><td><code>xs:anyURI</code></td><td></td><td></td></tr>
+<tr id="a-normalMap"><td class="n"><code>normalMap</code></td><td><code>xs:anyURI</code></td><td></td><td></td></tr>
+<tr id="a-normalScale"><td class="n"><code>normalScale</code></td><td><code>xs:double</code></td><td><code>1</code></td><td></td></tr>
+<tr id="a-metallicRoughnessMap"><td class="n"><code>metallicRoughnessMap</code></td><td><code>xs:anyURI</code></td><td></td><td></td></tr>
+<tr id="a-occlusionMap"><td class="n"><code>occlusionMap</code></td><td><code>xs:anyURI</code></td><td></td><td></td></tr>
+<tr id="a-emissiveMap"><td class="n"><code>emissiveMap</code></td><td><code>xs:anyURI</code></td><td></td><td></td></tr>
+<tr id="a-displacementMap"><td class="n"><code>displacementMap</code></td><td><code>xs:anyURI</code></td><td></td><td></td></tr>
+<tr id="a-displacementScale"><td class="n"><code>displacementScale</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-uvScaleX"><td class="n"><code>uvScaleX</code></td><td><code>xs:double</code></td><td><code>1</code></td><td></td></tr>
+<tr id="a-uvScaleY"><td class="n"><code>uvScaleY</code></td><td><code>xs:double</code></td><td><code>1</code></td><td></td></tr>
+<tr id="a-materialX"><td class="n"><code>materialX</code></td><td><code>xs:anyURI</code></td><td></td><td></td></tr></tbody></table></div>
+</main>
+<footer>Generated by sr-schemadoc from <a href="../scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>dff44fe7a1bedc518985b84f4afe59942cdd0d84350e8c5fcafe6bf0b60a27f9</code>) and <a href="../scene-render.sch">scene-render.sch</a> (SHA-256 <code>d56520fbcd0135324f1f76daf462579774502c4e3b8c0f8f359b155352c33fad</code>).</footer>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+</body>
+</html>

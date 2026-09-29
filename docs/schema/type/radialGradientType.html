@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>radialGradientType — scene-render 1.1.1 schema</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body data-root="../">
+<header><div class="bar"><a class="brand" href="../index.html">scene-render 1.1.1 schema</a>
+<nav><a href="../index.html">Overview</a> <a href="../elements.html">Elements</a> <a href="../types.html">Types</a> <a href="../simple-types.html">Simple types</a> <a href="../groups.html">Groups</a> <a href="../rules.html">Rules</a></nav>
+<div class="search"><input id="q" type="search" placeholder="Search elements, attributes, types  ( / )" autocomplete="off" aria-label="Search"><ul id="res" class="results"></ul></div></div></header>
+<main>
+<h1>radialGradientType</h1>
+<div class="sub">Type of <code>&lt;radialGradient&gt;</code> in <a href="../type/paintsType.html"><code>paintsType</code></a></div>
+
+<p>Extends <a href="../type/gradientBaseType.html"><code>gradientBaseType</code></a>.</p>
+<h2>Content</h2>
+<h3>From <a href="../type/gradientBaseType.html"><code>gradientBaseType</code></a></h3><ul class="model"><li><span class="lbl">one of</span><span class="occ">any number</span><ul class="model"><li><a href="../type/stopType.html"><code>&lt;stop&gt;</code></a></li><li><details><summary>group <a href="../groups.html#animationElements"><code>animationElements</code></a></summary><ul class="model"><li><span class="lbl">one of</span><ul class="model"><li><a href="../type/animateType.html"><code>&lt;animate&gt;</code></a></li><li><a href="../type/expressionType.html"><code>&lt;expression&gt;</code></a></li><li><a href="../type/motionPathType.html"><code>&lt;motionPath&gt;</code></a></li><li><a href="../type/linkType.html"><code>&lt;link&gt;</code></a></li></ul></li></ul></details></li></ul></li></ul>
+<h2>Attributes</h2>
+<div class="wrap"><table><thead><tr><th>Attribute</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr class="from"><td colspan="4">declared here</td></tr>
+<tr id="a-cx"><td class="n"><code>cx</code></td><td><code>xs:double</code></td><td><code>0.5</code></td><td></td></tr>
+<tr id="a-cy"><td class="n"><code>cy</code></td><td><code>xs:double</code></td><td><code>0.5</code></td><td></td></tr>
+<tr id="a-r"><td class="n"><code>r</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td><code>0.5</code></td><td></td></tr>
+<tr id="a-fx"><td class="n"><code>fx</code></td><td><code>xs:double</code></td><td></td><td></td></tr>
+<tr id="a-fy"><td class="n"><code>fy</code></td><td><code>xs:double</code></td><td></td><td></td></tr>
+<tr id="a-fr"><td class="n"><code>fr</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-aspect"><td class="n"><code>aspect</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td><code>1</code></td><td></td></tr>
+<tr class="from"><td colspan="4">inherited from <a href="../type/gradientBaseType.html"><code>gradientBaseType</code></a> from attribute group <a href="../groups.html#gradientCommon"><code>gradientCommon</code></a></td></tr>
+<tr id="a-id"><td class="n"><code>id</code> <span class="req">required</span></td><td><code>xs:ID</code></td><td></td><td></td></tr>
+<tr id="a-spread"><td class="n"><code>spread</code></td><td>one of <span class="chip"><code>pad</code></span> <span class="chip"><code>reflect</code></span> <span class="chip"><code>repeat</code></span></td><td><code>pad</code></td><td></td></tr>
+<tr id="a-units"><td class="n"><code>units</code></td><td>one of <span class="chip"><code>object</code></span> <span class="chip"><code>user</code></span></td><td><code>object</code></td><td><div class="doc"><p>object: coordinates are fractions of the painted box; user: pixels in the painted node&#x27;s space.</p></div></td></tr>
+<tr id="a-interpolationSpace"><td class="n"><code>interpolationSpace</code></td><td>one of <span class="chip"><code>linear</code></span> <span class="chip"><code>srgb</code></span> <span class="chip"><code>oklab</code></span> <span class="chip"><code>oklch</code></span></td><td><code>linear</code></td><td></td></tr>
+<tr id="a-dither"><td class="n"><code>dither</code></td><td><code>xs:boolean</code></td><td><code>true</code></td><td></td></tr>
+<tr id="a-rotation"><td class="n"><code>rotation</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr></tbody></table></div>
+<h2>Schematron rules</h2>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>linearGradient|radialGradient|conicGradient</code> <a class="lbl" href="../rules.html#p19">p19</a></div><div class="assert"><span class="id">C36</span>gradient &quot;<code>{@id}</code>&quot; needs at least two stops.<code class="test">test: count(stop) &gt;= 2</code></div><div class="assert"><span class="id">C37</span>gradient stop offsets must be non-decreasing.<code class="test">test: not(stop[number(@offset) &lt; number(preceding-sibling::stop[1]/@offset)])</code></div></div>
+</main>
+<footer>Generated by sr-schemadoc from <a href="../scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>dff44fe7a1bedc518985b84f4afe59942cdd0d84350e8c5fcafe6bf0b60a27f9</code>) and <a href="../scene-render.sch">scene-render.sch</a> (SHA-256 <code>d56520fbcd0135324f1f76daf462579774502c4e3b8c0f8f359b155352c33fad</code>).</footer>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>maskType — scene-render 1.1.1 schema</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body data-root="../">
+<header><div class="bar"><a class="brand" href="../index.html">scene-render 1.1.1 schema</a>
+<nav><a href="../index.html">Overview</a> <a href="../elements.html">Elements</a> <a href="../types.html">Types</a> <a href="../simple-types.html">Simple types</a> <a href="../groups.html">Groups</a> <a href="../rules.html">Rules</a></nav>
+<div class="search"><input id="q" type="search" placeholder="Search elements, attributes, types  ( / )" autocomplete="off" aria-label="Search"><ul id="res" class="results"></ul></div></div></header>
+<main>
+<h1>maskType</h1>
+<div class="sub">Type of <code>&lt;mask&gt;</code> <details><summary>in 13 types</summary><a href="../type/layerType.html"><code>layerType</code></a>, <a href="../type/shapeType.html"><code>shapeType</code></a>, <a href="../type/particleEmitterType.html"><code>particleEmitterType</code></a>, <a href="../type/groupType.html"><code>groupType</code></a>, <a href="../type/sequenceType.html"><code>sequenceType</code></a>, <a href="../type/instanceType.html"><code>instanceType</code></a>, <a href="../type/includeType.html"><code>includeType</code></a>, <a href="../type/repeatType.html"><code>repeatType</code></a>, <a href="../type/adjustmentType.html"><code>adjustmentType</code></a>, <a href="../type/flockType.html"><code>flockType</code></a>, <a href="../type/fluidType.html"><code>fluidType</code></a>, <a href="../type/slimeType.html"><code>slimeType</code></a>, <a href="../type/erosionType.html"><code>erosionType</code></a></details></div>
+<div class="doc"><p>Masks combine in document order using @mode; the 1.0 behaviour (product of coverages) is mode=&quot;intersect&quot;, the default. Coverage is anti-aliased, then expanded/contracted by @expansion and blurred by @feather pixels.</p></div>
+<h2>Content</h2>
+<ul class="model"><li><details><summary>group <a href="../groups.html#animationElements"><code>animationElements</code></a><span class="occ">any number</span></summary><ul class="model"><li><span class="lbl">one of</span><ul class="model"><li><a href="../type/animateType.html"><code>&lt;animate&gt;</code></a></li><li><a href="../type/expressionType.html"><code>&lt;expression&gt;</code></a></li><li><a href="../type/motionPathType.html"><code>&lt;motionPath&gt;</code></a></li><li><a href="../type/linkType.html"><code>&lt;link&gt;</code></a></li></ul></li></ul></details></li></ul>
+<h2>Attributes</h2>
+<div class="wrap"><table><thead><tr><th>Attribute</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr class="from"><td colspan="4">declared here</td></tr>
+<tr id="a-type"><td class="n"><code>type</code> <span class="req">required</span></td><td>one of <span class="chip"><code>rect</code></span> <span class="chip"><code>ellipse</code></span> <span class="chip"><code>rounded-rect</code></span> <span class="chip"><code>path</code></span> <span class="chip"><code>polygon</code></span> <span class="chip"><code>star</code></span></td><td></td><td></td></tr>
+<tr id="a-x"><td class="n"><code>x</code></td><td><a href="../simple-types.html#lengthType"><code>lengthType</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-y"><td class="n"><code>y</code></td><td><a href="../simple-types.html#lengthType"><code>lengthType</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-width"><td class="n"><code>width</code></td><td><a href="../simple-types.html#positiveLengthType"><code>positiveLengthType</code></a></td><td></td><td></td></tr>
+<tr id="a-height"><td class="n"><code>height</code></td><td><a href="../simple-types.html#positiveLengthType"><code>positiveLengthType</code></a></td><td></td><td></td></tr>
+<tr id="a-radius"><td class="n"><code>radius</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-invert"><td class="n"><code>invert</code></td><td><code>xs:boolean</code></td><td><code>false</code></td><td></td></tr>
+<tr id="a-path"><td class="n"><code>path</code></td><td><code>xs:string</code></td><td></td><td></td></tr>
+<tr id="a-points"><td class="n"><code>points</code></td><td><code>xs:positiveInteger</code></td><td><code>5</code></td><td></td></tr>
+<tr id="a-innerRadius"><td class="n"><code>innerRadius</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td></td><td></td></tr>
+<tr id="a-fillRule"><td class="n"><code>fillRule</code></td><td><a href="../simple-types.html#fillRuleType"><code>fillRuleType</code></a></td><td><code>nonzero</code></td><td></td></tr>
+<tr id="a-feather"><td class="n"><code>feather</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-expansion"><td class="n"><code>expansion</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-opacity"><td class="n"><code>opacity</code></td><td><a href="../simple-types.html#unitDecimal"><code>unitDecimal</code></a></td><td><code>1</code></td><td></td></tr>
+<tr id="a-mode"><td class="n"><code>mode</code></td><td>one of <span class="chip"><code>intersect</code></span> <span class="chip"><code>add</code></span> <span class="chip"><code>subtract</code></span> <span class="chip"><code>lighten</code></span> <span class="chip"><code>darken</code></span> <span class="chip"><code>difference</code></span> <span class="chip"><code>none</code></span></td><td><code>intersect</code></td><td></td></tr></tbody></table></div>
+<h2>Schematron rules</h2>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>mask</code> <a class="lbl" href="../rules.html#p4">p4</a></div><div class="assert"><span class="id">C4</span>mask type=&quot;path&quot; requires @path.<code class="test">test: not(@type=&#x27;path&#x27;) or @path</code></div><div class="assert"><span class="id">C5</span>mask type=&quot;<code>{@type}</code>&quot; requires @width and @height.<code class="test">test: @type=&#x27;path&#x27; or (@width and @height)</code></div></div>
+</main>
+<footer>Generated by sr-schemadoc from <a href="../scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>dff44fe7a1bedc518985b84f4afe59942cdd0d84350e8c5fcafe6bf0b60a27f9</code>) and <a href="../scene-render.sch">scene-render.sch</a> (SHA-256 <code>d56520fbcd0135324f1f76daf462579774502c4e3b8c0f8f359b155352c33fad</code>).</footer>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+</body>
+</html>

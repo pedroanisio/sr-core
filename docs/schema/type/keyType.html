@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>keyType — scene-render 1.1.1 schema</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body data-root="../">
+<header><div class="bar"><a class="brand" href="../index.html">scene-render 1.1.1 schema</a>
+<nav><a href="../index.html">Overview</a> <a href="../elements.html">Elements</a> <a href="../types.html">Types</a> <a href="../simple-types.html">Simple types</a> <a href="../groups.html">Groups</a> <a href="../rules.html">Rules</a></nav>
+<div class="search"><input id="q" type="search" placeholder="Search elements, attributes, types  ( / )" autocomplete="off" aria-label="Search"><ul id="res" class="results"></ul></div></div></header>
+<main>
+<h1>keyType</h1>
+<div class="sub">Type of <code>&lt;key&gt;</code> in <a href="../type/animateType.html"><code>animateType</code></a>, <a href="../type/timeRemapType.html"><code>timeRemapType</code></a></div>
+<div class="doc"><p>value is parsed with the type of the animated property (number, &quot;x,y&quot;, colour, paint, path data, string). easeIn/easeOut are After Effects-style temporal handles &quot;influence,speed&quot; normalised to [0,1]; spatialIn/Out are motion-path tangents in pixels relative to the key value.</p></div>
+<h2>Content</h2>
+<p>Empty: attributes only.</p>
+<h2>Attributes</h2>
+<div class="wrap"><table><thead><tr><th>Attribute</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr class="from"><td colspan="4">declared here</td></tr>
+<tr id="a-time"><td class="n"><code>time</code> <span class="req">required</span></td><td><code>xs:double</code></td><td></td><td></td></tr>
+<tr id="a-value"><td class="n"><code>value</code> <span class="req">required</span></td><td><code>xs:string</code></td><td></td><td></td></tr>
+<tr id="a-interpolation"><td class="n"><code>interpolation</code></td><td><a href="../simple-types.html#curveType"><code>curveType</code></a></td><td></td><td></td></tr>
+<tr id="a-bezier"><td class="n"><code>bezier</code></td><td><code>xs:string</code></td><td></td><td></td></tr>
+<tr id="a-easeIn"><td class="n"><code>easeIn</code></td><td><a href="../simple-types.html#pointType"><code>pointType</code></a></td><td></td><td></td></tr>
+<tr id="a-easeOut"><td class="n"><code>easeOut</code></td><td><a href="../simple-types.html#pointType"><code>pointType</code></a></td><td></td><td></td></tr>
+<tr id="a-spatialIn"><td class="n"><code>spatialIn</code></td><td><a href="../simple-types.html#pointType"><code>pointType</code></a></td><td></td><td></td></tr>
+<tr id="a-spatialOut"><td class="n"><code>spatialOut</code></td><td><a href="../simple-types.html#pointType"><code>pointType</code></a></td><td></td><td></td></tr>
+<tr id="a-roving"><td class="n"><code>roving</code></td><td><code>xs:boolean</code></td><td><code>false</code></td><td></td></tr>
+<tr id="a-steps"><td class="n"><code>steps</code></td><td><code>xs:positiveInteger</code></td><td></td><td></td></tr>
+<tr id="a-stepPosition"><td class="n"><code>stepPosition</code></td><td>one of <span class="chip"><code>start</code></span> <span class="chip"><code>end</code></span></td><td><code>end</code></td><td></td></tr>
+<tr id="a-tension"><td class="n"><code>tension</code></td><td><a href="../simple-types.html#signedUnitDecimal"><code>signedUnitDecimal</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-continuity"><td class="n"><code>continuity</code></td><td><a href="../simple-types.html#signedUnitDecimal"><code>signedUnitDecimal</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-bias"><td class="n"><code>bias</code></td><td><a href="../simple-types.html#signedUnitDecimal"><code>signedUnitDecimal</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-stiffness"><td class="n"><code>stiffness</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td><code>100</code></td><td></td></tr>
+<tr id="a-damping"><td class="n"><code>damping</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td><code>10</code></td><td></td></tr>
+<tr id="a-mass"><td class="n"><code>mass</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td><code>1</code></td><td></td></tr>
+<tr id="a-marker"><td class="n"><code>marker</code></td><td><code>xs:IDREF</code></td><td></td><td><div class="doc"><p>Snap the key time to a marker; @time becomes an offset from it.</p></div></td></tr></tbody></table></div>
+<h2>Schematron rules</h2>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>key[@interpolation=&#x27;steps&#x27;]</code> <a class="lbl" href="../rules.html#p21">p21</a></div><div class="assert"><span class="id">C39</span>interpolation=&quot;steps&quot; requires @steps.<code class="test">test: @steps</code></div></div>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>key[@interpolation=&#x27;cubic-bezier&#x27;]</code> <a class="lbl" href="../rules.html#p22">p22</a></div><div class="assert"><span class="id">C40</span>cubic-bezier keys need @bezier or easeOut/easeIn handles.<code class="test">test: @bezier or @easeOut or following-sibling::key[1]/@easeIn</code></div></div>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>*[@startMarker] | *[@endMarker] | key[@marker]</code> <a class="lbl" href="../rules.html#p37">p37</a></div><div class="assert"><span class="id">R21</span>marker references must name markers.<code class="test">test: (not(@startMarker) or /scene/markers/marker[@id=current()/@startMarker]) and (not(@endMarker) or /scene/markers/marker[@id=current()/@endMarker]) and (not(@marker) or /scene/markers/marker[@id=current()/@marker])</code></div></div>
+</main>
+<footer>Generated by sr-schemadoc from <a href="../scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>dff44fe7a1bedc518985b84f4afe59942cdd0d84350e8c5fcafe6bf0b60a27f9</code>) and <a href="../scene-render.sch">scene-render.sch</a> (SHA-256 <code>d56520fbcd0135324f1f76daf462579774502c4e3b8c0f8f359b155352c33fad</code>).</footer>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+</body>
+</html>

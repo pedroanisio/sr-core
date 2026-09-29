@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>transformConstraintType — scene-render 1.1.1 schema</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body data-root="../">
+<header><div class="bar"><a class="brand" href="../index.html">scene-render 1.1.1 schema</a>
+<nav><a href="../index.html">Overview</a> <a href="../elements.html">Elements</a> <a href="../types.html">Types</a> <a href="../simple-types.html">Simple types</a> <a href="../groups.html">Groups</a> <a href="../rules.html">Rules</a></nav>
+<div class="search"><input id="q" type="search" placeholder="Search elements, attributes, types  ( / )" autocomplete="off" aria-label="Search"><ul id="res" class="results"></ul></div></div></header>
+<main>
+<h1>transformConstraintType</h1>
+<div class="sub">Type of <code>&lt;transformConstraint&gt;</code> <details><summary>in 17 types</summary><a href="../type/skeletonType.html"><code>skeletonType</code></a>, <a href="../type/layerType.html"><code>layerType</code></a>, <a href="../type/shapeType.html"><code>shapeType</code></a>, <a href="../type/particleEmitterType.html"><code>particleEmitterType</code></a>, <a href="../type/object3DType.html"><code>object3DType</code></a>, <a href="../type/cameraType.html"><code>cameraType</code></a>, <a href="../type/groupType.html"><code>groupType</code></a>, <a href="../type/sequenceType.html"><code>sequenceType</code></a>, <a href="../type/instanceType.html"><code>instanceType</code></a>, <a href="../type/includeType.html"><code>includeType</code></a>, <a href="../type/repeatType.html"><code>repeatType</code></a>, <a href="../type/adjustmentType.html"><code>adjustmentType</code></a>, <a href="../type/flockType.html"><code>flockType</code></a>, <a href="../type/fluidType.html"><code>fluidType</code></a>, <a href="../type/slimeType.html"><code>slimeType</code></a>, <a href="../type/erosionType.html"><code>erosionType</code></a>, <a href="../type/lightType.html"><code>lightType</code></a></details></div>
+<div class="doc"><p>Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target&#x27;s transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target&#x27;s world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.</p></div>
+<h2>Content</h2>
+<ul class="model"><li><details><summary>group <a href="../groups.html#animationElements"><code>animationElements</code></a><span class="occ">any number</span></summary><ul class="model"><li><span class="lbl">one of</span><ul class="model"><li><a href="../type/animateType.html"><code>&lt;animate&gt;</code></a></li><li><a href="../type/expressionType.html"><code>&lt;expression&gt;</code></a></li><li><a href="../type/motionPathType.html"><code>&lt;motionPath&gt;</code></a></li><li><a href="../type/linkType.html"><code>&lt;link&gt;</code></a></li></ul></li></ul></details></li></ul>
+<h2>Attributes</h2>
+<div class="wrap"><table><thead><tr><th>Attribute</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr class="from"><td colspan="4">declared here</td></tr>
+<tr id="a-type"><td class="n"><code>type</code> <span class="req">required</span></td><td>one of <span class="chip"><code>parent</code></span> <span class="chip"><code>look-at</code></span> <span class="chip"><code>follow-path</code></span> <span class="chip"><code>copy-position</code></span> <span class="chip"><code>copy-rotation</code></span> <span class="chip"><code>copy-scale</code></span> <span class="chip"><code>copy-transform</code></span> <span class="chip"><code>distance</code></span> <span class="chip"><code>ik</code></span> <span class="chip"><code>track</code></span></td><td></td><td></td></tr>
+<tr id="a-target"><td class="n"><code>target</code></td><td><code>xs:IDREF</code></td><td></td><td></td></tr>
+<tr id="a-path"><td class="n"><code>path</code></td><td><code>xs:string</code></td><td></td><td></td></tr>
+<tr id="a-point"><td class="n"><code>point</code></td><td><code>xs:string</code></td><td></td><td></td></tr>
+<tr id="a-influence"><td class="n"><code>influence</code></td><td><a href="../simple-types.html#unitDecimal"><code>unitDecimal</code></a></td><td><code>1</code></td><td></td></tr>
+<tr id="a-space"><td class="n"><code>space</code></td><td>one of <span class="chip"><code>world</code></span> <span class="chip"><code>local</code></span></td><td><code>world</code></td><td></td></tr>
+<tr id="a-offsetX"><td class="n"><code>offsetX</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-offsetY"><td class="n"><code>offsetY</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-offsetRotation"><td class="n"><code>offsetRotation</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-minDistance"><td class="n"><code>minDistance</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td></td><td></td></tr>
+<tr id="a-maxDistance"><td class="n"><code>maxDistance</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td></td><td></td></tr>
+<tr id="a-bendPositive"><td class="n"><code>bendPositive</code></td><td><code>xs:boolean</code></td><td><code>true</code></td><td></td></tr>
+<tr id="a-progress"><td class="n"><code>progress</code></td><td><a href="../simple-types.html#unitDecimal"><code>unitDecimal</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-autoOrient"><td class="n"><code>autoOrient</code></td><td><code>xs:boolean</code></td><td><code>false</code></td><td></td></tr></tbody></table></div>
+<h2>Schematron rules</h2>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>transformConstraint</code> <a class="lbl" href="../rules.html#p15">p15</a></div><div class="assert"><span class="id">C27</span>follow-path requires @path.<code class="test">test: not(@type=&#x27;follow-path&#x27;) or @path</code></div><div class="assert"><span class="id">C28</span>transformConstraint type=&quot;<code>{@type}</code>&quot; requires @target.<code class="test">test: @type=&#x27;follow-path&#x27; or @target</code></div><div class="assert"><span class="id">C29</span>track constraints target trackData.<code class="test">test: not(@type=&#x27;track&#x27;) or /scene/tracking/trackData[@id=current()/@target]</code></div></div>
+</main>
+<footer>Generated by sr-schemadoc from <a href="../scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>dff44fe7a1bedc518985b84f4afe59942cdd0d84350e8c5fcafe6bf0b60a27f9</code>) and <a href="../scene-render.sch">scene-render.sch</a> (SHA-256 <code>d56520fbcd0135324f1f76daf462579774502c4e3b8c0f8f359b155352c33fad</code>).</footer>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+</body>
+</html>
