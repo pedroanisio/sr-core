@@ -10,3 +10,4 @@
 | [5](srep-0005.md) | Engine-neutral wording in the schema's comments and documentation | Standards | Final | 1.1 |
 | [6](srep-0006.md) | Package format 1.1: hash-covered metadata and safe reading | Standards | Accepted | vpkg 1.1 |
 | [7](srep-0007.md) | Adopt the conventions and definitions as normative semantics | Semantics | Accepted | 1.1 |
+| [8](srep-0008.md) | Close the version gate and check the 1.1 additions | Standards | Final | 1.1 |

@@ -502,3 +502,35 @@ def test_external_references_in_included_documents_are_rewritten(tmp_path):
     with zipfile.ZipFile(out) as z:
         assert 'src="../_external/shared/b.png"' in z.read("project/parts/part.xml").decode()
     assert (proj / "parts" / "part.xml").read_text() == part                  # the source is never touched
+
+
+def test_the_howto_walkthrough_works(tmp_path, capsys, monkeypatch):
+    """docs/vpkg-howto.md section 2, run as written: its finished vpkg.json, on the project it describes."""
+    import re as _re
+    howto = open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "docs",
+                              "vpkg-howto.md"), encoding="utf-8").read()
+    spec = json.loads(_re.search(r"This is the finished `planet-orbit/vpkg.json`:\s*```json\n(.*?)```", howto,
+                                 _re.S).group(1))
+    monkeypatch.setenv("SOURCE_DATE_EPOCH", "1790553600")
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / "config"))
+    proj = tmp_path / "planet-orbit"
+    (proj / "assets").mkdir(parents=True)
+    (proj / "assets" / "DejaVuSans.ttf").write_bytes(sfnt("DejaVu Sans"))
+    (proj / "assets" / "DejaVuSans-Bold.ttf").write_bytes(sfnt("DejaVu Sans", "Bold", 700))
+    (proj / "make_scene.py").write_text(
+        "open('scene.xml', 'w').write('<scene version=\"1.1\"><project width=\"64\" height=\"36\" fps=\"1\" "
+        "duration=\"10\"/><styles><textStyle id=\"t\" font=\"DejaVu Sans\"/></styles>"
+        "<output id=\"main\" path=\"renders/orbit.mp4\" codec=\"h264\"/><composition>"
+        "<text id=\"x\" style=\"t\" text=\"orbit\"/></composition></scene>')\n")
+    subprocess.run([sys.executable, "make_scene.py"], cwd=proj, check=True)
+    assert main(["init", str(proj)]) == 0 and (proj / "vpkg.json").exists()
+    (proj / "vpkg.json").write_text(json.dumps(spec))                     # the how-to's finished spec
+    assert main(["pack", str(proj), "-n", "--no-system-fonts"]) == 0
+    out = tmp_path / "packages" / "planet-orbit-1.0.0.vpkg.zip"
+    out.parent.mkdir()
+    assert main(["pack", str(proj), "-o", str(out.parent), "--no-system-fonts"]) == 0 and out.exists()
+    assert main(["verify", str(out)]) == 0
+    assert main(["unpack", str(out), str(tmp_path / "orbit"), "--fetch"]) == 0
+    capsys.readouterr()
+    assert main(["run", str(tmp_path / "orbit"), "--engine", "py", "--list"]) == 0
+    assert "[render] $" in capsys.readouterr().out
