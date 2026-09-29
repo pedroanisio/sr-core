@@ -1,15 +1,23 @@
 # scene-render 1.1 — normative spatial conventions
 
-Status: **normative for every scene-render 1.1 implementation** (C, Rust, Python, JavaScript).
-Decided 2026-09-28. Where the XSD is silent, this document fills the gap; where it speaks, it restates it.
+Status: **normative for every scene-render 1.1 implementation** (C, Rust, Python, JavaScript), adopted by
+SREP 7. Where the XSD is silent, this document fills the gap; where it speaks, it restates it.
 
 The XSD header already fixes the 2D conventions ("space: 2D pixels, origin top-left, +x right, +y down;
-angles: degrees, positive = clockwise on screen"). The 3D rules below adopt the C renderer's proposed
-definitions D1–D4, because they extend the schema's 2D space into depth without introducing a second
-coordinate system. References of the form Dn are to those numbered definitions.
+angles: degrees, positive = clockwise on screen"). The 3D rules below adopt definitions D1–D4, because they
+extend the schema's 2D space into depth without introducing a second coordinate system. References of the
+form Dn are to the numbered definitions in [DEFINITIONS.md](DEFINITIONS.md).
 
-Conformance is checked by `run.py` in this directory; every rule below has at least one case in `cases/`.
-Changes to these conventions go through an SREP (`../srep/srep-0000.md`).
+**Precedence.**
+1. The XSD and its Schematron rules.
+2. This document. Where a §5 ruling and a definition differ, the ruling applies.
+3. `DEFINITIONS.md`.
+4. For anything still unstated, the reference implementation's behaviour (SREP 0, Baseline).
+
+Conformance is checked by `run.py` in this directory against the cases in `cases/`. §4 lists which rules
+have cases. The rules without one (2.7, and the §5 rulings other than 5.14) are checked by each engine's own
+tests until cases are added. Changes to these conventions, and to `DEFINITIONS.md`, go through an SREP
+(`../srep/srep-0000.md`).
 
 ## 1. 2D node transform (all nodes with `transformAttributes`)
 
@@ -18,7 +26,7 @@ Changes to these conventions go through an SREP (`../srep/srep-0000.md`).
     M = T(x, y) · R(rotation) · Skew(skewX, skewY) · S(scaleX, scaleY) · T(−anchorX, −anchorY)
 
     so the local point (anchorX, anchorY) lands exactly on (x, y), and rotation and scale pivot about it.
-    (C `affine.c` D23; Python `compositor.py`; Rust `eval.rs`. The After Effects convention.)
+    (D23; the After Effects convention.)
 
 1.2 `anchorX`/`anchorY` are `lengthType`: a bare number is local pixels; `%` is a percentage of the
     **parent** box (as for every other `lengthType`, per the XSD header); `vw`/`vh`/`vmin`/`vmax` refer to the
@@ -46,6 +54,9 @@ Changes to these conventions go through an SREP (`../srep/srep-0000.md`).
 2.3 **Explicit cameras.** A `<camera>`'s `x`, `y`, `z` are **absolute** scene positions (default 0, 0, 0 —
     the frame's top-left corner). They are not offsets from the implicit camera.
     `fov` is horizontal; with `focalLength`, fov = 2·atan(sensorWidth / (2·focalLength)) (sensorWidth default 36).
+    An explicit camera has no implied distance. With `z` omitted it sits on the plane z = 0, so 2D layers and
+    objects at z = 0 are at zero depth and are not seen. Give `z` explicitly: −(W/2)/tan(fov/2) reproduces the
+    implicit camera's distance.
 
 2.4 **Orientation.** At yaw = pitch = roll = 0 a camera (or light) looks along +z with +y down in the image.
     R = R_yaw · R_pitch · R_roll (roll applied first, in the camera's own frame). Positive yaw turns the view
@@ -54,7 +65,9 @@ Changes to these conventions go through an SREP (`../srep/srep-0000.md`).
 
 2.5 **object3D transform.** M = T(x, y, z) · R_z(rotation) · R_y(rotationY) · R_x(rotationX) · S(scaleX, scaleY, scaleZ),
     in scene space, after the `parent` chain. Primitives are centred on their origin; a `plane` faces the
-    camera (its normal is −z).
+    camera (its normal is −z). The rotations are right-handed about the scene axes: positive `rotationY` turns
+    an object's right edge toward the viewer (−z), and positive `rotationX` turns its top edge toward the
+    viewer. 2.5D layers turn the other way (5.14).
 
 2.6 **Imported models.** Every mesh format is treated as Y-up metres (glTF/GLB, OBJ, PLY, STL, FBX after its
     own conversion, USD/USDZ) and enters scene space by a 180° turn about x and a scale of `pixelsPerMeter`
@@ -67,14 +80,16 @@ Changes to these conventions go through an SREP (`../srep/srep-0000.md`).
 
 ## 3. Open questions (not normative yet)
 
-None: the 2.5D rotation sign is settled by 5.14.
+- **Default position of an explicit camera** (2.3). Defaulting an omitted `z` to the implicit camera's distance
+  would make `<camera/>` useful. It would also change what existing documents that rely on z = 0 render, so it
+  is left for an SREP.
 
 ## 4. Cases
 
 | Case | Rule | What is measured |
 |---|---|---|
 | `a1-anchor-translate` | 1.1 | red rect centre lands on (x, y) |
-| `a2-anchor-rotate` | 1.1, 1.3 | rotation pivots about the anchor |
+| `a2-anchor-rotate` | 1.1, 1.3 | rotation pivots about the anchor; the anchor is off-centre, so the sign of the rotation shows |
 | `a3-anchor-scale` | 1.1 | scale pivots about the anchor (two anchors) |
 | `a4-anchor-percent` | 1.2 | percent anchors refer to the parent box |
 | `c1-colour-linear` | 1.4 | hex colours display as written in a linear working space |
@@ -83,7 +98,12 @@ None: the 2.5D rotation sign is settled by 5.14.
 | `b3-explicit-camera` | 2.3 | camera x/y/z are absolute |
 | `b4-yaw-pitch`, `b4b-pitch` | 2.4 | positive yaw looks right, positive pitch looks up |
 | `b6-roll` | 2.4 | positive roll: camera turns clockwise, content counter-clockwise |
-| `b5-gltf` | 2.6 | glTF up is screen up; 1 m = 100 px |
+| `b5-gltf` | 2.6 | glTF up is screen up and +X is screen right; 1 m = 100 px; single-sided faces are culled from behind |
+| `b7-yaw-pitch-combined` | 2.4 | yaw and pitch together, in the order R_yaw · R_pitch |
+| `b8-focal-length` | 2.3 | `focalLength` on the default 36 mm sensor gives the horizontal fov |
+| `d1-object3d-rotation-order` | 2.5 | `rotationX` applies before `rotation` (the order of M) |
+| `d3-object3d-rotation-y` | 2.5 | positive `rotationY` on an object3D is right-handed (right edge toward the viewer) |
+| `d2-layer-rotation-y` | 5.14 | positive `rotationY` on a 2.5D layer turns its right edge away |
 
 ## 5. Rulings where the XSD is silent (decided 2026-09-29)
 
@@ -131,17 +151,20 @@ numbered definitions (Dn, including the D9 table) wherever they define the behav
      stiffness k, shear springs at 0.15 k, bend springs at 0.02 k.
 
 5.11 **Text-animator presets** (c). `@preset` expands to the animators of the Python renderer's preset table
-     (`scenerender/text_animators.py`, PRESETS), which is the documentation the XSD refers to.
+     (DEFINITIONS.md P1), which is the documentation the XSD refers to.
 
 5.12 **Caption presets and karaoke** (c). Default caption style, anchor and fill model are the Python renderer's
-     (`scenerender/captions.py`): karaoke lights whole words with a cross-fade.
+     (DEFINITIONS.md P2): karaoke lights whole words with a cross-fade.
 
 5.13 **Blending against the background** (b, After Effects). The composition composites on transparency; the
      project background is added last, beneath everything. `behind`, `subtract`, stencils and silhouettes act on
      the layers only. Blend formulas and luminance weights are D14's (W3C, Lum = 0.3 R + 0.59 G + 0.11 B).
 
 5.14 **2.5D layer rotation** (b, After Effects). For flat layers (`threeD="true"` on 2D nodes), `rotationY` > 0
-     turns the right edge away from the viewer and `rotationX` > 0 turns the top edge away.
+     turns the right edge away from the viewer and `rotationX` > 0 turns the top edge away. This is deliberately
+     the opposite sense to object3D (2.5). Layer rotations follow the compositing precedent they come from,
+     while object3D rotations follow the right-handed scene axes that meshes and glTF use. Cases d2 and d3
+     check both.
 
 5.15 **Mask feather and combining** (D16). Feather is a Gaussian blur with standard deviation `feather`; `add`
      combines as a + m − a·m; polygon and star vertices lie on the ellipse inscribed in the box, from the top,

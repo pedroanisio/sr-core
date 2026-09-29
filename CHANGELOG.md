@@ -48,10 +48,25 @@ version:
 
 ### Docs
 
+- SREP 7 adopts `conformance/CONVENTIONS.md` and the new `conformance/DEFINITIONS.md` (definitions D1–D27 and
+  preset tables P1–P2, copied in so the specification is complete). It states the precedence, the rotation
+  handedness of layers and 3D objects, and the explicit-camera default.
+- SREP 0 describes the compatibility kit as it works: geometric measurements, no reference renders.
+
 - The vpkg how-to and SREP 1 explain why the default engine commands are aliases (`scene-render-rs`, `-c`, `-js`) and
   how to create them.
 
 ### Tooling
+
+- `conformance/run.py` exits non-zero when any case fails, reports a missing engine, timeout or failing engine as
+  that case's error instead of crashing or passing, and always writes its report.
+- Conformance cases that can detect what they test:
+  - a2 has an off-centre anchor, so the rotation sign shows;
+  - the glTF marker in b5 is asymmetric and single-sided, with a back-facing quad that must not appear;
+  - new cases: b7 (combined yaw and pitch), b8 (`focalLength`), d1 (object3D rotation order), d2 (2.5D layer
+    rotationY) and d3 (object3D rotationY).
+- The conformance runner is tested: failing and missing engines, wrong pictures, and exact regeneration of the
+  cases.
 
 - `.github/workflows/ci.yml`: tests on Python 3.10 and 3.12, `release.py check` and `check_hygiene.py --artifacts` on every push and pull request.
 - `conformance/`: the compatibility kit (normative conventions, cases, runner) now lives in this repository. The

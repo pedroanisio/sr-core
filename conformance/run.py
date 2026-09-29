@@ -87,7 +87,14 @@ def render(renderer, case):
     d, s = prepare(case, renderer)
     png = os.path.join(d, "frame.png")
     t0 = time.time()
-    p = subprocess.run(cmd(s, png), cwd=d, capture_output=True, text=True, timeout=600, env={**os.environ, **env})
+    argv = cmd(s, png)
+    try:
+        p = subprocess.run(argv, cwd=d, capture_output=True, text=True, timeout=600, env={**os.environ, **env})
+    except FileNotFoundError:
+        return None, None, time.time() - t0, [f"{argv[0]} not found: set the engine's environment variable or put "
+                                               "its scene-render-* alias on PATH (see the module documentation)"]
+    except subprocess.TimeoutExpired:
+        return None, None, time.time() - t0, ["timed out after 600 s"]
     dt = time.time() - t0
     if not os.path.exists(png):  # renderers that write the document's own output path
         found = sorted(glob.glob(os.path.join(d, "**", "*.png"), recursive=True))
@@ -95,6 +102,9 @@ def render(renderer, case):
             shutil.copy(found[0], png)
     log = (p.stdout + p.stderr).strip()
     notes = sorted({l.strip() for l in log.splitlines() if re.search(r"not (rendered|supported)|unsupported|error", l, re.I)})
+    if p.returncode != 0:                 # an engine that reports failure fails the case, whatever it wrote
+        tail = (log.splitlines() or [""])[-1][:160]
+        return None, p.returncode, dt, [f"exit status {p.returncode}: {tail}"] + notes[:5]
     return (png if os.path.exists(png) else None), p.returncode, dt, notes[:6]
 
 
@@ -113,8 +123,10 @@ def check(meas, exp, tol, png=None):
         got = region_rgb(png, reg["box"])
         ok = all(abs(g - w) <= COLOUR_TOL for g, w in zip(got, reg["rgb"]))
         rows.append((f"region{k}", "pass" if ok else "fail", {"rgb": reg["rgb"]}, {"rgb": got}))
+    for col in exp.get("absent", []):
+        rows.append((col, "fail" if col in meas else "pass", "absent", meas.get(col)))
     for col, e in exp.items():
-        if col in ("rule", "regions"):
+        if col in ("rule", "regions", "absent"):
             continue
         m = meas.get(col)
         if m is None:
@@ -126,7 +138,7 @@ def check(meas, exp, tol, png=None):
     return rows
 
 
-def main():
+def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--renderers", default="c,rs,py,js")
     ap.add_argument("--cases", default="")
@@ -149,8 +161,17 @@ def main():
                 entry["status"] = "error"
             report["results"][r][c] = entry
             print(f"{r:3s} {c:22s} {entry['status']:5s} {dt:6.1f}s " + ("; ".join(notes)[:110] if entry["status"] == "error" else ""), flush=True)
+    os.makedirs(OUT, exist_ok=True)
     json.dump(report, open(os.path.join(OUT, "report.json"), "w"), indent=2)
     write_md(report, spec, cases)
+    bad = [(r, c) for r, res in report["results"].items() for c, e in res.items() if e["status"] != "pass"]
+    if not cases:
+        print("no cases selected", flush=True)
+        return 2
+    if bad:
+        print(f"{len(bad)} of {sum(len(v) for v in report['results'].values())} case runs did not pass", flush=True)
+        return 1
+    return 0
 
 
 def write_md(report, spec, cases):
@@ -167,7 +188,8 @@ def write_md(report, spec, cases):
                 cells.append("⛔ " + (e["notes"][0][:60] if e["notes"] else f"exit {e['exit']}"))
             else:
                 bad = [x for x in e["checks"] if x["status"] != "pass"]
-                cells.append("❌ " + "; ".join(f"{x['colour']} " + ("missing" if x["measured"] is None else
+                cells.append("❌ " + "; ".join(f"{x['colour']} " + ("present (must not appear)" if x["expected"] == "absent" else
+                                                                   "missing" if x["measured"] is None else
                                                                    ", ".join(f"{k} {x['measured'][k]} (exp {x['expected'][k]})" for k in x["expected"]))
                                               for x in bad))
         L.append(f"| {c} | {spec['cases'][c]['rule']} | " + " | ".join(cells) + " |")
@@ -175,4 +197,4 @@ def write_md(report, spec, cases):
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
