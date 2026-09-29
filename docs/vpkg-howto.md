@@ -255,6 +255,17 @@ Bundled system fonts record their copyright and licence strings in `fonts[]` aut
 
 `run` calls engines by these default command names, which must be on PATH: `scenerender` (py), `scene-render-rs`, `scene-render-c` and `scene-render-js`.
 
+The C, Rust and JavaScript engines each install a binary named `scene-render`, so one PATH can't tell them apart. The three names above are aliases you create once per machine, pointing at each engine's `scene-render`:
+
+```bash
+ln -s /path/to/rs-scene-render/target/release/scene-render ~/.local/bin/scene-render-rs
+ln -s /path/to/c-scene-render-build/scene-render           ~/.local/bin/scene-render-c
+printf '#!/bin/sh\nexec node /path/to/js-render-engine/bin/scene-render.js "$@"\n' > ~/.local/bin/scene-render-js
+chmod +x ~/.local/bin/scene-render-js
+```
+
+If an alias is missing, `run` stops with a message naming the command it looked for and these three ways to provide it. The conformance runner (`conformance/run.py`) uses the same names.
+
 To use other names or paths, create `~/.config/scene-vpkg/engines.json`. It's read on every `run`; `$XDG_CONFIG_HOME` is honoured.
 
 ```json

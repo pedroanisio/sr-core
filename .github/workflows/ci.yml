@@ -1,0 +1,24 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install pytest setuptools wheel
+      - name: tests
+        run: python -m pytest -q tests
+      - name: versions, schema hashes and generated reference agree
+        run: python tools/release.py check
+      - name: release hygiene, including the sdist and wheel
+        run: python tools/check_hygiene.py --artifacts

@@ -77,7 +77,7 @@ version="1.N"?>
 
 | Case | Checks | Tolerance |
 |---|---|---|
-| `srep-<n>-<slug>` in the conformance suite | <what is measured: positions, colours, edge shift, event times> | ≥ 40 dB against the Rust reference render, or <stated> |
+| `conformance/cases/srep-<n>-<slug>.xml` | <what is measured: positions, colours, edge shift, event times> | ≥ 40 dB against the Rust reference render, or <stated> |
 
 <Every normative sentence in Specification is covered by at least one case. Say which case covers which
 sentence when it isn't obvious.>

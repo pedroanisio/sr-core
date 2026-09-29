@@ -46,6 +46,23 @@ class StepError(RuntimeError):
     pass
 
 
+def missing_command(argv: list, engine: str | None) -> str | None:
+    """None when argv[0] can be executed, else a message saying how to make it available."""
+    exe = argv[0]
+    if os.sep in exe or (os.altsep and os.altsep in exe):
+        found = os.path.isfile(exe) and os.access(exe, os.X_OK)
+    else:
+        found = shutil.which(exe) is not None
+    if found:
+        return None
+    if engine is None:
+        return f"{exe} is not on PATH"
+    return (f"engine {engine!r}: {exe} is not on PATH. The C, Rust and JavaScript engines each install a binary "
+            f"named scene-render, so run looks for a distinct name per engine. Link it "
+            f"(ln -s /path/to/scene-render ~/.local/bin/{exe}), set VPKG_ENGINE_{engine.upper().replace('-', '_')}, "
+            f"or give its command in ~/.config/scene-vpkg/engines.json")
+
+
 def engine_config(engine: str) -> dict:
     cfg = dict(ENGINES.get(engine, {"command": [engine], "to": None, "output": None, "all": None, "still": None}))
     base = os.environ.get("XDG_CONFIG_HOME") or os.path.join(os.path.expanduser("~"), ".config")
@@ -173,6 +190,12 @@ def run(path: str, engine: str | None = None, only=(), start: str | None = None,
             log(f"{label} $ {' '.join(shlex.quote(a) for a in argv)}" + (f"   (in {s['cwd']})" if s.get("cwd") else ""))
             if dry:
                 continue
+            problem = missing_command(argv, engine if s["kind"] == "render" else None)
+            if problem:
+                log(f"{label} {problem}")
+                if s.get("optional"):
+                    break
+                return 1
             if to:
                 os.makedirs(os.path.dirname(os.path.join(project, to)) or project, exist_ok=True)
             code = subprocess.run(argv, cwd=cwd, env={**env, **s.get("env", {}), **extra_env}).returncode

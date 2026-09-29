@@ -42,7 +42,7 @@ PRIVATE = [
     (re.compile(r"/Users/(?!me/)[A-Za-z][\w.-]*/"), "machine path under /Users"),
     (re.compile(r"/tmp/claude-|\bscratchpad\b|\.claude/projects|\.local/share/scene-render"), "private working directory"),
     (re.compile(r"\bv\d{3}-[a-z]"), "local project id"),
-    (re.compile(r"\bscene-render-conformance/"), "unpublished sibling folder"),
+    (re.compile(r"\b(?:scene-render-conformance|c-scene-render)/"), "unpublished sibling folder"),
     (re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+"), "e-mail address"),
 ]
 SCHEMA_ONLY = [(re.compile(r"\b(?:rs|c|py)-scene-render\b|\bpy-render\b|\bjs-render-engine\b|"

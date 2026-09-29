@@ -22,6 +22,20 @@ version:
 
 ### Fixed
 
+- `scenerender-vpkg run` reports a missing engine command with the alias it expected and how to provide it
+  (a symlink, `VPKG_ENGINE_<ID>` or `engines.json`), instead of a Python traceback.
+
+### Docs
+
+- The vpkg how-to and SREP 1 explain why the default engine commands are aliases (`scene-render-rs`, `-c`, `-js`) and
+  how to create them.
+
+### Tooling
+
+- `.github/workflows/ci.yml`: tests on Python 3.10 and 3.12, `release.py check` and `check_hygiene.py --artifacts` on every push and pull request.
+- `conformance/`: the compatibility kit (normative conventions, cases, runner) now lives in this repository. The
+  runner finds engines through environment variables or the `scene-render-*` aliases, not machine paths.
+
 ## 1.0.1 — 2026-09-29
 
 ### Fixed

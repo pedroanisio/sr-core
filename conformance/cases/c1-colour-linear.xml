@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.1">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF" workingColorSpace="linear-srgb" linearLight="true"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<shape id="g" shape="rect" width="200" height="100" x="60" y="60" fill="#808080FF"/>
+<shape id="o" shape="rect" width="200" height="100" x="380" y="200" fill="#D2691EFF"/>
+</composition>
+</scene>

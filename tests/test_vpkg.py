@@ -335,3 +335,17 @@ def test_writer_never_writes_a_later_version(tmp_path):
                                         '<composition id="c"/></scene>')
     with pytest.raises(mf.ManifestError, match="newer than this tool writes"):
         plan(str(tmp_path), minimal("1.3"))
+
+
+def test_missing_engine_command_explains_the_aliases(tmp_path, monkeypatch):
+    (tmp_path / "scene.xml").write_text('<scene version="1.1"><project width="2" height="2" fps="1" duration="1"/>'
+                                        '<composition id="c"/></scene>')
+    spec = minimal()
+    spec["pipeline"] = {"steps": [{"id": "render", "kind": "render", "render": {"scene": "scene.xml"}}]}
+    (tmp_path / "vpkg.json").write_text(mf.dump(spec))
+    monkeypatch.setenv("PATH", str(tmp_path / "empty"))
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / "config"))
+    monkeypatch.delenv("VPKG_ENGINE_RS", raising=False)
+    lines: list = []
+    assert run(str(tmp_path), engine="rs", log=lines.append) == 1
+    assert any("scene-render-rs is not on PATH" in ln and "VPKG_ENGINE_RS" in ln and "engines.json" in ln for ln in lines)
