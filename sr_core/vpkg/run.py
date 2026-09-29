@@ -79,6 +79,15 @@ def engine_config(engine: str) -> dict:
     return cfg
 
 
+def _render_inputs(m: dict, project: str, step: dict, engine: str | None) -> list:
+    """What a render step reads: the scene (or the variant made for the engine) and every file it references,
+    so editing the scene or an asset makes the render out of date."""
+    scene = os.path.join(project, mf.scene_for(m, step["render"]["scene"], engine))
+    if not os.path.isfile(scene):
+        return []
+    return [scene] + [f for f in refs.scan(scene).inputs if os.path.isfile(f)]
+
+
 def _fill(template: list, **values) -> list:
     return [x.format(**values) for x in template]
 
@@ -165,6 +174,8 @@ def run(path: str, engine: str | None = None, only=(), start: str | None = None,
                 log(f"{label} skipped: not idempotent and its outputs exist (run with --only {s['id']} to redo)")
                 continue
             ins = [f for f in _expand(project, s.get("inputs", [])) if os.path.exists(f)]
+            if s["kind"] == "render":
+                ins += _render_inputs(m, project, s, engine)
             if not ins or max(map(os.path.getmtime, ins)) <= min(map(os.path.getmtime, out_files)):
                 log(f"{label} up to date")
                 continue

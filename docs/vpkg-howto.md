@@ -24,7 +24,7 @@ The tool ships with sr-core. It uses only the Python standard library, so any Py
 
 ```bash
 pip install .                       # from the root of an sr-core checkout, or: pip install sr_core-<version>-py3-none-any.whl
-scenerender-vpkg --version          # scenerender-vpkg <version> (format 1.0)
+scenerender-vpkg --version          # scenerender-vpkg <version> (format <format version>)
 ```
 
 Without installing, run it from a checkout:

@@ -26,7 +26,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import mimetypes
 import os
 import re
 import shutil
@@ -131,13 +130,54 @@ def _inside(path: str, root: str) -> bool:
     return lint._inside(path, root)
 
 
-def _walk(project: str):
+def _walk(project: str, outside: list | None = None):
+    """Regular files under the project. A symbolic link whose target resolves outside the project is never
+    followed; it is reported in `outside` (pack refuses it) instead."""
+    real = os.path.realpath(project)
     for root, dirs, files in os.walk(project):
-        dirs.sort()
+        dirs[:] = sorted(d for d in dirs if not _escapes(os.path.join(root, d), real, outside, project))
         for name in sorted(files):
             p = os.path.join(root, name)
-            if os.path.isfile(p):
+            if os.path.isfile(p) and not _escapes(p, real, outside, project):
                 yield _rel(p, project), p
+
+
+# Media types by extension. Fixed here rather than read from the host's mimetypes tables, which differ between
+# machines, so the same project packs to the same bytes everywhere.
+MEDIA_TYPES = {
+    ".xml": "application/xml", ".xsd": "application/xml", ".sch": "application/xml", ".json": "application/json",
+    ".geojson": "application/geo+json", ".topojson": "application/json", ".kml": "application/vnd.google-earth.kml+xml",
+    ".gpx": "application/gpx+xml", ".md": "text/markdown", ".txt": "text/plain", ".csv": "text/csv",
+    ".srt": "application/x-subrip", ".vtt": "text/vtt", ".ass": "text/x-ssa", ".html": "text/html",
+    ".css": "text/css", ".js": "text/javascript", ".py": "text/x-python", ".sh": "application/x-sh",
+    ".glsl": "text/plain", ".conf": "text/plain", ".toml": "application/toml", ".yaml": "application/yaml",
+    ".yml": "application/yaml", ".pdf": "application/pdf", ".zip": "application/zip",
+    ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp", ".gif": "image/gif",
+    ".svg": "image/svg+xml", ".tif": "image/tiff", ".tiff": "image/tiff", ".exr": "image/x-exr",
+    ".hdr": "image/vnd.radiance", ".ktx2": "image/ktx2",
+    ".wav": "audio/wav", ".flac": "audio/flac", ".mp3": "audio/mpeg", ".ogg": "audio/ogg", ".opus": "audio/opus",
+    ".m4a": "audio/mp4", ".aac": "audio/aac",
+    ".mp4": "video/mp4", ".mov": "video/quicktime", ".webm": "video/webm", ".mkv": "video/x-matroska",
+    ".gltf": "model/gltf+json", ".glb": "model/gltf-binary", ".obj": "model/obj", ".mtl": "model/mtl",
+    ".stl": "model/stl", ".ply": "model/ply", ".usdz": "model/vnd.usdz+zip", ".fbx": "application/octet-stream",
+    ".bin": "application/octet-stream", ".ttf": "font/ttf", ".otf": "font/otf", ".ttc": "font/collection",
+    ".woff": "font/woff", ".woff2": "font/woff2", ".onnx": "application/octet-stream",
+}
+
+
+def media_type(rel: str) -> str | None:
+    return MEDIA_TYPES.get(os.path.splitext(rel)[1].lower())
+
+
+def _escapes(path: str, real_project: str, outside: list | None, project: str) -> bool:
+    if not os.path.islink(path):
+        return False
+    target = os.path.realpath(path)
+    if target == real_project or target.startswith(real_project + os.sep):
+        return False
+    if outside is not None:
+        outside.append(_rel(path, project))
+    return True
 
 
 def _role(rel: str, abs_path: str, plan: Plan) -> str:
@@ -249,7 +289,8 @@ def plan(project: str, spec: dict | None = None, *, with_archive: bool = False, 
 
     # 2. everything else in the project tree
     includes, excludes = spec.get("include", []), spec.get("exclude", [])
-    for rel, abs_path in _walk(project):
+    escaping: list = []
+    for rel, abs_path in _walk(project, escaping):
         if rel in p.files:
             if matches(rel, excludes):
                 p.warnings.append(f"{rel}: excluded by vpkg.json but a scene reads it; bundled")
@@ -285,6 +326,12 @@ def plan(project: str, spec: dict | None = None, *, with_archive: bool = False, 
         if os.path.isfile(local) and sha256_file(local) != fetch[rel]["sha256"]:
             p.errors.append(f"{rel}: local file does not match the fetch sha256")
 
+    for rel in escaping:
+        if matches(rel, excludes) or (matches(rel, DEFAULT_EXCLUDE) and not matches(rel, includes)):
+            p.left_out.append((rel, "symbolic link outside the project"))
+            continue
+        p.errors.append(f"{rel}: a symbolic link to a file outside the project; copy the file into the project "
+                        "instead (a link would pack a file the project does not contain)")
     # 3. portability lint
     for rel, abs_path in sorted(p.files.items()):
         if p.roles.get(rel) == "script" and _inside(abs_path, project):
@@ -312,7 +359,11 @@ def _looks_like_scene(path: str) -> bool:
 
 
 def _fonts(p: Plan, allow_missing: bool, use_system: bool) -> None:
-    project_fonts = [a for rel, a in sorted(p.files.items()) if rel.lower().endswith(fontlib.FONT_EXTENSIONS)]
+    # every font file in the project is a candidate, wherever it sits (fonts/, assets/, ...), unless the author
+    # excluded it; a candidate that a scene uses is bundled in place
+    excludes = p.spec.get("exclude", [])
+    project_fonts = [a for rel, a in _walk(p.project)
+                     if rel.lower().endswith(fontlib.FONT_EXTENSIONS) and not matches(rel, excludes)]
     index = fontlib.FontIndex(project_fonts, use_system=use_system)
     by_path: dict = {}                                    # (font path, index) -> fonts[] entry
     for scene_rel, scan in p.scans.items():
@@ -331,6 +382,8 @@ def _fonts(p: Plan, allow_missing: bool, use_system: bool) -> None:
                 if key not in by_path:
                     if _inside(face.path, p.project):
                         rel, origin = _rel(face.path, p.project), "project"
+                        if rel not in p.files:
+                            p.files[rel], p.roles[rel] = face.path, "font"
                     else:
                         slug = re.sub(r"[^a-z0-9]+", "-", face.family.lower()).strip("-")
                         rel, origin = f"{FONT_DIR}/{slug}/{os.path.basename(face.path)}", "system"
@@ -406,26 +459,49 @@ def _element_attrs(ref) -> dict:
     return _ATTR_CACHE[key].get((ref.element, ref.attr, ref.value), {})
 
 
+def _rewrite_refs(text: str, refs_: list, doc_dir: str, external: dict) -> tuple:
+    """Point every reference in `refs_` (all held by one document in `doc_dir`) at its `_external/` copy."""
+    changes, seen = [], set()
+    for abs_path, r in refs_:
+        if (r.attr, r.value) in seen:
+            continue
+        seen.add((r.attr, r.value))
+        new = os.path.relpath(external[abs_path], doc_dir or ".").replace(os.sep, "/")
+        rx = re.compile(r"(\b%s\s*=\s*)([\"'])%s\2" % (re.escape(r.attr), re.escape(escape(r.value))))
+        text, n = rx.subn(lambda m: m.group(1) + quoteattr(new), text)
+        if n:
+            changes.append(f"{r.attr}=\"{r.value}\" -> \"{new}\" ({n}x)")
+    return text, changes
+
+
 def _rewrite_scenes(p: Plan, external: dict) -> None:
+    # references held by <include>d documents inside the project: rewrite those documents too
+    included: dict = {}
+    for scene_rel, scan in p.scans.items():
+        path = p.files[scene_rel]
+        for abs_path, rs in scan.inputs.items():
+            if abs_path in external:
+                for r in rs:
+                    if r.source != path and r.source.endswith(".xml") and _inside(r.source, p.project):
+                        included.setdefault(r.source, []).append((abs_path, r))
+    for source, refs_ in sorted(included.items()):
+        rel = _rel(source, p.project)
+        if rel in p.scans:
+            continue                                    # a listed scene: handled below with its own references
+        text = p.content[rel].decode("utf-8") if rel in p.content else open(source, encoding="utf-8").read()
+        text, changes = _rewrite_refs(text, refs_, os.path.dirname(rel), external)
+        if changes:
+            p.content[rel] = text.encode("utf-8")
+            p.files.setdefault(rel, source)
+            p.rewrites.append({"path": rel, "changes": changes})
     for scene_rel, scan in p.scans.items():
         path = p.files[scene_rel]
         with open(path, "rb") as f:
             data = f.read()
-        text, changes = data.decode("utf-8"), []
         scene_dir = os.path.dirname(scene_rel)
-        seen = set()
-        for abs_path, rs in scan.inputs.items():
-            if abs_path not in external:
-                continue
-            for r in rs:
-                if r.source != path or (r.attr, r.value) in seen:
-                    continue
-                seen.add((r.attr, r.value))
-                new = os.path.relpath(external[abs_path], scene_dir or ".").replace(os.sep, "/")
-                rx = re.compile(r"(\b%s\s*=\s*)([\"'])%s\2" % (re.escape(r.attr), re.escape(escape(r.value))))
-                text, n = rx.subn(lambda m: m.group(1) + quoteattr(new), text)
-                if n:
-                    changes.append(f"{r.attr}=\"{r.value}\" -> \"{new}\" ({n}x)")
+        own = [(abs_path, r) for abs_path, rs in scan.inputs.items() if abs_path in external
+               for r in rs if r.source == path]
+        text, changes = _rewrite_refs(data.decode("utf-8"), own, scene_dir, external)
         decls = []
         for requested, res in p.font_plan.get(scene_rel, []):
             for face in res.faces:
@@ -493,7 +569,7 @@ def build_manifest(p: Plan, date: str | None = None) -> dict:
         else:
             size, digest = os.path.getsize(p.files[rel]), sha256_file(p.files[rel])
         entry = {"path": rel, "size": size, "sha256": digest, "role": p.roles.get(rel, "other")}
-        mt = mimetypes.guess_type(rel)[0]
+        mt = media_type(rel)
         if mt:
             entry["mediaType"] = mt
         if rel in p.referenced_by:
@@ -509,6 +585,7 @@ def build_manifest(p: Plan, date: str | None = None) -> dict:
         spec["external"] = p.external
     if p.rewrites:
         spec["rewrites"] = p.rewrites
+    spec["formatVersion"] = mf.FORMAT_VERSION            # the packed manifest uses this tool's format
     spec["packed"] = {"tool": "scenerender-vpkg", "toolVersion": __version__, "projectDir": os.path.basename(p.project),
                       "fileCount": len(files), "totalSize": sum(f["size"] for f in files)}
     if date:
@@ -537,12 +614,16 @@ def _info(name: str, dt, executable: bool = False) -> zipfile.ZipInfo:
 def write_zip(p: Plan, out: str, date: str | None = None) -> dict:
     dt, epoch_date = _date_time()
     m = build_manifest(p, date or epoch_date)
+    readme_bytes = readme(m).encode()
+    with open(mf.SCHEMA_PATH, "rb") as f:
+        schema_bytes = f.read()
+    m["packed"]["metaSha256"] = {"README.md": hashlib.sha256(readme_bytes).hexdigest(),
+                                 mf.SCHEMA_NAME: hashlib.sha256(schema_bytes).hexdigest()}
     tmp = out + ".part"
     with zipfile.ZipFile(tmp, "w", allowZip64=True) as z:
         z.writestr(_info(mf.MANIFEST, dt), mf.dump(m).encode())
-        with open(mf.SCHEMA_PATH, "rb") as f:
-            z.writestr(_info(mf.SCHEMA_NAME, dt), f.read())
-        z.writestr(_info("README.md", dt), readme(m).encode())
+        z.writestr(_info(mf.SCHEMA_NAME, dt), schema_bytes)
+        z.writestr(_info("README.md", dt), readme_bytes)
         for entry in m["files"]:
             rel = entry["path"]
             name = "project/" + rel

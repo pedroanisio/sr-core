@@ -8,3 +8,4 @@
 | [3](srep-0003.md) | Unversioned file names for the canonical schema | Process | Active | 1.1 |
 | [4](srep-0004.md) | Semantic versioning for sr-core, the schema and the package format | Process | Active | n/a |
 | [5](srep-0005.md) | Engine-neutral wording in the schema's comments and documentation | Standards | Final | 1.1 |
+| [6](srep-0006.md) | Package format 1.1: hash-covered metadata and safe reading | Standards | Accepted | vpkg 1.1 |

@@ -48,7 +48,37 @@ def locate(path: str) -> tuple:
 def _safe(name: str) -> bool:
     parts = name.split("/")
     return not (name.startswith("/") or "\\" in name or ".." in parts or (len(name) > 1 and name[1] == ":")
-                or "" in parts[:-1])
+                or "" in parts[:-1] or any(ord(c) < 32 or ord(c) == 127 for c in name))
+
+
+def inside(root: str, rel: str) -> str | None:
+    """The absolute path of `rel` (slash-separated) under `root`, or None when it would resolve outside it,
+    following any symbolic links already on disk."""
+    base = os.path.realpath(root)
+    if not _safe(rel):
+        return None
+    target = os.path.realpath(os.path.join(base, *rel.split("/")))
+    return target if target == base or target.startswith(base + os.sep) else None
+
+
+def _meta_errors(z: zipfile.ZipFile, names: list, m: dict, rep: "Report") -> None:
+    """README.md and vpkg.schema.json are covered by packed.metaSha256 from format 1.1."""
+    recorded = (m.get("packed") or {}).get("metaSha256")
+    if recorded is None:
+        if (mf.version(m) or (1, 0)) >= (1, 1):
+            rep.errors.append(f"{mf.MANIFEST}: packed.metaSha256 is missing (required from format 1.1)")
+        else:
+            rep.warnings.append("format 1.0: README.md and vpkg.schema.json are not covered by hashes; "
+                                "read them with care")
+        return
+    for name in sorted(META - {mf.MANIFEST}):
+        if name not in names:
+            continue
+        want = recorded.get(name)
+        if want is None:
+            rep.errors.append(f"{name}: in the zip but not covered by packed.metaSha256")
+        elif hashlib.sha256(z.read(name)).hexdigest() != want:
+            rep.errors.append(f"{name}: SHA-256 differs from packed.metaSha256")
 
 
 def verify(path: str, deep: bool = True, extract_to: str | None = None) -> Report:
@@ -85,10 +115,18 @@ def verify(path: str, deep: bool = True, extract_to: str | None = None) -> Repor
         if "files" not in m:
             rep.errors.append(f"{mf.MANIFEST}: no files[] (an authoring spec, not a packed manifest)")
             return rep
-        expected = {"project/" + f["path"]: f for f in m["files"]}
+        expected = {"project/" + f["path"]: f for f in m["files"] if isinstance(f.get("path"), str)}
         for name in names:
             if name not in expected and name not in META and not name.endswith("/"):
                 rep.errors.append(f"{name}: in the zip but not in {mf.MANIFEST}")
+        for name in expected:
+            if not _safe(name):
+                rep.errors.append(f"{name!r}: unsafe path in {mf.MANIFEST}")
+        _meta_errors(z, names, m, rep)
+        if rep.errors:
+            # never write anything from a package already known to be unsafe or invalid; keep hashing in memory
+            # so every problem is reported
+            extract_to, deep = None, False
         tmp = None
         if deep and extract_to is None:
             tmp = tempfile.TemporaryDirectory(prefix="vpkg-verify-")
@@ -101,8 +139,13 @@ def verify(path: str, deep: bool = True, extract_to: str | None = None) -> Repor
                 h, size = hashlib.sha256(), 0
                 dst = None
                 if extract_to:
-                    target = os.path.join(extract_to, *name.split("/"))
+                    target = inside(extract_to, name)
+                    if target is None:
+                        rep.errors.append(f"{f['path']}: resolves outside the extraction folder")
+                        continue
                     os.makedirs(os.path.dirname(target), exist_ok=True)
+                    if os.path.lexists(target):
+                        os.remove(target)
                     dst = open(target, "wb")
                 try:
                     with z.open(name) as src:
@@ -175,9 +218,14 @@ def fetch_all(root: str, only_missing: bool = True, log=print) -> list:
     """Download every fetch entry to its path under the project; returns errors."""
     manifest_path, project = locate(root)
     m = mf.load(manifest_path, check=False)
-    errors = []
+    errors = mf.validate(m)
+    if errors:
+        return errors
     for f in m.get("fetch", []):
-        target = os.path.join(project, *f["path"].split("/"))
+        target = inside(project, f["path"])
+        if target is None:
+            errors.append(f"{f['path']!r}: fetch path resolves outside the project")
+            continue
         if os.path.isfile(target) and only_missing:
             if _sha(target) == f["sha256"]:
                 continue

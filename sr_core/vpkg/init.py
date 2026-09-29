@@ -118,7 +118,7 @@ def init(project: str) -> dict:
             step["render"]["output"] = ids[0][0]
         steps.append(step)
     spec = {
-        "$schema": "urn:scene-render:vpkg:1.0",
+        "$schema": "urn:scene-render:vpkg:1",
         "format": mf.FORMAT, "formatVersion": mf.FORMAT_VERSION,
         "package": {"id": re.sub(r"[^a-z0-9._-]+", "-", os.path.basename(project).lower()).strip("-") or "video",
                     "version": "1.0.0", "title": _title(project), **({"languages": languages} if languages else {})},

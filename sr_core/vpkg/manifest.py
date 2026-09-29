@@ -1,6 +1,6 @@
 """vpkg.json: loading and validation.
 
-The JSON Schema in schema/vpkg-1.0.schema.json is the single definition of the format; `schema_errors`
+The JSON Schema in schema/vpkg-1.schema.json is the single definition of the format; `schema_errors`
 interprets the subset of JSON Schema it uses (type, const, enum, required, properties, additionalProperties,
 items, minItems, minLength, minimum, pattern, $ref) so validation needs only the standard library.
 `semantic_errors` adds the rules a schema cannot express: exactly one primary scene, unique step ids,
@@ -17,10 +17,15 @@ import os
 import re
 
 FORMAT = "scene-video-package"
-FORMAT_VERSION = "1.0"
+FORMAT_VERSION = "1.1"
 MANIFEST = "vpkg.json"
 SCHEMA_NAME = "vpkg.schema.json"
-SCHEMA_PATH = os.path.join(os.path.dirname(__file__), "schema", "vpkg-1.0.schema.json")
+SCHEMA_PATH = os.path.join(os.path.dirname(__file__), "schema", "vpkg-1.schema.json")
+
+
+def _anchored(pattern: str) -> str:
+    """JSON Schema (ECMA-262) `$` is the end of the string; Python's also matches before a final newline."""
+    return pattern[:-1] + r"\Z" if pattern.endswith("$") and not pattern.endswith("\\$") else pattern
 
 
 class ManifestError(ValueError):
@@ -61,7 +66,7 @@ def schema_errors(value, schema: dict | None = None, root: dict | None = None, w
     if isinstance(value, str):
         if len(value) < schema.get("minLength", 0):
             errors.append(f"{where}: too short")
-        if "pattern" in schema and not re.search(schema["pattern"], value):
+        if "pattern" in schema and not re.search(_anchored(schema["pattern"]), value):
             errors.append(f"{where}: {value!r} does not match {schema['pattern']}")
     if isinstance(value, (int, float)) and "minimum" in schema and value < schema["minimum"]:
         errors.append(f"{where}: below {schema['minimum']}")

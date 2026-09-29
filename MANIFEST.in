@@ -6,4 +6,6 @@ graft docs
 graft srep
 graft tools
 graft tests
+graft conformance
+prune conformance/out
 global-exclude __pycache__ *.py[cod]

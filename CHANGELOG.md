@@ -20,7 +20,28 @@ version:
 
 ### Added
 
+- Package format 1.1 (SREP 6): `packed.metaSha256` covers `README.md` and `vpkg.schema.json`, and `pack` writes
+  1.1 manifests. 1.0 packages still read, with a warning that their metadata is not hash-covered. The format
+  schema is `vpkg-1.schema.json`, with `$id` `urn:scene-render:vpkg:1`.
+
+### Security
+
+- `verify` and `unpack` never write from a package once any check fails, and never write outside the
+  extraction folder. Before, a hostile manifest path could write anywhere, even during a plain `verify`.
+- Paths with control characters are rejected. A newline could hide a `..` from the path check.
+- `fetch` validates the manifest and keeps every download inside the project.
+- `pack` refuses symbolic links that leave the project. It had bundled the files they pointed at.
+
 ### Fixed
+
+- References to files outside the project are rewritten in `<include>`d documents too. Such packages used to fail
+  their own `verify`.
+- Font files anywhere in the project (for example `assets/`) are found when resolving font families.
+- Render steps are out of date when their scene or any file it references changes.
+- Media types come from a fixed table, so a project packs to the same bytes on every machine.
+- The README no longer states version numbers that go stale. The reference's marker file no longer embeds the
+  tools version, which had made a tools-only release fail `release.py check`.
+- The sdist includes `conformance/`.
 
 - `scenerender-vpkg run` reports a missing engine command with the alias it expected and how to provide it
   (a symlink, `VPKG_ENGINE_<ID>` or `engines.json`), instead of a Python traceback.
