@@ -1,6 +1,6 @@
 ```
 SREP:            0
-Title:           Roadmap for environments, simulation and geodata
+Title:           Roadmap for science-explainer video
 Author:          rs-scene-render maintainers
 Status:          Draft
 Type:            Informational
@@ -9,37 +9,45 @@ Schema-Version:  n/a
 Requires:        the 1.2 drafts for basemaps, 3D maps and 3D rigid bodies
 ```
 
-# SREP 0 — Roadmap for environments, simulation and geodata
+# SREP 0 — Roadmap for science-explainer video
 
 ## Abstract
 
-scene-render has maps, terrain from elevation tiles, 2D simulations (smoke, flocks, slime, erosion), particles
-and rigid bodies, but no landscape that changes over time, no sky, no volumes, no water surface, no 3D
-deformables, no vegetation and several gaps in map layers. This SREP compares the format with the same peers
-as its earlier survey (Lottie, Rive, SVG 2, Remotion, Motion Canvas, HyperFrames, the JSON video APIs, MLT,
-OTIO, FCPXML, OpenUSD, glTF and OCIO) on these capabilities, takes the specialist tools that lead each area as
-the quality bar, fixes the design rules the work shares, and lays out the family of Standards SREPs that will
-close the gaps, in dependency order, with the evidence each must bring. It proposes no schema change itself.
+The format's goal is to produce almost any shot of a science-explainer video (Veritasium, PBS Space Time,
+Kurzgesagt, 3Blue1Brown, minutephysics, Steve Mould, Real Engineering, Primer) from a document, with every
+frame exact under seeking and every physical claim tested. This SREP measures the format against a catalogue
+of 36 reference shots from those channels and against its usual peers (Lottie, Rive, SVG 2, Remotion, Motion
+Canvas, HyperFrames, the JSON video APIs, MLT, OTIO, FCPXML, OpenUSD, glTF, OCIO, plus Manim, OpenSpace,
+ParaView and ray-optics for the new families). It takes the specialist tools that lead each area as the
+quality bar, fixes the design rules the work shares, and orders the Standards SREPs that close the gaps into
+nine milestones by share of screen time and size of gap. It proposes no schema change itself.
 
 ## Motivation
 
-The format is used to make explanatory and documentary video. Five kinds of shot recur and cannot be made
-today without pre-rendering in another tool and importing the result as footage:
+Explainer videos are built from a small number of shot families. A survey of the channels above gives a rough
+share of screen time for each (a judgement, not a measurement), and how well the format covers it today:
 
-1. **Landscapes that change:** rivers cutting valleys, floods, lava flows, snowfall and avalanches, wildfire
-   fronts, glaciers retreating.
-2. **Sky and air:** time of day, sunsets, haze over distance, fog, clouds, weather.
-3. **Water:** oceans, lakes and rivers with a real surface.
-4. **Matter in 3D:** cloth, smoke and fire, liquids, breaking objects, bodies that fall like ragdolls.
-5. **Living and data layers:** vegetation over terrain, growth patterns, and map layers such as shaded relief,
-   contours, heatmaps, wind flow and 3D cities.
+| Shot family | Share | Today |
+|---|---|---|
+| Live action and compositing | ≈22% | covered: keys, imported tracking, stabilisation |
+| Flat motion graphics and typography | ≈16% | covered |
+| Space and astronomy | ≈12% | gap |
+| Math animation | ≈10% | partial: shapes, TeX, morphing |
+| Scientific visualisation (fields, waves) | ≈10% | gap |
+| 3D mechanics and physics | ≈9% | partial: 3D rigid bodies (1.2 draft) |
+| Data, charts and maps | ≈8% | covered |
+| Characters and creatures | ≈6% | partial: 2D rigs, skinned glTF |
+| Optics | ≈3% | gap |
+| Fluids, smoke and fire | ≈2% | gap in 3D |
+| Landscapes, sky and weather | ≈2% | gap |
 
-None of the format's peers declares any of this. The motion-graphics formats and JSON video APIs have none of
-it; the code frameworks reach it only by embedding three.js or a physics library, which the author then has to
-drive deterministically by hand; the interchange formats describe some results (volumes, rigid bodies,
-instances) but simulate nothing. The specialist tools that do simulate (Houdini, Gaea, Unreal and the like) bake
-results once, are not driven by a declarative document, and are rarely validated against reference data. That
-is the opening.
+Of the 36 catalogue shots, an estimated 15 render natively today, 6 need custom work (shaders, hand-built
+geometry) and 15 hit a gap. None of the peers declares the missing families: the motion-graphics formats and
+JSON video APIs have none of them, the code frameworks reach them only through embedded three.js, Python or
+scripts that the author must make deterministic by hand, and the interchange formats describe results
+(volumes, rigid bodies, instances) without simulating anything. The specialist tools that do simulate or
+render these subjects (Houdini, OpenSpace, ParaView, ray-optics) are not driven by a declarative document, do
+not render to finished video under a single timeline, and are rarely validated. That is the opening.
 
 ## Specification
 
@@ -85,6 +93,27 @@ The criteria on which the format must beat every peer:
 4. **Interchange.** Volumes, instances, rigid bodies and 3D tiles are read from and written to OpenUSD and glTF
    forms, so results move to and from the peers' ecosystems.
 
+### The new families against their own leaders
+
+For the families the first comparison barely touches, the relevant peers are different tools:
+
+| Tool | Math animation | Fields | Space | Optics and waves | Video pipeline |
+|---|---|---|---|---|---|
+| Manim (3b1b, CE) | N: axes, plots, grid transforms, TeX matching by keys | P: vector fields, streamlines | – | – | yes; updaters replay from the start |
+| Motion Canvas | P: TeX by hand-split parts, code diffs | – | – | – | yes |
+| ParaView, VisIt | – | N: streamlines, LIC, isosurfaces, volumes | – | – | weak animation and typography |
+| OpenSpace | – | – | N: SPICE, catalogues, globes (MIT) | – | live planetarium shows |
+| SpaceEngine | – | – | N: procedural universe | – | free licence forbids monetised video |
+| ray-optics, Falstad, PhET | – | P | – | N: ray diagrams, ripple tanks | no video export |
+
+### The measure: a benchmark catalogue
+
+Progress is measured on a catalogue of 36 reference shots of 5 to 10 seconds from the channels above, kept in
+the reference implementation's evidence harness. Each shot records its source video, the techniques it needs,
+its status (native, custom, gap) and the milestone expected to make it native. A shot counts as native when
+its probe scene renders under `--strict`, meets its pixel checks, and gives the same frame when seeked as when
+played. The format leads when at least 90% of the catalogue is native.
+
 ### The quality bar: specialist tools
 
 The peers set no bar for quality here, so each capability is measured against the specialist tools that lead
@@ -113,6 +142,13 @@ it. "Lead" means we aim past them on a named criterion; "parity" means matching 
 | Map data layers | deck.gl (heatmap, trips), Kepler.gl, GEOlayers 3 | points, lines, choropleths, animated styles | **Parity plus:** heatmap, fill-extrusion, icons and time-series layers, rendered deterministically |
 | Wind and current fields | earth.nullschool, Windy | none | **Lead:** particle advection from GRIB2 data resolved into a pinned cache, reproducible frame by frame |
 | Photogrammetric 3D cities | Google Earth Studio, Cesium | extruded footprints | **Parity** for open and self-hosted OGC 3D Tiles 1.1 only (see Licensing) |
+| Math animation | Manim, Motion Canvas | shapes, TeX, morphing | **Lead:** formula morphs from TeX semantics, not hand-split strings; morphing free of artefacts; any frame computed alone, where Manim replays updaters |
+| Fields | ParaView, VisIt, matplotlib, Mathematica | particles in force fields | **Lead:** correct algorithms (Jobard–Lefer, LIC, Wegert phase portraits) with film-quality typography and camera, tested against analytic fields |
+| Space | OpenSpace, SpaceEngine, Celestia | none | **Lead:** mission-grade ephemerides pinned by digest, catalogue stars, physical atmospheres, and relativistic rendering in one deterministic document |
+| Black holes and relativity | the DNGR renderer (James et al. 2015), SpaceEngine | none | **Parity plus:** Kerr geodesics with ray bundles, Doppler and redshift, checked against the photon sphere, shadow and ISCO |
+| Optics and waves | ray-optics, LuxCore dispersion, Falstad | a path tracer, no diagrams | **Lead:** verified ray and wave optics (Snell, Fresnel, Airy, fringe spacing) that renders to film quality |
+| Footage | After Effects, Nuke | chroma, luma and difference keys; imported point, planar, camera and face tracks | **Parity:** tracks, camera solves, masks and depth computed by resolve providers into pinned caches |
+| Looks | After Effects (Kurzgesagt), Blender (Primer) | vector rendering, PBR | **Lead:** one scene rendered flat, hand-drawn, toon-shaded or photoreal |
 
 What no leading tool offers, and every SREP below must keep: a render is a pure function of the document,
 its pinned inputs and the frame time, and seeking to any frame gives exactly what playing up to it gives.
@@ -165,7 +201,56 @@ Four definitions are reused across the plan and get their own SREPs first:
 
 Each line is one Standards (or Semantics) SREP, in dependency order within its track. Algorithms are the
 current recommendation; each SREP argues its own choice. Tracks can proceed in parallel once the shared
-building blocks exist.
+building blocks exist. The milestones under **Order of work** group them.
+
+**Math and fields**
+
+| # | SREP | Recommended method | Reference tests |
+|---|---|---|---|
+| MF1 | Coordinate systems and plots | axes, number and complex planes, polar and 3D axes; explicit, parametric, polar and implicit curves (marching squares); TeX tick labels | plotted points on the analytic curve within 0.5 px |
+| MF2 | Space transforms | matrix, complex-function and nonlinear warps applied to any shape after adaptive subdivision | a linear map moves grid nodes exactly; conformal maps keep right angles |
+| MF3 | Semantic TeX and robust morphing | tagged formula parts carried to glyphs; morph by part with remaps and glyph-outline fallback; arc-length resampling, start alignment, sub-path matching | tagged parts land on their targets; no self-intersections mid-morph |
+| MF4 | Reactive values | attributes bound to value trackers and expressions, evaluated per frame without replay | any frame alone equals the played frame |
+| MF5 | Fields and flow | one field element (analytic, grid, simulated; vector, scalar, complex); arrow glyphs; evenly spaced streamlines (Jobard and Lefer 1997); line integral convolution (Cabral and Leedom 1993); phase portraits (Wegert 2012); charge and current field lines | dipole lines r = C sin²θ; winding number of zeros and poles; streamline separation |
+| MF6 | Scalar 3D | isosurfaces (marching cubes), transfer-function volumes through the media model | sphere area error falls as O(h²) |
+
+**Space**
+
+| # | SREP | Recommended method | Reference tests |
+|---|---|---|---|
+| SP1 | Time and frames | UTC and TDB, ICRF and body-fixed frames; JPL DE440 kernels pinned by digest; VSOP87 fallback | JPL Horizons positions within 1 km |
+| SP2 | Star fields | Hipparcos and Yale BSC; magnitude to flux; B–V to temperature (Ballesteros 2012) to colour through CIE 1931; proper motion; constellations | Δm = 5 gives flux ratio 100; Sun colour at about 5,800 K |
+| SP3 | Planets and the Sun | textures, clouds, night lights, rings, limb darkening; atmosphere from ground to orbit (A1) | terminator and limb positions against geometry |
+| SP4 | Orbits and N-body | Kepler propagation; leapfrog, Wisdom–Holman and IAS15 (Rein and Spiegel 2015) integrators; trajectory ribbons | two-body closure 1e-12; bounded energy error; time reversibility |
+| SP5 | Scale | double-precision floating origin, logarithmic depth, powers-of-ten camera, scale bars | no depth fighting across 10²⁰ in scale |
+| SP6 | Relativity diagrams | Minkowski diagrams with boosts, light cones, Penrose diagrams, embedding and curvature grids, gravitational-wave strain | boost preserves the interval; Flamm's paraboloid z = 2√(r_s(r − r_s)) |
+| SP7 | Relativistic rendering | Schwarzschild and Kerr geodesics with ray bundles (James et al. 2015); accretion disks with g⁴ beaming; relativistic camera (aberration, Doppler, searchlight) | photon sphere 1.5 r_s; shadow √27 M; ISCO 6M; weak-field deflection 4GM/(c²b) |
+| SP8 | Deep sky | procedural galaxies (density-wave arms, Sérsic bulge, dust lanes), N-body mergers, nebulae with emission-line palettes, through A2 | galaxy profiles follow their exponential and Sérsic laws |
+
+**Footage**
+
+| # | SREP | Recommended method | Reference tests |
+|---|---|---|---|
+| LA1 | Computed tracking | point and planar tracks and camera solves made by resolve providers into pinned track caches | synthetic plates with known motion: error below 0.5 px |
+| LA2 | Masks and depth | segmentation masks for rotoscoping and monocular depth as resolved assets | mask IoU against synthetic mattes |
+| LA3 | Integration | 3D objects anchored in plates, shadow catchers, lens-distortion matching | a solved camera re-projects scene points onto their plate positions |
+
+**Optics and waves**
+
+| # | SREP | Recommended method | Reference tests |
+|---|---|---|---|
+| OW1 | Ray-optics diagrams | sequential and non-sequential 2D tracing through thin and thick lenses, mirrors, prisms, GRIN media; Snell and Fresnel; image construction | Snell; total internal reflection; lensmaker equation |
+| OW2 | Spectral rendering | Sellmeier and Cauchy materials, hero-wavelength sampling in the path tracer | BK7 n = 1.5168 at 587.6 nm; prism deviation |
+| OW3 | Polarisation and wave optics | Jones calculus; Huygens–Fresnel summation; Fraunhofer patterns by FFT; phase shown as hue | Malus's law; Airy first zero 1.22 λ/D; fringe spacing λL/d |
+| OW4 | Wave simulations | 2D ripple tank (finite differences with absorbing boundaries), strings, Chladni plates from a plate eigen-solver (Ritz; Gander and Wanner 2012) | standing-wave nodes at nλ/2; CFL-stable steps |
+
+**Characters, agents and looks**
+
+| # | SREP | Recommended method | Reference tests |
+|---|---|---|---|
+| CL1 | Style layer | the same scene rendered flat, hand-drawn, toon-shaded with outlines, or photoreal | toon bands fall at their declared thresholds |
+| CL2 | Stylised characters | blob characters with squash-and-stretch rigs and eyes, in 2D and 3D | volume preserved under squash and stretch |
+| CL3 | Agent behaviours | declared rules (seek, eat, reproduce, pair off) on seeded agents, with charts bound to live counts | seeded populations reproduce exactly |
 
 **Foundations**
 
@@ -204,6 +289,7 @@ building blocks exist.
 | S1 | Cloth and soft bodies | Vertex Block Descent (Chen et al. 2024) with stable neo-Hookean material (Smith et al. 2018) and offset contact (Chen et al. 2025); XPBD rods for rope and hair | hanging-sheet rest shape; no energy gain without forces; zero self-intersections in a twisting test |
 | S2 | Smoke and fire | stable fluids with MacCormack advection and vorticity confinement, fuel–temperature combustion, on sparse grids, rendered through A2 | divergence below ε after projection; symmetric plume from a symmetric set-up |
 | S3 | Liquids | APIC/FLIP (Jiang et al. 2015) with exact transfers; MLS-MPM for granular snow and sand (Hu et al. 2018); whitewater (Ihmsen et al. 2012); surface meshing | Martin and Moyce dam-break front within 10 %; volume drift below 1 % |
+| S5 | Cutaways and exploded views | section planes with capped cuts, exploded assemblies, flow lines over 3D parts (MF5) | cut faces lie on the plane; exploded parts return exactly |
 | S4 | Fracture and ragdolls | seeded Voronoi pre-fracture with breakable glue joints; articulated bodies with motors blending from animation; rigid bodies read from and written to UsdPhysics and glTF physics (KHR_physics_rigid_bodies, once ratified) | fragment volumes sum to the whole; no glue breaks below its threshold |
 
 **Vegetation and growth**
@@ -225,16 +311,23 @@ building blocks exist.
 
 ### Order of work
 
-1. F1, F2 and F4, then T1 and T2: the terrain grid with erosion and water is the core of the landscape
-   shots and exercises every shared rule.
-2. A1 and M1: sky and relief make terrain read as landscape and are comparatively small.
-3. F3, A2, then A3, A4 and A5: media unlock clouds, fog, smoke and water.
-4. T3, T4 and T5, then S2 (which needs A2).
-5. S1, S3, S4, G1 and G2.
-6. M2 to M5, with F5 before M4 and M5.
+Nine milestones, ordered by share of screen time times size of gap, then by dependency. Catalogue counts are
+the estimated number of native shots once the milestone lands.
 
-Each SREP arrives with its Rust reference implementation, conformance cases where a still frame can measure
-the behaviour, and engine tests for the reference solutions listed.
+| Milestone | Content | Screen time | Native shots after |
+|---|---|---|---|
+| 0 Scoreboard | the catalogue in the evidence harness; F1 random numbers; F5 provenance and licence manifests | all | 15 of 36, measured |
+| 1 Math and fields | MF1–MF5 | ≈20% | 22 |
+| 2 Space | SP1–SP6; A1 sun, sky and atmosphere | ≈12% | 24 |
+| 3 Light and volumes | F3 media; A2 volumes; A3 clouds; SP7 relativistic rendering; SP8 deep sky; MF6 | space and sims | 27 |
+| 4 Footage | LA1–LA3 | ≈22% | 27 (existing shots without external trackers) |
+| 5 Optics and waves | OW1–OW4 | ≈3%, signature shots | 29 |
+| 6 Machines and matter | S5, S2, S3, S1, S4 | ≈11% | 33 |
+| 7 Characters, agents and looks | CL1–CL3 | ≈6% | 36 |
+| 8 Worlds | F2, F4, T1–T5, A4, A5, G1, G2, M1–M5 | ≈2%, plus maps | beyond the catalogue |
+
+The map layers of milestone 8 (M1, M2) are small and may run in parallel with earlier milestones, since
+maps are about 8% of screen time.
 
 ### Licensing constraints found
 
@@ -243,6 +336,11 @@ the behaviour, and engine tests for the reference solutions listed.
   tilesets only.
 - Sentinel-2 cloudless mosaics after 2016 are CC BY-NC-SA 4.0; the 2016 mosaic is CC BY 4.0.
 - Copernicus GLO-30, SRTM, GEBCO, NASA GIBS and NOAA GFS are usable with their stated credits.
+
+- The Gaia DR3 archive states CC BY-NC 3.0 IGO (to confirm), so SP2 defaults to Hipparcos and the Yale Bright
+  Star Catalogue.
+- SpaceEngine's free licence forbids monetised video; it is a peer, not a dependency.
+- REBOUND is GPL-3 (to confirm); SP4 implements the published integrators rather than linking it.
 
 These are findings to confirm under F5, not legal advice.
 
@@ -253,12 +351,18 @@ These are findings to confirm under F5, not legal advice.
 - **Two comparisons.** The format is positioned against the same peers as its earlier survey, because those
   are what authors choose between; none of them offers these capabilities natively. Quality, though, is
   measured against the specialist tools that lead each area, because the peers set no bar there. No single
-  product covers all five kinds of shot.
+  product covers all the shot families.
+- **Order by screen time.** Milestones follow share of explainer screen time times size of gap. Math, fields and
+  space are about a third of screen time and all open gaps; landscapes are about 2%.
+- **A catalogue as the measure.** Progress is counted in reference shots made native, with seek consistency,
+  so claims of coverage are evidence rather than estimates.
 - **Algorithms were chosen** for being gather-form or closed-form in time (so they can be exact and seekable),
   having published reference solutions, and being current practice in production tools.
 
 ## Rejected alternatives
 
+- **Environments first.** Terrain, water and weather were the first plan, but they fill about 2% of explainer
+  screen time; they move to the last milestone.
 - **One SREP for everything.** It would take years to reach Accepted and could not be reviewed in pieces.
 - **Adopting an external engine's model wholesale** (for example Houdini's heightfield layers or Unreal's
   water). Their definitions are not public specifications and are not deterministic.
@@ -355,7 +459,20 @@ Methods and specialist tools:
 - Vicari et al. 2007, MAGFLOW, Environmental Modelling & Software 22.
 - Wilkie et al. 2021, "A fitted radiance and attenuation model for realistic atmospheres" (Prague sky model),
   ACM TOG 40(4).
+- Ballesteros 2012, "New insights into black bodies", EPL 97, 34008 (B–V to temperature).
+- Cabral and Leedom 1993, "Imaging Vector Fields Using Line Integral Convolution", SIGGRAPH.
+- Gander and Wanner 2012, "From Euler, Ritz, and Galerkin to Modern Computing", SIAM Review 54(4).
+- James, von Tunzelmann, Franklin, Thorne 2015, "Gravitational lensing by spinning black holes in astrophysics,
+  and in the movie Interstellar", Class. Quantum Grav. 32, 065001.
+- Jobard and Lefer 1997, "Creating Evenly-Spaced Streamlines of Arbitrary Density", Visualization in Scientific
+  Computing.
+- Rein and Spiegel 2015, "IAS15: a fast, adaptive, high-order integrator for gravitational dynamics", MNRAS 446.
+- Wegert 2012, *Visual Complex Functions*, Birkhäuser.
+- Manim: https://docs.manim.community/ ; OpenSpace: https://www.openspaceproject.com/ ;
+  ray-optics: https://github.com/ricktu288/ray-optics ; ANISE: https://github.com/nyx-space/anise
 
 ## History
 
-- 2026-09-29: first draft.
+- 2026-09-29: first draft, as a roadmap for environments, simulation and geodata.
+- 2026-09-29: broadened to science-explainer video: benchmark catalogue, math and fields, space, footage,
+  optics and waves, characters and looks; milestones ordered by share of screen time.
