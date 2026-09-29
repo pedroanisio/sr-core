@@ -1,0 +1,217 @@
+```
+SREP:            0
+Title:           Add map tile assets and basemaps
+Author:          rs-scene-render maintainers
+Status:          Draft
+Type:            Standards
+Created:         2026-09-29
+Schema-Version:  1.2
+```
+
+# SREP 0 — Add map tile assets and basemaps
+
+## Abstract
+
+A new asset kind, `<tiles>`, names a PMTiles archive of map tiles: vector tiles (Mapbox Vector Tiles) or
+raster tiles (PNG, JPEG, WebP). A new child of `<map>`, `<basemap>`, draws a tiles asset under the map's own
+layers: vector tiles styled by a MapLibre style, raster tiles as images warped into the map's projection. A
+tiles asset can also name an online tile service, whose tiles a resolve step fetches into a pinned cache
+before rendering, as `<generated>` assets do. The scene version becomes 1.2 for documents that use them.
+
+## Motivation
+
+`<map>` draws geographic data the document supplies (`<geo>` assets), but not the context around it: streets,
+water, land use, place names, satellite imagery. Map-based explainers, news graphics and travel videos all
+need that context, and it comes as tiles: OpenStreetMap-derived vector tiles (Protomaps, OpenMapTiles),
+raster imagery and elevation tiles. The de facto standard for shipping a tile set as one file is PMTiles
+(Protomaps), and for styling vector tiles the MapLibre (formerly Mapbox GL) style specification. Without these,
+an author has to pre-render a map to an image and loses the map's projection, camera and animation.
+
+## Specification
+
+### Syntax
+
+```xml
+<!-- a new asset kind in assetsType's choice, after geo -->
+<xs:element name="tiles" type="tilesAssetType"/>
+
+<!-- a new child in mapAssetType's choice, before geoLayer -->
+<xs:element name="basemap" type="basemapType"/>
+
+<xs:complexType name="tilesAssetType">
+  <xs:annotation><xs:documentation>
+    Map tiles: a PMTiles archive (@src) of vector (MVT) or raster (PNG, JPEG, WebP) tiles; or
+    an online tile service (@url, a template with {z}, {x} and {y}, or {s} for a subdomain),
+    whose tiles a resolve step, run before rendering, downloads for the views the document's
+    maps show into @cache (a PMTiles archive pinned by @cacheSha256). Rendering never fetches tiles.
+    @tileSize is the pixel size tiles are drawn at (default 512 for vector tiles, 256 for
+    raster); @minZoom and @maxZoom bound the zooms fetched from a service. @attribution is the
+    credit the data requires.
+  </xs:documentation></xs:annotation>
+  <xs:attribute name="id" type="xs:ID" use="required"/>
+  <xs:attribute name="src" type="xs:anyURI"/>
+  <xs:attribute name="url" type="xs:string"/>
+  <xs:attribute name="cache" type="xs:anyURI"/>
+  <xs:attribute name="cacheSha256" type="sha256Type"/>
+  <xs:attribute name="tileSize" type="xs:positiveInteger"/>
+  <xs:attribute name="minZoom" type="xs:nonNegativeInteger" default="0"/>
+  <xs:attribute name="maxZoom" type="xs:nonNegativeInteger" default="19"/>
+  <xs:attribute name="attribution" type="xs:string"/>
+  <xs:attributeGroup ref="assetProvenance"/>
+</xs:complexType>
+
+<xs:complexType name="basemapType">
+  <xs:annotation><xs:documentation>
+    A basemap from a tiles asset. Vector tiles are drawn with a MapLibre style (@mapStyle: a
+    style JSON file, or protomaps-light / protomaps-dark, the Protomaps basemap styles, the
+    default); raster tiles are drawn as images, warped into the map's projection. Raster
+    basemaps paint beneath the map's vector content. @detail shifts the tile zoom (positive:
+    finer tiles); @labels="false" leaves out the style's text.
+  </xs:documentation></xs:annotation>
+  <xs:group ref="animationElements" minOccurs="0" maxOccurs="unbounded"/>
+  <xs:attribute name="id" type="xs:ID"/>
+  <xs:attribute name="tiles" type="xs:IDREF" use="required"/>
+  <xs:attribute name="mapStyle" type="xs:string"/>
+  <xs:attribute name="opacity" type="unitDecimal" default="1"/>
+  <xs:attribute name="detail" type="xs:double" default="0"/>
+  <xs:attribute name="labels" type="xs:boolean" default="true"/>
+  <xs:attribute name="attribution" type="xs:boolean" default="true">
+    <xs:annotation><xs:documentation>Draws the tiles' credit (their @attribution, or the archive's) in the map's corner, as data licences such as OpenStreetMap's require.</xs:documentation></xs:annotation>
+  </xs:attribute>
+</xs:complexType>
+
+<!-- scene/@version gains 1.2 -->
+<xs:attribute name="version" use="required">
+  <xs:simpleType><xs:restriction base="xs:string">
+    <xs:enumeration value="1.0"/><xs:enumeration value="1.1"/><xs:enumeration value="1.2"/>
+  </xs:restriction></xs:simpleType>
+</xs:attribute>
+```
+
+The attribute is `mapStyle`, not `style`: rule R22 reads every `@style` as a reference to a `textStyle`.
+
+```xml
+<!-- in the pattern holding R24-R26 -->
+<sch:rule context="basemap">
+  <sch:assert id="R27" test="/scene/assets/tiles[@id=current()/@tiles]">basemap/@tiles must name a tiles asset.</sch:assert>
+</sch:rule>
+<sch:rule context="tiles">
+  <sch:assert id="C46" test="@src or (@url and @cache and @cacheSha256)">tiles need @src, or @url with @cache and @cacheSha256.</sch:assert>
+</sch:rule>
+
+<!-- the version gate: a new pattern after p1 -->
+<sch:pattern id="p1b">
+  <sch:rule context="/scene[@version='1.0' or @version='1.1']">
+    <sch:assert id="V5" test="not(assets/tiles|.//basemap)">
+      documents before version="1.2" cannot use 1.2 elements or asset kinds; set version="1.2".</sch:assert>
+  </sch:rule>
+</sch:pattern>
+```
+
+A tiles asset with `@url` is verified like a generated asset: `@cacheSha256` is checked against `@cache`
+(asset code A02).
+
+### Semantics
+
+**Archive.** `@src` and `@cache` name PMTiles version 3 archives (header, root and leaf directories of
+Hilbert tile ids, internal compression none or gzip; tile compression none or gzip). The archive's tile
+type decides the kind: MVT is vector; PNG, JPEG and WebP are raster. Other archives are errors.
+
+**Tile zoom.** Maps in Web Mercator follow the MapLibre convention: at zoom 0 the world is 512 pixels wide.
+For a map whose projection scale is `k` pixels per radian, the tile zoom is
+
+    z = log2(2π·k / tileSize) + detail,   floor(z) for vector tiles, round(z) for raster tiles,
+
+clamped to the archive's zoom range. `tileSize` defaults to 512 for vector and 256 for raster tiles. A tile
+missing at `z` is replaced by its nearest ancestor present in the archive, cropped and scaled (overzoom).
+The tiles drawn are those whose area, projected, meets the map's frame. Maps in any other projection
+select tiles the same way, with `k` taken at the map's centre, and project every tile vertex through the
+map's projection, including its clipping.
+
+**Vector tiles** are decoded as MVT 2.1 (geometry in tile extent units, polygon exteriors clockwise in tile
+space) and drawn with the MapLibre style specification version 8: layers `background`, `fill`, `line`,
+`circle` and `symbol` (text only), with style expressions and legacy filters evaluated at the map's
+current zoom. Other layer types are skipped and reported. Symbol text is placed in style order and a
+label that overlaps an already placed label is dropped. `@mapStyle` names a style JSON file (a URI resolved
+like any asset) or one of the built-in styles `protomaps-light` (the default) and `protomaps-dark`, which are
+the Protomaps basemap styles (BSD-3-Clause) for the Protomaps basemap schema.
+
+**Raster tiles** are drawn as images: each tile's corners and interior (subdivided until the warp error is
+under 0.5 px) are projected, and the image is sampled bilinearly. They are painted before the map's
+`geoLayer`, `graticule`, `route` and `pin` content; vector basemaps are painted in document order with
+the map's other children.
+
+**Opacity and animation.** `@opacity` multiplies the basemap's alpha. `@opacity` and `@detail` may be
+animated. `@labels="false"` skips every `symbol` layer.
+
+**Attribution.** With `@attribution` true (the default) the credit (the tiles asset's `@attribution`, else the
+archive's metadata `attribution`) is drawn in the map's bottom-right corner, over the map, in a 10 px
+sans-serif face on a translucent plate.
+
+**Map frame.** Everything a map draws, basemaps included, is clipped to the map's frame.
+
+**Resolve.** For `@url`, the resolve step (not rendering) works out the tiles every view of the document's
+maps needs over its duration, fetches them from the template (`{s}` cycles a, b, c by (x + y) mod 3), writes
+them to `@cache` as a PMTiles archive and pins `@cacheSha256`. Tile services' terms limit bulk downloads;
+an engine should cap the number of tiles fetched and identify itself in the User-Agent.
+
+### Defaults and the neutral case
+
+Both elements are new. A map without `<basemap>` renders as before.
+
+## Rationale
+
+- **PMTiles** is a single-file, random-access tile archive with a public specification and readers in many
+  languages; it needs no tile server, which keeps renders hermetic.
+- **MapLibre style specification**: the open, widely implemented styling language for vector tiles, with
+  published test fixtures; the Protomaps styles are its reference use for OpenStreetMap-derived tiles.
+- **512-pixel zoom 0** is MapLibre's convention, so a style's zoom stops mean what they mean in MapLibre.
+- **Resolve step and pinned cache** follow `<generated>` (baseline): the network is never touched while
+  rendering, and a render is repeatable from the document and its files.
+
+## Rejected alternatives
+
+- **`@style` on `<basemap>`.** R22 reads every `@style` as a text style reference.
+- **Tile directories (`z/x/y.png`) or MBTiles.** Directories are thousands of files per asset; MBTiles needs
+  SQLite in every engine. PMTiles is one file with a simple binary layout.
+- **Fetching tiles while rendering.** Breaks determinism and offline rendering.
+
+## Backwards compatibility
+
+Every document valid under 1.1 is valid under 1.2 and renders the same. The new elements require
+`version="1.2"` (rule V5).
+
+## Engine impact
+
+| Engine | Status | Work | Tracking |
+|---|---|---|---|
+| Rust (`rs-scene-render`), reference | branch `maps-physics` | done: PMTiles reader and writer, MVT decoder, MapLibre style engine, tile selection, raster warping, label collision, resolve provider `tiles` | |
+| C (`c-scene-render`) | pending | PMTiles, MVT and style evaluation | |
+| Python (`py-render`) | pending | as above; `pmtiles` and `mapbox-vector-tile` exist | |
+| JavaScript (`js-render-engine`) | pending | as above; `pmtiles` and `@maplibre/maplibre-gl-style-spec` exist | |
+
+## Conformance
+
+| Case | Checks | Tolerance |
+|---|---|---|
+| `conformance/cases/srep-0000-basemap-raster.xml` | a raster basemap at zoom 0: the red west half and blue east half of the z0 tile land where Web Mercator at 512 px per world width puts them | 2 px |
+
+The Rust reference also checks its PMTiles and MVT decoding against the Python `pmtiles` and
+`mapbox-vector-tile` readers, and its style evaluation against `@maplibre/maplibre-gl-style-spec` on 8,159
+values of the Protomaps light style.
+
+## Open issues
+
+- Whether the built-in style names belong in the schema's documentation or in an engine note.
+- Rule ids R27 and C46 and the version gate id V5 are provisional until the editor assigns them.
+
+## References
+
+- PMTiles specification, version 3: https://github.com/protomaps/PMTiles/blob/main/spec/v3/spec.md
+- Mapbox Vector Tile specification 2.1: https://github.com/mapbox/vector-tile-spec
+- MapLibre style specification: https://maplibre.org/maplibre-style-spec/
+- Protomaps basemaps: https://github.com/protomaps/basemaps
+
+## History
+
+- 2026-09-29: first draft.

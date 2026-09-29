@@ -215,6 +215,79 @@ cases["d2-layer-rotation-y"] = doc(
     '<shape id="r" shape="rect" width="160" height="80" anchorX="80" anchorY="40" x="320" y="180" threeD="true" rotationY="40" fill="#0000FFFF"/>')
 expected["d2-layer-rotation-y"] = {"rule": "5.14", "blue": shot(placed(160, 80, (320, 180, 0), [("y", -40)]))}
 
+# ---------------------------------------------------------------- draft SREPs for schema 1.2
+def doc12(body, **kw):
+    return doc(body, **kw).replace('<scene version="1.1">', '<scene version="1.2">')
+
+
+def pmtiles_one_png(path, png):
+    """A PMTiles v3 archive holding one PNG tile, z0/0/0, with no compression."""
+    def varint(n):
+        out = bytearray()
+        while True:
+            b = n & 0x7F
+            n >>= 7
+            out.append(b | (0x80 if n else 0))
+            if not n:
+                return bytes(out)
+    # directory: one entry (tile id 0, run length 1, length, offset 0 written as 0 + 1)
+    root = varint(1) + varint(0) + varint(1) + varint(len(png)) + varint(1)
+    meta = b"{}"
+    root_off, meta_off = 127, 127 + len(root)
+    data_off = meta_off + len(meta)
+    header = b"PMTiles" + bytes([3]) + struct.pack(
+        "<11Q", root_off, len(root), meta_off, len(meta), data_off, 0, data_off, len(png), 1, 1, 1)
+    # clustered, internal compression none, tile compression none, tile type png, zooms 0..0
+    header += bytes([1, 1, 1, 2, 0, 0])
+    header += struct.pack("<4i", -1800000000, -850511287, 1800000000, 850511287) + bytes([0]) + struct.pack("<2i", 0, 0)
+    assert len(header) == 127
+    open(path, "wb").write(header + root + meta + png)
+
+
+def half_png():
+    """A 256 x 256 PNG, the west half red and the east half blue."""
+    import zlib
+    row = b"\x00" + (b"\xff\x00\x00" * 128) + (b"\x00\x00\xff" * 128)
+    raw = zlib.compress(row * 256, 9)
+    def chunk(t, d):
+        return struct.pack(">I", len(d)) + t + d + struct.pack(">I", zlib.crc32(t + d) & 0xFFFFFFFF)
+    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", 256, 256, 8, 2, 0, 0, 0))
+            + chunk(b"IDAT", raw) + chunk(b"IEND", b""))
+
+
+pmtiles_one_png(os.path.join(HERE, "assets", "halves.pmtiles"), half_png())
+# a 256 x 256 Web Mercator map at zoom 0 (512 px per world width) shows 90°W-90°E: the tile's west half fills
+# the map's left half
+MAP = ('<tiles id="t-halves" src="../assets/halves.pmtiles"/>'
+       '<map id="map-halves" width="256" height="256" projection="web-mercator" centerLon="0" centerLat="0" zoom="0">'
+       '<basemap tiles="t-halves" attribution="false"/></map>')
+cases["srep-0000-basemap-raster"] = doc12('<layer id="l" asset="map-halves" x="192" y="52"/>', extra_assets=MAP)
+expected["srep-0000-basemap-raster"] = {"rule": "SREP basemaps", "red": box(256, 180, 128, 256), "blue": box(384, 180, 128, 256)}
+
+# the same map as flat ground facing the implicit camera, centred on the object's origin
+cases["srep-0000-map-ground"] = doc12(
+    '<object3D id="g" primitive="map" map="map-halves" material="m-white" x="320" y="180"/>', extra_assets=MAP,
+    materials='<material id="m-white" baseColor="#FFFFFFFF" unlit="true" doubleSided="true"/>')
+expected["srep-0000-map-ground"] = {"rule": "SREP 3D maps", "red": box(256, 180, 128, 256), "blue": box(384, 180, 128, 256)}
+
+# free fall for 0.5 s at the default step 1/120 s, each step split into solverIterations = 8 substeps:
+# N = 60 * 8 semi-implicit Euler substeps of h = dt/8 move a body g·h²·N(N+1)/2 metres; 100 px per metre.
+# activateAt before physics@start, so the body is dynamic from the start
+SUB, N = 1 / 120 / 8, 60 * 8
+drop = 9.80665 * SUB * SUB * N * (N + 1) / 2 * 100
+cases["srep-0000-rigid3d-fall"] = doc12(
+    '<object3D id="s" primitive="sphere" radius="10" material="m-red" x="320" y="100" start="-1">'
+    '<rigidBody linearDamping="0" activateAt="-10"/></object3D>').replace("</composition>", '</composition>\n<physics start="-0.5"/>')
+expected["srep-0000-rigid3d-fall"] = {"rule": "SREP 3D rigid bodies", "red": {"cx": 320, "cy": round(100 + drop, 2)}}
+
+# dropped onto a static box whose top is at y = 250, a sphere of radius 10 comes to rest at y = 240
+cases["srep-0000-rigid3d-rest"] = doc12(
+    '<object3D id="floor" primitive="box" width="200" height="40" depth="200" material="m-blue" x="320" y="270" start="-3">'
+    '<rigidBody type="static"/></object3D>\n'
+    '<object3D id="s" primitive="sphere" radius="10" material="m-red" x="320" y="200" start="-3">'
+    '<rigidBody activateAt="-10"/></object3D>').replace("</composition>", '</composition>\n<physics start="-2"/>')
+expected["srep-0000-rigid3d-rest"] = {"rule": "SREP 3D rigid bodies", "red": {"cx": 320, "cy": 240}}
+
 os.makedirs(os.path.join(HERE, "cases"), exist_ok=True)
 for name, xml in cases.items():
     open(os.path.join(HERE, "cases", name + ".xml"), "w").write(xml)
