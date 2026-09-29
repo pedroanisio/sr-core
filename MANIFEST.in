@@ -1,0 +1,9 @@
+# The sdist is the complete source release: the canonical schema, its generated reference, the SREPs, the
+# release tooling and the tests all ship, so the tests pass from an unpacked sdist.
+include LICENSE README.md CHANGELOG.md
+graft schema
+graft docs
+graft srep
+graft tools
+graft tests
+global-exclude __pycache__ *.py[cod]

@@ -1,0 +1,3 @@
+# path:rule:reason — exceptions to tools/check_hygiene.py. Each needs a reason; an entry that matches
+# nothing fails the check, so remove entries when they are no longer needed.
+tools/check_hygiene.py:R2:the rule's own patterns for private working directories

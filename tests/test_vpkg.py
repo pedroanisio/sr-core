@@ -216,7 +216,7 @@ def test_pack_bundles_rewrites_and_is_reproducible(project, tmp_path):
 
 
 def test_pack_refuses_nonportable_projects(project, tmp_path):
-    (project / "bad.py").write_text('VOICE = "/home/someone/voice.onnx"\n')
+    (project / "bad.py").write_text('VOICE = "/home/someone/voice.onnx"\n')  # hygiene: allow R2 lint fixture: a machine path pack must refuse
     (project / "scene.xml").write_text(SCENE.replace("assets/bg.png", "assets/missing.png")
                                        .replace("Test Sans Bold", "Nowhere Grotesk"))
     with pytest.raises(PackError) as e:

@@ -12,7 +12,7 @@ The parts of scene-render that belong to no single engine:
 | [docs/vpkg-howto.md](docs/vpkg-howto.md) | How to package a video and rebuild one from a package |
 
 ```bash
-pip install -e ~/src/sr-core          # installs scenerender-vpkg; standard library only
+pip install .                         # from this checkout (or the release wheel); standard library only
 python3 -m sr_core.vpkg --help        # or without installing, from this folder
 python3 -m sr_core.schemadoc         # regenerate docs/schema after changing schema/ (--check: is it current?)
 python3 -m pytest tests               # vpkg (SREP 1) and schemadoc tests; fails if docs/schema is stale

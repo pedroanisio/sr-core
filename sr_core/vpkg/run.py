@@ -9,7 +9,7 @@ the step is `optional` (its outputs are already in the package).
 Render steps name a scene, not an engine: the engine is chosen here (--engine), and the scene's variant made
 for that engine (scenes[].targets + derivedFrom) is used when there is one. Engine commands come from
 ENGINES, overridden per id by ~/.config/scene-vpkg/engines.json ({"py": {"command": [...], "args": [...],
-"env": {...}}}) or by VPKG_ENGINE_<ID> (a command prefix, e.g. "node ~/src/js-render-engine/bin/scene-render.js").
+"env": {...}}}) or by VPKG_ENGINE_<ID> (a command prefix, e.g. "node /opt/js-render-engine/bin/scene-render.js").
 When _vpkg/fonts.conf exists, FONTCONFIG_FILE points at it (unless already set), so fontconfig-based engines
 and scripts find the bundled fonts.
 """

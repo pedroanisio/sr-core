@@ -23,30 +23,30 @@ The format, meaning every key, rule and default, is specified in [SREP 1](../sre
 The tool ships with sr-core. It uses only the Python standard library, so any Python 3.10 or newer can run it, even without the renderer's dependencies installed.
 
 ```bash
-pip install -e ~/src/sr-core        # standard library only
-scenerender-vpkg --version          # scenerender-vpkg 1.0.0 (format 1.0)
+pip install .                       # from the root of an sr-core checkout, or: pip install sr_core-<version>-py3-none-any.whl
+scenerender-vpkg --version          # scenerender-vpkg <version> (format 1.0)
 ```
 
 Without installing, run it from a checkout:
 
 ```bash
-cd ~/src/sr-core && python3 -m sr_core.vpkg --help
+python3 -m sr_core.vpkg --help      # from the root of an sr-core checkout
 ```
 
 The examples below write `scenerender-vpkg`; `python3 -m sr_core.vpkg` works the same way.
 
 ## 2. Package a project, step by step
 
-The example is `~/videos/moon-formation`: a 10 s scene written by `make_scene.py`, with two DejaVu fonts in `assets/`.
+The example is `planet-orbit/`: a 10 s scene written by `make_scene.py`, with two DejaVu fonts in `assets/`.
 
 ### 2.1 Generate a starter spec
 
 ```bash
-scenerender-vpkg init ~/videos/moon-formation
+scenerender-vpkg init planet-orbit
 ```
 
 ```
-wrote .../moon-formation/vpkg.json
+wrote planet-orbit/vpkg.json
   scenes: scene.xml=primary
   review the scene roles and write the pipeline steps before packing
 ```
@@ -75,14 +75,14 @@ Open the file and fill in what only you know.
 - **`engines`**: record the engines you actually rendered with, and how far (`full`, `stills`, `partial`). This is evidence for whoever receives the package, not a requirement.
 - **`credits`**: see [section 4](#4-large-downloads-fonts-and-credits).
 
-This is the finished `moon-formation/vpkg.json`:
+This is the finished `planet-orbit/vpkg.json`:
 
 ```json
 {
   "format": "scene-video-package",
   "formatVersion": "1.0",
-  "package": {"id": "moon-formation", "version": "1.0.0", "title": "Como a Lua se formou",
-              "description": "10 s explainer of the giant-impact origin of the Moon.", "languages": ["pt-BR"]},
+  "package": {"id": "planet-orbit", "version": "1.0.0", "title": "A planet's orbit",
+              "description": "10 s explainer of an elliptical orbit.", "languages": ["en"]},
   "scenes": [{"path": "scene.xml", "role": "primary"}],
   "requirements": {"tools": [{"name": "python", "version": ">=3.10", "for": ["scene"]}]},
   "pipeline": {
@@ -90,10 +90,10 @@ This is the finished `moon-formation/vpkg.json`:
       {"id": "scene", "kind": "generate", "run": ["python3", "make_scene.py"],
        "inputs": ["make_scene.py"], "outputs": ["scene.xml"]},
       {"id": "render", "kind": "render", "needs": ["scene"],
-       "render": {"scene": "scene.xml", "output": "main", "to": "renders/lua.mp4",
+       "render": {"scene": "scene.xml", "output": "main", "to": "renders/orbit.mp4",
                   "args": {"js": ["--anchor-mode", "position"]}}}
     ],
-    "deliverables": [{"path": "renders/lua.mp4", "role": "master", "step": "render"}]
+    "deliverables": [{"path": "renders/orbit.mp4", "role": "master", "step": "render"}]
   },
   "engines": [{"id": "py", "tested": "full"}, {"id": "rs", "tested": "full"}],
   "credits": [{"paths": ["assets/DejaVuSans*.ttf"], "title": "DejaVu Sans",
@@ -104,8 +104,8 @@ This is the finished `moon-formation/vpkg.json`:
 ### 2.3 Dry-run the pack
 
 ```bash
-scenerender-vpkg pack ~/videos/moon-formation -n        # check and plan, write nothing
-scenerender-vpkg pack ~/videos/moon-formation -n -v     # also list every file left out, with the reason
+scenerender-vpkg pack planet-orbit -n        # check and plan, write nothing
+scenerender-vpkg pack planet-orbit -n -v     # also list every file left out, with the reason
 ```
 
 ```
@@ -125,8 +125,8 @@ If `pack` refuses, see [section 7](#7-when-pack-refuses).
 ### 2.4 Pack and verify
 
 ```bash
-scenerender-vpkg pack ~/videos/moon-formation -o ~/videos/packages/
-scenerender-vpkg verify ~/videos/packages/moon-formation-1.0.0.vpkg.zip
+scenerender-vpkg pack planet-orbit -o packages/
+scenerender-vpkg verify packages/planet-orbit-1.0.0.vpkg.zip
 ```
 
 `pack` prints the size per file role and the zip it wrote. `verify` re-reads the package from scratch:
@@ -139,9 +139,9 @@ scenerender-vpkg verify ~/videos/packages/moon-formation-1.0.0.vpkg.zip
 Unpack somewhere outside the project and run the pipeline there. That proves the package doesn't secretly depend on your project folder.
 
 ```bash
-scenerender-vpkg unpack ~/videos/packages/moon-formation-1.0.0.vpkg.zip /tmp/moon --fetch
-scenerender-vpkg run /tmp/moon --engine py --list    # the commands it would run
-scenerender-vpkg run /tmp/moon --engine py           # generate steps are up to date, so it only renders
+scenerender-vpkg unpack packages/planet-orbit-1.0.0.vpkg.zip /tmp/orbit --fetch
+scenerender-vpkg run /tmp/orbit --engine py --list    # the commands it would run
+scenerender-vpkg run /tmp/orbit --engine py           # generate steps are up to date, so it only renders
 ```
 
 ## 3. Write the pipeline
@@ -164,8 +164,8 @@ The pipeline is the project's build instructions: your README's command list, ma
 - **`needs`** lists the steps that must run first. Steps run in dependency order, keeping the written order where they're free.
 - **`inputs` and `outputs`** (globs) make re-runs cheap: a step whose outputs all exist and are newer than its inputs is reported "up to date" and skipped. List outputs for every step that makes files. A step without outputs, such as a validator, always runs.
 - **`requires`** names executables that must be on PATH. **`optional: true`** means "skip this step if a requirement is missing, or if it fails". Use it for steps whose outputs ship in the package anyway, such as narration synthesis that needs Piper and a network download.
-- **`idempotent: false`** marks a step that must not run twice. For example, v007's `insert_dogfight.py` edits `scene.xml` in place. Such a step is skipped whenever its outputs exist, unless it's named with `--only`.
-- **`env`** sets environment variables for one step, for example `{"DF_T0": "52", "DF_TITLE": "0"}`.
+- **`idempotent: false`** marks a step that must not run twice, such as an `insert_intro.py` that edits `scene.xml` in place. Such a step is skipped whenever its outputs exist, unless it's named with `--only`.
+- **`env`** sets environment variables for one step, for example `{"SEED": "7", "INTRO_AT": "12"}`.
 
 ### 3.2 Render steps
 
@@ -230,7 +230,7 @@ Nothing needs doing if the scene declares its fonts as `<font>` assets. Otherwis
 
 **A family that isn't installed anywhere is an error.** That's deliberate: without it the video would render with a fallback font and look different on every machine. Download the real font into `fonts/` and keep its licence file beside it.
 
-Add a `SOURCES.md` there giving the release URL and the archive's SHA-256, as `v004-sun/fonts/` does, so the next person can check the files.
+Add a `SOURCES.md` there giving the release URL and the archive's SHA-256, so the next person can check the files.
 
 `pack --no-system-fonts` resolves from project fonts only, which shows exactly what the project carries itself.
 
@@ -273,7 +273,7 @@ To use other names or paths, create `~/.config/scene-vpkg/engines.json`. It's re
 A single run can override the command with an environment variable:
 
 ```bash
-VPKG_ENGINE_PY="python3 -m scenerender.cli" scenerender-vpkg run /tmp/moon --engine py
+VPKG_ENGINE_PY="python3 -m scenerender.cli" scenerender-vpkg run /tmp/orbit --engine py
 ```
 
 An engine id that isn't in the table (`--engine myengine`) runs `myengine` with no known argument forms. Give it `to`, `output`, `all` and `still` argument templates in `engines.json` to make it usable, using the same `{scene} {to} {output} {time} {frame}` placeholders as the built-in entries.
@@ -281,11 +281,11 @@ An engine id that isn't in the table (`--engine myengine`) runs `myengine` with 
 ## 6. Rebuild a video from a package
 
 ```bash
-scenerender-vpkg info    sun-1.0.0.vpkg.zip                # what it is, its steps and downloads
-scenerender-vpkg verify  sun-1.0.0.vpkg.zip                # integrity before trusting it
-scenerender-vpkg unpack  sun-1.0.0.vpkg.zip ~/work/sun --fetch
-scenerender-vpkg run     ~/work/sun --engine rs --list     # the plan
-scenerender-vpkg run     ~/work/sun --engine rs            # everything that is not up to date
+scenerender-vpkg info    orbit-1.0.0.vpkg.zip              # what it is, its steps and downloads
+scenerender-vpkg verify  orbit-1.0.0.vpkg.zip              # integrity before trusting it
+scenerender-vpkg unpack  orbit-1.0.0.vpkg.zip work/orbit --fetch
+scenerender-vpkg run     work/orbit --engine rs --list     # the plan
+scenerender-vpkg run     work/orbit --engine rs            # everything that is not up to date
 ```
 
 **Controlling what runs:**
@@ -297,7 +297,7 @@ scenerender-vpkg run     ~/work/sun --engine rs            # everything that is 
 | Stop after a step | `run DIR --until build` |
 | Re-run steps that are up to date | add `--force` |
 | Use a specific Python for script steps | add `--python ~/.venvs/video/bin/python` |
-| Run straight from the zip | `run sun-1.0.0.vpkg.zip --engine py` (unpacks beside it, or into `--dir`) |
+| Run straight from the zip | `run orbit-1.0.0.vpkg.zip --engine py` (unpacks beside it, or into `--dir`) |
 
 **Things to know:**
 - **Unpacked files are all up to date.** `unpack` gives every file the same modification time, so a fresh unpack treats every generated file as current, and only render steps (whose outputs aren't shipped) run.
@@ -336,7 +336,7 @@ Scene references outside the project are fixed automatically: they're copied to 
 | `[render] a render step: choose an engine with --engine` | Pass `--engine`, or run only non-render steps with `--until` |
 | `[vo] needs ffmpeg on PATH` | Install the tool. An optional step is skipped instead, and its outputs from the package are used. |
 | `engine 'js' has no still command` | That engine can't render single frames. Use another engine for still steps. |
-| `[insert] skipped: not idempotent and its outputs exist` | Expected. Run it with `--only insert` if you really want to redo it. |
+| `[intro] skipped: not idempotent and its outputs exist` | Expected. Run it with `--only intro` if you really want to redo it. |
 
 ## 9. Release a new version
 

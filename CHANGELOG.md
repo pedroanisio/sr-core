@@ -22,6 +22,25 @@ version:
 
 ### Fixed
 
+## 1.0.1 — 2026-09-29
+
+### Fixed
+
+- The sdist is a complete source release. It ships `schema/`, `docs/`, `srep/`, `tools/` and `tests/`, and the tests pass from it; before, they failed at collection.
+- Installation instructions and examples use neutral paths and projects: the README (and so the package metadata), the vpkg how-to and the `run` module documentation.
+
+### Tooling
+
+- `tools/release.py archive schema` builds the schema release tarball from a tag: the XSD, the Schematron, their hashes, README, CHANGELOG, LICENSE and the HTML reference. The same tag gives the same bytes.
+- `tools/check_hygiene.py` checks that tracked files and release artifacts carry only releasable material: no working material, private paths or unpublished references, SREP records complete, artifacts complete.
+
+### Docs
+
+- SREP 0 is Active, and states when documentation-only and process SREPs are Final or Active.
+- SREP decision records state the decision and date only.
+- The SREPs name the conformance suite, not a local folder.
+- SREP 5: engine-neutral wording in the schema.
+
 ## 1.0.0 — 2026-09-29
 
 ### Added

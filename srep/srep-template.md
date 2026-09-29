@@ -1,7 +1,7 @@
 ```
 SREP:            <number; the editor assigns it, use 0 while drafting>
 Title:           <imperative, under 60 characters: "Define camera shake units">
-Author:          <name or session, contact>
+Author:          <name, contact>
 Status:          Draft
 Type:            Standards | Semantics | Process | Informational
 Created:         <YYYY-MM-DD>
@@ -77,7 +77,7 @@ version="1.N"?>
 
 | Case | Checks | Tolerance |
 |---|---|---|
-| `scene-render-conformance/cases/srep-<n>-<slug>/` | <what is measured: positions, colours, edge shift, event times> | ≥ 40 dB against the Rust reference render, or <stated> |
+| `srep-<n>-<slug>` in the conformance suite | <what is measured: positions, colours, edge shift, event times> | ≥ 40 dB against the Rust reference render, or <stated> |
 
 <Every normative sentence in Specification is covered by at least one case. Say which case covers which
 sentence when it isn't obvious.>
