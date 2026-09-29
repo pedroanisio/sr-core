@@ -22,6 +22,11 @@ version:
 
 ### Fixed
 
+### Tooling
+
+- The schema-rule tests skip conformance cases of SREPs that are not yet accepted (unnumbered drafts, Draft or
+  Review): their cases use syntax the canonical schema gains only on acceptance.
+
 ## 1.1.0 — 2026-09-29
 
 ### Added

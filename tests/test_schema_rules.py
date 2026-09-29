@@ -91,7 +91,32 @@ def test_valid_documents_still_pass():
         assert verdict(x) in ("ok",), (verdict(x), x)
 
 
+def pending_srep(case: str) -> str | None:
+    """Why a case is not yet expected to validate, or None. Cases of an SREP that is still a draft
+    (srep-0000-*, not yet numbered) or in Draft or Review use syntax the canonical schema gains only on acceptance."""
+    import re
+    m = re.match(r"srep-(\d{4})-", os.path.basename(case))
+    if not m:
+        return None
+    if m.group(1) == "0000":
+        return "draft SREP, not yet numbered"
+    path = os.path.join(ROOT, "srep", f"srep-{m.group(1)}.md")
+    status = re.search(r"^Status:\s*(\S+)", open(path).read(), re.M) if os.path.exists(path) else None
+    if status and status.group(1) in ("Draft", "Review"):
+        return f"SREP {int(m.group(1))} is {status.group(1)}"
+    return None
+
+
 @pytest.mark.parametrize("case", sorted(glob.glob(os.path.join(ROOT, "conformance", "cases", "*.xml"))),
                          ids=os.path.basename)
 def test_conformance_cases_are_valid(case):
+    reason = pending_srep(case)
+    if reason:
+        pytest.skip(f"{reason}: validated once the SREP is accepted")
     assert verdict(open(case, "rb").read()) == "ok"
+
+
+def test_pending_srep_rule(tmp_path):
+    assert pending_srep("cases/a1-anchor-translate.xml") is None
+    assert pending_srep("cases/srep-0000-basemaps.xml") == "draft SREP, not yet numbered"
+    assert pending_srep("cases/srep-0008-anything.xml") is None          # SREP 8 is Final
