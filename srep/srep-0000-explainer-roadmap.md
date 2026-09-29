@@ -103,7 +103,7 @@ For the families the first comparison barely touches, the relevant peers are dif
 | Motion Canvas | P: TeX by hand-split parts, code diffs | – | – | – | yes |
 | ParaView, VisIt | – | N: streamlines, LIC, isosurfaces, volumes | – | – | weak animation and typography |
 | OpenSpace | – | – | N: SPICE, catalogues, globes (MIT) | – | live planetarium shows |
-| SpaceEngine | – | – | N: procedural universe | – | free licence forbids monetised video |
+| SpaceEngine | – | – | N: procedural universe | – | real-time viewer |
 | ray-optics, Falstad, PhET | – | P | – | N: ray diagrams, ripple tanks | no video export |
 
 ### The measure: a benchmark catalogue
@@ -141,7 +141,7 @@ it. "Lead" means we aim past them on a named criterion; "parity" means matching 
 | Map relief layers | MapLibre GL 5.x (hillshade with 5 methods, color-relief), GDAL, QGIS | none of these layer types | **Lead:** results equal to `gdaldem` within 1 level, in any projection, including terrain on globes and bathymetry |
 | Map data layers | deck.gl (heatmap, trips), Kepler.gl, GEOlayers 3 | points, lines, choropleths, animated styles | **Parity plus:** heatmap, fill-extrusion, icons and time-series layers, rendered deterministically |
 | Wind and current fields | earth.nullschool, Windy | none | **Lead:** particle advection from GRIB2 data resolved into a pinned cache, reproducible frame by frame |
-| Photogrammetric 3D cities | Google Earth Studio, Cesium | extruded footprints | **Parity** for open and self-hosted OGC 3D Tiles 1.1 only (see Licensing) |
+| Photogrammetric 3D cities | Google Earth Studio, Cesium | extruded footprints | **Parity** for OGC 3D Tiles 1.1 tilesets |
 | Math animation | Manim, Motion Canvas | shapes, TeX, morphing | **Lead:** formula morphs from TeX semantics, not hand-split strings; morphing free of artefacts; any frame computed alone, where Manim replays updaters |
 | Fields | ParaView, VisIt, matplotlib, Mathematica | particles in force fields | **Lead:** correct algorithms (Jobard–Lefer, LIC, Wegert phase portraits) with film-quality typography and camera, tested against analytic fields |
 | Space | OpenSpace, SpaceEngine, Celestia | none | **Lead:** mission-grade ephemerides pinned by digest, catalogue stars, physical atmospheres, and relativistic rendering in one deterministic document |
@@ -177,13 +177,15 @@ specification) to the work below. Each planned SREP states how it meets them.
    match bit for bit across implementations.
 6. **Validation.** Each SREP names reference solutions with closed forms or published data (listed below)
    and turns them into conformance cases or engine tests.
-7. **Pinned external data.** Data from services (elevation, imagery, weather grids, 3D tiles) is fetched by
-   a resolve step into a cache whose digest is in the document, as for `<generated>` and `<tiles>`. A source
-   whose terms forbid caching is not usable in a document.
+7. **Pinned external data.** Data from services (elevation, imagery, weather grids, ephemerides, 3D tiles) is
+   fetched by a resolve step into a cache whose digest is in the document, as for `<generated>` and `<tiles>`.
+8. **Unencumbered sources only.** Reference implementations depend only on public-domain or permissively
+   licensed code and data. The format defines no licence metadata or enforcement; a source that would need
+   either is out of scope.
 
 ### Shared building blocks
 
-Four definitions are reused across the plan and get their own SREPs first:
+Three definitions are reused across the plan and get their own SREPs first:
 
 - **Terrain grid.** One element holding a regular grid of layers over a rectangle: bedrock, loose material,
   water depth and flow, suspended sediment, lava depth and temperature, snow (by type), ice, fuel and burn
@@ -194,8 +196,6 @@ Four definitions are reused across the plan and get their own SREPs first:
   by the atmosphere, fog, clouds, volumes, water and smoke, so the raster renderer and the path tracer agree.
 - **Wind.** One wind field (a base vector, gusts and curl noise, animatable) read by particles, vegetation,
   clouds, water, snow drift and fire spread.
-- **Resolve manifests.** Each external source declares its licence, required attribution, whether caching is
-  allowed and any duration limits; renders fail when required attribution is suppressed.
 
 ### The planned SREPs
 
@@ -260,7 +260,6 @@ building blocks exist. The milestones under **Order of work** group them.
 | F2 | Terrain grid | the element, layers, units, generation (fBm, ridged, warp, terraces, from DEM or image), masks, 3D and 2D display, material splatting by slope, altitude, curvature and flow | F1 |
 | F3 | Media | the medium description and phase functions (Henyey–Greenstein, Rayleigh, Draine mix) | — |
 | F4 | Wind | the shared wind field | F1 |
-| F5 | Resolve manifests and licence gating | licence and attribution metadata for every resolved source | — |
 
 **Terrain processes**
 
@@ -307,7 +306,7 @@ building blocks exist. The milestones under **Order of work** group them.
 | M2 | Data layers | MapLibre `heatmap`, `fill-extrusion`, symbol icons and sprites | MapLibre render-test fixtures for these layer types |
 | M3 | Time-series layers | feature time and timeline-driven filters; trips (paths revealed by time) | a trip's head at time t is at its interpolated position |
 | M4 | Vector-field layers | particle advection over U/V grids (after Agafonkin's webgl-wind), GRIB2 resolved into a pinned raster | particles in a solid-body field follow the analytic circle |
-| M5 | 3D Tiles | OGC 3D Tiles 1.1 from open or self-hosted sets; tile choice by screen-space error from the camera alone | the CesiumGS 1.1 samples load; tile choice matches a reference list for fixed cameras |
+| M5 | 3D Tiles | OGC 3D Tiles 1.1 tilesets; tile choice by screen-space error from the camera alone | the CesiumGS 1.1 samples load; tile choice matches a reference list for fixed cameras |
 
 ### Order of work
 
@@ -316,7 +315,7 @@ the estimated number of native shots once the milestone lands.
 
 | Milestone | Content | Screen time | Native shots after |
 |---|---|---|---|
-| 0 Scoreboard | the catalogue in the evidence harness; F1 random numbers; F5 provenance and licence manifests | all | 15 of 36, measured |
+| 0 Scoreboard | the catalogue in the evidence harness; F1 random numbers | all | 15 of 36, measured |
 | 1 Math and fields | MF1–MF5 | ≈20% | 22 |
 | 2 Space | SP1–SP6; A1 sun, sky and atmosphere | ≈12% | 24 |
 | 3 Light and volumes | F3 media; A2 volumes; A3 clouds; SP7 relativistic rendering; SP8 deep sky; MF6 | space and sims | 27 |
@@ -328,21 +327,6 @@ the estimated number of native shots once the milestone lands.
 
 The map layers of milestone 8 (M1, M2) are small and may run in parallel with earlier milestones, since
 maps are about 8% of screen time.
-
-### Licensing constraints found
-
-- Google Photorealistic 3D Tiles may not be cached or used offline and limit promotional videos to 30 s; Cesium
-  ion content may not be stored for offline use. Neither fits rule 7, so M5 covers open and self-hosted
-  tilesets only.
-- Sentinel-2 cloudless mosaics after 2016 are CC BY-NC-SA 4.0; the 2016 mosaic is CC BY 4.0.
-- Copernicus GLO-30, SRTM, GEBCO, NASA GIBS and NOAA GFS are usable with their stated credits.
-
-- The Gaia DR3 archive states CC BY-NC 3.0 IGO (to confirm), so SP2 defaults to Hipparcos and the Yale Bright
-  Star Catalogue.
-- SpaceEngine's free licence forbids monetised video; it is a peer, not a dependency.
-- REBOUND is GPL-3 (to confirm); SP4 implements the published integrators rather than linking it.
-
-These are findings to confirm under F5, not legal advice.
 
 ## Rationale
 
@@ -368,7 +352,6 @@ These are findings to confirm under F5, not legal advice.
   water). Their definitions are not public specifications and are not deterministic.
 - **Particle droplet erosion as the main terrain method.** Its scattered deposits need exact accumulation to
   be order-independent, and it has no analytic test; it stays available as a detail pass.
-- **Google and Cesium ion tiles through the resolve step.** Their terms forbid the cache the format requires.
 
 ## Backwards compatibility
 
@@ -396,8 +379,7 @@ None for this SREP. Each planned SREP lists its cases.
 - How far the compatibility kit, which measures still frames geometrically, can test simulations; engine
   tests may need a shared reference-solution suite in sr-core.
 - Citations marked for checking in the research notes: Houdini's slope-collapse node, Niagara's shallow-water
-  status, the Tessendorf course-notes URL, BehavePlus reference numbers, the Prague model's dataset size and
-  licence.
+  status, the Tessendorf course-notes URL, BehavePlus reference numbers, the Prague model's dataset size.
 
 ## References
 
