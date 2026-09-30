@@ -201,6 +201,16 @@ then `run --engine rs` on a step that renders `scene.xml` uses `scene.rust.xml` 
 
 `pipeline.deliverables` names what the pipeline is for, such as the master MP4 or the stills folder. The README inside the package lists it.
 
+### 3.4 Shared code and kits: vendor them
+
+A library of generators or a brand kit shared by several videos lives outside any one project. A packaged project must not read it from there: `pack` refuses scripts that point into a home or outside the project, and old packages must rebuild unchanged after the library moves on. Copy what the project uses into it instead, and pin the copy:
+
+- Put the copy under a vendor folder, for example `film/vendor/<library>/` for code or `film/kit/` for a kit file.
+- Next to it, write a lock with the library's version and the SHA-256 of every copied file, for example `film/vendor/<library>.lock`.
+- List both in `include` and read them from the script's folder.
+
+The library's own sync tool writes the copy and the lock; its lock check says whether a project still matches what it vendored. Updating a project to a newer library version is a deliberate step: sync, rebuild, compare the output, and record the change.
+
 ## 4. Large downloads, fonts and credits
 
 ### 4.1 Fetch entries instead of bundling
@@ -324,6 +334,7 @@ scenerender-vpkg run     work/orbit --engine rs            # everything that is 
 | `scene.xml: <image src="assets/x.png"> not found` | A scene reads a file that doesn't exist | Create the file, or add the step that makes it to the pipeline with the file in its `outputs`. For a downloadable file, add a `fetch` entry. | none |
 | `font family 'Inter' is not declared and not installed here` | The scene names a font the machine doesn't have | Put the real font files in `fonts/`, with their licence | `--allow-missing-fonts` |
 | `make_audio.py:22: error absolute-path: VOICE = "/home/me/..."` | A script reads a machine-specific path | Build the path from the script's folder: `os.path.join(os.path.dirname(os.path.abspath(__file__)), "sources", ...)` | `--allow-nonportable` |
+| `brand.py:14: error home-path: KIT = os.path.expanduser("~/...")` | A script reads a file relative to the user's home (`~/...`, `expanduser("~")`, `$HOME/...`, `Path.home()`) | Vendor the file into the project (see 3.4) and read it from the script's folder. A tool the machine must provide, such as an engine binary, takes an environment variable and ends its line with `# vpkg: allow` | `--allow-nonportable` |
 | `make_art.py:13: error outside-project: ... os.path.join(HERE, "..", "other-project")` | A script reads another project | Copy the files it needs into this project, for example `sources/house/`, with a README saying where they came from | `--allow-nonportable` |
 | `warning temp-path: "/tmp/vo.wav"` (warning only) | A fixed scratch path | Use `tempfile.mkdtemp()` or `tempfile.gettempdir()` | none needed |
 | `... is a remote reference (not portable ...)` | A scene reads an `http(s)` URL | Download it into the project, or make it a `fetch` entry and point the scene at the local path | `--allow-remote` |

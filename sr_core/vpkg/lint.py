@@ -6,6 +6,8 @@ Reported per line:
 
   absolute-path   a literal absolute path into a home, mount, temp or source tree (/home/..., /Users/...,
                   /tmp/..., /mnt/..., /src, C:\\...), or into system font directories (bundle the font instead)
+  home-path       a path relative to the user's home: a "~/..." literal, expanduser("~") or $HOME/... -- it names
+                  a file on this machine as surely as /home/... does (vendor the file into the project instead)
   outside-project a relative path that climbs out of the project ("../x", os.path.join(HERE, "..", ...),
                   Path(...).parent.parent / "other") -- only when it resolves outside the project directory
 
@@ -24,6 +26,7 @@ SCRIPT_EXTENSIONS = (".py", ".sh", ".bash", ".zsh", ".mjs", ".js", ".cjs", ".ts"
 ABSOLUTE = re.compile(r"""(?<![\w.$}/])(/(?:home|Users|root|mnt|media|tmp|var/tmp|opt|srv|src|workspace|data|scratch)"""
                       r"""(?:/[^\s"'`;:,)\]}]*)?|/usr/(?:local/)?share/fonts[^\s"'`;:,)\]}]*|[A-Za-z]:\\\\?[^\s"'`;,)]+)""")
 QUOTED = re.compile(r"""(["'`])((?:\.\./|\.\.\\)[^"'`]*)\1""")
+HOME = re.compile(r"""(["'`])~[/\\][^"'`]*\1|expanduser\(\s*["']~["']|\$\{?HOME\}?[/\\]|Path\.home\(\)""")
 JOIN_UP = re.compile(r"""\bjoin\(\s*(HERE|ROOT|BASE|DIR|SCRIPT_DIR|__dirname|os\.path\.dirname\([^)]*\))\s*,\s*["']\.\.["']""")
 
 
@@ -55,6 +58,9 @@ def lint_file(path: str, project: str, rel: str | None = None) -> list:
     project = os.path.abspath(project)
     for n, line in enumerate(lines, 1):
         if "vpkg: allow" in line or (n == 1 and line.startswith("#!")):
+            continue
+        if HOME.search(line):
+            out.append(Finding(rel, n, "home-path", line))
             continue
         for m in ABSOLUTE.finditer(line):
             value = m.group(1)

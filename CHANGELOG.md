@@ -22,6 +22,8 @@ version:
 
 ### Fixed
 
+- `pack` lint: paths relative to the user's home (`"~/..."`, `expanduser("~")`, `$HOME/...`, `Path.home()`) are now an error, `home-path`, as `/home/...` already was. A script that read a brand kit through `expanduser("~/...")` passed the lint and packed a build step that could not run anywhere else. `docs/vpkg-howto.md` §3.4 describes vendoring shared code and kits into the project with a lock.
+
 ## 1.2.0 — 2026-09-30
 
 ### Added

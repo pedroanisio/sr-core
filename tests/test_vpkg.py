@@ -165,6 +165,17 @@ def test_lint_flags_machine_paths(tmp_path):
                      (6, "outside-project", "error")}
 
 
+def test_lint_flags_home_relative_paths(tmp_path):
+    p = tmp_path / "proj"
+    p.mkdir()
+    (p / "s.py").write_text('KIT = os.path.expanduser("~/proj/kit.xml")\nAF = os.path.join(os.path.expanduser("~"), "src")\n'
+                            'M = "~/.cache/model.onnx"\nS = "$HOME/models/x"\nP = Path.home() / "x"\nOK = "~/ok"  # vpkg: allow\n'
+                            'N = "a~/b"\nT = "~user"\n')
+    found = {(f.line, f.rule, f.severity) for f in lint.lint_file(str(p / "s.py"), str(p))}
+    assert found == {(1, "home-path", "error"), (2, "home-path", "error"), (3, "home-path", "error"), (4, "home-path", "error"),
+                     (5, "home-path", "error")}
+
+
 def test_manifest_semantics():
     m = {"format": mf.FORMAT, "formatVersion": "1.0", "package": {"id": "x", "version": "1.0.0", "title": "X"},
          "scenes": [{"path": "a.xml", "role": "primary"}, {"path": "b.xml", "role": "primary"}],
