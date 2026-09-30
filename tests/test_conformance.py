@@ -51,3 +51,14 @@ def test_a_wrong_picture_fails_the_run(tmp_path):
     black = ("import sys\nfrom PIL import Image\nImage.new('RGB', (640, 360)).save(sys.argv[sys.argv.index('-o') + 1])\n")
     r = _run(tmp_path, black)
     assert r.returncode == 1 and "fail" in r.stdout
+
+
+def test_an_output_case_delivers_that_output_at_its_time(tmp_path):
+    # the engine is asked to encode output "short" from output time 1; it writes the frame into the case folder
+    red = ("import os, sys\nfrom PIL import Image\n"
+            "a = sys.argv\n"
+            "assert a[1] == 'encode' and a[a.index('--output') + 1] == 'short' and float(a[a.index('--start') + 1]) == 1.0, a\n"
+            "d = os.path.join(os.path.dirname(a[2]), 'out')\nos.makedirs(d, exist_ok=True)\n"
+            "Image.new('RGB', (640, 360), (255, 0, 0)).save(os.path.join(d, 'frame_0024.png'))\n")
+    r = _run(tmp_path, red, cases="srep-0013-segment-join")
+    assert r.returncode == 0 and "pass" in r.stdout, r.stdout + r.stderr

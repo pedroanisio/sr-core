@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2">
+<project width="640" height="360" fps="10" duration="3" background="#000000FF"/>
+<output id="short" path="out/frame_%04d.png" codec="png-sequence" overlay="tag"><segment from="1" to="3" speed="2"/></output>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
+<symbols><symbol id="tag"><shape id="sq" shape="rect" width="20" height="20" x="100" y="170" fill="#FFFF00FF"><animate property="x"><key time="0" value="100" interpolation="linear"/><key time="0.8" value="500"/></animate></shape></symbol></symbols><composition>
+<shape id="clock" shape="rect" width="640" height="360" x="0" y="0" fill="#FF0000FF"><animate property="fill"><key time="0" value="#FF0000FF" interpolation="hold"/><key time="1" value="#00FF00FF" interpolation="hold"/><key time="2" value="#0000FFFF" interpolation="hold"/></animate></shape>
+</composition>
+</scene>

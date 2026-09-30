@@ -288,6 +288,67 @@ cases["srep-0011-rigid3d-rest"] = doc12(
     '<rigidBody activateAt="-10"/></object3D>').replace("</composition>", '</composition>\n<physics start="-2"/>')
 expected["srep-0011-rigid3d-rest"] = {"rule": "SREP 11", "red": {"cx": 320, "cy": 240}}
 
+# ---------------------------------------------------------------- SREP 13: outputs with segments
+# The composition holds red on [0, 1), green on [1, 2) and blue on [2, 3); each case renders its output "short" at
+# one output time ("output" in expected.json) and checks the whole frame's colour or a centroid.
+CLOCK = ('<shape id="clock" shape="rect" width="640" height="360" x="0" y="0" fill="#FF0000FF">'
+         '<animate property="fill"><key time="0" value="#FF0000FF" interpolation="hold"/>'
+         '<key time="1" value="#00FF00FF" interpolation="hold"/><key time="2" value="#0000FFFF" interpolation="hold"/>'
+         '</animate></shape>')
+FULL = [0, 0, W, H]
+
+
+def seg_doc(segments, fps=24, extra="", overlay=""):
+    out = f'<output id="short" path="out/frame_%04d.png" codec="png-sequence"{overlay}>{segments}</output>'
+    d = doc12(CLOCK).replace('duration="1"', 'duration="3"').replace('fps="24"', f'fps="{fps}"')
+    d = d.replace('<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>', out)
+    return d.replace("<composition>", extra + "<composition>")
+
+
+def srgb8(v):
+    """A linear value as an 8-bit sRGB code."""
+    return round(255 * (12.92 * v if v <= 0.0031308 else 1.055 * v ** (1 / 2.4) - 0.055))
+
+
+# 2..3 at speed 1, then 0..1 at speed 2: output 0.5 is composition 2.5 (blue), output 1.25 is 0.5 (red)
+MAP2 = '<segment from="2" to="3"/><segment from="0" to="1" speed="2"/>'
+cases["srep-0013-segment-map"] = seg_doc(MAP2)
+expected["srep-0013-segment-map"] = {"rule": "SREP 13", "output": {"id": "short", "time": 0.5},
+                                     "regions": [{"box": FULL, "rgb": [0, 0, 255]}]}
+cases["srep-0013-segment-map-speed"] = seg_doc(MAP2)
+expected["srep-0013-segment-map-speed"] = {"rule": "SREP 13", "output": {"id": "short", "time": 1.25},
+                                           "regions": [{"box": FULL, "rgb": [255, 0, 0]}]}
+
+# the frame exactly at the join (output 1) belongs to the incoming segment: composition 0, red
+cases["srep-0013-segment-join"] = seg_doc(MAP2)
+expected["srep-0013-segment-join"] = {"rule": "SREP 13", "output": {"id": "short", "time": 1.0},
+                                      "regions": [{"box": FULL, "rgb": [255, 0, 0]}]}
+
+# a backwards remap, 0 -> 3 to 1 -> 1, linear: segment time 0.25 is composition 2.5 (blue)
+cases["srep-0013-segment-remap"] = seg_doc(
+    '<segment><timeRemap><key time="0" value="3" interpolation="linear"/><key time="1" value="1"/></timeRemap></segment>')
+expected["srep-0013-segment-remap"] = {"rule": "SREP 13", "output": {"id": "short", "time": 0.25},
+                                       "regions": [{"box": FULL, "rgb": [0, 0, 255]}]}
+
+# blue (2..3) into red (0..1) through a linear crossfade of 0.5 s centred on the join at 1: at output 0.875 the
+# progress is 0.25 and the incoming side, 0.125 s before its start, is clamped to composition 0 (red). The mix is
+# a(1 - p) + b p on linear working values (the default working space).
+cases["srep-0013-segment-clamp"] = seg_doc(
+    '<segment from="2" to="3"><transition type="crossfade" duration="0.5" curve="linear"/></segment>'
+    '<segment from="0" to="1"/>')
+expected["srep-0013-segment-clamp"] = {"rule": "SREP 13", "output": {"id": "short", "time": 0.875},
+                                       "regions": [{"box": FULL, "rgb": [srgb8(0.25), 0, srgb8(0.75)]}]}
+
+# the overlay's yellow square moves from x = 100 to 500 over output 0..0.8: at output 0.4 its top-left is at
+# x = 300, whatever composition time the segment shows (at 10 fps, 0.4 is frame 4)
+TAG = ('<symbols><symbol id="tag"><shape id="sq" shape="rect" width="20" height="20" x="100" y="170" fill="#FFFF00FF">'
+       '<animate property="x"><key time="0" value="100" interpolation="linear"/><key time="0.8" value="500"/></animate>'
+       '</shape></symbol></symbols>')
+cases["srep-0013-segment-overlay"] = seg_doc('<segment from="1" to="3" speed="2"/>', fps=10, extra=TAG,
+                                             overlay=' overlay="tag"')
+expected["srep-0013-segment-overlay"] = {"rule": "SREP 13", "output": {"id": "short", "time": 0.4},
+                                         "yellow": box(310, 180, 20, 20)}
+
 os.makedirs(os.path.join(HERE, "cases"), exist_ok=True)
 for name, xml in cases.items():
     open(os.path.join(HERE, "cases", name + ".xml"), "w").write(xml)

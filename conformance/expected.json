@@ -255,6 +255,129 @@
         "cx": 320,
         "cy": 240
       }
+    },
+    "srep-0013-segment-map": {
+      "rule": "SREP 13",
+      "output": {
+        "id": "short",
+        "time": 0.5
+      },
+      "regions": [
+        {
+          "box": [
+            0,
+            0,
+            640,
+            360
+          ],
+          "rgb": [
+            0,
+            0,
+            255
+          ]
+        }
+      ]
+    },
+    "srep-0013-segment-map-speed": {
+      "rule": "SREP 13",
+      "output": {
+        "id": "short",
+        "time": 1.25
+      },
+      "regions": [
+        {
+          "box": [
+            0,
+            0,
+            640,
+            360
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    "srep-0013-segment-join": {
+      "rule": "SREP 13",
+      "output": {
+        "id": "short",
+        "time": 1.0
+      },
+      "regions": [
+        {
+          "box": [
+            0,
+            0,
+            640,
+            360
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    "srep-0013-segment-remap": {
+      "rule": "SREP 13",
+      "output": {
+        "id": "short",
+        "time": 0.25
+      },
+      "regions": [
+        {
+          "box": [
+            0,
+            0,
+            640,
+            360
+          ],
+          "rgb": [
+            0,
+            0,
+            255
+          ]
+        }
+      ]
+    },
+    "srep-0013-segment-clamp": {
+      "rule": "SREP 13",
+      "output": {
+        "id": "short",
+        "time": 0.875
+      },
+      "regions": [
+        {
+          "box": [
+            0,
+            0,
+            640,
+            360
+          ],
+          "rgb": [
+            137,
+            0,
+            225
+          ]
+        }
+      ]
+    },
+    "srep-0013-segment-overlay": {
+      "rule": "SREP 13",
+      "output": {
+        "id": "short",
+        "time": 0.4
+      },
+      "yellow": {
+        "cx": 310,
+        "cy": 180,
+        "w": 20,
+        "h": 20
+      }
     }
   }
 }

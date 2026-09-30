@@ -24,6 +24,8 @@ version:
 
 ### Tooling
 
+- `conformance/run.py` renders a case's named output at a given output time when its entry in `expected.json`
+  has `output` (`{"id", "time"}`), for SREP 13's cases; an engine that cannot is reported, not crashed.
 - The schema-rule tests skip conformance cases of SREPs that are not yet accepted (unnumbered drafts, Draft or
   Review): their cases use syntax the canonical schema gains only on acceptance.
 

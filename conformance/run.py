@@ -4,7 +4,8 @@
   python3 run.py [--renderers rs,c,py,js] [--cases a1,b2,...]
 
 For each renderer and case: copy the case into out/<renderer>/<case>/scene.xml (asset paths made absolute),
-render frame 0 to PNG, find each colour's pixels (pure red/green/blue/yellow on black) and compare the
+render frame 0 to PNG (or, for a case whose expected entry names an "output", deliver that output at the given
+output time), find each colour's pixels (pure red/green/blue/yellow on black) and compare the
 centroid (and size, where expected) with the normative value. Writes out/report.json and out/report.md.
 """
 import argparse
@@ -45,6 +46,13 @@ RENDERERS = {
     "js": ("JavaScript (js-render-engine)", _js, {}),
 }
 
+# name -> (scene, png, output id, output time) -> argv: renderers that can deliver one named output at one output
+# time (SREP 13 cases). The output writes a PNG sequence into the case folder; the frame at that time is the file.
+OUTPUT_RENDERERS = {
+    "rs": lambda s, p, oid, t: [os.environ.get("RS_RENDER_BIN", "scene-render-rs"), "encode", s, "--output", oid,
+                                "--start", f"{t}", "--end", f"{t + 0.001}"],
+}
+
 # a pixel belongs to a colour when that channel pattern dominates (robust to antialiasing and slight shading)
 CLASSES = {
     "red": lambda r, g, b: (r > 0.5) & (g < 0.3) & (b < 0.3),
@@ -82,12 +90,17 @@ def prepare(case, renderer):
     return d, s
 
 
-def render(renderer, case):
+def render(renderer, case, output=None):
     label, cmd, env = RENDERERS[renderer]
     d, s = prepare(case, renderer)
     png = os.path.join(d, "frame.png")
     t0 = time.time()
-    argv = cmd(s, png)
+    if output:
+        if renderer not in OUTPUT_RENDERERS:
+            return None, None, 0.0, [f"{label} cannot deliver an output at an output time from this kit yet"]
+        argv = OUTPUT_RENDERERS[renderer](s, png, output["id"], output["time"])
+    else:
+        argv = cmd(s, png)
     try:
         p = subprocess.run(argv, cwd=d, capture_output=True, text=True, timeout=600, env={**os.environ, **env})
     except FileNotFoundError:
@@ -126,7 +139,7 @@ def check(meas, exp, tol, png=None):
     for col in exp.get("absent", []):
         rows.append((col, "fail" if col in meas else "pass", "absent", meas.get(col)))
     for col, e in exp.items():
-        if col in ("rule", "regions", "absent"):
+        if col in ("rule", "regions", "absent", "output"):
             continue
         m = meas.get(col)
         if m is None:
@@ -150,7 +163,7 @@ def main() -> int:
     for r in a.renderers.split(","):
         report["results"][r] = {}
         for c in cases:
-            png, code, dt, notes = render(r, c)
+            png, code, dt, notes = render(r, c, spec["cases"][c].get("output"))
             entry = {"exit": code, "seconds": round(dt, 2), "notes": notes}
             if png:
                 meas = measure(png)
