@@ -1,0 +1,330 @@
+```
+SREP:            0
+Title:           Add segments to outputs: cut-downs and speed changes
+Author:          rs-scene-render maintainers
+Status:          Draft
+Type:            Standards
+Created:         2026-09-30
+Schema-Version:  1.2
+Requires:        the tiles and basemaps SREP (srep-0000-basemaps.md), for scene version 1.2 and its version gate
+```
+
+# SREP 0 — Add segments to outputs: cut-downs and speed changes
+
+## Abstract
+
+An `<output>` can hold `<segment>` children. Each segment takes a span of the composition (by time or by
+marker) and plays it at a speed, or through a time-remap curve; the output plays its segments one after
+another, joined by cuts or by a transition. Picture, audio and captions follow one time map, quantised to
+frames and samples without drift. The output can add its own material in output time: audio tracks, caption
+tracks (inline or transcribed from its own audio) and a graphics overlay. Loudness is normalised on the
+output's own programme. One long document then declares its short cut-downs (for example three to five
+vertical Shorts from a long video) with no editing outside the format.
+
+## Motivation
+
+The usual publishing plan for a long explainer is the long video plus several short vertical cut-downs. Today
+an `<output>` can render only one contiguous range (`start`, `end`) at the composition's own speed, so a
+cut-down is made outside the format. For a 254-second film cut to a 30-second Short:
+
+- the vertical composition is rendered at unusual frame rates (50/3, 12, 16 fps) so that FFmpeg can re-time
+  five pieces to between 1.19 and 2 times speed;
+- the pieces are spliced with FFmpeg;
+- sound effects are stretched with a separate time-stretching tool, while the music plays at normal speed from
+  a different excerpt for each piece;
+- a new narration, recorded for the Short, is mixed in a script, with its own hook text and end card;
+- captions for the new narration are burned in with FFmpeg.
+
+None of it is in the document, none of it is repeatable from the document alone, and captions and audio drift
+unless every step is redone by hand when the film changes. The format already has most of the parts (layouts
+with reframing, safe areas, caption tracks and transcription, pitch-preserving audio speed, time remapping,
+transitions, symbols). What is missing is a way to say which spans an output plays and how fast, and a place
+for material that belongs only to the cut-down.
+
+## Specification
+
+### Syntax
+
+```xml
+<!-- outputType: new children in its choice -->
+<xs:element name="segment" type="segmentType"/>
+<xs:element name="audioTrack" type="audioTrackType"/>   <!-- output-time audio -->
+<xs:element name="captionTrack" type="captionTrackType"/> <!-- output-time captions -->
+
+<!-- outputType: new attributes -->
+<xs:attribute name="audioTracks" type="xs:IDREFS"/>
+<xs:attribute name="audioRoles">
+  <xs:simpleType><xs:list itemType="audioRoleType"/></xs:simpleType>
+</xs:attribute>
+<xs:attribute name="audioBuses" type="xs:IDREFS"/>
+<xs:attribute name="overlay" type="xs:IDREF">
+  <xs:annotation><xs:documentation>
+    A symbol drawn over the output's picture in output time (series tags, calls to action, end cards).
+  </xs:documentation></xs:annotation>
+</xs:attribute>
+<xs:attribute name="joinFade" type="nonNegativeDecimal" default="0.01"/>
+
+<xs:complexType name="segmentType">
+  <xs:annotation><xs:documentation>
+    A span of the composition played by this output: from..to (seconds) or fromMarker..toMarker at speed,
+    or a timeRemap child mapping segment time (key/@time, from 0) to composition time (key/@value) for ramps,
+    freezes and reversals. The output plays its segments in document order. A transition child joins this
+    segment to the next one. animate children may animate focusX and focusY in segment time.
+  </xs:documentation></xs:annotation>
+  <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:element name="timeRemap" type="timeRemapType"/>
+    <xs:element name="transition" type="transitionType"/>
+    <xs:element name="animate" type="animateType"/>
+  </xs:choice>
+  <xs:attribute name="id" type="xs:ID"/>
+  <xs:attribute name="from" type="xs:double"/>
+  <xs:attribute name="to" type="xs:double"/>
+  <xs:attribute name="fromMarker" type="xs:IDREF"/>
+  <xs:attribute name="toMarker" type="xs:IDREF"/>
+  <xs:attribute name="speed" type="positiveDecimal" default="1"/>
+  <xs:attribute name="audio" default="stretch">
+    <xs:simpleType><xs:restriction base="xs:string">
+      <xs:enumeration value="stretch"/><xs:enumeration value="resample"/><xs:enumeration value="mute"/>
+    </xs:restriction></xs:simpleType>
+  </xs:attribute>
+  <xs:attribute name="focusX" type="unitDecimal"/>
+  <xs:attribute name="focusY" type="unitDecimal"/>
+</xs:complexType>
+```
+
+`audioRoleType` names the existing enumeration of `audioTrack/@role`, factored out so both attributes share
+it; no value changes. `segment/transition` is the existing `transitionType`, so its parameters and rules (C21
+for `shader`, C22 for `luma`) apply unchanged.
+
+```xml
+<sch:pattern id="p61">
+  <sch:rule context="output[segment]">
+    <sch:assert id="C54" test="not(@start or @end)">an output with segments cannot also set start or end; put the range in a segment instead.</sch:assert>
+    <sch:assert id="R39" test="not(@audioTracks) or count(str:tokenize(normalize-space(@audioTracks),' ')) = count(/scene/audioMix/audioTrack[contains(concat(' ',normalize-space(current()/@audioTracks),' '), concat(' ',@id,' '))])">every id in output/@audioTracks must name an audioMix track.</sch:assert>
+    <sch:assert id="R40" test="not(@overlay) or /scene/symbols/symbol[@id=current()/@overlay]">output/@overlay must name a symbol.</sch:assert>
+  </sch:rule>
+  <sch:rule context="segment">
+    <sch:assert id="C55" test="timeRemap or ((@from or @fromMarker) and (@to or @toMarker))">a segment needs from (or fromMarker) and to (or toMarker), or a timeRemap.</sch:assert>
+    <sch:assert id="C56" test="not(@from and @to) or (number(@from) &gt;= 0 and number(@to) &gt; number(@from) and number(@to) &lt;= number(/scene/project/@duration))">segment from and to must satisfy 0 ≤ from &lt; to ≤ project/@duration.</sch:assert>
+    <sch:assert id="C57" test="not(@from and @fromMarker) and not(@to and @toMarker)">a segment gives each end as a time or as a marker, not both.</sch:assert>
+    <sch:assert id="C58" test="count(timeRemap) &lt;= 1 and count(transition) &lt;= 1">a segment has at most one timeRemap and one transition.</sch:assert>
+    <sch:assert id="R38" test="(not(@fromMarker) or /scene/markers/marker[@id=current()/@fromMarker]) and (not(@toMarker) or /scene/markers/marker[@id=current()/@toMarker])">segment markers must name markers.</sch:assert>
+  </sch:rule>
+  <sch:rule context="segment/transition">
+    <sch:assert id="C59" test="not(@from or @to) and not(@type='morph')">a segment transition joins two rendered pictures: no from, no to, and not morph.</sch:assert>
+  </sch:rule>
+  <sch:rule context="output/captionTrack[@transcribe]">
+    <sch:assert id="R41" test="../audioTrack[@id=current()/@transcribe]">an output caption track transcribes one of that output's own audio tracks.</sch:assert>
+  </sch:rule>
+</sch:pattern>
+```
+
+Marker ends are checked the same way as times when the document is evaluated: a marker used as an end must lie
+in [0, project/@duration], and `fromMarker` must come before `toMarker`.
+
+`segment`, and `audioTrack` and `captionTrack` inside `output`, are new elements. With the tiles and basemaps
+SREP, `scene/@version` gains "1.2" and a gate pattern rejects 1.2 elements in 1.0 and 1.1 documents; this SREP
+adds `output/segment`, `output/audioTrack` and `output/captionTrack` to that gate.
+
+### Semantics
+
+**Time map.** Let an output have segments S₁ … Sₙ in document order. For a segment with a span, a = `from` (or
+its marker's time), b = `to` (or its marker's time), s = `speed`; its output duration is dᵢ = (b − a)/s and its
+map is c(u) = a + s·u for 0 ≤ u < dᵢ, where u is time since the segment's start in the output. For a segment
+with a `timeRemap`, c(u) is the remap curve at u (keys and interpolation as for layers), dᵢ is its last key's
+time, and `from`, `to`, the markers and `speed` are ignored; `timeRemap/@frameBlend` is ignored too, since the
+composition is evaluated continuously. Segment i starts at Tᵢ = d₁ + … + dᵢ₋₁ and the output lasts
+T = d₁ + … + dₙ. An output without segments behaves as today.
+
+**Extension and clamping.** Where a map is needed outside its segment (at a transition), a span map continues
+linearly, c(u) = a + s·u for any u, and a remap continues linearly with the slope of its first or last key
+interval. Every composition time is then clamped to [0, project/@duration].
+
+**Frames.** The output has ⌈T·fps⌉ frames, frame k at output time tₖ = k/fps. Frame k belongs to the segment
+whose interval [Tᵢ, Tᵢ₊₁) contains tₖ, so a frame exactly at a join shows the incoming segment. The frame is
+the composition evaluated at c(tₖ − Tᵢ), then laid out through the output's layout and variant as today. Every
+sub-frame sample (motion blur, frame blending) is taken at its own output time and mapped the same way, so blur
+covers the composition time the shutter spans at that speed.
+
+**Reframing.** When the output's layout reframes with `crop` or `fit-blur`, a segment's `focusX` and `focusY`
+(animated in segment time by `animate` children when present) replace the layout's focus for that segment's
+frames. They are ignored for `reflow` and `fit`. During a transition each side keeps its own focus.
+
+**Joins.** Without a `transition` child, segment i ends and segment i+1 begins at Tᵢ₊₁. With one, its window of
+length δ = min(`duration`, dᵢ, dᵢ₊₁) is centred on Tᵢ₊₁, ends at it or starts at it, per `alignment` (default
+center). Inside the window the outgoing and incoming pictures, each evaluated through its own extended and
+clamped map, are combined as the transition kind combines its nodes, with its `curve` and parameters. The
+output's duration is unchanged. `alignment="end"` keeps the incoming segment inside its span and
+`alignment="start"` keeps the outgoing one inside its span, for spans with nothing drawn beyond them.
+
+**Overlay.** `output/@overlay` names a symbol, laid out over the whole output frame, evaluated at output time
+tₖ (its animation and `start`, `end` are in output time) and composited over the mapped picture, after the
+layout and before burned captions.
+
+**Audio sources and selection.** The sources are the composition's `audioMix/audioTrack` elements and the
+audio of layers. A source is selected when it matches any selector given on the output: its id in
+`audioTracks`, its `role` in `audioRoles` (layer audio has the role `other`), or its bus (`bus`, or a layer's
+`audioBus`) in `audioBuses`. With none of the three attributes, every source is selected.
+
+**Audio programme.** The output's audio is built in output time:
+
+1. **Stems.** Each selected source is rendered in composition time with its own gain, fades, effects and
+   composition-time ducking, and without buses or the master.
+2. **Mapping.** Each stem is mapped through the segments. For each segment, per its `audio`:
+   - `stretch` changes duration and keeps pitch;
+   - `resample` changes duration and pitch together (varispeed, pitch scaled by the rate);
+   - `mute` gives silence.
+   A timeRemap segment follows the curve's slope; a span with slope 0 (a freeze) gives silence; a span that
+   runs backwards plays the samples reversed, then applies the same rule. Segment i occupies samples
+   round(Tᵢ·r) to round(Tᵢ₊₁·r) at sample rate r, rounded on the cumulative times so that rounding never
+   drifts. Consecutive segments are joined by an equal-power crossfade of `joinFade` seconds centred on the
+   join, or over the transition's window where there is one.
+3. **Output tracks.** The output's own `audioTrack` children are mixed in output time (`start` is output time).
+   Their ducking (`duckUnder`) may name composition tracks, which then duck against those tracks' mapped
+   stems.
+4. **Buses and master.** Buses, and then the master bus (its effects, `normalize` measured on this programme,
+   and the true-peak limiter), run once on the output's programme in output time. The composition's own
+   master processing is not applied to segment audio.
+
+The pitch-preserving stretch is engine-defined within the conformance tolerances: the stretched length is exact
+to the sample, pitch within ±1 Hz of the source, and loudness within ±0.5 LU of the unstretched material.
+WSOLA (Verhelst and Roelands 1993) is the recommended method.
+
+**Captions.** Composition caption tracks stay in composition time, including transcriptions. A track that
+transcribes an audio track (`@transcribe`) contributes cues only while that track is selected and the segment
+is not muted; other tracks follow `output/@captions` and `@burnCaptions` as today. Each contributing cue and
+word with composition interval [p, q] appears once for every segment whose span meets it, at the output
+interval given by mapping max(p, a) and min(q, b) through that segment (swapped when the map runs backwards).
+A cue cut at a span boundary keeps only its words inside the span; a cue with no word left is dropped.
+
+The output's own `captionTrack` children are in output time: inline cues, a `src` file, or `@transcribe` naming
+one of the output's own audio tracks, which the resolve step transcribes in output time. `output/@captions` and
+`@burnCaptions` may name them. Burned captions and sidecar files use the mapped and output-time cues together.
+
+**Markers, stills and chapters.** A marker used by `poster/@marker` or `thumbnail/@marker` stands for the first
+output time its composition time maps to; if no segment covers it, the output fails. `poster/@time` and
+`thumbnail/@time` are output time. Markers of `kind="chapter"` become the output's embedded chapters at the
+first output time each maps to; chapters in skipped spans are dropped.
+
+**Delivery warnings.** Engines report, as warnings:
+
+- a segment whose span begins or ends where no node is drawn above the project background;
+- a mapped caption cue displayed for less than 0.7 s.
+
+### Defaults and the neutral case
+
+An output without the new children and attributes renders exactly as before. The new attributes act only
+with segments, except `overlay`, `audioTrack` and `captionTrack`, which also apply to an output without
+segments (in output time, which then equals composition time from `start`).
+
+## Rationale
+
+- **On the output, not the composition.** The film stays the one source; each cut-down is a delivery choice,
+  like `layout` and `variant`. Editing the film updates every cut-down. Material that belongs only to the
+  cut-down (its narration, captions, hook, end card, music excerpts) lives on the output in output time, so it
+  does not move when a segment span is edited.
+- **Reuse.** Ramps, freezes and reversals reuse `timeRemap`; joins reuse the `transition` element with all its
+  parameters and rules; overlays reuse symbols; selection reuses track roles and buses; output-time captions
+  reuse caption tracks and the resolve step.
+- **Stems, then master.** Mapping each source separately lets output tracks duck against a mapped voice and
+  lets loudness be measured on what the cut-down actually plays: a 30-second Short normalised as part of a
+  254-second film would not reach its target.
+- **Quantisation.** Frame and sample boundaries are defined from cumulative output time, so picture cuts and
+  audio joins agree and do not drift over many segments.
+- **Precedent.** Edit decision lists (CMX 3600), OpenTimelineIO clips with `source_range` and linear time
+  warps, and FCPXML clips with `timeMap` describe cut-downs the same way: source spans, a rate per span, and
+  transitions between them.
+
+**Worked example: a 30-second Short from a 254-second film.** The five segments last 5, 5.5, 6, 7.5 and 6 s; the
+fourth span is illustrative.
+
+```xml
+<output id="short-1" path="short-1.mp4" codec="h264" layout="vertical" overlay="short-1-graphics"
+        audioRoles="effects" captions="short-1-vo-subs" burnCaptions="short-1-vo-subs">
+  <segment from="101.8" to="107.75" speed="1.19"/>
+  <segment from="127.6" to="138.6" speed="2"><transition type="crossfade" duration="0.3" alignment="end"/></segment>
+  <segment from="149.3" to="161.3" speed="2"/>
+  <segment from="200.0" to="211.25" speed="1.5"/>
+  <segment from="238.2" to="250.2" speed="2"/>
+  <!-- music at normal speed, a different excerpt per segment -->
+  <audioTrack id="m1" asset="music" start="0"    clipIn="1.4"   clipOut="6.4"/>
+  <audioTrack id="m2" asset="music" start="5"    clipIn="101.8" clipOut="107.3"/>
+  <audioTrack id="m3" asset="music" start="10.5" clipIn="127.6" clipOut="133.6"/>
+  <audioTrack id="m4" asset="music" start="16.5" clipIn="149.3" clipOut="156.8"/>
+  <audioTrack id="m5" asset="music" start="24"   clipIn="238.2" clipOut="244.2"/>
+  <!-- the Short's own narration, ducking the music, and its captions -->
+  <audioTrack id="short-1-vo" asset="short-1-narration" role="voiceover"/>
+  <captionTrack id="short-1-vo-subs" language="en-US" transcribe="short-1-vo"
+                cache="gen/short-1-vo.json" cacheSha256="…"/>
+</output>
+```
+
+The sound effects follow the segment map and are stretched with pitch kept (`audioRoles="effects"`); the film's
+narration and music are not selected; the music excerpts and the new narration play in output time; the
+Short's hook, counter and end card are the overlay symbol; the vertical layout hides the film's side panels.
+
+## Rejected alternatives
+
+- **`<clip>` as the element name.** `clipIn` and `clipOut` already mean trimming a source on audio tracks, and
+  "clip" names media assets in documents.
+- **A transition kind as a segment attribute.** Several kinds need parameters (`shader`, `matte`, `color`,
+  `direction`), and `morph` needs node geometry; a `transition` child reuses the element and its rules.
+- **Selecting audio only by track id.** Layer audio has no track id, and cut-downs select by function (effects
+  in, voice-over out); roles and buses do that.
+- **Normalising on the composition's mix.** It sets the level of the film, not of the cut-down.
+- **A speed attribute on the whole output.** Cut-downs mix speeds.
+- **A separate short document that includes the long one.** `include` brings in the composition but not its
+  audio mix, and has no time remapping.
+- **Platform limits in the schema** (a 60-second maximum). Platforms change them; a warning is enough.
+
+## Backwards compatibility
+
+Every valid document stays valid and renders the same. The new elements require `version="1.2"`.
+
+## Engine impact
+
+| Engine | Status | Work | Tracking |
+|---|---|---|---|
+| Rust (`rs-scene-render`), reference | pending | time map and quantisation in the encode loop; per-source stems from the mixer, mapped and stretched with the existing WSOLA; master on the output programme; caption mapping and output-time caption tracks; transitions between rendered frames; overlay compositing; chapters | |
+| C (`c-scene-render`) | pending | same | |
+| Python (`py-render`) | pending | same | |
+| JavaScript (`js-render-engine`) | pending | same | |
+
+## Conformance
+
+The picture cases use a composition whose background holds red on [0, 1), green on [1, 2) and blue on [2, 3).
+
+| Case | Checks | Tolerance |
+|---|---|---|
+| `srep-0000-segment-map` | segments 2..3 at speed 1, then 0..1 at speed 2: output 0.5 shows blue (c = 2.5), 1.25 shows red (c = 0.5) | region colour, 3 levels |
+| `srep-0000-segment-join` | the frame exactly at the join T₁ = 1 shows the incoming segment (red) | region colour, 3 levels |
+| `srep-0000-segment-remap` | a timeRemap from segment time 0 → 3 to 1 → 1 (backwards): segment time 0.25 shows c = 2.5 (blue) | region colour, 3 levels |
+| `srep-0000-segment-clamp` | a crossfade of 0.5 s, centred, into a segment starting at from = 0: frames before the join blend with the clamped c = 0 (red), no frame is empty | region colour, 3 levels |
+| `srep-0000-segment-overlay` | an overlay symbol with a key at output time 0.4 appears at output 0.4 whatever the map | centroid, 2 px |
+| engine test: audio pitch | a 440 Hz tone through a speed-2 segment stays at 440 Hz with `stretch` and plays at 880 Hz with `resample`; segment sample counts match the cumulative rounding | ± 1 Hz, exact counts |
+| engine test: loudness | a segmented output with `normalize="integrated"` measures −14 LUFS | ± 0.5 LU |
+| engine test: captions | words spanning a boundary appear only for their inside part; a transcribed voice not selected, or in a muted segment, contributes no cues; output-time captions keep their times | exact times |
+
+## Open issues
+
+- The compatibility kit renders frame 0 of the composition. These cases need `run.py` to render a named output
+  at a given output time.
+- Whether `fromMarker`/`toMarker` should also accept one marker with a duration as a span.
+- Rule ids C54–C59, R38–R41 and pattern p61 are provisional until the editor assigns them.
+
+## References
+
+- CMX 3600 edit decision list format.
+- OpenTimelineIO: `Clip.source_range`, `LinearTimeWarp` (https://opentimelineio.readthedocs.io/).
+- FCPXML: `timeMap` and `conform-rate` (Apple Final Cut Pro XML reference).
+- ITU-R BS.1770, loudness measurement.
+- Verhelst and Roelands 1993, "An overlap-add technique based on waveform similarity (WSOLA) for high quality
+  time-scale modification of speech", ICASSP.
+
+## History
+
+- 2026-09-30: first draft.
+- 2026-09-30: revised after review: output-time captions and overlay; captions follow selected, unmuted audio;
+  transitions as a child element; extension, clamping and alignment; stems and the master on the output
+  programme; frame and sample quantisation; selection by role and bus; freezes and reversal in audio; animated
+  focus; markers, stills and chapters; more rules, warnings and cases.
