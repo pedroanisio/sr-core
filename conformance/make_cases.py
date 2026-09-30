@@ -244,6 +244,70 @@ def pmtiles_one_png(path, png):
     open(path, "wb").write(header + root + meta + png)
 
 
+def pmtiles(path, entries, tile_type, minz, maxz):
+    """A PMTiles v3 archive of `entries` (tile id, run length, bytes) in id order, with no compression."""
+    def varint(n):
+        out = bytearray()
+        while True:
+            b = n & 0x7F
+            n >>= 7
+            out.append(b | (0x80 if n else 0))
+            if not n:
+                return bytes(out)
+    ids, last, data = [], 0, b""
+    root = varint(len(entries))
+    for tid, _, _ in entries:
+        root += varint(tid - last)
+        last = tid
+    root += b"".join(varint(run) for _, run, _ in entries)
+    root += b"".join(varint(len(b)) for _, _, b in entries)
+    # the first offset is written as offset + 1; the rest follow on contiguously (0)
+    root += varint(1) + b"".join(varint(0) for _ in entries[1:])
+    data = b"".join(b for _, _, b in entries)
+    meta = b"{}"
+    root_off, meta_off = 127, 127 + len(root)
+    data_off = meta_off + len(meta)
+    n = sum(run for _, run, _ in entries)
+    header = b"PMTiles" + bytes([3]) + struct.pack(
+        "<11Q", root_off, len(root), meta_off, len(meta), data_off, 0, data_off, len(data), n, len(entries), len(entries))
+    header += bytes([1, 1, 1, tile_type, minz, maxz])
+    header += struct.pack("<4i", -1800000000, -850511287, 1800000000, 850511287) + bytes([0]) + struct.pack("<2i", 0, 0)
+    assert len(header) == 127
+    open(path, "wb").write(header + root + meta + data)
+
+
+def png(w, h, pixel):
+    """A w x h RGB PNG whose pixel (x, y) is pixel(x, y)."""
+    import zlib
+    rows = b"".join(b"\x00" + b"".join(bytes(pixel(x, y)) for x in range(w)) for y in range(h))
+    def chunk(t, d):
+        return struct.pack(">I", len(d)) + t + d + struct.pack(">I", zlib.crc32(t + d) & 0xFFFFFFFF)
+    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 2, 0, 0, 0))
+            + chunk(b"IDAT", zlib.compress(rows, 9)) + chunk(b"IEND", b""))
+
+
+def mvt_west_half():
+    """A Mapbox Vector Tile (2.1) with layer "shapes": one polygon over the tile's west half (extent 4096)."""
+    def key(field, wire):
+        return bytes([(field << 3) | wire])
+    def varint(n):
+        out = bytearray()
+        while True:
+            b = n & 0x7F
+            n >>= 7
+            out.append(b | (0x80 if n else 0))
+            if not n:
+                return bytes(out)
+    def lendelim(field, payload):
+        return key(field, 2) + varint(len(payload)) + payload
+    zz = lambda v: (v << 1) ^ (v >> 31)
+    # MoveTo (0, 0); LineTo (2048, 0), (2048, 4096), (0, 4096); ClosePath: clockwise with y down
+    cmds = [9, zz(0), zz(0), 26, zz(2048), zz(0), zz(0), zz(4096), zz(-2048), zz(0), 15]
+    feature = key(3, 0) + varint(3) + lendelim(4, b"".join(varint(c) for c in cmds))
+    layer = key(15, 0) + varint(2) + lendelim(1, b"shapes") + lendelim(2, feature) + key(5, 0) + varint(4096)
+    return lendelim(3, layer)
+
+
 def half_png():
     """A 256 x 256 PNG, the west half red and the east half blue."""
     import zlib
@@ -256,13 +320,53 @@ def half_png():
 
 
 pmtiles_one_png(os.path.join(HERE, "assets", "halves.pmtiles"), half_png())
-# a 256 x 256 Web Mercator map at zoom 0 (512 px per world width) shows 90°W-90°E: the tile's west half fills
-# the map's left half
+# a 256 x 256 Web Mercator map at zoom 0 (the world 512 px wide) shows 90°W-90°E; its tile zoom is 1 for 256 px
+# raster tiles, so the one zoom-0 tile is overzoomed: its west half fills the map's left half
 MAP = ('<tiles id="t-halves" src="../assets/halves.pmtiles"/>'
        '<map id="map-halves" width="256" height="256" projection="web-mercator" centerLon="0" centerLat="0" zoom="0">'
        '<basemap tiles="t-halves" attribution="false"/></map>')
 cases["srep-0009-basemap-raster"] = doc12('<layer id="l" asset="map-halves" x="192" y="52"/>', extra_assets=MAP)
 expected["srep-0009-basemap-raster"] = {"rule": "SREP 9", "red": box(256, 180, 128, 256), "blue": box(384, 180, 128, 256)}
+
+# the tile zoom: a 256 px raster tile at map zoom 0 (k = 512 / 2π) is round(log2(2π·k / 256)) = 1, so the red
+# zoom-1 tiles are drawn, not the blue zoom-0 tile
+BLUE, RED = png(256, 256, lambda x, y: (0, 0, 255)), png(256, 256, lambda x, y: (255, 0, 0))
+pmtiles(os.path.join(HERE, "assets", "zooms.pmtiles"), [(0, 1, BLUE), (1, 4, RED)], 2, 0, 1)
+cases["srep-0009-basemap-zoom"] = doc12(
+    '<layer id="l" asset="map-zooms" x="192" y="52"/>',
+    extra_assets='<tiles id="t-zooms" src="../assets/zooms.pmtiles"/>'
+    '<map id="map-zooms" width="256" height="256" projection="web-mercator" centerLon="0" centerLat="0" zoom="0">'
+    '<basemap tiles="t-zooms" attribution="false"/></map>')
+expected["srep-0009-basemap-zoom"] = {"rule": "SREP 9", "regions": [{"box": [196, 56, 444, 304], "rgb": [255, 0, 0]}]}
+
+# the warp: an equirectangular world 256 px wide (k = 256 / 2π px per radian) of a zoom-0 tile whose top quarter
+# is red. That quarter spans Mercator latitudes 85.0511° to 66.5133°, at y = 128 - k·φ in the map
+QUARTER = png(256, 256, lambda x, y: (255, 0, 0) if y < 64 else (0, 0, 255))
+pmtiles_one_png(os.path.join(HERE, "assets", "quarter.pmtiles"), QUARTER)
+kq = 256 / (2 * math.pi)
+merc = lambda v: math.degrees(math.atan(math.sinh(math.pi * (1 - 2 * v))))
+y_top, y_bot = 128 - kq * math.radians(merc(0)), 128 - kq * math.radians(merc(0.25))
+cases["srep-0009-basemap-warp"] = doc12(
+    '<layer id="l" asset="map-quarter" x="192" y="52"/>',
+    extra_assets='<tiles id="t-quarter" src="../assets/quarter.pmtiles"/>'
+    '<map id="map-quarter" width="256" height="256" projection="equirectangular" centerLon="0" centerLat="0" zoom="0">'
+    '<basemap tiles="t-quarter" attribution="false"/></map>')
+expected["srep-0009-basemap-warp"] = {"rule": "SREP 9",
+                                      "red": box(320, 52 + (y_top + y_bot) / 2, 256, y_bot - y_top)}
+
+# a vector tile: one polygon over the west half, filled red by the style over a blue background layer
+pmtiles(os.path.join(HERE, "assets", "west.pmtiles"), [(0, 1, mvt_west_half())], 1, 0, 0)
+json.dump({"version": 8, "sources": {"t": {"type": "vector"}},
+           "layers": [{"id": "bg", "type": "background", "paint": {"background-color": "#0000ff"}},
+                      {"id": "west", "type": "fill", "source": "t", "source-layer": "shapes",
+                       "paint": {"fill-color": "#ff0000"}}]},
+          open(os.path.join(HERE, "assets", "west-style.json"), "w"))
+cases["srep-0009-basemap-vector"] = doc12(
+    '<layer id="l" asset="map-west" x="192" y="52"/>',
+    extra_assets='<tiles id="t-west" src="../assets/west.pmtiles"/>'
+    '<map id="map-west" width="256" height="256" projection="web-mercator" centerLon="0" centerLat="0" zoom="0">'
+    '<basemap tiles="t-west" mapStyle="../assets/west-style.json" labels="false" attribution="false"/></map>')
+expected["srep-0009-basemap-vector"] = {"rule": "SREP 9", "red": box(256, 180, 128, 256), "blue": box(384, 180, 128, 256)}
 
 # the same map as flat ground facing the implicit camera, centred on the object's origin
 cases["srep-0010-map-ground"] = doc12(
@@ -270,15 +374,51 @@ cases["srep-0010-map-ground"] = doc12(
     materials='<material id="m-white" baseColor="#FFFFFFFF" unlit="true" doubleSided="true"/>')
 expected["srep-0010-map-ground"] = {"rule": "SREP 10", "red": box(256, 180, 128, 256), "blue": box(384, 180, 128, 256)}
 
-# free fall for 0.5 s at the default step 1/120 s, each step split into solverIterations = 8 substeps:
-# N = 60 * 8 semi-implicit Euler substeps of h = dt/8 move a body g·h²·N(N+1)/2 metres; 100 px per metre.
-# activateAt before physics@start, so the body is dynamic from the start
-SUB, N = 1 / 120 / 8, 60 * 8
-drop = 9.80665 * SUB * SUB * N * (N + 1) / 2 * 100
+# a globe of the halves map facing the implicit camera: 0° longitude towards the camera, east towards +x. A ray
+# through screen x < 320 meets the sphere west of 0°, so the red west is the silhouette's left half. The
+# silhouette of a sphere of radius r at distance D is a circle of radius r·D/sqrt(D² - r²); a half-disc's
+# centroid lies 4R/(3π) from its diameter
+RG = 60
+RS = RG * D / math.sqrt(D * D - RG * RG)
+cases["srep-0010-globe-orientation"] = doc12(
+    f'<object3D id="g" primitive="globe" map="map-halves" radius="{RG}" segments="128" material="m-white" x="320" y="180"/>',
+    extra_assets=MAP, materials='<material id="m-white" baseColor="#FFFFFFFF" unlit="true" doubleSided="true"/>')
+expected["srep-0010-globe-orientation"] = {"rule": "SREP 10", "red": box(320 - 4 * RS / (3 * math.pi), 180, RS, 2 * RS),
+                                           "blue": box(320 + 4 * RS / (3 * math.pi), 180, RS, 2 * RS)}
+
+# free fall for 1 s at fixedStep 0.1 with solverIterations 4, 20 px per metre: N = 40 semi-implicit Euler
+# substeps of h = 0.025 s move a body g·h²·N(N+1)/2 metres (5.026 m = 100.5 px). Whole steps would give 107.9 px
+# and the exact fall 98.1 px, both outside the tolerance, so the case checks the substeps.
+G, DT, K, PPM, STEPS = 9.80665, 0.1, 4, 20, 10
+FALL = '<physics start="-1" fixedStep="0.1" solverIterations="4" pixelsPerMeter="20"{extra}/>'
+N, Hs = STEPS * K, DT / K
 cases["srep-0011-rigid3d-fall"] = doc12(
-    '<object3D id="s" primitive="sphere" radius="10" material="m-red" x="320" y="100" start="-1">'
-    '<rigidBody linearDamping="0" activateAt="-10"/></object3D>').replace("</composition>", '</composition>\n<physics start="-0.5"/>')
-expected["srep-0011-rigid3d-fall"] = {"rule": "SREP 11", "red": {"cx": 320, "cy": round(100 + drop, 2)}}
+    '<object3D id="s" primitive="sphere" radius="10" material="m-red" x="320" y="100" start="-2">'
+    '<rigidBody linearDamping="0" activateAt="-10"/></object3D>').replace("</composition>", "</composition>\n" + FALL.format(extra=""))
+expected["srep-0011-rigid3d-fall"] = {"rule": "SREP 11", "red": {"cx": 320, "cy": round(100 + G * Hs * Hs * N * (N + 1) / 2 * PPM, 2)}}
+
+# the same with linearDamping c = 1 at 30 px per metre: damping is applied once per step, v ← v / (1 + c·Δt),
+# after its substeps (113.7 px); damping every substep instead would give 109.6 px
+def damped_fall(c):
+    v = x = 0.0
+    for _ in range(STEPS):
+        for _ in range(K):
+            v += G * Hs
+            x += v * Hs
+        v /= 1 + c * DT
+    return x
+cases["srep-0011-rigid3d-damped"] = doc12(
+    '<object3D id="s" primitive="sphere" radius="10" material="m-red" x="320" y="100" start="-2">'
+    '<rigidBody linearDamping="1" activateAt="-10"/></object3D>').replace(
+    "</composition>", "</composition>\n" + FALL.format(extra="").replace('pixelsPerMeter="20"', 'pixelsPerMeter="30"'))
+expected["srep-0011-rigid3d-damped"] = {"rule": "SREP 11", "red": {"cx": 320, "cy": round(100 + damped_fall(1) * 30, 2)}}
+
+# velocityX is scene pixels per second: without gravity or damping a body moves 50 px in 1 s
+cases["srep-0011-rigid3d-velocity"] = doc12(
+    '<object3D id="s" primitive="sphere" radius="10" material="m-red" x="270" y="180" start="-2">'
+    '<rigidBody linearDamping="0" velocityX="50" activateAt="-10"/></object3D>').replace(
+    "</composition>", "</composition>\n" + FALL.format(extra=' gravityY="0"'))
+expected["srep-0011-rigid3d-velocity"] = {"rule": "SREP 11", "red": {"cx": 320, "cy": 180}}
 
 # dropped onto a static box whose top is at y = 250, a sphere of radius 10 comes to rest at y = 240
 cases["srep-0011-rigid3d-rest"] = doc12(
@@ -333,11 +473,39 @@ expected["srep-0013-segment-remap"] = {"rule": "SREP 13", "output": {"id": "shor
 # blue (2..3) into red (0..1) through a linear crossfade of 0.5 s centred on the join at 1: at output 0.875 the
 # progress is 0.25 and the incoming side, 0.125 s before its start, is clamped to composition 0 (red). The mix is
 # a(1 - p) + b p on linear working values (the default working space).
-cases["srep-0013-segment-clamp"] = seg_doc(
+cases["srep-0013-segment-crossfade"] = seg_doc(
     '<segment from="2" to="3"><transition type="crossfade" duration="0.5" curve="linear"/></segment>'
     '<segment from="0" to="1"/>')
-expected["srep-0013-segment-clamp"] = {"rule": "SREP 13", "output": {"id": "short", "time": 0.875},
+expected["srep-0013-segment-crossfade"] = {"rule": "SREP 13", "output": {"id": "short", "time": 0.875},
                                        "regions": [{"box": FULL, "rgb": [srgb8(0.25), 0, srgb8(0.75)]}]}
+
+# clamping: a remap reaching composition time -0.5 at its start. The yellow square moves x = 100 + 200·t and
+# extrapolates linearly before 0, so an unclamped map would draw it at x = 0; clamped, it is at x = 100
+MOVER = ('<shape id="mv" shape="rect" width="20" height="20" x="100" y="170" fill="#FFFF00FF">'
+         '<animate property="x" extrapolateBefore="linear"><key time="0" value="100" interpolation="linear"/>'
+         '<key time="1" value="300"/></animate></shape>')
+cases["srep-0013-segment-clamp"] = seg_doc(
+    '<segment><timeRemap><key time="0" value="-0.5" interpolation="linear"/><key time="1" value="0.5"/></timeRemap></segment>'
+    ).replace(CLOCK, MOVER)
+expected["srep-0013-segment-clamp"] = {"rule": "SREP 13", "output": {"id": "short", "time": 0.0}, "yellow": box(110, 180, 20, 20)}
+
+# reframing: a 360 x 360 crop of the 640 x 360 frame with the segment's focusX 0 shows columns 0..359: the left
+# half's red over 320 columns, then 40 of the right half's blue
+HALVES = ('<shape id="l" shape="rect" width="320" height="360" x="0" y="0" fill="#FF0000FF"/>'
+          '<shape id="r" shape="rect" width="320" height="360" x="320" y="0" fill="#0000FFFF"/>')
+cases["srep-0013-segment-focus"] = seg_doc('<segment from="0" to="1" focusX="0"/>').replace(CLOCK, HALVES).replace(
+    'codec="png-sequence"', 'codec="png-sequence" layout="sq"').replace(
+    "</output>\n", '</output>\n<layouts><layout id="sq" width="360" height="360" reframe="crop"/></layouts>\n', 1)
+expected["srep-0013-segment-focus"] = {"rule": "SREP 13", "output": {"id": "short", "time": 0.0},
+                                       "red": box(160, 180, 320, 360), "blue": box(340, 180, 40, 360)}
+
+# alignment end: the 0.5 s window ends on the join at 1 (0.5..1), so at output 0.75 the linear crossfade is half way:
+# 0.5 blue + 0.5 red in linear light (a centred window, 0.75..1.25, would still be all blue)
+cases["srep-0013-segment-align-end"] = seg_doc(
+    '<segment from="2" to="3"><transition type="crossfade" duration="0.5" curve="linear" alignment="end"/></segment>'
+    '<segment from="0" to="1"/>')
+expected["srep-0013-segment-align-end"] = {"rule": "SREP 13", "output": {"id": "short", "time": 0.75},
+                                           "regions": [{"box": FULL, "rgb": [srgb8(0.5), 0, srgb8(0.5)]}]}
 
 # the overlay's yellow square moves from x = 100 to 500 over output 0..0.8: at output 0.4 its top-left is at
 # x = 300, whatever composition time the segment shows (at 10 fps, 0.4 is frame 4)
@@ -348,6 +516,11 @@ cases["srep-0013-segment-overlay"] = seg_doc('<segment from="1" to="3" speed="2"
                                              overlay=' overlay="tag"')
 expected["srep-0013-segment-overlay"] = {"rule": "SREP 13", "output": {"id": "short", "time": 0.4},
                                          "yellow": box(310, 180, 20, 20)}
+
+# an overlay also draws on an output without segments, in output time (here from composition time 0)
+cases["srep-0013-overlay-plain"] = seg_doc("", fps=10, extra=TAG, overlay=' overlay="tag"')
+expected["srep-0013-overlay-plain"] = {"rule": "SREP 13", "output": {"id": "short", "time": 0.4},
+                                       "yellow": box(310, 180, 20, 20)}
 
 os.makedirs(os.path.join(HERE, "cases"), exist_ok=True)
 for name, xml in cases.items():

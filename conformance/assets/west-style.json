@@ -1,0 +1,1 @@
+{"version": 8, "sources": {"t": {"type": "vector"}}, "layers": [{"id": "bg", "type": "background", "paint": {"background-color": "#0000ff"}}, {"id": "west", "type": "fill", "source": "t", "source-layer": "shapes", "paint": {"fill-color": "#ff0000"}}]}

@@ -14,5 +14,6 @@
 | [9](srep-0009.md) | Add map tile assets and basemaps | Standards | Review | 1.2 |
 | [10](srep-0010.md) | Add draped map ground and globes to object3D | Standards | Review | 1.2 |
 | [11](srep-0011.md) | Add rigid bodies to object3D | Standards | Review | 1.2 |
-| [12](srep-0012.md) | Roadmap for science-explainer video | Informational | Review | n/a |
+| [12](srep-0012.md) | Plan the format's coverage of science-explainer video | Informational | Review | n/a |
 | [13](srep-0013.md) | Add segments to outputs: cut-downs and speed changes | Standards | Review | 1.2 |
+| [14](srep-0014.md) | Adopt design rules for simulation, space and geodata SREPs | Process | Draft | n/a |

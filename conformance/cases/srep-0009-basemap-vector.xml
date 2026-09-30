@@ -2,9 +2,9 @@
 <scene version="1.2">
 <project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
 <output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<assets><tiles id="t-west" src="../assets/west.pmtiles"/><map id="map-west" width="256" height="256" projection="web-mercator" centerLon="0" centerLat="0" zoom="0"><basemap tiles="t-west" mapStyle="../assets/west-style.json" labels="false" attribution="false"/></map></assets>
 <materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
 <composition>
-<object3D id="s" primitive="sphere" radius="10" material="m-red" x="320" y="100" start="-2"><rigidBody linearDamping="0" activateAt="-10"/></object3D>
+<layer id="l" asset="map-west" x="192" y="52"/>
 </composition>
-<physics start="-1" fixedStep="0.1" solverIterations="4" pixelsPerMeter="20"/>
 </scene>

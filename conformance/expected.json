@@ -227,6 +227,48 @@
         "h": 256
       }
     },
+    "srep-0009-basemap-zoom": {
+      "rule": "SREP 9",
+      "regions": [
+        {
+          "box": [
+            196,
+            56,
+            444,
+            304
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    "srep-0009-basemap-warp": {
+      "rule": "SREP 9",
+      "red": {
+        "cx": 320,
+        "cy": 126.11,
+        "w": 256,
+        "h": 13.18
+      }
+    },
+    "srep-0009-basemap-vector": {
+      "rule": "SREP 9",
+      "red": {
+        "cx": 256,
+        "cy": 180,
+        "w": 128,
+        "h": 256
+      },
+      "blue": {
+        "cx": 384,
+        "cy": 180,
+        "w": 128,
+        "h": 256
+      }
+    },
     "srep-0010-map-ground": {
       "rule": "SREP 10",
       "red": {
@@ -242,11 +284,40 @@
         "h": 256
       }
     },
+    "srep-0010-globe-orientation": {
+      "rule": "SREP 10",
+      "red": {
+        "cx": 294.38,
+        "cy": 180,
+        "w": 60.35,
+        "h": 120.71
+      },
+      "blue": {
+        "cx": 345.62,
+        "cy": 180,
+        "w": 60.35,
+        "h": 120.71
+      }
+    },
     "srep-0011-rigid3d-fall": {
       "rule": "SREP 11",
       "red": {
         "cx": 320,
-        "cy": 222.84
+        "cy": 200.52
+      }
+    },
+    "srep-0011-rigid3d-damped": {
+      "rule": "SREP 11",
+      "red": {
+        "cx": 320,
+        "cy": 213.74
+      }
+    },
+    "srep-0011-rigid3d-velocity": {
+      "rule": "SREP 11",
+      "red": {
+        "cx": 320,
+        "cy": 180
       }
     },
     "srep-0011-rigid3d-rest": {
@@ -344,7 +415,7 @@
         }
       ]
     },
-    "srep-0013-segment-clamp": {
+    "srep-0013-segment-crossfade": {
       "rule": "SREP 13",
       "output": {
         "id": "short",
@@ -366,7 +437,74 @@
         }
       ]
     },
+    "srep-0013-segment-clamp": {
+      "rule": "SREP 13",
+      "output": {
+        "id": "short",
+        "time": 0.0
+      },
+      "yellow": {
+        "cx": 110,
+        "cy": 180,
+        "w": 20,
+        "h": 20
+      }
+    },
+    "srep-0013-segment-focus": {
+      "rule": "SREP 13",
+      "output": {
+        "id": "short",
+        "time": 0.0
+      },
+      "red": {
+        "cx": 160,
+        "cy": 180,
+        "w": 320,
+        "h": 360
+      },
+      "blue": {
+        "cx": 340,
+        "cy": 180,
+        "w": 40,
+        "h": 360
+      }
+    },
+    "srep-0013-segment-align-end": {
+      "rule": "SREP 13",
+      "output": {
+        "id": "short",
+        "time": 0.75
+      },
+      "regions": [
+        {
+          "box": [
+            0,
+            0,
+            640,
+            360
+          ],
+          "rgb": [
+            188,
+            0,
+            188
+          ]
+        }
+      ]
+    },
     "srep-0013-segment-overlay": {
+      "rule": "SREP 13",
+      "output": {
+        "id": "short",
+        "time": 0.4
+      },
+      "yellow": {
+        "cx": 310,
+        "cy": 180,
+        "w": 20,
+        "h": 20
+      }
+    },
+    "srep-0013-overlay-plain": {
       "rule": "SREP 13",
       "output": {
         "id": "short",

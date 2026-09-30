@@ -84,7 +84,7 @@ def prepare(case, renderer):
     xml = open(os.path.join(HERE, "cases", case + ".xml")).read()
     # keep asset paths relative (some renderers refuse absolute ones): copy the assets beside the scene
     shutil.copytree(os.path.join(HERE, "assets"), os.path.join(d, "assets"))
-    xml = xml.replace('src="../assets/', 'src="assets/')
+    xml = xml.replace('="../assets/', '="assets/')
     s = os.path.join(d, "scene.xml")
     open(s, "w").write(xml)
     return d, s
