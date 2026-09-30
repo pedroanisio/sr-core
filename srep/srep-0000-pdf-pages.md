@@ -1,0 +1,270 @@
+```
+SREP:            0
+Title:           Add PDF page assets and text-anchored regions
+Author:          scene-render maintainers
+Status:          Draft
+Type:            Standards
+Created:         2026-09-30
+Schema-Version:  1.2
+```
+
+# SREP 0 (draft) — Add PDF page assets and text-anchored regions
+
+## Abstract
+
+A new asset kind, `<pdf>`, places one page of a PDF file as a picture. The page is not rasterised by the
+renderer. The resolve step renders it once, at a declared resolution, into a cache image pinned by its
+SHA-256, exactly as `generated` media are resolved. The same step finds phrases on the page and records
+their boxes as `<region>` children. A `shape` with `@region` takes its box from a region and follows the
+layer that shows the page. A highlight, circle or underline therefore sits on the words it marks, and
+stays there when the page moves, zooms or is re-rendered. Documents that use `<pdf>` declare
+`version="1.2"`.
+
+## Motivation
+
+Explainer and journalism videos show documents: papers, reports, contracts, slides. The format can only
+show them as images that someone made by hand, and it records nothing about where they came from or
+what is on them.
+
+- **A published science video shows page 1 of its source paper.**
+  - The page was rendered outside the project with `pdftoppm -r 150`, giving a 1241 × 1754 PNG, and then
+    re-saved by the art script. Its bytes now match neither the renderer's output nor anything the
+    document can check.
+  - The project README calls the image "unaltered" evidence. Nothing in the scene connects it to the
+    PDF, its page number or the PDF's hash.
+- **The key clause is marked by hand.**
+  - The highlight is an ellipse placed by eye.
+  - The scene carries a `todo` marker: "Align highlight to the abstract clause on the final arXiv
+    render". Any re-render of the page, at another resolution or from a revised preprint, moves the
+    words and leaves the mark behind.
+- **Resolution is fixed by the hand step.** Showing the page larger means redoing the manual render and
+  re-placing every mark.
+
+Other projects keep PDFs beside their scenes as well: a campaign proposal and research papers. None can
+reference them.
+
+## Specification
+
+### Syntax
+
+The XSD gains the declarations below. `pdf` joins the `assets` choice. `shapeType` gains `region`,
+`regionLayer` and `regionPadding`. Its `width` and `height` change from `use="required"` to optional,
+and Schematron C69 requires them unless `@region` is set, so no document changes validity.
+`scene/@version` accepts `1.2`.
+
+```xml
+<xs:complexType name="pdfRegionType">
+  <xs:annotation><xs:documentation>
+    A box on the page, in the cache image's pixels (origin top-left, +y down). With @text, the resolve
+    step finds the occurrence-th match of the phrase in the page's text and writes x, y, width and
+    height; without it, the box is given by hand.
+  </xs:documentation></xs:annotation>
+  <xs:attribute name="id" type="xs:ID" use="required"/>
+  <xs:attribute name="text" type="xs:string"/>
+  <xs:attribute name="occurrence" type="xs:positiveInteger" default="1"/>
+  <xs:attribute name="x" type="xs:double" use="required"/>
+  <xs:attribute name="y" type="xs:double" use="required"/>
+  <xs:attribute name="width" type="nonNegativeDecimal" use="required"/>
+  <xs:attribute name="height" type="nonNegativeDecimal" use="required"/>
+</xs:complexType>
+<xs:complexType name="pdfAssetType">
+  <xs:annotation><xs:documentation>
+    One page of a PDF, drawn as an image. The renderer never reads the PDF: it reads @cache and fails
+    unless its SHA-256 equals @cacheSha256. A resolve step, run before rendering, renders page @page at
+    @dpi over @background into the cache, writes width, height and cacheSha256, and resolves the
+    regions' text. @sha256 pins the source file.
+  </xs:documentation></xs:annotation>
+  <xs:sequence><xs:element name="region" type="pdfRegionType" minOccurs="0" maxOccurs="unbounded"/></xs:sequence>
+  <xs:attribute name="id" type="xs:ID" use="required"/>
+  <xs:attribute name="src" type="xs:anyURI" use="required"/>
+  <xs:attribute name="page" type="xs:positiveInteger" default="1"/>
+  <xs:attribute name="dpi" default="150">
+    <xs:simpleType><xs:restriction base="xs:double">
+      <xs:minInclusive value="18"/><xs:maxInclusive value="1200"/>
+    </xs:restriction></xs:simpleType>
+  </xs:attribute>
+  <xs:attribute name="background" type="colorType" default="#FFFFFFFF"/>
+  <xs:attribute name="annotations" type="xs:boolean" default="false"/>
+  <xs:attribute name="cache" type="xs:anyURI" use="required"/>
+  <xs:attribute name="cacheSha256" type="sha256Type" use="required"/>
+  <xs:attribute name="width" type="xs:positiveInteger" use="required"/>
+  <xs:attribute name="height" type="xs:positiveInteger" use="required"/>
+  <xs:attributeGroup ref="assetProvenance"/>
+</xs:complexType>
+
+<!-- added to shapeType -->
+<xs:attribute name="region" type="xs:IDREF"/>
+<xs:attribute name="regionLayer" type="xs:IDREF"/>
+<xs:attribute name="regionPadding" type="xs:double" default="0"/>
+```
+
+```xml
+<sch:pattern id="p65">
+  <sch:rule context="/scene[@version='1.0' or @version='1.1']">
+    <sch:assert id="V9" test="not(assets/pdf)">pdf assets need version="1.2".</sch:assert>
+  </sch:rule>
+</sch:pattern>
+<sch:pattern id="p66">
+  <sch:rule context="assets/pdf">
+    <sch:assert id="C66" test="@sha256">a pdf asset pins its source with @sha256.</sch:assert>
+  </sch:rule>
+  <sch:rule context="shape[@region]">
+    <sch:assert id="C67" test="@regionLayer">@region needs @regionLayer, the layer that shows the page.</sch:assert>
+    <sch:assert id="C68" test="not(@parent) and not(transformConstraint)">a shape placed on a region has no other transform parent or constraint.</sch:assert>
+    <sch:assert id="R45" test="/scene/assets/pdf/region[@id=current()/@region]">@region must name a region of a pdf asset.</sch:assert>
+    <sch:assert id="R46" test="//layer[@id=current()/@regionLayer][@asset=/scene/assets/pdf[region/@id=current()/@region]/@id]">@regionLayer must name a layer whose asset holds the region.</sch:assert>
+  </sch:rule>
+  <sch:rule context="shape">
+    <sch:assert id="C69" test="@width and @height">shape needs @width and @height unless it takes its box from @region.</sch:assert>
+  </sch:rule>
+</sch:pattern>
+```
+
+In Schematron, a pattern fires only the first rule whose context matches, so `shape[@region]` comes
+before the `shape` rule and C69 applies only to shapes without `@region`.
+
+### Semantics
+
+**1. The page image.**
+1. A renderer MUST draw a `pdf` asset as an image asset of `width` × `height` pixels whose pixels are
+   the file at `cache`. It MUST refuse to render if that file's SHA-256 differs from `cacheSha256`.
+2. It MUST NOT read or rasterise `src`. Layers place the asset exactly as they place an image: media
+   box, fit, crop and flips, by D20.
+3. The cache image is display sRGB with straight alpha, like any image asset.
+
+**2. The resolve step** writes the cache, `width`, `height`, `cacheSha256` and the regions' coordinates.
+It MUST:
+1. check the SHA-256 of `src` against `@sha256` and fail on a mismatch;
+2. use page `page`, counted from 1. The page box is the CropBox, which defaults to the MediaBox and is
+   clipped to it, turned clockwise by the page's `/Rotate` (ISO 32000-2, §7.7.3.3 and §14.11.2);
+3. make the image ⌈Wpt · `dpi` / 72⌉ × ⌈Hpt · `dpi` / 72⌉ pixels, where Wpt × Hpt is the turned page box
+   in points;
+4. composite the page's content over `background`. Annotations are drawn, through their normal
+   appearance streams, only with `annotations="true"`. Optional content uses its default state;
+5. find each region that has `text`:
+   - **Page text.** The page's characters in the order the text extractor reports them.
+   - **Normalisation** of both the page text and `@text`: NFKC; every run of white space, line breaks
+     included, becomes one space; soft hyphens are removed; a hyphen at a line end is removed together
+     with the line break.
+   - **Match.** The `occurrence`-th case-sensitive match of the normalised `@text`, with matches taken
+     left to right without overlapping.
+   - **Box.** The union of the matched characters' boxes, in cache pixels, rounded to 0.1 px.
+   - If there is no such match, the step fails.
+6. leave regions without `text` unchanged.
+
+How the page is rasterised and how characters are boxed are not specified. The cache and the
+coordinates are recorded in the document, so every renderer draws the same pixels and marks the same
+place whatever tool resolved them.
+
+**3. Shapes on regions.** For a shape with `@region`, let G be the region's box grown by `regionPadding`
+on each side: (x − p, y − p), size (width + 2p, height + 2p).
+1. The shape's box is (0, 0)–(G.width, G.height). Its own `width` and `height` are not used.
+2. The shape's world transform MUST be W_L · M · T(G.x, G.y) · M_s, where:
+   - W_L is the world transform of `regionLayer`;
+   - M is that layer's media-box transform for its asset (D20: crop, rotation, pixel aspect, flips,
+     fit);
+   - M_s is the shape's own transform (CONVENTIONS 1.1).
+
+   The shape follows the layer as a transform child would (D23 `parent`). Its ancestors' transforms
+   are not applied; their opacity, clocks and effects are.
+3. With a nonzero crop or a `fit` that clips, a region may lie partly outside the visible page. It is
+   drawn where it falls.
+4. A shape on a region is an ordinary shape in every other way. Trim paths, strokes, markers, fills,
+   blends and animation all apply, and it may be the target of a connector.
+
+### Defaults and the neutral case
+
+`pdf` is a new asset kind and `@region` is a new attribute, so no existing document contains either. The
+optional `width` and `height` on `shape` are required again by C69 whenever `@region` is absent, so every
+document keeps its verdict.
+
+## Rationale
+
+- **Resolve once, pin the result.** The baseline already keeps provider media and transcriptions out of
+  rendering this way (`generated`, `captionTrack/@transcribe`).
+  - PDF rasterisers (pdfium, MuPDF, poppler) differ in antialiasing, font hinting and shading. Putting
+    one inside each of four engines would make a document render four ways.
+  - Resolved, the engines need no PDF code at all, and the picture is identical everywhere.
+- **Provenance.** `@sha256` on the source, `page` and `dpi` are recorded in the document, and the cache
+  is pinned by `cacheSha256`. Together they say which page of which file was shown, which the evidence
+  standard of documentary work needs.
+- **Regions come from the text layer, not from pixels.** The text layer carries exact character boxes.
+  The only link a picture has to its words is OCR, which is neither exact nor deterministic.
+- **Output size uses ⌈…⌉** (the rounding `pdftoppm` uses), so an existing hand render and a resolved one
+  agree in size: an A4 page at 150 dpi is 1241 × 1754.
+- **Regions attach through the layer's transform, like `parent`,** so a mark stays on its words
+  through every placement, fit and crop without the author re-deriving coordinates. Composing the
+  shape's own transform last keeps the hand-drawn wobble (a slight `rotation` on the circle) that
+  editorial styles use.
+
+## Rejected alternatives
+
+- **Renderers read PDFs directly.** Four engines would need four PDF libraries that disagree on pixels,
+  and rendering would depend on an unpinned tool. See Rationale.
+- **Convert pages to SVG `vector` assets.** The SVG subset excludes text, images and clipping (D27), and
+  PDFs are mostly text.
+- **PDF as a video output codec.** Engines produce raster frames, so a PDF frame is an image in a
+  wrapper, and `poster` and `thumbnail` already cover stills. Printable review documents belong to tooling,
+  not to the format.
+- **One region box per line.** Useful for multi-line highlighter strokes, but it needs a node that draws
+  several boxes. Left as an open issue; the union box covers circles, boxes and single-line marks.
+- **Region positions as expressions (`region('id').x`).** Expressions cannot set a shape's size (D25),
+  and a highlight needs its size from the words.
+
+## Backwards compatibility
+
+- **Class: Added, MINOR (1.2).**
+  - `pdf` needs `version="1.2"` (V9).
+  - The shape attributes are new with neutral defaults.
+  - `shape/@width` and `@height` move from the XSD to C69 with the same effect.
+- No document valid under 1.1 becomes invalid or renders differently.
+- **Evidence.** The XSD and Schematron above were applied to a copy of the canonical schema, and the 2,665
+  local scene documents that declare 1.0 or 1.1 were validated with both copies. No verdict changed.
+
+## Engine impact
+
+| Engine | Status | Work | Tracking |
+|---|---|---|---|
+| Rust (`rs-scene-render`), reference | pending | Renderer: a pdf asset loads as an image from its verified cache; a region shape's world transform is composed from the layer as for `parent`. Resolve (`sr-resolve`): a local PDF task (render the page, extract characters), keyed by the source hash, page, dpi, background, annotations and the region queries. | |
+| C (`c-scene-render`) | pending | Renderer only: image from cache, region transform. | |
+| Python (`py-render`) | pending | Renderer only. | |
+| JavaScript (`js-render-engine`) | pending | Renderer only. | |
+
+## Conformance
+
+Renderers are tested with a committed cache. The resolve step is tested separately.
+
+| Case | Checks | Expected |
+|---|---|---|
+| `srep-NNNN-pdf-page` | a pdf asset whose cache is a 200 × 100 blue PNG, placed by a layer at (100, 50) with `scaleX="2"` `scaleY="2"` | blue box centre (300, 150), 400 × 200 |
+| `srep-NNNN-pdf-bad-cache` | as above with a wrong `cacheSha256` | the render fails |
+| `srep-NNNN-pdf-region` | as `pdf-page`, region (20, 10, 60, 20), red rect shape on it, `regionPadding="5"` | red box centre (100 + 2·50, 50 + 2·20) = (200, 90), 140 × 60 |
+| `srep-NNNN-pdf-region-fit` | layer `boxWidth="100"` `boxHeight="100"` `fit="contain"` at (0, 0), cache 200 × 100, same region, no padding | scale 0.5, page at y offset 25: red box centre (25, 35), 30 × 10 |
+| `srep-NNNN-pdf-region-rotate` | layer `rotation="90"` about its anchor (0, 0) at (300, 50), region (20, 10, 60, 20) | red box centre (300 − 20, 50 + 50) = (280, 100), 20 × 60 |
+| resolve tests (engine repository) | a generated two-page PDF with known glyph positions: page selection, `/Rotate`, CropBox, ⌈⌉ sizing, background, text normalisation (line-end hyphen, NFKC ligatures), `occurrence`, a missing phrase failing, a source hash mismatch failing | exact sizes; boxes to 0.5 px |
+| `tests/test_schema_rules.py` | V9, C66–C69, R45, R46; every existing case and document keeps its verdict | exact |
+
+## Open issues
+
+- **Per-line boxes** for multi-line highlights, and an underline mode that uses the text baseline rather
+  than the box.
+- **Several pages of one file** each need an asset. A `pages` range producing one asset per page may be
+  wanted.
+- **Regions from vector content** (a figure, a table cell), not only text.
+- **Version 1.2 is shared** with the connector draft and SREPs 9, 10, 11 and 13; the gates V5, V8 and V9
+  can merge into one rule when 1.2 is cut.
+
+## References
+
+- [SREP 0](srep-0000.md), [SREP 4](srep-0004.md), [SREP 7](srep-0007.md).
+- [CONVENTIONS.md](../conformance/CONVENTIONS.md) 1.1; [DEFINITIONS.md](../conformance/DEFINITIONS.md) D20
+  (media box), D23 (`parent`), D25 (expressions), D27 (SVG subset).
+- ISO 32000-2:2020, Document management — Portable document format — Part 2 (PDF 2.0): §7.7.3.3 page
+  objects (`/Rotate`), §14.11.2 page boundaries (MediaBox, CropBox), §12.5 annotations (appearance
+  streams), §8.11 optional content.
+- Unicode Standard Annex #15, Unicode Normalization Forms (NFKC).
+- The `generated` asset and `captionTrack/@transcribe`: the resolve-and-pin precedent in the baseline.
+
+## History
+
+- 2026-09-30: first draft.

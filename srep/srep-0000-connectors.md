@@ -1,0 +1,471 @@
+```
+SREP:            0
+Title:           Add connectors and stroke markers
+Author:          scene-render maintainers
+Status:          Draft
+Type:            Standards
+Created:         2026-09-30
+Schema-Version:  1.2
+```
+
+# SREP 0 (draft) — Add connectors and stroke markers
+
+## Abstract
+
+A new node, `<connector>`, draws a line between two nodes, or between a node and a fixed point, and
+recomputes it every frame. It stays attached to its ends while they move, scale or rotate, and it stops
+at the edges of their boxes. It routes straight, with axis-aligned elbows or on a curve, and can carry a
+text label. Stroke markers (`markerStart`, `markerEnd`: arrowheads, dots, bars) are added to connectors
+and to open `shape` outlines. Markers ride on the ends of trim paths, so a line that draws on carries its
+arrowhead with it. Documents that use `<connector>` declare `version="1.2"`. The marker attributes default
+to `none` and are accepted in every version.
+
+## Motivation
+
+The format has no way to say "an arrow from this node to that one". Every arrow in a scene today is a
+`shape` with coordinates computed by the author, and nothing ties it to what it points at.
+
+- **A published production with 31 campaign arrows on a map** draws each arrow as three shapes:
+  - a dark casing and a gold core, two `shape="path"` nodes whose 60-odd vertices are identical;
+  - a separate triangle for the head, with coordinates computed outside the document;
+  - `trimEnd` keys on both strokes, and hand-set opacity keys on the head so that it pops in when the
+    strokes finish drawing (0.12 s before `trimEnd` reaches 1).
+
+  The head cannot travel with the draw-on, because nothing places a shape at the end of another shape's
+  trimmed outline. The 31 arrows take 93 shapes and 124 animations. A change to an arrow's route means
+  recomputing three coordinate lists and re-timing the head.
+- **The feature showcase fixture** fakes an arrowhead with a `polygon` riding a `motionPath` under
+  `autoOrient`. That only works because the path is fixed.
+- **No workaround follows a moving node.**
+  - Expressions set only x, y, rotation, scale, anchor and opacity (D25), so they cannot move the
+    vertices of an outline.
+  - Straight centre-to-centre links can be faked: a `line` shape with `copy-position`, `look-at` and a
+    `scaleX` expression over `prop()`. Even then the line cannot stop at a box edge, a dash pattern
+    stretches with the scale, and nothing handles elbows or curves.
+
+Every diagram, flow chart, org chart, timeline and annotated map in an explainer video needs this.
+Existing precedent for a line that follows the objects it joins:
+- DrawingML connection shapes (`cxnSp`, with `stCxn`/`endCxn` naming the joined shapes), in PowerPoint
+  and Keynote;
+- Graphviz edges clipped to node boundaries;
+- the FrameForge document contract's `connector`, which joins objects by id with sides, ports and
+  orthogonal routing.
+
+## Specification
+
+### Syntax
+
+The XSD gains the declarations below. `connector` joins `nodeChoice`, after `shape`, and `shapeType` gains
+`<xs:attributeGroup ref="strokeMarkers"/>` after `trimPath`. `scene/@version` accepts `1.2`.
+
+`nodeAttributes` is split, with no change to what it accepts:
+- a new group, `nodeCoreAttributes`, holds `id`, `name`, `tags`, `z`, `visible`, `opacity`, `start`,
+  `end`, `startMarker`, `endMarker`, `condition`, `motionBlur`, `matte`, `matteMode` and `matteVisible`;
+- `nodeAttributes` references that group and keeps the placement attributes (`parent`, `threeD`,
+  `zDepth`, `rotationX`, `rotationY`, `alignX`, `alignY`, `alignTo`, `margin` and
+  `transformAttributes`).
+
+A connector takes only the core group, so the XSD itself rejects a transform on one.
+
+```xml
+<xs:simpleType name="strokeMarkerType">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="none"/><xs:enumeration value="arrow"/><xs:enumeration value="open-arrow"/>
+    <xs:enumeration value="circle"/><xs:enumeration value="square"/><xs:enumeration value="diamond"/>
+    <xs:enumeration value="bar"/>
+  </xs:restriction>
+</xs:simpleType>
+<xs:attributeGroup name="strokeMarkers">
+  <xs:annotation><xs:documentation>
+    Markers drawn at the start and end of an open outline, in the stroke's paint, pointing along it
+    (the start marker points backwards). markerSize is in multiples of strokeWidth. With trim paths,
+    markers sit at the ends of the visible part.
+  </xs:documentation></xs:annotation>
+  <xs:attribute name="markerStart" type="strokeMarkerType" default="none"/>
+  <xs:attribute name="markerEnd" type="strokeMarkerType" default="none"/>
+  <xs:attribute name="markerSize" type="positiveDecimal" default="4"/>
+</xs:attributeGroup>
+<xs:simpleType name="connectorAnchorType">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="auto"/><xs:enumeration value="center"/>
+    <xs:enumeration value="top"/><xs:enumeration value="right"/>
+    <xs:enumeration value="bottom"/><xs:enumeration value="left"/>
+    <xs:enumeration value="top-left"/><xs:enumeration value="top-right"/>
+    <xs:enumeration value="bottom-right"/><xs:enumeration value="bottom-left"/>
+  </xs:restriction>
+</xs:simpleType>
+<xs:simpleType name="pointListType">
+  <xs:list itemType="pointType"/>
+</xs:simpleType>
+<xs:complexType name="connectorType">
+  <xs:annotation><xs:documentation>
+    A line between two nodes (or fixed points) that is recomputed every frame, so it stays attached
+    while they move. @from and @to name a group, layer, shape or instance; with anchor auto the line is
+    cut where it leaves the start node's box and enters the end node's box, less fromGap and toGap.
+    route straight, orthogonal (axis-aligned elbows) or curved (bend in degrees); @points are
+    waypoints. A connector has no box and no transform of its own.
+  </xs:documentation></xs:annotation>
+  <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:element name="animate" type="animateType"/>
+    <xs:element name="expression" type="expressionType"/>
+    <xs:element name="mask" type="maskType"/>
+  </xs:choice>
+  <xs:attributeGroup ref="nodeCoreAttributes"/>
+  <xs:attribute name="from" type="xs:IDREF"/>
+  <xs:attribute name="to" type="xs:IDREF"/>
+  <xs:attribute name="fromAnchor" type="connectorAnchorType" default="auto"/>
+  <xs:attribute name="toAnchor" type="connectorAnchorType" default="auto"/>
+  <xs:attribute name="fromX" type="lengthType"/>
+  <xs:attribute name="fromY" type="lengthType"/>
+  <xs:attribute name="toX" type="lengthType"/>
+  <xs:attribute name="toY" type="lengthType"/>
+  <xs:attribute name="fromGap" type="nonNegativeDecimal" default="0"/>
+  <xs:attribute name="toGap" type="nonNegativeDecimal" default="0"/>
+  <xs:attribute name="route" default="straight">
+    <xs:simpleType><xs:restriction base="xs:string">
+      <xs:enumeration value="straight"/><xs:enumeration value="orthogonal"/><xs:enumeration value="curved"/>
+    </xs:restriction></xs:simpleType>
+  </xs:attribute>
+  <xs:attribute name="points" type="pointListType"/>
+  <xs:attribute name="bend" default="30">
+    <xs:simpleType><xs:restriction base="xs:double">
+      <xs:minInclusive value="-90"/><xs:maxInclusive value="90"/>
+    </xs:restriction></xs:simpleType>
+  </xs:attribute>
+  <xs:attribute name="stroke" type="paintType" default="#FFFFFFFF"/>
+  <xs:attribute name="strokeWidth" type="nonNegativeDecimal" default="4"/>
+  <xs:attribute name="strokeCap" type="strokeCapType" default="butt"/>
+  <xs:attribute name="strokeJoin" type="strokeJoinType" default="miter"/>
+  <xs:attribute name="miterLimit" type="positiveDecimal" default="4"/>
+  <xs:attribute name="dash" type="numberListType"/>
+  <xs:attribute name="dashOffset" type="xs:double" default="0"/>
+  <xs:attribute name="blend" type="blendType" default="normal"/>
+  <xs:attribute name="effects" type="xs:IDREFS"/>
+  <xs:attributeGroup ref="trimPath"/>
+  <xs:attributeGroup ref="strokeMarkers"/>
+  <xs:attribute name="label" type="xs:IDREF"/>
+  <xs:attribute name="labelAt" type="unitDecimal" default="0.5"/>
+  <xs:attribute name="labelOffset" type="xs:double" default="0"/>
+  <xs:attribute name="labelOrient" default="horizontal">
+    <xs:simpleType><xs:restriction base="xs:string">
+      <xs:enumeration value="horizontal"/><xs:enumeration value="along"/>
+    </xs:restriction></xs:simpleType>
+  </xs:attribute>
+</xs:complexType>
+```
+
+```xml
+<sch:pattern id="p62">
+  <sch:rule context="/scene[@version='1.0' or @version='1.1']">
+    <sch:assert id="V8" test="not(.//connector)">connector needs version="1.2".</sch:assert>
+  </sch:rule>
+</sch:pattern>
+<sch:pattern id="p63">
+  <sch:rule context="connector">
+    <sch:assert id="C60" test="(@from or (@fromX and @fromY)) and (@to or (@toX and @toY))">a connector end needs a node (@from, @to) or a point (@fromX and @fromY, @toX and @toY).</sch:assert>
+    <sch:assert id="C61" test="not(@fromAnchor[.!='auto'] and (@fromX or @fromY)) and not(@toAnchor[.!='auto'] and (@toX or @toY))">an anchor keyword and an explicit anchor point exclude each other.</sch:assert>
+    <sch:assert id="C62" test="count(@fromX|@fromY) != 1 and count(@toX|@toY) != 1">@fromX and @fromY (and @toX and @toY) come together.</sch:assert>
+    <sch:assert id="C63" test="not(@route='curved' and @points)">route="curved" takes no @points.</sch:assert>
+    <sch:assert id="C64" test="not(animate[@property='x' or @property='y' or @property='rotation' or @property='scaleX' or @property='scaleY' or @property='anchorX' or @property='anchorY' or @property='skewX' or @property='skewY']) and not(expression[@property!='opacity'])">a connector has no transform of its own: its geometry comes from its ends.</sch:assert>
+    <sch:assert id="R42-from" test="not(@from) or (ancestor::symbol and ancestor::symbol[1]//*[@id=current()/@from][self::group or self::layer or self::shape or self::instance][not(ancestor::repeat)][not(ancestor-or-self::*[@threeD='true'])]) or (not(ancestor::symbol) and /scene/composition//*[@id=current()/@from][self::group or self::layer or self::shape or self::instance][not(ancestor::repeat)][not(ancestor-or-self::*[@threeD='true'])])">@from must name a group, layer, shape or instance in the same composition or symbol, outside any repeat and not 2.5D.</sch:assert>
+    <sch:assert id="R42-to" test="not(@to) or (ancestor::symbol and ancestor::symbol[1]//*[@id=current()/@to][self::group or self::layer or self::shape or self::instance][not(ancestor::repeat)][not(ancestor-or-self::*[@threeD='true'])]) or (not(ancestor::symbol) and /scene/composition//*[@id=current()/@to][self::group or self::layer or self::shape or self::instance][not(ancestor::repeat)][not(ancestor-or-self::*[@threeD='true'])])">@to must name a group, layer, shape or instance in the same composition or symbol, outside any repeat and not 2.5D.</sch:assert>
+    <sch:assert id="R43" test="not(//transformConstraint[@target=current()/@id] | //*[@parent=current()/@id] | //link[starts-with(@source, concat(current()/@id, '.'))])">nothing may be positioned by a connector (transform parent, constraint target, link source).</sch:assert>
+    <sch:assert id="R44" test="not(@label) or /scene/assets/text[@id=current()/@label]">@label must name a text asset.</sch:assert>
+  </sch:rule>
+</sch:pattern>
+<sch:pattern id="p64">
+  <sch:rule context="shape[@markerStart[.!='none'] or @markerEnd[.!='none']]">
+    <sch:assert id="C65" test="@shape='path' or @shape='line'">markers need an open outline: shape="path" or "line".</sch:assert>
+  </sch:rule>
+</sch:pattern>
+```
+
+The existing R24 and R25 already check `url(#…)` and `var(--…)` on any element's `@stroke`, connectors
+included.
+
+### Semantics
+
+Symbols used below:
+- **t**, the frame time (or a motion-blur sample time);
+- **C**, the world transform of the connector's parent, which maps connector space to the frame
+  (D23 world space);
+- a point written **(x, y)** is in connector space unless stated.
+
+**1. The node.**
+1. A `connector` MUST be drawn in its parent's space: connector space is the space in which its
+   siblings' `x` and `y` are given.
+2. It MUST have no transform of its own, and no box:
+   - it adds nothing to a group's geometric box (CONVENTIONS 5.18);
+   - it takes no slot in a group layout (D20).
+3. It is painted at its place in paint order (`z`, then document order), with `opacity`, `blend`,
+   `effects`, masks and matte applied as for a `shape`.
+
+**2. Ends.** Each end (`from`, `to`) is a **node end**, when the node attribute is set, or a
+**point end**.
+
+1. **Point end.** The reference point is (`fromX`, `fromY`). Its lengths follow `lengthType`: `%` of the
+   parent box, `vw`/`vh` of the frame. A point end is never clipped.
+2. **Presence.** A node end's target T is **present** at t when T and every ancestor of T are within
+   their windows, with group clocks applied (D20), and their `condition`s hold.
+   - `visible="false"` and `opacity="0"` do not make a target absent: an invisible shape is a valid
+     anchor point.
+   - If either end's target is not present at t, the connector MUST draw nothing at t.
+3. **Box.** T's box is the rectangle (0, 0)–(w, h) in T's node space:
+   - for a `shape`, `layer` or `instance`, D20's untransformed box;
+   - for a `group`, its geometric box (CONVENTIONS 5.18), expressed in the group's node space.
+4. **Pose.** Let W be T's world transform at t, **as drawn**, that is, after keyframes, expressions,
+   links, motion paths, layout, transform parents and constraints.
+   - Q = C⁻¹ · W maps T's node space into connector space.
+   - The **outline** of the end is the image under Q of the box's four corners, a parallelogram.
+5. **Reference point** of a node end:
+   - `fromAnchor="auto"` (the default): Q(w/2, h/2). The end is **clipped**.
+   - An anchor keyword: Q of the named box point. The end is not clipped.
+
+     | Keyword | Point | Keyword | Point |
+     |---|---|---|---|
+     | `center` | (w/2, h/2) | `top-left` | (0, 0) |
+     | `top` | (w/2, 0) | `top-right` | (w, 0) |
+     | `right` | (w, h/2) | `bottom-right` | (w, h) |
+     | `bottom` | (w/2, h) | `bottom-left` | (0, h) |
+     | `left` | (0, h/2) | | |
+   - `fromX`/`fromY` present: Q(fromX, fromY), with `%` of T's box (w for x, h for y). The end is not
+     clipped.
+   - If w = 0, h = 0 or Q is singular, the reference point is Q of the chosen box point and the end is
+     not clipped.
+
+   The same rules apply to `to`, `toAnchor`, `toX` and `toY`.
+
+**3. Route.** Let a and b be the two reference points, and w₁ … wₙ the `points` (connector space, in
+order). The route is a polyline.
+
+1. **`straight`:** a, w₁, …, wₙ, b.
+2. **`orthogonal`**, without waypoints:
+   - if |bx − ax| ≥ |by − ay|: a, (m, ay), (m, by), b, with m = (ax + bx)/2;
+   - else: a, (ax, m), (bx, m), b, with m = (ay + by)/2.
+3. **`orthogonal`**, with waypoints: consecutive points p, q of a, w₁, …, wₙ, b are joined through
+   (qx, py) when |qx − px| ≥ |qy − py|, and through (px, qy) otherwise.
+4. Consecutive coincident points are dropped.
+5. **`curved`:** one cubic Bézier from a to b:
+   - φ = atan2(by − ay, bx − ax); β = `bend` in degrees; ℓ = 0.3915 · |b − a|;
+   - c₁ = a + ℓ · (cos(φ − β), sin(φ − β));
+   - c₂ = b − ℓ · (cos(φ + β), sin(φ + β)).
+
+   Positive `bend` bulges to the left of the direction of travel: for travel toward +x, toward −y.
+   `bend="0"` is the straight segment.
+6. Curves are flattened in 16 equal parameter steps, as for motion paths (D21).
+
+**4. Clipping and gaps.** Let s be arc length along the route, S its total length.
+
+1. For a clipped `from` end, s₀ is the arc length of the **first** point where the route meets the
+   from-outline. For an unclipped end, s₀ = 0.
+2. For a clipped `to` end, s₁ is the arc length of the **last** point where the route meets the
+   to-outline. For an unclipped end, s₁ = S.
+3. Then s₀ ← s₀ + `fromGap` and s₁ ← s₁ − `toGap`.
+4. If a clipped end's route never meets its outline, or s₁ ≤ s₀, the connector MUST draw nothing at t.
+5. The **visible path** V is the route between s₀ and s₁.
+
+**5. Trim.** `trimStart`, `trimEnd`, `trimOffset` and `trimMode` apply to V exactly as to a shape's
+outline. The result is the **drawn interval**: the part of V that is stroked, in the direction of
+travel.
+
+**6. Stroke.**
+1. The drawn interval, shortened at each end by that end's marker setback (§7), is stroked by D26 with
+   `strokeWidth`, `strokeCap`, `strokeJoin`, `miterLimit`, `dash` and `dashOffset`.
+2. The stroke is always centred.
+3. The box for `url(#…)` paints is the bounding box of V before trim.
+
+**7. Markers** (connectors, and `shape="path"` or `"line"`). Let u = `strokeWidth` and L = `markerSize` · u.
+
+1. **Placement.** A marker is drawn in a **marker frame**:
+   - its origin is the end of the drawn interval;
+   - its +x axis is the direction of travel there (the last segment of nonzero length) for
+     `markerEnd`, and the reverse of it (the first segment of nonzero length) for `markerStart`;
+   - its +y axis is +x turned 90° clockwise on screen.
+2. **Geometry**, in the marker frame:
+
+   | Marker | Shape | Setback |
+   |---|---|---|
+   | `arrow` | filled triangle (0, 0), (−L, −L/2), (−L, L/2) | L |
+   | `open-arrow` | polyline (−L, −L/2), (0, 0), (−L, L/2), stroked with width u and the stroke's cap, join and miter limit | 0 |
+   | `circle` | filled disc, centre (−L/2, 0), radius L/2 | L/2 |
+   | `square` | filled square, centre (−L/2, 0), side L, sides parallel to the axes | L/2 |
+   | `diamond` | filled quadrilateral (0, 0), (−L/2, −L/2), (−L, 0), (−L/2, L/2) | L/2 |
+   | `bar` | segment (0, −L/2) to (0, L/2), stroked with width u and the stroke's cap | 0 |
+   | `none` | nothing | 0 |
+3. **Paint.**
+   - Markers use the stroke's paint.
+   - Stroke and markers MUST form one coverage (their union) before painting, so a translucent stroke is
+     not darker where a marker overlaps it.
+   - Markers are not dashed.
+4. **Degenerate cases.**
+   - If the drawn interval has zero length, or u = 0, neither stroke nor markers are drawn.
+   - If the shortening in §6 leaves no stroke, only the markers are drawn.
+5. **On shapes.**
+   - `markerStart` applies at the first point of the trimmed outline in path order, and `markerEnd` at
+     the last, each only when the subpath holding that point is open.
+   - The marker frame is in the shape's node space.
+
+**8. Label.**
+1. With `label`, the text asset is drawn above the stroke, with the connector's opacity, blend and
+   effects.
+2. Its box (the asset's `width` × `height`) is centred on the point P + `labelOffset` · n, where:
+   - P is the point of V at arc length s₀ + `labelAt` · (s₁ − s₀);
+   - n is the unit normal at P, turned 90° clockwise from the direction of travel.
+3. With `labelOrient="horizontal"` the label is not rotated. With `along` it is rotated by the
+   direction of travel θ at P, and by θ + 180° when θ is outside (−90°, 90°], so the text never reads
+   upside down.
+4. The label does not follow trim.
+
+**9. Time and animation.**
+1. The geometry MUST be recomputed at every frame and motion-blur sample time from the ends' poses at
+   that time.
+2. `opacity`, `stroke`, `strokeWidth`, `dashOffset`, `trimStart`, `trimEnd`, `trimOffset`, `markerSize`,
+   `bend`, `fromGap`, `toGap`, `labelAt` and `labelOffset` animate.
+3. Nothing is positioned by a connector (R43), so connector geometry never feeds back into a pose and
+   is computed after every node's pose at t is final.
+
+### Defaults and the neutral case
+
+`connector` is a new element, so no existing document contains one. `markerStart` and `markerEnd`
+default to `none`, which draws nothing and shortens nothing, so a `shape` without them renders exactly as
+before. Splitting `nodeAttributes` changes no declaration's type or default, only which group declares it.
+
+## Rationale
+
+- **Baseline conventions.** Everything happens in pixel space with +y down and clockwise angles:
+  - positive `bend` follows the same rotation sense as `rotation`;
+  - the marker frame's +y is the stroke's right-hand side;
+  - the box of a target is the one layout (D20) and chromatic aberration (5.18) already use, so no new
+    notion of "a node's size" is introduced.
+- **Reading targets as drawn.** Constraints read their targets unconstrained so that constraints cannot
+  cycle (D23). A connector cannot be read by anything (R43), so it can use the final pose, which is what
+  the viewer sees. An arrow that pointed where a constrained node would have been without its
+  constraint would be a visible bug.
+- **Invisible targets stay valid.** Ports and fixed attachment points need no new syntax. An invisible
+  child shape of a node is a port, and it moves with the node.
+- **Clip to the box, not to the drawn pixels.**
+  - Measuring pixels would make geometry depend on antialiasing, effects and text rasterisation, which
+    differ between engines.
+  - The box is exact, and it is what DrawingML connection sites and Graphviz node boundaries use.
+  - With a box, rotated targets are handled exactly: the outline is the transformed box.
+- **Curves.**
+  - Control points leave each end at ±`bend` from the chord, at a distance of 0.3915 times the chord:
+    the default of TikZ's `bend left`/`bend right` with `looseness=1`.
+  - The apex offset has a closed form, (3/4) · ℓ · sin β, which keeps the behaviour measurable.
+- **Orthogonal routing** is the Z and L construction of DrawingML's elbow connector:
+  - deterministic;
+  - a function of the two reference points alone;
+  - independent of every other node.
+- **Markers** follow SVG 2 §11.6:
+  - sized in stroke widths (`markerUnits="strokeWidth"`);
+  - oriented along the path, with the start marker reversed (`orient="auto-start-reverse"`).
+
+  A closed set of shapes with exact geometry replaces SVG's arbitrary marker content. That makes every
+  engine's output comparable and every marker measurable.
+- **Markers ride on trim paths.** This is the one behaviour the production above had to fake, and the
+  reason markers apply to `shape` as well as to `connector`. The union coverage in §7 is what its
+  translucent casing (`#0B151CC8`) needs not to show a darker seam under the head.
+
+## Rejected alternatives
+
+- **Status quo: shapes, expressions and constraints.** Expressions cannot move vertices (D25).
+  Constraint tricks cover only centre-to-centre straight lines, stretch dashes, and cannot stop at an
+  edge.
+- **Endpoints as child elements** (`<from ref side port/>`, as in FrameForge). The format's convention
+  is flat attributes with IDREFs, which Schematron checks directly and `animate` can target.
+- **Named ports on every node.** Invisible child nodes already are ports, and they can be animated like
+  anything else.
+- **SVG-style `<marker>` definitions with arbitrary content.** They need nested rendering, a viewBox, and
+  orientation and overflow rules, and no two engines would clip them alike. A later SREP can add
+  `marker="url(#symbolId)"` if a closed set proves too small.
+- **Obstacle-avoiding routes** (Graphviz splines, ELK). They make every connector depend on every node,
+  cost a search per frame, and cannot be specified so that four engines agree to 2 px. Waypoints give
+  authors the control.
+- **Resolving connectors before rendering**, as `generated` assets are resolved, into fixed `shape`s.
+  That freezes the geometry, and following moving nodes is the point.
+- **Markers only on connectors.** The production that motivates the feature draws map routes, which are
+  not attached to nodes.
+- **Markers sized in pixels.** A casing and its core would need two marker sizes; in stroke widths,
+  one size serves both.
+
+## Backwards compatibility
+
+- **Class: Added, MINOR (1.2).**
+  - `<connector>` is new and needs `version="1.2"` (V8).
+  - The marker attributes are new attributes with neutral defaults, accepted in every version (SREP 0,
+    Versioning).
+  - No document valid under 1.1 becomes invalid, and none renders differently.
+- **Evidence.** The XSD and Schematron above were applied to a copy of the canonical schema, and 3,405
+  local scene documents were validated with both copies. 116 verdicts changed, from rejected to
+  accepted, and every one of them is a document that already declares `version="1.2"`: the reference
+  implementation's test scenes for SREPs 9–11 (see Open issues). No other verdict changed.
+
+## Engine impact
+
+| Engine | Status | Work | Tracking |
+|---|---|---|---|
+| Rust (`rs-scene-render`), reference | pending | Compute connectors after the constraint post-pass (`sr-eval` `rig::post_pass`): `FrameNode::world` and `FrameNode::size` give W and the box. Build and stroke the outline per frame through the path already used by `shape_scene` (`sr-vector` trim and stroker). The node cache must invalidate a connector when either target's pose changes. | |
+| C (`c-scene-render`) | pending | Its shapes fix outlines at load (D26, D27); a connector needs a per-frame outline. Markers on shapes reuse its stroker. | |
+| Python (`py-render`) | pending | | |
+| JavaScript (`js-render-engine`) | pending | | |
+
+## Conformance
+
+All cases are 640 × 360 on black, stroke `#00FF00FF`, `strokeWidth="6"`, butt caps.
+- **R** is a red 80 × 60 rect at (100, 150), centre (140, 180).
+- **B** is a blue 80 × 60 rect at (460, 150), centre (500, 180).
+
+Expected values were computed from §2–§8, independently of any engine.
+
+| Case | Checks | Expected |
+|---|---|---|
+| `srep-NNNN-straight` | R → B, auto anchors (2.5, 4) | green box centre (320, 180), 280 × 6 |
+| `srep-NNNN-rotated-gap` | B replaced by an 80 × 80 blue square about (500, 180), `rotation="45"`; `fromGap="10"`, `toGap="10"` (2.4, 4.3) | green from x = 190 to x = 433.43 (the square's left vertex, 443.43, less 10) |
+| `srep-NNNN-anchor` | R at (280, 40), B at (440, 260); `fromAnchor="bottom"`, `toAnchor="top"` (2.5) | line (320, 100) → (480, 260): green box centre (400, 180), 164.24 × 164.24 |
+| `srep-NNNN-orthogonal` | R at (100, 60), B at (460, 240); `route="orthogonal"` (3.2) | green at (320, 180); black at (250, 180); green from x = 180 to x = 460 |
+| `srep-NNNN-curved` | R → B, `route="curved"`, `bend="30"` (3.5) | apex of the centre line at (320, 127.15): green at (320, 128), black at (320, 180) |
+| `srep-NNNN-arrow` | R → B, `markerEnd="arrow"` (7) | green box centre (320, 180), 280 × 24 (tip at x = 460) |
+| `srep-NNNN-trim-arrow` | as `arrow`, `trimEnd="0.5"` (5, 7) | green box centre (250, 180), 140 × 24 (tip at x = 320); no green right of x = 322 |
+| `srep-NNNN-follows` | B has `x="460"` and an `animate` of x keyed to 400 at t = 0 (2.4, 9) | green box from x = 180 to x = 400 |
+| `srep-NNNN-absent` | B has `start="0.5"`; frame 0 (2.2) | no green anywhere |
+| `srep-NNNN-shape-markers` | `shape="path"` `M100 180 L500 180`, `markerStart="arrow"`, `markerEnd="arrow"` (7.1, 7.5) | green box from x = 100 to x = 500, height 24; the start triangle opens rightward (no green left of x = 98) |
+| `tests/test_schema_rules.py` | V8, C60–C65, R42–R44 each reject a document built to break them; valid connectors and every existing case still pass | exact |
+
+The label (§8) needs a relative measurement that the kit lacks: the centroid difference between two
+identical labels at different `labelOffset` values, which cancels glyph metrics. `run.py` gains it with
+this SREP, and until then the label is covered by each engine's tests.
+
+## Open issues
+
+- **Version 1.2 is shared** with SREPs 9, 10, 11 and 13, in Review. SREP 9's gate V5 and this SREP's V8
+  gate the same version and can merge into one rule when 1.2 is cut. The rule ids here start after the
+  ones those SREPs use (C54–C59, R38–R41 and pattern p61 are SREP 13's).
+- **Targets inside repeats and nested instances.** A per-copy connector (`index`-matched ends) is left
+  for a later SREP.
+- **Curved routes through waypoints** (a Catmull–Rom or smoothed spline) are left out.
+- **`object3D` and 2.5D targets.** They would join at the projected origin; left out.
+- **Label timing.** The label shows while the connector does; revealing it with trim would need its own
+  attribute.
+- **Multiple strokes.** The casing-and-core arrows above still need two nodes. A general appearance
+  stack for strokes belongs in its own SREP.
+- **Scope.** The editor may split markers on shapes into their own SREP.
+
+## References
+
+- [SREP 0](srep-0000.md) (process, Versioning), [SREP 4](srep-0004.md) (version classes),
+  [SREP 7](srep-0007.md) (conventions and definitions).
+- [CONVENTIONS.md](../conformance/CONVENTIONS.md) 1.1, 5.18, 5.21; [DEFINITIONS.md](../conformance/DEFINITIONS.md)
+  D20 (boxes and layout), D21 (flattening), D23 (world space, constraints), D25 (expressions), D26
+  (stroking), D27 (outlines).
+- SVG 2, §11.6 Markers: `marker-start`, `marker-end`, `markerUnits`, `orient="auto-start-reverse"`.
+  <https://www.w3.org/TR/SVG2/painting.html#Markers>
+- ECMA-376 Office Open XML, DrawingML connection shapes (`cxnSp`, `stCxn`, `endCxn`).
+- Graphviz attribute `clip`: an edge ends at the boundary of its node rather than its centre.
+  <https://graphviz.org/docs/attrs/clip/>
+- TikZ and PGF manual, `to` path library: `bend left`, `bend right` and `looseness`.
+- FrameForge document contract, `Connector`.
+  <https://github.com/pedroanisio/frameforge-api/blob/main/src/frameforge_api/model/objects/connector.py>
+
+## History
+
+- 2026-09-30: first draft.
