@@ -21,6 +21,10 @@ computed from those classes by `python3 tools/release.py next schema`:
 
 ### Fixed
 
+### Docs
+
+- The header no longer lists the engines by name; which engines are active is a process decision (SREP 25).
+
 ## 1.1.3 — 2026-09-29
 
 ### Fixed

@@ -1,6 +1,6 @@
 # scene-render 1.1 — normative spatial conventions
 
-Status: **normative for every scene-render 1.1 implementation** (C, Rust, Python, JavaScript), adopted by
+Status: **normative for every scene-render 1.1 implementation** (Rust is the only active one, SREP 25), adopted by
 SREP 7. Where the XSD is silent, this document fills the gap; where it speaks, it restates it.
 
 The XSD header already fixes the 2D conventions ("space: 2D pixels, origin top-left, +x right, +y down;

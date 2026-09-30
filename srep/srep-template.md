@@ -69,9 +69,9 @@ version="1.N"?>
 | Engine | Status | Work | Tracking |
 |---|---|---|---|
 | Rust (`rs-scene-render`), reference | <branch or commit of the reference implementation> | <what changes> | <issue> |
-| C (`c-scene-render`) | exact / sized / pending / n/a | <what changes; size in files or days> | <issue> |
-| Python (`py-render`) | | | |
-| JavaScript (`js-render-engine`) | | | |
+| <another active engine, if any> | exact / sized / pending / n/a | <what changes; size in files or days> | <issue> |
+
+<List active engines only (SREP 0, Roles). Discontinued engines are not listed (SREP 25).>
 
 ## Conformance
 

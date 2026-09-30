@@ -94,9 +94,9 @@ default keeps it.
 | Engine | Status | Work | Tracking |
 |---|---|---|---|
 | Rust (`rs-scene-render`), reference | branch `force-field-scope` | done: `useForceFields` on emitters, flocks and fluids | |
-| C (`c-scene-render`) | pending | read `useForceFields`; confirm the default rule | |
-| Python (`py-render`) | pending | same | |
-| JavaScript (`js-render-engine`) | pending | same | |
+| C (`c-scene-render`) | discontinued | none (SREP 25) | |
+| Python (`py-render`) | discontinued | none (SREP 25) | |
+| JavaScript (`js-render-engine`) | discontinued | none (SREP 25) | |
 
 ## Conformance
 

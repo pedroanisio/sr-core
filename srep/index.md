@@ -26,3 +26,4 @@
 | [21](srep-0021.md) | Add a pinned-font policy | Standards | Draft | 1.2 |
 | [22](srep-0022.md) | Publish engine capability manifests | Standards | Draft | capabilities 1 |
 | [23](srep-0023.md) | Draw corner radii on rect shapes | Semantics | Draft | 1.1 |
+| [25](srep-0025.md) | Develop the Rust engine only, for now | Process | Active | n/a |

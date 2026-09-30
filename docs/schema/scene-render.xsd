@@ -3,7 +3,7 @@
   <xs:annotation>
     <xs:documentation>
       scene-render scene format 1.1. This schema is the interchange contract
-      shared by every scene-render engine (C, Rust, Python, JavaScript). Its
+      shared by every scene-render engine. Its
       canonical copy is sr-core/schema/; it changes only through an accepted
       SREP (sr-core/srep/). Every document valid under 1.0 is valid
       under 1.1 (with one exception: colour channels above 1, which 1.0 matched

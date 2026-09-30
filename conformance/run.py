@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
-"""Run every case in cases/ through each scene-render implementation and check it against expected.json.
+"""Run every case in cases/ through scene-render implementations and check it against expected.json.
 
-  python3 run.py [--renderers rs,c,py,js] [--cases a1,b2,...]
+  python3 run.py [--renderers rs] [--cases a1,b2,...]
+
+By default only the Rust engine runs: it is the only active engine (SREP 25). The C, Python and JavaScript
+runners stay available with --renderers, for when an engine becomes active again.
 
 For each renderer and case: copy the case into out/<renderer>/<case>/scene.xml (asset paths made absolute),
 render frame 0 to PNG (or, for a case whose expected entry names an "output", deliver that output at the given
@@ -153,7 +156,7 @@ def check(meas, exp, tol, png=None):
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--renderers", default="c,rs,py,js")
+    ap.add_argument("--renderers", default="rs")
     ap.add_argument("--cases", default="")
     a = ap.parse_args()
     spec = json.load(open(os.path.join(HERE, "expected.json")))
