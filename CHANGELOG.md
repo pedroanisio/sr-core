@@ -20,6 +20,13 @@ version:
 
 ### Added
 
+- `sr-review` (also `python -m sr_core.review`) writes a PDF review sheet of a scene: a cover with its facts and
+  outputs, one page per section (`section` markers inside `chapter` markers, else chapters, else top-level groups)
+  with a frame, its captions and its markers, then the open to-dos, sources and credits, and metadata. `--engine`
+  renders the frames with the engine's still command, the same commands `scenerender-vpkg run` uses; `--frames`
+  reads and keeps them. Exit 0 written, 1 written with missing frames, 2 nothing written. Standard library only;
+  frames are smaller (JPEG) when Pillow is installed.
+
 ### Fixed
 
 ### Tooling

@@ -2,7 +2,7 @@
 
 Three version lines, each Semantic Versioning, each moving only when its own contract changes (SREP 4):
 
-- this distribution and its commands (`scenerender-vpkg`, `sr-schemadoc`): ``__version__`` below;
+- this distribution and its commands (`scenerender-vpkg`, `sr-schemadoc`, `sr-review`): ``__version__`` below;
 - the scene schema: ``xs:schema/@version`` in ``schema/scene-render.xsd``; documents declare its MAJOR.MINOR;
 - the package format: ``sr_core.vpkg.manifest.FORMAT_VERSION`` (MAJOR.MINOR, written into ``vpkg.json``).
 

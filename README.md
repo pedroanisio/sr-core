@@ -10,12 +10,14 @@ The parts of scene-render that belong to no single engine:
 | [srep/](srep/) | Scene Render Enhancement Proposals: [SREP 0](srep/srep-0000.md) (the process), the [template](srep/srep-template.md) and the [index](srep/index.md) |
 | [sr_core/vpkg/](sr_core/vpkg/) | `scenerender-vpkg`, the reference implementation of [SREP 1](srep/srep-0001.md), scene video packages (`.vpkg.zip`) |
 | [sr_core/schemadoc/](sr_core/schemadoc/) | `sr-schemadoc`, which generates `docs/schema/` from `schema/` |
+| [sr_core/review/](sr_core/review/) | `sr-review`, a PDF review sheet of a scene: a frame, the captions and the markers of each section, open to-dos, sources and credits |
 | [docs/vpkg-howto.md](docs/vpkg-howto.md) | How to package a video and rebuild one from a package |
 
 ```bash
 pip install .                         # from this checkout (or the release wheel); standard library only
 python3 -m sr_core.vpkg --help        # or without installing, from this folder
 python3 -m sr_core.schemadoc         # regenerate docs/schema after changing schema/ (--check: is it current?)
+python3 -m sr_core.review SCENE.xml --engine rs   # review sheet SCENE.review.pdf, frames rendered by the engine
 python3 -m pytest tests               # vpkg (SREP 1) and schemadoc tests; fails if docs/schema is stale
 ```
 

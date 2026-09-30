@@ -32,5 +32,6 @@ jobs:
           cd "$RUNNER_TEMP"
           scenerender-vpkg --version
           sr-schemadoc --version
+          sr-review --version
           sr-schemadoc --xsd "$GITHUB_WORKSPACE/schema/scene-render.xsd" -o site
           test -f site/index.html

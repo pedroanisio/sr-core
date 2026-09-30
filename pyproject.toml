@@ -22,6 +22,8 @@ test = ["pytest"]
 scenerender-vpkg = "sr_core.vpkg.cli:main"
 # Canonical static HTML reference of the scene-render XSD and Schematron.
 sr-schemadoc = "sr_core.schemadoc.cli:main"
+# PDF review sheet of a scene: frames, captions, markers, to-dos, credits; standard library only.
+sr-review = "sr_core.review.cli:main"
 
 [build-system]
 requires = ["setuptools>=61"]
