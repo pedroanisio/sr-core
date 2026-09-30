@@ -261,32 +261,32 @@ pmtiles_one_png(os.path.join(HERE, "assets", "halves.pmtiles"), half_png())
 MAP = ('<tiles id="t-halves" src="../assets/halves.pmtiles"/>'
        '<map id="map-halves" width="256" height="256" projection="web-mercator" centerLon="0" centerLat="0" zoom="0">'
        '<basemap tiles="t-halves" attribution="false"/></map>')
-cases["srep-0000-basemap-raster"] = doc12('<layer id="l" asset="map-halves" x="192" y="52"/>', extra_assets=MAP)
-expected["srep-0000-basemap-raster"] = {"rule": "SREP basemaps", "red": box(256, 180, 128, 256), "blue": box(384, 180, 128, 256)}
+cases["srep-0009-basemap-raster"] = doc12('<layer id="l" asset="map-halves" x="192" y="52"/>', extra_assets=MAP)
+expected["srep-0009-basemap-raster"] = {"rule": "SREP 9", "red": box(256, 180, 128, 256), "blue": box(384, 180, 128, 256)}
 
 # the same map as flat ground facing the implicit camera, centred on the object's origin
-cases["srep-0000-map-ground"] = doc12(
+cases["srep-0010-map-ground"] = doc12(
     '<object3D id="g" primitive="map" map="map-halves" material="m-white" x="320" y="180"/>', extra_assets=MAP,
     materials='<material id="m-white" baseColor="#FFFFFFFF" unlit="true" doubleSided="true"/>')
-expected["srep-0000-map-ground"] = {"rule": "SREP 3D maps", "red": box(256, 180, 128, 256), "blue": box(384, 180, 128, 256)}
+expected["srep-0010-map-ground"] = {"rule": "SREP 10", "red": box(256, 180, 128, 256), "blue": box(384, 180, 128, 256)}
 
 # free fall for 0.5 s at the default step 1/120 s, each step split into solverIterations = 8 substeps:
 # N = 60 * 8 semi-implicit Euler substeps of h = dt/8 move a body g·h²·N(N+1)/2 metres; 100 px per metre.
 # activateAt before physics@start, so the body is dynamic from the start
 SUB, N = 1 / 120 / 8, 60 * 8
 drop = 9.80665 * SUB * SUB * N * (N + 1) / 2 * 100
-cases["srep-0000-rigid3d-fall"] = doc12(
+cases["srep-0011-rigid3d-fall"] = doc12(
     '<object3D id="s" primitive="sphere" radius="10" material="m-red" x="320" y="100" start="-1">'
     '<rigidBody linearDamping="0" activateAt="-10"/></object3D>').replace("</composition>", '</composition>\n<physics start="-0.5"/>')
-expected["srep-0000-rigid3d-fall"] = {"rule": "SREP 3D rigid bodies", "red": {"cx": 320, "cy": round(100 + drop, 2)}}
+expected["srep-0011-rigid3d-fall"] = {"rule": "SREP 11", "red": {"cx": 320, "cy": round(100 + drop, 2)}}
 
 # dropped onto a static box whose top is at y = 250, a sphere of radius 10 comes to rest at y = 240
-cases["srep-0000-rigid3d-rest"] = doc12(
+cases["srep-0011-rigid3d-rest"] = doc12(
     '<object3D id="floor" primitive="box" width="200" height="40" depth="200" material="m-blue" x="320" y="270" start="-3">'
     '<rigidBody type="static"/></object3D>\n'
     '<object3D id="s" primitive="sphere" radius="10" material="m-red" x="320" y="200" start="-3">'
     '<rigidBody activateAt="-10"/></object3D>').replace("</composition>", '</composition>\n<physics start="-2"/>')
-expected["srep-0000-rigid3d-rest"] = {"rule": "SREP 3D rigid bodies", "red": {"cx": 320, "cy": 240}}
+expected["srep-0011-rigid3d-rest"] = {"rule": "SREP 11", "red": {"cx": 320, "cy": 240}}
 
 os.makedirs(os.path.join(HERE, "cases"), exist_ok=True)
 for name, xml in cases.items():

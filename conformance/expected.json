@@ -212,8 +212,8 @@
         "h": 88.18
       }
     },
-    "srep-0000-basemap-raster": {
-      "rule": "SREP basemaps",
+    "srep-0009-basemap-raster": {
+      "rule": "SREP 9",
       "red": {
         "cx": 256,
         "cy": 180,
@@ -227,8 +227,8 @@
         "h": 256
       }
     },
-    "srep-0000-map-ground": {
-      "rule": "SREP 3D maps",
+    "srep-0010-map-ground": {
+      "rule": "SREP 10",
       "red": {
         "cx": 256,
         "cy": 180,
@@ -242,15 +242,15 @@
         "h": 256
       }
     },
-    "srep-0000-rigid3d-fall": {
-      "rule": "SREP 3D rigid bodies",
+    "srep-0011-rigid3d-fall": {
+      "rule": "SREP 11",
       "red": {
         "cx": 320,
         "cy": 222.84
       }
     },
-    "srep-0000-rigid3d-rest": {
-      "rule": "SREP 3D rigid bodies",
+    "srep-0011-rigid3d-rest": {
+      "rule": "SREP 11",
       "red": {
         "cx": 320,
         "cy": 240
