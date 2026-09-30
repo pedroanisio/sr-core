@@ -3,7 +3,8 @@
 Normative through SREP 7. These are the numbered definitions that `CONVENTIONS.md` refers to as Dn, and the preset tables its rulings
 5.11 and 5.12 refer to (P1, P2). Each gives
 the meaning of attributes the XSD declares without defining, and keeps the declared default as the neutral case.
-Where a ruling in `CONVENTIONS.md` §5 differs from a definition here, the ruling applies.
+Where a ruling in `CONVENTIONS.md` §5 differs from a definition here, the ruling applies. The Rust engine's
+behaviour overrules both while it is the only active engine ([SREP 25](../srep/srep-0025.md)).
 
 The format's conventions apply throughout: 2D space in pixels with +y down and angles positive clockwise on
 screen; physics in metres with +y up.

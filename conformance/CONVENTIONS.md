@@ -8,11 +8,14 @@ angles: degrees, positive = clockwise on screen"). The 3D rules below adopt defi
 extend the schema's 2D space into depth without introducing a second coordinate system. References of the
 form Dn are to the numbered definitions in [DEFINITIONS.md](DEFINITIONS.md).
 
-**Precedence.**
+**Precedence** ([SREP 25](../srep/srep-0025.md): the Rust engine is the only active engine, and its behaviour
+overrules this document and `DEFINITIONS.md`):
 1. The XSD and its Schematron rules.
-2. This document. Where a §5 ruling and a definition differ, the ruling applies.
-3. `DEFINITIONS.md`.
-4. For anything still unstated, the reference implementation's behaviour (SREP 0, Baseline).
+2. The behaviour of the Rust engine, the reference implementation.
+3. This document. Where a §5 ruling and a definition differ, the ruling applies.
+4. `DEFINITIONS.md`.
+
+Where the Rust engine differs from a rule here, the rule is corrected to match it.
 
 Conformance is checked by `run.py` in this directory against the cases in `cases/`. §4 lists which rules
 have cases. The rules without one (2.7, and the §5 rulings other than 5.14) are checked by each engine's own
@@ -107,9 +110,11 @@ tests until cases are added. Changes to these conventions, and to `DEFINITIONS.m
 
 ## 5. Rulings where the XSD is silent (decided 2026-09-29)
 
-Where the XSD and §1–2 say nothing, these rules are normative. The order of sources: (a) the C renderer's
-numbered definitions (Dn, including the D9 table) wherever they define the behaviour; (b) the W3C / After Effects precedent;
-(c) otherwise the behaviour of existing content (the Python renderer's). Each rule names its source.
+Where the XSD and §1–2 say nothing, these rules are normative, below the Rust engine's behaviour (Precedence).
+The order of sources they were decided from: (a) the C renderer's numbered definitions (Dn, including the D9
+table) wherever they define the behaviour; (b) the W3C / After Effects precedent; (c) otherwise the behaviour of
+existing content (the Python renderer's). Each rule names its source. The C and Python engines are discontinued
+(SREP 25); where a rule cites them and the Rust engine differs, the Rust engine applies.
 
 5.1 **Expressions** (extends D25). A program is zero or more statements, each a declaration (`var`, `let`,
     `const`) or an assignment `name = expr`, then one expression, separated by `;` or line breaks. Assigning a
