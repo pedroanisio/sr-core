@@ -59,12 +59,15 @@ glTF and FBX use for the video lists "pick one node or mesh out of a file" and "
 ```xml
 <sch:rule context="object3D[@materialOverride]">
   <sch:assert id="MOV1" test="count(str:tokenize(normalize-space(@materialOverride),' ')) &gt; 0 and count(str:tokenize(normalize-space(@materialOverride),' ')) = count(str:tokenize(normalize-space(@materialOverride),' ')[contains(.,':') and substring-before(.,':')!='' and substring-after(.,':')!=''])">@materialOverride is a space-separated list of name:id pairs.</sch:assert>
+  <sch:assert id="MOV2" test="not(str:tokenize(normalize-space(@materialOverride),' ')[not(substring-after(., ':') = current()/ancestor::scene/materials/material/@id)])">@materialOverride: each id after the colon must name a material.</sch:assert>
 </sch:rule>
 ```
 
-That each `id` names a document material cannot be decided by the schema alone for the same reason `@material` is not
-checked statically for imported models (the name side depends on the file); an unknown `id` is reported when the object is drawn
-(Semantics 3).
+MOV2 is the check `@material` has as R4: every `id` (the text after the first colon of each pair) names a `material` of the
+document, so that a document that cannot render is rejected by validation. The comparison of a string with a node set
+is existential in XPath 1.0, and `current()` is the object, so the assert reads "no token has an id that is not the id of
+some material". A malformed pair has no id and fails MOV2 as well as MOV1. One diagnostic is given for the object however
+many pairs fail. The list has no length limit.
 
 New attributes with no default, accepted in every version (SREP 0, Versioning).
 
@@ -83,8 +86,8 @@ engine MUST report the missing name.
 
 **3. Material override.** A `materialOverride` of `a:x b:y` replaces the material named `a` with the document material
 `x`, and `b` with `y`. A primitive whose material name matches no pair keeps its imported material. A name that matches no
-imported material has no effect and the engine SHOULD report it. An `id` that names no document material MUST be reported
-as an error. A document material takes the place of the imported one entirely, as `@material` does for every material:
+imported material has no effect and the engine SHOULD report it, naming it and listing the model's material names. An `id`
+that names no document material is a validation error (MOV2). A document material takes the place of the imported one entirely, as `@material` does for every material:
 texture coordinates, maps and parameters come from the document material.
 
 **4. Precedence.** With `@material`, every primitive uses it and `materialOverride` has no effect.
@@ -111,7 +114,9 @@ Neither attribute set: the whole model is drawn with its imported materials, as 
 
 ## Backwards compatibility
 
-Class: Added, MINOR in effect, accepted in every version. No valid document changes validity or rendering.
+Class: Added, MINOR in effect, accepted in every version. No valid document changes validity or rendering, except that
+a `materialOverride` naming a document material that does not exist, which could not render (the object failed with a
+"material not found" error), is now rejected by validation (MOV2).
 
 ## Engine impact
 
@@ -127,6 +132,8 @@ Class: Added, MINOR in effect, accepted in every version. No valid document chan
 | `srep-NNNN-model-node-missing` | an unknown `node` draws nothing and is reported | exact |
 | `srep-NNNN-model-material-override` | `materialOverride="a:blue"` draws the primitive with material `a` blue and the other material unchanged | exact colours |
 | `srep-NNNN-model-material-precedence` | with `@material` set, `materialOverride` has no effect | exact colours |
+| `srep-NNNN-model-override-unknown-id` | `materialOverride="a:nosuch"` with no such document material fails validation with MOV2 | exact |
+| `srep-NNNN-model-override-many-pairs` | 1, 2, 40 and 200 pairs: all-good passes, one wrong pair (first or last) fails with MOV2 | exact |
 
 ## Open issues
 
@@ -140,3 +147,4 @@ Class: Added, MINOR in effect, accepted in every version. No valid document chan
 ## History
 
 - 2026-10-05: first draft.
+- 2026-10-05: MOV2 (each id names a document material) added after verification found `materialOverride="stone:nosuchmaterial"` validating and then failing to render; the engine also warns when a name matches no material of the model.
