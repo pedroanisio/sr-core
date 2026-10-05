@@ -1,0 +1,122 @@
+---
+disclaimer:
+  notice: >-
+    No information within this document should be taken for granted.
+    Any statement or premise not backed by a real logical definition
+    or verifiable reference may be invalid, erroneous, or a hallucination.
+  generated_by: "Claude Sonnet 5.5 via Claude Code (worker brave-heart), from the Rust engine's commits and the G2 lab log"
+  date: "2026-10-05"
+---
+
+```
+SREP:            0
+Title:           Check the kind of asset a reference names (R42 to R44)
+Author:          scene-render maintainers (drafted by brave-heart)
+Status:          Draft
+Type:            Standards
+Created:         2026-10-05
+Schema-Version:  1.1
+```
+
+# SREP 0 (draft) — Check the kind of asset a reference names (R42 to R44)
+
+## Abstract
+
+Three attributes name something of a particular kind and the schema checks only that the name exists: a pattern
+paint's `@asset` and an emitter's `@emitterAsset` must name an image asset, and the `@source` of a
+`displacement-map`, `difference-key` or `shader` effect must name a node of the composition. Three Schematron
+rules, R42, R43 and R44, check the kind. They reject only documents that could not be rendered as written.
+
+## Motivation
+
+- **R42, R43.** A `pattern` paint tiles an image and a particle emitter samples an image's opaque pixels. A document
+  that named a generator or a text asset there passed validation and failed only when rendering. The G2 lab found
+  both while exercising the paint and particle attributes.
+- **R44.** `@source` of `displacement-map`, `difference-key` and `shader` takes a drawn node. A document that named an
+  asset (an image or a generator) there validated clean and failed at `render --strict` (the stained-glass style
+  study met this). The hint that was missing: an asset is placed on a hidden layer, and the layer is named.
+
+Under SREP 0, a validator that accepts what rendering rejects is a defect of the Schematron, not of the document.
+
+## Specification
+
+### Syntax
+
+No XSD change.
+
+```xml
+<sch:pattern id="p62">
+  <sch:rule context="paints/pattern">
+    <sch:assert id="R42" test="/scene/assets/image[@id=current()/@asset]">pattern/@asset must name an image asset: a pattern tiles an image.</sch:assert>
+  </sch:rule>
+</sch:pattern>
+<sch:pattern id="p63">
+  <sch:rule context="*[@emitterAsset]">
+    <sch:assert id="R43" test="/scene/assets/image[@id=current()/@emitterAsset]">@emitterAsset must name an image asset: particles are emitted from its opaque pixels.</sch:assert>
+  </sch:rule>
+</sch:pattern>
+<sch:pattern id="p64">
+  <sch:rule context="effect[@source][@type='displacement-map' or @type='difference-key' or @type='shader']">
+    <sch:assert id="R44" test="/scene/composition//*[@id=current()/@source] or /scene/symbols//*[@id=current()/@source]">effect @source must name a composition node; an asset is placed on a (hidden) layer, and the layer named.</sch:assert>
+  </sch:rule>
+</sch:pattern>
+```
+
+### Semantics
+
+1. A validator MUST report R42 for a `pattern` paint whose `@asset` is not the id of an `image` asset.
+2. A validator MUST report R43 for an element whose `@emitterAsset` is not the id of an `image` asset.
+3. A validator MUST report R44 for an `effect` of type `displacement-map`, `difference-key` or `shader` whose `@source`
+   is not the id of an element inside `composition` or `symbols`.
+4. These are errors, with the same severity as the other reference rules (R1 to R41).
+
+### Defaults and the neutral case
+
+No attribute is added. A document that satisfies the rules validates and renders as before.
+
+## Rationale
+
+- The rules mirror the checks rendering already made; they move the failure to where the author is looking.
+- R44 allows `symbols` descendants because a node inside a symbol is a valid source for an effect used in the symbol.
+- The message of R44 names the repair (a hidden layer that places the asset), which is what the author must do.
+
+## Rejected alternatives
+
+- **Support the other kinds.** A generator or a text asset as pattern or emitter source would be a feature with its own
+  semantics (resolution, time); none of the studies needed it.
+- **Leave validation permissive and fail at render.** That is the defect.
+
+## Backwards compatibility
+
+- **Class: Fixed, PATCH** (SREP 4: a correction that rejects only documents whose meaning was undefined).
+- A document naming a non-image asset in R42 or R43 was already refused by rendering. For R44 the evidence is a failure
+  at `render --strict`; whether a non-strict render of such a document drew the effect without the source is not
+  established by this draft, and the lab found no production scene that depends on it.
+- No document that rendered correctly under the baseline is rejected. The corpus of the engine (valid and invalid
+  cases for R42 to R44, `r42` to `r44`) was added with the rules.
+
+## Engine impact
+
+| Engine | Status | Work | Tracking |
+|---|---|---|---|
+| Rust (`rs-scene-render`), reference | implemented: commits `45de038` (R42, R43), `26016a9` (R44), with the Rust mirror in the rule engine and the engine's corpus cases | | |
+
+## Conformance
+
+| Case | Checks | Tolerance |
+|---|---|---|
+| `srep-NNNN-r42` | a pattern paint naming a generator asset fails validation with R42; naming an image passes | exact |
+| `srep-NNNN-r43` | an emitter naming a text asset fails with R43; naming an image passes | exact |
+| `srep-NNNN-r44` | a displacement-map whose `@source` is an asset id fails with R44; naming a hidden layer in the composition passes; naming a node inside a symbol passes | exact |
+
+## Open issues
+
+- Whether a `pattern` should also accept a vector (SVG) asset as a tile.
+
+## References
+
+- SREP 0, SREP 4 (what a PATCH may reject). The G2 lab log entries for P6b and the stained-glass study.
+
+## History
+
+- 2026-10-05: first draft, after the engine's change landed.
