@@ -20,7 +20,7 @@
 | [15](srep-0015.md) | Add stroke markers that ride on trim paths | Standards | Draft | 1.2 |
 | [16](srep-0016.md) | Add connectors that follow the nodes they join | Standards | Draft | 1.2 |
 | [17](srep-0017.md) | Add PDF page assets and text-anchored regions | Standards | Draft | 1.2 |
-| [18](srep-0018.md) | Add render reports and inert-attribute findings | Standards | Draft | 1.2 |
+| [18](srep-0018.md) | Add render reports and inert-attribute findings | Standards | Accepted | 1.2 |
 | [19](srep-0019.md) | Add legibility checks for video text and captions | Standards | Draft | 1.2 |
 | [20](srep-0020.md) | Define where lines of text sit in a text box | Semantics | Draft | 1.1 |
 | [21](srep-0021.md) | Add a pinned-font policy | Standards | Draft | 1.2 |
