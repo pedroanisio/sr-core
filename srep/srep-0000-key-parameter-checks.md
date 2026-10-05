@@ -1,0 +1,142 @@
+---
+disclaimer:
+  notice: >-
+    No information within this document should be taken for granted.
+    Any statement or premise not backed by a real logical definition
+    or verifiable reference may be invalid, erroneous, or a hallucination.
+  generated_by: "Claude Sonnet 5.5 via Claude Code (worker brave-heart), from the Rust engine's curve resolution and the NOLN motion research (E1, E2)"
+  date: "2026-10-05"
+---
+
+```
+SREP:            0
+Title:           Warn about key parameters the curve ignores
+Author:          scene-render maintainers (drafted by brave-heart)
+Status:          Draft
+Type:            Standards
+Created:         2026-10-05
+Schema-Version:  1.2
+```
+
+# SREP 0 (draft) — Warn about key parameters the curve ignores
+
+## Abstract
+
+A key parameter that the key's curve does not read (`bezier`, `easeOut`, `easeIn`, `steps`, `stepPosition`, the spring and
+the tcb parameters) is reported as a warning (E19), as `overshoot` and `period` already are (the key-overshoot-period
+SREP). A key that takes `cubic-bezier` from its animation's `defaultInterpolation`, starts a segment and gives no handles
+is reported too, because the engine then uses its own default handles. Nothing changes in what is rendered or in which
+documents are valid.
+
+## Motivation
+
+The NOLN motion research (§1.1, items E1 and E2) found that a parameter on a segment whose curve does not read it is
+silently ignored, which invites authoring mistakes with 41 curves, and that C40 (a `cubic-bezier` key needs `@bezier` or
+handles) reads only the `interpolation` written on the key. With the Rust reference, measured on a two-key animation
+with `defaultInterpolation="cubic-bezier"` and no handles: the document validates with no diagnostic and the segment uses
+the After Effects default handles (influence 1/3, speed 1), which an author who left the handles out did not ask for. A
+`bezier` attribute on a `linear` key is accepted and does nothing.
+
+## Specification
+
+### Syntax
+
+```xml
+None.
+```
+
+```xml
+None.
+```
+
+No schema or rule changes: C40 keeps its context (`key[@interpolation='cubic-bezier']`).
+
+### Semantics
+
+**1. Default curve without handles.** A key that names no `@interpolation` has the curve of its animation's
+`@defaultInterpolation` (a key's curve governs the segment from that key to the next). When that curve is `cubic-bezier`,
+a key follows, and neither the key has `@bezier` or `@easeOut` nor the key that follows has `@easeIn`, an engine SHOULD
+report a warning naming the key and saying that the engine's default handles are used. A last key starts no segment and
+is not reported. C40 is unchanged: it still applies only to keys that name `cubic-bezier`.
+
+**2. Parameters a curve does not read.** For key `i` (counting from 1) with curve `c(i)` (the key's `@interpolation`, else
+the animation's default), an engine SHOULD report, as a warning that names the key, the attribute and the curve, each
+attribute below that is present (or, for those with a default, set to a value other than it) where the stated condition
+holds:
+
+| Attribute of key `i` | Read by | Reported when |
+|---|---|---|
+| `bezier` | `cubic-bezier` | `c(i)` is not `cubic-bezier` |
+| `easeOut` | `cubic-bezier` without `@bezier` | `c(i)` is not `cubic-bezier`, or key `i` has `@bezier` |
+| `easeIn` | the `cubic-bezier` segment that ends in the key, without `@bezier` | `i = 1`; or `c(i−1)` is not `cubic-bezier`; or key `i−1` has `@bezier` |
+| `steps`, `stepPosition` (other than `end`) | `steps` | `c(i)` is not `steps` |
+| `stiffness` (≠100), `damping` (≠10), `mass` (≠1) | `spring` | `c(i)` is not `spring` |
+| `tension`, `continuity`, `bias` (≠0) | `tcb` | neither `c(i)` nor `c(i−1)` is `tcb` (the tangent of a key is shaped by the segment before it as well) |
+
+An attribute that is set to its default value is not a parameter and is not reported. These warnings do not change
+what is rendered. The Rust reference gives them the code E19 (an evaluation warning, as the key-overshoot-period
+warnings).
+
+**3. Strict delivery.** The model has two severities, error and warning, and strict delivery rejects evaluation warnings:
+these warnings, like every E19 before them, make a document that rendered before fail under `--strict` until it is fixed.
+They do not affect a delivery without `--strict`.
+
+### Defaults and the neutral case
+
+A document whose keys carry only parameters their curves read, and no `cubic-bezier` default without handles, gives no
+new warning.
+
+## Rationale
+
+- **A warning for the default case, not a C40 extension.** Extending C40 to keys that inherit `cubic-bezier` would
+  make a valid document invalid, which is a MAJOR change under SREP 0 (Versioning); a warning is MINOR. The intent of C40
+  (a `cubic-bezier` segment says what its curve is) is served by the report, and the stricter rule can be promoted in a
+  later MAJOR (Open issues).
+- **Warnings for unread parameters:** they do not change the rendering, and existing documents carry them (a pasted key
+  with a leftover handle); the same decision as the key-overshoot-period SREP and SREP 18's inert-attribute warnings.
+- **Tcb also reads the previous segment's key**: the engine computes a key's tangent from the tension, continuity and bias
+  of the key when its own curve, or the previous key's curve, is `tcb`.
+- **The last key is exempt** from the default-handles warning because its curve is never read.
+
+## Rejected alternatives
+
+- **Making the default case a C40 error now.** A MAJOR change (see above).
+- **An info severity so that strict delivery would not reject.** The model has no such severity; adding one is a
+  separate decision (Open issues).
+- **Making the unread parameters errors.** Breaks documents that render correctly today.
+
+## Backwards compatibility
+
+Class: Added (warnings), MINOR. No document changes validity or rendering. A document with an affected key gains a warning
+and, under strict delivery, fails until the key is corrected (Semantics 3), as with the earlier E19 additions. The
+scenes in the repository and the lab's sweep cases were searched for `defaultInterpolation="cubic-bezier"`: none uses it.
+
+## Engine impact
+
+| Engine | Status | Work | Tracking |
+|---|---|---|---|
+| Rust (`rs-scene-render`), reference | pending | the key-parameter check at program build | |
+
+## Conformance
+
+| Case | Checks | Tolerance |
+|---|---|---|
+| `srep-NNNN-key-default-handles` | `defaultInterpolation="cubic-bezier"`, two keys, no handles: one warning on key 1; handles on key 1, or `easeIn` on key 2, give none; the last key is never reported | exact |
+| `srep-NNNN-key-parameters-ignored` | each row of the table: a warning where stated, none where the curve reads the attribute | exact |
+
+## Open issues
+
+- Promote the default-handles case to a validation error (C40 for inherited curves) in the next MAJOR, with a migration.
+- Whether a warning severity below "rejected by strict delivery" (an info level) should exist, so that advice like this
+  does not fail strict builds.
+- Whether `steps` without `@steps` under a default of `steps` deserves the same treatment (it has a defined default of one
+  step).
+
+## References
+
+- SREP 0 (Versioning); SREP 18 (inert attributes); the key-overshoot-period SREP (the same warning for `overshoot` and `period`).
+- NOLN motion research, items E1 and E2 (internal).
+
+## History
+
+- 2026-10-05: first draft; the default case is a warning, not a C40 extension, because the extension breaks SREP 0's MINOR rule.
