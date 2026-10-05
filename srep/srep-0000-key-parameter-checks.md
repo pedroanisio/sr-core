@@ -23,7 +23,7 @@ Schema-Version:  1.2
 ## Abstract
 
 A key parameter that the key's curve does not read (`bezier`, `easeOut`, `easeIn`, `steps`, `stepPosition`, the spring and
-the tcb parameters) is reported as a warning (E19), as `overshoot` and `period` already are (the key-overshoot-period
+the tcb parameters) is reported as information (E19), as `overshoot` and `period` already are (the key-overshoot-period
 SREP). A key that takes `cubic-bezier` from its animation's `defaultInterpolation`, starts a segment and gives no handles
 is reported too, because the engine then uses its own default handles. Nothing changes in what is rendered or in which
 documents are valid.
@@ -73,13 +73,13 @@ holds:
 | `stiffness` (≠100), `damping` (≠10), `mass` (≠1) | `spring` | `c(i)` is not `spring` |
 | `tension`, `continuity`, `bias` (≠0) | `tcb` | neither `c(i)` nor `c(i−1)` is `tcb` (the tangent of a key is shaped by the segment before it as well) |
 
-An attribute that is set to its default value is not a parameter and is not reported. These warnings do not change
-what is rendered. The Rust reference gives them the code E19 (an evaluation warning, as the key-overshoot-period
-warnings).
+An attribute that is set to its default value is not a parameter and is not reported. These findings do not change
+what is rendered. Under SREP 18's resolution (accepted 2026-10-05) the findings of the table are inert and are reported at `info`
+severity; the Rust reference gives them the code E19 at `info`, as the key-overshoot-period findings. The default-handles
+finding of 1 is not inert (the default handles shape the motion) and stays a warning, with the code E21.
 
-**3. Strict delivery.** The model has two severities, error and warning, and strict delivery rejects evaluation warnings:
-these warnings, like every E19 before them, make a document that rendered before fail under `--strict` until it is fixed.
-They do not affect a delivery without `--strict`.
+**3. Strict delivery.** Strict delivery and `--deny-warnings` count errors and warnings, not information: the findings of
+the table, being information, never fail them; the default-handles warning of 1 does, as every warning does.
 
 ### Defaults and the neutral case
 
@@ -92,7 +92,7 @@ new warning.
   make a valid document invalid, which is a MAJOR change under SREP 0 (Versioning); a warning is MINOR. The intent of C40
   (a `cubic-bezier` segment says what its curve is) is served by the report, and the stricter rule can be promoted in a
   later MAJOR (Open issues).
-- **Warnings for unread parameters:** they do not change the rendering, and existing documents carry them (a pasted key
+- **Information for unread parameters:** they do not change the rendering, and existing documents carry them (a pasted key
   with a leftover handle); the same decision as the key-overshoot-period SREP and SREP 18's inert-attribute warnings.
 - **Tcb also reads the previous segment's key**: the engine computes a key's tangent from the tension, continuity and bias
   of the key when its own curve, or the previous key's curve, is `tcb`.
@@ -101,14 +101,13 @@ new warning.
 ## Rejected alternatives
 
 - **Making the default case a C40 error now.** A MAJOR change (see above).
-- **An info severity so that strict delivery would not reject.** The model has no such severity; adding one is a
-  separate decision (Open issues).
 - **Making the unread parameters errors.** Breaks documents that render correctly today.
 
 ## Backwards compatibility
 
-Class: Added (warnings), MINOR. No document changes validity or rendering. A document with an affected key gains a warning
-and, under strict delivery, fails until the key is corrected (Semantics 3), as with the earlier E19 additions. The
+Class: Added (findings), MINOR. No document changes validity or rendering. A document with a key that has an unread parameter
+gains an information finding, which strict delivery does not count; a document with a default-handles key gains a warning
+and, under strict delivery, fails until the key is corrected (Semantics 3). The
 scenes in the repository and the lab's sweep cases were searched for `defaultInterpolation="cubic-bezier"`: none uses it.
 
 ## Engine impact
@@ -127,8 +126,6 @@ scenes in the repository and the lab's sweep cases were searched for `defaultInt
 ## Open issues
 
 - Promote the default-handles case to a validation error (C40 for inherited curves) in the next MAJOR, with a migration.
-- Whether a warning severity below "rejected by strict delivery" (an info level) should exist, so that advice like this
-  does not fail strict builds.
 - Whether `steps` without `@steps` under a default of `steps` deserves the same treatment (it has a defined default of one
   step).
 

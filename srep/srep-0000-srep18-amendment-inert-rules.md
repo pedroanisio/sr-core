@@ -82,9 +82,12 @@ The registry (Specification 4) gains:
 `MASK-MISS` is a warning, not an inert finding: the mask has an effect, and it is to hide the node, which is almost
 never what the author meant.
 
-**Severity of the engine's current output.** Until an engine writes SREP 18's report, an engine that prints these
-conditions on its own channel SHOULD print them as information (not warnings), so that they do not fail a strict mode that
-fails on warnings. `MASK-MISS` is a warning.
+**Severity of the engine's current output.** SREP 18 (accepted, Resolution of 2026-10-05) reports inert findings at `info`
+severity. Until an engine writes SREP 18's report, an engine that prints these conditions on its own channel MUST print I9
+to I13 as information (not warnings), so that they do not fail a strict mode that counts errors and warnings only.
+`MASK-MISS` is a warning, as SREP 18's table and this amendment say: the mask has an effect (the node disappears) and
+that is almost never intended, so strict modes count it. The Rust reference prints I9 to I13 as `E19` at `info` and
+`MASK-MISS` as `E20` at `warning`.
 
 ### Defaults and the neutral case
 
@@ -116,7 +119,7 @@ mask outside its node is unaffected.
 
 | Engine | Status | Work | Tracking |
 |---|---|---|---|
-| Rust (`rs-scene-render`), reference | implemented as evaluation warnings `E19` (collapse, channel, effect source at opacity 0) and `E20` (mask outside its node): commit `27551fd`; the key-parameter warning (E19) is in the engine working tree | rename to the SREP 18 codes when the report exists; print I9 to I13 at information level; for I13 each effect type declares the attributes it reads in a list next to its kernel, a test-only check fails any kernel that reads an undeclared name, and the warning uses the declared list, so an over-declared list can only miss a warning and never raises a wrong one | |
+| Rust (`rs-scene-render`), reference | implemented as evaluation findings `E19` (collapse, channel, effect source at opacity 0, key parameters, effect parameters) at `info` severity and `E20` (mask outside its node) at `warning`; the `info` severity is a patch after SREP 18's acceptance (strict delivery and `--deny-warnings` count errors and warnings only) | rename to the SREP 18 codes when the report exists; print I9 to I13 at information level; for I13 each effect type declares the attributes it reads in a list next to its kernel, a test-only check fails any kernel that reads an undeclared name, and the warning uses the declared list, so an over-declared list can only miss a warning and never raises a wrong one | |
 
 ## Conformance
 
@@ -131,9 +134,6 @@ mask outside its node is unaffected.
 
 ## Open issues
 
-- The engine's E19 and E20 are warnings today and fail `--deny-warnings`; SREP 18 says inert findings are `info`. This
-  draft proposes information for I9 to I13. The editor may prefer to keep them warnings while the attributes are
-  accepted-but-unread (the case for E19) and make them information only once documented as inert.
 - Whether `collapse` should be given a meaning for isolated groups (the engine's owner chose to document it as inert first).
 
 ## References
