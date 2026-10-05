@@ -1,0 +1,127 @@
+---
+disclaimer:
+  notice: >-
+    No information within this document should be taken for granted.
+    Any statement or premise not backed by a real logical definition
+    or verifiable reference may be invalid, erroneous, or a hallucination.
+  generated_by: "Claude Sonnet 5.5 via Claude Code (worker brave-heart), from the Rust engine's expression VM and the NOLN motion research (E6)"
+  date: "2026-10-05"
+---
+
+```
+SREP:            0
+Title:           Add penner and propAtTime to the expression built-ins
+Author:          scene-render maintainers (drafted by brave-heart)
+Status:          Draft
+Type:            Semantics
+Created:         2026-10-05
+Schema-Version:  1.2
+```
+
+# SREP 0 (draft) — Add `penner` and `propAtTime` to the expression built-ins
+
+## Abstract
+
+Two built-ins for the expression language (SREP 0 definitions, Expressions). `penner("curve", u)` evaluates any of the
+curves a key can name (the 30 Penner easings, the CSS eases, `spring` and the rest, with the parameters a key without any
+has) at progress `u`. `propAtTime("id.property", t)` reads another property's value at another composition time, so a
+follower can lag, lead or echo a body without a helper node. Expressions that use neither are unchanged.
+
+## Motivation
+
+The NOLN motion research (§1.4 and item E6): "expression access to the Penner family and `valueAtTime` of another node;
+a helper node is needed today". With the Rust reference the expression `ease(...)` family covers linear and the CSS
+eases only; an overshoot or elastic move driven by an expression, or a rig where a head follows the shoulder one beat late,
+needs an extra animated helper node whose keys carry the curve or a time shift.
+
+## Specification
+
+### Syntax
+
+```xml
+None.
+```
+
+```xml
+None.
+```
+
+The documentation of `expression` lists the built-ins; it gains `propAtTime("id.property", t)` and
+`penner("curve", u)`. No attribute or element changes.
+
+### Semantics
+
+The built-ins of the expression language gain:
+
+- `penner("curve", u)`: the first argument is a string literal naming a curve exactly as `key/@interpolation` writes it
+  (`back-out`, `elastic-in-out`, `ease-in`, `spring`, `cubic-bezier`, …); an unknown name is a compile error that suggests
+  the nearest. The value is that curve's progress at `u`, with the parameters a key without any has: the Penner constant of
+  `back-*` (1.70158), the periods of `elastic-*` (0.3, 0.45 in-out), the default spring (100, 10, 1; the progress of the
+  spring over a segment of one second landing on 1 at `u = 1`), the default handles of `cubic-bezier`, and one step for
+  `steps`. `u` is not clamped (the curve is evaluated as a key's segment is, for `u` in [0, 1]; outside it, as the curve's own
+  formula). The result is a number; `u` is a number.
+- `propAtTime("id.property", t)`: the first argument is a string literal as for `prop`; `t` is a composition time in
+  seconds. The value is that property's value at `t` as `prop("id.property")` would read it at `t`: its keys, its link and its
+  expression, all evaluated at `t`. The expression depends on that property as `prop` does, so a cycle through `propAtTime` is
+  the dependency-cycle error of `prop` (E03), and an unknown property is the same compile error as for `prop`.
+
+### Defaults and the neutral case
+
+An expression that calls neither function is evaluated as before. A document using either is not understood by an
+engine that lacks them: it fails to compile the expression (unknown function), a validation-level error.
+
+## Rationale
+
+- **A curve name, not a function per curve.** 41 curve names exist and a key already names them; one built-in with the
+  same names has no second vocabulary to keep in step.
+- **Literals for names** (`prop`, `markerTime` and `loopIn` do the same) so that dependencies and errors are known when the
+  expression compiles.
+- **Composition time for `propAtTime`**, as `prop` reads the other property in composition time, rather than the node's time:
+  the two properties may have different timelines, and a lag in the follower's own time would mean different things for
+  different nodes.
+- **The full value** (keys, link and expression), as `prop` already reads: the definition's sentence "that node's own keys
+  and links, not its expression, so expressions never cycle" describes the cycle check, not the value, which includes
+  the property's expression when the dependency order allows (the Rust reference); cycles are detected through the
+  declared dependency.
+
+## Rejected alternatives
+
+- **`valueAtTime(t)` with an optional property argument.** Overloads one name with a different meaning (the
+  property's own keys); a separate name says what it reads.
+- **`ease` family extended to the Penner names** (`easeOutBack(...)`): 30 more names and no way to name `spring` or
+  `cubic-bezier`.
+
+## Backwards compatibility
+
+Class: Added built-ins, MINOR. A document valid under the previous version stays valid and renders the same. A document
+that uses the new built-ins needs an engine that has them.
+
+## Engine impact
+
+| Engine | Status | Work | Tracking |
+|---|---|---|---|
+| Rust (`rs-scene-render`), reference | pending | the compile step resolves the literal arguments (curve index, property slot); the VM calls the curve or the host's property reader at `t` | |
+
+## Conformance
+
+| Case | Checks | Tolerance |
+|---|---|---|
+| `srep-NNNN-expr-penner` | `100 * penner("quad-in", 0.5)` is 25; `penner("back-out", 0.5)` is 1.0875… (1 + 2.70158·(−0.5)³ + 1.70158·0.25); every named curve gives 1 at `u = 1` | 1e-6 |
+| `srep-NNNN-expr-penner-unknown` | `penner("quad-inn", 0.5)` is a compile error that suggests `quad-in` | exact |
+| `srep-NNNN-expr-prop-at-time` | a property keyed 0 to 100 over 2 s: `propAtTime("a.x", time − 1)` at 1.5 s is 25; at a property that is itself an expression, its expression's value | 1e-6 |
+| `srep-NNNN-expr-prop-at-time-unknown` | an unknown property is a compile error | exact |
+
+## Open issues
+
+- A `propAtTime` whose time depends on the property it reads (a self-reference through `time`) can recurse: the engine
+  limits the depth.
+- Whether `penner` should accept the key parameters (`overshoot`, `period`) as further arguments.
+
+## References
+
+- SREP 0 (definitions, Expressions); the key-overshoot-period SREP (the constants and periods); the engine README on expressions.
+- NOLN motion research, item E6 (internal).
+
+## History
+
+- 2026-10-05: first draft.
