@@ -15,7 +15,7 @@ Author:          scene-render maintainers (drafted by brave-heart)
 Status:          Draft
 Type:            Standards
 Created:         2026-10-05
-Schema-Version:  1.3 (SREP 15 and the other 1.2 drafts keep 1.2)
+Schema-Version:  1.2
 ```
 
 # SREP 0 (draft) — Add tracking to extruded 3D text
@@ -25,8 +25,7 @@ Schema-Version:  1.3 (SREP 15 and the other 1.2 drafts keep 1.2)
 `object3D` with `primitive="text"` extrudes the outlines of a string. It has no letter spacing, so a title in 3D cannot be
 spaced the way the same title is in 2D, where `textAnimator/@tracking` and the text asset's `tracking` give extra space in
 thousandths of an em. `object3D` gains an optional `tracking`, in the same unit, that adds space after every character of
-the extruded string. The attribute is valid only on 3D text, and a document that uses it declares version 1.3 or later, like the
-other `object3D` additions of that version. A document without it renders as before.
+the extruded string. The attribute is valid only on 3D text and is accepted in every version. A document without it renders as before.
 
 ## Motivation
 
@@ -43,16 +42,12 @@ and its collider path build the same outlines from the same function, so the att
 <!-- object3DType gains -->
 <xs:attribute name="tracking" type="xs:double">
   <xs:annotation><xs:documentation>Extra space after every character of primitive="text", in thousandths of an em of the
-  text size (the object's height). Negative values tighten. Requires version 1.3 or later; valid only with primitive="text".
+  text size (the object's height). Negative values tighten. Valid only with primitive="text".
   </xs:documentation></xs:annotation>
 </xs:attribute>
 ```
 
 ```xml
-<!-- the version gate, written as the 1.0 rules V1 to V7 are: forbidden in the versions before the one that introduces it -->
-<sch:rule context="/scene[@version='1.0' or @version='1.1' or @version='1.2']">
-  <sch:assert id="TXT1" test="not(.//object3D[@tracking])">object3D @tracking requires version="1.3" or later.</sch:assert>
-</sch:rule>
 <sch:rule context="object3D[@tracking]">
   <sch:assert id="TXT2" test="@primitive='text'">@tracking applies to object3D primitive="text".</sch:assert>
 </sch:rule>
@@ -81,10 +76,6 @@ Absent `tracking`, geometry is identical to the baseline.
   same unit lets a 3D title match its 2D twin.
 - **Moving glyphs after layout.** The extrusion function lays out text once and outlines its glyphs; adding the offset by glyph
   index keeps kerning and shaping as they are, and changes nothing for the neutral case.
-- **Version 1.3, not 1.2.** The master schema is 1.1.4 and 1.2 is claimed by SREP 15 and the other 1.2 drafts, which are still
-  drafts; the other `object3D` additions that the Rust engine carries are already on 1.3. The editor sets the version on
-  acceptance. TXT1 forbids the attribute before 1.3 (as V1 to V7 forbid the 1.1 additions under 1.0) and so allows it in 1.3 and
-  every later version.
 
 ## Rejected alternatives
 
@@ -94,7 +85,7 @@ Absent `tracking`, geometry is identical to the baseline.
 
 ## Backwards compatibility
 
-- **Class: Added, MINOR (1.3).** New attribute, version-gated by TXT1; no valid document changes.
+- **Class: Added, accepted in every version** (SREP 0, Versioning: a new attribute with a neutral default needs no version gate). No valid document changes.
 
 ## Engine impact
 
@@ -107,7 +98,7 @@ Absent `tracking`, geometry is identical to the baseline.
 | Case | Checks | Tolerance |
 |---|---|---|
 | `srep-NNNN-text3d-tracking` | `primitive="text"` of "II" at `height="100"`, flat orthographic view: the horizontal distance between the two stems grows by `tracking · 0.1` px (200 gives 20 px) | 1 px |
-| `srep-NNNN-text3d-tracking-rules` | `tracking` on a `box` fails TXT2; on text under version 1.2 fails TXT1; under 1.3 it passes | exact |
+| `srep-NNNN-text3d-tracking-rules` | `tracking` on a `box` fails TXT2; on text it passes under every version | exact |
 
 ## Open issues
 
