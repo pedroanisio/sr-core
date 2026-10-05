@@ -46,7 +46,8 @@ its previous version.
    are mapped. 1 is no stretch. With units="object" the gradient already follows the painted box, so a radial gradient on a
    wide shape is an ellipse without any aspect; > 1 widens it further, < 1 narrows it."
 4. **`geoLayerType`.** "lines stroked (drawn on by @progress)" gains "; polygon outlines are always drawn whole". `progress`
-   trims lines only.
+   trims lines only. **Withdrawn if srep-0000-geo-outline-progress.md is accepted**, which makes `progress` trace polygon outlines
+   too; the documentation then says so instead.
 5. **`textAnimatorType/@presetStart`.** Adds: "Time on the layer's parent timeline (composition time for a top-level layer), not
    an offset from the layer's start; when absent the preset starts at the layer's own start."
 6. **`camera/@fov`.** Adds: "Horizontal field of view in degrees, across the frame width: the focal distance in pixels is

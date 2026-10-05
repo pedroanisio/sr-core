@@ -1,0 +1,119 @@
+---
+disclaimer:
+  notice: >-
+    No information within this document should be taken for granted.
+    Any statement or premise not backed by a real logical definition
+    or verifiable reference may be invalid, erroneous, or a hallucination.
+  generated_by: "Claude Sonnet 5.5 via Claude Code (worker brave-heart), from the Rust engine's working-tree patch for the style-library finding T21 F4"
+  date: "2026-10-05"
+---
+
+```
+SREP:            0
+Title:           Draw polygon outlines on with geoLayer progress
+Author:          scene-render maintainers (drafted by brave-heart)
+Status:          Draft
+Type:            Semantics
+Created:         2026-10-05
+Schema-Version:  1.1
+```
+
+# SREP 0 (draft) — Draw polygon outlines on with geoLayer progress
+
+## Abstract
+
+`geoLayer/@progress` draws the lines of a geo asset on, from 0 to 1, and leaves polygon outlines whole. This SREP makes
+`progress` trace each polygon ring from its first vertex by the same fraction, the closing edge included, so region borders
+draw on like routes do. The fill stays whole. **This changes the picture of any document with polygons, a stroke and a
+`progress` below 1:** their outlines were drawn in full and are now traced. It reverses the sentence "polygon outlines are
+always drawn whole" that the annotation draft (item 4, srep-0000-annotation-clarifications.md) proposes to add to the schema.
+
+## Motivation
+
+A style-library finding (T21 F4 of the engine's task list) asked for a map whose region borders draw on: with the baseline
+rule, `progress` on a choropleth of polygons changed nothing, so the only draw-on available was for line features. The G2
+lab's review of the baseline recorded that the code matched the schema (only lines are drawn on) and left the draw-on of
+polygon outlines as a feature needing a decision; the decision was to add it.
+
+**Before and after.** A `geoLayer` of two squares with `fill="#00000000"`, `stroke="#FFFFFF"`, `strokeWidth="3"`:
+- before: the outline is whole at `progress="0"`, `"0.5"` and `"1"` (the red-test measurement on the engine: 1,616 lit
+  pixels at progress 0, where the rule now says none);
+- after: no outline pixels at 0, about half of the pixels of the full outline at 0.5, and the full outline at 1.
+
+## Specification
+
+### Syntax
+
+No attribute is added. The documentation of `geoLayerType` changes:
+
+```xml
+The features of a geo asset: polygons filled and stroked, lines and outlines stroked (drawn on by @progress: each line or
+ring from its first vertex; the fill stays whole), points as dots.
+```
+
+### Semantics
+
+1. **Rings.** For a polygon feature, each ring (the exterior and every hole) is a closed outline starting at its first
+   vertex in the feature's coordinate order.
+2. **Progress.** With `progress` = p in [0, 1), the stroke of each ring is traced from its first vertex along the ring over
+   the fraction p of that ring's own length, the closing edge (last vertex to first) included. With p = 1 the ring is drawn
+   whole, as before; with p = 0 nothing of the outline is drawn.
+3. **Same fraction for every ring.** All rings and all lines of the layer use the same p (simultaneous trimming); a
+   shorter ring finishes at the same time as a longer one.
+4. **Fill.** The fill of polygons is never trimmed by `progress`.
+5. **Lines and points** are unchanged: a line is traced by p from its first vertex; points are not affected by `progress`.
+
+### Defaults and the neutral case
+
+`progress` defaults to 1. At 1 every outline is drawn whole, so a document that does not animate or set `progress` below 1
+renders as before.
+
+## Rationale
+
+- **The attribute already means draw-on.** Extending it to outlines is what authors expect of a `progress` on a layer that
+  strokes outlines; the baseline's exception was an implementation habit documented in the schema's own words.
+- **Same fraction.** Per-ring fractions of a single total length would finish rings at different times in an order set by
+  data; one fraction is predictable and matches `trimMode="simultaneous"` of shapes.
+- **Fill whole.** A filled region that appears with its border is a separate look (a fill reveal), which `opacity` or a
+  matte can do.
+
+## Rejected alternatives
+
+- **A new attribute (`outlineProgress`).** Leaves the common case (progress on a polygon layer) doing nothing.
+- **Sequential trimming across all rings** (one pen). Order by data order; no study needed it.
+
+## Backwards compatibility
+
+- **Class: Changed, PATCH or MINOR is the editor's call.** No document becomes invalid.
+- **Visible change.** A document with polygon features, a stroke and `progress` below 1 at any frame draws a partial outline
+  where it drew a whole one. Documents that leave `progress` at 1 are unchanged. The affected scenes are those that animate
+  `progress` on a polygon layer; this draft did not search the maintainers' scenes for them.
+- **Supersedes.** If accepted, item 4 of srep-0000-annotation-clarifications.md is withdrawn; the documentation sentence above
+  replaces it.
+
+## Engine impact
+
+| Engine | Status | Work | Tracking |
+|---|---|---|---|
+| Rust (`rs-scene-render`), reference | implemented in the engine's working tree (the T21 F4 patch; not committed when this was drafted): the geo layer traces each ring by `progress` through the same trim as shapes, closing edge included, and leaves the fill whole | | |
+
+## Conformance
+
+| Case | Checks | Tolerance |
+|---|---|---|
+| `srep-NNNN-geo-outline-progress` | two squares, fill transparent, stroke white 3 px: no white at progress 0; between a third and two thirds of the full outline's white pixels at 0.5 (about half); the full outline at 1 | pixel counts ±20 |
+| `srep-NNNN-geo-fill-whole` | the same with a red fill: the red interior is present at progress 0, 0.5 and 1 | exact colour |
+
+## Open issues
+
+- Whether the trace should start at a data-independent vertex (the westmost, say), since the first vertex depends on the
+  source file's ring order.
+- Whether the trim should apply to the stroke only or also to the casing of stylised outlines.
+
+## References
+
+- SREP 0; the annotation draft (item 4); SREP 15 (trim-path semantics on shapes, for the same-fraction rule).
+
+## History
+
+- 2026-10-05: first draft.
