@@ -1,0 +1,162 @@
+---
+disclaimer:
+  notice: >-
+    No information within this document should be taken for granted.
+    Any statement or premise not backed by a real logical definition
+    or verifiable reference may be invalid, erroneous, or a hallucination.
+  generated_by: "Claude Sonnet 5.5 via Claude Code (worker brave-heart), from the Rust engine's commits and the style-library studies"
+  date: "2026-10-05"
+---
+
+```
+SREP:            0
+Title:           Define halftone and selective-color, and three effect corrections
+Author:          scene-render maintainers (drafted by brave-heart)
+Status:          Draft
+Type:            Semantics
+Created:         2026-10-05
+Schema-Version:  1.1
+```
+
+# SREP 0 (draft) — Define halftone and selective-color, and three effect corrections
+
+## Abstract
+
+The schema lets `effect` carry `angle`, `color`, `paint` and `amount` for any type, and says nothing about what
+`halftone` and `selective-color` do with them. This SREP gives those attributes their meaning: for `halftone`, the
+screen's `angle` (default 0, as authored), the ink `color` (default black) and the ground `paint` (default opaque white);
+for `selective-color`, a window centred on `hue` or on the hue of `color`, mixed with the original by `amount`. It also
+records three corrections to effects whose output contradicted their definition: `gradient-map` keeps the alpha of its
+stops, `matte-choke` grown by a negative amount takes the colour of the edge it grows from, and `halftone` never paints
+outside the edge of its source. **One default changes visibly:** a `halftone` with no `angle` renders at 0°, not 45°.
+
+## Motivation
+
+- **Halftone attributes were ignored, and 0 meant 45.** A halftone effect with `color` or `paint` drew black dots on white
+  regardless; `angle="0"`, the schema's declared default, was rewritten to 45°, so an author could not ask for a
+  0° screen. The halftone-pop-art style study set `angle` explicitly everywhere to work around it.
+- **Selective-color ignored `color` and `amount`.** Only hue, tolerance, saturation and brightness acted; the G2 lab's
+  review of the effects found that, of selective-color's attributes, only `saturation` had a visible effect before the fix, and that `channel` is read by nothing.
+- **Gradient-map dropped its stops' alpha.** A map ending in a transparent stop rendered that end opaque (the risograph
+  style study).
+- **Matte-choke grew a black ring.** A negative amount grew the alpha but kept the colour of the transparent pixels
+  (found in the style-library studies).
+- **Halftone painted outside its source.** Edge cells drew ground or ink outside the shape: diamonds at 45° and specks at
+  15° and 75°.
+
+## Specification
+
+### Syntax
+
+No attribute is added; `effect/@angle`, `@color`, `@paint`, `@amount`, `@hue`, `@tolerance`, `@saturation`,
+`@brightness` and `@size` already exist. The `effectType` documentation gains, in the list of types:
+
+```xml
+selective-color: @hue (degrees) or @color (its hue) centres a window of width @tolerance; inside it @saturation scales and
+@brightness adds; @amount mixes the result with the original. @channel is not read.
+halftone: @size is the cell, @angle the screen's angle (default 0), @color the ink (default black) and
+@paint the ground between the dots (default white).
+```
+
+### Semantics
+
+All quantities are in pixels of the effect's input and in display-encoded colour unless stated otherwise.
+
+**1. Halftone.** Let `s` be the cell size: `@size` when it is at least 2, otherwise 8. Let `a` be `@angle` in degrees
+(default 0) and `R` the rotation matrix with columns `(cos a, sin a)` and `(−sin a, cos a)`. For a pixel at `p`:
+
+1. `q = R·p / s`, `cell = floor(q) + (0.5, 0.5)`, and the cell centre in pixels `c = Rᵀ·(cell·s)`.
+2. The tone is `l = luma(S(c))` of the source, un-premultiplied and encoded, where `S(c)` is the source at the cell
+   centre; where the source's alpha at the centre is below 0.01, the tone is taken from the pixel's own source value.
+3. The dot radius is `r = sqrt(1 − l) · 0.7071` in cell units, and the dot coverage is
+   `inside = 1 − smoothstep(r − 0.05, r + 0.05, |q − cell|)`.
+4. With `ink = @color` (default `#000000`) and `ground = @paint` (default `#FFFFFF`, opaque), each premultiplied, the
+   screen is `(ink·inside + ground·(1 − inside)) · α`, where α is **the alpha of the pixel's own source value**.
+5. The result is `mix(source, screen, clamp(@amount, 0, 1))`.
+
+Because α is the pixel's own, a halftone MUST NOT paint where the source is transparent, whatever the cell centre's
+alpha. A transparent `@paint` lets the picture show between the dots.
+
+**2. Selective-color.** In HSV of the display-encoded pixel `(H, S, V)` (H in turns, `[0, 1)`):
+
+1. The centre hue is `@hue` degrees, or, when `@color` is given, the HSV hue of that colour's display-encoded values
+   (`@color` wins over `@hue`).
+2. `d` is the circular distance `|fract(H − centre/360 + 0.5) − 0.5|` and the weight is
+   `w = 1 − smoothstep(t/2, t/2 + 0.05, d)` with `t = @tolerance` (default 0.2).
+3. `S' = clamp(S · mix(1, @saturation, w), 0, 1)` (`@saturation` default 1) and `V' = V + @brightness · w`
+   (`@brightness` default 0).
+4. The result is `mix(original, hsv→rgb(H, S', V'), clamp(@amount, 0, 1))` (`@amount` default 1).
+
+An engine that does not read `@channel` MUST say so (see the amendment to SREP 18 on inert attributes).
+
+**3. Gradient-map.** The stop's alpha is carried through: the result colour is the stop colour at the pixel's mapped
+position, and its alpha multiplies the pixel's own alpha (premultiplied arithmetic). A map whose stops are all opaque
+renders as before.
+
+**4. Matte-choke with a negative amount (grow).** A pixel that becomes covered by growing takes the colour of the nearest
+covered source pixel (the donor) within the grow radius, not the colour it had while transparent.
+
+### Defaults and the neutral case
+
+Documents that set `@angle` explicitly on `halftone`, and that use no `@color`, `@paint` or `@amount` on `halftone` or
+`selective-color`, render as before, except at the source's edge for `halftone` (rule 1.4) and where `gradient-map` or
+`matte-choke` had a transparent stop or a grow ring (rules 3 and 4). **A `halftone` that omits `@angle` renders
+differently:** its screen is at 0°, not 45°.
+
+## Rationale
+
+- **The declared default decides** (SREP 0, order of argument): the schema declares `angle` default 0 for effects, so
+  0 is the baseline's declared value; the 45° rewrite was an engine habit that made 0 unexpressible.
+- **Ink and ground are the attributes the effect already had names for.** `color` and `paint` are the element's own
+  paint-typed attributes; the alternative of new attributes (`ink`, `ground`) adds surface for no gain.
+- **Pixel alpha for coverage.** Cell-centre coverage cannot be right at edges: a cell straddling the edge is either
+  entirely inside or entirely outside.
+
+## Rejected alternatives
+
+- **Keep 45° as the default and let 0 be written another way.** It leaves the declared default false.
+- **Keep the halftone ground implicit white.** Kept as the default; a transparent ground is the new capability.
+- **Make `selective-color` work in linear light.** The adjustment is perceptual (hue and saturation); display
+  values match what image editors do and what the studies expected.
+
+## Backwards compatibility
+
+- **Class: Fixed/Changed, PATCH** for the attribute meanings (they define attributes that did nothing), with one
+  **visible default change**.
+- **Visible change.** A `halftone` without `@angle` renders at 0°, not 45°. No golden of the Rust engine contains a
+  halftone, and the style library sets angles explicitly; no scene in the style library is known to rely on the 45° (this draft did not search the maintainers' other scenes).
+- **Edge change.** `halftone` output no longer extends past the source's edge; `gradient-map` ends on a transparent stop
+  are now transparent; a grown `matte-choke` ring takes the edge's colour. Scenes that contained these defects render
+  differently; the studies that found them are the affected scenes.
+- **Version gate.** None.
+
+## Engine impact
+
+| Engine | Status | Work | Tracking |
+|---|---|---|---|
+| Rust (`rs-scene-render`), reference | implemented: `e697a89` (halftone attributes, angle), `406d4bf` (edge), `09acc45` (selective-color), `d67bb37` (gradient-map alpha), `b8aafa1` (matte-choke donor) | | |
+
+## Conformance
+
+| Case | Checks | Tolerance |
+|---|---|---|
+| `srep-NNNN-halftone-angle` | a grey ramp halftoned with no `@angle` and with `@angle="45"`: the dot lattices differ by a 45° rotation, the default one is axis-aligned | lattice period ±1 px |
+| `srep-NNNN-halftone-colours` | `@color` red, `@paint` blue: dot pixels red, ground blue, no black or white | exact colours |
+| `srep-NNNN-halftone-edge` | a disc halftoned: no pixel outside the disc's alpha is non-transparent | 0 pixels |
+| `srep-NNNN-selective-color` | a red and a green bar, `@color` red with `@saturation="0"`: red bar grey, green bar unchanged; `@amount="0.5"` halves the change | 1 level |
+| `srep-NNNN-gradient-map-alpha` | a map from opaque red to transparent: the dark end is transparent | alpha ±1 level |
+| `srep-NNNN-matte-choke-grow` | a red disc grown by 4 px: the ring is red | exact colour |
+
+## Open issues
+
+- Whether `selective-color` should accept `@channel` (red, green, and so on) as an alternative to `@hue`.
+- The halftone's tone is luminance only; a CMYK screen would be a new `type`.
+
+## References
+
+- SREP 0, SREP 4, SREP 18 (the amendment draft on inert attributes).
+- The halftone-pop-art and risograph style studies and the style-library notes; the G2 lab log (sweeps and wave 3).
+
+## History
+
+- 2026-10-05: first draft, after the engine's changes landed.
