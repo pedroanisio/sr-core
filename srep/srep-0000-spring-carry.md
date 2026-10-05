@@ -1,0 +1,131 @@
+---
+disclaimer:
+  notice: >-
+    No information within this document should be taken for granted.
+    Any statement or premise not backed by a real logical definition
+    or verifiable reference may be invalid, erroneous, or a hallucination.
+  generated_by: "Claude Sonnet 5.5 via Claude Code (worker brave-heart), from the Rust engine's spring curve and the NOLN motion research (E4)"
+  date: "2026-10-05"
+---
+
+```
+SREP:            0
+Title:           Let a spring key carry the velocity of the segment before it
+Author:          scene-render maintainers (drafted by brave-heart)
+Status:          Draft
+Type:            Standards
+Created:         2026-10-05
+Schema-Version:  1.2
+```
+
+# SREP 0 (draft) — Let a spring key carry the velocity of the segment before it
+
+## Abstract
+
+A `spring` key segment is released from rest at its key, whatever the segment before it was doing. A hit that follows
+another hit therefore stops dead and restarts. A new boolean attribute on a key, `carry`, starts the spring with the
+velocity the previous segment arrives at that key with, so chained springs keep their momentum. A key without `carry`
+is unchanged.
+
+## Motivation
+
+The NOLN motion research (§1.1 Limits and item E4): "spring starts from rest every segment (no velocity carry-over);
+needed for hit-after-hit follow-through without summing springs by hand" (dance accents, wire drag). With the Rust
+reference the spring of a key is the step response of a damped oscillator released from rest at the key; a chain
+of springs shows a velocity discontinuity at every key.
+
+## Specification
+
+### Syntax
+
+```xml
+<!-- keyType gains -->
+<xs:attribute name="carry" type="xs:boolean" default="false">
+  <xs:annotation><xs:documentation>On a key whose segment is a spring: start the spring with the velocity the previous
+  segment arrives at this key with (its rate of change at the end), instead of from rest, so a hit that follows another
+  keeps its momentum. Needs a previous key and a following key.</xs:documentation></xs:annotation>
+</xs:attribute>
+```
+
+```xml
+None.
+```
+
+New attribute with a neutral default, accepted in every version (SREP 0, Versioning).
+
+### Semantics
+
+**1. Applicability.** `carry` applies to a key that is neither first nor last, whose curve (`interpolation`, else the
+animation's `defaultInterpolation`) is `spring`, and that has no spatial tangents (position pairs with `spatialOut`).
+Elsewhere it has no effect, and an engine SHOULD report it as information (SREP 18, inert).
+
+**2. Incoming velocity.** Let `a` be the key, `p` the key before it, `x_p(t)` the value of the segment from `p` to `a` at
+time `t`, `h = min(1 ms, 0.1·(a.t − p.t))` and `v₀ = (x_p(a.t) − x_p(a.t − h)) / h`, per component. (The segment before is
+whatever curve it has; a hold or a jump arrives with no velocity, as the difference is zero.)
+
+**3. Spring with release velocity.** For the segment from `a` to the next key `b`, with duration `D`, `τ = t − a.t`, and a
+spring of stiffness `k`, damping `c` and mass `m` (`ω₀ = √(k/m)`, `ζ = c/(2√(km))`):
+
+```
+x(τ) = a.v + (b.v − a.v)·s(τ) + v₀·g(τ)          (per component)
+x*(τ) = x(τ) + (b.v − x(D))·τ/D
+```
+
+where `s` is the step response of the existing spring curve and `g` its response to a unit initial velocity from zero
+displacement:
+
+- `ζ < 1`: `g(τ) = e^(−ζω₀τ) · sin(ω_d τ) / ω_d`, `ω_d = ω₀√(1−ζ²)`;
+- `ζ = 1`: `g(τ) = τ · e^(−ω₀τ)`;
+- `ζ > 1`: `g(τ) = (e^(r₁τ) − e^(r₂τ)) / (r₁ − r₂)`, `r₁,₂ = −ω₀(ζ ∓ √(ζ²−1))`.
+
+The value is `x*`: as for a spring without `carry`, the residual at the next key is spread linearly over the segment so that the
+value lands on `b.v` at `b.t`. (With `v₀ = 0` this is the existing spring curve.) These are the standard results for the
+second-order system; the equation is `ẍ = (k/m)(b.v − x) − (c/m)ẋ`.
+
+### Defaults and the neutral case
+
+`carry` absent or `false`: the segment is the existing spring curve.
+
+## Rationale
+
+- **An attribute on the key that starts the segment**, as every other segment parameter (`stiffness`, `overshoot`).
+- **The previous segment's actual velocity**, whatever its curve, so a spring can follow a linear move, a bezier or
+  another spring; evaluation stays a pure function of time because `v₀` is computed from the key times and values.
+- **The same landing rule** as the spring curve, so the value reaches the next key exactly.
+
+## Rejected alternatives
+
+- **A `velocity` attribute** giving an explicit release velocity: authors do not know the velocity of an eased segment.
+- **Stateful simulation across frames**: breaks seeking and segmented rendering (see SREP link-follower).
+
+## Backwards compatibility
+
+Class: Added, MINOR in effect, accepted in every version. No valid document changes validity or rendering.
+
+## Engine impact
+
+| Engine | Status | Work | Tracking |
+|---|---|---|---|
+| Rust (`rs-scene-render`), reference | pending | the channel's segment evaluation for a carried spring; the inert report | |
+
+## Conformance
+
+| Case | Checks | Tolerance |
+|---|---|---|
+| `srep-NNNN-spring-carry` | `0 → 100` linear in 1 s, then a spring (100, 10, 1) with `carry` to 0 at 3 s: the value follows `100(1 − s(u)) + 100·g(u)` for `u` in 0 to 0.8 s; without `carry`, `100(1 − s(u))` | 0.3 |
+| `srep-NNNN-spring-carry-lands` | the carried spring reaches the next key's value at its time | exact |
+| `srep-NNNN-spring-carry-inert` | `carry` on a linear key, on the first key and on the last key is reported as information | exact |
+
+## Open issues
+
+- Carrying the velocity into non-spring curves (an ease that starts with momentum).
+
+## References
+
+- SREP 0; SREP 18 (inert findings); the spring curve of the `key` element.
+- Step and release responses of a damped oscillator: standard linear-systems results, derived from the stated equation.
+- NOLN motion research, item E4 (internal).
+
+## History
+
+- 2026-10-05: first draft.
