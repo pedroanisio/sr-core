@@ -71,7 +71,13 @@ unevennessSeed` (an unsigned 32-bit integer; larger values wrap).
    every adapter; the rest is single-precision arithmetic.
 2. **Value noise.** `V(q, o)` is the trilinear interpolation of the eight surrounding lattice values with the weight
    `t² (3 − 2t)` on each fractional part.
-3. **Height.** `h(p) = (V(p/s, 0) + V(2p/s, 1)/2 + V(4p/s, 2)/4) / 1.75`, in `[-1, 1]`.
+3. **Height.** Let `f` be the screen footprint of a pixel in scene units: the length of the vector `|∂p/∂X| + |∂p/∂Y|`
+   (componentwise absolute values of the position's derivatives along the screen axes, as `fwidth` computes them). The octave
+   amplitudes fade with it: `a_o = clamp((s / 2^o) / f − 1, 0, 1)`, which is 1 for features of 2 or more pixels, 0 for features
+   of 1 pixel or less, and linear between, so that detail finer than the screen can show disappears instead of aliasing.
+   Then `h(p) = (a₀·V(p/s, 0) + a₁·V(2p/s, 1)/2 + a₂·V(4p/s, 2)/4) / 1.75`, in `[-1, 1]`. The amplitudes `a_o` are those of the
+   shaded pixel and are used for all seven evaluations of `h` in item 4. An engine whose derivatives are not those of a
+   2 × 2 pixel quad MUST approximate `f` within a factor of 1.5.
 4. **Shading normal.** With `e = s/32`, `g_x = (h(p + e·x̂) − h(p − e·x̂)) · s/(2e)` and `g_y`, `g_z` likewise along the object's
    `y` and `z` axes, let `w = g_x·a_x + g_y·a_y + g_z·a_z` where `a_x, a_y, a_z` are the unit vectors of the object's axes in world
    space. The shading normal `n` (after any normal map) becomes `normalize(n − 0.5·A · (w − (w · n) n))`, and the tangent
@@ -118,6 +124,7 @@ Class: Added, accepted in every version. No valid document changes validity or r
 | `srep-NNNN-unevenness-off` | a sphere with `unevenness` 0 and absent: identical pixels | 0 |
 | `srep-NNNN-unevenness-varies` | `unevenness` 0.8 on a smooth sphere: the luminance varies across the lit face where it did not | variance above a stated floor |
 | `srep-NNNN-unevenness-sticks` | the same object turned about its axis: the pattern turns with it | 2 px |
+| `srep-NNNN-unevenness-fade` | `unevennessScale` 1 on a sphere seen at about 1 px per unit: no pixel changes by more than 0.02 against `unevenness` 0; at scale 16 the change exceeds 0.15 | 0.02 |
 | `srep-NNNN-unevenness-seed` | two seeds give different patterns; the same seed repeats exactly | exact |
 
 ## Open issues
@@ -125,13 +132,18 @@ Class: Added, accepted in every version. No valid document changes validity or r
 - Whether the noise should also be offered in world space, for backdrops.
 - The strengths 0.5 and 0.25 of items 4 and 5 are chosen for a visible but subtle effect at `A` = 0.2 to 0.4; they are not derived.
 - The path tracer.
+- Whether the fade should use the mean rather than the sum of the two derivative magnitudes; the engine uses the vector length of `fwidth`.
 
 ## References
 
 - SREP 0; the model-select draft; the glTF 2.0 material model (normal and roughness).
-- PCG: O'Neill, "PCG: A Family of Simple Fast Space-Efficient Statistically Good Algorithms for Random Number Generation" (2014).
-  The constants in item 1 were compared with the Rust engine's WGSL (`pcg_step`, `lattice`) on 2026-10-05 and are identical, as are the
-  octave weights, the fade, the step `e = s/32`, the factors 0.5 and 0.25 and the clamp.
+- O'Neill, "PCG: A Family of Simple Fast Space-Efficient Statistically Good Algorithms for Random Number Generation" (2014): the
+  PCG family, whose 32-bit output permutation (xorshift-right by `(state ≫ 28) + 4`, multiply, xorshift by 22) item 1 uses. The exact constants
+  of item 1 were compared with the Rust engine's WGSL on 2026-10-05 and are identical; they were **not** checked against O'Neill's
+  source in this session (the engine's constants are the ones in common use for this 32-bit variant).
+- Jarzynski and Olano, "Hash Functions for GPU Rendering", Journal of Computer Graphics Techniques 9(3), 2020, <https://jcgt.org/published/0009/03/02/>.
+  The paper's Table 1 lists the hash `pcg` with the reference O'Neill 2014a among the hashes it tests; read from the paper's PDF text on 2026-10-05. The constants of item 1 do **not** appear in the text extracted from
+  the paper (its own listings are `pcg3d` and `pcg4d`, with other constants), so the paper is cited for the choice of family, not for the constants.
 
 ## History
 
