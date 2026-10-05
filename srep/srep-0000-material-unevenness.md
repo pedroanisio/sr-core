@@ -63,16 +63,19 @@ units (the uniform scale of the object's transform, including the unit conversio
 pattern moves, turns and keeps its feature size with the object), `s = unevennessScale`, `A = unevenness` and `σ =
 unevennessSeed` (an unsigned 32-bit integer; larger values wrap).
 
-1. **Lattice values.** For integers `(i, j, k)` and octave `o`, `v(i, j, k, o)` is the 32-bit integer hash
-   `H(i, j, k, σ + o)` mapped to `[-1, 1)` as `(H / 2³² · 2) − 1`, where `H` applies the PCG output function
-   `x → ((x ≫ ((x ≫ 28) + 4)) ⊕ x) · 277803737, then ⊕ (… ≫ 22)` successively to `σ'`, then `⊕ k`, then `⊕ j`, then `⊕ i`
-   (all arithmetic modulo 2³², coordinates as two's-complement 32-bit integers).
+1. **Lattice values.** The 32-bit PCG step is `pcg(x)`: `state = x · 747796405 + 2891336453`,
+   `word = ((state ≫ ((state ≫ 28) + 4)) ⊕ state) · 277803737`, `pcg(x) = (word ≫ 22) ⊕ word` (all arithmetic modulo 2³²,
+   shifts logical). For integers `(i, j, k)`, the hash is `H(i, j, k, c) = pcg(pcg(pcg(pcg(c) ⊕ k) ⊕ j) ⊕ i)`, with the
+   coordinates as two's-complement 32-bit integers. The lattice value of octave `o` is `v(i, j, k, o) = f32(H(i, j, k,
+   σ + o)) · 2⁻³¹ − 1`, with the `u32` converted to single precision by rounding to nearest. The integer part is exact on
+   every adapter; the rest is single-precision arithmetic.
 2. **Value noise.** `V(q, o)` is the trilinear interpolation of the eight surrounding lattice values with the weight
    `t² (3 − 2t)` on each fractional part.
 3. **Height.** `h(p) = (V(p/s, 0) + V(2p/s, 1)/2 + V(4p/s, 2)/4) / 1.75`, in `[-1, 1]`.
-4. **Shading normal.** With `e = s/32` and `g_x = (h(p + e·x̂) − h(p − e·x̂)) · s / (2e)` and `g_y`, `g_z` likewise, the shading
-   normal `n` becomes `normalize(n − 0.5·A · (g − (g · n_o) n_o))`, where `n_o` is `n` expressed in the object's space; the
-   result is carried back to the space of `n`.
+4. **Shading normal.** With `e = s/32`, `g_x = (h(p + e·x̂) − h(p − e·x̂)) · s/(2e)` and `g_y`, `g_z` likewise along the object's
+   `y` and `z` axes, let `w = g_x·a_x + g_y·a_y + g_z·a_z` where `a_x, a_y, a_z` are the unit vectors of the object's axes in world
+   space. The shading normal `n` (after any normal map) becomes `normalize(n − 0.5·A · (w − (w · n) n))`, and the tangent
+   frame is re-orthogonalised to it.
 5. **Roughness.** `r' = clamp(r + 0.25·A·h(p), 0.03, 1)`, where `r` is the roughness after any map.
 6. **Where it applies.** To every surface drawn with the material. A material whose `unlit` is true shows no unevenness.
    An engine that cannot apply it (a renderer without per-point shading) MUST say so.
@@ -126,8 +129,9 @@ Class: Added, accepted in every version. No valid document changes validity or r
 ## References
 
 - SREP 0; the model-select draft; the glTF 2.0 material model (normal and roughness).
-- PCG output function: O'Neill, "PCG: A Family of Simple Fast Space-Efficient Statistically Good Algorithms for Random Number
-  Generation" (2014); the constants above are the common 32-bit "pcg_hash" variant, to be checked against the implementation.
+- PCG: O'Neill, "PCG: A Family of Simple Fast Space-Efficient Statistically Good Algorithms for Random Number Generation" (2014).
+  The constants in item 1 were compared with the Rust engine's WGSL (`pcg_step`, `lattice`) on 2026-10-05 and are identical, as are the
+  octave weights, the fade, the step `e = s/32`, the factors 0.5 and 0.25 and the clamp.
 
 ## History
 
