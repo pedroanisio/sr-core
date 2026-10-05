@@ -10,7 +10,7 @@ disclaimer:
 
 ```
 SREP:            0
-Title:           Amend SREP 18: four more inert-attribute rules and a mask finding
+Title:           Amend SREP 18: five more inert-attribute rules and a mask finding
 Author:          scene-render maintainers (drafted by brave-heart)
 Status:          Draft
 Type:            Standards
@@ -19,7 +19,7 @@ Schema-Version:  1.2
 Requires:        18
 ```
 
-# SREP 0 (draft) — Amend SREP 18: four more inert-attribute rules and a mask finding
+# SREP 0 (draft) — Amend SREP 18: five more inert-attribute rules and a mask finding
 
 ## Abstract
 
@@ -27,7 +27,7 @@ SREP 18 closes the table of inert-attribute findings at eight rules (I1 to I8) a
 with a condition that is inert under the conventions, the definitions and every accepted SREP". The Rust engine already
 reports four more conditions as evaluation warnings, under its own codes E19 and E20. This amendment brings them into
 SREP 18's table and registry: `INERT-I9` (`group/@collapse`), `INERT-I10` (a selective-color `@channel`), `INERT-I11` (an
-effect `@source` that is never drawn), `INERT-I12` (a key's `overshoot` or `period` on a curve that does not read it) and a new code `MASK-MISS` (a mask that leaves nothing of its node). It also
+effect `@source` that is never drawn), `INERT-I12` (a key's `overshoot` or `period` on a curve that does not read it), `INERT-I13` (an effect attribute its type does not read) and a new code `MASK-MISS` (a mask that leaves nothing of its node). It also
 settles the severity of the engine's current output. SREP 18 is not otherwise changed.
 
 ## Motivation
@@ -49,6 +49,8 @@ Each condition was found by the G2 lab, a style study or the motion research:
   way to keep a map off screen is `visible="false"` at opacity 1.
 - **A key parameter on the wrong curve.** `overshoot` and `period` (key overshoot and period draft) are read only by the
   `back-*` and `elastic-*` curves; on another curve they do nothing.
+- **An effect parameter its type does not read.** A vignette given `intensity` (valid on every effect type) kept the default `radius` of
+  4 px and darkened everything beyond about 4 px of the centre, with no diagnostic (found by a style-library study).
 - **A mask in canvas coordinates.** Masks use the node's own coordinates; a rectangle or ellipse that adds to or
   intersects the node's shape and lies entirely outside the node's box leaves nothing of it, which looks like the node
   vanishing (silhouette study, defect E2).
@@ -69,6 +71,7 @@ SREP 18, Specification 5, gains these rules. Each is reported as `INERT-<rule>` 
 | I10 | an `effect` of type `selective-color` with `channel` other than `rgb`. The effect does not read `channel`. |
 | I11 | an `effect` of type `displacement-map`, `difference-key` or `shader` whose `source` names a node with opacity 0 for the whole of its window (it is drawn with its own opacity, so it contributes nothing). `visible="false"` at opacity 1 is the way to keep the node off screen. |
 | I12 | a `key` with `overshoot` on a segment whose curve is not `back-in`, `back-out` or `back-in-out`, or `period` on one whose curve is not `elastic-in`, `elastic-out` or `elastic-in-out` (the curve is the key's `interpolation`, else the animation's `defaultInterpolation`); see the key overshoot and period draft. |
+| I13 | an `effect` carrying an attribute that its `type` does not read. `effectType` is one attribute bag shared by every effect type, so the XSD accepts any of them on any type; each type reads a defined subset (its documentation lists them), and the others, including `id`, `type`, `enabled` and `mix`, are exempt only where every type reads them (`id`, `type`, `enabled`, `mix`). |
 
 The registry (Specification 4) gains:
 
@@ -91,7 +94,7 @@ mask outside its node is unaffected.
 ## Rationale
 
 - **Same condition, one name.** An engine code is a private name for a finding every engine will report.
-- **Inert means by definition.** I9 to I12 are inert by the schema's own words once the documentation of `collapse` is
+- **Inert means by definition.** I9 to I13 are inert by the schema's own words once the documentation of `collapse` is
   corrected (rule 1 of the annotation SREP draft); a choice of semantics for `collapse` (implementing it for isolated groups) is
   left open for a later SREP, with the finding reporting the attribute until then.
 - **Why `MASK-MISS` is a separate code.** I1 to I8 are attributes with no effect; a mask outside its node has the strongest
@@ -113,7 +116,7 @@ mask outside its node is unaffected.
 
 | Engine | Status | Work | Tracking |
 |---|---|---|---|
-| Rust (`rs-scene-render`), reference | implemented as evaluation warnings `E19` (collapse, channel, effect source at opacity 0) and `E20` (mask outside its node): commit `27551fd`; the key-parameter warning (E19) is in the engine working tree | rename to the SREP 18 codes when the report exists; print I9 to I12 at information level | |
+| Rust (`rs-scene-render`), reference | implemented as evaluation warnings `E19` (collapse, channel, effect source at opacity 0) and `E20` (mask outside its node): commit `27551fd`; the key-parameter warning (E19) is in the engine working tree | rename to the SREP 18 codes when the report exists; print I9 to I13 at information level; for I13 each effect type declares the attributes it reads in a list next to its kernel, a test-only check fails any kernel that reads an undeclared name, and the warning uses the declared list, so an over-declared list can only miss a warning and never raises a wrong one | |
 
 ## Conformance
 
@@ -122,13 +125,14 @@ mask outside its node is unaffected.
 | `srep-NNNN-inert-collapse` | a group with `collapse="true"` | report lists exactly `INERT-I9` |
 | `srep-NNNN-inert-channel` | a selective-color with `channel="red"`; and with `channel="rgb"` | `INERT-I10` once; none |
 | `srep-NNNN-inert-key-param` | a key with `overshoot` on an `ease-out` segment; and on `back-out` | `INERT-I12` once; none |
+| `srep-NNNN-inert-effect-param` | a vignette effect with `intensity`; and one with `amount`, `radius`, `softness` | `INERT-I13` once; none |
 | `srep-NNNN-inert-source-hidden` | a displacement-map whose source layer has opacity 0; and one with `visible="false"` at opacity 1 | `INERT-I11` once; none |
 | `srep-NNNN-mask-miss` | a rect mask at canvas coordinates outside a 300 x 400 shape; a mask in local coordinates; an inverted mask; a subtracting mask | `MASK-MISS` once; none |
 
 ## Open issues
 
 - The engine's E19 and E20 are warnings today and fail `--deny-warnings`; SREP 18 says inert findings are `info`. This
-  draft proposes information for I9 to I12. The editor may prefer to keep them warnings while the attributes are
+  draft proposes information for I9 to I13. The editor may prefer to keep them warnings while the attributes are
   accepted-but-unread (the case for E19) and make them information only once documented as inert.
 - Whether `collapse` should be given a meaning for isolated groups (the engine's owner chose to document it as inert first).
 
