@@ -35947,15 +35947,28 @@
         }
       ]
     },
+    "srep-0042-clip-blend-keyed": {
+      "rule": "SREP 42",
+      "red": {
+        "cx": 215,
+        "cy": 203.33
+      }
+    },
     "srep-0042-clip-blend-unknown": {
       "rule": "SREP 42",
-      "pending": "the finding (an unknown second clip is reported) is a report finding, not a pixel; checked by the engine's own test"
+      "pending": "needs the findings kind to read `render` output: the engine reports an unknown name only when a frame is evaluated (`validate --format json` lists nothing for it); form: {\"via\": \"render\", \"messages\": [...]} runs `render FILE -f 0 -o PNG`, ignores the exit status, and each message is a substring of some line of stdout or stderr",
+      "findings": {
+        "via": "render",
+        "messages": [
+          "nosuchclip"
+        ]
+      }
     },
     "srep-0042-clip-blend-w0": {
       "rule": "SREP 42",
       "red": {
         "cx": 200,
-        "cy": 200,
+        "cy": 203.33,
         "w": 20,
         "h": 20
       }
@@ -35964,7 +35977,7 @@
       "rule": "SREP 42",
       "red": {
         "cx": 230,
-        "cy": 200,
+        "cy": 203.33,
         "w": 20,
         "h": 20
       }
@@ -35973,7 +35986,7 @@
       "rule": "SREP 42",
       "red": {
         "cx": 260,
-        "cy": 200,
+        "cy": 203.33,
         "w": 20,
         "h": 20
       }

@@ -5,6 +5,6 @@
 <assets><mesh id="mesh-m" src="../assets/clips.glb" format="glb"/></assets>
 <materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
 <composition>
-<object3D id="m" primitive="mesh" mesh="mesh-m" animationClip="left" animationClipTo="nosuchclip" animationBlend="0.5" animationOffsetTo="0.25" x="200" y="200" z="0"/>
+<object3D id="m" primitive="mesh" mesh="mesh-m" animationClip="left" animationClipTo="right" x="200" y="200" z="0"><animate property="animationBlend"><key time="-0.25" value="0"/><key time="0.75" value="1"/></animate></object3D>
 </composition>
 </scene>
