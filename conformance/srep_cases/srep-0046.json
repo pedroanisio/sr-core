@@ -1,9 +1,95 @@
 {
  "srep-0046-morph-by-name": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-marker\" src=\"../assets/marker.glb\" format=\"glb\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-marker\" material=\"m-red\" x=\"320\" y=\"200\" z=\"0\" morphWeights=\"1 1\">\n<morph name=\"right\" weight=\"0.5\"/>\n<morph name=\"up\"><animate property=\"weight\"><key time=\"0\" value=\"0\"/><key time=\"1\" value=\"1\"/></animate></morph>\n</object3D>\n</composition>\n</scene>\n",
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-m\" src=\"../assets/morphs.glb\" format=\"glb\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-m\" x=\"320\" y=\"200\" z=\"0\" ><morph name=\"right\" weight=\"1\"/></object3D>\n</composition>\n</scene>\n",
   "expected": {
    "rule": "SREP 46",
-   "pending": "needs a model with named morph targets; the kit's only model (marker.glb) has none, so the SREP's 40 px displacements cannot be reproduced without inventing a model or numbers"
+   "red": {
+    "cx": 360,
+    "cy": 200
+   }
+  }
+ },
+ "srep-0046-morph-by-name-both-half": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-m\" src=\"../assets/morphs.glb\" format=\"glb\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-m\" x=\"320\" y=\"200\" z=\"0\" ><morph name=\"right\" weight=\"0.5\"/><morph name=\"up\" weight=\"0.5\"/></object3D>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 46",
+   "red": {
+    "cx": 340,
+    "cy": 180
+   }
+  }
+ },
+ "srep-0046-morph-by-name-combine": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-m\" src=\"../assets/morphs.glb\" format=\"glb\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-m\" x=\"320\" y=\"200\" z=\"0\" ><morph name=\"right\" weight=\"0.5\"/><morph name=\"up\" weight=\"1\"/></object3D>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 46",
+   "red": {
+    "cx": 340,
+    "cy": 160
+   }
+  }
+ },
+ "srep-0046-morph-keyed": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-m\" src=\"../assets/morphs.glb\" format=\"glb\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-m\" x=\"320\" y=\"200\" z=\"0\" ><morph name=\"right\"><animate property=\"weight\"><key time=\"-0.25\" value=\"0\"/><key time=\"0.75\" value=\"1\"/></animate></morph></object3D>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 46",
+   "red": {
+    "cx": 330,
+    "cy": 200
+   }
+  }
+ },
+ "srep-0046-morph-precedence": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-m\" src=\"../assets/morphs.glb\" format=\"glb\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-m\" x=\"320\" y=\"200\" z=\"0\" morphWeights=\"1 1\"><morph name=\"up\" weight=\"0\"/></object3D>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 46",
+   "red": {
+    "cx": 360,
+    "cy": 200
+   }
+  }
+ },
+ "srep-0046-morph-unknown": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-m\" src=\"../assets/morphs.glb\" format=\"glb\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-m\" x=\"320\" y=\"200\" z=\"0\" ><morph name=\"nosuchtarget\" weight=\"1\"/></object3D>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 46",
+   "pending": "needs the findings kind to read `render` output: the engine reports an unknown name only when a frame is evaluated (`validate --format json` lists nothing for it); form: {\"via\": \"render\", \"messages\": [...]} runs `render FILE -f 0 -o PNG`, ignores the exit status, and each message is a substring of some line of stdout or stderr",
+   "findings": {
+    "via": "render",
+    "messages": [
+     "nosuchtarget",
+     "right",
+     "up"
+    ]
+   }
+  }
+ },
+ "srep-0046-morph-unknown-none": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-m\" src=\"../assets/joints.glb\" format=\"glb\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-m\" x=\"320\" y=\"200\" z=\"0\" ><morph name=\"smile\" weight=\"1\"/></object3D>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 46",
+   "pending": "needs the findings kind to read `render` output: the engine reports an unknown name only when a frame is evaluated (`validate --format json` lists nothing for it); form: {\"via\": \"render\", \"messages\": [...]} runs `render FILE -f 0 -o PNG`, ignores the exit status, and each message is a substring of some line of stdout or stderr",
+   "findings": {
+    "via": "render",
+    "messages": [
+     "smile"
+    ]
+   }
+  }
+ },
+ "srep-0046-morph-version": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.1\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-m\" src=\"../assets/morphs.glb\" format=\"glb\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-m\" x=\"320\" y=\"200\" z=\"0\" ><morph name=\"right\" weight=\"1\"/></object3D>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 46",
+   "findings": {
+    "codes": [
+     "V5"
+    ],
+    "counts": {
+     "V5": 1
+    },
+    "valid": false
+   }
   }
  }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scene version="1.2">
+<scene version="1.1">
 <project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
 <output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
 <assets><mesh id="mesh-m" src="../assets/morphs.glb" format="glb"/></assets>
