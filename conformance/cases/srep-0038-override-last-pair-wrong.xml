@@ -5,6 +5,6 @@
 <assets><mesh id="mesh-marker" src="../assets/materials.glb" format="glb"/></assets>
 <materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
 <composition>
-<object3D id="m" primitive="mesh" mesh="mesh-marker" materialOverride="stone:m-blue" x="320" y="200" z="0"/>
+<object3D id="m" primitive="mesh" mesh="mesh-marker" materialOverride="stone:m-blue old:nosuch" x="320" y="200" z="0"/>
 </composition>
 </scene>
