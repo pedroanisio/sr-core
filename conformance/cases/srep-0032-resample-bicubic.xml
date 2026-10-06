@@ -2,9 +2,9 @@
 <scene version="1.2">
 <project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
 <output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
-<assets><image id="a-chk" src="../assets/srep32-checker-2x2.png" width="2" height="2" sha256="8e1ad4e148a4e64e0ac2673cc75f78dcc98bff8d987080e90f1438be881a0cf4"/></assets>
+<assets><image id="a-strip" src="../assets/srep32-strip-8x1.png" width="8" height="1" sha256="d0211dd60be1adcf6345a924f0199964df17a982189eeaf8fdd7fc3f8ba1d174"/></assets>
 <materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
 <composition>
-<layer id="l-default" asset="a-chk" fit="fill" boxWidth="8" boxHeight="8" x="20" y="20"/><layer id="l-linear" asset="a-chk" fit="fill" boxWidth="8" boxHeight="8" x="120" y="20" resample="linear"/>
+<layer id="l-bicubic" asset="a-strip" fit="fill" boxWidth="32" boxHeight="4" x="20.5" y="20.5" resample="bicubic"/>
 </composition>
 </scene>

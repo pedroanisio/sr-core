@@ -2,9 +2,9 @@
 <scene version="1.2">
 <project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
 <output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
-<assets><image id="a-chk" src="../assets/srep32-checker-2x2.png" width="2" height="2" sha256="8e1ad4e148a4e64e0ac2673cc75f78dcc98bff8d987080e90f1438be881a0cf4"/></assets>
+<assets><image id="a-blocks" src="../assets/srep32-blocks-8x8.png" width="8" height="8" sha256="9a6af952db7223616f1aa66287ad114dd0530238443c9deddc0f7d92c2751e75"/></assets>
 <materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
 <composition>
-<layer id="l-default" asset="a-chk" fit="fill" boxWidth="8" boxHeight="8" x="20" y="20"/><layer id="l-linear" asset="a-chk" fit="fill" boxWidth="8" boxHeight="8" x="120" y="20" resample="linear"/>
+<layer id="l-linear" asset="a-blocks" fit="fill" boxWidth="4" boxHeight="4" x="20" y="20" resample="linear"/><layer id="l-bicubic" asset="a-blocks" fit="fill" boxWidth="4" boxHeight="4" x="60" y="20" resample="bicubic"/><layer id="l-mitchell" asset="a-blocks" fit="fill" boxWidth="4" boxHeight="4" x="100" y="20" resample="mitchell"/>
 </composition>
 </scene>
