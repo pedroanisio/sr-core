@@ -2,7 +2,7 @@
 <scene version="1.2">
 <project width="640" height="360" fps="24" duration="1" background="#000000FF" fontPolicy="pinned"/>
 <output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
-<assets><font id="tf" src="../assets/srep-test-font.ttf" family="SREPTest" sha256="582a660f7c03060b7e9da78d192b91feedfac9d7a6531672f609efdf7a12964e"/><text id="t" text="H&#x4E2D;" width="400" height="300" size="100" font="SREPTest" fallback="SREPTest" fontAsset="tf" color="#FF0000FF"/></assets>
+<assets><font id="tf" src="../assets/srep-test-font.ttf" family="SREPTest" sha256="e2dacfbbbb8395cd45fa6fa965499185532c81225b071df0bc7dc6660e12fda9"/><text id="t" text="H&#x4E2D;" width="400" height="300" size="100" font="SREPTest" fallback="SREPTest" fontAsset="tf" color="#FF0000FF"/></assets>
 <composition>
 <layer id="l" asset="t" x="100" y="30"/>
 </composition>

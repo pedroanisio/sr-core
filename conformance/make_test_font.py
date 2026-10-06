@@ -31,7 +31,9 @@ def build(path):
     fb.setupGlyf({n: rect() for n in names})
     fb.setupHorizontalMetrics({n: (600, 50) for n in names})
     fb.setupHorizontalHeader(ascent=800, descent=-200, lineGap=0)
-    fb.setupNameTable({"familyName": "SREPTest", "styleName": "Regular"})
+    # the renderer reads the full and PostScript names too: a face without them is refused
+    fb.setupNameTable({"familyName": "SREPTest", "styleName": "Regular", "uniqueFontIdentifier": "SREPTest-Regular-1",
+                       "fullName": "SREPTest Regular", "psName": "SREPTest-Regular"})
     fb.setupOS2(sTypoAscender=800, sTypoDescender=-200, sTypoLineGap=0, usWinAscent=800, usWinDescent=200, fsType=0)
     fb.setupPost()
     fb.font["head"].created = fb.font["head"].modified = 3534000000   # fixed, so the file is reproducible
