@@ -133,7 +133,8 @@ def findings(renderer, case, want):
     """A case whose expected entry has "findings": the engine validates the document and reports these diagnostics.
 
     {"codes": [...]} must all be present, {"absent": [...]} must not be, {"counts": {code: n}} gives exact numbers,
-    {"messages": [...]} are substrings some message holds, {"valid": bool} is the verdict. Only the Rust
+    {"messages": [...]} are substrings some message holds, {"valid": bool} is the verdict. With {"via": "render"} the engine
+    renders frame 0 and only {"messages": [...]} is checked, against everything it printed. Only the Rust
     engine is asked (`validate --format json`, which includes the evaluation warnings); another renderer is an error."""
     label, _, env = RENDERERS[renderer]
     if renderer != "rs":
@@ -141,6 +142,19 @@ def findings(renderer, case, want):
     d, s_ = prepare(case, renderer)
     t0 = time.time()
     exe = os.environ.get("RS_RENDER_BIN", "scene-render-rs")
+    if want.get("via") == "render":
+        # reports that exist only at frame evaluation (an unknown joint or morph name, an unknown clip): the engine
+        # renders frame 0, the exit status is ignored (an unknown clip fails the frame), and every message must be a
+        # substring of some line of what it printed
+        try:
+            p = subprocess.run([exe, "render", s_, "-f", "0", "-o", os.path.join(d, "frame.png")], cwd=d,
+                               capture_output=True, text=True, timeout=600, env={**os.environ, **env})
+        except (FileNotFoundError, subprocess.TimeoutExpired) as e:
+            return "error", time.time() - t0, [f"render failed: {type(e).__name__}: {e}"], {}
+        said = p.stdout + p.stderr
+        checks = {"messages": [(m, m in said) for m in want.get("messages", [])]}
+        ok = all(v for rows in checks.values() for _, v in rows)
+        return ("pass" if ok else "fail"), time.time() - t0, [], {"reported": [l.strip()[:120] for l in said.splitlines() if l.strip()][:6], "valid": None, "checks": checks}
     try:
         p = subprocess.run([exe, "validate", s_, "--format", "json"], cwd=d, capture_output=True, text=True,
                            timeout=600, env={**os.environ, **env})

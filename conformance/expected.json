@@ -35956,7 +35956,6 @@
     },
     "srep-0042-clip-blend-unknown": {
       "rule": "SREP 42",
-      "pending": "needs the findings kind to read `render` output: the engine reports an unknown name only when a frame is evaluated (`validate --format json` lists nothing for it); form: {\"via\": \"render\", \"messages\": [...]} runs `render FILE -f 0 -o PNG`, ignores the exit status, and each message is a substring of some line of stdout or stderr",
       "findings": {
         "via": "render",
         "messages": [
@@ -36037,7 +36036,6 @@
     },
     "srep-0043-joint-socket-unknown": {
       "rule": "SREP 43",
-      "pending": "needs the findings kind to read `render` output: the engine reports an unknown name only when a frame is evaluated (`validate --format json` lists nothing for it); form: {\"via\": \"render\", \"messages\": [...]} runs `render FILE -f 0 -o PNG`, ignores the exit status, and each message is a substring of some line of stdout or stderr",
       "findings": {
         "via": "render",
         "messages": [
@@ -36258,7 +36256,6 @@
     },
     "srep-0046-morph-unknown": {
       "rule": "SREP 46",
-      "pending": "needs the findings kind to read `render` output: the engine reports an unknown name only when a frame is evaluated (`validate --format json` lists nothing for it); form: {\"via\": \"render\", \"messages\": [...]} runs `render FILE -f 0 -o PNG`, ignores the exit status, and each message is a substring of some line of stdout or stderr",
       "findings": {
         "via": "render",
         "messages": [
@@ -36270,7 +36267,6 @@
     },
     "srep-0046-morph-unknown-none": {
       "rule": "SREP 46",
-      "pending": "needs the findings kind to read `render` output: the engine reports an unknown name only when a frame is evaluated (`validate --format json` lists nothing for it); form: {\"via\": \"render\", \"messages\": [...]} runs `render FILE -f 0 -o PNG`, ignores the exit status, and each message is a substring of some line of stdout or stderr",
       "findings": {
         "via": "render",
         "messages": [
@@ -36369,7 +36365,6 @@
     },
     "srep-0047-joint-unknown": {
       "rule": "SREP 47",
-      "pending": "needs the findings kind to read `render` output: the engine reports an unknown name only when a frame is evaluated (`validate --format json` lists nothing for it); form: {\"via\": \"render\", \"messages\": [...]} runs `render FILE -f 0 -o PNG`, ignores the exit status, and each message is a substring of some line of stdout or stderr",
       "findings": {
         "via": "render",
         "messages": [
