@@ -1733,37 +1733,134 @@
       "rule": "SREP 39",
       "pending": "the SREP expects the luminance variance across the lit face to exceed a floor it does not state; needs a measured value"
     },
+    "srep-0040-crt1-rejected": {
+      "rule": "SREP 40",
+      "findings": {
+        "codes": [
+          "CRT1"
+        ],
+        "valid": false
+      }
+    },
+    "srep-0040-frx1-rejected": {
+      "rule": "SREP 40",
+      "findings": {
+        "codes": [
+          "FRX1"
+        ],
+        "valid": false
+      }
+    },
+    "srep-0040-msq1-rejected": {
+      "rule": "SREP 40",
+      "findings": {
+        "codes": [
+          "MSQ1"
+        ],
+        "valid": false
+      }
+    },
+    "srep-0040-ocn1-rejected": {
+      "rule": "SREP 40",
+      "findings": {
+        "codes": [
+          "OCN1"
+        ],
+        "valid": false
+      }
+    },
+    "srep-0040-p3d1-rejected": {
+      "rule": "SREP 40",
+      "findings": {
+        "codes": [
+          "P3D1"
+        ],
+        "valid": false
+      }
+    },
+    "srep-0040-pyc1-derived-rejected": {
+      "rule": "SREP 40",
+      "findings": {
+        "codes": [
+          "PYC1"
+        ],
+        "valid": false
+      }
+    },
+    "srep-0040-pyro1-rejected": {
+      "rule": "SREP 40",
+      "findings": {
+        "codes": [
+          "PYRO1"
+        ],
+        "valid": false
+      }
+    },
+    "srep-0040-vol1-rejected": {
+      "rule": "SREP 40",
+      "findings": {
+        "codes": [
+          "VOL1"
+        ],
+        "valid": false
+      }
+    },
+    "srep-0040-version-gate": {
+      "rule": "SREP 40",
+      "findings": {
+        "codes": [
+          "V8"
+        ],
+        "valid": false
+      }
+    },
     "srep-0040-crater": {
       "rule": "SREP 40",
-      "pending": "the SREP states no pixel-level value for this document; it is checked by the schema tests (tests/test_srep_0040.py)"
+      "findings": {
+        "valid": true
+      }
     },
     "srep-0040-fracture": {
       "rule": "SREP 40",
-      "pending": "the SREP states no pixel-level value for this document; it is checked by the schema tests (tests/test_srep_0040.py)"
+      "findings": {
+        "valid": true
+      }
     },
     "srep-0040-ocean": {
       "rule": "SREP 40",
-      "pending": "the SREP states no pixel-level value for this document; it is checked by the schema tests (tests/test_srep_0040.py)"
+      "findings": {
+        "valid": true
+      }
     },
     "srep-0040-particles3d": {
       "rule": "SREP 40",
-      "pending": "the SREP states no pixel-level value for this document; it is checked by the schema tests (tests/test_srep_0040.py)"
+      "findings": {
+        "valid": true
+      }
     },
     "srep-0040-pyro": {
       "rule": "SREP 40",
-      "pending": "the SREP states no pixel-level value for this document; it is checked by the schema tests (tests/test_srep_0040.py)"
+      "findings": {
+        "valid": true
+      }
     },
     "srep-0040-physics-internal-edges": {
       "rule": "SREP 40",
-      "pending": "the SREP states no pixel-level value for this document; it is checked by the schema tests (tests/test_srep_0040.py)"
+      "findings": {
+        "valid": true
+      }
     },
     "srep-0040-pyro-crater": {
       "rule": "SREP 40",
-      "pending": "the SREP states no pixel-level value for this document; it is checked by the schema tests (tests/test_srep_0040.py)"
+      "findings": {
+        "valid": true
+      }
     },
     "srep-0040-ocean-full": {
       "rule": "SREP 40",
-      "pending": "the SREP states no pixel-level value for this document; it is checked by the schema tests (tests/test_srep_0040.py)"
+      "findings": {
+        "valid": true
+      }
     },
     "srep-0041-shadow-catcher": {
       "rule": "SREP 41",
