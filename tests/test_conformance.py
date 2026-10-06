@@ -26,6 +26,15 @@ def _run(tmp_path, engine_script: str | None, cases="a1"):
     pytest.importorskip("PIL")
     copy = tmp_path / "conformance"
     shutil.copytree(CONF, copy, ignore=shutil.ignore_patterns("out", "__pycache__"))
+    # the stand-in engines below implement what a pending case waits for (the captions command of SREP 52), so the
+    # copy runs those cases instead of listing them as pending
+    if engine_script is not None and "srep-0052" in cases:
+        import json
+        spec = json.loads((copy / "expected.json").read_text())
+        for c in spec["cases"]:
+            if c.startswith("srep-0052-"):
+                spec["cases"][c].pop("pending", None)
+        (copy / "expected.json").write_text(json.dumps(spec, indent=2))
     env = {k: v for k, v in os.environ.items() if k != "RS_RENDER_BIN"}
     env["PATH"] = str(tmp_path / "empty")
     if engine_script is not None:
