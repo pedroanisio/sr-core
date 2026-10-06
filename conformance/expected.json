@@ -843,6 +843,16 @@
       },
       "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
     },
+    "srep-0016-group-box": {
+      "rule": "SREP 16",
+      "green": {
+        "cx": 290,
+        "cy": 180,
+        "w": 220,
+        "h": 6
+      },
+      "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+    },
     "srep-0016-orthogonal": {
       "rule": "SREP 16",
       "green": {
