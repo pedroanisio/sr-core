@@ -5,5 +5,4546 @@
    "rule": "SREP 29",
    "pending": "needs measured values: the SREP's Conformance table gives colours and lattice properties, not centroids or sizes, and the case document is schema-valid only; the six checks need per-effect cases with measured output"
   }
+ },
+ "srep-0029-halftone-default-angle": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- SREP 29 s1 halftone with no @angle: the screen is at 0 degrees (the schema default), not 45. Adjustment layer, so the effect input is the frame and p is a frame pixel; flat grey 128 source in the rect 64..320 x 64..256. Derivation: tone l=128/255, dot radius r=sqrt(1-l)*0.7071=0.4990 cell (3.99 px); q=R*p/8 with R the identity, cell centre c = 8*(floor(p/8)+0.5); ink black at the dot centre, ground white at the cell corner. Probes: 4x4 ink boxes at the centres of cells (10,10), (30,12), (38,28) = (84,84), (244,100), (308,228), and 1x1 ground pixels at the corners of the same cells; the far cells are 27 periods from the first, so a lattice period off by 1 px moves them by 27 px, outside a dot. The same probes are ground or ink under the 45 degree lattice only by accident (see srep-0029-halftone-angle-45). Engine provenance: measured on rs-scene-render vendor/schema-1.3 build 2d9eb13d (binary sha256 prefix 4be4bebe002bc190), llvmpipe, frame 0 (render -f 0), VM style1; the expected values were derived from the SREP formulas first (script model) and then compared with the render. Proposals until re-verified on the vendoring commit. -->\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"256\" height=\"192\" x=\"64\" y=\"64\" fill=\"#808080FF\"/>\n<adjustment id=\"a\" effects=\"e\"/>\n</composition>\n<effects>\n<effect id=\"e\" type=\"halftone\" size=\"8\"/>\n</effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 29",
+   "regions": [
+    {
+     "box": [
+      82,
+      82,
+      86,
+      86
+     ],
+     "rgb": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "box": [
+      79,
+      80,
+      80,
+      81
+     ],
+     "rgb": [
+      255.0,
+      255.0,
+      255.0
+     ]
+    },
+    {
+     "box": [
+      242,
+      98,
+      246,
+      102
+     ],
+     "rgb": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "box": [
+      239,
+      96,
+      240,
+      97
+     ],
+     "rgb": [
+      255.0,
+      255.0,
+      255.0
+     ]
+    },
+    {
+     "box": [
+      306,
+      226,
+      310,
+      230
+     ],
+     "rgb": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "box": [
+      303,
+      224,
+      304,
+      225
+     ],
+     "rgb": [
+      255.0,
+      255.0,
+      255.0
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0029-halftone-angle-45": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- SREP 29 s1 halftone with @angle=45 on the same source as srep-0029-halftone-default-angle. q = R*p/8 with R = [[cos a, -sin a],[sin a, cos a]], cell centre c = R^T*(cell*8). Cells (-1, 18), (1, 32), (5, 45) have centres at (101.82, 107.48), (192.33, 175.36), (288.50, 226.27): ink black 4x4 boxes there, white ground pixels beside the cell corners R^T*(8i, 8j). The lattices differ by the 45 degree rotation: the 1x1 white boxes (84, 84), (306, 226), (163, 163) lie inside 0 degree dots (ink in the default-angle case) and are ground under this lattice. The far cells (period 8 px along the rotated axes) fix the period to about 1 px. Engine provenance: measured on rs-scene-render vendor/schema-1.3 build 2d9eb13d (binary sha256 prefix 4be4bebe002bc190), llvmpipe, frame 0 (render -f 0), VM style1; the expected values were derived from the SREP formulas first (script model) and then compared with the render. Proposals until re-verified on the vendoring commit. -->\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"256\" height=\"192\" x=\"64\" y=\"64\" fill=\"#808080FF\"/>\n<adjustment id=\"a\" effects=\"e\"/>\n</composition>\n<effects>\n<effect id=\"e\" type=\"halftone\" size=\"8\" angle=\"45\"/>\n</effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 29",
+   "regions": [
+    {
+     "box": [
+      100,
+      105,
+      104,
+      109
+     ],
+     "rgb": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "box": [
+      96,
+      107,
+      97,
+      108
+     ],
+     "rgb": [
+      255.0,
+      255.0,
+      255.0
+     ]
+    },
+    {
+     "box": [
+      190,
+      173,
+      194,
+      177
+     ],
+     "rgb": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "box": [
+      186,
+      175,
+      187,
+      176
+     ],
+     "rgb": [
+      255.0,
+      255.0,
+      255.0
+     ]
+    },
+    {
+     "box": [
+      286,
+      224,
+      290,
+      228
+     ],
+     "rgb": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "box": [
+      282,
+      226,
+      283,
+      227
+     ],
+     "rgb": [
+      255.0,
+      255.0,
+      255.0
+     ]
+    },
+    {
+     "box": [
+      84,
+      84,
+      85,
+      85
+     ],
+     "rgb": [
+      255.0,
+      255.0,
+      255.0
+     ]
+    },
+    {
+     "box": [
+      306,
+      226,
+      307,
+      227
+     ],
+     "rgb": [
+      255.0,
+      255.0,
+      255.0
+     ]
+    },
+    {
+     "box": [
+      163,
+      163,
+      164,
+      164
+     ],
+     "rgb": [
+      255.0,
+      255.0,
+      255.0
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0029-halftone-colours": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- SREP 29 s1 halftone with @color red (the ink) and @paint blue (the ground), angle default 0, same source and boxes as srep-0029-halftone-default-angle. Screen = ink*inside + ground*(1-inside): at a dot centre inside = 1 gives exactly red (255,0,0); at a cell corner inside = 0 gives exactly blue (0,0,255); no black or white anywhere in these boxes. Engine provenance: measured on rs-scene-render vendor/schema-1.3 build 2d9eb13d (binary sha256 prefix 4be4bebe002bc190), llvmpipe, frame 0 (render -f 0), VM style1; the expected values were derived from the SREP formulas first (script model) and then compared with the render. Proposals until re-verified on the vendoring commit. -->\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"256\" height=\"192\" x=\"64\" y=\"64\" fill=\"#808080FF\"/>\n<adjustment id=\"a\" effects=\"e\"/>\n</composition>\n<effects>\n<effect id=\"e\" type=\"halftone\" size=\"8\" color=\"#FF0000FF\" paint=\"#0000FFFF\"/>\n</effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 29",
+   "regions": [
+    {
+     "box": [
+      82,
+      82,
+      86,
+      86
+     ],
+     "rgb": [
+      255.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "box": [
+      79,
+      80,
+      80,
+      81
+     ],
+     "rgb": [
+      0.0,
+      0.0,
+      255.0
+     ]
+    },
+    {
+     "box": [
+      242,
+      98,
+      246,
+      102
+     ],
+     "rgb": [
+      255.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "box": [
+      239,
+      96,
+      240,
+      97
+     ],
+     "rgb": [
+      0.0,
+      0.0,
+      255.0
+     ]
+    },
+    {
+     "box": [
+      306,
+      226,
+      310,
+      230
+     ],
+     "rgb": [
+      255.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "box": [
+      303,
+      224,
+      304,
+      225
+     ],
+     "rgb": [
+      0.0,
+      0.0,
+      255.0
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0029-halftone-coverage-mean": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- SREP 29 s1 step 3 and 4 halftone dot coverage and the mixing of ink and ground. Same source as srep-0029-halftone-default-angle, black ink, white ground. The 64x64 box 80..144 holds 8x8 whole cells; the SREP mixes ink and ground in display-encoded colour (all quantities are display-encoded unless stated), so the box mean is 255*(1 - mean coverage), coverage = 1 - smoothstep(r-0.05, r+0.05, d) with r = 0.4990 cell, evaluated at pixel centres: 52.38 (pixel corners: 66.21). Mixing in linear light would give 61.97. FINDING: the engine measures 61.9 (mean of all three channels) where the SREP formula (mixing in display-encoded colour) gives 52.4; 61.97 is what mixing ink and ground in LINEAR light gives; with linearLight=false the engine measures 144.4. This case fails on this build by design: the expectation is the SREP's, not the render's. Engine provenance: measured on rs-scene-render vendor/schema-1.3 build 2d9eb13d (binary sha256 prefix 4be4bebe002bc190), llvmpipe, frame 0 (render -f 0), VM style1; the expected values were derived from the SREP formulas first (script model) and then compared with the render. Proposals until re-verified on the vendoring commit. -->\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"256\" height=\"192\" x=\"64\" y=\"64\" fill=\"#808080FF\"/>\n<adjustment id=\"a\" effects=\"e\"/>\n</composition>\n<effects>\n<effect id=\"e\" type=\"halftone\" size=\"8\"/>\n</effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 29",
+   "regions": [
+    {
+     "box": [
+      80,
+      80,
+      144,
+      144
+     ],
+     "rgb": [
+      52.4,
+      52.4,
+      52.4
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0029-halftone-edge": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- SREP 29 s1 and rule 1.4: a halftone never paints outside the edge of its source. Four discs of diameter 120 (R=60): three grey (#808080) at (110,100), (320,100), (530,100) halftoned at angle 0 (default), 15 and 45, and one white at (320,270) at angle 0; ink red, ground blue, on black. The disc alpha is 0 beyond R (plus half a pixel of antialiasing), so the output must be transparent there and the frame black. 288 3x3 boxes sit on rings at R+3, R+6 and R+9 px at 24 angles around each disc, each box at least R+1 px from its centre: all black (0,0,0); a single painted pixel gives a mean above 28. The cells of the grey discs straddle the edge at every angle (cell 8 px), which is where the defect showed. Non-vacuity: the white disc has tone 1, dot radius sqrt(1-1)*0.7071 = 0, so its whole interior is the ground: the 64x64 box at its centre is blue (0,0,255) (at most 2 code values of error if the lattice anchor is fractional). Engine provenance: measured on rs-scene-render vendor/schema-1.3 build 2d9eb13d (binary sha256 prefix 4be4bebe002bc190), llvmpipe, frame 0 (render -f 0), VM style1; the expected values were derived from the SREP formulas first (script model) and then compared with the render. Proposals until re-verified on the vendoring commit. -->\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"d0\" shape=\"ellipse\" width=\"120\" height=\"120\" x=\"50\" y=\"40\" fill=\"#808080FF\" effects=\"e0\"/>\n<shape id=\"d1\" shape=\"ellipse\" width=\"120\" height=\"120\" x=\"260\" y=\"40\" fill=\"#808080FF\" effects=\"e15\"/>\n<shape id=\"d2\" shape=\"ellipse\" width=\"120\" height=\"120\" x=\"470\" y=\"40\" fill=\"#808080FF\" effects=\"e45\"/>\n<shape id=\"d3\" shape=\"ellipse\" width=\"120\" height=\"120\" x=\"260\" y=\"210\" fill=\"#FFFFFFFF\" effects=\"e0\"/>\n</composition>\n<effects>\n<effect id=\"e0\" type=\"halftone\" size=\"8\" color=\"#FF0000FF\" paint=\"#0000FFFF\"/>\n<effect id=\"e15\" type=\"halftone\" size=\"8\" angle=\"15\" color=\"#FF0000FF\" paint=\"#0000FFFF\"/>\n<effect id=\"e45\" type=\"halftone\" size=\"8\" angle=\"45\" color=\"#FF0000FF\" paint=\"#0000FFFF\"/>\n</effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 29",
+   "regions": [
+    {
+     "box": [
+      172,
+      99,
+      175,
+      102
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      175,
+      99,
+      178,
+      102
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      178,
+      99,
+      181,
+      102
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      170,
+      115,
+      173,
+      118
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      173,
+      116,
+      176,
+      119
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      176,
+      117,
+      179,
+      120
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      164,
+      131,
+      167,
+      134
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      166,
+      132,
+      169,
+      135
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      169,
+      133,
+      172,
+      136
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      154,
+      144,
+      157,
+      147
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      156,
+      146,
+      159,
+      149
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      158,
+      148,
+      161,
+      151
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      141,
+      154,
+      144,
+      157
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      142,
+      156,
+      145,
+      159
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      143,
+      159,
+      146,
+      162
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      125,
+      160,
+      128,
+      163
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      126,
+      163,
+      129,
+      166
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      127,
+      166,
+      130,
+      169
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      109,
+      162,
+      112,
+      165
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      109,
+      165,
+      112,
+      168
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      109,
+      168,
+      112,
+      171
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      93,
+      160,
+      96,
+      163
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      92,
+      163,
+      95,
+      166
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      91,
+      166,
+      94,
+      169
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      78,
+      154,
+      81,
+      157
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      76,
+      156,
+      79,
+      159
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      75,
+      159,
+      78,
+      162
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      64,
+      144,
+      67,
+      147
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      62,
+      146,
+      65,
+      149
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      60,
+      148,
+      63,
+      151
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      54,
+      131,
+      57,
+      134
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      52,
+      132,
+      55,
+      135
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      49,
+      133,
+      52,
+      136
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      47,
+      115,
+      50,
+      118
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      45,
+      116,
+      48,
+      119
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      42,
+      117,
+      45,
+      120
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      46,
+      99,
+      49,
+      102
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      43,
+      99,
+      46,
+      102
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      40,
+      99,
+      43,
+      102
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      47,
+      83,
+      50,
+      86
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      45,
+      82,
+      48,
+      85
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      42,
+      81,
+      45,
+      84
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      53,
+      66,
+      56,
+      69
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      52,
+      66,
+      55,
+      69
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      49,
+      65,
+      52,
+      68
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      63,
+      53,
+      66,
+      56
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      62,
+      52,
+      65,
+      55
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      60,
+      50,
+      63,
+      53
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      76,
+      43,
+      79,
+      46
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      76,
+      42,
+      79,
+      45
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      74,
+      39,
+      77,
+      42
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      93,
+      37,
+      96,
+      40
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      92,
+      35,
+      95,
+      38
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      91,
+      32,
+      94,
+      35
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      109,
+      36,
+      112,
+      39
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      109,
+      33,
+      112,
+      36
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      109,
+      30,
+      112,
+      33
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      125,
+      37,
+      128,
+      40
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      126,
+      35,
+      129,
+      38
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      127,
+      32,
+      130,
+      35
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      141,
+      44,
+      144,
+      47
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      142,
+      42,
+      145,
+      45
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      143,
+      39,
+      146,
+      42
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      154,
+      54,
+      157,
+      57
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      156,
+      52,
+      159,
+      55
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      158,
+      50,
+      161,
+      53
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      164,
+      67,
+      167,
+      70
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      166,
+      66,
+      169,
+      69
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      169,
+      64,
+      172,
+      67
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      170,
+      83,
+      173,
+      86
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      173,
+      82,
+      176,
+      85
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      176,
+      81,
+      179,
+      84
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      382,
+      99,
+      385,
+      102
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      385,
+      99,
+      388,
+      102
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      388,
+      99,
+      391,
+      102
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      380,
+      115,
+      383,
+      118
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      383,
+      116,
+      386,
+      119
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      386,
+      117,
+      389,
+      120
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      374,
+      131,
+      377,
+      134
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      376,
+      132,
+      379,
+      135
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      379,
+      133,
+      382,
+      136
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      364,
+      144,
+      367,
+      147
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      366,
+      146,
+      369,
+      149
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      368,
+      148,
+      371,
+      151
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      351,
+      154,
+      354,
+      157
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      352,
+      156,
+      355,
+      159
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      353,
+      159,
+      356,
+      162
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      335,
+      160,
+      338,
+      163
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      336,
+      163,
+      339,
+      166
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      337,
+      166,
+      340,
+      169
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      319,
+      162,
+      322,
+      165
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      319,
+      165,
+      322,
+      168
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      319,
+      168,
+      322,
+      171
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      303,
+      160,
+      306,
+      163
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      302,
+      163,
+      305,
+      166
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      301,
+      166,
+      304,
+      169
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      287,
+      154,
+      290,
+      157
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      286,
+      156,
+      289,
+      159
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      285,
+      159,
+      288,
+      162
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      274,
+      144,
+      277,
+      147
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      272,
+      146,
+      275,
+      149
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      270,
+      148,
+      273,
+      151
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      264,
+      131,
+      267,
+      134
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      262,
+      132,
+      265,
+      135
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      259,
+      133,
+      262,
+      136
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      257,
+      115,
+      260,
+      118
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      255,
+      116,
+      258,
+      119
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      252,
+      117,
+      255,
+      120
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      256,
+      99,
+      259,
+      102
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      253,
+      99,
+      256,
+      102
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      250,
+      99,
+      253,
+      102
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      257,
+      83,
+      260,
+      86
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      255,
+      82,
+      258,
+      85
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      252,
+      81,
+      255,
+      84
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      263,
+      66,
+      266,
+      69
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      262,
+      66,
+      265,
+      69
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      259,
+      65,
+      262,
+      68
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      273,
+      53,
+      276,
+      56
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      272,
+      52,
+      275,
+      55
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      270,
+      50,
+      273,
+      53
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      286,
+      43,
+      289,
+      46
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      286,
+      42,
+      289,
+      45
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      285,
+      39,
+      288,
+      42
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      303,
+      37,
+      306,
+      40
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      302,
+      35,
+      305,
+      38
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      301,
+      32,
+      304,
+      35
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      319,
+      36,
+      322,
+      39
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      319,
+      33,
+      322,
+      36
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      319,
+      30,
+      322,
+      33
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      335,
+      37,
+      338,
+      40
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      336,
+      35,
+      339,
+      38
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      337,
+      32,
+      340,
+      35
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      351,
+      44,
+      354,
+      47
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      352,
+      42,
+      355,
+      45
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      353,
+      39,
+      356,
+      42
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      364,
+      54,
+      367,
+      57
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      366,
+      52,
+      369,
+      55
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      368,
+      50,
+      371,
+      53
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      374,
+      67,
+      377,
+      70
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      376,
+      66,
+      379,
+      69
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      379,
+      64,
+      382,
+      67
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      380,
+      83,
+      383,
+      86
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      383,
+      82,
+      386,
+      85
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      386,
+      81,
+      389,
+      84
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      592,
+      99,
+      595,
+      102
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      595,
+      99,
+      598,
+      102
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      598,
+      99,
+      601,
+      102
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      590,
+      115,
+      593,
+      118
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      593,
+      116,
+      596,
+      119
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      596,
+      117,
+      599,
+      120
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      584,
+      131,
+      587,
+      134
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      586,
+      132,
+      589,
+      135
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      589,
+      133,
+      592,
+      136
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      574,
+      144,
+      577,
+      147
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      576,
+      146,
+      579,
+      149
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      578,
+      148,
+      581,
+      151
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      561,
+      154,
+      564,
+      157
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      562,
+      156,
+      565,
+      159
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      563,
+      159,
+      566,
+      162
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      545,
+      160,
+      548,
+      163
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      546,
+      163,
+      549,
+      166
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      547,
+      166,
+      550,
+      169
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      529,
+      162,
+      532,
+      165
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      529,
+      165,
+      532,
+      168
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      529,
+      168,
+      532,
+      171
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      513,
+      160,
+      516,
+      163
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      512,
+      163,
+      515,
+      166
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      511,
+      166,
+      514,
+      169
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      497,
+      154,
+      500,
+      157
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      496,
+      156,
+      499,
+      159
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      495,
+      159,
+      498,
+      162
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      484,
+      144,
+      487,
+      147
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      482,
+      146,
+      485,
+      149
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      480,
+      148,
+      483,
+      151
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      474,
+      131,
+      477,
+      134
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      472,
+      132,
+      475,
+      135
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      469,
+      133,
+      472,
+      136
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      467,
+      115,
+      470,
+      118
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      465,
+      116,
+      468,
+      119
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      462,
+      117,
+      465,
+      120
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      466,
+      99,
+      469,
+      102
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      463,
+      99,
+      466,
+      102
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      460,
+      99,
+      463,
+      102
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      467,
+      83,
+      470,
+      86
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      465,
+      82,
+      468,
+      85
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      462,
+      81,
+      465,
+      84
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      473,
+      66,
+      476,
+      69
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      472,
+      66,
+      475,
+      69
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      469,
+      65,
+      472,
+      68
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      483,
+      53,
+      486,
+      56
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      482,
+      52,
+      485,
+      55
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      480,
+      50,
+      483,
+      53
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      496,
+      43,
+      499,
+      46
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      496,
+      42,
+      499,
+      45
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      495,
+      39,
+      498,
+      42
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      513,
+      37,
+      516,
+      40
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      512,
+      35,
+      515,
+      38
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      511,
+      32,
+      514,
+      35
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      529,
+      36,
+      532,
+      39
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      529,
+      33,
+      532,
+      36
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      529,
+      30,
+      532,
+      33
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      545,
+      37,
+      548,
+      40
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      546,
+      35,
+      549,
+      38
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      547,
+      32,
+      550,
+      35
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      561,
+      44,
+      564,
+      47
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      562,
+      42,
+      565,
+      45
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      563,
+      39,
+      566,
+      42
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      574,
+      54,
+      577,
+      57
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      576,
+      52,
+      579,
+      55
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      578,
+      50,
+      581,
+      53
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      584,
+      67,
+      587,
+      70
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      586,
+      66,
+      589,
+      69
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      589,
+      64,
+      592,
+      67
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      590,
+      83,
+      593,
+      86
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      593,
+      82,
+      596,
+      85
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      596,
+      81,
+      599,
+      84
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      382,
+      269,
+      385,
+      272
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      385,
+      269,
+      388,
+      272
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      388,
+      269,
+      391,
+      272
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      380,
+      285,
+      383,
+      288
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      383,
+      286,
+      386,
+      289
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      386,
+      287,
+      389,
+      290
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      374,
+      301,
+      377,
+      304
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      376,
+      302,
+      379,
+      305
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      379,
+      303,
+      382,
+      306
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      364,
+      314,
+      367,
+      317
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      366,
+      316,
+      369,
+      319
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      368,
+      318,
+      371,
+      321
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      351,
+      324,
+      354,
+      327
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      352,
+      326,
+      355,
+      329
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      353,
+      329,
+      356,
+      332
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      335,
+      330,
+      338,
+      333
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      336,
+      333,
+      339,
+      336
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      337,
+      336,
+      340,
+      339
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      319,
+      332,
+      322,
+      335
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      319,
+      335,
+      322,
+      338
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      319,
+      338,
+      322,
+      341
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      303,
+      330,
+      306,
+      333
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      302,
+      333,
+      305,
+      336
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      301,
+      336,
+      304,
+      339
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      287,
+      324,
+      290,
+      327
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      286,
+      326,
+      289,
+      329
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      285,
+      329,
+      288,
+      332
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      274,
+      314,
+      277,
+      317
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      272,
+      316,
+      275,
+      319
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      270,
+      318,
+      273,
+      321
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      264,
+      301,
+      267,
+      304
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      262,
+      302,
+      265,
+      305
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      259,
+      303,
+      262,
+      306
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      257,
+      285,
+      260,
+      288
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      255,
+      286,
+      258,
+      289
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      252,
+      287,
+      255,
+      290
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      256,
+      269,
+      259,
+      272
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      253,
+      269,
+      256,
+      272
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      250,
+      269,
+      253,
+      272
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      257,
+      253,
+      260,
+      256
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      255,
+      252,
+      258,
+      255
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      252,
+      251,
+      255,
+      254
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      263,
+      236,
+      266,
+      239
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      262,
+      236,
+      265,
+      239
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      259,
+      235,
+      262,
+      238
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      273,
+      223,
+      276,
+      226
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      272,
+      222,
+      275,
+      225
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      270,
+      220,
+      273,
+      223
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      286,
+      213,
+      289,
+      216
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      286,
+      212,
+      289,
+      215
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      285,
+      209,
+      288,
+      212
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      303,
+      207,
+      306,
+      210
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      302,
+      205,
+      305,
+      208
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      301,
+      202,
+      304,
+      205
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      319,
+      206,
+      322,
+      209
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      319,
+      203,
+      322,
+      206
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      319,
+      200,
+      322,
+      203
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      335,
+      207,
+      338,
+      210
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      336,
+      205,
+      339,
+      208
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      337,
+      202,
+      340,
+      205
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      351,
+      214,
+      354,
+      217
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      352,
+      212,
+      355,
+      215
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      353,
+      209,
+      356,
+      212
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      364,
+      224,
+      367,
+      227
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      366,
+      222,
+      369,
+      225
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      368,
+      220,
+      371,
+      223
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      374,
+      237,
+      377,
+      240
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      376,
+      236,
+      379,
+      239
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      379,
+      234,
+      382,
+      237
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      380,
+      253,
+      383,
+      256
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      383,
+      252,
+      386,
+      255
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      386,
+      251,
+      389,
+      254
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      288,
+      238,
+      352,
+      302
+     ],
+     "rgb": [
+      0,
+      0,
+      255
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0029-selective-color": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- SREP 29 s2 selective-color, @color red (hue 0 degrees) with @saturation=0, @amount default 1, @tolerance default 0.2: window half-width 0.1 turn (36 degrees) with the smoothstep edge to 0.15. #FF0000 (S=1, V=1) gives S'=0: (255,255,255), WHITE, not grey: V is 1, so desaturating a pure red gives white (the SREP's Conformance row says grey; the row is loose, the formula decides). #B40000 (V=180/255) gives (180,180,180) grey. #B45A00 (hue 30, d=0.0833 inside the full window) gives (180,180,180). #00B400 (hue 120, d=0.3333 > 0.15, w=0) is unchanged (0,180,0). Engine provenance: measured on rs-scene-render vendor/schema-1.3 build 2d9eb13d (binary sha256 prefix 4be4bebe002bc190), llvmpipe, frame 0 (render -f 0), VM style1; the expected values were derived from the SREP formulas first (script model) and then compared with the render. Proposals until re-verified on the vendoring commit. -->\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"b0\" shape=\"rect\" width=\"80\" height=\"80\" x=\"40\" y=\"100\" fill=\"#FF0000FF\" effects=\"e\"/>\n<shape id=\"b1\" shape=\"rect\" width=\"80\" height=\"80\" x=\"160\" y=\"100\" fill=\"#B40000FF\" effects=\"e\"/>\n<shape id=\"b2\" shape=\"rect\" width=\"80\" height=\"80\" x=\"280\" y=\"100\" fill=\"#00B400FF\" effects=\"e\"/>\n<shape id=\"b3\" shape=\"rect\" width=\"80\" height=\"80\" x=\"400\" y=\"100\" fill=\"#B45A00FF\" effects=\"e\"/>\n</composition>\n<effects>\n<effect id=\"e\" type=\"selective-color\" color=\"#FF0000FF\" saturation=\"0\"/>\n</effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 29",
+   "regions": [
+    {
+     "box": [
+      50,
+      110,
+      110,
+      170
+     ],
+     "rgb": [
+      255.0,
+      255.0,
+      255.0
+     ]
+    },
+    {
+     "box": [
+      170,
+      110,
+      230,
+      170
+     ],
+     "rgb": [
+      180.0,
+      180.0,
+      180.0
+     ]
+    },
+    {
+     "box": [
+      290,
+      110,
+      350,
+      170
+     ],
+     "rgb": [
+      0.0,
+      180.0,
+      0.0
+     ]
+    },
+    {
+     "box": [
+      410,
+      110,
+      470,
+      170
+     ],
+     "rgb": [
+      180.0,
+      180.0,
+      180.0
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0029-selective-color-amount": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- SREP 29 s2 step 4, @amount=0.5 halves the change: result = original + (adjusted - original)*0.5, in display-encoded colour (the SREP: all quantities are display-encoded). #B40000 adjusted to (180,180,180): the halved change is (180, 90, 90). Green #00B400 (w=0) is unchanged. A mix in linear light would give G = B = 131 instead of 90. FINDING: the engine measures (180,131,131) for the #B40000 bar where the SREP formula (@amount mixes in display-encoded colour: halves the change) gives (180,90,90); 131 is the linear-light mix; with linearLight=false the engine still measures 131. This case fails on this build by design: the expectation is the SREP's, not the render's. Engine provenance: measured on rs-scene-render vendor/schema-1.3 build 2d9eb13d (binary sha256 prefix 4be4bebe002bc190), llvmpipe, frame 0 (render -f 0), VM style1; the expected values were derived from the SREP formulas first (script model) and then compared with the render. Proposals until re-verified on the vendoring commit. -->\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"b0\" shape=\"rect\" width=\"80\" height=\"80\" x=\"40\" y=\"100\" fill=\"#B40000FF\" effects=\"e\"/>\n<shape id=\"b1\" shape=\"rect\" width=\"80\" height=\"80\" x=\"160\" y=\"100\" fill=\"#00B400FF\" effects=\"e\"/>\n</composition>\n<effects>\n<effect id=\"e\" type=\"selective-color\" color=\"#FF0000FF\" saturation=\"0\" amount=\"0.5\"/>\n</effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 29",
+   "regions": [
+    {
+     "box": [
+      50,
+      110,
+      110,
+      170
+     ],
+     "rgb": [
+      180.0,
+      90.0,
+      90.0
+     ]
+    },
+    {
+     "box": [
+      170,
+      110,
+      230,
+      170
+     ],
+     "rgb": [
+      0.0,
+      180.0,
+      0.0
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0029-selective-color-hue-window": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- SREP 29 s2 @hue (degrees), @brightness and the window edge. Effect e: @hue=120, @brightness=-0.2: green #00B400 (V=0.7059, w=1) gives V'=0.5059: (0,129,0); yellow #B4B400 (hue 60, d=0.1667 > 0.15, w=0) is unchanged. Effect e2: @hue=30, @saturation=0: #87B400 has hue 75 degrees, d=0.125 turn, w = 1 - smoothstep(0.1, 0.15, 0.125) = 0.5 (the midpoint of the smoothstep), S' = 1*(1+(0-1)*0.5) = 0.5, V=180/255: (157.5,180,90); #B45A00 (hue 30, w=1) gives (180,180,180). Engine provenance: measured on rs-scene-render vendor/schema-1.3 build 2d9eb13d (binary sha256 prefix 4be4bebe002bc190), llvmpipe, frame 0 (render -f 0), VM style1; the expected values were derived from the SREP formulas first (script model) and then compared with the render. Proposals until re-verified on the vendoring commit. -->\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"b0\" shape=\"rect\" width=\"80\" height=\"80\" x=\"40\" y=\"100\" fill=\"#00B400FF\" effects=\"e\"/>\n<shape id=\"b1\" shape=\"rect\" width=\"80\" height=\"80\" x=\"160\" y=\"100\" fill=\"#B4B400FF\" effects=\"e\"/>\n<shape id=\"b2\" shape=\"rect\" width=\"80\" height=\"80\" x=\"280\" y=\"100\" fill=\"#87B400FF\" effects=\"e2\"/>\n<shape id=\"b3\" shape=\"rect\" width=\"80\" height=\"80\" x=\"400\" y=\"100\" fill=\"#B45A00FF\" effects=\"e2\"/>\n</composition>\n<effects>\n<effect id=\"e\" type=\"selective-color\" hue=\"120\" brightness=\"-0.2\"/>\n<effect id=\"e2\" type=\"selective-color\" hue=\"30\" saturation=\"0\"/>\n</effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 29",
+   "regions": [
+    {
+     "box": [
+      50,
+      110,
+      110,
+      170
+     ],
+     "rgb": [
+      0.0,
+      129.0,
+      0.0
+     ]
+    },
+    {
+     "box": [
+      170,
+      110,
+      230,
+      170
+     ],
+     "rgb": [
+      180.0,
+      180.0,
+      0.0
+     ]
+    },
+    {
+     "box": [
+      290,
+      110,
+      350,
+      170
+     ],
+     "rgb": [
+      157.5,
+      180.0,
+      90.0
+     ]
+    },
+    {
+     "box": [
+      410,
+      110,
+      470,
+      170
+     ],
+     "rgb": [
+      180.0,
+      180.0,
+      180.0
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0029-selective-color-color-wins": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- SREP 29 s2 step 1: when @color is given it wins over @hue. The effect has @color red and @hue=120: the window is centred on red (0 degrees), so #B40000 goes grey (180,180,180) and #00B400 (hue 120, the window of @hue) is unchanged (0,180,0). Engine provenance: measured on rs-scene-render vendor/schema-1.3 build 2d9eb13d (binary sha256 prefix 4be4bebe002bc190), llvmpipe, frame 0 (render -f 0), VM style1; the expected values were derived from the SREP formulas first (script model) and then compared with the render. Proposals until re-verified on the vendoring commit. -->\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"b0\" shape=\"rect\" width=\"80\" height=\"80\" x=\"40\" y=\"100\" fill=\"#B40000FF\" effects=\"e\"/>\n<shape id=\"b1\" shape=\"rect\" width=\"80\" height=\"80\" x=\"160\" y=\"100\" fill=\"#00B400FF\" effects=\"e\"/>\n</composition>\n<effects>\n<effect id=\"e\" type=\"selective-color\" color=\"#FF0000FF\" hue=\"120\" saturation=\"0\"/>\n</effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 29",
+   "regions": [
+    {
+     "box": [
+      50,
+      110,
+      110,
+      170
+     ],
+     "rgb": [
+      180.0,
+      180.0,
+      180.0
+     ]
+    },
+    {
+     "box": [
+      170,
+      110,
+      230,
+      170
+     ],
+     "rgb": [
+      0.0,
+      180.0,
+      0.0
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0029-gradient-map-alpha": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- SREP 29 s3 gradient-map keeps the alpha of its stops: result alpha = stop alpha * pixel alpha. Map 1 runs from opaque red (offset 0) to transparent red (offset 1), map 2 the reverse; the background is blue (0,0,255) so transparency shows. A black patch maps to offset 0 and a white patch to offset 1 under any luma weights. Map 1: black patch alpha 1 gives red (255,0,0), white patch alpha 0 gives the blue background (0,0,255). Map 2: black patch alpha 0 gives blue, white patch alpha 1 gives red. The SREP's row says the dark end of an opaque-to-transparent map is transparent: by the formula the dark end is the FIRST stop, here opaque; the transparent end is the light end. The case tests both orders. Engine provenance: measured on rs-scene-render vendor/schema-1.3 build 2d9eb13d (binary sha256 prefix 4be4bebe002bc190), llvmpipe, frame 0 (render -f 0), VM style1; the expected values were derived from the SREP formulas first (script model) and then compared with the render. Proposals until re-verified on the vendoring commit. -->\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#0000FFFF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<paints><linearGradient id=\"g1\"><stop offset=\"0\" color=\"#FF0000FF\"/><stop offset=\"1\" color=\"#FF000000\"/></linearGradient><linearGradient id=\"g2\"><stop offset=\"0\" color=\"#FF000000\"/><stop offset=\"1\" color=\"#FF0000FF\"/></linearGradient></paints>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"p00\" shape=\"rect\" width=\"100\" height=\"80\" x=\"60\" y=\"40\" fill=\"#000000FF\" effects=\"e1\"/>\n<shape id=\"p02\" shape=\"rect\" width=\"100\" height=\"80\" x=\"380\" y=\"40\" fill=\"#FFFFFFFF\" effects=\"e1\"/>\n<shape id=\"p10\" shape=\"rect\" width=\"100\" height=\"80\" x=\"60\" y=\"200\" fill=\"#000000FF\" effects=\"e2\"/>\n<shape id=\"p12\" shape=\"rect\" width=\"100\" height=\"80\" x=\"380\" y=\"200\" fill=\"#FFFFFFFF\" effects=\"e2\"/>\n</composition>\n<effects>\n<effect id=\"e1\" type=\"gradient-map\" paint=\"url(#g1)\"/>\n<effect id=\"e2\" type=\"gradient-map\" paint=\"url(#g2)\"/>\n</effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 29",
+   "regions": [
+    {
+     "box": [
+      70,
+      50,
+      150,
+      110
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      390,
+      50,
+      470,
+      110
+     ],
+     "rgb": [
+      0,
+      0,
+      255
+     ]
+    },
+    {
+     "box": [
+      70,
+      210,
+      150,
+      270
+     ],
+     "rgb": [
+      0,
+      0,
+      255
+     ]
+    },
+    {
+     "box": [
+      390,
+      210,
+      470,
+      270
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0029-gradient-map-alpha-mid": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- SREP 29 s3, an interior position (assumptions A1 and A2, stated because the SREP leaves them to the baseline effect: A1 the mapped position is the display-encoded luma, so the flat #808080 patch sits at 128/255 = 0.50196; A2 with linearLight=false the over-compositing of the result on the blue background is done on display-encoded values). Map 1 alpha = 1 - 0.50196 = 0.49804: R = 255a = 127.0, B = 255(1-a) = 128.0. Map 2 alpha = 0.50196: R = 128.0, B = 127.0. The stop alpha is interpolated linearly between the stops. Engine provenance: measured on rs-scene-render vendor/schema-1.3 build 2d9eb13d (binary sha256 prefix 4be4bebe002bc190), llvmpipe, frame 0 (render -f 0), VM style1; the expected values were derived from the SREP formulas first (script model) and then compared with the render. Proposals until re-verified on the vendoring commit. -->\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#0000FFFF\" linearLight=\"false\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<paints><linearGradient id=\"g1\"><stop offset=\"0\" color=\"#FF0000FF\"/><stop offset=\"1\" color=\"#FF000000\"/></linearGradient><linearGradient id=\"g2\"><stop offset=\"0\" color=\"#FF000000\"/><stop offset=\"1\" color=\"#FF0000FF\"/></linearGradient></paints>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"p01\" shape=\"rect\" width=\"100\" height=\"80\" x=\"220\" y=\"40\" fill=\"#808080FF\" effects=\"e1\"/>\n<shape id=\"p11\" shape=\"rect\" width=\"100\" height=\"80\" x=\"220\" y=\"200\" fill=\"#808080FF\" effects=\"e2\"/>\n</composition>\n<effects>\n<effect id=\"e1\" type=\"gradient-map\" paint=\"url(#g1)\"/>\n<effect id=\"e2\" type=\"gradient-map\" paint=\"url(#g2)\"/>\n</effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 29",
+   "regions": [
+    {
+     "box": [
+      230,
+      50,
+      310,
+      110
+     ],
+     "rgb": [
+      127.0,
+      0,
+      128.0
+     ]
+    },
+    {
+     "box": [
+      230,
+      210,
+      310,
+      270
+     ],
+     "rgb": [
+      128.0,
+      0,
+      127.0
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0029-matte-choke-grow": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- SREP 29 s4 matte-choke with a negative @amount grows the matte, and a pixel that becomes covered takes the colour of the nearest covered source pixel within the grow radius (the donor). Red disc diameter 60 centred (320,180) and blue disc centred (130,180), each grown by 4 px: radius 34, so each measures w=h=68 about its centre. Ring boxes at pixel-centre distances 31 to 33.4 from the centre (grown ring, outside the original radius 30 or at its antialiased edge) are the pure donor colour (255,0,0) or (0,0,255): exact colour. The box 36 to 40 px out is black. A ring that kept the colour of the transparent pixels would be black and the objects would measure 60. Engine provenance: measured on rs-scene-render vendor/schema-1.3 build 2d9eb13d (binary sha256 prefix 4be4bebe002bc190), llvmpipe, frame 0 (render -f 0), VM style1; the expected values were derived from the SREP formulas first (script model) and then compared with the render. Proposals until re-verified on the vendoring commit. -->\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"dr\" shape=\"ellipse\" width=\"60\" height=\"60\" x=\"290\" y=\"150\" fill=\"#FF0000FF\" effects=\"e\"/>\n<shape id=\"db\" shape=\"ellipse\" width=\"60\" height=\"60\" x=\"100\" y=\"150\" fill=\"#0000FFFF\" effects=\"e\"/>\n</composition>\n<effects>\n<effect id=\"e\" type=\"matte-choke\" amount=\"-4\"/>\n</effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 29",
+   "red": {
+    "cx": 320,
+    "cy": 180,
+    "w": 68,
+    "h": 68
+   },
+   "blue": {
+    "cx": 130,
+    "cy": 180,
+    "w": 68,
+    "h": 68
+   },
+   "regions": [
+    {
+     "box": [
+      287,
+      178,
+      289,
+      182
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      351,
+      178,
+      353,
+      182
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      318,
+      147,
+      322,
+      149
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      318,
+      211,
+      322,
+      213
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      342,
+      202,
+      344,
+      204
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      356,
+      178,
+      360,
+      182
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      97,
+      178,
+      99,
+      182
+     ],
+     "rgb": [
+      0,
+      0,
+      255
+     ]
+    },
+    {
+     "box": [
+      161,
+      178,
+      163,
+      182
+     ],
+     "rgb": [
+      0,
+      0,
+      255
+     ]
+    },
+    {
+     "box": [
+      128,
+      147,
+      132,
+      149
+     ],
+     "rgb": [
+      0,
+      0,
+      255
+     ]
+    },
+    {
+     "box": [
+      128,
+      211,
+      132,
+      213
+     ],
+     "rgb": [
+      0,
+      0,
+      255
+     ]
+    },
+    {
+     "box": [
+      152,
+      202,
+      154,
+      204
+     ],
+     "rgb": [
+      0,
+      0,
+      255
+     ]
+    },
+    {
+     "box": [
+      166,
+      178,
+      170,
+      182
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    }
+   ]
+  }
  }
 }

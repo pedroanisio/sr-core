@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SREP 29 s1 halftone with @angle=45 on the same source as srep-0029-halftone-default-angle. q = R*p/8 with R = [[cos a, -sin a],[sin a, cos a]], cell centre c = R^T*(cell*8). Cells (-1, 18), (1, 32), (5, 45) have centres at (101.82, 107.48), (192.33, 175.36), (288.50, 226.27): ink black 4x4 boxes there, white ground pixels beside the cell corners R^T*(8i, 8j). The lattices differ by the 45 degree rotation: the 1x1 white boxes (84, 84), (306, 226), (163, 163) lie inside 0 degree dots (ink in the default-angle case) and are ground under this lattice. The far cells (period 8 px along the rotated axes) fix the period to about 1 px. Engine provenance: measured on rs-scene-render vendor/schema-1.3 build 2d9eb13d (binary sha256 prefix 4be4bebe002bc190), llvmpipe, frame 0 (render -f 0), VM style1; the expected values were derived from the SREP formulas first (script model) and then compared with the render. Proposals until re-verified on the vendoring commit. -->
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<shape id="s" shape="rect" width="256" height="192" x="64" y="64" fill="#808080FF"/>
+<adjustment id="a" effects="e"/>
+</composition>
+<effects>
+<effect id="e" type="halftone" size="8" angle="45"/>
+</effects>
+</scene>

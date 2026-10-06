@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SREP 29 s1 step 3 and 4 halftone dot coverage and the mixing of ink and ground. Same source as srep-0029-halftone-default-angle, black ink, white ground. The 64x64 box 80..144 holds 8x8 whole cells; the SREP mixes ink and ground in display-encoded colour (all quantities are display-encoded unless stated), so the box mean is 255*(1 - mean coverage), coverage = 1 - smoothstep(r-0.05, r+0.05, d) with r = 0.4990 cell, evaluated at pixel centres: 52.38 (pixel corners: 66.21). Mixing in linear light would give 61.97. FINDING: the engine measures 61.9 (mean of all three channels) where the SREP formula (mixing in display-encoded colour) gives 52.4; 61.97 is what mixing ink and ground in LINEAR light gives; with linearLight=false the engine measures 144.4. This case fails on this build by design: the expectation is the SREP's, not the render's. Engine provenance: measured on rs-scene-render vendor/schema-1.3 build 2d9eb13d (binary sha256 prefix 4be4bebe002bc190), llvmpipe, frame 0 (render -f 0), VM style1; the expected values were derived from the SREP formulas first (script model) and then compared with the render. Proposals until re-verified on the vendoring commit. -->
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<shape id="s" shape="rect" width="256" height="192" x="64" y="64" fill="#808080FF"/>
+<adjustment id="a" effects="e"/>
+</composition>
+<effects>
+<effect id="e" type="halftone" size="8"/>
+</effects>
+</scene>

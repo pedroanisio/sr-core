@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SREP 29 s4 matte-choke with a negative @amount grows the matte, and a pixel that becomes covered takes the colour of the nearest covered source pixel within the grow radius (the donor). Red disc diameter 60 centred (320,180) and blue disc centred (130,180), each grown by 4 px: radius 34, so each measures w=h=68 about its centre. Ring boxes at pixel-centre distances 31 to 33.4 from the centre (grown ring, outside the original radius 30 or at its antialiased edge) are the pure donor colour (255,0,0) or (0,0,255): exact colour. The box 36 to 40 px out is black. A ring that kept the colour of the transparent pixels would be black and the objects would measure 60. Engine provenance: measured on rs-scene-render vendor/schema-1.3 build 2d9eb13d (binary sha256 prefix 4be4bebe002bc190), llvmpipe, frame 0 (render -f 0), VM style1; the expected values were derived from the SREP formulas first (script model) and then compared with the render. Proposals until re-verified on the vendoring commit. -->
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<shape id="dr" shape="ellipse" width="60" height="60" x="290" y="150" fill="#FF0000FF" effects="e"/>
+<shape id="db" shape="ellipse" width="60" height="60" x="100" y="150" fill="#0000FFFF" effects="e"/>
+</composition>
+<effects>
+<effect id="e" type="matte-choke" amount="-4"/>
+</effects>
+</scene>
