@@ -20,9 +20,13 @@ version:
 
 ### Added
 
-### Changed
+### Fixed
 
-- The packaged schema, the generated reference under `docs/schema` and the files `pack` and the lints read are schema 1.3.0 (schema 1.2.0 before it): every accepted SREP up to 56, and SREP 40. See [schema/CHANGELOG.md](schema/CHANGELOG.md).
+## 1.3.0 — 2026-10-06
+
+### Added
+
+- Validates and packs schema 1.3.0 documents (every accepted SREP up to 56, and SREP 40), which the 1.2.0 package rejects: the packaged schema, the generated reference under `docs/schema` and the files `pack` and the lints read are now schema 1.3.0. See [schema/CHANGELOG.md](schema/CHANGELOG.md).
 
 ### Tooling
 
