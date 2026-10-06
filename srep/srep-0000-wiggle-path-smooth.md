@@ -1,0 +1,112 @@
+---
+disclaimer:
+  notice: >-
+    No information within this document should be taken for granted.
+    Any statement or premise not backed by a real logical definition
+    or verifiable reference may be invalid, erroneous, or a hallucination.
+  generated_by: "Claude Sonnet 5.5 via Claude Code (worker brave-heart), from the Rust engine's shape modifiers and the whiteboard style's feature gap F1"
+  date: "2026-10-05"
+---
+
+```
+SREP:            0
+Title:           Give wiggle-path a smooth mode
+Author:          scene-render maintainers (drafted by brave-heart)
+Status:          Draft
+Type:            Semantics
+Created:         2026-10-05
+Schema-Version:  1.2
+```
+
+# SREP 0 (draft) — Give `wiggle-path` a smooth mode
+
+## Abstract
+
+`shapeModifier type="wiggle-path"` displaces points along a path and joins them with straight lines, so a line wobbles
+as a polygon. The `mode` attribute, which `zig-zag` already reads as `corner` or `smooth`, takes the same two values
+for `wiggle-path`: `smooth` joins the displaced points with a Catmull-Rom spline through them, which reads as a hand-drawn
+line. No attribute is added; the default is the existing behaviour.
+
+## Motivation
+
+The whiteboard style's feature gap F1 (ENGINE-DEFECTS.md): "`wiggle-path` gives polygonal jitter; no smooth/corner option;
+usable at size about 1.8, detail 16, frequency 0 (W7 hand-drawn wobble in the lines: APPROXIMATED)". With the Rust
+reference, `detail` 10 at size 3 is rough, 40 a buzz, size 8 jagged: the line is always a polyline of the displaced points.
+
+## Specification
+
+### Syntax
+
+```xml
+<!-- the documentation of shapeModifier/@mode changes; no declaration changes -->
+<xs:attribute name="mode" type="xs:NMTOKEN">
+  <xs:annotation><xs:documentation>merge: add|subtract|intersect|exclude; zig-zag and wiggle-path: corner|smooth
+  (wiggle-path smooth joins the wiggled points with a Catmull-Rom spline through them instead of straight lines);
+  offset-path join: miter|round|bevel.</xs:documentation></xs:annotation>
+</xs:attribute>
+```
+
+```xml
+None.
+```
+
+### Semantics
+
+The wiggled points of a subpath `P₀ … P_{n−1}` are computed as before (the subpath flattened, `detail` points per hundred units
+of length, each displaced along the normal by `size` times the smooth noise). With `mode="smooth"` (any other value, or no
+`mode`, is `corner`, the polyline) the subpath is the cubic Bézier spline through them whose segment from `Pₖ` to
+`Pₖ₊₁` has the control points
+
+```
+Pₖ + (Pₖ₊₁ − Pₖ₋₁)/6        and        Pₖ₊₁ − (Pₖ₊₂ − Pₖ)/6
+```
+
+(the Catmull-Rom segment). At the ends of an open subpath the missing neighbour is the end point itself; a closed
+subpath wraps around. The vertices are the same points in both modes.
+
+### Defaults and the neutral case
+
+No `mode`, or `corner`: the polyline, as before.
+
+## Rationale
+
+- **The same vocabulary as `zig-zag`**, whose `mode` is `corner|smooth` with the same meaning (straight or curved joins).
+- **Catmull-Rom** because it passes through the points (the wiggle's amplitude stays what `size` says) and needs no
+  parameter; the factor 1/6 is the standard conversion of a uniform Catmull-Rom segment to a cubic Bézier.
+
+## Rejected alternatives
+
+- **A new attribute** (`smooth="true"`): `mode` already carries the same choice for the neighbouring modifier.
+- **Smoothing by more points** (a higher `detail`): turns the wobble into a buzz (the measured F1).
+
+## Backwards compatibility
+
+Class: Added value of an existing attribute, MINOR in effect, accepted in every version (`mode` is an `xs:NMTOKEN`). No
+valid document changes validity or rendering: `mode="smooth"` on a `wiggle-path` was read as `corner`.
+
+## Engine impact
+
+| Engine | Status | Work | Tracking |
+|---|---|---|---|
+| Rust (`rs-scene-render`), reference | pending | the wiggle modifier builds a spline contour when `smooth` | |
+
+## Conformance
+
+| Case | Checks | Tolerance |
+|---|---|---|
+| `srep-NNNN-wiggle-smooth` | a 200-unit line with 20 wiggled points: the vertices equal those of `corner`; the largest turn between flattened segments is under a third of the polyline's | 1e-9 on vertices |
+
+## Open issues
+
+- A `correlation`-like control of how fast neighbouring points differ (AE's Wiggle Paths has one).
+
+## References
+
+- SREP 0; the `zig-zag` modifier's `mode`.
+- Uniform Catmull-Rom spline to cubic Bézier conversion (control offsets of a sixth of the neighbour chord): a standard
+  result, stated here and not cited from a source.
+- Whiteboard style feature gap F1 (internal).
+
+## History
+
+- 2026-10-05: first draft.
