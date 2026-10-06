@@ -14172,8 +14172,331 @@
       ]
     },
     "srep-0037-text3d-tracking": {
-      "rule": "SREP 37",
-      "pending": "the SREP gives a relative expectation (stem distance grows by tracking * 0.1 px = 20 px at tracking 200), not an absolute position; needs the baseline measured from the same document with tracking removed"
+      "rule": "SREP 37: font assets/srep35-block.ttf (upem 2048, advance 1229, glyph I box x 205..1024, y 0..1434), size 100, scale 100/2048; glyph i moves i*t*s/1000 = i*20.0 px; block centred on its bbox, ortho camera 1 px/unit: stems x 260.00..299.99 and 340.01..380.00 (gap 40.02 px; baseline gap 20.0, growth 20.0 px), rows 145..215",
+      "regions": [
+        {
+          "box": [
+            260,
+            150,
+            299,
+            210
+          ],
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "box": [
+            340,
+            150,
+            380,
+            210
+          ],
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "box": [
+            301,
+            150,
+            339,
+            210
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            250,
+            150,
+            260,
+            210
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            380,
+            150,
+            390,
+            210
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            260,
+            145,
+            299,
+            214
+          ],
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "box": [
+            260,
+            216,
+            299,
+            225
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            260,
+            135,
+            299,
+            144
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    "srep-0037-text3d-tracking-baseline": {
+      "rule": "SREP 37: font assets/srep35-block.ttf (upem 2048, advance 1229, glyph I box x 205..1024, y 0..1434), size 100, scale 100/2048; glyph i moves i*t*s/1000 = i*0.0 px; block centred on its bbox, ortho camera 1 px/unit: stems x 270.00..309.99 and 330.01..370.00 (gap 20.02 px; baseline gap 20.0, growth 0.0 px), rows 145..215",
+      "regions": [
+        {
+          "box": [
+            270,
+            150,
+            309,
+            210
+          ],
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "box": [
+            330,
+            150,
+            370,
+            210
+          ],
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "box": [
+            311,
+            150,
+            329,
+            210
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            260,
+            150,
+            270,
+            210
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            370,
+            150,
+            380,
+            210
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            270,
+            145,
+            309,
+            214
+          ],
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "box": [
+            270,
+            216,
+            309,
+            225
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            270,
+            135,
+            309,
+            144
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    "srep-0037-text3d-tracking-negative": {
+      "rule": "SREP 37: font assets/srep35-block.ttf (upem 2048, advance 1229, glyph I box x 205..1024, y 0..1434), size 100, scale 100/2048; glyph i moves i*t*s/1000 = i*-10.0 px; block centred on its bbox, ortho camera 1 px/unit: stems x 275.00..314.99 and 325.01..365.00 (gap 10.02 px; baseline gap 20.0, growth -10.0 px), rows 145..215",
+      "regions": [
+        {
+          "box": [
+            275,
+            150,
+            314,
+            210
+          ],
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "box": [
+            325,
+            150,
+            365,
+            210
+          ],
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "box": [
+            316,
+            150,
+            324,
+            210
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            265,
+            150,
+            275,
+            210
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            365,
+            150,
+            375,
+            210
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            275,
+            145,
+            314,
+            214
+          ],
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "box": [
+            275,
+            216,
+            314,
+            225
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            275,
+            135,
+            314,
+            144
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
     },
     "srep-0038-model-material-override": {
       "rule": "SREP 38",

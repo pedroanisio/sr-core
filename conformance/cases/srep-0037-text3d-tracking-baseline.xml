@@ -6,6 +6,6 @@
 <materials><material id="m-white" baseColor="#FFFFFFFF" unlit="true" doubleSided="true"/></materials>
 <composition>
 <camera id="cam" projection="orthographic" orthoHeight="360" x="320" y="180" z="-500"/>
-<object3D id="ii" primitive="text" text="II" font="SREPBlock" height="100" tracking="200" material="m-white" x="320" y="180"/>
+<object3D id="ii" primitive="text" text="II" font="SREPBlock" height="100" material="m-white" x="320" y="180"/>
 </composition>
 </scene>
