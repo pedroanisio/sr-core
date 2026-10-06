@@ -35993,7 +35993,68 @@
     },
     "srep-0043-joint-socket": {
       "rule": "SREP 43",
-      "pending": "needs a model with a named, animated joint; the kit's only model (marker.glb) has none, so no pixel expectation can be derived without inventing one"
+      "red": {
+        "cx": 320,
+        "cy": 280
+      },
+      "green": {
+        "cx": 380,
+        "cy": 200
+      }
+    },
+    "srep-0043-joint-socket-constraint": {
+      "rule": "SREP 43",
+      "red": {
+        "cx": 320,
+        "cy": 280
+      },
+      "green": {
+        "cx": 380,
+        "cy": 200
+      }
+    },
+    "srep-0043-joint-socket-rotate": {
+      "rule": "SREP 43",
+      "red": {
+        "cx": 320,
+        "cy": 280
+      },
+      "green": {
+        "cx": 320,
+        "cy": 150
+      }
+    },
+    "srep-0043-joint-socket-start": {
+      "rule": "SREP 43",
+      "red": {
+        "cx": 320,
+        "cy": 280
+      },
+      "green": {
+        "cx": 320,
+        "cy": 200
+      }
+    },
+    "srep-0043-joint-socket-unknown": {
+      "rule": "SREP 43",
+      "pending": "needs the findings kind to read `render` output: the engine reports an unknown name only when a frame is evaluated (`validate --format json` lists nothing for it); form: {\"via\": \"render\", \"messages\": [...]} runs `render FILE -f 0 -o PNG`, ignores the exit status, and each message is a substring of some line of stdout or stderr",
+      "findings": {
+        "via": "render",
+        "messages": [
+          "NoSuchJoint"
+        ]
+      }
+    },
+    "srep-0043-joint-socket-unknown-frame": {
+      "rule": "SREP 43",
+      "red": {
+        "cx": 320,
+        "cy": 280
+      },
+      "green": {
+        "cx": 320,
+        "cy": 160
+      }
     },
     "srep-0044-key-default-handles": {
       "rule": "SREP 44",
