@@ -54,9 +54,13 @@ RENDERERS = {
 
 # name -> (scene, png, output id, output time) -> argv: renderers that can deliver one named output at one output
 # time (SREP 13 cases). The output writes a PNG sequence into the case folder; the frame at that time is the file.
+# An expected "output" entry is {"id", "time"} and may add "start" and "end" (the CLI range, default time to time + 1 ms:
+# for a segmented output that is output time) and "frame" (which written file to take, default the first). An output
+# without segments takes its origin from the CLI start, so a case that needs output time t reads the frame t from start 0.
 OUTPUT_RENDERERS = {
-    "rs": lambda s, p, oid, t: [os.environ.get("RS_RENDER_BIN", "scene-render-rs"), "encode", s, "--output", oid,
-                                "--start", f"{t}", "--end", f"{t + 0.001}"],
+    "rs": lambda s, p, out: [os.environ.get("RS_RENDER_BIN", "scene-render-rs"), "encode", s, "--output", out["id"],
+                             "--start", f"{out.get('start', out['time'])}",
+                             "--end", f"{out.get('end', out.get('start', out['time']) + 0.001)}"],
 }
 
 # a pixel belongs to a colour when that channel pattern dominates (robust to antialiasing and slight shading)
@@ -104,7 +108,7 @@ def render(renderer, case, output=None):
     if output:
         if renderer not in OUTPUT_RENDERERS:
             return None, None, 0.0, [f"{label} cannot deliver an output at an output time from this kit yet"]
-        argv = OUTPUT_RENDERERS[renderer](s, png, output["id"], output["time"])
+        argv = OUTPUT_RENDERERS[renderer](s, png, output)
     else:
         argv = cmd(s, png)
     try:
@@ -120,7 +124,7 @@ def render(renderer, case, output=None):
         found = sorted(f for f in glob.glob(os.path.join(d, "**", "*.png"), recursive=True)
                        if not f.startswith(os.path.join(d, "assets") + os.sep))
         if found:
-            shutil.copy(found[0], png)
+            shutil.copy(found[min((output or {}).get("frame", 0), len(found) - 1)], png)
     log = (p.stdout + p.stderr).strip()
     notes = sorted({l.strip() for l in log.splitlines() if re.search(r"not (rendered|supported)|unsupported|error", l, re.I)})
     if p.returncode != 0:                 # an engine that reports failure fails the case, whatever it wrote

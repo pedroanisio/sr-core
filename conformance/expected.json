@@ -508,7 +508,10 @@
       "rule": "SREP 13",
       "output": {
         "id": "short",
-        "time": 0.4
+        "time": 0.4,
+        "start": 0,
+        "end": 0.5,
+        "frame": 4
       },
       "yellow": {
         "cx": 310,
