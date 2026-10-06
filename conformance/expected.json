@@ -36119,6 +36119,14 @@
         "h": 20
       }
     },
+    "srep-0042-clip-blend-unknown-rest-pose": {
+      "rule": "SREP 42 Semantics 4: \"A name of animationClipTo that matches no clip MUST be reported, as for animationClip; the object then blends toward the rest pose.\" Clip \"right\" holds the node at x = 0.6 m (60 px) and the rest pose at 0, so with animationBlend 0.5 toward the rest pose the triangle sits half way: 30 px right of the object at x = 200, and its vertex average is 3.33 px below the origin (as in the other clip-blend cases): centroid (230, 203.33).",
+      "pending": "engine deviation: an unknown animationClipTo fails the whole frame (as an unknown animationClip does) instead of blending toward the rest pose; the entry holds the derived value and becomes real when the engine follows the SREP (roadmap, gap work)",
+      "red": {
+        "cx": 230,
+        "cy": 203.33
+      }
+    },
     "srep-0043-joint-socket": {
       "rule": "SREP 43",
       "red": {
