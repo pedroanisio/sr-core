@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SREP 29 s3 gradient-map keeps the alpha of its stops: result alpha = stop alpha * pixel alpha. Map 1 runs from opaque red (offset 0) to transparent red (offset 1), map 2 the reverse; the background is blue (0,0,255) so transparency shows. A black patch maps to offset 0 and a white patch to offset 1 under any luma weights. Map 1: black patch alpha 1 gives red (255,0,0), white patch alpha 0 gives the blue background (0,0,255). Map 2: black patch alpha 0 gives blue, white patch alpha 1 gives red. The SREP's row says the dark end of an opaque-to-transparent map is transparent: by the formula the dark end is the FIRST stop, here opaque; the transparent end is the light end. The case tests both orders. Engine provenance: measured on rs-scene-render vendor/schema-1.3 build 2d9eb13d (binary sha256 prefix 4be4bebe002bc190), llvmpipe, frame 0 (render -f 0), VM style1; the expected values were derived from the SREP formulas first (script model) and then compared with the render. Proposals until re-verified on the vendoring commit. -->
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="1" background="#0000FFFF"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<paints><linearGradient id="g1"><stop offset="0" color="#FF0000FF"/><stop offset="1" color="#FF000000"/></linearGradient><linearGradient id="g2"><stop offset="0" color="#FF000000"/><stop offset="1" color="#FF0000FF"/></linearGradient></paints>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<shape id="p00" shape="rect" width="100" height="80" x="60" y="40" fill="#000000FF" effects="e1"/>
+<shape id="p02" shape="rect" width="100" height="80" x="380" y="40" fill="#FFFFFFFF" effects="e1"/>
+<shape id="p10" shape="rect" width="100" height="80" x="60" y="200" fill="#000000FF" effects="e2"/>
+<shape id="p12" shape="rect" width="100" height="80" x="380" y="200" fill="#FFFFFFFF" effects="e2"/>
+</composition>
+<effects>
+<effect id="e1" type="gradient-map" paint="url(#g1)"/>
+<effect id="e2" type="gradient-map" paint="url(#g2)"/>
+</effects>
+</scene>

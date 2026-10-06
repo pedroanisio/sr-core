@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scene version="1.2">
-<project width="640" height="360" fps="10" duration="1" background="#000000FF" motionBlur="true" shutterAngle="180"/>
+<project width="640" height="360" fps="10" duration="1" background="#000000FF" motionBlur="true" shutterAngle="180" adaptiveMotionBlur="false" motionBlurSamples="16"/>
 <output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
 <materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
 <composition>
-<group id="grp" shutterAngle="360"><shape id="inherits" shape="rect" width="20" height="20" anchorX="10" anchorY="10" x="320" y="120" fill="#FF0000FF"><animate property="x"><key time="0" value="320"/><key time="1" value="420"/></animate></shape><shape id="own" shape="rect" width="20" height="20" anchorX="10" anchorY="10" x="320" y="240" fill="#00FF00FF" shutterAngle="180"><animate property="x"><key time="0" value="320"/><key time="1" value="420"/></animate></shape></group>
+<group id="grp" shutterAngle="360"><shape id="inherits" shape="rect" width="20" height="20" anchorX="10" anchorY="10" x="320" y="100" fill="#FF0000FF"><animate property="x"><key time="0" value="320"/><key time="1" value="420"/></animate></shape><shape id="own" shape="rect" width="20" height="20" anchorX="10" anchorY="10" x="320" y="180" fill="#00FF00FF" shutterAngle="180"><animate property="x"><key time="0" value="320"/><key time="1" value="420"/></animate></shape><shape id="zero" shape="rect" width="20" height="20" anchorX="10" anchorY="10" x="320" y="260" fill="#0000FFFF" shutterAngle="0"><animate property="x"><key time="0" value="320"/><key time="1" value="420"/></animate></shape></group>
 </composition>
 </scene>

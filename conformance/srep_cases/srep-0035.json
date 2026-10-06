@@ -1,9 +1,215 @@
 {
  "srep-0035-preset-ease-curves": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><text id=\"t-ease\" text=\"I\" width=\"200\" height=\"200\" size=\"100\" color=\"#FF0000FF\"/></assets>\n<composition>\n<layer id=\"ease\" asset=\"t-ease\" x=\"220\" y=\"80\"><textAnimator preset=\"ascend\" presetEase=\"linear\" presetStart=\"0\" presetDuration=\"1\"/></layer>\n</composition>\n</scene>\n",
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><font id=\"f\" src=\"../assets/srep35-block.ttf\" family=\"SREP35Block\"/><text id=\"t\" text=\"I\" width=\"80\" height=\"200\" size=\"100\" lineHeight=\"1\" verticalAlign=\"top\" align=\"start\" fontAsset=\"f\" color=\"#FF0000FF\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"c0\" asset=\"t\" x=\"20\" y=\"100\"><textAnimator preset=\"ascend\" presetEase=\"linear\" presetStart=\"-0.4\" presetDuration=\"1\" opacity=\"1\"/></layer>\n<layer id=\"c1\" asset=\"t\" x=\"105\" y=\"100\"><textAnimator preset=\"ascend\" presetEase=\"quad-in\" presetStart=\"-0.4\" presetDuration=\"1\" opacity=\"1\"/></layer>\n<layer id=\"c2\" asset=\"t\" x=\"190\" y=\"100\"><textAnimator preset=\"ascend\" presetEase=\"quad-out\" presetStart=\"-0.4\" presetDuration=\"1\" opacity=\"1\"/></layer>\n<layer id=\"c3\" asset=\"t\" x=\"275\" y=\"100\"><textAnimator preset=\"ascend\" presetEase=\"cubic-out\" presetStart=\"-0.4\" presetDuration=\"1\" opacity=\"1\"/></layer>\n<layer id=\"c4\" asset=\"t\" x=\"360\" y=\"100\"><textAnimator preset=\"ascend\" presetEase=\"expo-out\" presetStart=\"-0.4\" presetDuration=\"1\" opacity=\"1\"/></layer>\n<layer id=\"c5\" asset=\"t\" x=\"445\" y=\"100\"><textAnimator preset=\"ascend\" presetEase=\"back-out\" presetStart=\"-0.4\" presetDuration=\"1\" opacity=\"1\"/></layer>\n<layer id=\"c6\" asset=\"t\" x=\"530\" y=\"100\"><textAnimator preset=\"ascend\" presetEase=\"bounce-out\" presetStart=\"-0.4\" presetDuration=\"1\" opacity=\"1\"/></layer>\n</composition>\n</scene>\n",
   "expected": {
    "rule": "SREP 35",
-   "pending": "the SREP states the offset as 0.5 em * (1 - f(0.4)) but the glyph position of 'I' depends on the font, so no centroid is derived here; needs a measured value from the engine"
+   "regions": [
+    {
+     "box": [
+      30,
+      95,
+      70,
+      175
+     ],
+     "rgb": [
+      112,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      115,
+      107,
+      155,
+      187
+     ],
+     "rgb": [
+      112,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      200,
+      83,
+      240,
+      163
+     ],
+     "rgb": [
+      112,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      285,
+      75,
+      325,
+      155
+     ],
+     "rgb": [
+      109,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      370,
+      68,
+      410,
+      148
+     ],
+     "rgb": [
+      111,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      455,
+      63,
+      495,
+      143
+     ],
+     "rgb": [
+      110,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      540,
+      69,
+      580,
+      149
+     ],
+     "rgb": [
+      110,
+      0,
+      0
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0035-pop-back-out": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><font id=\"f\" src=\"../assets/srep35-block.ttf\" family=\"SREP35Block\"/><text id=\"t\" text=\"I\" width=\"80\" height=\"200\" size=\"100\" lineHeight=\"1\" verticalAlign=\"top\" align=\"start\" fontAsset=\"f\" color=\"#FF0000FF\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"p\" asset=\"t\" x=\"100\" y=\"100\"><textAnimator preset=\"pop\" presetEase=\"back-out\" presetStart=\"-0.580103\" presetDuration=\"1\"/></layer>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 35",
+   "red": {
+    "w": 55.0,
+    "h": 77.0
+   }
+  }
+ },
+ "srep-0035-pop-back-out-end": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><font id=\"f\" src=\"../assets/srep35-block.ttf\" family=\"SREP35Block\"/><text id=\"t\" text=\"I\" width=\"80\" height=\"200\" size=\"100\" lineHeight=\"1\" verticalAlign=\"top\" align=\"start\" fontAsset=\"f\" color=\"#FF0000FF\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"p\" asset=\"t\" x=\"100\" y=\"100\"><textAnimator preset=\"pop\" presetEase=\"back-out\" presetStart=\"-1.000000\" presetDuration=\"1\"/></layer>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 35",
+   "red": {
+    "w": 50.0,
+    "h": 70.0
+   }
+  }
+ },
+ "srep-0035-pop-linear": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><font id=\"f\" src=\"../assets/srep35-block.ttf\" family=\"SREP35Block\"/><text id=\"t\" text=\"I\" width=\"80\" height=\"200\" size=\"100\" lineHeight=\"1\" verticalAlign=\"top\" align=\"start\" fontAsset=\"f\" color=\"#FF0000FF\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"p\" asset=\"t\" x=\"100\" y=\"100\"><textAnimator preset=\"pop\" presetEase=\"linear\" presetStart=\"-0.400000\" presetDuration=\"1\"/></layer>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 35",
+   "red": {
+    "w": 20.0,
+    "h": 28.0
+   }
+  }
+ },
+ "srep-0035-counter-zeros-end": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><font id=\"f\" src=\"../assets/srep35-block.ttf\" family=\"SREP35Block\"/><text id=\"t\" text=\"007\" width=\"300\" height=\"200\" size=\"100\" lineHeight=\"1\" verticalAlign=\"top\" align=\"start\" fontAsset=\"f\" color=\"#FF0000FF\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"c\" asset=\"t\" x=\"100\" y=\"100\"><textAnimator preset=\"counter\" presetStart=\"-1.0\" presetDuration=\"1\"/></layer>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 35",
+   "red": {
+    "cx": 225.0,
+    "cy": 159.83,
+    "w": 170,
+    "h": 52
+   }
+  }
+ },
+ "srep-0035-counter-zeros-mid": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><font id=\"f\" src=\"../assets/srep35-block.ttf\" family=\"SREP35Block\"/><text id=\"t\" text=\"007\" width=\"300\" height=\"200\" size=\"100\" lineHeight=\"1\" verticalAlign=\"top\" align=\"start\" fontAsset=\"f\" color=\"#FF0000FF\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"c\" asset=\"t\" x=\"100\" y=\"100\"><textAnimator preset=\"counter\" presetStart=\"-0.3\" presetDuration=\"1\"/></layer>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 35",
+   "red": {
+    "w": 170
+   }
+  }
+ },
+ "srep-0035-counter-clock-before": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"4\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><font id=\"f\" src=\"../assets/srep35-block.ttf\" family=\"SREP35Block\"/><text id=\"t\" text=\"9\" width=\"300\" height=\"200\" size=\"100\" lineHeight=\"1\" verticalAlign=\"top\" align=\"start\" fontAsset=\"f\" color=\"#FF0000FF\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"c\" asset=\"t\" x=\"100\" y=\"100\" start=\"1\"><textAnimator preset=\"counter\" presetStart=\"2\" presetDuration=\"1\"/></layer>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 35",
+   "output": {
+    "id": "still",
+    "time": 1.958333
+   },
+   "red": {
+    "w": 50,
+    "h": 10.0
+   }
+  }
+ },
+ "srep-0035-counter-clock": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"4\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><font id=\"f\" src=\"../assets/srep35-block.ttf\" family=\"SREP35Block\"/><text id=\"t\" text=\"9\" width=\"300\" height=\"200\" size=\"100\" lineHeight=\"1\" verticalAlign=\"top\" align=\"start\" fontAsset=\"f\" color=\"#FF0000FF\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"c\" asset=\"t\" x=\"100\" y=\"100\" start=\"1\"><textAnimator preset=\"counter\" presetStart=\"2\" presetDuration=\"1\"/></layer>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 35",
+   "output": {
+    "id": "still",
+    "time": 2.083333
+   },
+   "red": {
+    "w": 50,
+    "h": 22.0
+   }
+  }
+ },
+ "srep-0035-counter-clock-end": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"4\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><font id=\"f\" src=\"../assets/srep35-block.ttf\" family=\"SREP35Block\"/><text id=\"t\" text=\"9\" width=\"300\" height=\"200\" size=\"100\" lineHeight=\"1\" verticalAlign=\"top\" align=\"start\" fontAsset=\"f\" color=\"#FF0000FF\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"c\" asset=\"t\" x=\"100\" y=\"100\" start=\"1\"><textAnimator preset=\"counter\" presetStart=\"2\" presetDuration=\"1\"/></layer>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 35",
+   "output": {
+    "id": "still",
+    "time": 3.5
+   },
+   "red": {
+    "w": 50,
+    "h": 64.0
+   }
+  }
+ },
+ "srep-0035-mask-reveal-lines": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><font id=\"f\" src=\"../assets/srep35-block.ttf\" family=\"SREP35Block\"/><text id=\"t\" text=\"I&#10;I\" width=\"80\" height=\"300\" size=\"100\" lineHeight=\"1\" verticalAlign=\"top\" align=\"start\" fontAsset=\"f\" color=\"#FF0000FF\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"m\" asset=\"t\" x=\"100\" y=\"40\"><textAnimator preset=\"mask-reveal\" presetStart=\"-0.1\" presetDuration=\"1.7\"/></layer>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 35",
+   "red": {
+    "cx": 130.0,
+    "cy": 135.1,
+    "w": 50,
+    "h": 10
+   }
+  }
+ },
+ "srep-0035-mask-reveal-pending": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><font id=\"f\" src=\"../assets/srep35-block.ttf\" family=\"SREP35Block\"/><text id=\"t\" text=\"I&#10;I\" width=\"80\" height=\"300\" size=\"100\" lineHeight=\"1\" verticalAlign=\"top\" align=\"start\" fontAsset=\"f\" color=\"#FF0000FF\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"m\" asset=\"t\" x=\"100\" y=\"40\"><textAnimator preset=\"mask-reveal\" presetStart=\"0.5\" presetDuration=\"1.7\"/></layer>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 35",
+   "absent": [
+    "red"
+   ]
   }
  }
 }

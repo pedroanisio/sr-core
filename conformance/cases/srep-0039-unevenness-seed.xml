@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<materials><material id="m-seed1" baseColor="#FFFFFFFF" metallic="0" roughness="0.6" unevenness="0.8" unevennessScale="16" unevennessSeed="1"/><material id="m-seed2" baseColor="#FFFFFFFF" metallic="0" roughness="0.6" unevenness="0.8" unevennessScale="16" unevennessSeed="2"/><material id="m-seed1b" baseColor="#FFFFFFFF" metallic="0" roughness="0.6" unevenness="0.8" unevennessScale="16" unevennessSeed="1"/></materials>
+<composition>
+<object3D id="p0" primitive="plane" material="m-seed1" width="180" height="260" x="120" y="180"/><object3D id="p1" primitive="plane" material="m-seed2" width="180" height="260" x="320" y="180"/><object3D id="p2" primitive="plane" material="m-seed1b" width="180" height="260" x="520" y="180"/>
+</composition>
+<lights><light id="sun" type="directional" yaw="35" pitch="-20" intensity="1"/></lights>
+</scene>

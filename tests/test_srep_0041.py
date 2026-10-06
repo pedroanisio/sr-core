@@ -17,7 +17,7 @@ def obj(attrs, version="1.1"):
 
 
 def test_cases_exist():
-    assert len(CASES) == 2
+    assert len(CASES) == 4
 
 
 @pytest.mark.parametrize("case", CASES, ids=os.path.basename)

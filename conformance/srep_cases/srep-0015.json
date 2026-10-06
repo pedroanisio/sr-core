@@ -4,21 +4,9 @@
   "expected": {
    "rule": "SREP 15",
    "green": {
-    "cx": 320,
-    "cy": 180,
+    "cx": 331.02,
+    "cy": 180.0,
     "w": 280,
-    "h": 24
-   }
-  }
- },
- "srep-0015-both-ends": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"m\" shape=\"path\" path=\"M100 180 L500 180\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#00FF00FF\" strokeWidth=\"6\" strokeCap=\"butt\" markerStart=\"arrow\" markerEnd=\"arrow\"/>\n</composition>\n</scene>\n",
-  "expected": {
-   "rule": "SREP 15",
-   "green": {
-    "cx": 300,
-    "cy": 180,
-    "w": 400,
     "h": 24
    }
   }
@@ -28,18 +16,289 @@
   "expected": {
    "rule": "SREP 15",
    "green": {
-    "cx": 250,
-    "cy": 180,
+    "cx": 258.53,
+    "cy": 180.0,
     "w": 140,
     "h": 24
-   }
+   },
+   "regions": [
+    {
+     "box": [
+      324,
+      0,
+      640,
+      360
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0015-both-ends": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"m\" shape=\"path\" path=\"M100 180 L500 180\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#00FF00FF\" strokeWidth=\"6\" strokeCap=\"butt\" markerStart=\"arrow\" markerEnd=\"arrow\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 15",
+   "green": {
+    "cx": 300.0,
+    "cy": 180.0,
+    "w": 400,
+    "h": 24
+   },
+   "regions": [
+    {
+     "box": [
+      0,
+      0,
+      98,
+      360
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    }
+   ]
   }
  },
  "srep-0015-union": {
   "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"m\" shape=\"path\" path=\"M180 180 L460 180\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#00FF0080\" strokeWidth=\"6\" strokeCap=\"butt\" markerEnd=\"arrow\"/>\n</composition>\n</scene>\n",
   "expected": {
    "rule": "SREP 15",
-   "pending": "the SREP states no pixel level for the flat green, which depends on the blend space; needs a measured value"
+   "regions": [
+    {
+     "box": [
+      250,
+      178,
+      350,
+      182
+     ],
+     "rgb": [
+      0,
+      188,
+      0
+     ]
+    },
+    {
+     "box": [
+      434,
+      177,
+      438,
+      183
+     ],
+     "rgb": [
+      0,
+      188,
+      0
+     ]
+    },
+    {
+     "box": [
+      438,
+      172,
+      442,
+      188
+     ],
+     "rgb": [
+      0,
+      188,
+      0
+     ]
+    },
+    {
+     "box": [
+      448,
+      178,
+      454,
+      182
+     ],
+     "rgb": [
+      0,
+      188,
+      0
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0015-trim-start": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"m\" shape=\"path\" path=\"M180 180 L460 180\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#00FF00FF\" strokeWidth=\"6\" strokeCap=\"butt\" markerStart=\"arrow\" trimStart=\"0.25\" trimEnd=\"0.75\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 15",
+   "green": {
+    "cx": 312.03,
+    "cy": 180.0,
+    "w": 140,
+    "h": 24
+   }
+  }
+ },
+ "srep-0015-start-only": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"m\" shape=\"path\" path=\"M180 180 L460 180\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#00FF00FF\" strokeWidth=\"6\" strokeCap=\"butt\" markerStart=\"arrow\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 15",
+   "green": {
+    "cx": 309.69,
+    "cy": 180.0,
+    "w": 280,
+    "h": 24
+   }
+  }
+ },
+ "srep-0015-circle": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"m\" shape=\"path\" path=\"M180 180 L460 180\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#00FF00FF\" strokeWidth=\"6\" strokeCap=\"butt\" markerEnd=\"circle\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 15",
+   "green": {
+    "cx": 340.69,
+    "cy": 180.0,
+    "w": 280,
+    "h": 24
+   }
+  }
+ },
+ "srep-0015-square": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"m\" shape=\"path\" path=\"M180 180 L460 180\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#00FF00FF\" strokeWidth=\"6\" strokeCap=\"butt\" markerEnd=\"square\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 15",
+   "green": {
+    "cx": 346.18,
+    "cy": 180.0,
+    "w": 280,
+    "h": 24
+   }
+  }
+ },
+ "srep-0015-diamond": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"m\" shape=\"path\" path=\"M180 180 L460 180\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#00FF00FF\" strokeWidth=\"6\" strokeCap=\"butt\" markerEnd=\"diamond\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 15",
+   "green": {
+    "cx": 331.98,
+    "cy": 180.0,
+    "w": 280,
+    "h": 24
+   }
+  }
+ },
+ "srep-0015-bar": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"m\" shape=\"path\" path=\"M180 180 L460 180\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#00FF00FF\" strokeWidth=\"6\" strokeCap=\"butt\" markerEnd=\"bar\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 15",
+   "green": {
+    "cx": 329.78,
+    "cy": 180.0,
+    "w": 283,
+    "h": 24
+   }
+  }
+ },
+ "srep-0015-marker-size": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"m\" shape=\"path\" path=\"M180 180 L460 180\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#00FF00FF\" strokeWidth=\"6\" strokeCap=\"butt\" markerEnd=\"arrow\" markerSize=\"8\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 15",
+   "green": {
+    "cx": 357.27,
+    "cy": 180.0,
+    "w": 280,
+    "h": 48
+   }
+  }
+ },
+ "srep-0015-vertical": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"m\" shape=\"path\" path=\"M320 60 L320 300\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#00FF00FF\" strokeWidth=\"6\" strokeCap=\"butt\" markerEnd=\"arrow\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 15",
+   "green": {
+    "cx": 320.0,
+    "cy": 190.57,
+    "w": 24,
+    "h": 240
+   }
+  }
+ },
+ "srep-0015-diagonal": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"m\" shape=\"path\" path=\"M180 80 L420 320\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#00FF00FF\" strokeWidth=\"6\" strokeCap=\"butt\" markerEnd=\"arrow\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 15",
+   "green": {
+    "cx": 307.48,
+    "cy": 207.48,
+    "w": 242,
+    "h": 242
+   }
+  }
+ },
+ "srep-0015-union-open-arrow": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"m\" shape=\"path\" path=\"M180 180 L460 180\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#00FF0080\" strokeWidth=\"6\" strokeCap=\"butt\" markerEnd=\"open-arrow\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 15",
+   "regions": [
+    {
+     "box": [
+      250,
+      178,
+      350,
+      182
+     ],
+     "rgb": [
+      0,
+      188,
+      0
+     ]
+    },
+    {
+     "box": [
+      450,
+      177,
+      456,
+      178
+     ],
+     "rgb": [
+      0,
+      188,
+      0
+     ]
+    },
+    {
+     "box": [
+      438,
+      168,
+      442,
+      172
+     ],
+     "rgb": [
+      0,
+      188,
+      0
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0015-closed-no-marker": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"m\" shape=\"path\" path=\"M240 120 L400 120 L400 240 L240 240 Z\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#00FF00FF\" strokeWidth=\"6\" strokeCap=\"butt\" markerEnd=\"arrow\" markerStart=\"arrow\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 15",
+   "green": {
+    "cx": 319.98,
+    "cy": 179.98,
+    "w": 166,
+    "h": 126
+   }
+  }
+ },
+ "srep-0015-zero-width": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"m\" shape=\"path\" path=\"M180 180 L460 180\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#00FF00FF\" strokeWidth=\"0\" strokeCap=\"butt\" markerEnd=\"arrow\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 15",
+   "absent": [
+    "green"
+   ]
   }
  }
 }

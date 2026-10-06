@@ -1,16 +1,549 @@
 {
  "srep-0036-geo-fill-whole": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><geo id=\"sq\" src=\"../assets/squares.geojson\"/><map id=\"m-sq\" width=\"640\" height=\"360\" projection=\"equirectangular\" fit=\"sq\" fitPadding=\"20\"><geoLayer geo=\"sq\" fill=\"#FF0000FF\" stroke=\"#FFFFFFFF\" strokeWidth=\"3\" progress=\"0.5\"/></map></assets>\n<composition>\n<layer id=\"atlas\" asset=\"m-sq\" x=\"0\" y=\"0\"/>\n</composition>\n</scene>\n",
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><geo id=\"sq\" src=\"../assets/srep36-rings.geojson\"/><map id=\"m-sq\" width=\"640\" height=\"360\" projection=\"equirectangular\" fit=\"sq\" fitPadding=\"20\"><geoLayer geo=\"sq\" fill=\"#FF0000FF\" stroke=\"#00FF00FF\" strokeWidth=\"4\" progress=\"0.5\"/></map></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"atlas\" asset=\"m-sq\" x=\"0\" y=\"0\"/>\n</composition>\n</scene>\n",
   "expected": {
    "rule": "SREP 36",
-   "pending": "the SREP expects the red interior at progress 0, 0.5 and 1 (exact colour); the case fixes progress 0.5 only and the kit has no region entry derived here"
+   "regions": [
+    {
+     "box": [
+      32,
+      92,
+      208,
+      268
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      532,
+      142,
+      608,
+      218
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    }
+   ]
   }
  },
  "srep-0036-geo-outline-progress": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><geo id=\"sq\" src=\"../assets/squares.geojson\"/><map id=\"m-sq\" width=\"640\" height=\"360\" projection=\"equirectangular\" fit=\"sq\" fitPadding=\"20\"><geoLayer geo=\"sq\" fill=\"#00000000\" stroke=\"#FFFFFFFF\" strokeWidth=\"3\" progress=\"0.5\"/></map></assets>\n<composition>\n<layer id=\"atlas\" asset=\"m-sq\" x=\"0\" y=\"0\"/>\n</composition>\n</scene>\n",
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><geo id=\"sq\" src=\"../assets/srep36-rings.geojson\"/><map id=\"m-sq\" width=\"640\" height=\"360\" projection=\"equirectangular\" fit=\"sq\" fitPadding=\"20\"><geoLayer geo=\"sq\" fill=\"#00000000\" stroke=\"#00FF00FF\" strokeWidth=\"4\" progress=\"0.5\"/></map></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"atlas\" asset=\"m-sq\" x=\"0\" y=\"0\"/>\n</composition>\n</scene>\n",
   "expected": {
    "rule": "SREP 36",
-   "pending": "the SREP gives pixel-count ratios (a third to two thirds of the full outline's white pixels at 0.5), which the kit's centroid/size entries cannot express; needs a measured pixel count"
+   "regions": [
+    {
+     "box": [
+      19,
+      100,
+      21,
+      260
+     ],
+     "rgb": [
+      0,
+      255,
+      0
+     ]
+    },
+    {
+     "box": [
+      40,
+      79,
+      200,
+      81
+     ],
+     "rgb": [
+      0,
+      255,
+      0
+     ]
+    },
+    {
+     "box": [
+      219,
+      100,
+      221,
+      260
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      40,
+      279,
+      200,
+      281
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      519,
+      150,
+      521,
+      210
+     ],
+     "rgb": [
+      0,
+      255,
+      0
+     ]
+    },
+    {
+     "box": [
+      540,
+      129,
+      600,
+      131
+     ],
+     "rgb": [
+      0,
+      255,
+      0
+     ]
+    },
+    {
+     "box": [
+      619,
+      150,
+      621,
+      210
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      540,
+      229,
+      600,
+      231
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      0,
+      60,
+      240,
+      300
+     ],
+     "rgb": [
+      0,
+      7,
+      0
+     ]
+    },
+    {
+     "box": [
+      500,
+      110,
+      640,
+      250
+     ],
+     "rgb": [
+      0,
+      11,
+      0
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0036-geo-outline-p0": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><geo id=\"sq\" src=\"../assets/srep36-rings.geojson\"/><map id=\"m-sq\" width=\"640\" height=\"360\" projection=\"equirectangular\" fit=\"sq\" fitPadding=\"20\"><geoLayer geo=\"sq\" fill=\"#00000000\" stroke=\"#00FF00FF\" strokeWidth=\"4\" progress=\"0\"/></map></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"atlas\" asset=\"m-sq\" x=\"0\" y=\"0\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 36",
+   "absent": [
+    "green"
+   ]
+  }
+ },
+ "srep-0036-geo-outline-p1": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><geo id=\"sq\" src=\"../assets/srep36-rings.geojson\"/><map id=\"m-sq\" width=\"640\" height=\"360\" projection=\"equirectangular\" fit=\"sq\" fitPadding=\"20\"><geoLayer geo=\"sq\" fill=\"#00000000\" stroke=\"#00FF00FF\" strokeWidth=\"4\" progress=\"1\"/></map></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"atlas\" asset=\"m-sq\" x=\"0\" y=\"0\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 36",
+   "regions": [
+    {
+     "box": [
+      19,
+      100,
+      21,
+      260
+     ],
+     "rgb": [
+      0,
+      255,
+      0
+     ]
+    },
+    {
+     "box": [
+      40,
+      79,
+      200,
+      81
+     ],
+     "rgb": [
+      0,
+      255,
+      0
+     ]
+    },
+    {
+     "box": [
+      219,
+      100,
+      221,
+      260
+     ],
+     "rgb": [
+      0,
+      255,
+      0
+     ]
+    },
+    {
+     "box": [
+      40,
+      279,
+      200,
+      281
+     ],
+     "rgb": [
+      0,
+      255,
+      0
+     ]
+    },
+    {
+     "box": [
+      519,
+      150,
+      521,
+      210
+     ],
+     "rgb": [
+      0,
+      255,
+      0
+     ]
+    },
+    {
+     "box": [
+      540,
+      129,
+      600,
+      131
+     ],
+     "rgb": [
+      0,
+      255,
+      0
+     ]
+    },
+    {
+     "box": [
+      619,
+      150,
+      621,
+      210
+     ],
+     "rgb": [
+      0,
+      255,
+      0
+     ]
+    },
+    {
+     "box": [
+      540,
+      229,
+      600,
+      231
+     ],
+     "rgb": [
+      0,
+      255,
+      0
+     ]
+    },
+    {
+     "box": [
+      0,
+      60,
+      240,
+      300
+     ],
+     "rgb": [
+      0,
+      15,
+      0
+     ]
+    },
+    {
+     "box": [
+      500,
+      110,
+      640,
+      250
+     ],
+     "rgb": [
+      0,
+      21,
+      0
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0036-geo-outline-p4": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><geo id=\"sq\" src=\"../assets/srep36-rings.geojson\"/><map id=\"m-sq\" width=\"640\" height=\"360\" projection=\"equirectangular\" fit=\"sq\" fitPadding=\"20\"><geoLayer geo=\"sq\" fill=\"#00000000\" stroke=\"#00FF00FF\" strokeWidth=\"4\" progress=\"0.4\"/></map></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"atlas\" asset=\"m-sq\" x=\"0\" y=\"0\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 36",
+   "regions": [
+    {
+     "box": [
+      19,
+      100,
+      21,
+      260
+     ],
+     "rgb": [
+      0,
+      255,
+      0
+     ]
+    },
+    {
+     "box": [
+      40,
+      79,
+      120,
+      81
+     ],
+     "rgb": [
+      0,
+      255,
+      0
+     ]
+    },
+    {
+     "box": [
+      160,
+      79,
+      200,
+      81
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      219,
+      100,
+      221,
+      260
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      40,
+      279,
+      200,
+      281
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      519,
+      150,
+      521,
+      210
+     ],
+     "rgb": [
+      0,
+      255,
+      0
+     ]
+    },
+    {
+     "box": [
+      540,
+      129,
+      560,
+      131
+     ],
+     "rgb": [
+      0,
+      255,
+      0
+     ]
+    },
+    {
+     "box": [
+      619,
+      150,
+      621,
+      210
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      540,
+      229,
+      600,
+      231
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      0,
+      60,
+      240,
+      300
+     ],
+     "rgb": [
+      0,
+      6,
+      0
+     ]
+    },
+    {
+     "box": [
+      500,
+      110,
+      640,
+      250
+     ],
+     "rgb": [
+      0,
+      9,
+      0
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0036-geo-fill-whole-p0": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><geo id=\"sq\" src=\"../assets/srep36-rings.geojson\"/><map id=\"m-sq\" width=\"640\" height=\"360\" projection=\"equirectangular\" fit=\"sq\" fitPadding=\"20\"><geoLayer geo=\"sq\" fill=\"#FF0000FF\" stroke=\"#00FF00FF\" strokeWidth=\"4\" progress=\"0\"/></map></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"atlas\" asset=\"m-sq\" x=\"0\" y=\"0\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 36",
+   "regions": [
+    {
+     "box": [
+      32,
+      92,
+      208,
+      268
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      532,
+      142,
+      608,
+      218
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    }
+   ],
+   "absent": [
+    "green"
+   ],
+   "red": {
+    "cx": 210.0,
+    "cy": 180.0,
+    "w": 600,
+    "h": 200
+   }
+  }
+ },
+ "srep-0036-geo-fill-whole-p1": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><geo id=\"sq\" src=\"../assets/srep36-rings.geojson\"/><map id=\"m-sq\" width=\"640\" height=\"360\" projection=\"equirectangular\" fit=\"sq\" fitPadding=\"20\"><geoLayer geo=\"sq\" fill=\"#FF0000FF\" stroke=\"#00FF00FF\" strokeWidth=\"4\" progress=\"1\"/></map></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"atlas\" asset=\"m-sq\" x=\"0\" y=\"0\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 36",
+   "regions": [
+    {
+     "box": [
+      32,
+      92,
+      208,
+      268
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      532,
+      142,
+      608,
+      218
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    }
+   ]
   }
  }
 }

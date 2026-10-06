@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<assets><font id="f-block" src="../assets/srep37-block.ttf" family="SREPBlock"/></assets>
+<materials><material id="m-white" baseColor="#FFFFFFFF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<camera id="cam" projection="orthographic" orthoHeight="360" x="320" y="180" z="-500"/>
+<object3D id="ii" primitive="text" text="II" font="SREPBlock" height="100" material="m-white" x="320" y="180"/>
+</composition>
+</scene>

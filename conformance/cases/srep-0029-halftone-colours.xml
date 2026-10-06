@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SREP 29 s1 halftone with @color red (the ink) and @paint blue (the ground), angle default 0, same source and boxes as srep-0029-halftone-default-angle. Screen = ink*inside + ground*(1-inside): at a dot centre inside = 1 gives exactly red (255,0,0); at a cell corner inside = 0 gives exactly blue (0,0,255); no black or white anywhere in these boxes. Engine provenance: measured on rs-scene-render vendor/schema-1.3 build 2d9eb13d (binary sha256 prefix 4be4bebe002bc190), llvmpipe, frame 0 (render -f 0), VM style1; the expected values were derived from the SREP formulas first (script model) and then compared with the render. Proposals until re-verified on the vendoring commit. -->
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<shape id="s" shape="rect" width="256" height="192" x="64" y="64" fill="#808080FF"/>
+<adjustment id="a" effects="e"/>
+</composition>
+<effects>
+<effect id="e" type="halftone" size="8" color="#FF0000FF" paint="#0000FFFF"/>
+</effects>
+</scene>

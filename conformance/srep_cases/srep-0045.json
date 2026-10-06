@@ -22,5 +22,115 @@
     "h": 20
    }
   }
+ },
+ "srep-0045-link-follow-exponential-1p2": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"60\" duration=\"4\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"src\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"100\" y=\"300\" fill=\"#00FF00FF\"><animate property=\"x\"><key time=\"0\" value=\"100\" interpolation=\"hold\"/><key time=\"1\" value=\"300\"/></animate></shape>\n<shape id=\"fo\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"50\" y=\"120\" fill=\"#FF0000FF\">\n<link property=\"x\" source=\"src.x\" follow=\"exponential\" timeConstant=\"0.2\"/>\n</shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 45",
+   "output": {
+    "id": "still",
+    "time": 1.2
+   },
+   "red": {
+    "cx": 226.42,
+    "cy": 120,
+    "w": 40,
+    "h": 20
+   },
+   "green": {
+    "cx": 300,
+    "cy": 300,
+    "w": 40,
+    "h": 20
+   }
+  }
+ },
+ "srep-0045-link-follow-exponential-2p0": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"60\" duration=\"4\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"src\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"100\" y=\"300\" fill=\"#00FF00FF\"><animate property=\"x\"><key time=\"0\" value=\"100\" interpolation=\"hold\"/><key time=\"1\" value=\"300\"/></animate></shape>\n<shape id=\"fo\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"50\" y=\"120\" fill=\"#FF0000FF\">\n<link property=\"x\" source=\"src.x\" follow=\"exponential\" timeConstant=\"0.2\"/>\n</shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 45",
+   "output": {
+    "id": "still",
+    "time": 2.0
+   },
+   "red": {
+    "cx": 298.65,
+    "cy": 120,
+    "w": 40,
+    "h": 20
+   },
+   "green": {
+    "cx": 300,
+    "cy": 300,
+    "w": 40,
+    "h": 20
+   }
+  }
+ },
+ "srep-0045-link-follow-spring-rise": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"60\" duration=\"4\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"src\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"100\" y=\"300\" fill=\"#00FF00FF\"><animate property=\"x\"><key time=\"0\" value=\"100\" interpolation=\"hold\"/><key time=\"1\" value=\"300\"/></animate></shape>\n<shape id=\"fo\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"50\" y=\"210\" fill=\"#0000FFFF\">\n<link property=\"x\" source=\"src.x\" follow=\"spring\" stiffness=\"100\" damping=\"10\" mass=\"1\"/>\n</shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 45",
+   "output": {
+    "id": "still",
+    "time": 1.2
+   },
+   "blue": {
+    "cx": 269.89,
+    "cy": 210,
+    "w": 40,
+    "h": 20
+   },
+   "green": {
+    "cx": 300,
+    "cy": 300,
+    "w": 40,
+    "h": 20
+   }
+  }
+ },
+ "srep-0045-link-follow-spring-peak": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"60\" duration=\"4\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"src\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"100\" y=\"300\" fill=\"#00FF00FF\"><animate property=\"x\"><key time=\"0\" value=\"100\" interpolation=\"hold\"/><key time=\"1\" value=\"300\"/></animate></shape>\n<shape id=\"fo\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"50\" y=\"210\" fill=\"#0000FFFF\">\n<link property=\"x\" source=\"src.x\" follow=\"spring\" stiffness=\"100\" damping=\"10\" mass=\"1\"/>\n</shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 45",
+   "output": {
+    "id": "still",
+    "time": 1.3666666666666667
+   },
+   "blue": {
+    "cx": 332.58,
+    "cy": 210,
+    "w": 40,
+    "h": 20
+   },
+   "green": {
+    "cx": 300,
+    "cy": 300,
+    "w": 40,
+    "h": 20
+   }
+  }
+ },
+ "srep-0045-link-follow-spring-settled": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"60\" duration=\"4\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"src\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"100\" y=\"300\" fill=\"#00FF00FF\"><animate property=\"x\"><key time=\"0\" value=\"100\" interpolation=\"hold\"/><key time=\"1\" value=\"300\"/></animate></shape>\n<shape id=\"fo\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"50\" y=\"210\" fill=\"#0000FFFF\">\n<link property=\"x\" source=\"src.x\" follow=\"spring\" stiffness=\"100\" damping=\"10\" mass=\"1\"/>\n</shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 45",
+   "output": {
+    "id": "still",
+    "time": 3.0
+   },
+   "blue": {
+    "cx": 300.0,
+    "cy": 210,
+    "w": 40,
+    "h": 20
+   },
+   "green": {
+    "cx": 300,
+    "cy": 300,
+    "w": 40,
+    "h": 20
+   }
+  }
  }
 }

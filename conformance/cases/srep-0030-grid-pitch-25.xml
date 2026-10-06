@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SREP 30 grid generator at scale 25: the pitch stays 25 whatever the line width. Three 200x200 assets at (0,0), (220,0), (440,0): @lineWidth=1, @lineWidth=3, and no @lineWidth (max(1, 0.04*25) = 1 px, the same picture as the first). Lines at asset 0, 25, 50, ... 175 (k = 0..7), each w wide, both directions; probes are w wide, ten pixels long, with one-pixel black neighbours; the gap between the first two lines is black. Engine provenance: measured on rs-scene-render vendor/schema-1.3 build 2d9eb13d (binary sha256 prefix 4be4bebe002bc190), llvmpipe, frame 0 (render -f 0), VM style1; the expected values were derived from the SREP formulas first (script model) and then compared with the render. Proposals until re-verified on the vendoring commit. -->
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<assets><generator id="g0" kind="grid" width="200" height="200" scale="25" lineWidth="1" paint="#FF0000FF" paint2="#000000FF"/><generator id="g1" kind="grid" width="200" height="200" scale="25" lineWidth="3" paint="#FF0000FF" paint2="#000000FF"/><generator id="g2" kind="grid" width="200" height="200" scale="25" paint="#FF0000FF" paint2="#000000FF"/></assets>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<layer id="l-g0" asset="g0" x="0" y="0"/>
+<layer id="l-g1" asset="g1" x="220" y="0"/>
+<layer id="l-g2" asset="g2" x="440" y="0"/>
+</composition>
+</scene>

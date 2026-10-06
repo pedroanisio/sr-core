@@ -2,12 +2,9 @@
 <scene version="1.2">
 <project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
 <output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
-<assets><generator id="g-check" kind="checkerboard" width="2" height="2" scale="1" paint="#FF0000FF" paint2="#0000FFFF"/></assets>
+<assets><image id="a-chk" src="../assets/srep32-checker-2x2.png" width="2" height="2" sha256="8e1ad4e148a4e64e0ac2673cc75f78dcc98bff8d987080e90f1438be881a0cf4"/></assets>
 <materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
 <composition>
-<layer id="l-default" asset="g-check" fit="fill" boxWidth="200" boxHeight="200" x="20" y="20"/>
-<layer id="l-linear" asset="g-check" fit="fill" boxWidth="200" boxHeight="200" x="240" y="20" resample="linear"/>
-<layer id="l-bicubic" asset="g-check" fit="fill" boxWidth="200" boxHeight="200" x="20" y="200" resample="bicubic"/>
-<layer id="l-mitchell" asset="g-check" fit="fill" boxWidth="200" boxHeight="200" x="240" y="200" resample="mitchell"/>
+<layer id="l-default" asset="a-chk" fit="fill" boxWidth="8" boxHeight="8" x="20" y="20"/><layer id="l-linear" asset="a-chk" fit="fill" boxWidth="8" boxHeight="8" x="120" y="20" resample="linear"/>
 </composition>
 </scene>

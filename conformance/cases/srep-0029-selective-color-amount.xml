@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SREP 29 s2 step 4, @amount=0.5 halves the change: result = original + (adjusted - original)*0.5, in display-encoded colour (the SREP: all quantities are display-encoded). #B40000 adjusted to (180,180,180): the halved change is (180, 90, 90). Green #00B400 (w=0) is unchanged. A mix in linear light would give G = B = 131 instead of 90. FINDING: the engine measures (180,131,131) for the #B40000 bar where the SREP formula (@amount mixes in display-encoded colour: halves the change) gives (180,90,90); 131 is the linear-light mix; with linearLight=false the engine still measures 131. This case fails on this build by design: the expectation is the SREP's, not the render's. Engine provenance: measured on rs-scene-render vendor/schema-1.3 build 2d9eb13d (binary sha256 prefix 4be4bebe002bc190), llvmpipe, frame 0 (render -f 0), VM style1; the expected values were derived from the SREP formulas first (script model) and then compared with the render. Proposals until re-verified on the vendoring commit. -->
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<shape id="b0" shape="rect" width="80" height="80" x="40" y="100" fill="#B40000FF" effects="e"/>
+<shape id="b1" shape="rect" width="80" height="80" x="160" y="100" fill="#00B400FF" effects="e"/>
+</composition>
+<effects>
+<effect id="e" type="selective-color" color="#FF0000FF" saturation="0" amount="0.5"/>
+</effects>
+</scene>

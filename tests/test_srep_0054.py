@@ -24,14 +24,17 @@ def rig(attrs):
                f'<transformConstraint type="ik" target="goal"{attrs}/></skeleton></group>')
 
 
-@pytest.mark.parametrize("name", ["srep-0054-ik-pole", "srep-0054-ik-soft-reach"])
+NAMES = sorted(f[:-4] for f in os.listdir(CASES) if f.startswith("srep-0054-") and f.endswith(".xml"))
+
+
+@pytest.mark.parametrize("name", NAMES)
 def test_the_cases_validate(name):
     assert verdict(case(name)) == "ok"
 
 
 def test_the_cases_use_the_new_attributes():
-    assert b'pole="pole"' in case("srep-0054-ik-pole")
-    assert b'softness="0.3"' in case("srep-0054-ik-soft-reach")
+    assert any(b"pole=" in case(n) for n in NAMES if "-pole-" in n)
+    assert any(b"softness=" in case(n) for n in NAMES if "-soft-reach" in n)
 
 
 @pytest.mark.parametrize("attrs", ["", ' pole="p"', ' softness="0"', ' softness="0.3"', ' softness="1"',

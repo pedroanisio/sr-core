@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<materials><material id="m-clay" baseColor="#FFFFFFFF" metallic="0" roughness="0.6" unevenness="0.8" unevennessScale="16" unevennessSeed="3"/></materials>
+<composition>
+<object3D id="upright" primitive="plane" material="m-clay" width="220" height="220" x="170" y="180"/><object3D id="turned" primitive="plane" material="m-clay" width="220" height="220" x="470" y="180" rotation="30"/>
+</composition>
+<lights><light id="sun" type="directional" yaw="35" pitch="-20" intensity="1"/></lights>
+</scene>
