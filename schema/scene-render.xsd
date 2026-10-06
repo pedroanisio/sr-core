@@ -3269,6 +3269,11 @@
         <xs:enumeration value="ttml"/><xs:enumeration value="itt"/><xs:enumeration value="scc"/>
       </xs:restriction></xs:simpleType>
     </xs:attribute>
+    <xs:attribute name="readingSpeed" type="positiveDecimal">
+      <xs:annotation><xs:documentation>
+        Characters per second this track may reach; overrides accessibility/@readingSpeed.
+      </xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="transcribe" type="xs:IDREF"/>
     <xs:attribute name="cache" type="xs:anyURI"/>
     <xs:attribute name="cacheSha256" type="sha256Type"/>
@@ -3538,6 +3543,14 @@
       </xs:restriction></xs:simpleType>
     </xs:attribute>
     <xs:attribute name="minContrast" type="positiveDecimal" default="4.5"/>
+    <xs:attribute name="legibilityCheck" default="off">
+      <xs:simpleType><xs:restriction base="xs:string">
+        <xs:enumeration value="off"/><xs:enumeration value="warn"/><xs:enumeration value="error"/>
+      </xs:restriction></xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="readingSpeed" type="positiveDecimal"/>
+    <xs:attribute name="minDisplayTime" type="nonNegativeDecimal" default="0.8333"/>
+    <xs:attribute name="minTextSize" type="lengthType"/>
   </xs:complexType>
   <xs:complexType name="metadataType">
     <xs:choice minOccurs="0" maxOccurs="unbounded">

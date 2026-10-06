@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="2" background="#000000FF"/>
+<metadata><accessibility legibilityCheck="warn" minTextSize="3vh"/></metadata>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<assets><text id="t" text="small" width="200" height="40" size="8"/></assets>
+<composition>
+<layer id="l" asset="t" x="320" y="180"/>
+</composition>
+</scene>
