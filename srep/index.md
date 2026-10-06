@@ -60,3 +60,11 @@
 | [55](srep-0055.md) | Give nodes their own shutter angle | Standards | Accepted | 1.2 |
 | [56](srep-0056.md) | Add stroke-order text from single-line fonts | Standards | Accepted | 1.2 |
 | [57](srep-0057.md) | Accept the marker ids a beatGrid generates (beat.N, bar.N) | Standards | Accepted | 1.4 |
+| [58](srep-0058.md) | Measure motion paths and along-path points one way | Semantics | Accepted | 1.5 |
+| [59](srep-0059.md) | Check ID references in every validator | Standards | Accepted | 1.5 |
+| [60](srep-0060.md) | Blur a node at the edges of its window | Semantics | Accepted | 1.5 |
+| [61](srep-0061.md) | Amend SREP 18: inert IK and stroke-text attributes | Standards | Accepted | 1.5 |
+| [62](srep-0062.md) | Amend SREP 34: a feathered mask that reaches its node | Standards | Accepted | 1.5 |
+| [63](srep-0063.md) | Add conditions to capability manifest entries | Standards | Accepted | capabilities 1 |
+| [64](srep-0064.md) | Define rounded corners by the circle, not the steps | Semantics | Accepted | 1.5 |
+| [65](srep-0065.md) | Amend SREPs 18 and 20: report text overflow by what it loses | Standards | Accepted | 1.5 |

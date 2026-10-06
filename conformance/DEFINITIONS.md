@@ -619,12 +619,14 @@ is batch 7), and `collapse` (there are no 2.5D nodes yet).
 
 **Definition.** A `motionPath` sets the node's x and y to a point on its
 `path` at progress p.
-- **Geometry:** the path is flattened exactly as a path shape is, each
-  curve command in 16 equal parameter steps. A closed subpath includes
+- **Geometry:** the path is measured as SREP 58 defines: lines and cubic
+  pieces (arcs as cubics of at most 90°), a 32-sample table per piece on
+  the true curve, points on the exact curve. A closed subpath includes
   its closing segment; subpaths follow one another with jumps that take
-  no progress. A lone moveto draws nothing and is not part of the path.
+  no length or progress. A lone moveto draws nothing and is not part of
+  the path.
 - **Speed:** with `constantSpeed` (the default), p is the fraction of
-  drawn length; otherwise every flattened segment takes an equal share.
+  drawn length; otherwise every piece takes an equal share (SREP 58).
 - **Progress:** p comes from a nested `animate` on `progress`, or from
   `interpolation` (any curve without key parameters) over [`start`,
   `end`], with `end` defaulting to the node's end; before and after, p
@@ -632,8 +634,8 @@ is batch 7), and `collapse` (there are no 2.5D nodes yet).
 - **`autoOrient`:** adds the direction of travel, in degrees clockwise
   from +x, plus `orientOffset`, to the node's rotation.
 - **At a vertex, including a jump:** the node takes the outgoing segment
-  (its position is the vertex and its direction the next segment's), as a
-  key applies from its time on.
+  (its position is the vertex and its direction that of the next segment
+  of non-zero length, SREP 58), as a key applies from its time on.
 
 **Reported:** animating x or y beside a motion path (the path sets the
 position), and a second motion path on the same node.
