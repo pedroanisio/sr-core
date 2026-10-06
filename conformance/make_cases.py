@@ -584,6 +584,22 @@ def hold_doc(expr):
 cases["srep-0053-wiggle-hold"] = hold_doc("200 + wiggle(3, 20, 1, 0.5, 0.249, 0.25) - wiggle(3, 20, 1, 0.5, 0, 0.25)")
 cases["srep-0053-wiggle-hold-zero"] = hold_doc("200 + wiggle(3, 20, 1, 0.5, 0.1, 0) - wiggle(3, 20, 1, 0.5, 0.1)")
 
+# ---------------------------------------------------------------- SREP 54: IK pole and softness
+# Two bones of 10 and 10 with the root at (0, 0) of the group (placed at 100, 100), goal (10, 10), pole above or beside it.
+def ik_doc(goal, pole, constraint_extra):
+    return doc12(
+        '<group id="g" x="100" y="100">'
+        f'<shape id="goal" shape="ellipse" x="{goal[0]}" y="{goal[1]}" width="2" height="2" fill="#00FF00FF"/>'
+        f'<shape id="pole" shape="ellipse" x="{pole[0]}" y="{pole[1]}" width="2" height="2" fill="#0000FFFF"/>'
+        '<skeleton id="rig"><bone id="hip" x="0" y="0" length="10"/><bone id="knee" parent="hip" x="10" length="10"/>'
+        f'<transformConstraint type="ik" target="goal"{constraint_extra}/></skeleton>'
+        '<shape id="leg" shape="rect" x="0" y="0" width="20" height="2" fill="#FF0000FF">'
+        '<deform><modifier type="skin" skeleton="rig"/></deform></shape></group>')
+
+
+cases["srep-0054-ik-pole"] = ik_doc((10, 10), (0, 30), ' pole="pole" bendPositive="true"')
+cases["srep-0054-ik-soft-reach"] = ik_doc((25, 0), (0, 30), ' softness="0.3"')
+
 os.makedirs(os.path.join(HERE, "cases"), exist_ok=True)
 for name, xml in cases.items():
     open(os.path.join(HERE, "cases", name + ".xml"), "w").write(xml)
