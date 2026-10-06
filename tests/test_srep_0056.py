@@ -4,7 +4,14 @@ import os
 
 import pytest
 
-from test_schema_rules import ROOT, doc, etree, verdict
+from test_schema_rules import ROOT, doc as _doc, etree, verdict
+
+
+def doc(*args, **kw):
+    """A scene document that declares version 1.2, the version these features need (V5)."""
+    kw.setdefault("version", "1.2")
+    return _doc(*args, **kw)
+
 
 CASES = os.path.join(ROOT, "conformance", "cases")
 FONT = os.path.join(ROOT, "conformance", "assets", "stroke-hi.jhf")

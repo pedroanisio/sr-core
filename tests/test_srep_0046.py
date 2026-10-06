@@ -3,7 +3,14 @@ import os
 
 import pytest
 
-from test_schema_rules import ROOT, doc, verdict
+from test_schema_rules import ROOT, doc as _doc, verdict
+
+
+def doc(*args, **kw):
+    """A scene document that declares version 1.2, the version these features need (V5)."""
+    kw.setdefault("version", "1.2")
+    return _doc(*args, **kw)
+
 
 CASE = os.path.join(ROOT, "conformance", "cases", "srep-0046-morph-by-name.xml")
 MODEL = '<mesh id="mm" src="x.glb" format="glb"/>'
