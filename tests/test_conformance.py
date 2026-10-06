@@ -77,3 +77,70 @@ def test_a_pending_case_is_listed_but_does_not_fail_the_run(tmp_path):
                        capture_output=True, text=True, env=env)
     assert r.returncode == 0 and "pending" in r.stdout, (r.stdout, r.stderr)
     assert "zz-pending" in (copy / "out" / "report.md").read_text()
+
+
+def _captions_engine(pages, words=None, active=None, status=0, greedy_words=None):
+    """A stand-in engine for `captions <scene> [--at times]`: tracks "cap", "src" and "grd", each with these pages,
+    these words in one cue (greedy_words instead for a case whose name says greedy) and these current words."""
+    words = words if words is not None else [["aa", 0.0, 2.0], ["bb", 2.0, 4.0], ["cc", 4.0, 6.0], ["dd", 6.0, 8.0]]
+    return ("import json, sys\n"
+            "a = sys.argv\n"
+            "assert a[1] == 'captions', a\n"
+            "times = [float(t) for t in a[a.index('--at') + 1].split(',')] if '--at' in a else []\n"
+            f"pages, words, active = {pages!r}, {words!r}, {active!r}\n"
+            f"if 'greedy' in a[2] and {greedy_words!r}: words = {greedy_words!r}\n"
+            "cue = {'start': 0.0, 'end': 8.0, 'words': [{'index': i, 'text': t, 'start': s, 'end': e} for i, (t, s, e) in enumerate(words)]}\n"
+            "def track(i):\n"
+            "    return {'id': i, 'burn': True, 'preset': 'classic', 'lineBreaks': 'source', 'wordCount': len(words),\n"
+            "            'cues': [cue], 'pages': [{'text': p} for p in pages],\n"
+            "            'at': [{'time': t, 'page': 0, 'cue': 0, 'word': (active or {}).get(str(t))} for t in times]}\n"
+            "print(json.dumps({'tracks': [track('cap'), track('src'), track('grd')]}))\n"
+            f"sys.exit({status})\n")
+
+
+def test_a_captions_case_passes_on_the_pages_it_expects(tmp_path):
+    r = _run(tmp_path, _captions_engine(["aa bb\ncc dd", "ee ff\ngg hh"]), cases="srep-0052-caption-lines-limits-chars")
+    assert r.returncode == 0 and "pass" in r.stdout, r.stdout + r.stderr
+
+
+def test_a_captions_case_fails_on_other_pages(tmp_path):
+    r = _run(tmp_path, _captions_engine(["aa bb cc dd ee ff gg hh"]), cases="srep-0052-caption-lines-limits-chars")
+    assert r.returncode == 1 and "fail" in r.stdout, r.stdout + r.stderr
+    assert "captions: pages" in (tmp_path / "conformance" / "out" / "report.md").read_text()
+
+
+def test_a_captions_case_checks_the_current_word_at_each_time(tmp_path):
+    good = {"0.5": 0, "1.5": 1, "2.5": 2, "3.5": 3}
+    engine = _captions_engine(["aa bb\ncc dd"], active=good)
+    # the boxed-word case has two tracks; the stand-in gives both the same pages, so only "src" can pass on pages
+    r = _run(tmp_path, engine, cases="srep-0052-caption-lines-presets-boxed-word")
+    assert r.returncode == 1, r.stdout
+    report = (tmp_path / "conformance" / "out" / "report.md").read_text()
+    assert "grd" in report and "activeWord" not in report, report
+    again = tmp_path / "again"
+    again.mkdir()
+    _run(again, _captions_engine(["aa bb\ncc dd"], active={**good, "2.5": 1}),
+         cases="srep-0052-caption-lines-presets-boxed-word")
+    assert "activeWord src at 2.5: 2 (got 1)" in (again / "conformance" / "out" / "report.md").read_text()
+
+
+def test_a_captions_case_compares_words_and_times_with_another_case(tmp_path):
+    import json
+
+    def results(d):
+        return json.loads((d / "conformance" / "out" / "report.json").read_text())["results"]["rs"]
+    # the stand-in prints "aa bb\ncc dd" for both cases: blank passes, as its words and times equal blank-greedy's
+    _run(tmp_path, _captions_engine(["aa bb\ncc dd"]), cases="srep-0052-caption-lines-blank")
+    assert results(tmp_path)["srep-0052-caption-lines-blank"]["status"] == "pass", results(tmp_path)
+    assert results(tmp_path)["srep-0052-caption-lines-blank-greedy"]["status"] == "fail", "its pages differ"
+    # words that move in the greedy case fail the comparison
+    moved = tmp_path / "moved"
+    moved.mkdir()
+    _run(moved, _captions_engine(["aa bb\ncc dd"], greedy_words=[["aa", 0.0, 1.0]]), cases="srep-0052-caption-lines-blank")
+    blank = results(moved)["srep-0052-caption-lines-blank"]
+    assert blank["status"] == "fail" and not blank["checks"]["wordsAndTimes"][0][1], blank
+
+
+def test_a_captions_case_errors_when_the_engine_fails(tmp_path):
+    r = _run(tmp_path, _captions_engine(["aa bb\ncc dd"], status=1), cases="srep-0052-caption-lines-limits-chars")
+    assert r.returncode == 1 and "error" in r.stdout and "Traceback" not in r.stderr, r.stdout + r.stderr

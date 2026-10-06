@@ -36735,7 +36735,6 @@
     },
     "srep-0052-caption-lines-blank": {
       "rule": "SREP 52",
-      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
       "captions": {
         "track": "cap",
         "pages": [
@@ -36747,7 +36746,6 @@
     },
     "srep-0052-caption-lines-blank-greedy": {
       "rule": "SREP 52",
-      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
       "captions": {
         "track": "cap",
         "pages": [
@@ -36758,7 +36756,6 @@
     },
     "srep-0052-caption-lines-default": {
       "rule": "SREP 52",
-      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
       "captions": {
         "track": "cap",
         "pages": [
@@ -36768,7 +36765,6 @@
     },
     "srep-0052-caption-lines-greedy": {
       "rule": "SREP 52",
-      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
       "captions": {
         "track": "cap",
         "pages": [
@@ -36778,7 +36774,6 @@
     },
     "srep-0052-caption-lines-limits-chars": {
       "rule": "SREP 52",
-      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
       "captions": {
         "track": "cap",
         "pages": [
@@ -36789,7 +36784,6 @@
     },
     "srep-0052-caption-lines-limits-one-line": {
       "rule": "SREP 52",
-      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
       "captions": {
         "track": "cap",
         "pages": [
@@ -36801,7 +36795,6 @@
     },
     "srep-0052-caption-lines-limits-words": {
       "rule": "SREP 52",
-      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
       "captions": {
         "track": "cap",
         "pages": [
@@ -36812,7 +36805,6 @@
     },
     "srep-0052-caption-lines-presets-boxed-word": {
       "rule": "SREP 52",
-      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
       "captions": [
         {
           "track": "src",
@@ -36868,7 +36860,6 @@
     },
     "srep-0052-caption-lines-presets-highlight": {
       "rule": "SREP 52",
-      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
       "captions": [
         {
           "track": "src",
@@ -36924,7 +36915,6 @@
     },
     "srep-0052-caption-lines-presets-karaoke": {
       "rule": "SREP 52",
-      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
       "captions": [
         {
           "track": "src",
@@ -36980,7 +36970,6 @@
     },
     "srep-0052-caption-lines-source": {
       "rule": "SREP 52",
-      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
       "captions": {
         "track": "cap",
         "pages": [
