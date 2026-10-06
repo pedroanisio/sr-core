@@ -1,0 +1,1 @@
+<scene version="1.2"><project width="64" height="64" fps="10" duration="1"/><assets><image id="im" src="../assets/tile.png" width="16" height="16"/></assets><paints><pattern id="p" asset="im"/></paints><composition><shape id="s" shape="rect" width="20" height="20" fill="url(#p)"/></composition></scene>

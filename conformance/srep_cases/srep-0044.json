@@ -1,16 +1,66 @@
 {
  "srep-0044-key-default-handles": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"r\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"100\" y=\"120\" fill=\"#FF0000FF\">\n<animate property=\"x\" defaultInterpolation=\"cubic-bezier\"><key time=\"0\" value=\"100\"/><key time=\"1\" value=\"200\"/></animate>\n</shape>\n</composition>\n</scene>\n",
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"40\" height=\"40\" x=\"20\" y=\"20\" fill=\"#FF0000FF\"><animate property=\"x\" defaultInterpolation=\"cubic-bezier\"><key time=\"0\" value=\"20\"/><key time=\"1\" value=\"200\"/></animate></shape>\n</composition>\n</scene>\n",
   "expected": {
    "rule": "SREP 44",
-   "pending": "the SREP states no pixel-level expectation; the finding (E21, warning) is checked by the schema tests and the engine's own tests"
+   "findings": {
+    "codes": [
+     "E21"
+    ],
+    "counts": {
+     "E21": 1
+    }
+   }
+  }
+ },
+ "srep-0044-key-handles-on-key-1": {
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"40\" height=\"40\" x=\"20\" y=\"20\" fill=\"#FF0000FF\"><animate property=\"x\" defaultInterpolation=\"cubic-bezier\"><key time=\"0\" value=\"20\" bezier=\"0.25,0.1,0.25,1\"/><key time=\"1\" value=\"200\"/></animate></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 44",
+   "findings": {
+    "absent": [
+     "E21"
+    ]
+   }
+  }
+ },
+ "srep-0044-key-handles-on-key-2": {
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"40\" height=\"40\" x=\"20\" y=\"20\" fill=\"#FF0000FF\"><animate property=\"x\" defaultInterpolation=\"cubic-bezier\"><key time=\"0\" value=\"20\"/><key time=\"1\" value=\"200\" easeIn=\"0.4,0.9\"/></animate></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 44",
+   "findings": {
+    "absent": [
+     "E21"
+    ]
+   }
   }
  },
  "srep-0044-key-parameters-ignored": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"r\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"100\" y=\"120\" fill=\"#FF0000FF\">\n<animate property=\"x\" defaultInterpolation=\"linear\"><key time=\"0\" value=\"100\" bezier=\"0.25,0.1,0.25,1\" steps=\"4\" stiffness=\"200\"/><key time=\"1\" value=\"200\" easeIn=\"0.4,0.9\"/></animate>\n</shape>\n</composition>\n</scene>\n",
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"40\" height=\"40\" x=\"20\" y=\"20\" fill=\"#FF0000FF\"><animate property=\"x\" defaultInterpolation=\"linear\"><key time=\"0\" value=\"20\" bezier=\"0.25,0.1,0.25,1\" steps=\"4\" stiffness=\"200\"/><key time=\"1\" value=\"200\" easeIn=\"0.4,0.9\"/></animate></shape>\n</composition>\n</scene>\n",
   "expected": {
    "rule": "SREP 44",
-   "pending": "the SREP states no pixel-level expectation; the findings (E19, info) are checked by the schema tests and the engine's own tests"
+   "findings": {
+    "codes": [
+     "E19"
+    ],
+    "messages": [
+     "@bezier",
+     "@steps",
+     "@stiffness",
+     "@easeIn"
+    ]
+   }
+  }
+ },
+ "srep-0044-key-parameters-read": {
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"40\" height=\"40\" x=\"20\" y=\"20\" fill=\"#FF0000FF\"><animate property=\"x\"><key time=\"0\" value=\"20\" interpolation=\"back-out\" overshoot=\"2\"/><key time=\"1\" value=\"200\" interpolation=\"elastic-out\" period=\"0.5\"/></animate></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 44",
+   "findings": {
+    "absent": [
+     "E19"
+    ]
+   }
   }
  }
 }

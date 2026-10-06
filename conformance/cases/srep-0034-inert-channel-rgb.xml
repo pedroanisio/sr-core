@@ -1,0 +1,9 @@
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
+<composition>
+<shape id="s" shape="rect" width="40" height="40" x="80" y="20" fill="#00FF00FF" effects="e"/>
+</composition>
+<effects>
+<effect id="e" type="selective-color" hue="120" channel="rgb"/>
+</effects>
+</scene>

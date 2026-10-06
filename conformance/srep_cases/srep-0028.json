@@ -1,9 +1,84 @@
 {
- "srep-0028-asset-kinds": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><image id=\"tile\" src=\"../assets/tile.png\" width=\"16\" height=\"16\"/><generator id=\"noise\" kind=\"noise\" width=\"16\" height=\"16\"/></assets>\n<paints><pattern id=\"p-tile\" asset=\"tile\"/></paints>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"r\" shape=\"rect\" width=\"40\" height=\"20\" x=\"200\" y=\"120\" fill=\"url(#p-tile)\"/>\n<layer id=\"n-layer\" asset=\"noise\" visible=\"false\"/>\n<particleEmitter id=\"sparks\" color=\"#FFFF00FF\" emitterShape=\"asset-alpha\" emitterAsset=\"tile\"/>\n</composition>\n<effects><effect id=\"dm\" type=\"displacement-map\" source=\"n-layer\"/></effects>\n</scene>\n",
+ "srep-0028-r42-fails": {
+  "xml": "<scene version=\"1.2\"><project width=\"64\" height=\"64\" fps=\"10\" duration=\"1\"/><assets><generator id=\"g\" kind=\"fractal-noise\" width=\"16\" height=\"16\"/></assets><paints><pattern id=\"p\" asset=\"g\"/></paints><composition><shape id=\"s\" shape=\"rect\" width=\"20\" height=\"20\" fill=\"url(#p)\"/></composition></scene>\n",
   "expected": {
    "rule": "SREP 28",
-   "pending": "validation rules: the finding is checked by the schema tests (tests/test_srep_0028.py); the SREP states no pixel-level expectation"
+   "findings": {
+    "codes": [
+     "R42"
+    ],
+    "valid": false
+   }
+  }
+ },
+ "srep-0028-r42-passes": {
+  "xml": "<scene version=\"1.2\"><project width=\"64\" height=\"64\" fps=\"10\" duration=\"1\"/><assets><image id=\"im\" src=\"../assets/tile.png\" width=\"16\" height=\"16\"/></assets><paints><pattern id=\"p\" asset=\"im\"/></paints><composition><shape id=\"s\" shape=\"rect\" width=\"20\" height=\"20\" fill=\"url(#p)\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 28",
+   "findings": {
+    "absent": [
+     "R42"
+    ]
+   }
+  }
+ },
+ "srep-0028-r43-fails": {
+  "xml": "<scene version=\"1.2\"><project width=\"64\" height=\"64\" fps=\"10\" duration=\"1\"/><assets><generator id=\"g\" kind=\"fractal-noise\" width=\"16\" height=\"16\"/></assets><composition><particleEmitter id=\"e\" emitterAsset=\"g\" rate=\"10\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 28",
+   "findings": {
+    "codes": [
+     "R43"
+    ],
+    "valid": false
+   }
+  }
+ },
+ "srep-0028-r43-passes": {
+  "xml": "<scene version=\"1.2\"><project width=\"64\" height=\"64\" fps=\"10\" duration=\"1\"/><assets><image id=\"im\" src=\"../assets/tile.png\" width=\"16\" height=\"16\"/></assets><composition><particleEmitter id=\"e\" emitterAsset=\"im\" rate=\"10\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 28",
+   "findings": {
+    "absent": [
+     "R43"
+    ]
+   }
+  }
+ },
+ "srep-0028-r44-fails": {
+  "xml": "<scene version=\"1.2\"><project width=\"64\" height=\"64\" fps=\"10\" duration=\"1\"/><assets><generator id=\"g\" kind=\"fractal-noise\" width=\"16\" height=\"16\"/></assets><composition><shape id=\"s\" shape=\"rect\" width=\"20\" height=\"20\" effects=\"dm\"/></composition><effects><effect id=\"dm\" type=\"displacement-map\" source=\"g\"/></effects></scene>\n",
+  "expected": {
+   "rule": "SREP 28",
+   "findings": {
+    "codes": [
+     "R44"
+    ],
+    "valid": false
+   }
+  }
+ },
+ "srep-0028-r44-hidden-layer": {
+  "xml": "<scene version=\"1.2\"><project width=\"64\" height=\"64\" fps=\"10\" duration=\"1\"/><assets><generator id=\"g\" kind=\"fractal-noise\" width=\"16\" height=\"16\"/></assets><composition><layer id=\"gl\" asset=\"g\" visible=\"false\"/><shape id=\"s\" shape=\"rect\" width=\"20\" height=\"20\" effects=\"dm\"/></composition><effects><effect id=\"dm\" type=\"displacement-map\" source=\"gl\"/></effects></scene>\n",
+  "expected": {
+   "rule": "SREP 28",
+   "findings": {
+    "absent": [
+     "R44"
+    ],
+    "valid": true
+   }
+  }
+ },
+ "srep-0028-r44-in-symbol": {
+  "xml": "<scene version=\"1.2\"><project width=\"64\" height=\"64\" fps=\"10\" duration=\"1\"/><assets><generator id=\"g\" kind=\"fractal-noise\" width=\"16\" height=\"16\"/></assets><symbols><symbol id=\"sy\"><layer id=\"gl\" asset=\"g\" visible=\"false\"/></symbol></symbols><composition><shape id=\"s\" shape=\"rect\" width=\"20\" height=\"20\" effects=\"dm\"/></composition><effects><effect id=\"dm\" type=\"displacement-map\" source=\"gl\"/></effects></scene>\n",
+  "expected": {
+   "rule": "SREP 28",
+   "findings": {
+    "absent": [
+     "R44"
+    ],
+    "valid": true
+   }
   }
  }
 }

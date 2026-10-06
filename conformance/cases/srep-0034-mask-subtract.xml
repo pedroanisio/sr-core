@@ -1,0 +1,6 @@
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
+<composition>
+<shape id="m" shape="rect" x="500" y="300" width="300" height="400" fill="#FF0000FF"><mask type="rect" x="500" y="300" width="30" height="40" mode="subtract"/></shape>
+</composition>
+</scene>

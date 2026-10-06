@@ -1,9 +1,178 @@
 {
- "srep-0034-inert-and-mask-miss": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<group id=\"g-collapse\" collapse=\"true\"><shape id=\"in-group\" shape=\"rect\" width=\"20\" height=\"20\" x=\"20\" y=\"20\" fill=\"#FF0000FF\"/></group>\n<shape id=\"s-selective\" shape=\"rect\" width=\"40\" height=\"40\" x=\"80\" y=\"20\" fill=\"#00FF00FF\" effects=\"e-channel e-vignette\"/>\n<shape id=\"s-key\" shape=\"rect\" width=\"20\" height=\"20\" x=\"140\" y=\"20\" fill=\"#0000FFFF\"><animate property=\"x\"><key time=\"0\" value=\"140\" interpolation=\"ease-out\" overshoot=\"1.5\"/><key time=\"1\" value=\"300\"/></animate></shape>\n<shape id=\"s-source\" shape=\"rect\" width=\"40\" height=\"40\" x=\"200\" y=\"20\" fill=\"#FFFF00FF\" opacity=\"0\"/>\n<shape id=\"s-masked\" shape=\"rect\" width=\"300\" height=\"400\" x=\"320\" y=\"0\" fill=\"#FFFFFFFF\"><mask type=\"rect\" x=\"900\" y=\"900\" width=\"10\" height=\"10\" mode=\"add\"/></shape>\n</composition>\n<effects>\n<effect id=\"e-channel\" type=\"selective-color\" hue=\"120\" channel=\"red\"/>\n<effect id=\"e-vignette\" type=\"vignette\" intensity=\"0.5\"/>\n<effect id=\"e-displace\" type=\"displacement-map\" source=\"s-source\"/>\n</effects>\n</scene>\n",
+ "srep-0034-inert-collapse": {
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<composition>\n<group id=\"g\" collapse=\"true\"><shape id=\"in\" shape=\"rect\" width=\"20\" height=\"20\" x=\"20\" y=\"20\" fill=\"#FF0000FF\"/></group>\n</composition>\n</scene>\n",
   "expected": {
    "rule": "SREP 34",
-   "pending": "report-channel findings (INERT-I9..I13, MASK-MISS) are not pixel results and the kit has no report runner; the findings are checked by the schema tests (tests/test_srep_0034.py) only as far as the documents validate"
+   "findings": {
+    "codes": [
+     "E19"
+    ],
+    "counts": {
+     "E19": 1
+    },
+    "messages": [
+     "collapse"
+    ]
+   }
+  }
+ },
+ "srep-0034-inert-channel-red": {
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"40\" height=\"40\" x=\"80\" y=\"20\" fill=\"#00FF00FF\" effects=\"e\"/>\n</composition>\n<effects>\n<effect id=\"e\" type=\"selective-color\" hue=\"120\" channel=\"red\"/>\n</effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 34",
+   "findings": {
+    "codes": [
+     "E19"
+    ],
+    "counts": {
+     "E19": 1
+    },
+    "messages": [
+     "channel"
+    ]
+   }
+  }
+ },
+ "srep-0034-inert-channel-rgb": {
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"40\" height=\"40\" x=\"80\" y=\"20\" fill=\"#00FF00FF\" effects=\"e\"/>\n</composition>\n<effects>\n<effect id=\"e\" type=\"selective-color\" hue=\"120\" channel=\"rgb\"/>\n</effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 34",
+   "findings": {
+    "absent": [
+     "E19"
+    ]
+   }
+  }
+ },
+ "srep-0034-inert-key-param": {
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"40\" height=\"40\" x=\"20\" y=\"20\" fill=\"#FF0000FF\"><animate property=\"x\"><key time=\"0\" value=\"20\" interpolation=\"ease-out\" overshoot=\"1.5\"/><key time=\"1\" value=\"200\"/></animate></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 34",
+   "findings": {
+    "codes": [
+     "E19"
+    ],
+    "counts": {
+     "E19": 1
+    },
+    "messages": [
+     "@overshoot"
+    ]
+   }
+  }
+ },
+ "srep-0034-inert-key-param-read": {
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"40\" height=\"40\" x=\"20\" y=\"20\" fill=\"#FF0000FF\"><animate property=\"x\"><key time=\"0\" value=\"20\" interpolation=\"back-out\" overshoot=\"1.5\"/><key time=\"1\" value=\"200\"/></animate></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 34",
+   "findings": {
+    "absent": [
+     "E19"
+    ]
+   }
+  }
+ },
+ "srep-0034-inert-effect-param": {
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"40\" height=\"40\" x=\"80\" y=\"20\" fill=\"#00FF00FF\" effects=\"e\"/>\n</composition>\n<effects>\n<effect id=\"e\" type=\"vignette\" intensity=\"0.5\"/>\n</effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 34",
+   "findings": {
+    "codes": [
+     "E19"
+    ],
+    "counts": {
+     "E19": 1
+    },
+    "messages": [
+     "@intensity"
+    ]
+   }
+  }
+ },
+ "srep-0034-inert-effect-param-read": {
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"40\" height=\"40\" x=\"80\" y=\"20\" fill=\"#00FF00FF\" effects=\"e\"/>\n</composition>\n<effects>\n<effect id=\"e\" type=\"vignette\" amount=\"0.5\" radius=\"0.8\" softness=\"0.4\"/>\n</effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 34",
+   "findings": {
+    "absent": [
+     "E19"
+    ]
+   }
+  }
+ },
+ "srep-0034-inert-source-opacity-zero": {
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<composition>\n<shape id=\"src\" shape=\"rect\" width=\"40\" height=\"40\" x=\"200\" y=\"20\" fill=\"#FFFF00FF\" opacity=\"0\"/>\n<shape id=\"t\" shape=\"rect\" width=\"40\" height=\"40\" x=\"300\" y=\"20\" fill=\"#0000FFFF\" effects=\"e\"/>\n</composition>\n<effects>\n<effect id=\"e\" type=\"displacement-map\" source=\"src\"/>\n</effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 34",
+   "findings": {
+    "codes": [
+     "E19"
+    ],
+    "counts": {
+     "E19": 1
+    },
+    "messages": [
+     "opacity 0"
+    ]
+   }
+  }
+ },
+ "srep-0034-inert-source-hidden-layer": {
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<composition>\n<shape id=\"src\" shape=\"rect\" width=\"40\" height=\"40\" x=\"200\" y=\"20\" fill=\"#FFFF00FF\" visible=\"false\"/>\n<shape id=\"t\" shape=\"rect\" width=\"40\" height=\"40\" x=\"300\" y=\"20\" fill=\"#0000FFFF\" effects=\"e\"/>\n</composition>\n<effects>\n<effect id=\"e\" type=\"displacement-map\" source=\"src\"/>\n</effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 34",
+   "findings": {
+    "absent": [
+     "E19"
+    ]
+   }
+  }
+ },
+ "srep-0034-mask-miss": {
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<composition>\n<shape id=\"m\" shape=\"rect\" x=\"500\" y=\"300\" width=\"300\" height=\"400\" fill=\"#FF0000FF\"><mask type=\"rect\" x=\"500\" y=\"300\" width=\"300\" height=\"400\" mode=\"add\"/></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 34",
+   "findings": {
+    "codes": [
+     "E20"
+    ],
+    "counts": {
+     "E20": 1
+    }
+   }
+  }
+ },
+ "srep-0034-mask-local": {
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<composition>\n<shape id=\"m\" shape=\"rect\" x=\"500\" y=\"300\" width=\"300\" height=\"400\" fill=\"#FF0000FF\"><mask type=\"rect\" x=\"0\" y=\"0\" width=\"300\" height=\"400\" mode=\"add\"/></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 34",
+   "findings": {
+    "absent": [
+     "E20"
+    ]
+   }
+  }
+ },
+ "srep-0034-mask-inverted": {
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<composition>\n<shape id=\"m\" shape=\"rect\" x=\"500\" y=\"300\" width=\"300\" height=\"400\" fill=\"#FF0000FF\"><mask type=\"rect\" x=\"500\" y=\"300\" width=\"30\" height=\"40\" invert=\"true\"/></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 34",
+   "findings": {
+    "absent": [
+     "E20"
+    ]
+   }
+  }
+ },
+ "srep-0034-mask-subtract": {
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<composition>\n<shape id=\"m\" shape=\"rect\" x=\"500\" y=\"300\" width=\"300\" height=\"400\" fill=\"#FF0000FF\"><mask type=\"rect\" x=\"500\" y=\"300\" width=\"30\" height=\"40\" mode=\"subtract\"/></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 34",
+   "findings": {
+    "absent": [
+     "E20"
+    ]
+   }
   }
  }
 }

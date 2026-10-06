@@ -1400,9 +1400,66 @@
         "h": 20
       }
     },
-    "srep-0028-asset-kinds": {
+    "srep-0028-r42-fails": {
       "rule": "SREP 28",
-      "pending": "validation rules: the finding is checked by the schema tests (tests/test_srep_0028.py); the SREP states no pixel-level expectation"
+      "findings": {
+        "codes": [
+          "R42"
+        ],
+        "valid": false
+      }
+    },
+    "srep-0028-r42-passes": {
+      "rule": "SREP 28",
+      "findings": {
+        "absent": [
+          "R42"
+        ]
+      }
+    },
+    "srep-0028-r43-fails": {
+      "rule": "SREP 28",
+      "findings": {
+        "codes": [
+          "R43"
+        ],
+        "valid": false
+      }
+    },
+    "srep-0028-r43-passes": {
+      "rule": "SREP 28",
+      "findings": {
+        "absent": [
+          "R43"
+        ]
+      }
+    },
+    "srep-0028-r44-fails": {
+      "rule": "SREP 28",
+      "findings": {
+        "codes": [
+          "R44"
+        ],
+        "valid": false
+      }
+    },
+    "srep-0028-r44-hidden-layer": {
+      "rule": "SREP 28",
+      "findings": {
+        "absent": [
+          "R44"
+        ],
+        "valid": true
+      }
+    },
+    "srep-0028-r44-in-symbol": {
+      "rule": "SREP 28",
+      "findings": {
+        "absent": [
+          "R44"
+        ],
+        "valid": true
+      }
     },
     "srep-0029-effect-meanings": {
       "rule": "SREP 29",
@@ -1443,13 +1500,200 @@
       "rule": "SREP 32",
       "pending": "needs a measured value: the SREP's Conformance table compares texel values after magnification and states no centroid or region, and the SREP itself records that nothing was measured (Motivation: not measured yet)"
     },
-    "srep-0033-safe-area-force": {
+    "srep-0033-safe-warn": {
       "rule": "SREP 33",
-      "pending": "report-channel finding (SA01/SA02) on validate, not a pixel result; the kit's run.py has no runner for report cases, and the finding is checked by the schema tests (tests/test_srep_0033.py) only as far as the attribute validates"
+      "findings": {
+        "codes": [
+          "SA01"
+        ],
+        "counts": {
+          "SA01": 1
+        }
+      }
     },
-    "srep-0034-inert-and-mask-miss": {
+    "srep-0033-safe-hidden": {
+      "rule": "SREP 33",
+      "findings": {
+        "absent": [
+          "SA01"
+        ]
+      }
+    },
+    "srep-0033-safe-force": {
+      "rule": "SREP 33",
+      "findings": {
+        "absent": [
+          "SA01"
+        ],
+        "codes": [
+          "SA02"
+        ],
+        "counts": {
+          "SA02": 1
+        }
+      }
+    },
+    "srep-0033-safe-force-group": {
+      "rule": "SREP 33",
+      "findings": {
+        "absent": [
+          "SA01"
+        ],
+        "codes": [
+          "SA02"
+        ],
+        "counts": {
+          "SA02": 1
+        }
+      }
+    },
+    "srep-0033-safe-force-symbol": {
+      "rule": "SREP 33",
+      "findings": {
+        "absent": [
+          "SA01"
+        ],
+        "codes": [
+          "SA02"
+        ]
+      }
+    },
+    "srep-0034-inert-collapse": {
       "rule": "SREP 34",
-      "pending": "report-channel findings (INERT-I9..I13, MASK-MISS) are not pixel results and the kit has no report runner; the findings are checked by the schema tests (tests/test_srep_0034.py) only as far as the documents validate"
+      "findings": {
+        "codes": [
+          "E19"
+        ],
+        "counts": {
+          "E19": 1
+        },
+        "messages": [
+          "collapse"
+        ]
+      }
+    },
+    "srep-0034-inert-channel-red": {
+      "rule": "SREP 34",
+      "findings": {
+        "codes": [
+          "E19"
+        ],
+        "counts": {
+          "E19": 1
+        },
+        "messages": [
+          "channel"
+        ]
+      }
+    },
+    "srep-0034-inert-channel-rgb": {
+      "rule": "SREP 34",
+      "findings": {
+        "absent": [
+          "E19"
+        ]
+      }
+    },
+    "srep-0034-inert-key-param": {
+      "rule": "SREP 34",
+      "findings": {
+        "codes": [
+          "E19"
+        ],
+        "counts": {
+          "E19": 1
+        },
+        "messages": [
+          "@overshoot"
+        ]
+      }
+    },
+    "srep-0034-inert-key-param-read": {
+      "rule": "SREP 34",
+      "findings": {
+        "absent": [
+          "E19"
+        ]
+      }
+    },
+    "srep-0034-inert-effect-param": {
+      "rule": "SREP 34",
+      "findings": {
+        "codes": [
+          "E19"
+        ],
+        "counts": {
+          "E19": 1
+        },
+        "messages": [
+          "@intensity"
+        ]
+      }
+    },
+    "srep-0034-inert-effect-param-read": {
+      "rule": "SREP 34",
+      "findings": {
+        "absent": [
+          "E19"
+        ]
+      }
+    },
+    "srep-0034-inert-source-opacity-zero": {
+      "rule": "SREP 34",
+      "findings": {
+        "codes": [
+          "E19"
+        ],
+        "counts": {
+          "E19": 1
+        },
+        "messages": [
+          "opacity 0"
+        ]
+      }
+    },
+    "srep-0034-inert-source-hidden-layer": {
+      "rule": "SREP 34",
+      "findings": {
+        "absent": [
+          "E19"
+        ]
+      }
+    },
+    "srep-0034-mask-miss": {
+      "rule": "SREP 34",
+      "findings": {
+        "codes": [
+          "E20"
+        ],
+        "counts": {
+          "E20": 1
+        }
+      }
+    },
+    "srep-0034-mask-local": {
+      "rule": "SREP 34",
+      "findings": {
+        "absent": [
+          "E20"
+        ]
+      }
+    },
+    "srep-0034-mask-inverted": {
+      "rule": "SREP 34",
+      "findings": {
+        "absent": [
+          "E20"
+        ]
+      }
+    },
+    "srep-0034-mask-subtract": {
+      "rule": "SREP 34",
+      "findings": {
+        "absent": [
+          "E20"
+        ]
+      }
     },
     "srep-0035-preset-ease-curves": {
       "rule": "SREP 35",
@@ -1566,11 +1810,52 @@
     },
     "srep-0044-key-default-handles": {
       "rule": "SREP 44",
-      "pending": "the SREP states no pixel-level expectation; the finding (E21, warning) is checked by the schema tests and the engine's own tests"
+      "findings": {
+        "codes": [
+          "E21"
+        ],
+        "counts": {
+          "E21": 1
+        }
+      }
+    },
+    "srep-0044-key-handles-on-key-1": {
+      "rule": "SREP 44",
+      "findings": {
+        "absent": [
+          "E21"
+        ]
+      }
+    },
+    "srep-0044-key-handles-on-key-2": {
+      "rule": "SREP 44",
+      "findings": {
+        "absent": [
+          "E21"
+        ]
+      }
     },
     "srep-0044-key-parameters-ignored": {
       "rule": "SREP 44",
-      "pending": "the SREP states no pixel-level expectation; the findings (E19, info) are checked by the schema tests and the engine's own tests"
+      "findings": {
+        "codes": [
+          "E19"
+        ],
+        "messages": [
+          "@bezier",
+          "@steps",
+          "@stiffness",
+          "@easeIn"
+        ]
+      }
+    },
+    "srep-0044-key-parameters-read": {
+      "rule": "SREP 44",
+      "findings": {
+        "absent": [
+          "E19"
+        ]
+      }
     },
     "srep-0045-link-follow-constant": {
       "rule": "SREP 45",
