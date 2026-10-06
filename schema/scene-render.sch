@@ -480,4 +480,9 @@
       <sch:assert id="R47" test="@kind='grid'">@lineWidth is the line width of a grid generator.</sch:assert>
     </sch:rule>
   </sch:pattern>
+  <sch:pattern id="p67">
+    <sch:rule context="object3D[@tracking]">
+      <sch:assert id="TXT2" test="@primitive='text'">@tracking applies to object3D primitive="text".</sch:assert>
+    </sch:rule>
+  </sch:pattern>
 </sch:schema>

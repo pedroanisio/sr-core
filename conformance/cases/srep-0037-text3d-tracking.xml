@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<materials><material id="m-white" baseColor="#FFFFFFFF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<object3D id="ii" primitive="text" text="II" height="100" tracking="200" material="m-white" x="320" y="180"/>
+</composition>
+</scene>
