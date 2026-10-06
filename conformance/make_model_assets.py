@@ -74,8 +74,8 @@ def box(pts):
     return [[min(p[i] for p in pts) for i in range(3)], [max(p[i] for p in pts) for i in range(3)]]
 
 
-def material(rgb):
-    return {"pbrMetallicRoughness": {"baseColorFactor": [*rgb, 1], "metallicFactor": 0, "roughnessFactor": 1},
+def material(rgb, name=None):
+    return {**({"name": name} if name else {}), "pbrMetallicRoughness": {"baseColorFactor": [*rgb, 1], "metallicFactor": 0, "roughnessFactor": 1},
             "doubleSided": True, "extensions": {"KHR_materials_unlit": {}}}
 
 
@@ -118,7 +118,24 @@ def morphs():
         "materials": [material((1, 0, 0))]})
 
 
+def materials():
+    """materials.glb (SREP 38): one mesh of two primitives side by side with named materials, `stone` (red, left, x = -0.4 m)
+    and `old` (green, right, x = +0.4 m); a materialOverride pair names them."""
+    g = Glb()
+    left, right = triangle(-0.4, 0.0), triangle(0.4, 0.0)
+    pl = g.floats(left, "VEC3", box(left), 34962)
+    pr = g.floats(right, "VEC3", box(right), 34962)
+    idx = g.indices([0, 1, 2])
+    g.write(os.path.join(OUT, "materials.glb"), {
+        "scene": 0, "scenes": [{"nodes": [0]}], "nodes": [{"name": "pair", "mesh": 0}],
+        "meshes": [{"name": "pairMesh", "primitives": [
+            {"attributes": {"POSITION": pl}, "indices": idx, "material": 0},
+            {"attributes": {"POSITION": pr}, "indices": idx, "material": 1}]}],
+        "materials": [material((1, 0, 0), "stone"), material((0, 1, 0), "old")]})
+
+
 if __name__ == "__main__":
     joints()
     morphs()
-    print("wrote srep_cases/assets/joints.glb and morphs.glb")
+    materials()
+    print("wrote srep_cases/assets/joints.glb, morphs.glb and materials.glb")

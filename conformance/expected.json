@@ -1692,10 +1692,6 @@
         "valid": true
       }
     },
-    "srep-0029-effect-meanings": {
-      "rule": "SREP 29",
-      "pending": "needs measured values: the SREP's Conformance table gives colours and lattice properties, not centroids or sizes, and the case document is schema-valid only; the six checks need per-effect cases with measured output"
-    },
     "srep-0029-halftone-default-angle": {
       "rule": "SREP 29",
       "regions": [
@@ -14489,10 +14485,6 @@
         }
       ]
     },
-    "srep-0038-model-material-override": {
-      "rule": "SREP 38",
-      "pending": "marker.glb has unnamed materials, so a materialOverride pair cannot match; needs a model with named materials"
-    },
     "srep-0038-model-node": {
       "rule": "SREP 38",
       "green": {
@@ -14506,6 +14498,103 @@
         "blue",
         "yellow"
       ]
+    },
+    "srep-0038-model-material-override": {
+      "rule": "SREP 38 (Semantics: each primitive whose imported material has that name is drawn with the document material; a material with no pair keeps its imported look). materials.glb has two primitives, `stone` (red) at x = -0.4 m and `old` (green) at +0.4 m; with materialOverride=\"stone:m-blue\" the left primitive is blue and the right stays green. A model point (gx, gy) is at (320 + 100 gx, 200 - 100 gy): the triangles span 20 x 30 px about (280, 200) and (360, 200) (their vertex average y is 0).",
+      "blue": {
+        "cx": 280,
+        "cy": 200,
+        "w": 20,
+        "h": 30
+      },
+      "green": {
+        "cx": 360,
+        "cy": 200,
+        "w": 20,
+        "h": 30
+      },
+      "absent": [
+        "red",
+        "yellow"
+      ]
+    },
+    "srep-0038-model-material-override-none": {
+      "rule": "SREP 38: without materialOverride the primitives keep their imported materials, stone red and old green (the baseline of the override case).",
+      "red": {
+        "cx": 280,
+        "cy": 200,
+        "w": 20,
+        "h": 30
+      },
+      "green": {
+        "cx": 360,
+        "cy": 200,
+        "w": 20,
+        "h": 30
+      },
+      "absent": [
+        "blue",
+        "yellow"
+      ]
+    },
+    "srep-0038-model-material-precedence": {
+      "rule": "SREP 38 (Semantics: @material replaces every material and takes precedence over materialOverride): both primitives are yellow, one 100 x 30 px blob about (320, 200) (the two triangles span x 270 to 370).",
+      "yellow": {
+        "cx": 320,
+        "cy": 200,
+        "w": 100,
+        "h": 30
+      },
+      "absent": [
+        "red",
+        "green",
+        "blue"
+      ]
+    },
+    "srep-0038-model-node-missing": {
+      "rule": "SREP 38: an unknown node draws nothing and is reported (the report names the node).",
+      "findings": {
+        "via": "render",
+        "messages": [
+          "nosuchnode"
+        ]
+      }
+    },
+    "srep-0038-override-unknown-id": {
+      "rule": "SREP 38: a pair naming no document material fails validation with MOV2",
+      "findings": {
+        "codes": [
+          "MOV2"
+        ],
+        "valid": false
+      }
+    },
+    "srep-0038-override-two-pairs-good": {
+      "rule": "SREP 38: two good pairs pass (no MOV2)",
+      "findings": {
+        "absent": [
+          "MOV2"
+        ],
+        "valid": true
+      }
+    },
+    "srep-0038-override-first-pair-wrong": {
+      "rule": "SREP 38: one wrong pair, the first, fails with MOV2",
+      "findings": {
+        "codes": [
+          "MOV2"
+        ],
+        "valid": false
+      }
+    },
+    "srep-0038-override-last-pair-wrong": {
+      "rule": "SREP 38: one wrong pair, the last, fails with MOV2",
+      "findings": {
+        "codes": [
+          "MOV2"
+        ],
+        "valid": false
+      }
     },
     "srep-0039-unevenness-varies": {
       "rule": "SREP 39",
