@@ -113,7 +113,9 @@ def render(renderer, case, output=None):
         return None, None, time.time() - t0, ["timed out after 600 s"]
     dt = time.time() - t0
     if not os.path.exists(png):  # renderers that write the document's own output path
-        found = sorted(glob.glob(os.path.join(d, "**", "*.png"), recursive=True))
+        # the assets copied beside the scene are inputs, not output
+        found = sorted(f for f in glob.glob(os.path.join(d, "**", "*.png"), recursive=True)
+                       if not f.startswith(os.path.join(d, "assets") + os.sep))
         if found:
             shutil.copy(found[0], png)
     log = (p.stdout + p.stderr).strip()

@@ -3762,6 +3762,11 @@
     <xs:attribute name="representation" type="xs:NMTOKEN">
       <xs:annotation><xs:documentation>Preferred asset representation name for this output (e.g. "proxy" for drafts).</xs:documentation></xs:annotation>
     </xs:attribute>
+    <xs:attribute name="report" type="xs:anyURI">
+      <xs:annotation><xs:documentation>
+        Where to write this output's render report (scene-render-report/1), relative to the document.
+      </xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:complexType>
 
   <!-- ===================================================== root -->
