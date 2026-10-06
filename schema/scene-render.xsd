@@ -1571,6 +1571,14 @@
     <xs:attribute name="opacity" type="unitDecimal" default="1"/>
     <xs:attribute name="start" type="xs:double" default="0"/>
     <xs:attribute name="end" type="xs:double"/>
+    <xs:attribute name="shutterAngle">
+      <xs:annotation><xs:documentation>The shutter angle, in degrees, of this node's motion blur, instead of the project's: the
+      nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the
+      whole frame interval. Only where motion blur is on for the node.</xs:documentation></xs:annotation>
+      <xs:simpleType><xs:restriction base="xs:double">
+        <xs:minInclusive value="0"/><xs:maxInclusive value="720"/>
+      </xs:restriction></xs:simpleType>
+    </xs:attribute>
     <xs:attribute name="startMarker" type="xs:IDREF"/>
     <xs:attribute name="endMarker" type="xs:IDREF"/>
     <xs:attribute name="condition" type="expressionString">

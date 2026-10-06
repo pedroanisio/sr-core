@@ -600,6 +600,27 @@ def ik_doc(goal, pole, constraint_extra):
 cases["srep-0054-ik-pole"] = ik_doc((10, 10), (0, 30), ' pole="pole" bendPositive="true"')
 cases["srep-0054-ik-soft-reach"] = ik_doc((25, 0), (0, 30), ' softness="0.3"')
 
+# ---------------------------------------------------------------- SREP 55: nodeAttributes/@shutterAngle
+# A square crosses at 100 px/s at 10 fps; project angle 180, one node 360, one node 0. Rows: blue (project), red (360), green (0).
+def shutter_doc(body):
+    return doc12(body).replace('<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>',
+                               '<project width="640" height="360" fps="10" duration="1" background="#000000FF" '
+                               'motionBlur="true" shutterAngle="180"/>')
+
+
+def crossing(id, y, colour, extra=""):
+    return (f'<shape id="{id}" shape="rect" width="20" height="20" anchorX="10" anchorY="10" x="320" y="{y}" '
+            f'fill="{COL[colour]}"{extra}><animate property="x"><key time="0" value="320"/><key time="1" value="420"/>'
+            '</animate></shape>')
+
+
+cases["srep-0055-node-shutter"] = shutter_doc(
+    crossing("project", 90, "blue") + crossing("wide", 180, "red", ' shutterAngle="360"')
+    + crossing("sharp", 270, "green", ' shutterAngle="0"'))
+cases["srep-0055-node-shutter-inherit"] = shutter_doc(
+    '<group id="grp" shutterAngle="360">' + crossing("inherits", 120, "red")
+    + crossing("own", 240, "green", ' shutterAngle="180"') + "</group>")
+
 os.makedirs(os.path.join(HERE, "cases"), exist_ok=True)
 for name, xml in cases.items():
     open(os.path.join(HERE, "cases", name + ".xml"), "w").write(xml)
