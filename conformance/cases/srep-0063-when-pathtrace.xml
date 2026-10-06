@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2">
+<project width="64" height="64" fps="24" duration="1" background="#000000FF"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<composition>
+<camera id="cam" z="-30" renderer="pathtrace"/>
+<object3D id="ground" primitive="plane" width="20" height="20" rotationX="-90" shadowCatcher="true"/>
+<object3D id="ball" primitive="sphere" radius="2" y="-2"/>
+</composition>
+</scene>

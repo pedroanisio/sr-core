@@ -1,0 +1,28 @@
+{
+ "srep-0063-when-raster": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"64\" height=\"64\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<camera id=\"cam\" z=\"-30\"/>\n<object3D id=\"ground\" primitive=\"plane\" width=\"20\" height=\"20\" rotationX=\"-90\" shadowCatcher=\"true\"/>\n<object3D id=\"ball\" primitive=\"sphere\" radius=\"2\" y=\"-2\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 63 (a shadow catcher under the raster renderer: an entry conditioned on the path tracer does not apply)",
+   "findings": {
+    "valid": true,
+    "absent": [
+     "SUP-REPORTED"
+    ]
+   },
+   "pending": "the Rust reference does not implement SREP 63 yet (nor the SUP findings of SREP 22); the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0063-when-pathtrace": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"64\" height=\"64\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<camera id=\"cam\" z=\"-30\" renderer=\"pathtrace\"/>\n<object3D id=\"ground\" primitive=\"plane\" width=\"20\" height=\"20\" rotationX=\"-90\" shadowCatcher=\"true\"/>\n<object3D id=\"ball\" primitive=\"sphere\" radius=\"2\" y=\"-2\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 63 (with camera/@renderer=pathtrace the conditioned entry applies: SUP-REPORTED names object3D/@shadowCatcher=true)",
+   "findings": {
+    "valid": true,
+    "codes": [
+     "SUP-REPORTED"
+    ]
+   },
+   "pending": "the Rust reference does not implement SREP 63 yet (nor the SUP findings of SREP 22); the entry keeps the values derived from the SREP"
+  }
+ }
+}

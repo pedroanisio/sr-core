@@ -39546,6 +39546,26 @@
       },
       "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
     },
+    "srep-0058-jump": {
+      "rule": "SREP 58 (a jump takes no length: at p = 0.5 the node is at the next subpath's start)",
+      "red": {
+        "cx": 300,
+        "cy": 180,
+        "w": 10,
+        "h": 10
+      },
+      "pending": "the Rust reference does not implement SREP 58 yet (its motion paths count the jump as length and take the incoming direction at a vertex); the entry keeps the values derived from the SREP"
+    },
+    "srep-0058-vertex": {
+      "rule": "SREP 58 (at an exact vertex the direction is the outgoing segment's: the bar stands vertical)",
+      "red": {
+        "cx": 300,
+        "cy": 100,
+        "w": 4,
+        "h": 40
+      },
+      "pending": "the Rust reference does not implement SREP 58 yet (its motion paths count the jump as length and take the incoming direction at a vertex); the entry keeps the values derived from the SREP"
+    },
     "srep-0059-identity": {
       "rule": "SREP 59 (an IDREF naming no id is rejected: @parent=\"nosuch\")",
       "findings": {
@@ -39575,6 +39595,26 @@
         ]
       },
       "pending": "the Rust reference does not implement R54 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0063-when-raster": {
+      "rule": "SREP 63 (a shadow catcher under the raster renderer: an entry conditioned on the path tracer does not apply)",
+      "findings": {
+        "valid": true,
+        "absent": [
+          "SUP-REPORTED"
+        ]
+      },
+      "pending": "the Rust reference does not implement SREP 63 yet (nor the SUP findings of SREP 22); the entry keeps the values derived from the SREP"
+    },
+    "srep-0063-when-pathtrace": {
+      "rule": "SREP 63 (with camera/@renderer=pathtrace the conditioned entry applies: SUP-REPORTED names object3D/@shadowCatcher=true)",
+      "findings": {
+        "valid": true,
+        "codes": [
+          "SUP-REPORTED"
+        ]
+      },
+      "pending": "the Rust reference does not implement SREP 63 yet (nor the SUP findings of SREP 22); the entry keeps the values derived from the SREP"
     }
   }
 }

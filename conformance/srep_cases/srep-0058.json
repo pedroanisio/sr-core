@@ -1,0 +1,28 @@
+{
+ "srep-0058-jump": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"r\" shape=\"rect\" width=\"10\" height=\"10\" anchorX=\"5\" anchorY=\"5\" fill=\"#FF0000FF\">\n<motionPath path=\"M 100 180 L 110 180 M 300 180 L 310 180\"><animate property=\"progress\"><key time=\"0\" value=\"0.5\"/></animate></motionPath>\n</shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 58 (a jump takes no length: at p = 0.5 the node is at the next subpath's start)",
+   "red": {
+    "cx": 300,
+    "cy": 180,
+    "w": 10,
+    "h": 10
+   },
+   "pending": "the Rust reference does not implement SREP 58 yet (its motion paths count the jump as length and take the incoming direction at a vertex); the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0058-vertex": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"r\" shape=\"rect\" width=\"40\" height=\"4\" anchorX=\"20\" anchorY=\"2\" fill=\"#FF0000FF\">\n<motionPath path=\"M 200 100 L 300 100 L 300 200\" autoOrient=\"true\"><animate property=\"progress\"><key time=\"0\" value=\"0.5\"/></animate></motionPath>\n</shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 58 (at an exact vertex the direction is the outgoing segment's: the bar stands vertical)",
+   "red": {
+    "cx": 300,
+    "cy": 100,
+    "w": 4,
+    "h": 40
+   },
+   "pending": "the Rust reference does not implement SREP 58 yet (its motion paths count the jump as length and take the incoming direction at a vertex); the entry keeps the values derived from the SREP"
+  }
+ }
+}
