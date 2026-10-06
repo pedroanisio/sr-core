@@ -2,6 +2,6 @@
 <project width="640" height="360" fps="24" duration="1" background="#000000FF" safeArea="sa"/>
 <safeAreas><safeArea id="sa" preset="custom" top="0.1" right="0.1" bottom="0.1" left="0.1" enforce="warn"/></safeAreas>
 <composition>
-<shape id="cta" shape="rect" width="40" height="20" x="610" y="170" fill="#FF0000FF" safeAreaForce="true"/>
+<shape id="cta" shape="rect" width="40" height="20" x="610" y="170" fill="#FF0000FF" tags="cta" safeAreaForce="true"/>
 </composition>
 </scene>

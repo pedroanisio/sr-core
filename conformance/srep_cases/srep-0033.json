@@ -1,6 +1,6 @@
 {
  "srep-0033-safe-warn": {
-  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" safeArea=\"sa\"/>\n<safeAreas><safeArea id=\"sa\" preset=\"custom\" top=\"0.1\" right=\"0.1\" bottom=\"0.1\" left=\"0.1\" enforce=\"warn\"/></safeAreas>\n<composition>\n<shape id=\"cta\" shape=\"rect\" width=\"40\" height=\"20\" x=\"610\" y=\"170\" fill=\"#FF0000FF\"/>\n</composition>\n</scene>\n",
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" safeArea=\"sa\"/>\n<safeAreas><safeArea id=\"sa\" preset=\"custom\" top=\"0.1\" right=\"0.1\" bottom=\"0.1\" left=\"0.1\" enforce=\"warn\"/></safeAreas>\n<composition>\n<shape id=\"cta\" shape=\"rect\" width=\"40\" height=\"20\" x=\"610\" y=\"170\" fill=\"#FF0000FF\" tags=\"cta\"/>\n</composition>\n</scene>\n",
   "expected": {
    "rule": "SREP 33",
    "findings": {
@@ -14,7 +14,7 @@
   }
  },
  "srep-0033-safe-hidden": {
-  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" safeArea=\"sa\"/>\n<safeAreas><safeArea id=\"sa\" preset=\"custom\" top=\"0.1\" right=\"0.1\" bottom=\"0.1\" left=\"0.1\" enforce=\"warn\"/></safeAreas>\n<composition>\n<shape id=\"cta\" shape=\"rect\" width=\"40\" height=\"20\" x=\"610\" y=\"170\" fill=\"#FF0000FF\" opacity=\"0\"/>\n</composition>\n</scene>\n",
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" safeArea=\"sa\"/>\n<safeAreas><safeArea id=\"sa\" preset=\"custom\" top=\"0.1\" right=\"0.1\" bottom=\"0.1\" left=\"0.1\" enforce=\"warn\"/></safeAreas>\n<composition>\n<shape id=\"cta\" shape=\"rect\" width=\"40\" height=\"20\" x=\"610\" y=\"170\" fill=\"#FF0000FF\" tags=\"cta\" opacity=\"0\"/>\n</composition>\n</scene>\n",
   "expected": {
    "rule": "SREP 33",
    "findings": {
@@ -25,7 +25,7 @@
   }
  },
  "srep-0033-safe-force": {
-  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" safeArea=\"sa\"/>\n<safeAreas><safeArea id=\"sa\" preset=\"custom\" top=\"0.1\" right=\"0.1\" bottom=\"0.1\" left=\"0.1\" enforce=\"warn\"/></safeAreas>\n<composition>\n<shape id=\"cta\" shape=\"rect\" width=\"40\" height=\"20\" x=\"610\" y=\"170\" fill=\"#FF0000FF\" safeAreaForce=\"true\"/>\n</composition>\n</scene>\n",
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" safeArea=\"sa\"/>\n<safeAreas><safeArea id=\"sa\" preset=\"custom\" top=\"0.1\" right=\"0.1\" bottom=\"0.1\" left=\"0.1\" enforce=\"warn\"/></safeAreas>\n<composition>\n<shape id=\"cta\" shape=\"rect\" width=\"40\" height=\"20\" x=\"610\" y=\"170\" fill=\"#FF0000FF\" tags=\"cta\" safeAreaForce=\"true\"/>\n</composition>\n</scene>\n",
   "expected": {
    "rule": "SREP 33",
    "findings": {
@@ -42,7 +42,7 @@
   }
  },
  "srep-0033-safe-force-group": {
-  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" safeArea=\"sa\"/>\n<safeAreas><safeArea id=\"sa\" preset=\"custom\" top=\"0.1\" right=\"0.1\" bottom=\"0.1\" left=\"0.1\" enforce=\"warn\"/></safeAreas>\n<composition>\n<group id=\"gf\" safeAreaForce=\"true\"><shape id=\"cta\" shape=\"rect\" width=\"40\" height=\"20\" x=\"610\" y=\"170\" fill=\"#FF0000FF\"/></group>\n</composition>\n</scene>\n",
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" safeArea=\"sa\"/>\n<safeAreas><safeArea id=\"sa\" preset=\"custom\" top=\"0.1\" right=\"0.1\" bottom=\"0.1\" left=\"0.1\" enforce=\"warn\"/></safeAreas>\n<composition>\n<group id=\"gf\" safeAreaForce=\"true\"><shape id=\"cta\" shape=\"rect\" width=\"40\" height=\"20\" x=\"610\" y=\"170\" fill=\"#FF0000FF\" tags=\"cta\"/></group>\n</composition>\n</scene>\n",
   "expected": {
    "rule": "SREP 33",
    "findings": {
@@ -59,7 +59,7 @@
   }
  },
  "srep-0033-safe-force-symbol": {
-  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" safeArea=\"sa\"/>\n<safeAreas><safeArea id=\"sa\" preset=\"custom\" top=\"0.1\" right=\"0.1\" bottom=\"0.1\" left=\"0.1\" enforce=\"warn\"/></safeAreas>\n<symbols><symbol id=\"sy\" safeAreaForce=\"true\"><shape id=\"cta\" shape=\"rect\" width=\"40\" height=\"20\" x=\"610\" y=\"170\" fill=\"#FF0000FF\"/></symbol></symbols>\n<composition>\n<instance id=\"i\" symbol=\"sy\" x=\"0\" y=\"0\"/>\n</composition>\n</scene>\n",
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" safeArea=\"sa\"/>\n<safeAreas><safeArea id=\"sa\" preset=\"custom\" top=\"0.1\" right=\"0.1\" bottom=\"0.1\" left=\"0.1\" enforce=\"warn\"/></safeAreas>\n<symbols><symbol id=\"sy\" safeAreaForce=\"true\"><shape id=\"cta\" shape=\"rect\" width=\"40\" height=\"20\" x=\"610\" y=\"170\" fill=\"#FF0000FF\" tags=\"cta\"/></symbol></symbols>\n<composition>\n<instance id=\"i\" symbol=\"sy\" x=\"0\" y=\"0\"/>\n</composition>\n</scene>\n",
   "expected": {
    "rule": "SREP 33",
    "findings": {
