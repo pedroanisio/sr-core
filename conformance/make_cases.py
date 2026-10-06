@@ -5,6 +5,7 @@ Every case is a 640x360 frame on black with flat, unlit, single-colour objects; 
 centroid and bounding box of each colour. Expected values are computed here from the normative rules,
 so the cases and their answers cannot drift apart.
 """
+import glob
 import json
 import math
 import os
@@ -521,6 +522,14 @@ expected["srep-0013-segment-overlay"] = {"rule": "SREP 13", "output": {"id": "sh
 cases["srep-0013-overlay-plain"] = seg_doc("", fps=10, extra=TAG, overlay=' overlay="tag"')
 expected["srep-0013-overlay-plain"] = {"rule": "SREP 13", "output": {"id": "short", "time": 0.4},
                                        "yellow": box(310, 180, 20, 20)}
+
+# cases of SREPs 15 and later live in srep_cases/*.json, each {name: {"xml": <document text>, "expected": {...}}};
+# an expected entry with "pending": "<reason>" is listed in the kit but not run (the engine does not pass it yet, or
+# the SREP states no pixel-level value)
+for path in sorted(glob.glob(os.path.join(HERE, "srep_cases", "*.json"))):
+    for name, case in json.load(open(path)).items():
+        cases[name] = case["xml"]
+        expected[name] = case["expected"]
 
 os.makedirs(os.path.join(HERE, "cases"), exist_ok=True)
 for name, xml in cases.items():

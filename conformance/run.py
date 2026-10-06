@@ -166,6 +166,11 @@ def main() -> int:
     for r in a.renderers.split(","):
         report["results"][r] = {}
         for c in cases:
+            pending = spec["cases"][c].get("pending")
+            if pending:
+                report["results"][r][c] = {"status": "pending", "reason": pending, "notes": []}
+                print(f"{r:3s} {c:22s} pending ({pending[:90]})", flush=True)
+                continue
             png, code, dt, notes = render(r, c, spec["cases"][c].get("output"))
             entry = {"exit": code, "seconds": round(dt, 2), "notes": notes}
             if png:
@@ -180,7 +185,7 @@ def main() -> int:
     os.makedirs(OUT, exist_ok=True)
     json.dump(report, open(os.path.join(OUT, "report.json"), "w"), indent=2)
     write_md(report, spec, cases)
-    bad = [(r, c) for r, res in report["results"].items() for c, e in res.items() if e["status"] != "pass"]
+    bad = [(r, c) for r, res in report["results"].items() for c, e in res.items() if e["status"] not in ("pass", "pending")]
     if not cases:
         print("no cases selected", flush=True)
         return 2
@@ -198,7 +203,9 @@ def write_md(report, spec, cases):
         cells = []
         for r in rs:
             e = report["results"][r][c]
-            if e["status"] == "pass":
+            if e["status"] == "pending":
+                cells.append("⏳ pending: " + e["reason"][:80])
+            elif e["status"] == "pass":
                 cells.append("✅")
             elif e["status"] == "error":
                 cells.append("⛔ " + (e["notes"][0][:60] if e["notes"] else f"exit {e['exit']}"))

@@ -62,3 +62,18 @@ def test_an_output_case_delivers_that_output_at_its_time(tmp_path):
             "Image.new('RGB', (640, 360), (255, 0, 0)).save(os.path.join(d, 'frame_0024.png'))\n")
     r = _run(tmp_path, red, cases="srep-0013-segment-join")
     assert r.returncode == 0 and "pass" in r.stdout, r.stdout + r.stderr
+
+
+def test_a_pending_case_is_listed_but_does_not_fail_the_run(tmp_path):
+    import json
+    copy = tmp_path / "conformance"
+    shutil.copytree(CONF, copy, ignore=shutil.ignore_patterns("out", "__pycache__"))
+    spec = json.load(open(copy / "expected.json"))
+    spec["cases"]["zz-pending"] = {"rule": "SREP 0", "pending": "the engine does not implement it yet"}
+    json.dump(spec, open(copy / "expected.json", "w"))
+    env = {k: v for k, v in os.environ.items() if k != "RS_RENDER_BIN"}
+    env["PATH"] = str(tmp_path / "empty")      # no engine: a case that ran would be an error
+    r = subprocess.run([sys.executable, str(copy / "run.py"), "--renderers", "rs", "--cases", "zz-pending"],
+                       capture_output=True, text=True, env=env)
+    assert r.returncode == 0 and "pending" in r.stdout, (r.stdout, r.stderr)
+    assert "zz-pending" in (copy / "out" / "report.md").read_text()
