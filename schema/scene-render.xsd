@@ -125,7 +125,7 @@
   <xs:simpleType name="colorType">
     <xs:annotation><xs:documentation>
       #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
-      style token reference var(--name) resolved from styles/token.
+      style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
     </xs:documentation></xs:annotation>
     <xs:restriction base="xs:string">
       <xs:pattern value="#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?|(0(\.[0-9]+)?|1(\.0+)?|\.[0-9]+)(,(0(\.[0-9]+)?|1(\.0+)?|\.[0-9]+)){2,3}|var\(--[A-Za-z0-9_\-]+\)"/>
@@ -418,7 +418,8 @@
   </xs:complexType>
   <xs:complexType name="expressionType">
     <xs:annotation><xs:documentation>
-      Computes @property every frame. The language is a pure, side-effect-free
+      Computes @property every frame; @property names an attribute the element's own type declares (or position,
+      scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free
       subset of ECMAScript expressions with these built-ins: time, frame, value,
       index, count, seed, param(name), prop("id.property"), valueAtTime(t),
       wiggle(freq, amp[, octaves, ampMult]), noise(x[,y,z]), random([min,max]),
@@ -626,7 +627,9 @@
       <xs:attribute name="fx" type="xs:double"/>
       <xs:attribute name="fy" type="xs:double"/>
       <xs:attribute name="fr" type="nonNegativeDecimal" default="0"/>
-      <xs:attribute name="aspect" type="positiveDecimal" default="1"/>
+      <xs:attribute name="aspect" type="positiveDecimal" default="1">
+        <xs:annotation><xs:documentation>Multiplier on the gradient's x extent about its centre, applied after the units are mapped. 1 is no stretch. With units="object" the gradient already follows the painted box, so a radial gradient on a wide shape is an ellipse without any aspect; &gt; 1 widens it further, &lt; 1 narrows it.</xs:documentation></xs:annotation>
+      </xs:attribute>
     </xs:extension></xs:complexContent>
   </xs:complexType>
   <xs:complexType name="conicGradientType">
@@ -1484,6 +1487,11 @@
 
   <!-- ===================================================== node attributes -->
   <xs:attributeGroup name="transformAttributes">
+    <xs:annotation><xs:documentation>
+      anchorX and anchorY are in the node's local layout coordinates. On a fitted
+      layer this is the fit box, not the source image's pixel coordinates: the
+      centre of a 1920 by 1080 box is anchorX="960", anchorY="540".
+    </xs:documentation></xs:annotation>
     <xs:attribute name="x" type="lengthType" default="0"/>
     <xs:attribute name="y" type="lengthType" default="0"/>
     <xs:attribute name="rotation" type="xs:double" default="0"/>
@@ -1754,7 +1762,9 @@
         <xs:enumeration value="tracking-in"/><xs:enumeration value="mask-reveal"/>
       </xs:restriction></xs:simpleType>
     </xs:attribute>
-    <xs:attribute name="presetStart" type="xs:double"/>
+    <xs:attribute name="presetStart" type="xs:double">
+      <xs:annotation><xs:documentation>Time on the layer's parent timeline (composition time for a top-level layer), not an offset from the layer's start; when absent the preset starts at the layer's own start.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="presetDuration" type="positiveDecimal"/>
     <xs:attribute name="unit" default="character">
       <xs:simpleType><xs:restriction base="xs:string">
@@ -2255,7 +2265,9 @@
         <xs:enumeration value="perspective"/><xs:enumeration value="orthographic"/>
       </xs:restriction></xs:simpleType>
     </xs:attribute>
-    <xs:attribute name="fov" type="positiveDecimal" default="60"/>
+    <xs:attribute name="fov" type="positiveDecimal" default="60">
+      <xs:annotation><xs:documentation>Horizontal field of view in degrees, across the frame width: the focal distance in pixels is (frame width / 2) / tan(fov / 2), whatever the frame's height, so a portrait frame sees a narrower vertical angle than a landscape one.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="near" type="positiveDecimal" default="0.1"/>
     <xs:attribute name="far" type="positiveDecimal" default="10000"/>
     <xs:attribute name="yaw" type="xs:double" default="0"/>
