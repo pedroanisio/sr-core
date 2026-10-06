@@ -1692,10 +1692,6 @@
         "valid": true
       }
     },
-    "srep-0029-effect-meanings": {
-      "rule": "SREP 29",
-      "pending": "needs measured values: the SREP's Conformance table gives colours and lattice properties, not centroids or sizes, and the case document is schema-valid only; the six checks need per-effect cases with measured output"
-    },
     "srep-0029-halftone-default-angle": {
       "rule": "SREP 29",
       "regions": [
