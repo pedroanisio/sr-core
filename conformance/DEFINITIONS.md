@@ -273,14 +273,24 @@ it:
   weighted by (1 − F).
 
 **Lighting.**
-- A punctual light (D4) of intensity E contributes π · f · E · (n·l), so
-  a white dielectric facing a light of intensity 1 head-on returns about
-  1 − F₀ plus its specular peak. The factor π keeps D4's relative
-  intensities meaningful.
+- A punctual light (D4) of intensity E contributes f · E · (n·l), where f is
+  the BRDF above (its diffuse part is (1 − F) · c_diff / π), so a white
+  dielectric facing a light of intensity 1 head-on returns about
+  (1 − F₀) / π plus its specular peak. An ambient light (below) adds
+  I · c_diff, so a light of intensity π matches an ambient light of
+  intensity 1 on a white diffuse surface facing it.
 - An ambient light of intensity I adds I · c_diff.
 - `emissive` × `emissiveStrength` adds light.
 - Without a material, an object uses the declared defaults: white, not
   metallic, roughness 0.5.
+
+**History of D11.** 2026-10-06: corrected to the Rust engine's convention by the schema editor's decision (the earlier text
+gave a punctual light the factor π: π · f · E · (n·l), and a head-on white dielectric about 1 − F₀); no render changes.
+The engine's lights never carried the π: in the SREP 41 shadow-catcher case with ambient light 0.18 and a spot of
+intensity 3 at 400 px (E = 0.1875), the measured ratio of arriving to unshadowed light is 0.765, which is 0.18 / (0.18 +
+0.96 · 0.1856 / π) = 0.761 and not 0.18 / (0.18 + 0.96 · 0.1856) = 0.504. The conventions' own precedence (this file, and
+CONVENTIONS.md, "Precedence"; SREP 25) puts the behaviour of the Rust engine above this text, and says the text is corrected
+to match it.
 
 **Unlit.** `unlit="true"` (KHR_materials_unlit) shows `baseColor` (times
 `baseColorMap`) with no lighting, emission or ambient term.

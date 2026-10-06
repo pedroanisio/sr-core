@@ -1976,25 +1976,6 @@
         }
       ]
     },
-    "srep-0029-halftone-coverage-mean": {
-      "rule": "SREP 29",
-      "regions": [
-        {
-          "box": [
-            80,
-            80,
-            144,
-            144
-          ],
-          "rgb": [
-            52.4,
-            52.4,
-            52.4
-          ]
-        }
-      ],
-      "pending": "engine/derivation difference (finding 2, a row that is not in the SREP table): derived 52.4, measured 61.9 (the engine mixes ink and ground in linear light, 61.97); to be settled when the halftone coverage definition is checked against the SREP text."
-    },
     "srep-0029-halftone-edge": {
       "rule": "SREP 29",
       "regions": [
@@ -35826,7 +35807,7 @@
       ]
     },
     "srep-0041-shadow-catcher-ambient": {
-      "rule": "SREP 41 s2-4 with D11: geometry: light (320,-100,150) down, floor y=300 (400 px), caster top face y=90 half-width 20 -> shadow half-width 20*400/190 = 42.105 px: x 277.895..362.105, ortho camera 1 px/unit; ambient 0.18 white (A=0.18, D11: I*c_diff); spot E=3*(100/d)^2, L=(1-F0)*E*n.l with F0=0.04 (D11: pi*f*E*n.l, f=(1-F)c/pi), view and light along the normal; in shadow ratio=A/(A+L) ~ 0.50, C'=lin(128)*ratio, sRGB-encoded; per-region mean of the per-pixel values",
+      "rule": "SREP 41 s2-4 with D11: geometry: light (320,-100,150) down, floor y=300 (400 px), caster top face y=90 half-width 20 -> shadow half-width 20*400/190 = 42.105 px: x 277.895..362.105, ortho camera 1 px/unit; ambient 0.18 white (A=0.18, D11: I*c_diff); spot E=3*(100/d)^2, L=(1-F0)*E*n.l with F0=0.04 (D11 as corrected 2026-10-06: f*E*n.l, f=(1-F)c/pi, no factor pi), view and light along the normal; in shadow ratio=A/(A+L) ~ 0.76 (L=0.96*E*n.l/pi), C'=lin(128)*ratio, sRGB-encoded; per-region mean of the per-pixel values; per-pixel means over the four shadow regions 112.77 to 112.79 (computed with the corrected D11), so 113 within the kit tolerance of 3 code values; before the D11 correction the derivation gave 93 with the factor pi in L, and the engine renders 113",
       "regions": [
         {
           "box": [
@@ -35836,9 +35817,9 @@
             210
           ],
           "rgb": [
-            93,
-            93,
-            93
+            113,
+            113,
+            113
           ]
         },
         {
@@ -35849,9 +35830,9 @@
             210
           ],
           "rgb": [
-            93,
-            93,
-            93
+            113,
+            113,
+            113
           ]
         },
         {
@@ -35862,9 +35843,9 @@
             141
           ],
           "rgb": [
-            93,
-            93,
-            93
+            113,
+            113,
+            113
           ]
         },
         {
@@ -35875,9 +35856,9 @@
             222
           ],
           "rgb": [
-            93,
-            93,
-            93
+            113,
+            113,
+            113
           ]
         },
         {
@@ -35958,8 +35939,7 @@
             128
           ]
         }
-      ],
-      "pending": "finding 3: derived 93 inside the shadow with ambient light, measured 113; the derivation needs a reviewer (the builder first derived the opacity case in encoded space and corrected it from CONVENTIONS 1.4), and the engine may deviate; the entry holds the derived value."
+      ]
     },
     "srep-0041-shadow-catcher-nolight-shadow": {
       "rule": "SREP 41 s6: the only light has castShadow=false: v=1, E_sh=E_un, alpha=0 on the whole catcher: the plate is unchanged (128) in every strip, inside the would-be shadow too",

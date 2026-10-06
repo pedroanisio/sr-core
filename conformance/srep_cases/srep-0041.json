@@ -278,7 +278,7 @@
  "srep-0041-shadow-catcher-ambient": {
   "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-white\" baseColor=\"#FFFFFFFF\" roughness=\"1\" specular=\"0\"/></materials>\n<composition>\n<shape id=\"plate\" shape=\"rect\" width=\"640\" height=\"360\" x=\"0\" y=\"0\" fill=\"#808080FF\"/>\n<camera id=\"cam\" projection=\"orthographic\" orthoHeight=\"360\" x=\"320\" y=\"-200\" z=\"150\" pitch=\"-90\"/>\n<object3D id=\"floor\" primitive=\"plane\" width=\"600\" height=\"300\" rotationX=\"-90\" material=\"m-white\" shadowCatcher=\"true\" x=\"320\" y=\"300\" z=\"150\"/>\n<object3D id=\"caster\" primitive=\"box\" width=\"40\" height=\"20\" depth=\"40\" material=\"m-white\" x=\"320\" y=\"100\" z=\"150\"/>\n</composition>\n<lights><light id=\"key\" type=\"spot\" x=\"320\" y=\"-100\" z=\"150\" pitch=\"-90\" spotAngle=\"60\" intensity=\"3\" affectsSpecular=\"false\" castShadow=\"true\"/><light id=\"amb\" type=\"ambient\" intensity=\"0.18\"/></lights>\n</scene>\n",
   "expected": {
-   "rule": "SREP 41 s2-4 with D11: geometry: light (320,-100,150) down, floor y=300 (400 px), caster top face y=90 half-width 20 -> shadow half-width 20*400/190 = 42.105 px: x 277.895..362.105, ortho camera 1 px/unit; ambient 0.18 white (A=0.18, D11: I*c_diff); spot E=3*(100/d)^2, L=(1-F0)*E*n.l with F0=0.04 (D11: pi*f*E*n.l, f=(1-F)c/pi), view and light along the normal; in shadow ratio=A/(A+L) ~ 0.50, C'=lin(128)*ratio, sRGB-encoded; per-region mean of the per-pixel values",
+   "rule": "SREP 41 s2-4 with D11: geometry: light (320,-100,150) down, floor y=300 (400 px), caster top face y=90 half-width 20 -> shadow half-width 20*400/190 = 42.105 px: x 277.895..362.105, ortho camera 1 px/unit; ambient 0.18 white (A=0.18, D11: I*c_diff); spot E=3*(100/d)^2, L=(1-F0)*E*n.l with F0=0.04 (D11 as corrected 2026-10-06: f*E*n.l, f=(1-F)c/pi, no factor pi), view and light along the normal; in shadow ratio=A/(A+L) ~ 0.76 (L=0.96*E*n.l/pi), C'=lin(128)*ratio, sRGB-encoded; per-region mean of the per-pixel values; per-pixel means over the four shadow regions 112.77 to 112.79 (computed with the corrected D11), so 113 within the kit tolerance of 3 code values; before the D11 correction the derivation gave 93 with the factor pi in L, and the engine renders 113",
    "regions": [
     {
      "box": [
@@ -288,9 +288,9 @@
       210
      ],
      "rgb": [
-      93,
-      93,
-      93
+      113,
+      113,
+      113
      ]
     },
     {
@@ -301,9 +301,9 @@
       210
      ],
      "rgb": [
-      93,
-      93,
-      93
+      113,
+      113,
+      113
      ]
     },
     {
@@ -314,9 +314,9 @@
       141
      ],
      "rgb": [
-      93,
-      93,
-      93
+      113,
+      113,
+      113
      ]
     },
     {
@@ -327,9 +327,9 @@
       222
      ],
      "rgb": [
-      93,
-      93,
-      93
+      113,
+      113,
+      113
      ]
     },
     {
@@ -410,8 +410,7 @@
       128
      ]
     }
-   ],
-   "pending": "finding 3: derived 93 inside the shadow with ambient light, measured 113; the derivation needs a reviewer (the builder first derived the opacity case in encoded space and corrected it from CONVENTIONS 1.4), and the engine may deviate; the entry holds the derived value."
+   ]
   }
  },
  "srep-0041-shadow-catcher-nolight-shadow": {
