@@ -20,8 +20,11 @@ import shutil
 import subprocess
 import time
 
-import numpy as np
-from PIL import Image
+try:                          # pixel cases need them; findings cases do not
+    import numpy as np
+    from PIL import Image
+except ImportError:
+    np = Image = None
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "out")
