@@ -1,0 +1,87 @@
+```
+SREP:            0
+Title:           Define rounded corners by the circle, not the steps
+Author:          scene-render maintainers (drafted by gap-A)
+Status:          Draft
+Type:            Semantics
+Created:         2026-10-06
+Schema-Version:  1.3 (no schema change)
+Requires:        23
+```
+
+# SREP 0 (draft) — Define rounded corners by the circle, not the steps
+
+## Abstract
+
+[SREP 23](srep-0023.md) and D27 define a rounded corner as a circular arc "in 16 steps". The Rust reference draws each
+corner as a cubic Bézier quarter-circle, flattened at the renderer's tolerance. The two outlines differ by less than
+0.05 px at r = 30, and the kit's cases cannot tell them apart.
+
+This SREP defines the corner by the circle and a bound on the deviation from it, not by how it is constructed.
+
+## Motivation
+
+- SREP 23, Semantics 1: "circular corners of `radius`, or of `cornerRadii` (…), each corner in 16 steps".
+- The reference: `rs-scene-render`, `crates/sr-vector/src/shapes.rs`, `rect`, draws each corner as one cubic with the
+  handle ratio κ = 0.5522847498 of a quarter circle, and the renderer flattens it at its drawing tolerance.
+- The deviation from the circle, computed from the formulas:
+  - the 16-step polygon has sagitta r · (1 − cos(90°/32)) = 0.0361 px at r = 30;
+  - the Bézier quarter-circle's largest radial error is 0.027 % of r = 0.0082 px at r = 30.
+- Read literally, SREP 23 makes the more exact outline the non-conforming one.
+
+## Specification
+
+### Semantics
+
+SREP 23, Semantics 1, and D27's rounded-rect item read: "each corner a circular arc of its radius, drawn within
+**0.002 · r + 0.05 px** of that circle", in place of "each corner in 16 steps". The scaling of radii by the least ratio
+is unchanged.
+
+Both constructions conform. At r = 30 the bound is 0.11 px. The 16-step polygon and the Bézier quarter-circle both stay
+inside it at every radius:
+- the polygon's sagitta is 0.0012 · r;
+- the Bézier's radial error is 0.00027 · r, plus the flattening tolerance.
+
+### Defaults and the neutral case
+
+No syntax changes. Neither construction changes.
+
+## Rationale
+
+A definition that names the circle and a tolerance lets every engine use its own exact-enough construction. A
+definition by steps makes the more exact outline the non-conforming one.
+
+## Rejected alternatives
+
+- **Change the reference to 16 steps.** It would move its corners away from the circle, and no case could tell the
+  difference.
+
+## Backwards compatibility
+
+No validity or picture changes.
+
+## Engine impact
+
+| Engine | Status | Work | Tracking |
+|---|---|---|---|
+| Rust (`rs-scene-render`), reference | exact (within the bound) | none | |
+
+## Conformance
+
+The three `srep-0023-*` cases are unchanged; their regions are at least 1 px from the corner arcs.
+
+## Open issues
+
+- Whether the bound's 0.05 px should be stated in the device pixels of the output or in the node's own units.
+
+## References
+
+- [SREP 23](srep-0023.md); [DEFINITIONS.md](../conformance/DEFINITIONS.md) D27.
+- The quarter-circle cubic: κ = 4/3 · (√2 − 1), with radial error at most about 0.027 % of r.
+
+## History
+
+- 2026-10-06: first draft.
+- 2026-10-06: drafted with AI assistance (Claude Opus 5.5 via Claude Code (worker gap-A), from rs-scene-render's
+  `shapes::rect`). The deviations are computed, not measured. No statement here should be taken for granted without
+  its definition or reference.

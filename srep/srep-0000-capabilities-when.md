@@ -1,0 +1,108 @@
+```
+SREP:            0
+Title:           Add conditions to capability manifest entries
+Author:          scene-render maintainers (drafted by gap-A)
+Status:          Draft
+Type:            Standards
+Created:         2026-10-06
+Schema-Version:  capabilities 1 (a MINOR addition; no scene schema change)
+Requires:        22
+```
+
+# SREP 0 (draft) — Add conditions to capability manifest entries
+
+## Abstract
+
+A capability manifest entry ([SREP 22](srep-0022.md)) names one construct, and an engine reports `SUP-APPROX` or
+`SUP-REPORTED` for every document that uses it. Many gaps, though, hold only together with another construct. SREP 22
+leaves those to `note`, so the report either warns about documents the engine draws exactly, or the engine names the
+wrong construct.
+
+An optional `when` field adds the condition. The entry applies, and is reported, only when the document also uses
+every construct listed in `when`.
+
+## Motivation
+
+- SREP 22, Open issues: "Some gaps are conditional (a value supported only with another attribute). The first version
+  records them in `note`."
+- The Rust reference's manifest (`gap/srep-22-capabilities`) has conditional gaps only:
+  - The path tracer draws neither a shadow catcher nor material unevenness; the raster renderer draws both.
+    - Listed as `object3D/@shadowCatcher`, the entry gave every raster document with a shadow catcher a
+      `SUP-REPORTED` warning, which was false. A reviewer caught it.
+    - The manifest now lists `camera/@renderer=pathtrace` instead. That warns about every path-traced document,
+      including those without either construct.
+  - A pattern paint is drawn exactly on shapes and the background, and is not drawn on vector and text assets,
+    captions and map drapes.
+  - An adjustment layer's motion blur is not drawn only when the layer moves.
+
+## Specification
+
+### Form
+
+An entry gains an optional field `when`, an array of constructs in SREP 22's grammar (`element`, `element/@attribute`,
+`element/@attribute=value`):
+
+```json
+{"construct": "object3D/@shadowCatcher=true", "status": "reported",
+ "when": ["camera/@renderer=pathtrace"], "note": "the path tracer draws no shadow catcher"}
+```
+
+### Semantics
+
+1. An entry with `when` applies to a document that uses its construct **and** every construct in `when`.
+   - Uses are counted anywhere in the document; they need not be on the same element.
+2. **Coverage** (SREP 22, Semantics 3) is per condition. A construct may appear in several entries with different
+   `when`; where none applies, it is claimed exact.
+3. **Reporting** (SREP 22, Semantics 4): `SUP-APPROX` or `SUP-REPORTED` once per applying entry. The `message` names
+   the construct and the conditions.
+4. A reader that does not know `when` treats the entry as unconditional, which is today's behaviour: it may over-warn,
+   and it never under-warns.
+
+### Defaults and the neutral case
+
+An entry without `when` is as in format 1.
+
+## Rationale
+
+- **Same-document, not same-element.** The conditions of the gaps found so far (a renderer, a target kind) are set
+  elsewhere in the document from the construct. Element-level conditions would need a path language. Open issues
+  keeps that open.
+- **A MINOR addition to format 1.** SREP 22 says "MINOR additions add fields".
+
+## Rejected alternatives
+
+- **Name the condition's construct instead** (what the reference does now for the path tracer). It over-warns in the
+  other direction, and loses which construct is affected.
+
+## Backwards compatibility
+
+Format 1 manifests stay valid, and readers that ignore `when` keep working.
+
+## Engine impact
+
+| Engine | Status | Work | Tracking |
+|---|---|---|---|
+| Rust (`rs-scene-render`), reference | pending | the manifest's conditional entries take `when`; the SUP findings test it | |
+
+sr-core: `capabilities-1.schema.json` (still to be written, SREP 22) allows `when`.
+
+## Conformance
+
+| Case | Checks | Expected |
+|---|---|---|
+| `srep-NNNN-when` | a raster document with a shadow catcher; the same with `camera renderer="pathtrace"` | no SUP finding; `SUP-REPORTED` naming `object3D/@shadowCatcher=true` |
+
+## Open issues
+
+- Conditions on the same element, or on an ancestor, for example a pattern used as the `fill` of a text asset.
+
+## References
+
+- [SREP 22](srep-0022.md), Semantics and Open issues.
+
+## History
+
+- 2026-10-06: first draft.
+- 2026-10-06: drafted with AI assistance (Claude Opus 5.5 via Claude Code (worker gap-A), from the review of
+  rs-scene-render's capabilities.json). No statement here should be taken for granted without its definition or
+  reference.

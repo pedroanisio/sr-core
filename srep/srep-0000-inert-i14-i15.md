@@ -1,0 +1,98 @@
+```
+SREP:            0
+Title:           Amend SREP 18: inert IK and stroke-text attributes
+Author:          scene-render maintainers (drafted by gap-A)
+Status:          Draft
+Type:            Standards
+Created:         2026-10-06
+Schema-Version:  1.3
+Requires:        18, 34, 54, 56
+```
+
+# SREP 0 (draft) — Amend SREP 18: inert IK and stroke-text attributes
+
+## Abstract
+
+[SREP 54](srep-0054.md) and [SREP 56](srep-0056.md) each name attributes that have no effect in some places, and ask
+that they be reported "as inert (SREP 18)". [SREP 18](srep-0018.md)'s table is closed: "A later SREP adds a rule only
+with a condition that is inert". Neither SREP added a rule, so no code exists for them.
+
+This amendment adds two rules to the table, as [SREP 34](srep-0034.md) did for I9 to I13:
+- `INERT-I14`: an IK `pole` or `softness` that the solver does not read;
+- `INERT-I15`: stroke-text attributes on another shape kind.
+
+## Motivation
+
+- **SREP 54, Semantics 3:** "Chains of three or more bones (the FABRIK solver) ignore `pole` and `softness`; an engine
+  SHOULD report them as inert (SREP 18)."
+- **SREP 56, Syntax:** "on other shapes they have no effect and a validator SHOULD report them as inert (SREP 18)".
+- **The reference reports both today,** at `info` severity, under its own code `E19`, which a render report writes as
+  `X-rs-scene-render-E19`. So readers of a report cannot tell these findings from the engine's other `E19` findings.
+- The reference's IK report covers two more cases that are inert for the same reason:
+  - a chain of one bone, which aims at the target;
+  - a constraint whose `type` is not `ik`, which reads neither attribute.
+
+## Specification
+
+### Semantics
+
+SREP 18, Specification 5, gains these rules. Each is reported as `INERT-<rule>` at `info` severity, with SREP 18's
+fields.
+
+| Rule | Condition |
+|---|---|
+| I14 | a `transformConstraint` with `pole`, or with `softness` other than 0, that is not `type="ik"`, or that constrains a bone chain of other than two bones. The chain is the constrained bone and its ancestors, less the leading bones of zero length that the solver drops (SREP 54). |
+| I15 | a `shape` other than `shape="stroke-text"` with `text`, with `strokeFont`, or with `fontSize` other than its default 48 (SREP 56) |
+
+An attribute that is animated, linked, computed by an expression, or the target of an `override` or `bind` is not
+reported. Its value may change, and with it whether it has an effect. This is the same exemption as I1 to I7 (see
+SREP 18's erratum of 2026-10-06).
+
+### Defaults and the neutral case
+
+Findings never change pixels.
+
+## Rationale
+
+- **The SREPs asked for the reports,** and only the closed table can give them a code. This is the route SREP 34 took.
+- **`fontSize="48"` written explicitly is not reported.** It is the default, so writing it changes nothing whatever
+  the shape. The same is true of `softness="0"`.
+
+## Rejected alternatives
+
+- **Leave them as engine-specific codes.** Then the closed table is not the full list of inert findings, and each
+  engine names them its own way.
+
+## Backwards compatibility
+
+No validity or picture changes. Reports of documents that use these attributes change code, from `X-<engine>-…` to
+`INERT-I14` and `INERT-I15`.
+
+## Engine impact
+
+| Engine | Status | Work | Tracking |
+|---|---|---|---|
+| Rust (`rs-scene-render`), reference | partial | reported today as E19 (`gap/srep-54-ik-inert`, `gap/srep-56-stroke-text-inert`); rename to INERT-I14 and INERT-I15 | |
+
+## Conformance
+
+| Case | Checks | Expected |
+|---|---|---|
+| `srep-NNNN-inert-ik` | `pole` and `softness="0.3"` on an IK constraint of a chain of three bones; the same on a chain of two | INERT-I14 twice; none |
+| `srep-NNNN-inert-stroke-text` | `text`, `strokeFont`, `fontSize="20"` on a `rect`; `fontSize="48"` on a `rect`; the three on a `stroke-text` shape | INERT-I15 three times; none; none |
+
+## Open issues
+
+None.
+
+## References
+
+- [SREP 18](srep-0018.md), Specification 5; [SREP 34](srep-0034.md); [SREP 54](srep-0054.md), Semantics 3;
+  [SREP 56](srep-0056.md), Syntax.
+
+## History
+
+- 2026-10-06: first draft.
+- 2026-10-06: drafted with AI assistance (Claude Opus 5.5 via Claude Code (worker gap-A), from rs-scene-render's
+  inert reports on the gap branches). No statement here should be taken for granted without its definition or
+  reference.
