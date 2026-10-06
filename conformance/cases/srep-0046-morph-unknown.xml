@@ -2,9 +2,9 @@
 <scene version="1.2">
 <project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
 <output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<assets><mesh id="mesh-m" src="../assets/morphs.glb" format="glb"/></assets>
 <materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
 <composition>
-
+<object3D id="m" primitive="mesh" mesh="mesh-m" x="320" y="200" z="0" ><morph name="nosuchtarget" weight="1"/></object3D>
 </composition>
-<captions><captionTrack id="cap" language="en" preset="classic" lineBreaks="source" maxCharsPerLine="80" maxLines="2"><cue start="0" end="8" text="aa bb&#10;cc dd ee ff&#10;gg hh"/></captionTrack></captions>
 </scene>

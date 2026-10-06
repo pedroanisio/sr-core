@@ -12,7 +12,7 @@ def doc(*args, **kw):
     return _doc(*args, **kw)
 
 
-CASE = os.path.join(ROOT, "conformance", "cases", "srep-0047-joint-pose.xml")
+CASE = os.path.join(ROOT, "conformance", "cases", "srep-0047-joint-rotation.xml")
 MODEL = '<mesh id="mm" src="x.glb" format="glb"/>'
 
 

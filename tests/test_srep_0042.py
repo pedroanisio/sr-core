@@ -20,7 +20,7 @@ def mesh(attrs, version="1.1"):
 
 
 def test_cases_exist():
-    assert len(CASES) == 4
+    assert len(CASES) == 5
 
 
 @pytest.mark.parametrize("case", CASES, ids=os.path.basename)

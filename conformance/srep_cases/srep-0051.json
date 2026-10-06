@@ -48,5 +48,14 @@
     "cy": 216.44
    }
   }
+ },
+ "srep-0051-wiggle-corner-vertex-340": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"w\" shape=\"path\" width=\"200\" height=\"10\" x=\"220\" y=\"180\" path=\"M 0 5 L 200 5\" stroke=\"#FF0000FF\" strokeWidth=\"3\" fill=\"#00000000\"><shapeModifier type=\"wiggle-path\" size=\"80\" detail=\"3\" frequency=\"2\" seed=\"7\"/></shape>\n<shape id=\"mask-l\" shape=\"rect\" x=\"0\" y=\"0\" width=\"338\" height=\"360\" fill=\"#000000FF\"/>\n<shape id=\"mask-r\" shape=\"rect\" x=\"342\" y=\"0\" width=\"298\" height=\"360\" fill=\"#000000FF\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 51, Semantics: \"The vertices are the same points in both modes\". The vertices of the wiggled path (detail 3 per hundred units over 200 units, so one every 40 px from x = 220) are x = 220, 260, 300, 340, ...; at the vertex x = 340 the corner polyline (no mode) and the smooth spline pass through the same point, so the red centroid in the 4 px slab 338..342 has the same height as in the smooth case srep-0051-wiggle-smooth-vertex-340 (cy 216.44). Only cy is asserted: the slab holds the segments on both sides of the vertex, whose slopes differ between the two modes. The claim is the equality of the two cases; the value is the engine-seeded noise of seed 7 (a regression pin shared with the smooth case). Not yet measured on the engine.",
+   "red": {
+    "cy": 216.44
+   }
+  }
  }
 }

@@ -1,9 +1,24 @@
 {
- "srep-0042-clip-blend-unknown": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-clips\" src=\"../assets/clips.glb\" format=\"glb\"/></assets>\n<composition>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-clips\" animationClip=\"left\" animationClipTo=\"nosuchclip\" animationBlend=\"0.5\" animationOffsetTo=\"0.25\" x=\"200\" y=\"200\" z=\"0\"/>\n</composition>\n</scene>\n",
+ "srep-0042-clip-blend-keyed": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-m\" src=\"../assets/clips.glb\" format=\"glb\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-m\" animationClip=\"left\" animationClipTo=\"right\" x=\"200\" y=\"200\" z=\"0\"><animate property=\"animationBlend\"><key time=\"-0.25\" value=\"0\"/><key time=\"0.75\" value=\"1\"/></animate></object3D>\n</composition>\n</scene>\n",
   "expected": {
    "rule": "SREP 42",
-   "pending": "the finding (an unknown second clip is reported) is a report finding, not a pixel; checked by the engine's own test"
+   "red": {
+    "cx": 215,
+    "cy": 203.33
+   }
+  }
+ },
+ "srep-0042-clip-blend-unknown": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-m\" src=\"../assets/clips.glb\" format=\"glb\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-m\" animationClip=\"left\" animationClipTo=\"nosuchclip\" animationBlend=\"0.5\" animationOffsetTo=\"0.25\" x=\"200\" y=\"200\" z=\"0\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 42",
+   "findings": {
+    "via": "render",
+    "messages": [
+     "nosuchclip"
+    ]
+   }
   }
  },
  "srep-0042-clip-blend-w0": {
@@ -12,7 +27,7 @@
    "rule": "SREP 42",
    "red": {
     "cx": 200,
-    "cy": 200,
+    "cy": 203.33,
     "w": 20,
     "h": 20
    }
@@ -24,7 +39,7 @@
    "rule": "SREP 42",
    "red": {
     "cx": 230,
-    "cy": 200,
+    "cy": 203.33,
     "w": 20,
     "h": 20
    }
@@ -36,7 +51,7 @@
    "rule": "SREP 42",
    "red": {
     "cx": 260,
-    "cy": 200,
+    "cy": 203.33,
     "w": 20,
     "h": 20
    }

@@ -36076,15 +36076,27 @@
         }
       ]
     },
+    "srep-0042-clip-blend-keyed": {
+      "rule": "SREP 42",
+      "red": {
+        "cx": 215,
+        "cy": 203.33
+      }
+    },
     "srep-0042-clip-blend-unknown": {
       "rule": "SREP 42",
-      "pending": "the finding (an unknown second clip is reported) is a report finding, not a pixel; checked by the engine's own test"
+      "findings": {
+        "via": "render",
+        "messages": [
+          "nosuchclip"
+        ]
+      }
     },
     "srep-0042-clip-blend-w0": {
       "rule": "SREP 42",
       "red": {
         "cx": 200,
-        "cy": 200,
+        "cy": 203.33,
         "w": 20,
         "h": 20
       }
@@ -36093,7 +36105,7 @@
       "rule": "SREP 42",
       "red": {
         "cx": 230,
-        "cy": 200,
+        "cy": 203.33,
         "w": 20,
         "h": 20
       }
@@ -36102,14 +36114,74 @@
       "rule": "SREP 42",
       "red": {
         "cx": 260,
-        "cy": 200,
+        "cy": 203.33,
         "w": 20,
         "h": 20
       }
     },
     "srep-0043-joint-socket": {
       "rule": "SREP 43",
-      "pending": "needs a model with a named, animated joint; the kit's only model (marker.glb) has none, so no pixel expectation can be derived without inventing one"
+      "red": {
+        "cx": 320,
+        "cy": 280
+      },
+      "green": {
+        "cx": 380,
+        "cy": 200
+      }
+    },
+    "srep-0043-joint-socket-constraint": {
+      "rule": "SREP 43",
+      "red": {
+        "cx": 320,
+        "cy": 280
+      },
+      "green": {
+        "cx": 380,
+        "cy": 200
+      }
+    },
+    "srep-0043-joint-socket-rotate": {
+      "rule": "SREP 43",
+      "red": {
+        "cx": 320,
+        "cy": 280
+      },
+      "green": {
+        "cx": 320,
+        "cy": 150
+      }
+    },
+    "srep-0043-joint-socket-start": {
+      "rule": "SREP 43",
+      "red": {
+        "cx": 320,
+        "cy": 280
+      },
+      "green": {
+        "cx": 320,
+        "cy": 200
+      }
+    },
+    "srep-0043-joint-socket-unknown": {
+      "rule": "SREP 43",
+      "findings": {
+        "via": "render",
+        "messages": [
+          "NoSuchJoint"
+        ]
+      }
+    },
+    "srep-0043-joint-socket-unknown-frame": {
+      "rule": "SREP 43",
+      "red": {
+        "cx": 320,
+        "cy": 280
+      },
+      "green": {
+        "cx": 320,
+        "cy": 160
+      }
     },
     "srep-0044-key-default-handles": {
       "rule": "SREP 44",
@@ -36278,11 +36350,172 @@
     },
     "srep-0046-morph-by-name": {
       "rule": "SREP 46",
-      "pending": "needs a model with named morph targets; the kit's only model (marker.glb) has none, so the SREP's 40 px displacements cannot be reproduced without inventing a model or numbers"
+      "red": {
+        "cx": 360,
+        "cy": 200
+      }
     },
-    "srep-0047-joint-pose": {
+    "srep-0046-morph-by-name-both-half": {
+      "rule": "SREP 46",
+      "red": {
+        "cx": 340,
+        "cy": 180
+      }
+    },
+    "srep-0046-morph-by-name-combine": {
+      "rule": "SREP 46",
+      "red": {
+        "cx": 340,
+        "cy": 160
+      }
+    },
+    "srep-0046-morph-keyed": {
+      "rule": "SREP 46",
+      "red": {
+        "cx": 330,
+        "cy": 200
+      }
+    },
+    "srep-0046-morph-precedence": {
+      "rule": "SREP 46",
+      "red": {
+        "cx": 360,
+        "cy": 200
+      }
+    },
+    "srep-0046-morph-unknown": {
+      "rule": "SREP 46",
+      "findings": {
+        "via": "render",
+        "messages": [
+          "nosuchtarget",
+          "right",
+          "up"
+        ]
+      }
+    },
+    "srep-0046-morph-unknown-none": {
+      "rule": "SREP 46",
+      "findings": {
+        "via": "render",
+        "messages": [
+          "smile"
+        ]
+      }
+    },
+    "srep-0046-morph-version": {
+      "rule": "SREP 46",
+      "findings": {
+        "codes": [
+          "V5"
+        ],
+        "counts": {
+          "V5": 1
+        },
+        "valid": false
+      }
+    },
+    "srep-0047-joint-look-at": {
       "rule": "SREP 47",
-      "pending": "needs a model with named, jointed nodes; the kit's only model (marker.glb) has none, so the SREP's socket displacements and look-at angles cannot be reproduced without inventing a model or numbers"
+      "red": {
+        "cx": 320,
+        "cy": 280
+      },
+      "blue": {
+        "cx": 320,
+        "cy": 160
+      }
+    },
+    "srep-0047-joint-look-at-influence": {
+      "rule": "SREP 47",
+      "red": {
+        "cx": 320,
+        "cy": 280
+      },
+      "blue": {
+        "cx": 348.28,
+        "cy": 171.72
+      }
+    },
+    "srep-0047-joint-look-at-max-angle": {
+      "rule": "SREP 47",
+      "red": {
+        "cx": 320,
+        "cy": 280
+      },
+      "blue": {
+        "cx": 354.64,
+        "cy": 180.0
+      }
+    },
+    "srep-0047-joint-look-at-zero": {
+      "rule": "SREP 47",
+      "red": {
+        "cx": 320,
+        "cy": 280
+      },
+      "blue": {
+        "cx": 360,
+        "cy": 200
+      }
+    },
+    "srep-0047-joint-rotation": {
+      "rule": "SREP 47",
+      "red": {
+        "cx": 320,
+        "cy": 280
+      },
+      "green": {
+        "cx": 320,
+        "cy": 160
+      }
+    },
+    "srep-0047-joint-rotation-45": {
+      "rule": "SREP 47",
+      "red": {
+        "cx": 320,
+        "cy": 280
+      },
+      "green": {
+        "cx": 348.28,
+        "cy": 171.72
+      }
+    },
+    "srep-0047-joint-rotation-keyed": {
+      "rule": "SREP 47",
+      "red": {
+        "cx": 320,
+        "cy": 280
+      },
+      "green": {
+        "cx": 348.28,
+        "cy": 171.72
+      }
+    },
+    "srep-0047-joint-unknown": {
+      "rule": "SREP 47",
+      "findings": {
+        "via": "render",
+        "messages": [
+          "NoSuchJoint",
+          "body",
+          "Hand",
+          "Arm",
+          "Head"
+        ]
+      }
+    },
+    "srep-0047-joint-version": {
+      "rule": "SREP 47",
+      "findings": {
+        "codes": [
+          "V5"
+        ],
+        "counts": {
+          "V5": 1
+        },
+        "valid": false
+      }
     },
     "srep-0048-expr-penner-prop-at-time": {
       "rule": "SREP 48",
@@ -36379,13 +36612,267 @@
         "cy": 216.44
       }
     },
+    "srep-0051-wiggle-corner-vertex-340": {
+      "rule": "SREP 51, Semantics: \"The vertices are the same points in both modes\". The vertices of the wiggled path (detail 3 per hundred units over 200 units, so one every 40 px from x = 220) are x = 220, 260, 300, 340, ...; at the vertex x = 340 the corner polyline (no mode) and the smooth spline pass through the same point, so the red centroid in the 4 px slab 338..342 has the same height as in the smooth case srep-0051-wiggle-smooth-vertex-340 (cy 216.44). Only cy is asserted: the slab holds the segments on both sides of the vertex, whose slopes differ between the two modes. The claim is the equality of the two cases; the value is the engine-seeded noise of seed 7 (a regression pin shared with the smooth case). Not yet measured on the engine.",
+      "red": {
+        "cy": 216.44
+      }
+    },
+    "srep-0052-caption-lines-blank": {
+      "rule": "SREP 52",
+      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+      "captions": {
+        "track": "cap",
+        "pages": [
+          "aa bb\ncc dd"
+        ],
+        "wordCount": 4,
+        "wordsAndTimesEqualTo": "srep-0052-caption-lines-blank-greedy"
+      }
+    },
+    "srep-0052-caption-lines-blank-greedy": {
+      "rule": "SREP 52",
+      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+      "captions": {
+        "track": "cap",
+        "pages": [
+          "aa bb cc dd"
+        ],
+        "wordCount": 4
+      }
+    },
+    "srep-0052-caption-lines-default": {
+      "rule": "SREP 52",
+      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+      "captions": {
+        "track": "cap",
+        "pages": [
+          "aa bb cc dd ee ff gg hh"
+        ]
+      }
+    },
     "srep-0052-caption-lines-greedy": {
       "rule": "SREP 52",
-      "pending": "companion of srep-0052-caption-lines-source (same cue, default layout); see that entry"
+      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+      "captions": {
+        "track": "cap",
+        "pages": [
+          "aa bb cc dd ee ff gg hh"
+        ]
+      }
+    },
+    "srep-0052-caption-lines-limits-chars": {
+      "rule": "SREP 52",
+      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+      "captions": {
+        "track": "cap",
+        "pages": [
+          "aa bb\ncc dd",
+          "ee ff\ngg hh"
+        ]
+      }
+    },
+    "srep-0052-caption-lines-limits-one-line": {
+      "rule": "SREP 52",
+      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+      "captions": {
+        "track": "cap",
+        "pages": [
+          "aa bb",
+          "cc dd ee ff",
+          "gg hh"
+        ]
+      }
+    },
+    "srep-0052-caption-lines-limits-words": {
+      "rule": "SREP 52",
+      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+      "captions": {
+        "track": "cap",
+        "pages": [
+          "aa bb\ncc dd",
+          "ee ff\ngg hh"
+        ]
+      }
+    },
+    "srep-0052-caption-lines-presets-boxed-word": {
+      "rule": "SREP 52",
+      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+      "captions": [
+        {
+          "track": "src",
+          "pages": [
+            "aa bb\ncc dd"
+          ],
+          "preset": "boxed-word",
+          "activeWord": [
+            [
+              0.5,
+              0
+            ],
+            [
+              1.5,
+              1
+            ],
+            [
+              2.5,
+              2
+            ],
+            [
+              3.5,
+              3
+            ]
+          ]
+        },
+        {
+          "track": "grd",
+          "pages": [
+            "aa bb cc dd"
+          ],
+          "preset": "boxed-word",
+          "activeWord": [
+            [
+              0.5,
+              0
+            ],
+            [
+              1.5,
+              1
+            ],
+            [
+              2.5,
+              2
+            ],
+            [
+              3.5,
+              3
+            ]
+          ]
+        }
+      ]
+    },
+    "srep-0052-caption-lines-presets-highlight": {
+      "rule": "SREP 52",
+      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+      "captions": [
+        {
+          "track": "src",
+          "pages": [
+            "aa bb\ncc dd"
+          ],
+          "preset": "highlight",
+          "activeWord": [
+            [
+              0.5,
+              0
+            ],
+            [
+              1.5,
+              1
+            ],
+            [
+              2.5,
+              2
+            ],
+            [
+              3.5,
+              3
+            ]
+          ]
+        },
+        {
+          "track": "grd",
+          "pages": [
+            "aa bb cc dd"
+          ],
+          "preset": "highlight",
+          "activeWord": [
+            [
+              0.5,
+              0
+            ],
+            [
+              1.5,
+              1
+            ],
+            [
+              2.5,
+              2
+            ],
+            [
+              3.5,
+              3
+            ]
+          ]
+        }
+      ]
+    },
+    "srep-0052-caption-lines-presets-karaoke": {
+      "rule": "SREP 52",
+      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+      "captions": [
+        {
+          "track": "src",
+          "pages": [
+            "aa bb\ncc dd"
+          ],
+          "preset": "karaoke",
+          "activeWord": [
+            [
+              0.5,
+              0
+            ],
+            [
+              1.5,
+              1
+            ],
+            [
+              2.5,
+              2
+            ],
+            [
+              3.5,
+              3
+            ]
+          ]
+        },
+        {
+          "track": "grd",
+          "pages": [
+            "aa bb cc dd"
+          ],
+          "preset": "karaoke",
+          "activeWord": [
+            [
+              0.5,
+              0
+            ],
+            [
+              1.5,
+              1
+            ],
+            [
+              2.5,
+              2
+            ],
+            [
+              3.5,
+              3
+            ]
+          ]
+        }
+      ]
     },
     "srep-0052-caption-lines-source": {
       "rule": "SREP 52",
-      "pending": "the SREP states exact page text, not a pixel position, and the kit measures colour centroids; the burned-in text layout depends on font metrics, which no definition in the SREP gives"
+      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+      "captions": {
+        "track": "cap",
+        "pages": [
+          "aa bb\ncc dd ee ff",
+          "gg hh"
+        ]
+      }
     },
     "srep-0053-wiggle-hold": {
       "rule": "SREP 53",

@@ -1,9 +1,131 @@
 {
- "srep-0047-joint-pose": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-marker\" src=\"../assets/marker.glb\" format=\"glb\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"target\" primitive=\"sphere\" material=\"m-yellow\" radius=\"10\" x=\"320\" y=\"60\" z=\"0\"/>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-marker\" material=\"m-red\" x=\"320\" y=\"200\" z=\"0\">\n<joint name=\"Hand\" rotation=\"90\"/>\n<joint name=\"Head\" rotationX=\"10\" rotationY=\"20\" lookAt=\"target\" lookAxis=\"minus-y\" influence=\"0.5\" maxAngle=\"30\"/>\n<joint name=\"Arm\"><animate property=\"rotation\"><key time=\"0\" value=\"0\"/><key time=\"1\" value=\"90\"/></animate></joint>\n</object3D>\n</composition>\n</scene>\n",
+ "srep-0047-joint-look-at": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-m\" src=\"../assets/joints.glb\" format=\"glb\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"target\" primitive=\"sphere\" material=\"m-yellow\" radius=\"10\" x=\"320\" y=\"100\" z=\"0\"/>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-m\" x=\"320\" y=\"200\" z=\"0\" ><joint name=\"Head\" lookAt=\"target\" lookAxis=\"x\"/></object3D>\n</composition>\n</scene>\n",
   "expected": {
    "rule": "SREP 47",
-   "pending": "needs a model with named, jointed nodes; the kit's only model (marker.glb) has none, so the SREP's socket displacements and look-at angles cannot be reproduced without inventing a model or numbers"
+   "red": {
+    "cx": 320,
+    "cy": 280
+   },
+   "blue": {
+    "cx": 320,
+    "cy": 160
+   }
+  }
+ },
+ "srep-0047-joint-look-at-influence": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-m\" src=\"../assets/joints.glb\" format=\"glb\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"target\" primitive=\"sphere\" material=\"m-yellow\" radius=\"10\" x=\"320\" y=\"100\" z=\"0\"/>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-m\" x=\"320\" y=\"200\" z=\"0\" ><joint name=\"Head\" lookAt=\"target\" lookAxis=\"x\" influence=\"0.5\"/></object3D>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 47",
+   "red": {
+    "cx": 320,
+    "cy": 280
+   },
+   "blue": {
+    "cx": 348.28,
+    "cy": 171.72
+   }
+  }
+ },
+ "srep-0047-joint-look-at-max-angle": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-m\" src=\"../assets/joints.glb\" format=\"glb\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"target\" primitive=\"sphere\" material=\"m-yellow\" radius=\"10\" x=\"320\" y=\"100\" z=\"0\"/>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-m\" x=\"320\" y=\"200\" z=\"0\" ><joint name=\"Head\" lookAt=\"target\" lookAxis=\"x\" maxAngle=\"30\"/></object3D>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 47",
+   "red": {
+    "cx": 320,
+    "cy": 280
+   },
+   "blue": {
+    "cx": 354.64,
+    "cy": 180.0
+   }
+  }
+ },
+ "srep-0047-joint-look-at-zero": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-m\" src=\"../assets/joints.glb\" format=\"glb\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"target\" primitive=\"sphere\" material=\"m-yellow\" radius=\"10\" x=\"320\" y=\"100\" z=\"0\"/>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-m\" x=\"320\" y=\"200\" z=\"0\" ><joint name=\"Head\" lookAt=\"target\" lookAxis=\"x\" influence=\"0\"/></object3D>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 47",
+   "red": {
+    "cx": 320,
+    "cy": 280
+   },
+   "blue": {
+    "cx": 360,
+    "cy": 200
+   }
+  }
+ },
+ "srep-0047-joint-rotation": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-m\" src=\"../assets/joints.glb\" format=\"glb\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-m\" x=\"320\" y=\"200\" z=\"0\" ><joint name=\"Arm\" rotation=\"90\"/></object3D>\n<object3D id=\"p\" primitive=\"plane\" material=\"m-green\" width=\"20\" height=\"20\" x=\"40\" parent=\"m\" parentJoint=\"Arm\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 47",
+   "red": {
+    "cx": 320,
+    "cy": 280
+   },
+   "green": {
+    "cx": 320,
+    "cy": 160
+   }
+  }
+ },
+ "srep-0047-joint-rotation-45": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-m\" src=\"../assets/joints.glb\" format=\"glb\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-m\" x=\"320\" y=\"200\" z=\"0\" ><joint name=\"Arm\" rotation=\"45\"/></object3D>\n<object3D id=\"p\" primitive=\"plane\" material=\"m-green\" width=\"20\" height=\"20\" x=\"40\" parent=\"m\" parentJoint=\"Arm\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 47",
+   "red": {
+    "cx": 320,
+    "cy": 280
+   },
+   "green": {
+    "cx": 348.28,
+    "cy": 171.72
+   }
+  }
+ },
+ "srep-0047-joint-rotation-keyed": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-m\" src=\"../assets/joints.glb\" format=\"glb\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-m\" x=\"320\" y=\"200\" z=\"0\" ><joint name=\"Arm\"><animate property=\"rotation\"><key time=\"-0.5\" value=\"0\"/><key time=\"0.5\" value=\"90\"/></animate></joint></object3D>\n<object3D id=\"p\" primitive=\"plane\" material=\"m-green\" width=\"20\" height=\"20\" x=\"40\" parent=\"m\" parentJoint=\"Arm\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 47",
+   "red": {
+    "cx": 320,
+    "cy": 280
+   },
+   "green": {
+    "cx": 348.28,
+    "cy": 171.72
+   }
+  }
+ },
+ "srep-0047-joint-unknown": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-m\" src=\"../assets/joints.glb\" format=\"glb\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-m\" x=\"320\" y=\"200\" z=\"0\" ><joint name=\"NoSuchJoint\" rotation=\"90\"/></object3D>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 47",
+   "findings": {
+    "via": "render",
+    "messages": [
+     "NoSuchJoint",
+     "body",
+     "Hand",
+     "Arm",
+     "Head"
+    ]
+   }
+  }
+ },
+ "srep-0047-joint-version": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.1\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-m\" src=\"../assets/joints.glb\" format=\"glb\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-m\" x=\"320\" y=\"200\" z=\"0\" ><joint name=\"Arm\" rotation=\"90\"/></object3D>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 47",
+   "findings": {
+    "codes": [
+     "V5"
+    ],
+    "counts": {
+     "V5": 1
+    },
+    "valid": false
+   }
   }
  }
 }

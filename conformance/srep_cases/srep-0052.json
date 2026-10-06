@@ -1,16 +1,291 @@
 {
- "srep-0052-caption-lines-greedy": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n\n</composition>\n<captions><captionTrack id=\"cap\" language=\"en\" preset=\"classic\" lineBreaks=\"greedy\"><cue start=\"0\" end=\"1\" text=\"alpha beta&#10;gamma&#10;delta epsilon zeta\"/></captionTrack></captions>\n</scene>\n",
+ "srep-0052-caption-lines-blank": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n\n</composition>\n<captions><captionTrack id=\"cap\" language=\"en\" preset=\"classic\" lineBreaks=\"source\" maxCharsPerLine=\"80\" maxLines=\"2\"><cue start=\"0\" end=\"8\" text=\"&#10; aa bb&#13;&#10;&#10; cc dd&#10;\"/></captionTrack></captions>\n</scene>\n",
   "expected": {
    "rule": "SREP 52",
-   "pending": "companion of srep-0052-caption-lines-source (same cue, default layout); see that entry"
+   "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+   "captions": {
+    "track": "cap",
+    "pages": [
+     "aa bb\ncc dd"
+    ],
+    "wordCount": 4,
+    "wordsAndTimesEqualTo": "srep-0052-caption-lines-blank-greedy"
+   }
+  }
+ },
+ "srep-0052-caption-lines-blank-greedy": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n\n</composition>\n<captions><captionTrack id=\"cap\" language=\"en\" preset=\"classic\" lineBreaks=\"greedy\" maxCharsPerLine=\"80\" maxLines=\"2\"><cue start=\"0\" end=\"8\" text=\"&#10; aa bb&#13;&#10;&#10; cc dd&#10;\"/></captionTrack></captions>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 52",
+   "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+   "captions": {
+    "track": "cap",
+    "pages": [
+     "aa bb cc dd"
+    ],
+    "wordCount": 4
+   }
+  }
+ },
+ "srep-0052-caption-lines-default": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n\n</composition>\n<captions><captionTrack id=\"cap\" language=\"en\" preset=\"classic\" maxCharsPerLine=\"80\" maxLines=\"2\"><cue start=\"0\" end=\"8\" text=\"aa bb&#10;cc dd ee ff&#10;gg hh\"/></captionTrack></captions>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 52",
+   "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+   "captions": {
+    "track": "cap",
+    "pages": [
+     "aa bb cc dd ee ff gg hh"
+    ]
+   }
+  }
+ },
+ "srep-0052-caption-lines-greedy": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n\n</composition>\n<captions><captionTrack id=\"cap\" language=\"en\" preset=\"classic\" lineBreaks=\"greedy\" maxCharsPerLine=\"80\" maxLines=\"2\"><cue start=\"0\" end=\"8\" text=\"aa bb&#10;cc dd ee ff&#10;gg hh\"/></captionTrack></captions>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 52",
+   "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+   "captions": {
+    "track": "cap",
+    "pages": [
+     "aa bb cc dd ee ff gg hh"
+    ]
+   }
+  }
+ },
+ "srep-0052-caption-lines-limits-chars": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n\n</composition>\n<captions><captionTrack id=\"cap\" language=\"en\" preset=\"classic\" lineBreaks=\"source\" maxCharsPerLine=\"5\" maxLines=\"2\"><cue start=\"0\" end=\"8\" text=\"aa bb&#10;cc dd ee ff&#10;gg hh\"/></captionTrack></captions>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 52",
+   "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+   "captions": {
+    "track": "cap",
+    "pages": [
+     "aa bb\ncc dd",
+     "ee ff\ngg hh"
+    ]
+   }
+  }
+ },
+ "srep-0052-caption-lines-limits-one-line": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n\n</composition>\n<captions><captionTrack id=\"cap\" language=\"en\" preset=\"classic\" lineBreaks=\"source\" maxCharsPerLine=\"80\" maxLines=\"1\"><cue start=\"0\" end=\"8\" text=\"aa bb&#10;cc dd ee ff&#10;gg hh\"/></captionTrack></captions>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 52",
+   "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+   "captions": {
+    "track": "cap",
+    "pages": [
+     "aa bb",
+     "cc dd ee ff",
+     "gg hh"
+    ]
+   }
+  }
+ },
+ "srep-0052-caption-lines-limits-words": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n\n</composition>\n<captions><captionTrack id=\"cap\" language=\"en\" preset=\"classic\" lineBreaks=\"source\" maxWordsPerLine=\"2\" maxCharsPerLine=\"80\" maxLines=\"2\"><cue start=\"0\" end=\"8\" text=\"aa bb&#10;cc dd ee ff&#10;gg hh\"/></captionTrack></captions>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 52",
+   "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+   "captions": {
+    "track": "cap",
+    "pages": [
+     "aa bb\ncc dd",
+     "ee ff\ngg hh"
+    ]
+   }
+  }
+ },
+ "srep-0052-caption-lines-presets-boxed-word": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n\n</composition>\n<captions><captionTrack id=\"src\" language=\"en\" preset=\"boxed-word\" lineBreaks=\"source\" maxCharsPerLine=\"80\" maxLines=\"2\"><cue start=\"0\" end=\"4\" text=\"aa bb&#10;cc dd\"/></captionTrack><captionTrack id=\"grd\" language=\"en\" preset=\"boxed-word\" lineBreaks=\"greedy\" maxCharsPerLine=\"80\" maxLines=\"2\"><cue start=\"0\" end=\"4\" text=\"aa bb&#10;cc dd\"/></captionTrack></captions>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 52",
+   "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+   "captions": [
+    {
+     "track": "src",
+     "pages": [
+      "aa bb\ncc dd"
+     ],
+     "preset": "boxed-word",
+     "activeWord": [
+      [
+       0.5,
+       0
+      ],
+      [
+       1.5,
+       1
+      ],
+      [
+       2.5,
+       2
+      ],
+      [
+       3.5,
+       3
+      ]
+     ]
+    },
+    {
+     "track": "grd",
+     "pages": [
+      "aa bb cc dd"
+     ],
+     "preset": "boxed-word",
+     "activeWord": [
+      [
+       0.5,
+       0
+      ],
+      [
+       1.5,
+       1
+      ],
+      [
+       2.5,
+       2
+      ],
+      [
+       3.5,
+       3
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0052-caption-lines-presets-highlight": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n\n</composition>\n<captions><captionTrack id=\"src\" language=\"en\" preset=\"highlight\" lineBreaks=\"source\" maxCharsPerLine=\"80\" maxLines=\"2\"><cue start=\"0\" end=\"4\" text=\"aa bb&#10;cc dd\"/></captionTrack><captionTrack id=\"grd\" language=\"en\" preset=\"highlight\" lineBreaks=\"greedy\" maxCharsPerLine=\"80\" maxLines=\"2\"><cue start=\"0\" end=\"4\" text=\"aa bb&#10;cc dd\"/></captionTrack></captions>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 52",
+   "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+   "captions": [
+    {
+     "track": "src",
+     "pages": [
+      "aa bb\ncc dd"
+     ],
+     "preset": "highlight",
+     "activeWord": [
+      [
+       0.5,
+       0
+      ],
+      [
+       1.5,
+       1
+      ],
+      [
+       2.5,
+       2
+      ],
+      [
+       3.5,
+       3
+      ]
+     ]
+    },
+    {
+     "track": "grd",
+     "pages": [
+      "aa bb cc dd"
+     ],
+     "preset": "highlight",
+     "activeWord": [
+      [
+       0.5,
+       0
+      ],
+      [
+       1.5,
+       1
+      ],
+      [
+       2.5,
+       2
+      ],
+      [
+       3.5,
+       3
+      ]
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0052-caption-lines-presets-karaoke": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n\n</composition>\n<captions><captionTrack id=\"src\" language=\"en\" preset=\"karaoke\" lineBreaks=\"source\" maxCharsPerLine=\"80\" maxLines=\"2\"><cue start=\"0\" end=\"4\" text=\"aa bb&#10;cc dd\"/></captionTrack><captionTrack id=\"grd\" language=\"en\" preset=\"karaoke\" lineBreaks=\"greedy\" maxCharsPerLine=\"80\" maxLines=\"2\"><cue start=\"0\" end=\"4\" text=\"aa bb&#10;cc dd\"/></captionTrack></captions>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 52",
+   "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+   "captions": [
+    {
+     "track": "src",
+     "pages": [
+      "aa bb\ncc dd"
+     ],
+     "preset": "karaoke",
+     "activeWord": [
+      [
+       0.5,
+       0
+      ],
+      [
+       1.5,
+       1
+      ],
+      [
+       2.5,
+       2
+      ],
+      [
+       3.5,
+       3
+      ]
+     ]
+    },
+    {
+     "track": "grd",
+     "pages": [
+      "aa bb cc dd"
+     ],
+     "preset": "karaoke",
+     "activeWord": [
+      [
+       0.5,
+       0
+      ],
+      [
+       1.5,
+       1
+      ],
+      [
+       2.5,
+       2
+      ],
+      [
+       3.5,
+       3
+      ]
+     ]
+    }
+   ]
   }
  },
  "srep-0052-caption-lines-source": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n\n</composition>\n<captions><captionTrack id=\"cap\" language=\"en\" preset=\"classic\" lineBreaks=\"source\"><cue start=\"0\" end=\"1\" text=\"alpha beta&#10;gamma&#10;delta epsilon zeta\"/></captionTrack></captions>\n</scene>\n",
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n\n</composition>\n<captions><captionTrack id=\"cap\" language=\"en\" preset=\"classic\" lineBreaks=\"source\" maxCharsPerLine=\"80\" maxLines=\"2\"><cue start=\"0\" end=\"8\" text=\"aa bb&#10;cc dd ee ff&#10;gg hh\"/></captionTrack></captions>\n</scene>\n",
   "expected": {
    "rule": "SREP 52",
-   "pending": "the SREP states exact page text, not a pixel position, and the kit measures colour centroids; the burned-in text layout depends on font metrics, which no definition in the SREP gives"
+   "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+   "captions": {
+    "track": "cap",
+    "pages": [
+     "aa bb\ncc dd ee ff",
+     "gg hh"
+    ]
+   }
   }
  }
 }
