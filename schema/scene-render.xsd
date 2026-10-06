@@ -1363,6 +1363,45 @@
     <xs:attribute name="outlineWidth" type="nonNegativeDecimal" default="1"/>
     <xs:attribute name="precision" type="positiveDecimal" default="0.7071"/>
   </xs:complexType>
+  <xs:complexType name="pdfRegionType">
+    <xs:annotation><xs:documentation>
+      A box on the page, in the cache image's pixels (origin top-left, +y down). With @text, the resolve
+      step finds the occurrence-th match of the phrase in the page's text and writes x, y, width and
+      height; without it, the box is given by hand.
+    </xs:documentation></xs:annotation>
+    <xs:attribute name="id" type="xs:ID" use="required"/>
+    <xs:attribute name="text" type="xs:string"/>
+    <xs:attribute name="occurrence" type="xs:positiveInteger" default="1"/>
+    <xs:attribute name="x" type="xs:double" use="required"/>
+    <xs:attribute name="y" type="xs:double" use="required"/>
+    <xs:attribute name="width" type="nonNegativeDecimal" use="required"/>
+    <xs:attribute name="height" type="nonNegativeDecimal" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="pdfAssetType">
+    <xs:annotation><xs:documentation>
+      One page of a PDF, drawn as an image. The renderer never reads the PDF: it reads @cache and fails
+      unless its SHA-256 equals @cacheSha256. A resolve step, run before rendering, renders page @page at
+      @dpi over @background into the cache, writes width, height and cacheSha256, and resolves the
+      regions' text. @sha256 pins the source file.
+    </xs:documentation></xs:annotation>
+    <xs:sequence><xs:element name="region" type="pdfRegionType" minOccurs="0" maxOccurs="unbounded"/></xs:sequence>
+    <xs:attribute name="id" type="xs:ID" use="required"/>
+    <xs:attribute name="src" type="xs:anyURI" use="required"/>
+    <xs:attribute name="page" type="xs:positiveInteger" default="1"/>
+    <xs:attribute name="dpi" default="150">
+      <xs:simpleType><xs:restriction base="xs:double">
+        <xs:minInclusive value="18"/><xs:maxInclusive value="1200"/>
+      </xs:restriction></xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="background" type="colorType" default="#FFFFFFFF"/>
+    <xs:attribute name="annotations" type="xs:boolean" default="false"/>
+    <xs:attribute name="cache" type="xs:anyURI" use="required"/>
+    <xs:attribute name="cacheSha256" type="sha256Type" use="required"/>
+    <xs:attribute name="width" type="xs:positiveInteger" use="required"/>
+    <xs:attribute name="height" type="xs:positiveInteger" use="required"/>
+    <xs:attributeGroup ref="assetProvenance"/>
+  </xs:complexType>
+
   <xs:complexType name="assetsType">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:element name="image" type="imageAssetType"/>
@@ -1383,6 +1422,7 @@
       <xs:element name="geo" type="geoAssetType"/>
       <xs:element name="tiles" type="tilesAssetType"/>
       <xs:element name="map" type="mapAssetType"/>
+      <xs:element name="pdf" type="pdfAssetType"/>
     </xs:choice>
   </xs:complexType>
 
@@ -1921,8 +1961,8 @@
         <xs:enumeration value="path"/>
       </xs:restriction></xs:simpleType>
     </xs:attribute>
-    <xs:attribute name="width" type="positiveLengthType" use="required"/>
-    <xs:attribute name="height" type="positiveLengthType" use="required"/>
+    <xs:attribute name="width" type="positiveLengthType"/>
+    <xs:attribute name="height" type="positiveLengthType"/>
     <xs:attribute name="path" type="xs:string"/>
     <xs:attribute name="fillRule" type="fillRuleType" default="nonzero"/>
     <xs:attribute name="radius" type="nonNegativeDecimal" default="0"/>
@@ -1942,6 +1982,9 @@
     <xs:attributeGroup ref="strokeStyle"/>
     <xs:attributeGroup ref="trimPath"/>
     <xs:attributeGroup ref="strokeMarkers"/>
+    <xs:attribute name="region" type="xs:IDREF"/>
+    <xs:attribute name="regionLayer" type="xs:IDREF"/>
+    <xs:attribute name="regionPadding" type="xs:double" default="0"/>
   </xs:complexType>
   <xs:complexType name="connectorType">
     <xs:annotation><xs:documentation>

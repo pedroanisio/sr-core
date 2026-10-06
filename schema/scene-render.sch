@@ -415,4 +415,23 @@
       <sch:assert id="R50" test="not(@label) or /scene/assets/text[@id=current()/@label]">@label must name a text asset.</sch:assert>
     </sch:rule>
   </sch:pattern>
+  <sch:pattern id="p72">
+    <sch:rule context="/scene[@version='1.0' or @version='1.1']">
+      <sch:assert id="V9" test="not(assets/pdf)">pdf assets need version="1.2".</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p73">
+    <sch:rule context="assets/pdf">
+      <sch:assert id="C66" test="@sha256">a pdf asset pins its source with @sha256.</sch:assert>
+    </sch:rule>
+    <sch:rule context="shape[@region]">
+      <sch:assert id="C67" test="@regionLayer">@region needs @regionLayer, the layer that shows the page.</sch:assert>
+      <sch:assert id="C68" test="not(@parent) and not(transformConstraint)">a shape placed on a region has no other transform parent or constraint.</sch:assert>
+      <sch:assert id="R51" test="/scene/assets/pdf/region[@id=current()/@region]">@region must name a region of a pdf asset.</sch:assert>
+      <sch:assert id="R52" test="//layer[@id=current()/@regionLayer][@asset=/scene/assets/pdf[region/@id=current()/@region]/@id]">@regionLayer must name a layer whose asset holds the region.</sch:assert>
+    </sch:rule>
+    <sch:rule context="shape">
+      <sch:assert id="C69" test="@width and @height">shape needs @width and @height unless it takes its box from @region.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
 </sch:schema>
