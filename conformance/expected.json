@@ -39545,6 +39545,36 @@
         ]
       },
       "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0059-identity": {
+      "rule": "SREP 59 (an IDREF naming no id is rejected: @parent=\"nosuch\")",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "S10"
+        ]
+      }
+    },
+    "srep-0059-empty-idrefs": {
+      "rule": "SREP 59 (an empty IDREFS list is rejected)",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "S06",
+          "R53"
+        ]
+      },
+      "pending": "the Rust reference does not implement R53 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0059-audiogram-source": {
+      "rule": "SREP 59 (an audiogram source that is not an audioTrack fails R54)",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "R54"
+        ]
+      },
+      "pending": "the Rust reference does not implement R54 yet; the entry keeps the values derived from the SREP"
     }
   }
 }

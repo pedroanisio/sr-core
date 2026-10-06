@@ -1,0 +1,41 @@
+{
+ "srep-0059-identity": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"64\" height=\"64\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"10\" height=\"10\" parent=\"nosuch\"></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 59 (an IDREF naming no id is rejected: @parent=\"nosuch\")",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "S10"
+    ]
+   }
+  }
+ },
+ "srep-0059-empty-idrefs": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"64\" height=\"64\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"10\" height=\"10\" effects=\" \"></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 59 (an empty IDREFS list is rejected)",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "S06",
+     "R53"
+    ]
+   },
+   "pending": "the Rust reference does not implement R53 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0059-audiogram-source": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"64\" height=\"64\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<assets>\n<audio id=\"a\" src=\"a.wav\"/>\n<audiogram id=\"g\" source=\"s\" width=\"32\" height=\"16\"/>\n</assets>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"10\" height=\"10\"></shape>\n</composition>\n<audioMix><audioTrack id=\"t\" asset=\"a\"/></audioMix>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 59 (an audiogram source that is not an audioTrack fails R54)",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "R54"
+    ]
+   },
+   "pending": "the Rust reference does not implement R54 yet; the entry keeps the values derived from the SREP"
+  }
+ }
+}

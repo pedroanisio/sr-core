@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2">
+<project width="64" height="64" fps="24" duration="1" background="#000000FF"/>
+<composition>
+<shape id="s" shape="rect" width="10" height="10" parent="nosuch"></shape>
+</composition>
+</scene>
