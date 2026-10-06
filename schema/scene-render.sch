@@ -434,4 +434,12 @@
       <sch:assert id="C69" test="@width and @height">shape needs @width and @height unless it takes its box from @region.</sch:assert>
     </sch:rule>
   </sch:pattern>
+  <sch:pattern id="p74">
+    <sch:rule context="/scene[project/@fontPolicy='pinned']">
+      <sch:assert id="C70" test="not(//@fontFile)">fontPolicy="pinned": faces come from font assets, not @fontFile.</sch:assert>
+      <sch:assert id="C71" test="not(assets/font[not(@sha256)])">fontPolicy="pinned": every font asset carries @sha256.</sch:assert>
+      <sch:assert id="C72" test="not(//@font[not(. = /scene/assets/font/@family)])">fontPolicy="pinned": every @font names the family of a font asset.</sch:assert>
+      <sch:assert id="C73" test="not(//@fallback[str:tokenize(., ',')[not(normalize-space(.) = current()/assets/font/@family)]])">fontPolicy="pinned": every @fallback family names a font asset.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
 </sch:schema>

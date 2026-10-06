@@ -3626,6 +3626,11 @@
         <xs:enumeration value="draft"/><xs:enumeration value="preview"/><xs:enumeration value="final"/>
       </xs:restriction></xs:simpleType>
     </xs:attribute>
+    <xs:attribute name="fontPolicy" default="system">
+      <xs:simpleType><xs:restriction base="xs:string">
+        <xs:enumeration value="system"/><xs:enumeration value="pinned"/>
+      </xs:restriction></xs:simpleType>
+    </xs:attribute>
   </xs:complexType>
 
   <!-- ===================================================== outputs -->
