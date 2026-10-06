@@ -434,7 +434,7 @@
       subset of ECMAScript expressions with these built-ins: time, frame, value,
       index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t),
       valueAtTime(t), penner("curve", u),
-      wiggle(freq, amp[, octaves, ampMult]), noise(x[,y,z]), random([min,max]),
+      wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]),
       loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1),
       clamp, lerp, smoothstep, spring(t, stiffness, damping, mass),
       audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex,

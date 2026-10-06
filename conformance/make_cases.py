@@ -571,6 +571,19 @@ CAP_TEXT = "alpha beta&#10;gamma&#10;delta epsilon zeta"
 cases["srep-0052-caption-lines-source"] = caption_doc("source", CAP_TEXT)
 cases["srep-0052-caption-lines-greedy"] = caption_doc("greedy", CAP_TEXT)
 
+# ---------------------------------------------------------------- SREP 53: wiggle(freq, amp, octaves, ampMult, t, hold)
+# Both squares are written as 200 + (a wiggle) - (the same wiggle read at another time), which is exactly 200 whenever the
+# two reads are the same value, whatever the noise is. 0.249 s lies in the hold interval [0, 0.25), so the held wiggle at 0.249
+# equals the wiggle at 0; a hold of 0 leaves t as it is, so a hold of 0 equals no hold.
+def hold_doc(expr):
+    return doc12(
+        '<shape id="r" shape="rect" width="40" height="40" anchorX="20" anchorY="20" x="200" y="180" fill="#FF0000FF">'
+        f'<expression property="x">{expr}</expression></shape>')
+
+
+cases["srep-0053-wiggle-hold"] = hold_doc("200 + wiggle(3, 20, 1, 0.5, 0.249, 0.25) - wiggle(3, 20, 1, 0.5, 0, 0.25)")
+cases["srep-0053-wiggle-hold-zero"] = hold_doc("200 + wiggle(3, 20, 1, 0.5, 0.1, 0) - wiggle(3, 20, 1, 0.5, 0.1)")
+
 os.makedirs(os.path.join(HERE, "cases"), exist_ok=True)
 for name, xml in cases.items():
     open(os.path.join(HERE, "cases", name + ".xml"), "w").write(xml)
