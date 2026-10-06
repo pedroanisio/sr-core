@@ -47,7 +47,7 @@ def test_angles_outside_zero_to_720_are_rejected(value):
 
 def test_there_is_no_default_and_the_range_matches_the_project_attribute():
     schema = etree.parse(os.path.join(ROOT, "schema", "scene-render.xsd"))
-    node_attr = schema.xpath("//xs:attributeGroup[@name='nodeAttributes']/xs:attribute[@name='shutterAngle']", namespaces=XS)[0]
+    node_attr = schema.xpath("//xs:attributeGroup[@name='nodeCoreAttributes']/xs:attribute[@name='shutterAngle']", namespaces=XS)[0]
     proj_attr = schema.xpath("//xs:complexType[@name='projectType']/xs:attribute[@name='shutterAngle']", namespaces=XS)[0]
     assert node_attr.get("default") is None and proj_attr.get("default") == "180"
     rng = lambda a: [(e.tag.split("}")[1], e.get("value")) for e in a.xpath(".//xs:restriction/*", namespaces=XS)]

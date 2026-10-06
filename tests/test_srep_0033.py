@@ -25,7 +25,7 @@ def test_case_validates():
     assert verdict(case("srep-0033-safe-area-force.xml")) == "ok"
 
 
-@pytest.mark.parametrize("path", ["//xs:attributeGroup[@name='nodeAttributes']",
+@pytest.mark.parametrize("path", ["//xs:attributeGroup[@name='nodeCoreAttributes']",
                                   "//xs:complexType[@name='symbolType']"])
 def test_declared_boolean_default_false_with_the_sentences(path):
     a = XSD_TREE.xpath(path + "/xs:attribute[@name='safeAreaForce']", namespaces=NS)
