@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<assets><geo id="sq" src="../assets/squares.geojson"/><map id="m-sq" width="640" height="360" projection="equirectangular" fit="sq" fitPadding="20"><geoLayer geo="sq" fill="#00000000" stroke="#FFFFFFFF" strokeWidth="3" progress="0.5"/></map></assets>
+<composition>
+<layer id="atlas" asset="m-sq" x="0" y="0"/>
+</composition>
+</scene>
