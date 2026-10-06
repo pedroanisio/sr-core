@@ -11,51 +11,51 @@
 | [6](srep-0006.md) | Package format 1.1: hash-covered metadata and safe reading | Standards | Accepted | vpkg 1.1 |
 | [7](srep-0007.md) | Adopt the conventions and definitions as normative semantics | Semantics | Accepted | 1.1 |
 | [8](srep-0008.md) | Close the version gate and check the 1.1 additions | Standards | Final | 1.1 |
-| [9](srep-0009.md) | Add map tile assets and basemaps | Standards | Review | 1.2 |
-| [10](srep-0010.md) | Add draped map ground and globes to object3D | Standards | Review | 1.2 |
-| [11](srep-0011.md) | Add rigid bodies to object3D | Standards | Review | 1.2 |
-| [12](srep-0012.md) | Plan the format's coverage of science-explainer video | Informational | Review | n/a |
-| [13](srep-0013.md) | Add segments to outputs: cut-downs and speed changes | Standards | Review | 1.2 |
-| [14](srep-0014.md) | Adopt design rules for simulation, space and geodata SREPs | Process | Draft | n/a |
-| [15](srep-0015.md) | Add stroke markers that ride on trim paths | Standards | Draft | 1.2 |
-| [16](srep-0016.md) | Add connectors that follow the nodes they join | Standards | Draft | 1.2 |
-| [17](srep-0017.md) | Add PDF page assets and text-anchored regions | Standards | Draft | 1.2 |
+| [9](srep-0009.md) | Add map tile assets and basemaps | Standards | Accepted | 1.2 |
+| [10](srep-0010.md) | Add draped map ground and globes to object3D | Standards | Accepted | 1.2 |
+| [11](srep-0011.md) | Add rigid bodies to object3D | Standards | Accepted | 1.2 |
+| [12](srep-0012.md) | Plan the format's coverage of science-explainer video | Informational | Active | n/a |
+| [13](srep-0013.md) | Add segments to outputs: cut-downs and speed changes | Standards | Accepted | 1.2 |
+| [14](srep-0014.md) | Adopt design rules for simulation, space and geodata SREPs | Process | Active | n/a |
+| [15](srep-0015.md) | Add stroke markers that ride on trim paths | Standards | Accepted | 1.2 |
+| [16](srep-0016.md) | Add connectors that follow the nodes they join | Standards | Accepted | 1.2 |
+| [17](srep-0017.md) | Add PDF page assets and text-anchored regions | Standards | Accepted | 1.2 |
 | [18](srep-0018.md) | Add render reports and inert-attribute findings | Standards | Accepted | 1.2 |
-| [19](srep-0019.md) | Add legibility checks for video text and captions | Standards | Draft | 1.2 |
-| [20](srep-0020.md) | Define where lines of text sit in a text box | Semantics | Draft | 1.1 |
-| [21](srep-0021.md) | Add a pinned-font policy | Standards | Draft | 1.2 |
-| [22](srep-0022.md) | Publish engine capability manifests | Standards | Draft | capabilities 1 |
-| [23](srep-0023.md) | Draw corner radii on rect shapes | Semantics | Draft | 1.1 |
-| [24](srep-0024.md) | Define which force fields act on a simulation | Standards | Draft | 1.2 |
+| [19](srep-0019.md) | Add legibility checks for video text and captions | Standards | Accepted | 1.2 |
+| [20](srep-0020.md) | Define where lines of text sit in a text box | Semantics | Accepted | 1.2 |
+| [21](srep-0021.md) | Add a pinned-font policy | Standards | Accepted | 1.2 |
+| [22](srep-0022.md) | Publish engine capability manifests | Standards | Accepted | capabilities 1 |
+| [23](srep-0023.md) | Draw corner radii on rect shapes | Semantics | Accepted | 1.2 |
+| [24](srep-0024.md) | Define which force fields act on a simulation | Standards | Accepted | 1.2 |
 | [25](srep-0025.md) | Develop the Rust engine only, for now | Process | Active | n/a |
-| [26](srep-0026.md) | Place the copies of a repeat on generated points | Standards | Draft | 1.2 |
-| [27](srep-0027.md) | Clarify six schema annotations (documentation only) | Standards | Draft | 1.1 |
-| [28](srep-0028.md) | Check the kind of asset a reference names (R42 to R44) | Standards | Draft | 1.1 |
-| [29](srep-0029.md) | Define halftone and selective-color, and three effect corrections | Semantics | Draft | 1.1 |
-| [30](srep-0030.md) | Add lineWidth to the grid generator | Standards | Draft | 1.1 |
-| [31](srep-0031.md) | Add overshoot and period to keys of back and elastic curves | Standards | Draft | 1.1 |
-| [32](srep-0032.md) | Add a bicubic resampling filter for magnified layers | Standards | Draft | 1.1 |
-| [33](srep-0033.md) | Define safe-area enforcement and the safeAreaForce override | Standards | Draft | 1.1 |
-| [34](srep-0034.md) | Amend SREP 18: five more inert-attribute rules and a mask finding | Standards | Draft | 1.2 |
-| [35](srep-0035.md) | Add presetEase to text animators, and fix three preset behaviours | Standards | Draft | 1.1 |
-| [36](srep-0036.md) | Draw polygon outlines on with geoLayer progress | Semantics | Draft | 1.1 |
-| [37](srep-0037.md) | Add tracking to extruded 3D text | Standards | Draft | 1.2 |
-| [38](srep-0038.md) | Select a node and override materials of an imported model | Standards | Draft | 1.2 |
-| [39](srep-0039.md) | Add procedural unevenness to materials (a clay finish) | Standards | Draft | 1.2 |
-| [40](srep-0040.md) | Native volumetric and large-scale cinematic effects | Standards | Draft | 1.3 |
-| [41](srep-0041.md) | Add a shadow catcher to 3D objects | Standards | Draft | 1.2 |
-| [42](srep-0042.md) | Blend two clips of an imported model | Standards | Draft | 1.2 |
-| [43](srep-0043.md) | Attach 3D elements to a joint of an imported model | Standards | Draft | 1.2 |
-| [44](srep-0044.md) | Warn about key parameters the curve ignores | Standards | Draft | 1.2 |
-| [45](srep-0045.md) | Give link a spring or exponential follower | Standards | Draft | 1.2 |
-| [46](srep-0046.md) | Set morph targets of an imported model by name | Standards | Draft | 1.2 |
-| [47](srep-0047.md) | Pose and aim a joint of an imported model | Standards | Draft | 1.2 |
-| [48](srep-0048.md) | Add penner and propAtTime to the expression built-ins | Semantics | Draft | 1.2 |
-| [49](srep-0049.md) | Add an additive mode to motionPath | Standards | Draft | 1.2 |
-| [50](srep-0050.md) | Let a spring key carry the velocity of the segment before it | Standards | Draft | 1.2 |
-| [51](srep-0051.md) | Give wiggle-path a smooth mode | Semantics | Draft | 1.2 |
-| [52](srep-0052.md) | Let captions keep the line breaks written in a cue | Standards | Draft | 1.1 |
-| [53](srep-0053.md) | Add a hold argument to wiggle | Semantics | Draft | 1.2 |
-| [54](srep-0054.md) | Add a pole target and a soft reach to two-bone IK | Standards | Draft | 1.2 |
-| [55](srep-0055.md) | Give nodes their own shutter angle | Standards | Draft | 1.2 |
-| [56](srep-0056.md) | Add stroke-order text from single-line fonts | Standards | Draft | 1.2 |
+| [26](srep-0026.md) | Place the copies of a repeat on generated points | Standards | Accepted | 1.2 |
+| [27](srep-0027.md) | Clarify six schema annotations (documentation only) | Standards | Accepted | 1.2 |
+| [28](srep-0028.md) | Check the kind of asset a reference names (R42 to R44) | Standards | Accepted | 1.2 |
+| [29](srep-0029.md) | Define halftone and selective-color, and three effect corrections | Semantics | Accepted | 1.2 |
+| [30](srep-0030.md) | Add lineWidth to the grid generator | Standards | Accepted | 1.2 |
+| [31](srep-0031.md) | Add overshoot and period to keys of back and elastic curves | Standards | Accepted | 1.2 |
+| [32](srep-0032.md) | Add a bicubic resampling filter for magnified layers | Standards | Accepted | 1.2 |
+| [33](srep-0033.md) | Define safe-area enforcement and the safeAreaForce override | Standards | Accepted | 1.2 |
+| [34](srep-0034.md) | Amend SREP 18: five more inert-attribute rules and a mask finding | Standards | Accepted | 1.2 |
+| [35](srep-0035.md) | Add presetEase to text animators, and fix three preset behaviours | Standards | Accepted | 1.2 |
+| [36](srep-0036.md) | Draw polygon outlines on with geoLayer progress | Semantics | Accepted | 1.2 |
+| [37](srep-0037.md) | Add tracking to extruded 3D text | Standards | Accepted | 1.2 |
+| [38](srep-0038.md) | Select a node and override materials of an imported model | Standards | Accepted | 1.2 |
+| [39](srep-0039.md) | Add procedural unevenness to materials (a clay finish) | Standards | Accepted | 1.2 |
+| [40](srep-0040.md) | Native volumetric and large-scale cinematic effects | Standards | Accepted | 1.3 |
+| [41](srep-0041.md) | Add a shadow catcher to 3D objects | Standards | Accepted | 1.2 |
+| [42](srep-0042.md) | Blend two clips of an imported model | Standards | Accepted | 1.2 |
+| [43](srep-0043.md) | Attach 3D elements to a joint of an imported model | Standards | Accepted | 1.2 |
+| [44](srep-0044.md) | Warn about key parameters the curve ignores | Standards | Accepted | 1.2 |
+| [45](srep-0045.md) | Give link a spring or exponential follower | Standards | Accepted | 1.2 |
+| [46](srep-0046.md) | Set morph targets of an imported model by name | Standards | Accepted | 1.2 |
+| [47](srep-0047.md) | Pose and aim a joint of an imported model | Standards | Accepted | 1.2 |
+| [48](srep-0048.md) | Add penner and propAtTime to the expression built-ins | Semantics | Accepted | 1.2 |
+| [49](srep-0049.md) | Add an additive mode to motionPath | Standards | Accepted | 1.2 |
+| [50](srep-0050.md) | Let a spring key carry the velocity of the segment before it | Standards | Accepted | 1.2 |
+| [51](srep-0051.md) | Give wiggle-path a smooth mode | Semantics | Accepted | 1.2 |
+| [52](srep-0052.md) | Let captions keep the line breaks written in a cue | Standards | Accepted | 1.2 |
+| [53](srep-0053.md) | Add a hold argument to wiggle | Semantics | Accepted | 1.2 |
+| [54](srep-0054.md) | Add a pole target and a soft reach to two-bone IK | Standards | Accepted | 1.2 |
+| [55](srep-0055.md) | Give nodes their own shutter angle | Standards | Accepted | 1.2 |
+| [56](srep-0056.md) | Add stroke-order text from single-line fonts | Standards | Accepted | 1.2 |
