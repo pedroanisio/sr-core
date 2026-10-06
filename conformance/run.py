@@ -148,7 +148,7 @@ def findings(renderer, case, want):
     exe = os.environ.get("RS_RENDER_BIN", "scene-render-rs")
     if want.get("via") == "render":
         # reports that exist only at frame evaluation (an unknown joint or morph name, an unknown clip): the engine
-        # renders frame 0, the exit status is ignored (an unknown clip fails the frame), and every message must be a
+        # renders frame 0, the exit status is ignored (an unknown animationClip fails the frame), and every message must be a
         # substring of some line of what it printed
         try:
             p = subprocess.run([exe, "render", s_, "-f", "0", "-o", os.path.join(d, "frame.png")], cwd=d,
