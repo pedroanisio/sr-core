@@ -23,8 +23,21 @@ def scene(effect):
             f"<effects>{effect}</effects></scene>")
 
 
-def test_case_validates():
-    assert verdict(case("srep-0029-effect-meanings.xml")) == "ok"
+def _kit_cases():
+    import json
+    with open(os.path.join(ROOT, "conformance", "expected.json")) as f:
+        return sorted(c for c in json.load(f)["cases"] if c.startswith("srep-0029-"))
+
+
+@pytest.mark.parametrize("name", _kit_cases())
+def test_case_validates(name):
+    assert verdict(case(name + ".xml")) == "ok"
+
+
+def test_every_case_file_of_this_srep_has_an_expected_entry():
+    files = sorted(f[:-4] for f in os.listdir(os.path.join(ROOT, "conformance", "cases"))
+                   if f.startswith("srep-0029-") and f.endswith(".xml"))
+    assert files == _kit_cases()
 
 
 def effect_doc():
