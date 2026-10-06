@@ -14,7 +14,7 @@ def case(name):
     (release coordinator), so until then the document is checked as 1.1, which differs only in that attribute."""
     xml = open(os.path.join(CASES, name + ".xml"), "rb").read()
     assert b'<scene version="1.2">' in xml
-    return xml.replace(b'<scene version="1.2">', b'<scene version="1.1">')
+    return xml
 
 
 def node(attr, kind="shape"):

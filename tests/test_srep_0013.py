@@ -3,7 +3,7 @@ captionTrack children, five output attributes, segmentType, audioRoleType, rules
 amended C20, C33, R14) and the SREP's ten cases.
 
 The 1.2 enumeration value of scene/@version and the version gate V5 are applied centrally, so the cases are
-checked here with version="1.1" substituted for version="1.2"; nothing else in them is changed."""
+checked here with as written (version="1.2")."""
 import glob
 import json
 import os
@@ -17,12 +17,12 @@ OUT = 'path="o.mp4" codec="h264"'
 
 
 def as_1_1(path):
-    return open(path, "rb").read().replace(b'version="1.2"', b'version="1.1"', 1)
+    return open(path, "rb").read()
 
 
 def scene(output="", tail="", head="", assets='<audio id="wav" src="x.wav"/>', duration=4):
     """A 1.1 scene with one output; `head` goes between the outputs and the composition, `tail` after it."""
-    return (f'<scene version="1.1"><project width="100" height="100" fps="1" duration="{duration}"/>{output}'
+    return (f'<scene version="1.2"><project width="100" height="100" fps="1" duration="{duration}"/>{output}'
             f'<assets>{assets}</assets>{head}<composition><shape id="s" shape="rect" width="10" height="10"/></composition>'
             f'{tail}</scene>')
 

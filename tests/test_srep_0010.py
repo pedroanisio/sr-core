@@ -2,7 +2,7 @@
 C47, R28, R29) and the SREP's two cases.
 
 The 1.2 enumeration value of scene/@version and the version gate V5 are applied centrally, so the cases are
-checked here with version="1.1" substituted for version="1.2"; nothing else in them is changed."""
+checked here with as written (version="1.2")."""
 import glob
 import json
 import os
@@ -18,7 +18,7 @@ ASSETS = ('<tiles id="t" src="a.pmtiles"/><tiles id="dem" src="dem.pmtiles"/>'
 
 
 def as_1_1(path):
-    return open(path, "rb").read().replace(b'version="1.2"', b'version="1.1"', 1)
+    return open(path, "rb").read()
 
 
 def obj(attrs):

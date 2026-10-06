@@ -15,7 +15,7 @@ def obj(inner, attrs=""):
 
 def test_case_validates():
     # version 1.2 joins scene/@version centrally, and V5 (not yet in this schema) will require it
-    assert verdict(open(CASE, "rb").read().replace(b'version="1.2"', b'version="1.1"')) == "ok"
+    assert verdict(open(CASE, "rb").read()) == "ok"
 
 
 @pytest.mark.parametrize("inner,attrs", [

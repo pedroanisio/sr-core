@@ -2,7 +2,7 @@
 z and forceZ on force fields, gravityZ on physics, C48) and the SREP's four cases.
 
 The 1.2 enumeration value of scene/@version and the version gate V5 are applied centrally, so the cases are
-checked here with version="1.1" substituted for version="1.2"; nothing else in them is changed."""
+checked here with as written (version="1.2")."""
 import glob
 import json
 import os
@@ -15,7 +15,7 @@ CASES = sorted(glob.glob(os.path.join(ROOT, "conformance", "cases", "srep-0011-*
 
 
 def as_1_1(path):
-    return open(path, "rb").read().replace(b'version="1.2"', b'version="1.1"', 1)
+    return open(path, "rb").read()
 
 
 def body(attrs="", primitive="sphere", physics="<physics/>"):
