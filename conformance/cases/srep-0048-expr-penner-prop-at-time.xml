@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<shape id="r" shape="rect" width="40" height="20" anchorX="20" anchorY="10" x="0" y="120" fill="#FF0000FF">
+<expression property="x">100 + 100 * penner("quad-in", 0.5)</expression>
+</shape>
+<shape id="a" shape="rect" width="40" height="20" anchorX="20" anchorY="10" x="0" y="240" fill="#00FF00FF">
+<animate property="x"><key time="0" value="100"/><key time="2" value="200"/></animate>
+</shape>
+<shape id="g" shape="rect" width="40" height="20" anchorX="20" anchorY="10" x="0" y="300" fill="#0000FFFF">
+<expression property="x">propAtTime("a.x", 0.5)</expression>
+</shape>
+</composition>
+</scene>
