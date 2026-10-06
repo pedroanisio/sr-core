@@ -1,0 +1,123 @@
+---
+disclaimer:
+  notice: >-
+    No information within this document should be taken for granted.
+    Any statement or premise not backed by a real logical definition
+    or verifiable reference may be invalid, erroneous, or a hallucination.
+  generated_by: "Claude Sonnet 5.5 via Claude Code (worker brave-heart), from the Rust engine's commit bd305d4 (owner, 2026-10-02), its tests and README text"
+  date: "2026-10-06"
+---
+
+```
+SREP:            0
+Title:           Let captions keep the line breaks written in a cue
+Author:          scene-render maintainers (drafted by brave-heart, from the owner's implementation)
+Status:          Draft
+Type:            Standards
+Created:         2026-10-06
+Schema-Version:  1.1
+```
+
+# SREP 0 (draft) — Let captions keep the line breaks written in a cue
+
+## Abstract
+
+Burned captions break a cue into lines only by length (`maxCharsPerLine`, `maxWordsPerLine`) and treat the newlines
+written in the cue text as spaces. `captionTrack/@lineBreaks` takes `greedy` (that behaviour, the default) or `source`: a
+line ends at every newline of the cue, and the limits still wrap and page a source line that is too long. A track
+without the attribute is unchanged.
+
+## Motivation
+
+The engine's implementation (commit bd305d4, "Captions: lineBreaks="source" keeps the line breaks written in a cue",
+approved as a feature by the owner on 2026-10-02) exists and is documented in the engine's README, but no SREP states it,
+so sr-core's schema does not declare the attribute (schema sync report, 2026-10-06). Authors of subtitle files (SRT,
+WebVTT) break lines on purpose; the default layout discards those breaks.
+
+## Specification
+
+### Syntax
+
+```xml
+<!-- captionTrackType gains -->
+<xs:attribute name="lineBreaks" default="greedy">
+  <xs:annotation><xs:documentation>greedy treats source newlines as spaces (legacy). source ends a line at each
+  cue newline; maxCharsPerLine, maxWordsPerLine and maxLines still apply. Blank source lines do not add empty caption
+  rows; one-word still pages each word.</xs:documentation></xs:annotation>
+  <xs:simpleType><xs:restriction base="xs:string">
+    <xs:enumeration value="greedy"/><xs:enumeration value="source"/>
+  </xs:restriction></xs:simpleType>
+</xs:attribute>
+```
+
+```xml
+None.
+```
+
+A new attribute with a neutral default, accepted in every version (SREP 0, Versioning).
+
+### Semantics
+
+For a cue, let its words be the words of its text (split at whitespace), with their timing as for any cue (a timed span
+covering several words is divided by the lengths of the words). With `lineBreaks="greedy"` the words fill lines
+as before. With `lineBreaks="source"`:
+
+1. **Source lines.** The cue text is split at line feeds (a carriage return before a line feed is whitespace); a source
+   line is the words between two line feeds. A source line with no words (a blank line) adds nothing: no empty row.
+   If the timed words and the cue text do not give the same words, the text of the words is used for the breaks.
+2. **A break before a word.** The first word of every source line except the first non-blank one starts a new caption
+   line, whatever the length of the line before it.
+3. **Limits.** `maxCharsPerLine` and `maxWordsPerLine` still wrap a source line that exceeds them, and `maxLines` still
+   pages the cue: a source break is an additional break, never a way past a limit. Words are never added or dropped.
+4. **`one-word`** pages each word alone: source breaks have no effect.
+5. **Word indices.** Karaoke, highlight and boxed-word presets address words by their index in the cue; the indices
+   are the same in both modes (newlines are not words).
+
+### Defaults and the neutral case
+
+`lineBreaks` absent or `greedy`: the existing layout, pixel for pixel.
+
+## Rationale
+
+- **Opt-in**, so existing documents' pages and pixels do not move.
+- **Limits still apply**, so a source break cannot overflow the caption block that the style's width bounds.
+- **Newlines as metadata, not words**, so word timing and presets (which count words) do not change with the mode.
+
+## Rejected alternatives
+
+- **Source breaks by default**: changes every existing burned caption that carries newlines.
+- **A new cue element per line**: SRT and WebVTT put several lines in one cue.
+
+## Backwards compatibility
+
+Class: Added attribute with a neutral default, MINOR, accepted in every version. No valid document changes validity or rendering.
+
+## Engine impact
+
+| Engine | Status | Work | Tracking |
+|---|---|---|---|
+| Rust (`rs-scene-render`), reference | implemented, commit bd305d4 (owner) | none; the README paragraph on captions describes it | |
+
+## Conformance
+
+| Case | Checks | Tolerance |
+|---|---|---|
+| `srep-NNNN-caption-lines-source` | a cue of three source lines: `source` starts a caption line at each; `greedy` fills lines by length only (the engine's test `caption_source_breaks_are_opt_in_and_limits_still_apply` states the exact pages) | exact text |
+| `srep-NNNN-caption-lines-limits` | a limit smaller than a source line wraps it, and `maxLines` pages the cue | exact text |
+| `srep-NNNN-caption-lines-blank` | blank lines and CRLF add no empty row; words and times are unchanged | exact |
+| `srep-NNNN-caption-lines-presets` | karaoke, highlight and boxed-word presets address the same word indices in both modes | exact |
+
+(The engine's tests of the commit: `crates/sr-text/tests/data.rs` and `crates/sr-gpu/tests/text.rs`.)
+
+## Open issues
+
+- Whether `source` should also apply to non-burned outputs (WebVTT and SRT writers already keep newlines).
+
+## References
+
+- SREP 0; the engine's README paragraph on captions (opt-in `lineBreaks`).
+- The engine commit bd305d4 and its tests (read for this draft).
+
+## History
+
+- 2026-10-06: first draft, written from the owner's implementation.
