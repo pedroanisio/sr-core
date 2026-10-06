@@ -1,9 +1,2332 @@
 {
  "srep-0030-grid-line-width": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><generator id=\"grid-plain\" kind=\"grid\" width=\"200\" height=\"200\" scale=\"100\" paint=\"#FF0000FF\" paint2=\"#000000FF\"/><generator id=\"grid-hair\" kind=\"grid\" width=\"200\" height=\"200\" scale=\"100\" lineWidth=\"1\" paint=\"#FF0000FF\" paint2=\"#000000FF\"/><generator id=\"grid-heavy\" kind=\"grid\" width=\"200\" height=\"200\" scale=\"100\" lineWidth=\"3\" paint=\"#FF0000FF\" paint2=\"#000000FF\"/><generator id=\"grid-none\" kind=\"grid\" width=\"200\" height=\"200\" scale=\"100\" lineWidth=\"0\" paint=\"#FF0000FF\" paint2=\"#000000FF\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"l-plain\" asset=\"grid-plain\" x=\"0\" y=\"0\"/>\n<layer id=\"l-hair\" asset=\"grid-hair\" x=\"220\" y=\"0\"/>\n<layer id=\"l-heavy\" asset=\"grid-heavy\" x=\"440\" y=\"0\"/>\n<layer id=\"l-none\" asset=\"grid-none\" x=\"0\" y=\"200\"/>\n</composition>\n</scene>\n",
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- SREP 30 grid generator, four 200x200 assets at scale 100 (pitch 100): no @lineWidth (4 px = 0.04*100), @lineWidth=1 (1 px), @lineWidth=3 (3 px), @lineWidth=0 (no lines). Assets at (0,0), (220,0), (440,0), (0,200). A line starts at each multiple of the pitch from the asset top-left, covering [k*100, k*100+w): the first two lines of each grid (k=0 at asset 0, k=1 at asset 100) are probed in both directions with a box exactly w wide and ten pixels long (red), a one-pixel black neighbour each side, and a black box in the gap; for width 0 the places where the lines would be are black. Engine provenance: measured on rs-scene-render vendor/schema-1.3 build 2d9eb13d (binary sha256 prefix 4be4bebe002bc190), llvmpipe, frame 0 (render -f 0), VM style1; the expected values were derived from the SREP formulas first (script model) and then compared with the render. Proposals until re-verified on the vendoring commit. -->\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><generator id=\"g0\" kind=\"grid\" width=\"200\" height=\"200\" scale=\"100\" paint=\"#FF0000FF\" paint2=\"#000000FF\"/><generator id=\"g1\" kind=\"grid\" width=\"200\" height=\"200\" scale=\"100\" lineWidth=\"1\" paint=\"#FF0000FF\" paint2=\"#000000FF\"/><generator id=\"g2\" kind=\"grid\" width=\"200\" height=\"200\" scale=\"100\" lineWidth=\"3\" paint=\"#FF0000FF\" paint2=\"#000000FF\"/><generator id=\"g3\" kind=\"grid\" width=\"200\" height=\"200\" scale=\"100\" lineWidth=\"0\" paint=\"#FF0000FF\" paint2=\"#000000FF\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"l-g0\" asset=\"g0\" x=\"0\" y=\"0\"/>\n<layer id=\"l-g1\" asset=\"g1\" x=\"220\" y=\"0\"/>\n<layer id=\"l-g2\" asset=\"g2\" x=\"440\" y=\"0\"/>\n<layer id=\"l-g3\" asset=\"g3\" x=\"0\" y=\"200\"/>\n</composition>\n</scene>\n",
   "expected": {
    "rule": "SREP 30",
-   "pending": "needs a measured value: the SREP gives line widths (4, 1, 3, 0 px) but not the positions or the picture, and the pattern origin and the 200x200 asset's placement are not stated analytically"
+   "regions": [
+    {
+     "box": [
+      0,
+      6,
+      4,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      4,
+      6,
+      5,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      0,
+      16,
+      4
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      4,
+      16,
+      5
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      100,
+      6,
+      104,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      104,
+      6,
+      105,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      99,
+      6,
+      100,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      100,
+      16,
+      104
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      104,
+      16,
+      105
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      99,
+      16,
+      100
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      5,
+      5,
+      99,
+      99
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      220,
+      6,
+      221,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      221,
+      6,
+      222,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      0,
+      236,
+      1
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      1,
+      236,
+      2
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      320,
+      6,
+      321,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      321,
+      6,
+      322,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      319,
+      6,
+      320,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      100,
+      236,
+      101
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      101,
+      236,
+      102
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      99,
+      236,
+      100
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      222,
+      2,
+      319,
+      99
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      440,
+      6,
+      443,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      443,
+      6,
+      444,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      0,
+      456,
+      3
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      3,
+      456,
+      4
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      540,
+      6,
+      543,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      543,
+      6,
+      544,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      539,
+      6,
+      540,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      100,
+      456,
+      103
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      103,
+      456,
+      104
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      99,
+      456,
+      100
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      444,
+      4,
+      539,
+      99
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      0,
+      210,
+      4,
+      220
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      10,
+      200,
+      20,
+      204
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      100,
+      210,
+      104,
+      220
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      10,
+      300,
+      20,
+      304
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0030-grid-pitch-25": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- SREP 30 grid generator at scale 25: the pitch stays 25 whatever the line width. Three 200x200 assets at (0,0), (220,0), (440,0): @lineWidth=1, @lineWidth=3, and no @lineWidth (max(1, 0.04*25) = 1 px, the same picture as the first). Lines at asset 0, 25, 50, ... 175 (k = 0..7), each w wide, both directions; probes are w wide, ten pixels long, with one-pixel black neighbours; the gap between the first two lines is black. Engine provenance: measured on rs-scene-render vendor/schema-1.3 build 2d9eb13d (binary sha256 prefix 4be4bebe002bc190), llvmpipe, frame 0 (render -f 0), VM style1; the expected values were derived from the SREP formulas first (script model) and then compared with the render. Proposals until re-verified on the vendoring commit. -->\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><generator id=\"g0\" kind=\"grid\" width=\"200\" height=\"200\" scale=\"25\" lineWidth=\"1\" paint=\"#FF0000FF\" paint2=\"#000000FF\"/><generator id=\"g1\" kind=\"grid\" width=\"200\" height=\"200\" scale=\"25\" lineWidth=\"3\" paint=\"#FF0000FF\" paint2=\"#000000FF\"/><generator id=\"g2\" kind=\"grid\" width=\"200\" height=\"200\" scale=\"25\" paint=\"#FF0000FF\" paint2=\"#000000FF\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"l-g0\" asset=\"g0\" x=\"0\" y=\"0\"/>\n<layer id=\"l-g1\" asset=\"g1\" x=\"220\" y=\"0\"/>\n<layer id=\"l-g2\" asset=\"g2\" x=\"440\" y=\"0\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 30",
+   "regions": [
+    {
+     "box": [
+      0,
+      6,
+      1,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      1,
+      6,
+      2,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      0,
+      16,
+      1
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      1,
+      16,
+      2
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      25,
+      6,
+      26,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      26,
+      6,
+      27,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      24,
+      6,
+      25,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      25,
+      16,
+      26
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      26,
+      16,
+      27
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      24,
+      16,
+      25
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      50,
+      6,
+      51,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      51,
+      6,
+      52,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      49,
+      6,
+      50,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      50,
+      16,
+      51
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      51,
+      16,
+      52
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      49,
+      16,
+      50
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      75,
+      6,
+      76,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      76,
+      6,
+      77,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      74,
+      6,
+      75,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      75,
+      16,
+      76
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      76,
+      16,
+      77
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      74,
+      16,
+      75
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      100,
+      6,
+      101,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      101,
+      6,
+      102,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      99,
+      6,
+      100,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      100,
+      16,
+      101
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      101,
+      16,
+      102
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      99,
+      16,
+      100
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      125,
+      6,
+      126,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      126,
+      6,
+      127,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      124,
+      6,
+      125,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      125,
+      16,
+      126
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      126,
+      16,
+      127
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      124,
+      16,
+      125
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      150,
+      6,
+      151,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      151,
+      6,
+      152,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      149,
+      6,
+      150,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      150,
+      16,
+      151
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      151,
+      16,
+      152
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      149,
+      16,
+      150
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      175,
+      6,
+      176,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      176,
+      6,
+      177,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      174,
+      6,
+      175,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      175,
+      16,
+      176
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      176,
+      16,
+      177
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      6,
+      174,
+      16,
+      175
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      2,
+      2,
+      24,
+      24
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      220,
+      6,
+      223,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      223,
+      6,
+      224,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      0,
+      236,
+      3
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      3,
+      236,
+      4
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      245,
+      6,
+      248,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      248,
+      6,
+      249,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      244,
+      6,
+      245,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      25,
+      236,
+      28
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      28,
+      236,
+      29
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      24,
+      236,
+      25
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      270,
+      6,
+      273,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      273,
+      6,
+      274,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      269,
+      6,
+      270,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      50,
+      236,
+      53
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      53,
+      236,
+      54
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      49,
+      236,
+      50
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      295,
+      6,
+      298,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      298,
+      6,
+      299,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      294,
+      6,
+      295,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      75,
+      236,
+      78
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      78,
+      236,
+      79
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      74,
+      236,
+      75
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      320,
+      6,
+      323,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      323,
+      6,
+      324,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      319,
+      6,
+      320,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      100,
+      236,
+      103
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      103,
+      236,
+      104
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      99,
+      236,
+      100
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      345,
+      6,
+      348,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      348,
+      6,
+      349,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      344,
+      6,
+      345,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      125,
+      236,
+      128
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      128,
+      236,
+      129
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      124,
+      236,
+      125
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      370,
+      6,
+      373,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      373,
+      6,
+      374,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      369,
+      6,
+      370,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      150,
+      236,
+      153
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      153,
+      236,
+      154
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      149,
+      236,
+      150
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      395,
+      6,
+      398,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      398,
+      6,
+      399,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      394,
+      6,
+      395,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      175,
+      236,
+      178
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      178,
+      236,
+      179
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      226,
+      174,
+      236,
+      175
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      224,
+      4,
+      244,
+      24
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      440,
+      6,
+      441,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      441,
+      6,
+      442,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      0,
+      456,
+      1
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      1,
+      456,
+      2
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      465,
+      6,
+      466,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      466,
+      6,
+      467,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      464,
+      6,
+      465,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      25,
+      456,
+      26
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      26,
+      456,
+      27
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      24,
+      456,
+      25
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      490,
+      6,
+      491,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      491,
+      6,
+      492,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      489,
+      6,
+      490,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      50,
+      456,
+      51
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      51,
+      456,
+      52
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      49,
+      456,
+      50
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      515,
+      6,
+      516,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      516,
+      6,
+      517,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      514,
+      6,
+      515,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      75,
+      456,
+      76
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      76,
+      456,
+      77
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      74,
+      456,
+      75
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      540,
+      6,
+      541,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      541,
+      6,
+      542,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      539,
+      6,
+      540,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      100,
+      456,
+      101
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      101,
+      456,
+      102
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      99,
+      456,
+      100
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      565,
+      6,
+      566,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      566,
+      6,
+      567,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      564,
+      6,
+      565,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      125,
+      456,
+      126
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      126,
+      456,
+      127
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      124,
+      456,
+      125
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      590,
+      6,
+      591,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      591,
+      6,
+      592,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      589,
+      6,
+      590,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      150,
+      456,
+      151
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      151,
+      456,
+      152
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      149,
+      456,
+      150
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      615,
+      6,
+      616,
+      16
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      616,
+      6,
+      617,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      614,
+      6,
+      615,
+      16
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      175,
+      456,
+      176
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      176,
+      456,
+      177
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      446,
+      174,
+      456,
+      175
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      442,
+      2,
+      464,
+      24
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    }
+   ]
   }
  }
 }
