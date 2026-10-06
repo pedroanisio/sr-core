@@ -491,4 +491,10 @@
       <sch:assert id="MOV2" test="not(str:tokenize(normalize-space(@materialOverride),' ')[not(substring-after(., ':') = current()/ancestor::scene/materials/material/@id)])">@materialOverride: each id after the colon must name a material.</sch:assert>
     </sch:rule>
   </sch:pattern>
+  <sch:pattern id="p69">
+    <sch:rule context="shape[@shape='stroke-text']">
+      <sch:assert id="PEN1" test="@text and @strokeFont">shape="stroke-text" needs @text and @strokeFont.</sch:assert>
+      <sch:assert id="PEN2" test="not(@strokeFont) or /scene/assets/strokeFont[@id=current()/@strokeFont]">shape/@strokeFont must name a strokeFont asset.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
 </sch:schema>

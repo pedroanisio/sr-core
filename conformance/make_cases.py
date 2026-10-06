@@ -621,6 +621,38 @@ cases["srep-0055-node-shutter-inherit"] = shutter_doc(
     '<group id="grp" shutterAngle="360">' + crossing("inherits", 120, "red")
     + crossing("own", 240, "green", ' shutterAngle="180"') + "</group>")
 
+# ---------------------------------------------------------------- SREP 56: stroke-text from a single-line font
+# A Hershey-format (jhf) font of 42 records: glyph k is the character U+0020 + k. Only H (k = 40) and I (k = 41) have strokes.
+def jhf_record(number, left, right, strokes):
+    ch = lambda v: chr(ord("R") + v)
+    data = ch(left) + ch(right)
+    for k, stroke in enumerate(strokes):
+        if k:
+            data += " R"
+        data += "".join(ch(x) + ch(y) for x, y in stroke)
+    return f"{number:5d}{len(data) // 2:3d}{data}"
+
+
+def stroke_font():
+    rows = [jhf_record(k + 1, -8, 8, []) for k in range(40)]
+    rows.append(jhf_record(41, -5, 5, [[(-3, -12), (-3, 9)], [(3, -12), (3, 9)], [(-3, -1), (3, -1)]]))   # H
+    rows.append(jhf_record(42, -2, 2, [[(0, -12), (0, 9)]]))                                                  # I
+    return "\n".join(rows) + "\n"
+
+
+os.makedirs(os.path.join(HERE, "assets"), exist_ok=True)
+open(os.path.join(HERE, "assets", "stroke-hi.jhf"), "w").write(stroke_font())
+
+# "HI" at fontSize 42 (scale 2): H stems at x = 4 and 20, crossbar at y = 22, I stem at x = 20 + 4 = 24, tops at y = 0, feet at 42.
+cases["srep-0056-stroke-text-layout"] = doc12(
+    '<shape id="t" shape="stroke-text" width="100" height="50" x="100" y="100" text="HI" strokeFont="hand" fontSize="42" '
+    'stroke="#FF0000FF" strokeWidth="2" strokeCap="butt"/>',
+    extra_assets='<strokeFont id="hand" src="../assets/stroke-hi.jhf"/>')
+cases["srep-0056-stroke-text-trim"] = doc12(
+    '<shape id="t" shape="stroke-text" width="100" height="50" x="100" y="100" text="HI" strokeFont="hand" fontSize="42" '
+    'stroke="#FF0000FF" strokeWidth="2" strokeCap="butt" trimMode="sequential" trimEnd="0.5"/>',
+    extra_assets='<strokeFont id="hand" src="../assets/stroke-hi.jhf"/>')
+
 os.makedirs(os.path.join(HERE, "cases"), exist_ok=True)
 for name, xml in cases.items():
     open(os.path.join(HERE, "cases", name + ".xml"), "w").write(xml)

@@ -1043,6 +1043,16 @@
     </xs:attribute>
     <xs:attributeGroup ref="assetProvenance"/>
   </xs:complexType>
+  <xs:complexType name="strokeFontAssetType">
+    <xs:annotation><xs:documentation>A single-line font: glyphs as pen strokes. format="jhf" is the Hershey font file
+    format; the n-th glyph of the file (counting from 0) is the character U+0020 + n. Version 1.2.</xs:documentation></xs:annotation>
+    <xs:attribute name="id" type="xs:ID" use="required"/>
+    <xs:attribute name="src" type="xs:anyURI" use="required"/>
+    <xs:attribute name="format" default="jhf">
+      <xs:simpleType><xs:restriction base="xs:string"><xs:enumeration value="jhf"/></xs:restriction></xs:simpleType>
+    </xs:attribute>
+    <xs:attributeGroup ref="assetProvenance"/>
+  </xs:complexType>
   <xs:complexType name="fontAssetType">
     <xs:attribute name="id" type="xs:ID" use="required"/>
     <xs:attribute name="src" type="xs:anyURI" use="required"/>
@@ -1459,6 +1469,7 @@
       <xs:element name="mesh" type="meshAssetType"/>
       <xs:element name="lottie" type="lottieAssetType"/>
       <xs:element name="font" type="fontAssetType"/>
+      <xs:element name="strokeFont" type="strokeFontAssetType"/>
       <xs:element name="generator" type="generatorAssetType"/>
       <xs:element name="chart" type="chartAssetType"/>
       <xs:element name="audiogram" type="audiogramAssetType"/>
@@ -2054,12 +2065,15 @@
         <xs:enumeration value="rect"/><xs:enumeration value="ellipse"/>
         <xs:enumeration value="rounded-rect"/><xs:enumeration value="polygon"/>
         <xs:enumeration value="star"/><xs:enumeration value="line"/>
-        <xs:enumeration value="path"/>
+        <xs:enumeration value="path"/><xs:enumeration value="stroke-text"/>
       </xs:restriction></xs:simpleType>
     </xs:attribute>
     <xs:attribute name="width" type="positiveLengthType"/>
     <xs:attribute name="height" type="positiveLengthType"/>
     <xs:attribute name="path" type="xs:string"/>
+    <xs:attribute name="text" type="xs:string"/>
+    <xs:attribute name="strokeFont" type="xs:IDREF"/>
+    <xs:attribute name="fontSize" type="positiveDecimal" default="48"/>
     <xs:attribute name="fillRule" type="fillRuleType" default="nonzero"/>
     <xs:attribute name="radius" type="nonNegativeDecimal" default="0"/>
     <xs:attribute name="cornerRadii" type="numberListType">
