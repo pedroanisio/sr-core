@@ -2398,6 +2398,39 @@
     <xs:attribute name="symbol" type="xs:NCName"/>
     <xs:attribute name="sha256" type="sha256Type"/>
   </xs:complexType>
+  <xs:complexType name="pointsType">
+    <xs:annotation><xs:documentation>
+      Generates the points on which a repeat places its copies: one copy per point, copy i on point i,
+      in the repeat's own space (pixels, +y down). type grid (columns x rows, centred on the origin),
+      along-path (count points at equal arc length along @path), scatter (count seeded points inside
+      width x height centred on the origin, or inside @path), vertices (one point per vertex of @path)
+      or list (the pairs of @at). Expressions inside the repeat read pointX, pointY, pointAngle, pointU
+      and pointRandom.
+    </xs:documentation></xs:annotation>
+    <xs:sequence>
+      <xs:element name="animate" type="animateType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:ID"/>
+    <xs:attribute name="type" use="required">
+      <xs:simpleType><xs:restriction base="xs:string">
+        <xs:enumeration value="grid"/><xs:enumeration value="along-path"/>
+        <xs:enumeration value="scatter"/><xs:enumeration value="vertices"/>
+        <xs:enumeration value="list"/>
+      </xs:restriction></xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="columns" type="xs:positiveInteger" default="1"/>
+    <xs:attribute name="rows" type="xs:positiveInteger" default="1"/>
+    <xs:attribute name="spacingX" type="xs:double" default="100"/>
+    <xs:attribute name="spacingY" type="xs:double" default="100"/>
+    <xs:attribute name="count" type="xs:nonNegativeInteger"/>
+    <xs:attribute name="path" type="xs:string"/>
+    <xs:attribute name="fillRule" type="fillRuleType" default="nonzero"/>
+    <xs:attribute name="orient" type="xs:boolean" default="false"/>
+    <xs:attribute name="width" type="nonNegativeDecimal"/>
+    <xs:attribute name="height" type="nonNegativeDecimal"/>
+    <xs:attribute name="at" type="pointListType"/>
+    <xs:attribute name="seed" type="xs:unsignedLong"/>
+  </xs:complexType>
   <xs:complexType name="repeatType">
     <xs:annotation><xs:documentation>
       Generates copies of its children: @count copies, or one per item of the
@@ -2407,6 +2440,7 @@
       opacity - i*opacityStep and a start delay of i*timeStep (stagger).
     </xs:documentation></xs:annotation>
     <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="points" type="pointsType"/>
       <xs:group ref="nodeBehaviour"/>
       <xs:group ref="nodeChoice"/>
     </xs:choice>

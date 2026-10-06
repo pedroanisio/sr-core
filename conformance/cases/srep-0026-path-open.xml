@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<composition>
+<repeat id="r" x="320" y="180">
+<points type="along-path" path="M-100,0 L100,0" count="5"/>
+<shape id="s" shape="rect" width="20" height="20" anchorX="10" anchorY="10" fill="#FF0000FF"/>
+</repeat>
+</composition>
+</scene>

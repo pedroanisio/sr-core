@@ -72,7 +72,7 @@
   </sch:pattern>
   <sch:pattern id="p11">
     <sch:rule context="repeat">
-      <sch:assert id="C17" test="(@count and not(@over)) or (@over and not(@count))">repeat needs exactly one of @count or @over.</sch:assert>
+      <sch:assert id="C17" test="count(@count) + count(@over) + number(boolean(points)) = 1">repeat needs exactly one of @count, @over or a points child.</sch:assert>
       <sch:assert id="C18" test="not(@over) or /scene/parameters/data[@id=current()/@over] or /scene/parameters/param[@id=current()/@over][@type='list']">repeat/@over must name a data source or a list parameter.</sch:assert>
     </sch:rule>
   </sch:pattern>
@@ -440,6 +440,24 @@
       <sch:assert id="C71" test="not(assets/font[not(@sha256)])">fontPolicy="pinned": every font asset carries @sha256.</sch:assert>
       <sch:assert id="C72" test="not(//@font[not(. = /scene/assets/font/@family)])">fontPolicy="pinned": every @font names the family of a font asset.</sch:assert>
       <sch:assert id="C73" test="not(//@fallback[str:tokenize(., ',')[not(normalize-space(.) = current()/assets/font/@family)]])">fontPolicy="pinned": every @fallback family names a font asset.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p75">
+    <sch:rule context="/scene[@version='1.0' or @version='1.1']">
+      <sch:assert id="V10" test="not(.//repeat/points)">points in a repeat needs version="1.2".</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p76">
+    <sch:rule context="repeat">
+      <sch:assert id="C74" test="count(points) &lt;= 1">a repeat takes at most one points child.</sch:assert>
+      <sch:assert id="C80" test="not(points and (@from[. != 0] or @step[. != 1]))">a repeat with a points child takes no @from other than 0 and no @step other than 1.</sch:assert>
+    </sch:rule>
+    <sch:rule context="repeat/points">
+      <sch:assert id="C75" test="not(@type='along-path') or (@path and @count)">points type="along-path" needs @path and @count.</sch:assert>
+      <sch:assert id="C76" test="not(@type='scatter') or (@count and ((@path and not(@width or @height)) or (not(@path) and @width and @height)))">points type="scatter" needs @count and either @path or both @width and @height.</sch:assert>
+      <sch:assert id="C77" test="not(@type='vertices') or @path">points type="vertices" needs @path.</sch:assert>
+      <sch:assert id="C78" test="not(@type='list') or @at">points type="list" needs @at.</sch:assert>
+      <sch:assert id="C79" test="not(animate[not(@property='spacingX' or @property='spacingY' or @property='width' or @property='height')])">points animates only spacingX, spacingY, width and height.</sch:assert>
     </sch:rule>
   </sch:pattern>
 </sch:schema>
