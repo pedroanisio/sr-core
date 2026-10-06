@@ -22,6 +22,33 @@ version:
 
 ### Fixed
 
+## 1.4.0 — 2026-10-06
+
+### Added
+
+- Validates and packs schema 1.4.0 documents: the packaged schema, the generated reference under `docs/schema` and the files `pack` and the lints read are schema 1.4.0 (SREP 57: a `beat.N` or `bar.N` marker id is accepted where a marker is named, when the scene has a `beatGrid`; document version 1.4). See [schema/CHANGELOG.md](schema/CHANGELOG.md).
+
+### Tooling
+
+- The compatibility kit has the 19 cases of SREP 57 (`conformance/srep_cases/srep-0057.json`), pending until the Rust reference implements it, and `tests/test_srep_0057.py` checks the schema side.
+
+## 1.3.0 — 2026-10-06
+
+### Added
+
+- Validates and packs schema 1.3.0 documents (every accepted SREP up to 56, and SREP 40), which the 1.2.0 package rejects: the packaged schema, the generated reference under `docs/schema` and the files `pack` and the lints read are now schema 1.3.0. See [schema/CHANGELOG.md](schema/CHANGELOG.md).
+
+### Tooling
+
+- The compatibility kit has cases for SREPs 15 to 56 (`conformance/srep_cases/*.json`, with their assets under `srep_cases/assets/`); `make_cases.py` writes them into `cases/` and `expected.json`.
+- `conformance/run.py` gains the check form `findings`: it runs `validate --format json` (or the render, with `via: render`, for a report that exists only at frame evaluation) and compares the finding codes, their count, message fragments, the codes that must be absent and the document's validity. A case with `pending` is skipped and listed with its reason, never counted as a pass. numpy and Pillow are needed only by pixel cases.
+- An `output` entry of `expected.json` may select the range and frame to render (`id`, `time`, `start`, `end`, `frame`), for SREP 13's overlay case.
+- `conformance/make_test_font.py` generates the pinned font of SREP 20 and 21's cases, and `make_model_assets.py` the models of the model cases (`materials.glb`, `joints.glb`, `morphs.glb`).
+- A test per SREP (`tests/test_srep_00NN.py`) checks its schema rules and its case documents, `tests/test_schema_rules.py` holds the shared helpers, and a pending-case test keeps the `pending` entries honest.
+- `conformance/DEFINITIONS.md` D11 states the lighting convention the engine implements (no factor π for punctual lights), with a history paragraph; SREP 25 makes the engine's behaviour the reference.
+
+### Fixed
+
 - `pack` lint: paths relative to the user's home (`"~/..."`, `expanduser("~")`, `$HOME/...`, `Path.home()`) are now an error, `home-path`, as `/home/...` already was. A script that read a brand kit through `expanduser("~/...")` passed the lint and packed a build step that could not run anywhere else. `docs/vpkg-howto.md` §3.4 describes vendoring shared code and kits into the project with a lock.
 
 ## 1.2.0 — 2026-09-30

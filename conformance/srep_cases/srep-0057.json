@@ -1,0 +1,265 @@
+{
+ "srep-0057-generated-ids-start": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- expect: valid -->\n<scene version=\"1.1\">\n  <project width=\"480\" height=\"270\" fps=\"24\" duration=\"4\" background=\"#000000\" motionBlur=\"false\" seed=\"1\"/>\n\n  <markers><beatGrid bpm=\"120\" offset=\"0.25\"/></markers>\n  <composition>\n    <shape id=\"n\" shape=\"rect\" x=\"100\" y=\"100\" width=\"60\" height=\"60\" fill=\"#FF0000\" startMarker=\"beat.3\"></shape>\n  </composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 57 (startMarker=\"beat.3\" with a beatGrid validates)",
+   "findings": {
+    "valid": true,
+    "absent": [
+     "R21",
+     "W03",
+     "W04"
+    ]
+   },
+   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0057-generated-ids-bar": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- expect: valid -->\n<scene version=\"1.1\">\n  <project width=\"480\" height=\"270\" fps=\"24\" duration=\"4\" background=\"#000000\" motionBlur=\"false\" seed=\"1\"/>\n\n  <markers><beatGrid bpm=\"120\" offset=\"0.25\"/></markers>\n  <composition>\n    <shape id=\"n\" shape=\"rect\" x=\"100\" y=\"100\" width=\"60\" height=\"60\" fill=\"#FF0000\" startMarker=\"bar.2\"></shape>\n  </composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 57 (startMarker=\"bar.2\" with a beatGrid validates)",
+   "findings": {
+    "valid": true,
+    "absent": [
+     "R21"
+    ]
+   },
+   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0057-generated-ids-key": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- expect: valid -->\n<scene version=\"1.1\">\n  <project width=\"480\" height=\"270\" fps=\"24\" duration=\"4\" background=\"#000000\" motionBlur=\"false\" seed=\"1\"/>\n\n  <markers><beatGrid bpm=\"120\" offset=\"0.25\"/></markers>\n  <composition>\n    <shape id=\"n\" shape=\"rect\" x=\"100\" y=\"100\" width=\"60\" height=\"60\" fill=\"#FF0000\" ><animate property=\"x\"><key time=\"0\" value=\"0\"/><key time=\"1.9\" value=\"400\" marker=\"beat.4\"/></animate></shape>\n  </composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 57 (<key marker=\"beat.4\"/> with a beatGrid validates)",
+   "findings": {
+    "valid": true,
+    "absent": [
+     "R21"
+    ]
+   },
+   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0057-generated-ids-end": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- expect: valid -->\n<scene version=\"1.1\">\n  <project width=\"480\" height=\"270\" fps=\"24\" duration=\"4\" background=\"#000000\" motionBlur=\"false\" seed=\"1\"/>\n\n  <markers><beatGrid bpm=\"120\" offset=\"0.25\"/></markers>\n  <composition>\n    <shape id=\"n\" shape=\"rect\" x=\"100\" y=\"100\" width=\"60\" height=\"60\" fill=\"#FF0000\" startMarker=\"beat.0\" endMarker=\"bar.1\"></shape>\n  </composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 57 (startMarker=\"beat.0\" and endMarker=\"bar.1\" with a beatGrid validate)",
+   "findings": {
+    "valid": true,
+    "absent": [
+     "R21"
+    ]
+   },
+   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0057-generated-ids-poster": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- expect: valid -->\n<scene version=\"1.1\">\n  <project width=\"480\" height=\"270\" fps=\"24\" duration=\"4\" background=\"#000000\" motionBlur=\"false\" seed=\"1\"/>\n\n  <output id=\"o\" path=\"out/o.mp4\" codec=\"h264\"><poster path=\"out/p.png\" marker=\"bar.1\"/></output>\n  <markers><beatGrid bpm=\"120\" offset=\"0.25\"/></markers>\n  <composition>\n    <shape id=\"n\" shape=\"rect\" x=\"100\" y=\"100\" width=\"60\" height=\"60\" fill=\"#FF0000\" ></shape>\n  </composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 57 (poster marker=\"bar.1\" with a beatGrid validates with no warning)",
+   "findings": {
+    "valid": true,
+    "absent": [
+     "W04"
+    ]
+   },
+   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0057-generated-ids-poster-no-grid": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- expect: W04 -->\n<scene version=\"1.1\">\n  <project width=\"480\" height=\"270\" fps=\"24\" duration=\"4\" background=\"#000000\" motionBlur=\"false\" seed=\"1\"/>\n\n  <output id=\"o\" path=\"out/o.mp4\" codec=\"h264\"><poster path=\"out/p.png\" marker=\"bar.1\"/></output>\n  <markers><marker id=\"m3\" time=\"1.25\"/></markers>\n  <composition>\n    <shape id=\"n\" shape=\"rect\" x=\"100\" y=\"100\" width=\"60\" height=\"60\" fill=\"#FF0000\" ></shape>\n  </composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 57 (a poster marker with no beatGrid validates and warns W04)",
+   "findings": {
+    "valid": true,
+    "codes": [
+     "W04"
+    ],
+    "counts": {
+     "W04": 1
+    }
+   },
+   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0057-generated-ids-poster-element-id": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- expect: W04 -->\n<scene version=\"1.1\">\n  <project width=\"480\" height=\"270\" fps=\"24\" duration=\"4\" background=\"#000000\" motionBlur=\"false\" seed=\"1\"/>\n\n  <output id=\"o\" path=\"out/o.mp4\" codec=\"h264\"><poster path=\"out/p.png\" marker=\"n\"/></output>\n  <markers><beatGrid bpm=\"120\" offset=\"0.25\"/></markers>\n  <composition>\n    <shape id=\"n\" shape=\"rect\" x=\"100\" y=\"100\" width=\"60\" height=\"60\" fill=\"#FF0000\" ></shape>\n  </composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 57 (a poster marker naming an element that is not a marker validates and warns W04)",
+   "findings": {
+    "valid": true,
+    "codes": [
+     "W04"
+    ],
+    "counts": {
+     "W04": 1
+    }
+   },
+   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0057-generated-ids-poster-dangling": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- expect: W04 -->\n<scene version=\"1.1\">\n  <project width=\"480\" height=\"270\" fps=\"24\" duration=\"4\" background=\"#000000\" motionBlur=\"false\" seed=\"1\"/>\n\n  <output id=\"o\" path=\"out/o.mp4\" codec=\"h264\"><poster path=\"out/p.png\" marker=\"nowhere\"/></output>\n  <markers><beatGrid bpm=\"120\" offset=\"0.25\"/></markers>\n  <composition>\n    <shape id=\"n\" shape=\"rect\" x=\"100\" y=\"100\" width=\"60\" height=\"60\" fill=\"#FF0000\" ></shape>\n  </composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 57 (a poster marker naming no element validates and warns W04)",
+   "findings": {
+    "valid": true,
+    "codes": [
+     "W04"
+    ],
+    "counts": {
+     "W04": 1
+    }
+   },
+   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0057-generated-ids-no-grid": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- expect: R21 -->\n<scene version=\"1.1\">\n  <project width=\"480\" height=\"270\" fps=\"24\" duration=\"4\" background=\"#000000\" motionBlur=\"false\" seed=\"1\"/>\n\n  <markers><marker id=\"m3\" time=\"1.25\"/></markers>\n  <composition>\n    <shape id=\"n\" shape=\"rect\" x=\"100\" y=\"100\" width=\"60\" height=\"60\" fill=\"#FF0000\" startMarker=\"beat.3\"></shape>\n  </composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 57 (startMarker=\"beat.3\", no beatGrid, no marker of that id: fails R21)",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "R21"
+    ]
+   },
+   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0057-generated-ids-malformed-dots": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- expect: R21 -->\n<scene version=\"1.1\">\n  <project width=\"480\" height=\"270\" fps=\"24\" duration=\"4\" background=\"#000000\" motionBlur=\"false\" seed=\"1\"/>\n\n  <markers><beatGrid bpm=\"120\" offset=\"0.25\"/></markers>\n  <composition>\n    <shape id=\"n\" shape=\"rect\" x=\"100\" y=\"100\" width=\"60\" height=\"60\" fill=\"#FF0000\" startMarker=\"beat.3.1\"></shape>\n  </composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 57 (beat.3.1 fails R21)",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "R21"
+    ]
+   },
+   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0057-generated-ids-malformed-empty": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- expect: R21 -->\n<scene version=\"1.1\">\n  <project width=\"480\" height=\"270\" fps=\"24\" duration=\"4\" background=\"#000000\" motionBlur=\"false\" seed=\"1\"/>\n\n  <markers><beatGrid bpm=\"120\" offset=\"0.25\"/></markers>\n  <composition>\n    <shape id=\"n\" shape=\"rect\" x=\"100\" y=\"100\" width=\"60\" height=\"60\" fill=\"#FF0000\" startMarker=\"beat.\"></shape>\n  </composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 57 (beat. fails R21)",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "R21"
+    ]
+   },
+   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0057-generated-ids-malformed-kind": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- expect: R21 -->\n<scene version=\"1.1\">\n  <project width=\"480\" height=\"270\" fps=\"24\" duration=\"4\" background=\"#000000\" motionBlur=\"false\" seed=\"1\"/>\n\n  <markers><beatGrid bpm=\"120\" offset=\"0.25\"/></markers>\n  <composition>\n    <shape id=\"n\" shape=\"rect\" x=\"100\" y=\"100\" width=\"60\" height=\"60\" fill=\"#FF0000\" startMarker=\"beats.3\"></shape>\n  </composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 57 (beats.3 fails R21)",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "R21"
+    ]
+   },
+   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0057-generated-ids-malformed-letters": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- expect: R21 -->\n<scene version=\"1.1\">\n  <project width=\"480\" height=\"270\" fps=\"24\" duration=\"4\" background=\"#000000\" motionBlur=\"false\" seed=\"1\"/>\n\n  <markers><beatGrid bpm=\"120\" offset=\"0.25\"/></markers>\n  <composition>\n    <shape id=\"n\" shape=\"rect\" x=\"100\" y=\"100\" width=\"60\" height=\"60\" fill=\"#FF0000\" startMarker=\"beat.x\"></shape>\n  </composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 57 (beat.x fails R21)",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "R21"
+    ]
+   },
+   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0057-generated-ids-too-many-digits": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- expect: R21 -->\n<scene version=\"1.1\">\n  <project width=\"480\" height=\"270\" fps=\"24\" duration=\"4\" background=\"#000000\" motionBlur=\"false\" seed=\"1\"/>\n\n  <markers><beatGrid bpm=\"120\" offset=\"0.25\"/></markers>\n  <composition>\n    <shape id=\"n\" shape=\"rect\" x=\"100\" y=\"100\" width=\"60\" height=\"60\" fill=\"#FF0000\" startMarker=\"beat.12345678901234567890\"></shape>\n  </composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 57 (a twenty-digit N fails R21)",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "R21"
+    ]
+   },
+   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0057-generated-ids-element-id": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- expect: R21 -->\n<scene version=\"1.1\">\n  <project width=\"480\" height=\"270\" fps=\"24\" duration=\"4\" background=\"#000000\" motionBlur=\"false\" seed=\"1\"/>\n\n  <markers><beatGrid bpm=\"120\" offset=\"0.25\"/></markers>\n  <composition>\n    <shape id=\"n\" shape=\"rect\" x=\"100\" y=\"100\" width=\"60\" height=\"60\" fill=\"#FF0000\" startMarker=\"n\"></shape>\n  </composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 57 (an element id is not a marker: fails R21)",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "R21"
+    ]
+   },
+   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0057-generated-ids-leading-zeros": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- expect: valid -->\n<scene version=\"1.1\">\n  <project width=\"480\" height=\"270\" fps=\"24\" duration=\"4\" background=\"#000000\" motionBlur=\"false\" seed=\"1\"/>\n\n  <markers><beatGrid bpm=\"120\" offset=\"0.25\"/></markers>\n  <composition>\n    <shape id=\"n\" shape=\"rect\" x=\"100\" y=\"100\" width=\"60\" height=\"60\" fill=\"#FF0000\" startMarker=\"beat.007\"></shape>\n  </composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 57 (beat.007 validates)",
+   "findings": {
+    "valid": true,
+    "absent": [
+     "R21"
+    ]
+   },
+   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0057-generated-ids-collision": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- expect: W03 -->\n<scene version=\"1.1\">\n  <project width=\"480\" height=\"270\" fps=\"24\" duration=\"4\" background=\"#000000\" motionBlur=\"false\" seed=\"1\"/>\n\n  <markers><beatGrid bpm=\"120\" offset=\"0.25\"/><marker id=\"beat.3\" time=\"1.25\"/></markers>\n  <composition>\n    <shape id=\"n\" shape=\"rect\" x=\"100\" y=\"100\" width=\"60\" height=\"60\" fill=\"#FF0000\" startMarker=\"beat.3\"></shape>\n  </composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 57 (an explicit <marker id=\"beat.3\"/> beside a beatGrid validates and warns W03)",
+   "findings": {
+    "valid": true,
+    "codes": [
+     "W03"
+    ],
+    "counts": {
+     "W03": 1
+    }
+   },
+   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0057-generated-ids-collision-no-grid": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- expect: valid -->\n<scene version=\"1.1\">\n  <project width=\"480\" height=\"270\" fps=\"24\" duration=\"4\" background=\"#000000\" motionBlur=\"false\" seed=\"1\"/>\n\n  <markers><marker id=\"beat.3\" time=\"1.5\"/></markers>\n  <composition>\n    <shape id=\"n\" shape=\"rect\" x=\"100\" y=\"100\" width=\"60\" height=\"60\" fill=\"#FF0000\" startMarker=\"beat.3\"></shape>\n  </composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 57 (the same marker without a beatGrid validates with no warning)",
+   "findings": {
+    "valid": true,
+    "absent": [
+     "W03"
+    ]
+   },
+   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0057-generated-ids-explicit": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- expect: valid -->\n<scene version=\"1.1\">\n  <project width=\"480\" height=\"270\" fps=\"24\" duration=\"4\" background=\"#000000\" motionBlur=\"false\" seed=\"1\"/>\n\n  <markers><beatGrid bpm=\"120\" offset=\"0.25\"/><marker id=\"m3\" time=\"1.25\"/></markers>\n  <composition>\n    <shape id=\"n\" shape=\"rect\" x=\"100\" y=\"100\" width=\"60\" height=\"60\" fill=\"#FF0000\" startMarker=\"m3\"></shape>\n  </composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 57 (the explicit-marker control validates as before)",
+   "findings": {
+    "valid": true,
+    "absent": [
+     "R21",
+     "W03",
+     "W04"
+    ]
+   },
+   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+  }
+ }
+}
