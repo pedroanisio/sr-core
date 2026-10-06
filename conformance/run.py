@@ -10,6 +10,9 @@ For each renderer and case: copy the case into out/<renderer>/<case>/scene.xml (
 render frame 0 to PNG (or, for a case whose expected entry names an "output", deliver that output at the given
 output time), find each colour's pixels (pure red/green/blue/yellow on black) and compare the
 centroid (and size, where expected) with the normative value. Writes out/report.json and out/report.md.
+
+Two forms check something other than a picture: "findings" (the engine's diagnostics, `validate --format json`)
+and "captions" (the caption pages after paging and the current word per time, `captions --at`; SREP 52).
 """
 import argparse
 import glob
@@ -184,6 +187,69 @@ def findings(renderer, case, want):
     return ("pass" if ok else "fail"), time.time() - t0, [], {"reported": got, "valid": out.get("valid"), "checks": checks}
 
 
+def captions(renderer, case, want):
+    """A case whose expected entry has "captions": the engine's caption tracks after paging (SREP 52), read from
+    `scene-render captions <scene> --at <times>` (one JSON document; no picture, so no font metrics are involved).
+
+    The entry is one check or a list of them, each naming a "track" by id and checking, all exactly:
+    {"pages": [...]}, the text of each page in order, its lines joined by "\n"; {"preset": name}, the preset the
+    layout applies; {"wordCount": n}, the words over all cues; {"activeWord": [[time, index], ...]}, the current word
+    at that time as an index in its cue (null: none on screen); {"wordsAndTimesEqualTo": "<case>"}, the words of
+    every cue, their texts, starts and ends, equal those of the same track in that other case. Only the Rust engine
+    is asked; another renderer is an error."""
+    label, _, env = RENDERERS[renderer]
+    if renderer != "rs":
+        return "error", 0.0, [f"{label} cannot dump caption pages from this kit yet"], {}
+    specs = want if isinstance(want, list) else [want]
+    exe = os.environ.get("RS_RENDER_BIN", "scene-render-rs")
+    t0 = time.time()
+
+    def dump(name, times):
+        d, s_ = prepare(name, renderer)
+        argv = [exe, "captions", s_] + (["--at", ",".join(repr(float(t)) for t in times)] if times else [])
+        p = subprocess.run(argv, cwd=d, capture_output=True, text=True, timeout=600, env={**os.environ, **env})
+        if p.returncode != 0:
+            tail = ((p.stderr or p.stdout).strip().splitlines() or [""])[-1][:160]
+            raise RuntimeError(f"exit status {p.returncode}: {tail}")
+        return {t["id"]: t for t in json.loads(p.stdout)["tracks"]}
+
+    def words(track):
+        return [[(w["text"], w["start"], w["end"]) for w in c["words"]] for c in track["cues"]]
+
+    times = sorted({float(t) for spec in specs for t, _ in spec.get("activeWord", [])})
+    try:
+        tracks = dump(case, times)
+        others = {o: dump(o, []) for o in sorted({s["wordsAndTimesEqualTo"] for s in specs if "wordsAndTimesEqualTo" in s})}
+    except (FileNotFoundError, subprocess.TimeoutExpired, RuntimeError, ValueError, KeyError) as e:
+        return "error", time.time() - t0, [f"captions failed: {type(e).__name__}: {e}"], {}
+    checks = {"tracks": [], "pages": [], "preset": [], "wordCount": [], "activeWord": [], "wordsAndTimes": []}
+    reported = {}
+    for spec in specs:
+        tid = spec["track"]
+        t = tracks.get(tid)
+        checks["tracks"].append((tid, t is not None))
+        if t is None:
+            continue
+        pages = [p["text"] for p in t["pages"]]
+        reported[tid] = pages
+        if "pages" in spec:
+            checks["pages"].append((f"{tid} {spec['pages']!r} (got {pages!r})", pages == spec["pages"]))
+        if "preset" in spec:
+            checks["preset"].append((f"{tid} {spec['preset']} (got {t['preset']})", t["preset"] == spec["preset"]))
+        if "wordCount" in spec:
+            checks["wordCount"].append((f"{tid} {spec['wordCount']} (got {t['wordCount']})", t["wordCount"] == spec["wordCount"]))
+        at = {float(a["time"]): a["word"] for a in t["at"]}
+        for tm, idx in spec.get("activeWord", []):
+            got = at.get(float(tm), "missing")
+            checks["activeWord"].append((f"{tid} at {tm}: {idx} (got {got})", got == idx))
+        if "wordsAndTimesEqualTo" in spec:
+            other = spec["wordsAndTimesEqualTo"]
+            o = others[other].get(tid)
+            checks["wordsAndTimes"].append((f"{tid} equal to {other}", o is not None and words(o) == words(t)))
+    ok = all(v for rows in checks.values() for _, v in rows)
+    return ("pass" if ok else "fail"), time.time() - t0, [], {"form": "captions", "reported": reported, "checks": checks}
+
+
 COLOUR_TOL = 3  # 8-bit code values
 
 
@@ -231,6 +297,11 @@ def main() -> int:
                 report["results"][r][c] = {"status": "pending", "reason": pending, "notes": []}
                 print(f"{r:3s} {c:22s} pending ({pending[:90]})", flush=True)
                 continue
+            if "captions" in spec["cases"][c]:
+                st, dt, notes, detail = captions(r, c, spec["cases"][c]["captions"])
+                report["results"][r][c] = {"status": st, "seconds": round(dt, 2), "notes": notes, **detail}
+                print(f"{r:3s} {c:22s} {st:5s} {dt:6.1f}s captions " + ("; ".join(notes)[:110] if st == "error" else ""), flush=True)
+                continue
             if "findings" in spec["cases"][c]:
                 st, dt, notes, detail = findings(r, c, spec["cases"][c]["findings"])
                 report["results"][r][c] = {"status": st, "seconds": round(dt, 2), "notes": notes, **detail}
@@ -274,6 +345,9 @@ def write_md(report, spec, cases):
                 cells.append("✅")
             elif e["status"] == "error":
                 cells.append("⛔ " + (e["notes"][0][:60] if e["notes"] else f"exit {e.get('exit')}"))
+            elif e.get("form") == "captions":
+                bad = [f"{k} {c}" for k, rows in e["checks"].items() for c, ok in rows if not ok]
+                cells.append("❌ captions: " + "; ".join(bad))
             elif "checks" in e and "measured" not in e:
                 bad = [f"{k} {c}" for k, rows in e["checks"].items() for c, ok in rows if not ok]
                 cells.append("❌ findings: " + ", ".join(bad) + f" (reported {', '.join(e['reported']) or 'none'})")
