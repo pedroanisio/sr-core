@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<assets><text id="t-ease" text="I" width="200" height="200" size="100" color="#FF0000FF"/></assets>
+<composition>
+<layer id="ease" asset="t-ease" x="220" y="80"><textAnimator preset="ascend" presetEase="linear" presetStart="0" presetDuration="1"/></layer>
+</composition>
+</scene>
