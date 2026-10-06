@@ -410,7 +410,8 @@
       128
      ]
     }
-   ]
+   ],
+   "pending": "finding 3: derived 93 inside the shadow with ambient light, measured 113; the derivation needs a reviewer (the builder first derived the opacity case in encoded space and corrected it from CONVENTIONS 1.4), and the engine may deviate; the entry holds the derived value."
   }
  },
  "srep-0041-shadow-catcher-nolight-shadow": {

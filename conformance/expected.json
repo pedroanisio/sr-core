@@ -1992,7 +1992,8 @@
             52.4
           ]
         }
-      ]
+      ],
+      "pending": "engine/derivation difference (finding 2, a row that is not in the SREP table): derived 52.4, measured 61.9 (the engine mixes ink and ground in linear light, 61.97); to be settled when the halftone coverage definition is checked against the SREP text."
     },
     "srep-0029-halftone-edge": {
       "rule": "SREP 29",
@@ -5842,7 +5843,8 @@
             0.0
           ]
         }
-      ]
+      ],
+      "pending": "engine deviation (finding 1): SREP 29 says the amount is mixed in display-encoded values, so amount 0.5 on #B40000 gives (180,90,90); the engine mixes in linear light and gives (180,131,131). The entry holds the derived value; it becomes real when the engine follows the SREP."
     },
     "srep-0029-selective-color-hue-window": {
       "rule": "SREP 29",
@@ -14172,7 +14174,7 @@
       ]
     },
     "srep-0037-text3d-tracking": {
-      "rule": "SREP 37: font assets/srep35-block.ttf (upem 2048, advance 1229, glyph I box x 205..1024, y 0..1434), size 100, scale 100/2048; glyph i moves i*t*s/1000 = i*20.0 px; block centred on its bbox, ortho camera 1 px/unit: stems x 260.00..299.99 and 340.01..380.00 (gap 40.02 px; baseline gap 20.0, growth 20.0 px), rows 145..215",
+      "rule": "SREP 37: font assets/srep37-block.ttf (upem 2048, advance 1229, glyph I box x 205..1024, y 0..1434), size 100, scale 100/2048; glyph i moves i*t*s/1000 = i*20.0 px; block centred on its bbox, ortho camera 1 px/unit: stems x 260.00..299.99 and 340.01..380.00 (gap 40.02 px; baseline gap 20.0, growth 20.0 px), rows 145..215",
       "regions": [
         {
           "box": [
@@ -14281,7 +14283,7 @@
       ]
     },
     "srep-0037-text3d-tracking-baseline": {
-      "rule": "SREP 37: font assets/srep35-block.ttf (upem 2048, advance 1229, glyph I box x 205..1024, y 0..1434), size 100, scale 100/2048; glyph i moves i*t*s/1000 = i*0.0 px; block centred on its bbox, ortho camera 1 px/unit: stems x 270.00..309.99 and 330.01..370.00 (gap 20.02 px; baseline gap 20.0, growth 0.0 px), rows 145..215",
+      "rule": "SREP 37: font assets/srep37-block.ttf (upem 2048, advance 1229, glyph I box x 205..1024, y 0..1434), size 100, scale 100/2048; glyph i moves i*t*s/1000 = i*0.0 px; block centred on its bbox, ortho camera 1 px/unit: stems x 270.00..309.99 and 330.01..370.00 (gap 20.02 px; baseline gap 20.0, growth 0.0 px), rows 145..215",
       "regions": [
         {
           "box": [
@@ -14390,7 +14392,7 @@
       ]
     },
     "srep-0037-text3d-tracking-negative": {
-      "rule": "SREP 37: font assets/srep35-block.ttf (upem 2048, advance 1229, glyph I box x 205..1024, y 0..1434), size 100, scale 100/2048; glyph i moves i*t*s/1000 = i*-10.0 px; block centred on its bbox, ortho camera 1 px/unit: stems x 275.00..314.99 and 325.01..365.00 (gap 10.02 px; baseline gap 20.0, growth -10.0 px), rows 145..215",
+      "rule": "SREP 37: font assets/srep37-block.ttf (upem 2048, advance 1229, glyph I box x 205..1024, y 0..1434), size 100, scale 100/2048; glyph i moves i*t*s/1000 = i*-10.0 px; block centred on its bbox, ortho camera 1 px/unit: stems x 275.00..314.99 and 325.01..365.00 (gap 10.02 px; baseline gap 20.0, growth -10.0 px), rows 145..215",
       "regions": [
         {
           "box": [
@@ -35827,7 +35829,8 @@
             128
           ]
         }
-      ]
+      ],
+      "pending": "finding 3: derived 93 inside the shadow with ambient light, measured 113; the derivation needs a reviewer (the builder first derived the opacity case in encoded space and corrected it from CONVENTIONS 1.4), and the engine may deviate; the entry holds the derived value."
     },
     "srep-0041-shadow-catcher-nolight-shadow": {
       "rule": "SREP 41 s6: the only light has castShadow=false: v=1, E_sh=E_un, alpha=0 on the whole catcher: the plate is unchanged (128) in every strip, inside the would-be shadow too",
