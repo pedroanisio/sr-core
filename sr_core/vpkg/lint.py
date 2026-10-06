@@ -23,7 +23,7 @@ from dataclasses import dataclass
 
 SCRIPT_EXTENSIONS = (".py", ".sh", ".bash", ".zsh", ".mjs", ".js", ".cjs", ".ts", ".rb", ".pl", ".r", ".jl",
                      ".ps1", ".bat", ".cmd", ".mk", ".makefile")
-ABSOLUTE = re.compile(r"""(?<![\w.$}/])(/(?:home|Users|root|mnt|media|tmp|var/tmp|opt|srv|src|workspace|data|scratch)"""
+ABSOLUTE = re.compile(r"""(?<![\w.$}/<])(/(?:home|Users|root|mnt|media|tmp|var/tmp|opt|srv|src|workspace|data|scratch)"""
                       r"""(?:/[^\s"'`;:,)\]}]*)?|/usr/(?:local/)?share/fonts[^\s"'`;:,)\]}]*|[A-Za-z]:\\\\?[^\s"'`;,)]+)""")
 QUOTED = re.compile(r"""(["'`])((?:\.\./|\.\.\\)[^"'`]*)\1""")
 HOME = re.compile(r"""(["'`])~[/\\][^"'`]*\1|expanduser\(\s*["']~["']|\$\{?HOME\}?[/\\]|Path\.home\(\)""")

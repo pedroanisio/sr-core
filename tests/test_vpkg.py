@@ -165,6 +165,16 @@ def test_lint_flags_machine_paths(tmp_path):
                      (6, "outside-project", "error")}
 
 
+def test_lint_does_not_read_a_closing_tag_as_an_absolute_path(tmp_path):
+    # `</data>` in a string is markup, not the path /data; a real /data path and the tag's opening form still behave
+    p = tmp_path / "proj"
+    p.mkdir()
+    (p / "s.py").write_text('A = "<data>x</data>"\nB = f"</home>"\nC = "<//tmp/x>"\nD = "/data/x.wav"\nE = "see </data/x>"\n'
+                            'F = "</tmp>"\nG = "x = /home/me/f"\n')
+    found = {(f.line, f.rule) for f in lint.lint_file(str(p / "s.py"), str(p))}
+    assert found == {(4, "absolute-path"), (7, "absolute-path")}, found
+
+
 def test_lint_flags_home_relative_paths(tmp_path):
     p = tmp_path / "proj"
     p.mkdir()
