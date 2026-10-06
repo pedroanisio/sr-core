@@ -13467,7 +13467,183 @@
     },
     "srep-0035-preset-ease-curves": {
       "rule": "SREP 35",
-      "pending": "the SREP states the offset as 0.5 em * (1 - f(0.4)) but the glyph position of 'I' depends on the font, so no centroid is derived here; needs a measured value from the engine"
+      "regions": [
+        {
+          "box": [
+            30,
+            95,
+            70,
+            175
+          ],
+          "rgb": [
+            112,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            115,
+            107,
+            155,
+            187
+          ],
+          "rgb": [
+            112,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            200,
+            83,
+            240,
+            163
+          ],
+          "rgb": [
+            112,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            285,
+            75,
+            325,
+            155
+          ],
+          "rgb": [
+            109,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            370,
+            68,
+            410,
+            148
+          ],
+          "rgb": [
+            111,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            455,
+            63,
+            495,
+            143
+          ],
+          "rgb": [
+            110,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            540,
+            69,
+            580,
+            149
+          ],
+          "rgb": [
+            110,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    "srep-0035-pop-back-out": {
+      "rule": "SREP 35",
+      "red": {
+        "w": 55.0,
+        "h": 77.0
+      }
+    },
+    "srep-0035-pop-back-out-end": {
+      "rule": "SREP 35",
+      "red": {
+        "w": 50.0,
+        "h": 70.0
+      }
+    },
+    "srep-0035-pop-linear": {
+      "rule": "SREP 35",
+      "red": {
+        "w": 20.0,
+        "h": 28.0
+      }
+    },
+    "srep-0035-counter-zeros-end": {
+      "rule": "SREP 35",
+      "red": {
+        "cx": 225.0,
+        "cy": 159.83,
+        "w": 170,
+        "h": 52
+      }
+    },
+    "srep-0035-counter-zeros-mid": {
+      "rule": "SREP 35",
+      "red": {
+        "w": 170
+      }
+    },
+    "srep-0035-counter-clock-before": {
+      "rule": "SREP 35",
+      "output": {
+        "id": "still",
+        "time": 1.958333
+      },
+      "red": {
+        "w": 50,
+        "h": 10.0
+      }
+    },
+    "srep-0035-counter-clock": {
+      "rule": "SREP 35",
+      "output": {
+        "id": "still",
+        "time": 2.083333
+      },
+      "red": {
+        "w": 50,
+        "h": 22.0
+      }
+    },
+    "srep-0035-counter-clock-end": {
+      "rule": "SREP 35",
+      "output": {
+        "id": "still",
+        "time": 3.5
+      },
+      "red": {
+        "w": 50,
+        "h": 64.0
+      }
+    },
+    "srep-0035-mask-reveal-lines": {
+      "rule": "SREP 35",
+      "red": {
+        "cx": 130.0,
+        "cy": 135.1,
+        "w": 50,
+        "h": 10
+      }
+    },
+    "srep-0035-mask-reveal-pending": {
+      "rule": "SREP 35",
+      "absent": [
+        "red"
+      ]
     },
     "srep-0036-geo-fill-whole": {
       "rule": "SREP 36",

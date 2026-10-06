@@ -2,8 +2,15 @@
 <scene version="1.2">
 <project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
 <output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
-<assets><text id="t-ease" text="I" width="200" height="200" size="100" color="#FF0000FF"/></assets>
+<assets><font id="f" src="../assets/srep35-block.ttf" family="SREP35Block"/><text id="t" text="I" width="80" height="200" size="100" lineHeight="1" verticalAlign="top" align="start" fontAsset="f" color="#FF0000FF"/></assets>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
 <composition>
-<layer id="ease" asset="t-ease" x="220" y="80"><textAnimator preset="ascend" presetEase="linear" presetStart="0" presetDuration="1"/></layer>
+<layer id="c0" asset="t" x="20" y="100"><textAnimator preset="ascend" presetEase="linear" presetStart="-0.4" presetDuration="1" opacity="1"/></layer>
+<layer id="c1" asset="t" x="105" y="100"><textAnimator preset="ascend" presetEase="quad-in" presetStart="-0.4" presetDuration="1" opacity="1"/></layer>
+<layer id="c2" asset="t" x="190" y="100"><textAnimator preset="ascend" presetEase="quad-out" presetStart="-0.4" presetDuration="1" opacity="1"/></layer>
+<layer id="c3" asset="t" x="275" y="100"><textAnimator preset="ascend" presetEase="cubic-out" presetStart="-0.4" presetDuration="1" opacity="1"/></layer>
+<layer id="c4" asset="t" x="360" y="100"><textAnimator preset="ascend" presetEase="expo-out" presetStart="-0.4" presetDuration="1" opacity="1"/></layer>
+<layer id="c5" asset="t" x="445" y="100"><textAnimator preset="ascend" presetEase="back-out" presetStart="-0.4" presetDuration="1" opacity="1"/></layer>
+<layer id="c6" asset="t" x="530" y="100"><textAnimator preset="ascend" presetEase="bounce-out" presetStart="-0.4" presetDuration="1" opacity="1"/></layer>
 </composition>
 </scene>
