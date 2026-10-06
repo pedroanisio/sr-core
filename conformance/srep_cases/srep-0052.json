@@ -10,7 +10,8 @@
     ],
     "wordCount": 4,
     "wordsAndTimesEqualTo": "srep-0052-caption-lines-blank-greedy"
-   }
+   },
+   "pending": "the Rust reference has no `captions` command until gap/srep-52-captions-dump merges"
   }
  },
  "srep-0052-caption-lines-blank-greedy": {
@@ -23,7 +24,8 @@
      "aa bb cc dd"
     ],
     "wordCount": 4
-   }
+   },
+   "pending": "the Rust reference has no `captions` command until gap/srep-52-captions-dump merges"
   }
  },
  "srep-0052-caption-lines-default": {
@@ -35,7 +37,8 @@
     "pages": [
      "aa bb cc dd ee ff gg hh"
     ]
-   }
+   },
+   "pending": "the Rust reference has no `captions` command until gap/srep-52-captions-dump merges"
   }
  },
  "srep-0052-caption-lines-greedy": {
@@ -47,7 +50,8 @@
     "pages": [
      "aa bb cc dd ee ff gg hh"
     ]
-   }
+   },
+   "pending": "the Rust reference has no `captions` command until gap/srep-52-captions-dump merges"
   }
  },
  "srep-0052-caption-lines-limits-chars": {
@@ -60,7 +64,8 @@
      "aa bb\ncc dd",
      "ee ff\ngg hh"
     ]
-   }
+   },
+   "pending": "the Rust reference has no `captions` command until gap/srep-52-captions-dump merges"
   }
  },
  "srep-0052-caption-lines-limits-one-line": {
@@ -74,7 +79,8 @@
      "cc dd ee ff",
      "gg hh"
     ]
-   }
+   },
+   "pending": "the Rust reference has no `captions` command until gap/srep-52-captions-dump merges"
   }
  },
  "srep-0052-caption-lines-limits-words": {
@@ -87,7 +93,8 @@
      "aa bb\ncc dd",
      "ee ff\ngg hh"
     ]
-   }
+   },
+   "pending": "the Rust reference has no `captions` command until gap/srep-52-captions-dump merges"
   }
  },
  "srep-0052-caption-lines-presets-boxed-word": {
@@ -145,7 +152,8 @@
       ]
      ]
     }
-   ]
+   ],
+   "pending": "the Rust reference has no `captions` command until gap/srep-52-captions-dump merges"
   }
  },
  "srep-0052-caption-lines-presets-highlight": {
@@ -203,7 +211,8 @@
       ]
      ]
     }
-   ]
+   ],
+   "pending": "the Rust reference has no `captions` command until gap/srep-52-captions-dump merges"
   }
  },
  "srep-0052-caption-lines-presets-karaoke": {
@@ -261,7 +270,8 @@
       ]
      ]
     }
-   ]
+   ],
+   "pending": "the Rust reference has no `captions` command until gap/srep-52-captions-dump merges"
   }
  },
  "srep-0052-caption-lines-source": {
@@ -274,7 +284,8 @@
      "aa bb\ncc dd ee ff",
      "gg hh"
     ]
-   }
+   },
+   "pending": "the Rust reference has no `captions` command until gap/srep-52-captions-dump merges"
   }
  }
 }

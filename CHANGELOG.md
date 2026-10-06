@@ -31,6 +31,7 @@ version:
 ### Tooling
 
 - The compatibility kit has the cases of SREPs 58 (`srep-0058-jump`, `-vertex`), 59 (`srep-0059-identity`, `-empty-idrefs`, `-audiogram-source`) and 63 (`srep-0063-when-raster`, `-pathtrace`), and `srep-0016-group-box` of the SREP 16 erratum; those the Rust reference does not pass yet are pending. `tests/test_srep_0059.py` and `tests/test_capabilities.py` check the schema side; a case invalid only by an XSD identity check that libxml2 skips is skipped by the generic case test.
+- The 11 `srep-0052-caption-lines-*` cases are pending until the Rust reference has the `captions` command (gap/srep-52-captions-dump); the kit keeps their captions check form.
 
 ## 1.4.0 — 2026-10-06
 
