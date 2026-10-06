@@ -516,6 +516,1186 @@
         "w": 20,
         "h": 20
       }
+    },
+    "srep-0015-arrow": {
+      "rule": "SREP 15",
+      "green": {
+        "cx": 320,
+        "cy": 180,
+        "w": 280,
+        "h": 24
+      }
+    },
+    "srep-0015-both-ends": {
+      "rule": "SREP 15",
+      "green": {
+        "cx": 300,
+        "cy": 180,
+        "w": 400,
+        "h": 24
+      }
+    },
+    "srep-0015-trim-arrow": {
+      "rule": "SREP 15",
+      "green": {
+        "cx": 250,
+        "cy": 180,
+        "w": 140,
+        "h": 24
+      }
+    },
+    "srep-0015-union": {
+      "rule": "SREP 15",
+      "pending": "the SREP states no pixel level for the flat green, which depends on the blend space; needs a measured value"
+    },
+    "srep-0016-absent": {
+      "rule": "SREP 16",
+      "absent": [
+        "green"
+      ],
+      "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0016-anchor": {
+      "rule": "SREP 16",
+      "green": {
+        "cx": 400,
+        "cy": 180,
+        "w": 164.24,
+        "h": 164.24
+      },
+      "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0016-arrow": {
+      "rule": "SREP 16",
+      "green": {
+        "cx": 320,
+        "cy": 180,
+        "w": 280,
+        "h": 24
+      },
+      "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0016-curved": {
+      "rule": "SREP 16",
+      "regions": [
+        {
+          "box": [
+            318,
+            126,
+            322,
+            130
+          ],
+          "rgb": [
+            0,
+            255,
+            0
+          ]
+        },
+        {
+          "box": [
+            318,
+            178,
+            322,
+            182
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0016-follows": {
+      "rule": "SREP 16",
+      "green": {
+        "cx": 290,
+        "cy": 180,
+        "w": 220,
+        "h": 6
+      },
+      "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0016-orthogonal": {
+      "rule": "SREP 16",
+      "green": {
+        "cx": 320,
+        "cy": 180,
+        "w": 280
+      },
+      "regions": [
+        {
+          "box": [
+            318,
+            178,
+            322,
+            182
+          ],
+          "rgb": [
+            0,
+            255,
+            0
+          ]
+        },
+        {
+          "box": [
+            248,
+            178,
+            252,
+            182
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0016-rotated-gap": {
+      "rule": "SREP 16",
+      "green": {
+        "cx": 311.72,
+        "cy": 180,
+        "w": 243.43,
+        "h": 6
+      },
+      "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0016-straight": {
+      "rule": "SREP 16",
+      "green": {
+        "cx": 320,
+        "cy": 180,
+        "w": 280,
+        "h": 6
+      },
+      "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0016-trim-arrow": {
+      "rule": "SREP 16",
+      "green": {
+        "cx": 250,
+        "cy": 180,
+        "w": 140,
+        "h": 24
+      },
+      "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0017-pdf-bad-cache": {
+      "rule": "SREP 17",
+      "pending": "the expected result is a failed render, which expected.json and run.py cannot express yet"
+    },
+    "srep-0017-pdf-page": {
+      "rule": "SREP 17",
+      "blue": {
+        "cx": 300,
+        "cy": 150,
+        "w": 400,
+        "h": 200
+      },
+      "pending": "the Rust reference does not implement SREP 17 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0017-pdf-region": {
+      "rule": "SREP 17",
+      "red": {
+        "cx": 200,
+        "cy": 90,
+        "w": 140,
+        "h": 60
+      },
+      "pending": "the Rust reference does not implement SREP 17 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0017-pdf-region-fit": {
+      "rule": "SREP 17",
+      "red": {
+        "cx": 25,
+        "cy": 35,
+        "w": 30,
+        "h": 10
+      },
+      "pending": "the Rust reference does not implement SREP 17 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0017-pdf-region-rotate": {
+      "rule": "SREP 17",
+      "red": {
+        "cx": 280,
+        "cy": 100,
+        "w": 20,
+        "h": 60
+      },
+      "pending": "the Rust reference does not implement SREP 17 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0018-failed": {
+      "rule": "SREP 18",
+      "pending": "the expectation is a failed render and a report listing ASSET-MISSING, which run.py cannot check"
+    },
+    "srep-0018-report": {
+      "rule": "SREP 18",
+      "pending": "the expectation is a report file listing exactly INERT-I2 and INERT-I8, which run.py cannot check (it reads pixels only); checked by the schema tests (the attribute validates) and by the engine's report writer"
+    },
+    "srep-0019-off": {
+      "rule": "SREP 19",
+      "pending": "validation; the expectation is the absence of any LEG-* finding, which needs the SREP 18 report"
+    },
+    "srep-0019-short": {
+      "rule": "SREP 19",
+      "pending": "validation and report finding (LEG-SHORT) checked by the schema tests; the SREP states no pixel-level expectation"
+    },
+    "srep-0019-size": {
+      "rule": "SREP 19",
+      "pending": "validation and report finding (LEG-SIZE) checked by the schema tests; the SREP states no pixel-level expectation"
+    },
+    "srep-0019-speed": {
+      "rule": "SREP 19",
+      "pending": "validation and report finding (LEG-SPEED) checked by the schema tests; the SREP states no pixel-level expectation"
+    },
+    "srep-0020-text-align-center": {
+      "rule": "SREP 20",
+      "red": {
+        "cx": 300,
+        "cy": 100,
+        "w": 110,
+        "h": 70
+      }
+    },
+    "srep-0020-text-align-end": {
+      "rule": "SREP 20",
+      "red": {
+        "cx": 440,
+        "cy": 100,
+        "w": 110,
+        "h": 70
+      }
+    },
+    "srep-0020-text-align-start": {
+      "rule": "SREP 20",
+      "red": {
+        "cx": 160,
+        "cy": 100,
+        "w": 110,
+        "h": 70
+      }
+    },
+    "srep-0020-text-bottom": {
+      "rule": "SREP 20",
+      "red": {
+        "cx": 160,
+        "cy": 250,
+        "w": 110,
+        "h": 70
+      }
+    },
+    "srep-0020-text-lines": {
+      "rule": "SREP 20",
+      "pending": "the SREP's baselines 285 and 435 fall below the 360 px frame, so they cannot be measured; the coordinator must choose a geometry that fits"
+    },
+    "srep-0020-text-middle": {
+      "rule": "SREP 20",
+      "red": {
+        "cx": 160,
+        "cy": 175,
+        "w": 110,
+        "h": 70
+      }
+    },
+    "srep-0020-text-top": {
+      "rule": "SREP 20",
+      "red": {
+        "cx": 160,
+        "cy": 100,
+        "w": 110,
+        "h": 70
+      }
+    },
+    "srep-0021-pinned-font": {
+      "rule": "SREP 21",
+      "pending": "the SREP's expectation is a .notdef glyph of the test font and a FONT-GLYPH report finding; the .notdef geometry is not stated numerically"
+    },
+    "srep-0023-rect-corner-radii": {
+      "rule": "SREP 23",
+      "regions": [
+        {
+          "box": [
+            221,
+            131,
+            225,
+            135
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            415,
+            131,
+            419,
+            135
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    "srep-0023-rect-exact": {
+      "rule": "SREP 23",
+      "regions": [
+        {
+          "box": [
+            221,
+            131,
+            225,
+            135
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    "srep-0023-rect-radius": {
+      "rule": "SREP 23",
+      "regions": [
+        {
+          "box": [
+            221,
+            131,
+            225,
+            135
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            318,
+            131,
+            323,
+            136
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    "srep-0024-force-field-scope": {
+      "rule": "SREP 24",
+      "red": {
+        "cy": 60,
+        "w": 28,
+        "h": 8
+      },
+      "green": {
+        "cy": 180,
+        "w": 28,
+        "h": 8
+      },
+      "blue": {
+        "cx": 100,
+        "cy": 300,
+        "w": 8,
+        "h": 8
+      }
+    },
+    "srep-0026-grid": {
+      "rule": "SREP 26",
+      "regions": [
+        {
+          "box": [
+            215,
+            125,
+            225,
+            135
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            315,
+            125,
+            325,
+            135
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            415,
+            125,
+            425,
+            135
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            215,
+            225,
+            225,
+            235
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            315,
+            225,
+            325,
+            235
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            415,
+            225,
+            425,
+            235
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            265,
+            175,
+            275,
+            185
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            315,
+            175,
+            325,
+            185
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "pending": "the Rust reference does not implement SREP 26 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0026-list": {
+      "rule": "SREP 26",
+      "regions": [
+        {
+          "box": [
+            215,
+            125,
+            225,
+            135
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            315,
+            175,
+            325,
+            185
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            415,
+            225,
+            425,
+            235
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            265,
+            150,
+            275,
+            160
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            365,
+            200,
+            375,
+            210
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "pending": "the Rust reference does not implement SREP 26 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0026-order": {
+      "rule": "SREP 26",
+      "regions": [
+        {
+          "box": [
+            415,
+            125,
+            425,
+            135
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            415,
+            195,
+            425,
+            205
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            435,
+            175,
+            445,
+            185
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "pending": "the Rust reference does not implement SREP 26 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0026-path-closed": {
+      "rule": "SREP 26",
+      "regions": [
+        {
+          "box": [
+            265,
+            125,
+            275,
+            135
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            365,
+            125,
+            375,
+            135
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            365,
+            225,
+            375,
+            235
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            265,
+            225,
+            275,
+            235
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            315,
+            175,
+            325,
+            185
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            315,
+            125,
+            325,
+            135
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "pending": "the Rust reference does not implement SREP 26 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0026-path-open": {
+      "rule": "SREP 26",
+      "regions": [
+        {
+          "box": [
+            215,
+            175,
+            225,
+            185
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            265,
+            175,
+            275,
+            185
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            315,
+            175,
+            325,
+            185
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            365,
+            175,
+            375,
+            185
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            415,
+            175,
+            425,
+            185
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            240,
+            175,
+            250,
+            185
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            440,
+            175,
+            450,
+            185
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "pending": "the Rust reference does not implement SREP 26 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0026-vertices": {
+      "rule": "SREP 26",
+      "regions": [
+        {
+          "box": [
+            215,
+            125,
+            225,
+            135
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            415,
+            125,
+            425,
+            135
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            315,
+            225,
+            325,
+            235
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            315,
+            125,
+            325,
+            135
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            315,
+            175,
+            325,
+            185
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "pending": "the Rust reference does not implement SREP 26 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0027-anchor-local": {
+      "rule": "SREP 27",
+      "red": {
+        "cx": 200,
+        "cy": 120,
+        "w": 40,
+        "h": 20
+      }
+    },
+    "srep-0028-asset-kinds": {
+      "rule": "SREP 28",
+      "pending": "validation rules: the finding is checked by the schema tests (tests/test_srep_0028.py); the SREP states no pixel-level expectation"
+    },
+    "srep-0029-effect-meanings": {
+      "rule": "SREP 29",
+      "pending": "needs measured values: the SREP's Conformance table gives colours and lattice properties, not centroids or sizes, and the case document is schema-valid only; the six checks need per-effect cases with measured output"
+    },
+    "srep-0030-grid-line-width": {
+      "rule": "SREP 30",
+      "pending": "needs a measured value: the SREP gives line widths (4, 1, 3, 0 px) but not the positions or the picture, and the pattern origin and the 200x200 asset's placement are not stated analytically"
+    },
+    "srep-0031-back-elastic-keys": {
+      "rule": "SREP 31",
+      "red": {
+        "cx": 450.0,
+        "cy": 60,
+        "w": 20,
+        "h": 20
+      },
+      "green": {
+        "cx": 535.08,
+        "cy": 140,
+        "w": 20,
+        "h": 20
+      },
+      "blue": {
+        "cx": 493.75,
+        "cy": 220,
+        "w": 20,
+        "h": 20
+      },
+      "yellow": {
+        "cx": 506.25,
+        "cy": 300,
+        "w": 20,
+        "h": 20
+      }
+    },
+    "srep-0032-resample-filters": {
+      "rule": "SREP 32",
+      "pending": "needs a measured value: the SREP's Conformance table compares texel values after magnification and states no centroid or region, and the SREP itself records that nothing was measured (Motivation: not measured yet)"
+    },
+    "srep-0033-safe-area-force": {
+      "rule": "SREP 33",
+      "pending": "report-channel finding (SA01/SA02) on validate, not a pixel result; the kit's run.py has no runner for report cases, and the finding is checked by the schema tests (tests/test_srep_0033.py) only as far as the attribute validates"
+    },
+    "srep-0034-inert-and-mask-miss": {
+      "rule": "SREP 34",
+      "pending": "report-channel findings (INERT-I9..I13, MASK-MISS) are not pixel results and the kit has no report runner; the findings are checked by the schema tests (tests/test_srep_0034.py) only as far as the documents validate"
+    },
+    "srep-0035-preset-ease-curves": {
+      "rule": "SREP 35",
+      "pending": "the SREP states the offset as 0.5 em * (1 - f(0.4)) but the glyph position of 'I' depends on the font, so no centroid is derived here; needs a measured value from the engine"
+    },
+    "srep-0036-geo-fill-whole": {
+      "rule": "SREP 36",
+      "pending": "the SREP expects the red interior at progress 0, 0.5 and 1 (exact colour); the case fixes progress 0.5 only and the kit has no region entry derived here"
+    },
+    "srep-0036-geo-outline-progress": {
+      "rule": "SREP 36",
+      "pending": "the SREP gives pixel-count ratios (a third to two thirds of the full outline's white pixels at 0.5), which the kit's centroid/size entries cannot express; needs a measured pixel count"
+    },
+    "srep-0037-text3d-tracking": {
+      "rule": "SREP 37",
+      "pending": "the SREP gives a relative expectation (stem distance grows by tracking * 0.1 px = 20 px at tracking 200), not an absolute position; needs the baseline measured from the same document with tracking removed"
+    },
+    "srep-0038-model-material-override": {
+      "rule": "SREP 38",
+      "pending": "marker.glb has unnamed materials, so a materialOverride pair cannot match; needs a model with named materials"
+    },
+    "srep-0038-model-node": {
+      "rule": "SREP 38",
+      "green": {
+        "cx": 320,
+        "cy": 100,
+        "w": 20,
+        "h": 20
+      },
+      "absent": [
+        "red",
+        "blue",
+        "yellow"
+      ]
+    },
+    "srep-0039-unevenness-varies": {
+      "rule": "SREP 39",
+      "pending": "the SREP expects the luminance variance across the lit face to exceed a floor it does not state; needs a measured value"
+    },
+    "srep-0041-shadow-catcher": {
+      "rule": "SREP 41",
+      "pending": "the darkening ratio E_sh / E_un depends on the engine's light model; needs a measured value"
+    },
+    "srep-0041-shadow-catcher-opacity": {
+      "rule": "SREP 41",
+      "pending": "the SREP states the darkening halves at opacity 0.5 (a ratio against the opacity 1 case), not an absolute value; needs measured values for both"
+    },
+    "srep-0042-clip-blend-unknown": {
+      "rule": "SREP 42",
+      "pending": "the finding (an unknown second clip is reported) is a report finding, not a pixel; checked by the engine's own test"
+    },
+    "srep-0042-clip-blend-w0": {
+      "rule": "SREP 42",
+      "red": {
+        "cx": 200,
+        "cy": 200,
+        "w": 20,
+        "h": 20
+      }
+    },
+    "srep-0042-clip-blend-w05": {
+      "rule": "SREP 42",
+      "red": {
+        "cx": 230,
+        "cy": 200,
+        "w": 20,
+        "h": 20
+      }
+    },
+    "srep-0042-clip-blend-w1": {
+      "rule": "SREP 42",
+      "red": {
+        "cx": 260,
+        "cy": 200,
+        "w": 20,
+        "h": 20
+      }
+    },
+    "srep-0043-joint-socket": {
+      "rule": "SREP 43",
+      "pending": "needs a model with a named, animated joint; the kit's only model (marker.glb) has none, so no pixel expectation can be derived without inventing one"
+    },
+    "srep-0044-key-default-handles": {
+      "rule": "SREP 44",
+      "pending": "the SREP states no pixel-level expectation; the finding (E21, warning) is checked by the schema tests and the engine's own tests"
+    },
+    "srep-0044-key-parameters-ignored": {
+      "rule": "SREP 44",
+      "pending": "the SREP states no pixel-level expectation; the findings (E19, info) are checked by the schema tests and the engine's own tests"
+    },
+    "srep-0045-link-follow-constant": {
+      "rule": "SREP 45",
+      "red": {
+        "cx": 200,
+        "cy": 120,
+        "w": 40,
+        "h": 20
+      },
+      "blue": {
+        "cx": 200,
+        "cy": 210,
+        "w": 40,
+        "h": 20
+      },
+      "green": {
+        "cx": 200,
+        "cy": 300,
+        "w": 40,
+        "h": 20
+      }
+    },
+    "srep-0046-morph-by-name": {
+      "rule": "SREP 46",
+      "pending": "needs a model with named morph targets; the kit's only model (marker.glb) has none, so the SREP's 40 px displacements cannot be reproduced without inventing a model or numbers"
+    },
+    "srep-0047-joint-pose": {
+      "rule": "SREP 47",
+      "pending": "needs a model with named, jointed nodes; the kit's only model (marker.glb) has none, so the SREP's socket displacements and look-at angles cannot be reproduced without inventing a model or numbers"
+    },
+    "srep-0048-expr-penner-prop-at-time": {
+      "rule": "SREP 48",
+      "red": {
+        "cx": 125,
+        "cy": 120,
+        "w": 40,
+        "h": 20
+      },
+      "green": {
+        "cx": 100,
+        "cy": 240,
+        "w": 40,
+        "h": 20
+      },
+      "blue": {
+        "cx": 125,
+        "cy": 300,
+        "w": 40,
+        "h": 20
+      }
+    },
+    "srep-0049-motion-path-additive": {
+      "rule": "SREP 49",
+      "red": {
+        "cx": 150,
+        "cy": 50,
+        "w": 40,
+        "h": 20
+      },
+      "green": {
+        "cx": 150,
+        "cy": 150,
+        "w": 40,
+        "h": 20
+      },
+      "blue": {
+        "cx": 150,
+        "cy": 250,
+        "w": 40,
+        "h": 20
+      }
+    },
+    "srep-0050-spring-carry": {
+      "rule": "SREP 50",
+      "red": {
+        "cx": 248.38,
+        "cy": 180,
+        "w": 40,
+        "h": 40
+      }
+    },
+    "srep-0050-spring-carry-neutral": {
+      "rule": "SREP 50",
+      "red": {
+        "cx": 216.85,
+        "cy": 180,
+        "w": 40,
+        "h": 40
+      }
+    },
+    "srep-0051-wiggle-smooth": {
+      "rule": "SREP 51",
+      "pending": "the SREP states no pixel-level expectation: the wiggled points come from the engine's seeded noise, so no centroid or size can be computed analytically; its check compares vertices and turn angles of smooth against corner, which the kit's colour-centroid measure cannot express"
+    },
+    "srep-0051-wiggle-smooth-corner": {
+      "rule": "SREP 51",
+      "pending": "companion of srep-0051-wiggle-smooth (same document without mode); see that entry"
+    },
+    "srep-0052-caption-lines-greedy": {
+      "rule": "SREP 52",
+      "pending": "companion of srep-0052-caption-lines-source (same cue, default layout); see that entry"
+    },
+    "srep-0052-caption-lines-source": {
+      "rule": "SREP 52",
+      "pending": "the SREP states exact page text, not a pixel position, and the kit measures colour centroids; the burned-in text layout depends on font metrics, which no definition in the SREP gives"
+    },
+    "srep-0053-wiggle-hold": {
+      "rule": "SREP 53",
+      "red": {
+        "cx": 200,
+        "cy": 180,
+        "w": 40,
+        "h": 40
+      }
+    },
+    "srep-0053-wiggle-hold-zero": {
+      "rule": "SREP 53",
+      "red": {
+        "cx": 200,
+        "cy": 180,
+        "w": 40,
+        "h": 40
+      }
+    },
+    "srep-0054-ik-pole": {
+      "rule": "SREP 54",
+      "pending": "the elbow is only visible through a skinned shape; the SREP's expected elbow positions are derived in the notes but the kit's colour-centroid measure of a skinned rectangle is not computable without the engine's skin deformation (not defined in the SREP)"
+    },
+    "srep-0054-ik-soft-reach": {
+      "rule": "SREP 54",
+      "pending": "the SREP states exact d' values (checked by the engine's own test), not a pixel-level expectation; the skinned rectangle's pixels are not computable from the SREP's definitions"
+    },
+    "srep-0055-node-shutter": {
+      "rule": "SREP 55",
+      "pending": "needs a measured value: the SREP says 'about 5 px' and 'about 10 px' of smear, and the kit's bounding box counts only pixels above 0.5 in a pure-colour channel, so the measured width of a blurred edge depends on the engine's blend and encoding of partial coverage, which the SREP does not define"
+    },
+    "srep-0055-node-shutter-inherit": {
+      "rule": "SREP 55",
+      "pending": "same reason as srep-0055-node-shutter; the SREP gives no number for the inheritance case"
+    },
+    "srep-0056-stroke-text-layout": {
+      "rule": "SREP 56",
+      "red": {
+        "cx": 114.32,
+        "cy": 121.07,
+        "w": 22,
+        "h": 42
+      }
+    },
+    "srep-0056-stroke-text-trim": {
+      "rule": "SREP 56",
+      "red": {
+        "cx": 108.7,
+        "cy": 118.07,
+        "w": 14,
+        "h": 42
+      }
     }
   }
 }

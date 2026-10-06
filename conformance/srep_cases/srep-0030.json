@@ -1,0 +1,9 @@
+{
+ "srep-0030-grid-line-width": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><generator id=\"grid-plain\" kind=\"grid\" width=\"200\" height=\"200\" scale=\"100\" paint=\"#FF0000FF\" paint2=\"#000000FF\"/><generator id=\"grid-hair\" kind=\"grid\" width=\"200\" height=\"200\" scale=\"100\" lineWidth=\"1\" paint=\"#FF0000FF\" paint2=\"#000000FF\"/><generator id=\"grid-heavy\" kind=\"grid\" width=\"200\" height=\"200\" scale=\"100\" lineWidth=\"3\" paint=\"#FF0000FF\" paint2=\"#000000FF\"/><generator id=\"grid-none\" kind=\"grid\" width=\"200\" height=\"200\" scale=\"100\" lineWidth=\"0\" paint=\"#FF0000FF\" paint2=\"#000000FF\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"l-plain\" asset=\"grid-plain\" x=\"0\" y=\"0\"/>\n<layer id=\"l-hair\" asset=\"grid-hair\" x=\"220\" y=\"0\"/>\n<layer id=\"l-heavy\" asset=\"grid-heavy\" x=\"440\" y=\"0\"/>\n<layer id=\"l-none\" asset=\"grid-none\" x=\"0\" y=\"200\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 30",
+   "pending": "needs a measured value: the SREP gives line widths (4, 1, 3, 0 px) but not the positions or the picture, and the pattern origin and the 200x200 asset's placement are not stated analytically"
+  }
+ }
+}

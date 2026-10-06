@@ -1,0 +1,16 @@
+{
+ "srep-0041-shadow-catcher": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-white\" baseColor=\"#FFFFFFFF\" roughness=\"1\"/></materials>\n<composition>\n<shape id=\"plate\" shape=\"rect\" width=\"640\" height=\"360\" x=\"0\" y=\"0\" fill=\"#808080FF\"/>\n<object3D id=\"floor\" primitive=\"plane\" width=\"600\" height=\"300\" rotationX=\"90\" material=\"m-white\" shadowCatcher=\"true\" opacity=\"1\" x=\"320\" y=\"300\" z=\"150\"/>\n<object3D id=\"caster\" primitive=\"box\" width=\"80\" height=\"80\" depth=\"80\" material=\"m-white\" x=\"320\" y=\"230\" z=\"150\"/>\n</composition>\n<lights><light id=\"key\" type=\"spot\" x=\"320\" y=\"-100\" z=\"150\" pitch=\"90\" spotAngle=\"60\" intensity=\"3\" castShadow=\"true\"/></lights>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 41",
+   "pending": "the darkening ratio E_sh / E_un depends on the engine's light model; needs a measured value"
+  }
+ },
+ "srep-0041-shadow-catcher-opacity": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-white\" baseColor=\"#FFFFFFFF\" roughness=\"1\"/></materials>\n<composition>\n<shape id=\"plate\" shape=\"rect\" width=\"640\" height=\"360\" x=\"0\" y=\"0\" fill=\"#808080FF\"/>\n<object3D id=\"floor\" primitive=\"plane\" width=\"600\" height=\"300\" rotationX=\"90\" material=\"m-white\" shadowCatcher=\"true\" opacity=\"0.5\" x=\"320\" y=\"300\" z=\"150\"/>\n<object3D id=\"caster\" primitive=\"box\" width=\"80\" height=\"80\" depth=\"80\" material=\"m-white\" x=\"320\" y=\"230\" z=\"150\"/>\n</composition>\n<lights><light id=\"key\" type=\"spot\" x=\"320\" y=\"-100\" z=\"150\" pitch=\"90\" spotAngle=\"60\" intensity=\"3\" castShadow=\"true\"/></lights>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 41",
+   "pending": "the SREP states the darkening halves at opacity 0.5 (a ratio against the opacity 1 case), not an absolute value; needs measured values for both"
+  }
+ }
+}

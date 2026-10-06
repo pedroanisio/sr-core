@@ -1,0 +1,9 @@
+{
+ "srep-0043-joint-socket": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-marker\" src=\"../assets/marker.glb\" format=\"glb\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-marker\" material=\"m-red\" x=\"320\" y=\"200\" z=\"0\"/>\n<object3D id=\"prop\" primitive=\"box\" material=\"m-green\" width=\"20\" height=\"20\" depth=\"20\" parent=\"m\" parentJoint=\"Hand\"/>\n<object3D id=\"ring\" primitive=\"sphere\" material=\"m-blue\" radius=\"10\" x=\"100\" y=\"100\">\n<transformConstraint type=\"parent\" target=\"m\" targetJoint=\"Hand\"/>\n</object3D>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 43",
+   "pending": "needs a model with a named, animated joint; the kit's only model (marker.glb) has none, so no pixel expectation can be derived without inventing one"
+  }
+ }
+}

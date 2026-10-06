@@ -1,0 +1,91 @@
+{
+ "srep-0023-rect-corner-radii": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"r\" shape=\"rect\" width=\"200\" height=\"100\" anchorX=\"0\" anchorY=\"0\" x=\"220\" y=\"130\" fill=\"#FF0000FF\" cornerRadii=\"30 0 0 0\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 23",
+   "regions": [
+    {
+     "box": [
+      221,
+      131,
+      225,
+      135
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      415,
+      131,
+      419,
+      135
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0023-rect-exact": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"r\" shape=\"rect\" width=\"200\" height=\"100\" anchorX=\"0\" anchorY=\"0\" x=\"220\" y=\"130\" fill=\"#FF0000FF\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 23",
+   "regions": [
+    {
+     "box": [
+      221,
+      131,
+      225,
+      135
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0023-rect-radius": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"r\" shape=\"rect\" width=\"200\" height=\"100\" anchorX=\"0\" anchorY=\"0\" x=\"220\" y=\"130\" fill=\"#FF0000FF\" radius=\"30\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 23",
+   "regions": [
+    {
+     "box": [
+      221,
+      131,
+      225,
+      135
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      318,
+      131,
+      323,
+      136
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    }
+   ]
+  }
+ }
+}

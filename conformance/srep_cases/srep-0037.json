@@ -1,0 +1,9 @@
+{
+ "srep-0037-text3d-tracking": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"ii\" primitive=\"text\" text=\"II\" height=\"100\" tracking=\"200\" material=\"m-white\" x=\"320\" y=\"180\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 37",
+   "pending": "the SREP gives a relative expectation (stem distance grows by tracking * 0.1 px = 20 px at tracking 200), not an absolute position; needs the baseline measured from the same document with tracking removed"
+  }
+ }
+}

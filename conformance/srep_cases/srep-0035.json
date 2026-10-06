@@ -1,0 +1,9 @@
+{
+ "srep-0035-preset-ease-curves": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><text id=\"t-ease\" text=\"I\" width=\"200\" height=\"200\" size=\"100\" color=\"#FF0000FF\"/></assets>\n<composition>\n<layer id=\"ease\" asset=\"t-ease\" x=\"220\" y=\"80\"><textAnimator preset=\"ascend\" presetEase=\"linear\" presetStart=\"0\" presetDuration=\"1\"/></layer>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 35",
+   "pending": "the SREP states the offset as 0.5 em * (1 - f(0.4)) but the glyph position of 'I' depends on the font, so no centroid is derived here; needs a measured value from the engine"
+  }
+ }
+}

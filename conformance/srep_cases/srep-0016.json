@@ -1,0 +1,165 @@
+{
+ "srep-0016-absent": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"r\" shape=\"rect\" width=\"80\" height=\"60\" x=\"100\" y=\"150\" fill=\"#FF0000FF\"></shape>\n<shape id=\"b\" shape=\"rect\" width=\"80\" height=\"60\" x=\"460\" y=\"150\" fill=\"#0000FFFF\" start=\"0.5\"></shape>\n<connector id=\"c\" from=\"r\" to=\"b\" stroke=\"#00FF00FF\" strokeWidth=\"6\" strokeCap=\"butt\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 16",
+   "absent": [
+    "green"
+   ],
+   "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0016-anchor": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"r\" shape=\"rect\" width=\"80\" height=\"60\" x=\"280\" y=\"40\" fill=\"#FF0000FF\"></shape>\n<shape id=\"b\" shape=\"rect\" width=\"80\" height=\"60\" x=\"440\" y=\"260\" fill=\"#0000FFFF\"></shape>\n<connector id=\"c\" from=\"r\" to=\"b\" stroke=\"#00FF00FF\" strokeWidth=\"6\" strokeCap=\"butt\" fromAnchor=\"bottom\" toAnchor=\"top\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 16",
+   "green": {
+    "cx": 400,
+    "cy": 180,
+    "w": 164.24,
+    "h": 164.24
+   },
+   "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0016-arrow": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"r\" shape=\"rect\" width=\"80\" height=\"60\" x=\"100\" y=\"150\" fill=\"#FF0000FF\"></shape>\n<shape id=\"b\" shape=\"rect\" width=\"80\" height=\"60\" x=\"460\" y=\"150\" fill=\"#0000FFFF\"></shape>\n<connector id=\"c\" from=\"r\" to=\"b\" stroke=\"#00FF00FF\" strokeWidth=\"6\" strokeCap=\"butt\" markerEnd=\"arrow\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 16",
+   "green": {
+    "cx": 320,
+    "cy": 180,
+    "w": 280,
+    "h": 24
+   },
+   "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0016-curved": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"r\" shape=\"rect\" width=\"80\" height=\"60\" x=\"100\" y=\"150\" fill=\"#FF0000FF\"></shape>\n<shape id=\"b\" shape=\"rect\" width=\"80\" height=\"60\" x=\"460\" y=\"150\" fill=\"#0000FFFF\"></shape>\n<connector id=\"c\" from=\"r\" to=\"b\" stroke=\"#00FF00FF\" strokeWidth=\"6\" strokeCap=\"butt\" route=\"curved\" bend=\"30\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 16",
+   "regions": [
+    {
+     "box": [
+      318,
+      126,
+      322,
+      130
+     ],
+     "rgb": [
+      0,
+      255,
+      0
+     ]
+    },
+    {
+     "box": [
+      318,
+      178,
+      322,
+      182
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    }
+   ],
+   "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0016-follows": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"r\" shape=\"rect\" width=\"80\" height=\"60\" x=\"100\" y=\"150\" fill=\"#FF0000FF\"></shape>\n<shape id=\"b\" shape=\"rect\" width=\"80\" height=\"60\" x=\"460\" y=\"150\" fill=\"#0000FFFF\"><animate property=\"x\"><key time=\"0\" value=\"400\"/></animate></shape>\n<connector id=\"c\" from=\"r\" to=\"b\" stroke=\"#00FF00FF\" strokeWidth=\"6\" strokeCap=\"butt\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 16",
+   "green": {
+    "cx": 290,
+    "cy": 180,
+    "w": 220,
+    "h": 6
+   },
+   "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0016-orthogonal": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"r\" shape=\"rect\" width=\"80\" height=\"60\" x=\"100\" y=\"60\" fill=\"#FF0000FF\"></shape>\n<shape id=\"b\" shape=\"rect\" width=\"80\" height=\"60\" x=\"460\" y=\"240\" fill=\"#0000FFFF\"></shape>\n<connector id=\"c\" from=\"r\" to=\"b\" stroke=\"#00FF00FF\" strokeWidth=\"6\" strokeCap=\"butt\" route=\"orthogonal\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 16",
+   "green": {
+    "cx": 320,
+    "cy": 180,
+    "w": 280
+   },
+   "regions": [
+    {
+     "box": [
+      318,
+      178,
+      322,
+      182
+     ],
+     "rgb": [
+      0,
+      255,
+      0
+     ]
+    },
+    {
+     "box": [
+      248,
+      178,
+      252,
+      182
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    }
+   ],
+   "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0016-rotated-gap": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"r\" shape=\"rect\" width=\"80\" height=\"60\" x=\"100\" y=\"150\" fill=\"#FF0000FF\"></shape>\n<shape id=\"b\" shape=\"rect\" width=\"80\" height=\"80\" x=\"500\" y=\"180\" fill=\"#0000FFFF\" anchorX=\"40\" anchorY=\"40\" rotation=\"45\"></shape>\n<connector id=\"c\" from=\"r\" to=\"b\" stroke=\"#00FF00FF\" strokeWidth=\"6\" strokeCap=\"butt\" fromGap=\"10\" toGap=\"10\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 16",
+   "green": {
+    "cx": 311.72,
+    "cy": 180,
+    "w": 243.43,
+    "h": 6
+   },
+   "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0016-straight": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"r\" shape=\"rect\" width=\"80\" height=\"60\" x=\"100\" y=\"150\" fill=\"#FF0000FF\"></shape>\n<shape id=\"b\" shape=\"rect\" width=\"80\" height=\"60\" x=\"460\" y=\"150\" fill=\"#0000FFFF\"></shape>\n<connector id=\"c\" from=\"r\" to=\"b\" stroke=\"#00FF00FF\" strokeWidth=\"6\" strokeCap=\"butt\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 16",
+   "green": {
+    "cx": 320,
+    "cy": 180,
+    "w": 280,
+    "h": 6
+   },
+   "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0016-trim-arrow": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"r\" shape=\"rect\" width=\"80\" height=\"60\" x=\"100\" y=\"150\" fill=\"#FF0000FF\"></shape>\n<shape id=\"b\" shape=\"rect\" width=\"80\" height=\"60\" x=\"460\" y=\"150\" fill=\"#0000FFFF\"></shape>\n<connector id=\"c\" from=\"r\" to=\"b\" stroke=\"#00FF00FF\" strokeWidth=\"6\" strokeCap=\"butt\" markerEnd=\"arrow\" trimEnd=\"0.5\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 16",
+   "green": {
+    "cx": 250,
+    "cy": 180,
+    "w": 140,
+    "h": 24
+   },
+   "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+  }
+ }
+}

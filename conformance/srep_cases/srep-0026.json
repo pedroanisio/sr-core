@@ -1,0 +1,498 @@
+{
+ "srep-0026-grid": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<repeat id=\"r\" x=\"320\" y=\"180\">\n<points type=\"grid\" columns=\"3\" rows=\"2\"/>\n<shape id=\"s\" shape=\"rect\" width=\"40\" height=\"40\" anchorX=\"20\" anchorY=\"20\" fill=\"#FF0000FF\"/>\n</repeat>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 26",
+   "regions": [
+    {
+     "box": [
+      215,
+      125,
+      225,
+      135
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      315,
+      125,
+      325,
+      135
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      415,
+      125,
+      425,
+      135
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      215,
+      225,
+      225,
+      235
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      315,
+      225,
+      325,
+      235
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      415,
+      225,
+      425,
+      235
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      265,
+      175,
+      275,
+      185
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      315,
+      175,
+      325,
+      185
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    }
+   ],
+   "pending": "the Rust reference does not implement SREP 26 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0026-list": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<repeat id=\"r\" x=\"320\" y=\"180\">\n<points type=\"list\" at=\"-100,-50 0,0 100,50\"/>\n<shape id=\"s\" shape=\"rect\" width=\"20\" height=\"20\" anchorX=\"10\" anchorY=\"10\" fill=\"#FF0000FF\"/>\n</repeat>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 26",
+   "regions": [
+    {
+     "box": [
+      215,
+      125,
+      225,
+      135
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      315,
+      175,
+      325,
+      185
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      415,
+      225,
+      425,
+      235
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      265,
+      150,
+      275,
+      160
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      365,
+      200,
+      375,
+      210
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    }
+   ],
+   "pending": "the Rust reference does not implement SREP 26 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0026-order": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<repeat id=\"r\" x=\"320\" y=\"180\" offsetX=\"20\">\n<points type=\"along-path\" path=\"M100,-50 L100,0\" count=\"2\" orient=\"true\"/>\n<shape id=\"s\" shape=\"rect\" width=\"40\" height=\"10\" anchorX=\"20\" anchorY=\"5\" fill=\"#FF0000FF\"/>\n</repeat>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 26",
+   "regions": [
+    {
+     "box": [
+      415,
+      125,
+      425,
+      135
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      415,
+      195,
+      425,
+      205
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      435,
+      175,
+      445,
+      185
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    }
+   ],
+   "pending": "the Rust reference does not implement SREP 26 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0026-path-closed": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<repeat id=\"r\" x=\"320\" y=\"180\">\n<points type=\"along-path\" path=\"M-50,-50 H50 V50 H-50 Z\" count=\"4\"/>\n<shape id=\"s\" shape=\"rect\" width=\"20\" height=\"20\" anchorX=\"10\" anchorY=\"10\" fill=\"#FF0000FF\"/>\n</repeat>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 26",
+   "regions": [
+    {
+     "box": [
+      265,
+      125,
+      275,
+      135
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      365,
+      125,
+      375,
+      135
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      365,
+      225,
+      375,
+      235
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      265,
+      225,
+      275,
+      235
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      315,
+      175,
+      325,
+      185
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      315,
+      125,
+      325,
+      135
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    }
+   ],
+   "pending": "the Rust reference does not implement SREP 26 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0026-path-open": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<repeat id=\"r\" x=\"320\" y=\"180\">\n<points type=\"along-path\" path=\"M-100,0 L100,0\" count=\"5\"/>\n<shape id=\"s\" shape=\"rect\" width=\"20\" height=\"20\" anchorX=\"10\" anchorY=\"10\" fill=\"#FF0000FF\"/>\n</repeat>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 26",
+   "regions": [
+    {
+     "box": [
+      215,
+      175,
+      225,
+      185
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      265,
+      175,
+      275,
+      185
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      315,
+      175,
+      325,
+      185
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      365,
+      175,
+      375,
+      185
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      415,
+      175,
+      425,
+      185
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      240,
+      175,
+      250,
+      185
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      440,
+      175,
+      450,
+      185
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    }
+   ],
+   "pending": "the Rust reference does not implement SREP 26 yet; the entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0026-vertices": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<repeat id=\"r\" x=\"320\" y=\"180\">\n<points type=\"vertices\" path=\"M-100,-50 L100,-50 L0,50 Z\"/>\n<shape id=\"s\" shape=\"rect\" width=\"20\" height=\"20\" anchorX=\"10\" anchorY=\"10\" fill=\"#FF0000FF\"/>\n</repeat>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 26",
+   "regions": [
+    {
+     "box": [
+      215,
+      125,
+      225,
+      135
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      415,
+      125,
+      425,
+      135
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      315,
+      225,
+      325,
+      235
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      315,
+      125,
+      325,
+      135
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      315,
+      175,
+      325,
+      185
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    }
+   ],
+   "pending": "the Rust reference does not implement SREP 26 yet; the entry keeps the values derived from the SREP"
+  }
+ }
+}

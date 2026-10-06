@@ -1,0 +1,26 @@
+{
+ "srep-0053-wiggle-hold": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"r\" shape=\"rect\" width=\"40\" height=\"40\" anchorX=\"20\" anchorY=\"20\" x=\"200\" y=\"180\" fill=\"#FF0000FF\"><expression property=\"x\">200 + wiggle(3, 20, 1, 0.5, 0.249, 0.25) - wiggle(3, 20, 1, 0.5, 0, 0.25)</expression></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 53",
+   "red": {
+    "cx": 200,
+    "cy": 180,
+    "w": 40,
+    "h": 40
+   }
+  }
+ },
+ "srep-0053-wiggle-hold-zero": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"r\" shape=\"rect\" width=\"40\" height=\"40\" anchorX=\"20\" anchorY=\"20\" x=\"200\" y=\"180\" fill=\"#FF0000FF\"><expression property=\"x\">200 + wiggle(3, 20, 1, 0.5, 0.1, 0) - wiggle(3, 20, 1, 0.5, 0.1)</expression></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 53",
+   "red": {
+    "cx": 200,
+    "cy": 180,
+    "w": 40,
+    "h": 40
+   }
+  }
+ }
+}

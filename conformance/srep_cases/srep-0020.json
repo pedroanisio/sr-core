@@ -1,0 +1,81 @@
+{
+ "srep-0020-text-align-center": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><font id=\"tf\" src=\"../assets/srep-test-font.ttf\" family=\"SREPTest\"/><text id=\"t\" text=\"HH\" width=\"400\" height=\"300\" size=\"100\" lineHeight=\"1.5\" fontAsset=\"tf\" color=\"#FF0000FF\" verticalAlign=\"top\" align=\"center\"/></assets>\n<composition>\n<layer id=\"l\" asset=\"t\" x=\"100\" y=\"30\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 20",
+   "red": {
+    "cx": 300,
+    "cy": 100,
+    "w": 110,
+    "h": 70
+   }
+  }
+ },
+ "srep-0020-text-align-end": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><font id=\"tf\" src=\"../assets/srep-test-font.ttf\" family=\"SREPTest\"/><text id=\"t\" text=\"HH\" width=\"400\" height=\"300\" size=\"100\" lineHeight=\"1.5\" fontAsset=\"tf\" color=\"#FF0000FF\" verticalAlign=\"top\" align=\"end\"/></assets>\n<composition>\n<layer id=\"l\" asset=\"t\" x=\"100\" y=\"30\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 20",
+   "red": {
+    "cx": 440,
+    "cy": 100,
+    "w": 110,
+    "h": 70
+   }
+  }
+ },
+ "srep-0020-text-align-start": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><font id=\"tf\" src=\"../assets/srep-test-font.ttf\" family=\"SREPTest\"/><text id=\"t\" text=\"HH\" width=\"400\" height=\"300\" size=\"100\" lineHeight=\"1.5\" fontAsset=\"tf\" color=\"#FF0000FF\" verticalAlign=\"top\" align=\"start\"/></assets>\n<composition>\n<layer id=\"l\" asset=\"t\" x=\"100\" y=\"30\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 20",
+   "red": {
+    "cx": 160,
+    "cy": 100,
+    "w": 110,
+    "h": 70
+   }
+  }
+ },
+ "srep-0020-text-bottom": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><font id=\"tf\" src=\"../assets/srep-test-font.ttf\" family=\"SREPTest\"/><text id=\"t\" text=\"HH\" width=\"400\" height=\"300\" size=\"100\" lineHeight=\"1.5\" fontAsset=\"tf\" color=\"#FF0000FF\" verticalAlign=\"bottom\" align=\"start\"/></assets>\n<composition>\n<layer id=\"l\" asset=\"t\" x=\"100\" y=\"30\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 20",
+   "red": {
+    "cx": 160,
+    "cy": 250,
+    "w": 110,
+    "h": 70
+   }
+  }
+ },
+ "srep-0020-text-lines": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><font id=\"tf\" src=\"../assets/srep-test-font.ttf\" family=\"SREPTest\"/><text id=\"t\" text=\"HH&#10;HH&#10;HH\" width=\"400\" height=\"450\" size=\"100\" lineHeight=\"1.5\" fontAsset=\"tf\" color=\"#FF0000FF\" verticalAlign=\"top\" align=\"start\"/></assets>\n<composition>\n<layer id=\"l\" asset=\"t\" x=\"100\" y=\"30\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 20",
+   "pending": "the SREP's baselines 285 and 435 fall below the 360 px frame, so they cannot be measured; the coordinator must choose a geometry that fits"
+  }
+ },
+ "srep-0020-text-middle": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><font id=\"tf\" src=\"../assets/srep-test-font.ttf\" family=\"SREPTest\"/><text id=\"t\" text=\"HH\" width=\"400\" height=\"300\" size=\"100\" lineHeight=\"1.5\" fontAsset=\"tf\" color=\"#FF0000FF\" verticalAlign=\"middle\" align=\"start\"/></assets>\n<composition>\n<layer id=\"l\" asset=\"t\" x=\"100\" y=\"30\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 20",
+   "red": {
+    "cx": 160,
+    "cy": 175,
+    "w": 110,
+    "h": 70
+   }
+  }
+ },
+ "srep-0020-text-top": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><font id=\"tf\" src=\"../assets/srep-test-font.ttf\" family=\"SREPTest\"/><text id=\"t\" text=\"HH\" width=\"400\" height=\"300\" size=\"100\" lineHeight=\"1.5\" fontAsset=\"tf\" color=\"#FF0000FF\" verticalAlign=\"top\" align=\"start\"/></assets>\n<composition>\n<layer id=\"l\" asset=\"t\" x=\"100\" y=\"30\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 20",
+   "red": {
+    "cx": 160,
+    "cy": 100,
+    "w": 110,
+    "h": 70
+   }
+  }
+ }
+}

@@ -1,0 +1,16 @@
+{
+ "srep-0051-wiggle-smooth": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"w\" shape=\"path\" width=\"200\" height=\"10\" x=\"220\" y=\"180\" path=\"M 0 5 L 200 5\" stroke=\"#FF0000FF\" strokeWidth=\"3\" fill=\"#00000000\"><shapeModifier type=\"wiggle-path\" size=\"8\" detail=\"10\" frequency=\"2\" seed=\"7\" mode=\"smooth\"/></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 51",
+   "pending": "the SREP states no pixel-level expectation: the wiggled points come from the engine's seeded noise, so no centroid or size can be computed analytically; its check compares vertices and turn angles of smooth against corner, which the kit's colour-centroid measure cannot express"
+  }
+ },
+ "srep-0051-wiggle-smooth-corner": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"w\" shape=\"path\" width=\"200\" height=\"10\" x=\"220\" y=\"180\" path=\"M 0 5 L 200 5\" stroke=\"#FF0000FF\" strokeWidth=\"3\" fill=\"#00000000\"><shapeModifier type=\"wiggle-path\" size=\"8\" detail=\"10\" frequency=\"2\" seed=\"7\"/></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 51",
+   "pending": "companion of srep-0051-wiggle-smooth (same document without mode); see that entry"
+  }
+ }
+}

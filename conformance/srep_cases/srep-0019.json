@@ -1,0 +1,30 @@
+{
+ "srep-0019-off": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\"/>\n<metadata><accessibility legibilityCheck=\"off\"/></metadata>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n</composition>\n<captions><captionTrack id=\"en\" language=\"en-US\" mode=\"sidecar\" readingSpeed=\"20\"><cue start=\"0\" end=\"1\" text=\"abcdefghijklmnopqrstuvwxyz1234\"/></captionTrack></captions>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 19",
+   "pending": "validation; the expectation is the absence of any LEG-* finding, which needs the SREP 18 report"
+  }
+ },
+ "srep-0019-short": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\"/>\n<metadata><accessibility legibilityCheck=\"warn\"/></metadata>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n</composition>\n<captions><captionTrack id=\"en\" language=\"en-US\" mode=\"sidecar\"><cue start=\"0\" end=\"0.5\" text=\"short\"/></captionTrack></captions>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 19",
+   "pending": "validation and report finding (LEG-SHORT) checked by the schema tests; the SREP states no pixel-level expectation"
+  }
+ },
+ "srep-0019-size": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\"/>\n<metadata><accessibility legibilityCheck=\"warn\" minTextSize=\"3vh\"/></metadata>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><text id=\"t\" text=\"small\" width=\"200\" height=\"40\" size=\"8\"/></assets>\n<composition>\n<layer id=\"l\" asset=\"t\" x=\"320\" y=\"180\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 19",
+   "pending": "validation and report finding (LEG-SIZE) checked by the schema tests; the SREP states no pixel-level expectation"
+  }
+ },
+ "srep-0019-speed": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\"/>\n<metadata><accessibility legibilityCheck=\"warn\"/></metadata>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n</composition>\n<captions><captionTrack id=\"en\" language=\"en-US\" mode=\"sidecar\" readingSpeed=\"20\"><cue start=\"0\" end=\"1\" text=\"abcdefghijklmnopqrstuvwxyz1234\"/></captionTrack></captions>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 19",
+   "pending": "validation and report finding (LEG-SPEED) checked by the schema tests; the SREP states no pixel-level expectation"
+  }
+ }
+}

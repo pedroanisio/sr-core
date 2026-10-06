@@ -1,0 +1,26 @@
+{
+ "srep-0038-model-material-override": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-marker\" src=\"../assets/marker.glb\" format=\"glb\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-marker\" materialOverride=\"stone:m-blue old:m-red\" x=\"320\" y=\"200\" z=\"0\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 38",
+   "pending": "marker.glb has unnamed materials, so a materialOverride pair cannot match; needs a model with named materials"
+  }
+ },
+ "srep-0038-model-node": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><mesh id=\"mesh-marker\" src=\"../assets/marker.glb\" format=\"glb\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"m\" primitive=\"mesh\" mesh=\"mesh-marker\" node=\"green-up\" x=\"320\" y=\"200\" z=\"0\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 38",
+   "green": {
+    "cx": 320,
+    "cy": 100,
+    "w": 20,
+    "h": 20
+   },
+   "absent": [
+    "red",
+    "blue",
+    "yellow"
+   ]
+  }
+ }
+}

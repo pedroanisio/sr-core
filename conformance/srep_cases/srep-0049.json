@@ -1,0 +1,26 @@
+{
+ "srep-0049-motion-path-additive": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"r\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"100\" y=\"50\" fill=\"#FF0000FF\">\n<motionPath path=\"M 0 0 L 100 0\" additive=\"true\"><animate property=\"progress\"><key time=\"0\" value=\"0.5\"/></animate></motionPath>\n</shape>\n<shape id=\"g\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"100\" y=\"150\" fill=\"#00FF00FF\">\n<motionPath path=\"M 20 20 L 120 20\" additive=\"true\"><animate property=\"progress\"><key time=\"0\" value=\"0.5\"/></animate></motionPath>\n</shape>\n<shape id=\"b\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"100\" y=\"250\" fill=\"#0000FFFF\">\n<animate property=\"x\"><key time=\"0\" value=\"100\"/><key time=\"1\" value=\"200\"/></animate>\n<motionPath path=\"M 0 0 L 100 0\" additive=\"true\"><animate property=\"progress\"><key time=\"0\" value=\"0.5\"/></animate></motionPath>\n</shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 49",
+   "red": {
+    "cx": 150,
+    "cy": 50,
+    "w": 40,
+    "h": 20
+   },
+   "green": {
+    "cx": 150,
+    "cy": 150,
+    "w": 40,
+    "h": 20
+   },
+   "blue": {
+    "cx": 150,
+    "cy": 250,
+    "w": 40,
+    "h": 20
+   }
+  }
+ }
+}

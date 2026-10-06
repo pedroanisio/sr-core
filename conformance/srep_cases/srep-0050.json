@@ -1,0 +1,26 @@
+{
+ "srep-0050-spring-carry": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"r\" shape=\"rect\" width=\"40\" height=\"40\" anchorX=\"20\" anchorY=\"20\" x=\"100\" y=\"180\" fill=\"#FF0000FF\"><animate property=\"x\"><key time=\"-0.65\" value=\"100\"/><key time=\"-0.15\" value=\"400\" interpolation=\"spring\" stiffness=\"100\" damping=\"10\" mass=\"1\" carry=\"true\"/><key time=\"1.85\" value=\"100\"/></animate></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 50",
+   "red": {
+    "cx": 248.38,
+    "cy": 180,
+    "w": 40,
+    "h": 40
+   }
+  }
+ },
+ "srep-0050-spring-carry-neutral": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"r\" shape=\"rect\" width=\"40\" height=\"40\" anchorX=\"20\" anchorY=\"20\" x=\"100\" y=\"180\" fill=\"#FF0000FF\"><animate property=\"x\"><key time=\"-0.65\" value=\"100\"/><key time=\"-0.15\" value=\"400\" interpolation=\"spring\" stiffness=\"100\" damping=\"10\" mass=\"1\"/><key time=\"1.85\" value=\"100\"/></animate></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 50",
+   "red": {
+    "cx": 216.85,
+    "cy": 180,
+    "w": 40,
+    "h": 40
+   }
+  }
+ }
+}

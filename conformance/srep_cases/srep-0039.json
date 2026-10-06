@@ -1,0 +1,9 @@
+{
+ "srep-0039-unevenness-varies": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-clay\" baseColor=\"#FFFFFFFF\" roughness=\"0.8\" unevenness=\"0.8\" unevennessScale=\"16\" unevennessSeed=\"3\"/></materials>\n<composition>\n<object3D id=\"ball\" primitive=\"sphere\" material=\"m-clay\" radius=\"100\" x=\"320\" y=\"180\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 39",
+   "pending": "the SREP expects the luminance variance across the lit face to exceed a floor it does not state; needs a measured value"
+  }
+ }
+}

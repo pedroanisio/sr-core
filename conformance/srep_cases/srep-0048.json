@@ -1,0 +1,26 @@
+{
+ "srep-0048-expr-penner-prop-at-time": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"r\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"0\" y=\"120\" fill=\"#FF0000FF\">\n<expression property=\"x\">100 + 100 * penner(\"quad-in\", 0.5)</expression>\n</shape>\n<shape id=\"a\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"0\" y=\"240\" fill=\"#00FF00FF\">\n<animate property=\"x\"><key time=\"0\" value=\"100\"/><key time=\"2\" value=\"200\"/></animate>\n</shape>\n<shape id=\"g\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"0\" y=\"300\" fill=\"#0000FFFF\">\n<expression property=\"x\">propAtTime(\"a.x\", 0.5)</expression>\n</shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 48",
+   "red": {
+    "cx": 125,
+    "cy": 120,
+    "w": 40,
+    "h": 20
+   },
+   "green": {
+    "cx": 100,
+    "cy": 240,
+    "w": 40,
+    "h": 20
+   },
+   "blue": {
+    "cx": 125,
+    "cy": 300,
+    "w": 40,
+    "h": 20
+   }
+  }
+ }
+}

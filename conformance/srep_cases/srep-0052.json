@@ -1,0 +1,16 @@
+{
+ "srep-0052-caption-lines-greedy": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n\n</composition>\n<captions><captionTrack id=\"cap\" language=\"en\" preset=\"classic\" lineBreaks=\"greedy\"><cue start=\"0\" end=\"1\" text=\"alpha beta&#10;gamma&#10;delta epsilon zeta\"/></captionTrack></captions>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 52",
+   "pending": "companion of srep-0052-caption-lines-source (same cue, default layout); see that entry"
+  }
+ },
+ "srep-0052-caption-lines-source": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n\n</composition>\n<captions><captionTrack id=\"cap\" language=\"en\" preset=\"classic\" lineBreaks=\"source\"><cue start=\"0\" end=\"1\" text=\"alpha beta&#10;gamma&#10;delta epsilon zeta\"/></captionTrack></captions>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 52",
+   "pending": "the SREP states exact page text, not a pixel position, and the kit measures colour centroids; the burned-in text layout depends on font metrics, which no definition in the SREP gives"
+  }
+ }
+}

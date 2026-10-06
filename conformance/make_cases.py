@@ -526,132 +526,14 @@ expected["srep-0013-overlay-plain"] = {"rule": "SREP 13", "output": {"id": "shor
 # cases of SREPs 15 and later live in srep_cases/*.json, each {name: {"xml": <document text>, "expected": {...}}};
 # an expected entry with "pending": "<reason>" is listed in the kit but not run (the engine does not pass it yet, or
 # the SREP states no pixel-level value)
+import shutil
+os.makedirs(os.path.join(HERE, "assets"), exist_ok=True)
+for path in sorted(glob.glob(os.path.join(HERE, "srep_cases", "assets", "*"))):
+    shutil.copyfile(path, os.path.join(HERE, "assets", os.path.basename(path)))
 for path in sorted(glob.glob(os.path.join(HERE, "srep_cases", "*.json"))):
     for name, case in json.load(open(path)).items():
         cases[name] = case["xml"]
         expected[name] = case["expected"]
-
-# ---------------------------------------------------------------- SREP 50: key/@carry
-# A red square (40 x 40, centre anchor) moves in x: linear 100 -> 400 over 0.5 s, then a spring (100, 10, 1) back to 100.
-# The keys are shifted so that the render at composition time 0 is 0.15 s after the spring key (the kit renders frame 0).
-def carry_doc(carry):
-    u = 0.15
-    return doc12(
-        '<shape id="r" shape="rect" width="40" height="40" anchorX="20" anchorY="20" x="100" y="180" fill="#FF0000FF">'
-        '<animate property="x">'
-        f'<key time="{-u - 0.5}" value="100"/>'
-        f'<key time="{-u}" value="400" interpolation="spring" stiffness="100" damping="10" mass="1"{carry}/>'
-        f'<key time="{2 - u}" value="100"/>'
-        '</animate></shape>')
-
-
-cases["srep-0050-spring-carry"] = carry_doc(' carry="true"')
-cases["srep-0050-spring-carry-neutral"] = carry_doc("")
-
-# ---------------------------------------------------------------- SREP 51: wiggle-path mode="smooth"
-def wiggle_doc(mode):
-    return doc12(
-        '<shape id="w" shape="path" width="200" height="10" x="220" y="180" path="M 0 5 L 200 5" '
-        'stroke="#FF0000FF" strokeWidth="3" fill="#00000000">'
-        f'<shapeModifier type="wiggle-path" size="8" detail="10" frequency="2" seed="7"{mode}/></shape>')
-
-
-cases["srep-0051-wiggle-smooth"] = wiggle_doc(' mode="smooth"')
-cases["srep-0051-wiggle-smooth-corner"] = wiggle_doc("")
-
-# ---------------------------------------------------------------- SREP 52: captionTrack/@lineBreaks
-def caption_doc(line_breaks, text):
-    return doc12("", ).replace(
-        "</scene>",
-        f'<captions><captionTrack id="cap" language="en" preset="classic" lineBreaks="{line_breaks}">'
-        f'<cue start="0" end="1" text="{text}"/></captionTrack></captions>\n</scene>')
-
-
-CAP_TEXT = "alpha beta&#10;gamma&#10;delta epsilon zeta"
-cases["srep-0052-caption-lines-source"] = caption_doc("source", CAP_TEXT)
-cases["srep-0052-caption-lines-greedy"] = caption_doc("greedy", CAP_TEXT)
-
-# ---------------------------------------------------------------- SREP 53: wiggle(freq, amp, octaves, ampMult, t, hold)
-# Both squares are written as 200 + (a wiggle) - (the same wiggle read at another time), which is exactly 200 whenever the
-# two reads are the same value, whatever the noise is. 0.249 s lies in the hold interval [0, 0.25), so the held wiggle at 0.249
-# equals the wiggle at 0; a hold of 0 leaves t as it is, so a hold of 0 equals no hold.
-def hold_doc(expr):
-    return doc12(
-        '<shape id="r" shape="rect" width="40" height="40" anchorX="20" anchorY="20" x="200" y="180" fill="#FF0000FF">'
-        f'<expression property="x">{expr}</expression></shape>')
-
-
-cases["srep-0053-wiggle-hold"] = hold_doc("200 + wiggle(3, 20, 1, 0.5, 0.249, 0.25) - wiggle(3, 20, 1, 0.5, 0, 0.25)")
-cases["srep-0053-wiggle-hold-zero"] = hold_doc("200 + wiggle(3, 20, 1, 0.5, 0.1, 0) - wiggle(3, 20, 1, 0.5, 0.1)")
-
-# ---------------------------------------------------------------- SREP 54: IK pole and softness
-# Two bones of 10 and 10 with the root at (0, 0) of the group (placed at 100, 100), goal (10, 10), pole above or beside it.
-def ik_doc(goal, pole, constraint_extra):
-    return doc12(
-        '<group id="g" x="100" y="100">'
-        f'<shape id="goal" shape="ellipse" x="{goal[0]}" y="{goal[1]}" width="2" height="2" fill="#00FF00FF"/>'
-        f'<shape id="pole" shape="ellipse" x="{pole[0]}" y="{pole[1]}" width="2" height="2" fill="#0000FFFF"/>'
-        '<skeleton id="rig"><bone id="hip" x="0" y="0" length="10"/><bone id="knee" parent="hip" x="10" length="10"/>'
-        f'<transformConstraint type="ik" target="goal"{constraint_extra}/></skeleton>'
-        '<shape id="leg" shape="rect" x="0" y="0" width="20" height="2" fill="#FF0000FF">'
-        '<deform><modifier type="skin" skeleton="rig"/></deform></shape></group>')
-
-
-cases["srep-0054-ik-pole"] = ik_doc((10, 10), (0, 30), ' pole="pole" bendPositive="true"')
-cases["srep-0054-ik-soft-reach"] = ik_doc((25, 0), (0, 30), ' softness="0.3"')
-
-# ---------------------------------------------------------------- SREP 55: nodeAttributes/@shutterAngle
-# A square crosses at 100 px/s at 10 fps; project angle 180, one node 360, one node 0. Rows: blue (project), red (360), green (0).
-def shutter_doc(body):
-    return doc12(body).replace('<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>',
-                               '<project width="640" height="360" fps="10" duration="1" background="#000000FF" '
-                               'motionBlur="true" shutterAngle="180"/>')
-
-
-def crossing(id, y, colour, extra=""):
-    return (f'<shape id="{id}" shape="rect" width="20" height="20" anchorX="10" anchorY="10" x="320" y="{y}" '
-            f'fill="{COL[colour]}"{extra}><animate property="x"><key time="0" value="320"/><key time="1" value="420"/>'
-            '</animate></shape>')
-
-
-cases["srep-0055-node-shutter"] = shutter_doc(
-    crossing("project", 90, "blue") + crossing("wide", 180, "red", ' shutterAngle="360"')
-    + crossing("sharp", 270, "green", ' shutterAngle="0"'))
-cases["srep-0055-node-shutter-inherit"] = shutter_doc(
-    '<group id="grp" shutterAngle="360">' + crossing("inherits", 120, "red")
-    + crossing("own", 240, "green", ' shutterAngle="180"') + "</group>")
-
-# ---------------------------------------------------------------- SREP 56: stroke-text from a single-line font
-# A Hershey-format (jhf) font of 42 records: glyph k is the character U+0020 + k. Only H (k = 40) and I (k = 41) have strokes.
-def jhf_record(number, left, right, strokes):
-    ch = lambda v: chr(ord("R") + v)
-    data = ch(left) + ch(right)
-    for k, stroke in enumerate(strokes):
-        if k:
-            data += " R"
-        data += "".join(ch(x) + ch(y) for x, y in stroke)
-    return f"{number:5d}{len(data) // 2:3d}{data}"
-
-
-def stroke_font():
-    rows = [jhf_record(k + 1, -8, 8, []) for k in range(40)]
-    rows.append(jhf_record(41, -5, 5, [[(-3, -12), (-3, 9)], [(3, -12), (3, 9)], [(-3, -1), (3, -1)]]))   # H
-    rows.append(jhf_record(42, -2, 2, [[(0, -12), (0, 9)]]))                                                  # I
-    return "\n".join(rows) + "\n"
-
-
-os.makedirs(os.path.join(HERE, "assets"), exist_ok=True)
-open(os.path.join(HERE, "assets", "stroke-hi.jhf"), "w").write(stroke_font())
-
-# "HI" at fontSize 42 (scale 2): H stems at x = 4 and 20, crossbar at y = 22, I stem at x = 20 + 4 = 24, tops at y = 0, feet at 42.
-cases["srep-0056-stroke-text-layout"] = doc12(
-    '<shape id="t" shape="stroke-text" width="100" height="50" x="100" y="100" text="HI" strokeFont="hand" fontSize="42" '
-    'stroke="#FF0000FF" strokeWidth="2" strokeCap="butt"/>',
-    extra_assets='<strokeFont id="hand" src="../assets/stroke-hi.jhf"/>')
-cases["srep-0056-stroke-text-trim"] = doc12(
-    '<shape id="t" shape="stroke-text" width="100" height="50" x="100" y="100" text="HI" strokeFont="hand" fontSize="42" '
-    'stroke="#FF0000FF" strokeWidth="2" strokeCap="butt" trimMode="sequential" trimEnd="0.5"/>',
-    extra_assets='<strokeFont id="hand" src="../assets/stroke-hi.jhf"/>')
 
 os.makedirs(os.path.join(HERE, "cases"), exist_ok=True)
 for name, xml in cases.items():

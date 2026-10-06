@@ -1,0 +1,16 @@
+{
+ "srep-0036-geo-fill-whole": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><geo id=\"sq\" src=\"../assets/squares.geojson\"/><map id=\"m-sq\" width=\"640\" height=\"360\" projection=\"equirectangular\" fit=\"sq\" fitPadding=\"20\"><geoLayer geo=\"sq\" fill=\"#FF0000FF\" stroke=\"#FFFFFFFF\" strokeWidth=\"3\" progress=\"0.5\"/></map></assets>\n<composition>\n<layer id=\"atlas\" asset=\"m-sq\" x=\"0\" y=\"0\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 36",
+   "pending": "the SREP expects the red interior at progress 0, 0.5 and 1 (exact colour); the case fixes progress 0.5 only and the kit has no region entry derived here"
+  }
+ },
+ "srep-0036-geo-outline-progress": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><geo id=\"sq\" src=\"../assets/squares.geojson\"/><map id=\"m-sq\" width=\"640\" height=\"360\" projection=\"equirectangular\" fit=\"sq\" fitPadding=\"20\"><geoLayer geo=\"sq\" fill=\"#00000000\" stroke=\"#FFFFFFFF\" strokeWidth=\"3\" progress=\"0.5\"/></map></assets>\n<composition>\n<layer id=\"atlas\" asset=\"m-sq\" x=\"0\" y=\"0\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 36",
+   "pending": "the SREP gives pixel-count ratios (a third to two thirds of the full outline's white pixels at 0.5), which the kit's centroid/size entries cannot express; needs a measured pixel count"
+  }
+ }
+}

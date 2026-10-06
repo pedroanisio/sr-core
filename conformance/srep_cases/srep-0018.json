@@ -1,0 +1,16 @@
+{
+ "srep-0018-failed": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\" report=\"out/report.json\"/>\n<assets><image id=\"px\" src=\"../assets/srep18-pixel.png\" width=\"4\" height=\"4\" sha256=\"0000000000000000000000000000000000000000000000000000000000000000\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"px-layer\" asset=\"px\" x=\"0\" y=\"0\"/>\n<shape id=\"inert-stroke\" shape=\"rect\" width=\"40\" height=\"20\" x=\"100\" y=\"100\" strokeWidth=\"2\" fill=\"#FF0000FF\"/>\n<shape id=\"never-drawn\" shape=\"rect\" width=\"40\" height=\"20\" x=\"300\" y=\"100\" start=\"5\" fill=\"#0000FFFF\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 18",
+   "pending": "the expectation is a failed render and a report listing ASSET-MISSING, which run.py cannot check"
+  }
+ },
+ "srep-0018-report": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\" report=\"out/report.json\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"inert-stroke\" shape=\"rect\" width=\"40\" height=\"20\" x=\"100\" y=\"100\" strokeWidth=\"2\" fill=\"#FF0000FF\"/>\n<shape id=\"never-drawn\" shape=\"rect\" width=\"40\" height=\"20\" x=\"300\" y=\"100\" start=\"5\" fill=\"#0000FFFF\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 18",
+   "pending": "the expectation is a report file listing exactly INERT-I2 and INERT-I8, which run.py cannot check (it reads pixels only); checked by the schema tests (the attribute validates) and by the engine's report writer"
+  }
+ }
+}
