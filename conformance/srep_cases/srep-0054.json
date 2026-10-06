@@ -1,16 +1,210 @@
 {
- "srep-0054-ik-pole": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<group id=\"g\" x=\"100\" y=\"100\"><shape id=\"goal\" shape=\"ellipse\" x=\"10\" y=\"10\" width=\"2\" height=\"2\" fill=\"#00FF00FF\"/><shape id=\"pole\" shape=\"ellipse\" x=\"0\" y=\"30\" width=\"2\" height=\"2\" fill=\"#0000FFFF\"/><skeleton id=\"rig\"><bone id=\"hip\" x=\"0\" y=\"0\" length=\"10\"/><bone id=\"knee\" parent=\"hip\" x=\"10\" length=\"10\"/><transformConstraint type=\"ik\" target=\"goal\" pole=\"pole\" bendPositive=\"true\"/></skeleton><shape id=\"leg\" shape=\"rect\" x=\"0\" y=\"0\" width=\"20\" height=\"2\" fill=\"#FF0000FF\"><deform><modifier type=\"skin\" skeleton=\"rig\"/></deform></shape></group>\n</composition>\n</scene>\n",
+ "srep-0054-ik-pole-below-bend-true": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<group id=\"g\" x=\"200\" y=\"20\"><group id=\"goal\" x=\"100\" y=\"100\"><shape id=\"goal-m\" shape=\"rect\" x=\"-8\" y=\"-8\" width=\"16\" height=\"16\" fill=\"#00FF00FF\"/></group><group id=\"pole\" x=\"0\" y=\"300\"><shape id=\"pole-m\" shape=\"rect\" x=\"-4\" y=\"-4\" width=\"8\" height=\"8\" fill=\"#0000FFFF\"/></group><skeleton id=\"rig\" weights=\"../assets/srep54-knee-weights.json\"><bone id=\"hip\" x=\"0\" y=\"0\" length=\"100\"/><bone id=\"knee\" parent=\"hip\" x=\"100\" length=\"100\"/><transformConstraint type=\"ik\" target=\"goal\" pole=\"pole\" bendPositive=\"true\"/></skeleton><shape id=\"elbow\" shape=\"path\" width=\"8\" height=\"8\" path=\"M 96 -4 h 8 v 8 h -8 z\" fill=\"#FF0000FF\"><deform><modifier type=\"skin\" skeleton=\"rig\"/></deform></shape><shape id=\"tip\" shape=\"path\" width=\"6\" height=\"6\" path=\"M 197 -3 h 6 v 6 h -6 z\" fill=\"#FFFF00FF\"><deform><modifier type=\"skin\" skeleton=\"rig\"/></deform></shape></group>\n</composition>\n</scene>\n",
   "expected": {
    "rule": "SREP 54",
-   "pending": "the elbow is only visible through a skinned shape; the SREP's expected elbow positions are derived in the notes but the kit's colour-centroid measure of a skinned rectangle is not computable without the engine's skin deformation (not defined in the SREP)"
+   "red": {
+    "cx": 200.0,
+    "cy": 120.0
+   },
+   "yellow": {
+    "cx": 300.0,
+    "cy": 120.0
+   },
+   "green": {
+    "cx": 300,
+    "cy": 120,
+    "w": 16,
+    "h": 16
+   },
+   "blue": {
+    "cx": 200,
+    "cy": 320,
+    "w": 8,
+    "h": 8
+   }
   }
  },
- "srep-0054-ik-soft-reach": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<group id=\"g\" x=\"100\" y=\"100\"><shape id=\"goal\" shape=\"ellipse\" x=\"25\" y=\"0\" width=\"2\" height=\"2\" fill=\"#00FF00FF\"/><shape id=\"pole\" shape=\"ellipse\" x=\"0\" y=\"30\" width=\"2\" height=\"2\" fill=\"#0000FFFF\"/><skeleton id=\"rig\"><bone id=\"hip\" x=\"0\" y=\"0\" length=\"10\"/><bone id=\"knee\" parent=\"hip\" x=\"10\" length=\"10\"/><transformConstraint type=\"ik\" target=\"goal\" softness=\"0.3\"/></skeleton><shape id=\"leg\" shape=\"rect\" x=\"0\" y=\"0\" width=\"20\" height=\"2\" fill=\"#FF0000FF\"><deform><modifier type=\"skin\" skeleton=\"rig\"/></deform></shape></group>\n</composition>\n</scene>\n",
+ "srep-0054-ik-pole-below-bend-false": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<group id=\"g\" x=\"200\" y=\"20\"><group id=\"goal\" x=\"100\" y=\"100\"><shape id=\"goal-m\" shape=\"rect\" x=\"-8\" y=\"-8\" width=\"16\" height=\"16\" fill=\"#00FF00FF\"/></group><group id=\"pole\" x=\"0\" y=\"300\"><shape id=\"pole-m\" shape=\"rect\" x=\"-4\" y=\"-4\" width=\"8\" height=\"8\" fill=\"#0000FFFF\"/></group><skeleton id=\"rig\" weights=\"../assets/srep54-knee-weights.json\"><bone id=\"hip\" x=\"0\" y=\"0\" length=\"100\"/><bone id=\"knee\" parent=\"hip\" x=\"100\" length=\"100\"/><transformConstraint type=\"ik\" target=\"goal\" pole=\"pole\" bendPositive=\"false\"/></skeleton><shape id=\"elbow\" shape=\"path\" width=\"8\" height=\"8\" path=\"M 96 -4 h 8 v 8 h -8 z\" fill=\"#FF0000FF\"><deform><modifier type=\"skin\" skeleton=\"rig\"/></deform></shape><shape id=\"tip\" shape=\"path\" width=\"6\" height=\"6\" path=\"M 197 -3 h 6 v 6 h -6 z\" fill=\"#FFFF00FF\"><deform><modifier type=\"skin\" skeleton=\"rig\"/></deform></shape></group>\n</composition>\n</scene>\n",
   "expected": {
    "rule": "SREP 54",
-   "pending": "the SREP states exact d' values (checked by the engine's own test), not a pixel-level expectation; the skinned rectangle's pixels are not computable from the SREP's definitions"
+   "red": {
+    "cx": 200.0,
+    "cy": 120.0
+   },
+   "yellow": {
+    "cx": 300.0,
+    "cy": 120.0
+   },
+   "green": {
+    "cx": 300,
+    "cy": 120,
+    "w": 16,
+    "h": 16
+   },
+   "blue": {
+    "cx": 200,
+    "cy": 320,
+    "w": 8,
+    "h": 8
+   }
+  }
+ },
+ "srep-0054-ik-pole-right-bend-true": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<group id=\"g\" x=\"200\" y=\"20\"><group id=\"goal\" x=\"100\" y=\"100\"><shape id=\"goal-m\" shape=\"rect\" x=\"-8\" y=\"-8\" width=\"16\" height=\"16\" fill=\"#00FF00FF\"/></group><group id=\"pole\" x=\"300\" y=\"0\"><shape id=\"pole-m\" shape=\"rect\" x=\"-4\" y=\"-4\" width=\"8\" height=\"8\" fill=\"#0000FFFF\"/></group><skeleton id=\"rig\" weights=\"../assets/srep54-knee-weights.json\"><bone id=\"hip\" x=\"0\" y=\"0\" length=\"100\"/><bone id=\"knee\" parent=\"hip\" x=\"100\" length=\"100\"/><transformConstraint type=\"ik\" target=\"goal\" pole=\"pole\" bendPositive=\"true\"/></skeleton><shape id=\"elbow\" shape=\"path\" width=\"8\" height=\"8\" path=\"M 96 -4 h 8 v 8 h -8 z\" fill=\"#FF0000FF\"><deform><modifier type=\"skin\" skeleton=\"rig\"/></deform></shape><shape id=\"tip\" shape=\"path\" width=\"6\" height=\"6\" path=\"M 197 -3 h 6 v 6 h -6 z\" fill=\"#FFFF00FF\"><deform><modifier type=\"skin\" skeleton=\"rig\"/></deform></shape></group>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 54",
+   "red": {
+    "cx": 300.0,
+    "cy": 20.0
+   },
+   "yellow": {
+    "cx": 300.0,
+    "cy": 120.0
+   },
+   "green": {
+    "cx": 300,
+    "cy": 120,
+    "w": 16,
+    "h": 16
+   },
+   "blue": {
+    "cx": 500,
+    "cy": 20,
+    "w": 8,
+    "h": 8
+   }
+  }
+ },
+ "srep-0054-ik-pole-right-bend-false": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<group id=\"g\" x=\"200\" y=\"20\"><group id=\"goal\" x=\"100\" y=\"100\"><shape id=\"goal-m\" shape=\"rect\" x=\"-8\" y=\"-8\" width=\"16\" height=\"16\" fill=\"#00FF00FF\"/></group><group id=\"pole\" x=\"300\" y=\"0\"><shape id=\"pole-m\" shape=\"rect\" x=\"-4\" y=\"-4\" width=\"8\" height=\"8\" fill=\"#0000FFFF\"/></group><skeleton id=\"rig\" weights=\"../assets/srep54-knee-weights.json\"><bone id=\"hip\" x=\"0\" y=\"0\" length=\"100\"/><bone id=\"knee\" parent=\"hip\" x=\"100\" length=\"100\"/><transformConstraint type=\"ik\" target=\"goal\" pole=\"pole\" bendPositive=\"false\"/></skeleton><shape id=\"elbow\" shape=\"path\" width=\"8\" height=\"8\" path=\"M 96 -4 h 8 v 8 h -8 z\" fill=\"#FF0000FF\"><deform><modifier type=\"skin\" skeleton=\"rig\"/></deform></shape><shape id=\"tip\" shape=\"path\" width=\"6\" height=\"6\" path=\"M 197 -3 h 6 v 6 h -6 z\" fill=\"#FFFF00FF\"><deform><modifier type=\"skin\" skeleton=\"rig\"/></deform></shape></group>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 54",
+   "red": {
+    "cx": 300.0,
+    "cy": 20.0
+   },
+   "yellow": {
+    "cx": 300.0,
+    "cy": 120.0
+   },
+   "green": {
+    "cx": 300,
+    "cy": 120,
+    "w": 16,
+    "h": 16
+   },
+   "blue": {
+    "cx": 500,
+    "cy": 20,
+    "w": 8,
+    "h": 8
+   }
+  }
+ },
+ "srep-0054-ik-soft-reach-inside": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<group id=\"g\" x=\"60\" y=\"100\"><group id=\"goal\" x=\"130\" y=\"0\"><shape id=\"goal-m\" shape=\"rect\" x=\"-8\" y=\"-8\" width=\"16\" height=\"16\" fill=\"#00FF00FF\"/></group><group id=\"pole\" x=\"100\" y=\"100\"><shape id=\"pole-m\" shape=\"rect\" x=\"-4\" y=\"-4\" width=\"8\" height=\"8\" fill=\"#0000FFFF\"/></group><skeleton id=\"rig\" weights=\"../assets/srep54-knee-weights.json\"><bone id=\"hip\" x=\"0\" y=\"0\" length=\"100\"/><bone id=\"knee\" parent=\"hip\" x=\"100\" length=\"100\"/><transformConstraint type=\"ik\" target=\"goal\" pole=\"pole\" bendPositive=\"true\" softness=\"0.3\"/></skeleton><shape id=\"elbow\" shape=\"path\" width=\"8\" height=\"8\" path=\"M 96 -4 h 8 v 8 h -8 z\" fill=\"#FF0000FF\"><deform><modifier type=\"skin\" skeleton=\"rig\"/></deform></shape><shape id=\"tip\" shape=\"path\" width=\"6\" height=\"6\" path=\"M 197 -3 h 6 v 6 h -6 z\" fill=\"#FFFF00FF\"><deform><modifier type=\"skin\" skeleton=\"rig\"/></deform></shape></group>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 54",
+   "red": {
+    "cx": 125.0,
+    "cy": 175.99
+   },
+   "yellow": {
+    "cx": 190.0,
+    "cy": 100.0
+   },
+   "green": {
+    "cx": 190,
+    "cy": 100,
+    "w": 16,
+    "h": 16
+   },
+   "blue": {
+    "cx": 160,
+    "cy": 200,
+    "w": 8,
+    "h": 8
+   }
+  }
+ },
+ "srep-0054-ik-soft-reach-ease": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<group id=\"g\" x=\"60\" y=\"100\"><group id=\"goal\" x=\"190\" y=\"0\"><shape id=\"goal-m\" shape=\"rect\" x=\"-8\" y=\"-8\" width=\"16\" height=\"16\" fill=\"#00FF00FF\"/></group><group id=\"pole\" x=\"100\" y=\"100\"><shape id=\"pole-m\" shape=\"rect\" x=\"-4\" y=\"-4\" width=\"8\" height=\"8\" fill=\"#0000FFFF\"/></group><skeleton id=\"rig\" weights=\"../assets/srep54-knee-weights.json\"><bone id=\"hip\" x=\"0\" y=\"0\" length=\"100\"/><bone id=\"knee\" parent=\"hip\" x=\"100\" length=\"100\"/><transformConstraint type=\"ik\" target=\"goal\" pole=\"pole\" bendPositive=\"true\" softness=\"0.3\"/></skeleton><shape id=\"elbow\" shape=\"path\" width=\"8\" height=\"8\" path=\"M 96 -4 h 8 v 8 h -8 z\" fill=\"#FF0000FF\"><deform><modifier type=\"skin\" skeleton=\"rig\"/></deform></shape><shape id=\"tip\" shape=\"path\" width=\"6\" height=\"6\" path=\"M 197 -3 h 6 v 6 h -6 z\" fill=\"#FFFF00FF\"><deform><modifier type=\"skin\" skeleton=\"rig\"/></deform></shape></group>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 54",
+   "red": {
+    "cx": 146.96,
+    "cy": 149.37
+   },
+   "yellow": {
+    "cx": 237.14,
+    "cy": 106.16
+   },
+   "green": {
+    "cx": 250,
+    "cy": 100,
+    "w": 16,
+    "h": 16
+   },
+   "blue": {
+    "cx": 160,
+    "cy": 200,
+    "w": 8,
+    "h": 8
+   }
+  }
+ },
+ "srep-0054-ik-soft-reach-beyond-soft": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<group id=\"g\" x=\"60\" y=\"100\"><group id=\"goal\" x=\"250\" y=\"0\"><shape id=\"goal-m\" shape=\"rect\" x=\"-8\" y=\"-8\" width=\"16\" height=\"16\" fill=\"#00FF00FF\"/></group><group id=\"pole\" x=\"100\" y=\"100\"><shape id=\"pole-m\" shape=\"rect\" x=\"-4\" y=\"-4\" width=\"8\" height=\"8\" fill=\"#0000FFFF\"/></group><skeleton id=\"rig\" weights=\"../assets/srep54-knee-weights.json\"><bone id=\"hip\" x=\"0\" y=\"0\" length=\"100\"/><bone id=\"knee\" parent=\"hip\" x=\"100\" length=\"100\"/><transformConstraint type=\"ik\" target=\"goal\" pole=\"pole\" bendPositive=\"true\" softness=\"0.3\"/></skeleton><shape id=\"elbow\" shape=\"path\" width=\"8\" height=\"8\" path=\"M 96 -4 h 8 v 8 h -8 z\" fill=\"#FF0000FF\"><deform><modifier type=\"skin\" skeleton=\"rig\"/></deform></shape><shape id=\"tip\" shape=\"path\" width=\"6\" height=\"6\" path=\"M 197 -3 h 6 v 6 h -6 z\" fill=\"#FFFF00FF\"><deform><modifier type=\"skin\" skeleton=\"rig\"/></deform></shape></group>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 54",
+   "red": {
+    "cx": 155.2,
+    "cy": 130.6
+   },
+   "yellow": {
+    "cx": 253.31,
+    "cy": 111.21
+   },
+   "green": {
+    "cx": 310,
+    "cy": 100,
+    "w": 16,
+    "h": 16
+   },
+   "blue": {
+    "cx": 160,
+    "cy": 200,
+    "w": 8,
+    "h": 8
+   }
+  }
+ },
+ "srep-0054-ik-soft-reach-beyond-hard": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<group id=\"g\" x=\"60\" y=\"100\"><group id=\"goal\" x=\"250\" y=\"0\"><shape id=\"goal-m\" shape=\"rect\" x=\"-8\" y=\"-8\" width=\"16\" height=\"16\" fill=\"#00FF00FF\"/></group><group id=\"pole\" x=\"100\" y=\"100\"><shape id=\"pole-m\" shape=\"rect\" x=\"-4\" y=\"-4\" width=\"8\" height=\"8\" fill=\"#0000FFFF\"/></group><skeleton id=\"rig\" weights=\"../assets/srep54-knee-weights.json\"><bone id=\"hip\" x=\"0\" y=\"0\" length=\"100\"/><bone id=\"knee\" parent=\"hip\" x=\"100\" length=\"100\"/><transformConstraint type=\"ik\" target=\"goal\" pole=\"pole\" bendPositive=\"true\"/></skeleton><shape id=\"elbow\" shape=\"path\" width=\"8\" height=\"8\" path=\"M 96 -4 h 8 v 8 h -8 z\" fill=\"#FF0000FF\"><deform><modifier type=\"skin\" skeleton=\"rig\"/></deform></shape><shape id=\"tip\" shape=\"path\" width=\"6\" height=\"6\" path=\"M 197 -3 h 6 v 6 h -6 z\" fill=\"#FFFF00FF\"><deform><modifier type=\"skin\" skeleton=\"rig\"/></deform></shape></group>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 54",
+   "red": {
+    "cx": 160.0,
+    "cy": 100.0
+   },
+   "yellow": {
+    "cx": 260.0,
+    "cy": 100.0
+   },
+   "green": {
+    "cx": 310,
+    "cy": 100,
+    "w": 16,
+    "h": 16
+   },
+   "blue": {
+    "cx": 160,
+    "cy": 200,
+    "w": 8,
+    "h": 8
+   }
   }
  }
 }

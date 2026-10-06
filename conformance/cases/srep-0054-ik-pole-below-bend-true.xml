@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<group id="g" x="200" y="20"><group id="goal" x="100" y="100"><shape id="goal-m" shape="rect" x="-8" y="-8" width="16" height="16" fill="#00FF00FF"/></group><group id="pole" x="0" y="300"><shape id="pole-m" shape="rect" x="-4" y="-4" width="8" height="8" fill="#0000FFFF"/></group><skeleton id="rig" weights="../assets/srep54-knee-weights.json"><bone id="hip" x="0" y="0" length="100"/><bone id="knee" parent="hip" x="100" length="100"/><transformConstraint type="ik" target="goal" pole="pole" bendPositive="true"/></skeleton><shape id="elbow" shape="path" width="8" height="8" path="M 96 -4 h 8 v 8 h -8 z" fill="#FF0000FF"><deform><modifier type="skin" skeleton="rig"/></deform></shape><shape id="tip" shape="path" width="6" height="6" path="M 197 -3 h 6 v 6 h -6 z" fill="#FFFF00FF"><deform><modifier type="skin" skeleton="rig"/></deform></shape></group>
+</composition>
+</scene>

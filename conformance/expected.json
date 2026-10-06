@@ -36293,13 +36293,189 @@
         "h": 40
       }
     },
-    "srep-0054-ik-pole": {
+    "srep-0054-ik-pole-below-bend-true": {
       "rule": "SREP 54",
-      "pending": "the elbow is only visible through a skinned shape; the SREP's expected elbow positions are derived in the notes but the kit's colour-centroid measure of a skinned rectangle is not computable without the engine's skin deformation (not defined in the SREP)"
+      "red": {
+        "cx": 200.0,
+        "cy": 120.0
+      },
+      "yellow": {
+        "cx": 300.0,
+        "cy": 120.0
+      },
+      "green": {
+        "cx": 300,
+        "cy": 120,
+        "w": 16,
+        "h": 16
+      },
+      "blue": {
+        "cx": 200,
+        "cy": 320,
+        "w": 8,
+        "h": 8
+      }
     },
-    "srep-0054-ik-soft-reach": {
+    "srep-0054-ik-pole-below-bend-false": {
       "rule": "SREP 54",
-      "pending": "the SREP states exact d' values (checked by the engine's own test), not a pixel-level expectation; the skinned rectangle's pixels are not computable from the SREP's definitions"
+      "red": {
+        "cx": 200.0,
+        "cy": 120.0
+      },
+      "yellow": {
+        "cx": 300.0,
+        "cy": 120.0
+      },
+      "green": {
+        "cx": 300,
+        "cy": 120,
+        "w": 16,
+        "h": 16
+      },
+      "blue": {
+        "cx": 200,
+        "cy": 320,
+        "w": 8,
+        "h": 8
+      }
+    },
+    "srep-0054-ik-pole-right-bend-true": {
+      "rule": "SREP 54",
+      "red": {
+        "cx": 300.0,
+        "cy": 20.0
+      },
+      "yellow": {
+        "cx": 300.0,
+        "cy": 120.0
+      },
+      "green": {
+        "cx": 300,
+        "cy": 120,
+        "w": 16,
+        "h": 16
+      },
+      "blue": {
+        "cx": 500,
+        "cy": 20,
+        "w": 8,
+        "h": 8
+      }
+    },
+    "srep-0054-ik-pole-right-bend-false": {
+      "rule": "SREP 54",
+      "red": {
+        "cx": 300.0,
+        "cy": 20.0
+      },
+      "yellow": {
+        "cx": 300.0,
+        "cy": 120.0
+      },
+      "green": {
+        "cx": 300,
+        "cy": 120,
+        "w": 16,
+        "h": 16
+      },
+      "blue": {
+        "cx": 500,
+        "cy": 20,
+        "w": 8,
+        "h": 8
+      }
+    },
+    "srep-0054-ik-soft-reach-inside": {
+      "rule": "SREP 54",
+      "red": {
+        "cx": 125.0,
+        "cy": 175.99
+      },
+      "yellow": {
+        "cx": 190.0,
+        "cy": 100.0
+      },
+      "green": {
+        "cx": 190,
+        "cy": 100,
+        "w": 16,
+        "h": 16
+      },
+      "blue": {
+        "cx": 160,
+        "cy": 200,
+        "w": 8,
+        "h": 8
+      }
+    },
+    "srep-0054-ik-soft-reach-ease": {
+      "rule": "SREP 54",
+      "red": {
+        "cx": 146.96,
+        "cy": 149.37
+      },
+      "yellow": {
+        "cx": 237.14,
+        "cy": 106.16
+      },
+      "green": {
+        "cx": 250,
+        "cy": 100,
+        "w": 16,
+        "h": 16
+      },
+      "blue": {
+        "cx": 160,
+        "cy": 200,
+        "w": 8,
+        "h": 8
+      }
+    },
+    "srep-0054-ik-soft-reach-beyond-soft": {
+      "rule": "SREP 54",
+      "red": {
+        "cx": 155.2,
+        "cy": 130.6
+      },
+      "yellow": {
+        "cx": 253.31,
+        "cy": 111.21
+      },
+      "green": {
+        "cx": 310,
+        "cy": 100,
+        "w": 16,
+        "h": 16
+      },
+      "blue": {
+        "cx": 160,
+        "cy": 200,
+        "w": 8,
+        "h": 8
+      }
+    },
+    "srep-0054-ik-soft-reach-beyond-hard": {
+      "rule": "SREP 54",
+      "red": {
+        "cx": 160.0,
+        "cy": 100.0
+      },
+      "yellow": {
+        "cx": 260.0,
+        "cy": 100.0
+      },
+      "green": {
+        "cx": 310,
+        "cy": 100,
+        "w": 16,
+        "h": 16
+      },
+      "blue": {
+        "cx": 160,
+        "cy": 200,
+        "w": 8,
+        "h": 8
+      }
     },
     "srep-0055-node-shutter": {
       "rule": "SREP 55",
