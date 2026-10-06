@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>burst3DType — scene-render 1.2.0 schema</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body data-root="../">
+<header><div class="bar"><a class="brand" href="../index.html">scene-render 1.2.0 schema</a>
+<nav><a href="../index.html">Overview</a> <a href="../elements.html">Elements</a> <a href="../types.html">Types</a> <a href="../simple-types.html">Simple types</a> <a href="../groups.html">Groups</a> <a href="../rules.html">Rules</a></nav>
+<div class="search"><input id="q" type="search" placeholder="Search elements, attributes, types  ( / )" autocomplete="off" aria-label="Search"><ul id="res" class="results"></ul></div></div></header>
+<main>
+<h1>burst3DType</h1>
+<div class="sub">Type of <code>&lt;burst&gt;</code> in <a href="../type/particles3DType.html"><code>particles3DType</code></a></div>
+<div class="doc"><p>A burst of a 3D emitter at an instant (<code>time</code>, <code>count</code>, <code>repeat</code>, <code>interval</code>), or what the impact of a crater throws out of it: <code>crater</code> names a crater that grows from an impact (<code>crater@source</code>), <code>count</code> is then the number of particles that stand for the ejecta, and when, where, how fast and how heavy each one is are derived (the instant, <code>repeat</code> and <code>interval</code> are not given). Each particle is born at the instant it is launched, at its launch distance from the impact point, with its own velocity and mass; the mass is kept in the particle (the render size still comes from <code>size</code>) and the particles together hold 80% of the crater&#x27;s mass. Launch speed and mass follow the ejecta scaling of Housen and Holsapple (2011) as the engine reads it, which has not been checked against the paper; the launch angle, its spread, the launch time and the lopsidedness of an oblique impact are the engine&#x27;s own. <code>angle</code> is the launch angle above the tangent plane of the contact and <code>angleSpread</code> the half-width of the uniform spread around it, in degrees; both stay within 0 to 90 together. The ejecta of regolith and ice have no table row and are an error. Positions and velocities are in scene units through <code>physics/@pixelsPerMeter</code>, and gravity, drag and colliders are those of the emitter. The crater&#x27;s pose is that of its owner at the impact. More particles than <code>maxParticles</code> is an error, not a truncation.</p></div>
+<h2>Content</h2>
+<p>Empty: attributes only.</p>
+<h2>Attributes</h2>
+<div class="wrap"><table><thead><tr><th>Attribute</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr class="from"><td colspan="4">declared here</td></tr>
+<tr id="a-time"><td class="n"><code>time</code></td><td><code>xs:double</code></td><td></td><td></td></tr>
+<tr id="a-count"><td class="n"><code>count</code> <span class="req">required</span></td><td><code>xs:positiveInteger</code></td><td></td><td></td></tr>
+<tr id="a-repeat"><td class="n"><code>repeat</code></td><td><code>xs:nonNegativeInteger</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-interval"><td class="n"><code>interval</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td><code>1</code></td><td></td></tr>
+<tr id="a-crater"><td class="n"><code>crater</code></td><td><code>xs:IDREF</code></td><td></td><td></td></tr>
+<tr id="a-angle"><td class="n"><code>angle</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a> ≤ 90</td><td></td><td></td></tr>
+<tr id="a-angleSpread"><td class="n"><code>angleSpread</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a> ≤ 90</td><td></td><td></td></tr></tbody></table></div>
+<h2>Schematron rules</h2>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>particles3D/burst</code> <a class="lbl" href="../rules.html#cinematic-particles">cinematic-particles</a></div><div class="assert"><span class="id">P3D7</span>a burst requires time unless it comes from a crater, and a burst from a crater derives its instants, so time, repeat and interval may not be given.<code class="test">test: (@crater and not(@time or @repeat or @interval)) or (not(@crater) and @time)</code></div><div class="assert"><span class="id">P3D8</span>a burst from a crater must name a crater that grows from an impact.<code class="test">test: not(@crater) or /scene//crater[@id=current()/@crater and @source]</code></div><div class="assert"><span class="id">P3D9</span>angle and angleSpread belong to a burst from a crater.<code class="test">test: @crater or not(@angle or @angleSpread)</code></div><div class="assert"><span class="id">P3D10</span>the launch angle of a burst from a crater and its spread must stay between 0 and 90 degrees.<code class="test">test: not(@crater) or ($angle - $spread &gt;= 0 and $angle + $spread &lt;= 90)</code></div></div>
+</main>
+<footer>Generated by sr-schemadoc from <a href="../scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>373e28a64f0a0b403ff2f81377e8b70a3ae27fc35937a4edc3f4819b5c41f204</code>) and <a href="../scene-render.sch">scene-render.sch</a> (SHA-256 <code>e84979657842c2d84550d0900c089fd607d965a06b8441318978f1bd88de7d38</code>).</footer>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+</body>
+</html>

@@ -19,6 +19,8 @@ computed from those classes by `python3 tools/release.py next schema`:
 
 ### Added
 
+- Version 1.3: volumetric and large-scale cinematic effects (SREP 40): the `volume` and `meshSequence` asset kinds, the `volume` object3D primitive with `medium`, `pyro`, `crater` and `fracture` children, the `particles3D` and `ocean` nodes (with `burst`, `pyroSource`, `pyroImpulse`, `waterImpulse`, `whitewater` and `oceanWave`), the globe-relief attributes `planetRadius` and `terrainTileSize`, `terrainZoom`, `terrainMissing`, `terrainMemoryMiB`, `physics/@fixInternalEdges`, the version gate V8, the amendment of R5, and the rule families VOL, PYRO, PYC, P3D, OCN, CRT, FRX, MSQ and GEO (SREP 40).
+
 ### Fixed
 
 ## 1.2.0 — 2026-10-06

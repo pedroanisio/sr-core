@@ -11,7 +11,7 @@
 <nav><a href="index.html">Overview</a> <a href="elements.html">Elements</a> <a href="types.html">Types</a> <a href="simple-types.html">Simple types</a> <a href="groups.html">Groups</a> <a href="rules.html">Rules</a></nav>
 <div class="search"><input id="q" type="search" placeholder="Search elements, attributes, types  ( / )" autocomplete="off" aria-label="Search"><ul id="res" class="results"></ul></div></div></header>
 <main>
-<h1>Complex types</h1><p class="sub">140 named types, A–Z. Each element's page is its type's page.</p><div class="wrap"><table><thead><tr><th>Type</th><th>Attributes</th><th>Summary</th></tr></thead><tbody><tr><td class="n"><a href="type/accessibilityType.html"><code>accessibilityType</code></a></td><td>10</td><td>flashCheck runs a photosensitive-seizure analysis (general and red flashes above 3 per second over the ITU-R BT.1702 / WCAG 2.3.1 area threshold).</td></tr>
+<h1>Complex types</h1><p class="sub">154 named types, A–Z. Each element's page is its type's page.</p><div class="wrap"><table><thead><tr><th>Type</th><th>Attributes</th><th>Summary</th></tr></thead><tbody><tr><td class="n"><a href="type/accessibilityType.html"><code>accessibilityType</code></a></td><td>10</td><td>flashCheck runs a photosensitive-seizure analysis (general and red flashes above 3 per second over the ITU-R BT.1702 / WCAG 2.3.1 area threshold).</td></tr>
 <tr><td class="n"><a href="type/adjustmentType.html"><code>adjustmentType</code></a></td><td>37</td><td>Adjustment layer:</td></tr>
 <tr><td class="n"><a href="type/animatedType.html"><code>animatedType</code></a></td><td>0</td><td>Base for elements whose only children are animation elements.</td></tr>
 <tr><td class="n"><a href="type/animateType.html"><code>animateType</code></a></td><td>6</td><td></td></tr>
@@ -25,6 +25,7 @@
 <tr><td class="n"><a href="type/beatGridType.html"><code>beatGridType</code></a></td><td>4</td><td>Musical grid for cutting on the beat;</td></tr>
 <tr><td class="n"><a href="type/bindType.html"><code>bindType</code></a></td><td>4</td><td></td></tr>
 <tr><td class="n"><a href="type/boneType.html"><code>boneType</code></a></td><td>8</td><td></td></tr>
+<tr><td class="n"><a href="type/burst3DType.html"><code>burst3DType</code></a></td><td>7</td><td>A burst of a 3D emitter at an instant (<code>time</code>, <code>count</code>, <code>repeat</code>, <code>interval</code>), or what the impact of a crater throws out of it:</td></tr>
 <tr><td class="n"><a href="type/burstType.html"><code>burstType</code></a></td><td>4</td><td></td></tr>
 <tr><td class="n"><a href="type/busType.html"><code>busType</code></a></td><td>11</td><td></td></tr>
 <tr><td class="n"><a href="type/cameraType.html"><code>cameraType</code></a></td><td>36</td><td>Physical camera:</td></tr>
@@ -39,6 +40,7 @@
 <tr><td class="n"><a href="type/conicGradientType.html"><code>conicGradientType</code></a></td><td>9</td><td></td></tr>
 <tr><td class="n"><a href="type/connectorType.html"><code>connectorType</code></a></td><td>50</td><td>A line between two nodes (or fixed points) that is recomputed every frame, so it stays attached while they move.</td></tr>
 <tr><td class="n"><a href="type/constraintType.html"><code>constraintType</code></a></td><td>19</td><td>spring/distance/rope/hinge/slider/weld/motor join bodies a and b;</td></tr>
+<tr><td class="n"><a href="type/craterType.html"><code>craterType</code></a></td><td>22</td><td>Owned cinematic deformation in object-space scene units, after imported basis/node transforms.</td></tr>
 <tr><td class="n"><a href="type/cueType.html"><code>cueType</code></a></td><td>6</td><td></td></tr>
 <tr><td class="n"><a href="type/dataSourceType.html"><code>dataSourceType</code></a></td><td>4</td><td>Rows for repeat/@over and for batch rendering (one output set per row).</td></tr>
 <tr><td class="n"><a href="type/deformType.html"><code>deformType</code></a></td><td>0</td><td></td></tr>
@@ -56,6 +58,7 @@
 <tr><td class="n"><a href="type/fontAssetType.html"><code>fontAssetType</code></a></td><td>10</td><td></td></tr>
 <tr><td class="n"><a href="type/forceFieldType.html"><code>forceFieldType</code></a></td><td>17</td><td></td></tr>
 <tr><td class="n"><a href="type/formulaAssetType.html"><code>formulaAssetType</code></a></td><td>6</td><td></td></tr>
+<tr><td class="n"><a href="type/fractureType.html"><code>fractureType</code></a></td><td>10</td><td>Owned seeded closed-solid fracture.</td></tr>
 <tr><td class="n"><a href="type/generatedAssetType.html"><code>generatedAssetType</code></a></td><td>15</td><td>Media produced by an external generator (text-to-speech, image, video or music model, transcription).</td></tr>
 <tr><td class="n"><a href="type/generatorAssetType.html"><code>generatorAssetType</code></a></td><td>13</td><td>Procedural image source;</td></tr>
 <tr><td class="n"><a href="type/geoAssetType.html"><code>geoAssetType</code></a></td><td>8</td><td>Geographic data:</td></tr>
@@ -85,15 +88,19 @@
 <tr><td class="n"><a href="type/masterType.html"><code>masterType</code></a></td><td>6</td><td>Master bus.</td></tr>
 <tr><td class="n"><a href="type/materialsType.html"><code>materialsType</code></a></td><td>0</td><td></td></tr>
 <tr><td class="n"><a href="type/materialType.html"><code>materialType</code></a></td><td>41</td><td>glTF 2.0 metallic-roughness plus the ratified KHR_materials_* extensions (clearcoat, transmission, ior, sheen, volume, specular, iridescence, anisotropy, dispersion, emissive_strength, unlit).</td></tr>
+<tr><td class="n"><a href="type/mediumType.html"><code>mediumType</code></a></td><td>14</td><td></td></tr>
 <tr><td class="n"><a href="type/meshAssetType.html"><code>meshAssetType</code></a></td><td>7</td><td></td></tr>
 <tr><td class="n"><a href="type/meshGradientType.html"><code>meshGradientType</code></a></td><td>4</td><td>Freeform / mesh gradient:</td></tr>
 <tr><td class="n"><a href="type/meshPointType.html"><code>meshPointType</code></a></td><td>5</td><td></td></tr>
+<tr><td class="n"><a href="type/meshSequenceAssetType.html"><code>meshSequenceAssetType</code></a></td><td>13</td><td></td></tr>
 <tr><td class="n"><a href="type/metadataType.html"><code>metadataType</code></a></td><td>10</td><td></td></tr>
 <tr><td class="n"><a href="type/metaType.html"><code>metaType</code></a></td><td>2</td><td></td></tr>
 <tr><td class="n"><a href="type/modifierType.html"><code>modifierType</code></a></td><td>13</td><td></td></tr>
 <tr><td class="n"><a href="type/morphType.html"><code>morphType</code></a></td><td>2</td><td>With an object3D of primitive=&quot;mesh&quot; and an imported model:</td></tr>
 <tr><td class="n"><a href="type/motionPathType.html"><code>motionPathType</code></a></td><td>8</td><td>Moves the node&#x27;s position along an SVG path over [start, end].</td></tr>
-<tr><td class="n"><a href="type/object3DType.html"><code>object3DType</code></a></td><td>56</td><td></td></tr>
+<tr><td class="n"><a href="type/object3DType.html"><code>object3DType</code></a></td><td>62</td><td></td></tr>
+<tr><td class="n"><a href="type/oceanType.html"><code>oceanType</code></a></td><td>49</td><td></td></tr>
+<tr><td class="n"><a href="type/oceanWaveType.html"><code>oceanWaveType</code></a></td><td>5</td><td></td></tr>
 <tr><td class="n"><a href="type/outputType.html"><code>outputType</code></a></td><td>47</td><td>Several outputs render one scene into different placements.</td></tr>
 <tr><td class="n"><a href="type/overrideType.html"><code>overrideType</code></a></td><td>3</td><td>Sets attribute @property of the element whose id is @target (resolved in the scope of the enclosing instance, layout or variant) to @value.</td></tr>
 <tr><td class="n"><a href="type/paintsType.html"><code>paintsType</code></a></td><td>0</td><td></td></tr>
@@ -101,14 +108,18 @@
 <tr><td class="n"><a href="type/paramType.html"><code>paramType</code></a></td><td>11</td><td>Template input.</td></tr>
 <tr><td class="n"><a href="type/paramValueType.html"><code>paramValueType</code></a></td><td>2</td><td>Generic named value (shader uniforms, plugin params).</td></tr>
 <tr><td class="n"><a href="type/particleEmitterType.html"><code>particleEmitterType</code></a></td><td>81</td><td></td></tr>
+<tr><td class="n"><a href="type/particles3DType.html"><code>particles3DType</code></a></td><td>90</td><td></td></tr>
 <tr><td class="n"><a href="type/patternPaintType.html"><code>patternPaintType</code></a></td><td>8</td><td></td></tr>
 <tr><td class="n"><a href="type/pdfAssetType.html"><code>pdfAssetType</code></a></td><td>14</td><td>One page of a PDF, drawn as an image.</td></tr>
 <tr><td class="n"><a href="type/pdfRegionType.html"><code>pdfRegionType</code></a></td><td>7</td><td>A box on the page, in the cache image&#x27;s pixels (origin top-left, +y down).</td></tr>
-<tr><td class="n"><a href="type/physicsType.html"><code>physicsType</code></a></td><td>10</td><td>softBody:</td></tr>
+<tr><td class="n"><a href="type/physicsType.html"><code>physicsType</code></a></td><td>11</td><td>softBody:</td></tr>
 <tr><td class="n"><a href="type/pinType.html"><code>pinType</code></a></td><td>12</td><td>A marker at a longitude and latitude, with an optional label beside it;</td></tr>
 <tr><td class="n"><a href="type/pointsType.html"><code>pointsType</code></a></td><td>14</td><td>Generates the points on which a repeat places its copies:</td></tr>
 <tr><td class="n"><a href="type/projectType.html"><code>projectType</code></a></td><td>20</td><td></td></tr>
 <tr><td class="n"><a href="type/puppetPinType.html"><code>puppetPinType</code></a></td><td>8</td><td>Puppet pin at rest position restX/restY;</td></tr>
+<tr><td class="n"><a href="type/pyroImpulseType.html"><code>pyroImpulseType</code></a></td><td>27</td><td></td></tr>
+<tr><td class="n"><a href="type/pyroSourceType.html"><code>pyroSourceType</code></a></td><td>28</td><td></td></tr>
+<tr><td class="n"><a href="type/pyroType.html"><code>pyroType</code></a></td><td>24</td><td></td></tr>
 <tr><td class="n"><a href="type/radialGradientType.html"><code>radialGradientType</code></a></td><td>13</td><td></td></tr>
 <tr><td class="n"><a href="type/repeatType.html"><code>repeatType</code></a></td><td>47</td><td>Generates copies of its children:</td></tr>
 <tr><td class="n"><a href="type/representationType.html"><code>representationType</code></a></td><td>8</td><td>Alternate encodings of the same media (proxy, high-res, per-language audio, HDR/SDR grade).</td></tr>
@@ -149,10 +160,13 @@
 <tr><td class="n"><a href="type/variantType.html"><code>variantType</code></a></td><td>2</td><td>A named parameter set (A/B test cell, language, market).</td></tr>
 <tr><td class="n"><a href="type/vectorAssetType.html"><code>vectorAssetType</code></a></td><td>24</td><td>shape=&quot;svg&quot; renders the SVG file at @src (static SVG 2 subset, no script).</td></tr>
 <tr><td class="n"><a href="type/videoAssetType.html"><code>videoAssetType</code></a></td><td>18</td><td></td></tr>
+<tr><td class="n"><a href="type/volumeAssetType.html"><code>volumeAssetType</code></a></td><td>20</td><td></td></tr>
 <tr><td class="n"><a href="type/warpPointType.html"><code>warpPointType</code></a></td><td>4</td><td></td></tr>
+<tr><td class="n"><a href="type/waterImpulseType.html"><code>waterImpulseType</code></a></td><td>9</td><td>An impulse at an instant (<code>time</code>, <code>x</code>, <code>z</code>, <code>radius</code>, <code>amplitude</code>, <code>velocityX</code>, <code>velocityZ</code>, <code>type</code>), or the cavity that a body makes of the water it enters:</td></tr>
+<tr><td class="n"><a href="type/whitewaterType.html"><code>whitewaterType</code></a></td><td>16</td><td>Cinematic read-only water tracers.</td></tr>
 <tr><td class="n"><a href="type/wordType.html"><code>wordType</code></a></td><td>4</td><td></td></tr></tbody></table></div>
 </main>
-<footer>Generated by sr-schemadoc from <a href="scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>fa10eb69b53f1ecb7358357c1bc6e6196e215dceb4b6228eaa469f602254a89e</code>) and <a href="scene-render.sch">scene-render.sch</a> (SHA-256 <code>9cc4ab2c9d0a4f2694748ec7ccce520ff6ac64ffe9a7ac11ba7483eed9a55431</code>).</footer>
+<footer>Generated by sr-schemadoc from <a href="scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>373e28a64f0a0b403ff2f81377e8b70a3ae27fc35937a4edc3f4819b5c41f204</code>) and <a href="scene-render.sch">scene-render.sch</a> (SHA-256 <code>e84979657842c2d84550d0900c089fd607d965a06b8441318978f1bd88de7d38</code>).</footer>
 <script src="search-index.js"></script>
 <script src="search.js"></script>
 </body>

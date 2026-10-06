@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>waterImpulseType — scene-render 1.2.0 schema</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body data-root="../">
+<header><div class="bar"><a class="brand" href="../index.html">scene-render 1.2.0 schema</a>
+<nav><a href="../index.html">Overview</a> <a href="../elements.html">Elements</a> <a href="../types.html">Types</a> <a href="../simple-types.html">Simple types</a> <a href="../groups.html">Groups</a> <a href="../rules.html">Rules</a></nav>
+<div class="search"><input id="q" type="search" placeholder="Search elements, attributes, types  ( / )" autocomplete="off" aria-label="Search"><ul id="res" class="results"></ul></div></div></header>
+<main>
+<h1>waterImpulseType</h1>
+<div class="sub">Type of <code>&lt;waterImpulse&gt;</code> in <a href="../type/oceanType.html"><code>oceanType</code></a></div>
+<div class="doc"><p>An impulse at an instant (<code>time</code>, <code>x</code>, <code>z</code>, <code>radius</code>, <code>amplitude</code>, <code>velocityX</code>, <code>velocityZ</code>, <code>type</code>), or the cavity that a body makes of the water it enters: <code>source</code> names a dynamic rigidBody object that the ocean lists in <code>colliders</code>, and nothing is authored about when, where or how big (none of the others may be given, and a body has at most one). The entry is the first time the lowest point of the body crosses the ocean&#x27;s rest level (<code>waterLevel</code>) downward, found step by step from the body&#x27;s poses, with the body moving down at that instant; a body that starts in the water, or never reaches it, makes no cavity. The cavity is the transient crater of the scaling law of Holsapple (1993) for water as a target, with the body&#x27;s mass and density, the speed it enters at (the component normal to the surface, from the displacement of its centre over the canonical step) and the ocean&#x27;s gravity; the law&#x27;s volume and depth give the disc that is emptied (a bowl profile of the law&#x27;s depth at its centre holding the law&#x27;s volume), the water going to the ring around it (<code>waterImpulse type=&quot;displace&quot;</code> with a negative amplitude, conserving all the water). The cavity forms over the law&#x27;s formation time (0.8 times the square root of its volume&#x27;s cube root over gravity), in a part for every canonical step that grows smoothly from nothing to the whole (the shape of the growth is the engine&#x27;s choice, the law gives only the time); a ring or a disc narrower than four cells is widened, keeping the volume. The cavity is limited by the water layer: it takes at most 90% of the water of its disc, and of any column in it, so it never exposes the bed and is never an error for lack of water; a body that reaches the bed excavates the bed&#x27;s crater (<code>crater@source</code>) instead. The body goes on raising the columns it occupies, as before; the cavity is displacement in addition. Hydrostatic: no jet, no crown of spray, no air; the law is that of a crater in water, not a validated model of water entry. The event is made at the first entry only, for the owner&#x27;s pose at that instant, and an entry outside the ocean makes nothing.</p></div>
+<h2>Content</h2>
+<p>Empty: attributes only.</p>
+<h2>Attributes</h2>
+<div class="wrap"><table><thead><tr><th>Attribute</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr class="from"><td colspan="4">declared here</td></tr>
+<tr id="a-source"><td class="n"><code>source</code></td><td><code>xs:IDREF</code></td><td></td><td></td></tr>
+<tr id="a-time"><td class="n"><code>time</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-x"><td class="n"><code>x</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-z"><td class="n"><code>z</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-radius"><td class="n"><code>radius</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td><code>1</code></td><td></td></tr>
+<tr id="a-amplitude"><td class="n"><code>amplitude</code></td><td><code>xs:double</code></td><td><code>1</code></td><td></td></tr>
+<tr id="a-velocityX"><td class="n"><code>velocityX</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-velocityZ"><td class="n"><code>velocityZ</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-type"><td class="n"><code>type</code></td><td>one of <span class="chip"><code>displace</code></span> <span class="chip"><code>add-water</code></span></td><td><code>displace</code></td><td></td></tr></tbody></table></div>
+<h2>Schematron rules</h2>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>ocean/waterImpulse</code> <a class="lbl" href="../rules.html#cinematic-ocean">cinematic-ocean</a></div><div class="assert"><span class="id">OCN10</span>a water impulse from a body derives its instant, place, size and shape, so time, x, z, radius, amplitude, velocityX, velocityZ and type may not be given.<code class="test">test: not(@source and (@time or @x or @z or @radius or @amplitude or @velocityX or @velocityZ or @type))</code></div><div class="assert"><span class="id">OCN11</span>the source of a water impulse must be a dynamic rigid body, without a crater, that the ocean lists in colliders.<code class="test">test: not(@source) or (contains(concat(&#x27; &#x27;,normalize-space(../@colliders),&#x27; &#x27;),concat(&#x27; &#x27;,@source,&#x27; &#x27;)) and /scene//object3D[@id=current()/@source and not(crater)]/rigidBody[not(@type) or @type=&#x27;dynamic&#x27;])</code></div><div class="assert"><span class="id">OCN12</span>a body makes one cavity: at most one water impulse names it.<code class="test">test: not(@source) or count(../waterImpulse[@source=current()/@source])=1</code></div></div>
+</main>
+<footer>Generated by sr-schemadoc from <a href="../scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>373e28a64f0a0b403ff2f81377e8b70a3ae27fc35937a4edc3f4819b5c41f204</code>) and <a href="../scene-render.sch">scene-render.sch</a> (SHA-256 <code>e84979657842c2d84550d0900c089fd607d965a06b8441318978f1bd88de7d38</code>).</footer>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+</body>
+</html>

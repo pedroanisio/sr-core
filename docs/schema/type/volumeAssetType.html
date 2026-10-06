@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>volumeAssetType — scene-render 1.2.0 schema</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body data-root="../">
+<header><div class="bar"><a class="brand" href="../index.html">scene-render 1.2.0 schema</a>
+<nav><a href="../index.html">Overview</a> <a href="../elements.html">Elements</a> <a href="../types.html">Types</a> <a href="../simple-types.html">Simple types</a> <a href="../groups.html">Groups</a> <a href="../rules.html">Rules</a></nav>
+<div class="search"><input id="q" type="search" placeholder="Search elements, attributes, types  ( / )" autocomplete="off" aria-label="Search"><ul id="res" class="results"></ul></div></div></header>
+<main>
+<h1>volumeAssetType</h1>
+<div class="sub">Type of <code>&lt;volume&gt;</code> in <a href="../type/assetsType.html"><code>assetsType</code></a></div>
+
+<h2>Content</h2>
+<p>Empty: attributes only.</p>
+<h2>Attributes</h2>
+<div class="wrap"><table><thead><tr><th>Attribute</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr class="from"><td colspan="4">declared here</td></tr>
+<tr id="a-id"><td class="n"><code>id</code> <span class="req">required</span></td><td><code>xs:ID</code></td><td></td><td></td></tr>
+<tr id="a-src"><td class="n"><code>src</code> <span class="req">required</span></td><td><a href="../simple-types.html#volumeSourceType"><code>volumeSourceType</code></a></td><td></td><td></td></tr>
+<tr id="a-sha256"><td class="n"><code>sha256</code></td><td><a href="../simple-types.html#sha256Type"><code>sha256Type</code></a></td><td></td><td></td></tr>
+<tr id="a-format"><td class="n"><code>format</code></td><td>one of <span class="chip"><code>srvol</code></span> <span class="chip"><code>srvseq</code></span> <span class="chip"><code>openvdb</code></span></td><td><code>srvol</code></td><td></td></tr>
+<tr id="a-densityGrid"><td class="n"><code>densityGrid</code></td><td><a href="../simple-types.html#volumeChannelType"><code>volumeChannelType</code></a></td><td><code>density</code></td><td></td></tr>
+<tr id="a-temperatureGrid"><td class="n"><code>temperatureGrid</code></td><td><a href="../simple-types.html#volumeChannelType"><code>volumeChannelType</code></a></td><td></td><td></td></tr>
+<tr id="a-velocityGridX"><td class="n"><code>velocityGridX</code></td><td><a href="../simple-types.html#volumeChannelType"><code>volumeChannelType</code></a></td><td></td><td></td></tr>
+<tr id="a-velocityGridY"><td class="n"><code>velocityGridY</code></td><td><a href="../simple-types.html#volumeChannelType"><code>volumeChannelType</code></a></td><td></td><td></td></tr>
+<tr id="a-velocityGridZ"><td class="n"><code>velocityGridZ</code></td><td><a href="../simple-types.html#volumeChannelType"><code>volumeChannelType</code></a></td><td></td><td></td></tr>
+<tr id="a-first"><td class="n"><code>first</code></td><td><a href="../simple-types.html#volumeFrameIndexType"><code>volumeFrameIndexType</code></a></td><td></td><td></td></tr>
+<tr id="a-last"><td class="n"><code>last</code></td><td><a href="../simple-types.html#volumeFrameIndexType"><code>volumeFrameIndexType</code></a></td><td></td><td></td></tr>
+<tr id="a-fps"><td class="n"><code>fps</code></td><td><a href="../simple-types.html#fpsType"><code>fpsType</code></a></td><td></td><td></td></tr>
+<tr id="a-interpolation"><td class="n"><code>interpolation</code></td><td><a href="../simple-types.html#volumeInterpolationType"><code>volumeInterpolationType</code></a></td><td><code>hold</code></td><td></td></tr>
+<tr id="a-missingFrame"><td class="n"><code>missingFrame</code></td><td><a href="../simple-types.html#volumeMissingFrameType"><code>volumeMissingFrameType</code></a></td><td><code>error</code></td><td></td></tr>
+<tr id="a-boundsMinX"><td class="n"><code>boundsMinX</code></td><td><code>xs:double</code></td><td></td><td></td></tr>
+<tr id="a-boundsMinY"><td class="n"><code>boundsMinY</code></td><td><code>xs:double</code></td><td></td><td></td></tr>
+<tr id="a-boundsMinZ"><td class="n"><code>boundsMinZ</code></td><td><code>xs:double</code></td><td></td><td></td></tr>
+<tr id="a-boundsMaxX"><td class="n"><code>boundsMaxX</code></td><td><code>xs:double</code></td><td></td><td></td></tr>
+<tr id="a-boundsMaxY"><td class="n"><code>boundsMaxY</code></td><td><code>xs:double</code></td><td></td><td></td></tr>
+<tr id="a-boundsMaxZ"><td class="n"><code>boundsMaxZ</code></td><td><code>xs:double</code></td><td></td><td></td></tr></tbody></table></div>
+<h2>Schematron rules</h2>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>*[@parent][@id]</code> <a class="lbl" href="../rules.html#p30">p30</a></div><div class="assert"><span class="id">R10</span>a node cannot parent itself.<code class="test">test: @parent != @id</code></div></div>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>assets/volume</code> <a class="lbl" href="../rules.html#cinematic-volume">cinematic-volume</a></div><div class="assert"><span class="id">VOL6</span>volume sequences require first/last, 1..1000000 ordered frames and a numbered src pattern; sequence options require a sequence.<code class="test">test: @format=&#x27;srvseq&#x27; or ((@first or @last) and @first and @last and $last&gt;=$first and $last - $first&lt;1000000 and $pattern) or (not(@first or @last) and not(@fps) and (not(@interpolation) or @interpolation=&#x27;hold&#x27;) and (not(@missingFrame) or @missingFrame=&#x27;error&#x27;))</code></div><div class="assert"><span class="id">VOL9</span>advect requires all three velocity channels; velocity channels require advect interpolation.<code class="test">test: (@interpolation=&#x27;advect&#x27; and count(@velocityGridX|@velocityGridY|@velocityGridZ)=3) or ((not(@interpolation) or @interpolation!=&#x27;advect&#x27;) and not(@velocityGridX|@velocityGridY|@velocityGridZ))</code></div><div class="assert"><span class="id">VOL8</span>srvseq requires sha256 and owns its frame range and composition clock; first, last, fps and missing-frame substitution are not permitted.<code class="test">test: not(@format=&#x27;srvseq&#x27;) or (@sha256 and not(@first or @last or @fps) and (not(@missingFrame) or @missingFrame=&#x27;error&#x27;))</code></div><div class="assert"><span class="id">VOL7</span>volume sha256 applies to a single cache file, not a numbered sequence.<code class="test">test: not(@first or @last) or not(@sha256)</code></div><div class="assert"><span class="id">VOL4</span>volume bounds require all six finite coordinates with each minimum below its maximum.<code class="test">test: not(@boundsMinX|@boundsMinY|@boundsMinZ|@boundsMaxX|@boundsMaxY|@boundsMaxZ) or (count(@boundsMinX|@boundsMinY|@boundsMinZ|@boundsMaxX|@boundsMaxY|@boundsMaxZ)=6 and number(@boundsMinX)&lt;number(@boundsMaxX) and number(@boundsMinY)&lt;number(@boundsMaxY) and number(@boundsMinZ)&lt;number(@boundsMaxZ))</code></div></div>
+</main>
+<footer>Generated by sr-schemadoc from <a href="../scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>373e28a64f0a0b403ff2f81377e8b70a3ae27fc35937a4edc3f4819b5c41f204</code>) and <a href="../scene-render.sch">scene-render.sch</a> (SHA-256 <code>e84979657842c2d84550d0900c089fd607d965a06b8441318978f1bd88de7d38</code>).</footer>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+</body>
+</html>

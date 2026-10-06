@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>pyroImpulseType — scene-render 1.2.0 schema</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body data-root="../">
+<header><div class="bar"><a class="brand" href="../index.html">scene-render 1.2.0 schema</a>
+<nav><a href="../index.html">Overview</a> <a href="../elements.html">Elements</a> <a href="../types.html">Types</a> <a href="../simple-types.html">Simple types</a> <a href="../groups.html">Groups</a> <a href="../rules.html">Rules</a></nav>
+<div class="search"><input id="q" type="search" placeholder="Search elements, attributes, types  ( / )" autocomplete="off" aria-label="Search"><ul id="res" class="results"></ul></div></div></header>
+<main>
+<h1>pyroImpulseType</h1>
+<div class="sub">Type of <code>&lt;pyroImpulse&gt;</code> in <a href="../type/pyroType.html"><code>pyroType</code></a></div>
+
+<h2>Content</h2>
+<p>Empty: attributes only.</p>
+<h2>Attributes</h2>
+<div class="wrap"><table><thead><tr><th>Attribute</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr class="from"><td colspan="4">declared here</td></tr>
+<tr id="a-time"><td class="n"><code>time</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td></td><td></td></tr>
+<tr id="a-density"><td class="n"><code>density</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-temperature"><td class="n"><code>temperature</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-velocityX"><td class="n"><code>velocityX</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-velocityY"><td class="n"><code>velocityY</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-velocityZ"><td class="n"><code>velocityZ</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-expansion"><td class="n"><code>expansion</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr class="from"><td colspan="4">from attribute group <a href="../groups.html#pyroShape"><code>pyroShape</code></a></td></tr>
+<tr id="a-shape"><td class="n"><code>shape</code></td><td>one of <span class="chip"><code>sphere</code></span> <span class="chip"><code>box</code></span> <span class="chip"><code>mesh</code></span></td><td><code>sphere</code></td><td></td></tr>
+<tr id="a-radius"><td class="n"><code>radius</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td><code>1</code></td><td></td></tr>
+<tr id="a-width"><td class="n"><code>width</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td></td><td></td></tr>
+<tr id="a-height"><td class="n"><code>height</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td></td><td></td></tr>
+<tr id="a-depth"><td class="n"><code>depth</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td></td><td></td></tr>
+<tr id="a-x"><td class="n"><code>x</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-y"><td class="n"><code>y</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-z"><td class="n"><code>z</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-rotation"><td class="n"><code>rotation</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-rotationX"><td class="n"><code>rotationX</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-rotationY"><td class="n"><code>rotationY</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-scaleX"><td class="n"><code>scaleX</code></td><td><code>xs:double</code></td><td><code>1</code></td><td></td></tr>
+<tr id="a-scaleY"><td class="n"><code>scaleY</code></td><td><code>xs:double</code></td><td><code>1</code></td><td></td></tr>
+<tr id="a-scaleZ"><td class="n"><code>scaleZ</code></td><td><code>xs:double</code></td><td><code>1</code></td><td></td></tr>
+<tr id="a-mesh"><td class="n"><code>mesh</code></td><td><code>xs:IDREF</code></td><td></td><td></td></tr>
+<tr class="from"><td colspan="4">from attribute group <a href="../groups.html#pyroCrater"><code>pyroCrater</code></a></td></tr>
+<tr id="a-crater"><td class="n"><code>crater</code></td><td><code>xs:IDREF</code></td><td></td><td></td></tr>
+<tr id="a-heatFraction"><td class="n"><code>heatFraction</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a> ≤ 1</td><td></td><td></td></tr>
+<tr id="a-dustFraction"><td class="n"><code>dustFraction</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a> ≤ 1</td><td></td><td></td></tr>
+<tr id="a-specificHeat"><td class="n"><code>specificHeat</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td></td><td></td></tr>
+<tr id="a-maxTemperature"><td class="n"><code>maxTemperature</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a> ≤ 50000</td><td></td><td></td></tr></tbody></table></div>
+<h2>Schematron rules</h2>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>pyroSource|pyroImpulse</code> <a class="lbl" href="../rules.html#cinematic-volume">cinematic-volume</a></div><div class="assert"><span class="id">PYRO5</span>a mesh pyro source must name a mesh asset; @mesh is valid only for shape=mesh.<code class="test">test: (@shape=&#x27;mesh&#x27; and /scene/assets/mesh[@id=current()/@mesh]) or (not(@shape=&#x27;mesh&#x27;) and not(@mesh))</code></div><div class="assert"><span class="id">PYRO6</span>pyro shape and mesh selection are static; animate the source transform instead.<code class="test">test: not(*[@property=&#x27;shape&#x27; or @property=&#x27;mesh&#x27;])</code></div><div class="assert"><span class="id">PYRO2</span>pyro source end must be greater than start.<code class="test">test: not(@end) or (@start and number(@end)&gt;number(@start)) or (not(@start) and number(@end)&gt;0)</code></div><div class="assert"><span class="id">PYRO3</span>box pyro sources require width, height and depth.<code class="test">test: not(@shape=&#x27;box&#x27;) or (@width and @height and @depth)</code></div><div class="assert"><span class="id">PYRO4</span>pyro source transforms must be invertible (nonzero scales).<code class="test">test: not(@scaleX=0 or @scaleY=0 or @scaleZ=0)</code></div><div class="assert"><span class="id">PYC1</span>a pyro source or impulse from a crater derives its shape, place, timing, density, temperature and expansion, so none of them may be given.<code class="test">test: not(@crater and (@start or @end or @time or @densityRate or @temperatureRate or @density or @temperature or @expansion or @shape or @mesh or @radius or @width or @height or @depth or @x or @y or @z or @rotation or @rotationX or @rotationY or @scaleX or @scaleY or @scaleZ))</code></div><div class="assert"><span class="id">PYC2</span>heatFraction, dustFraction, specificHeat and maxTemperature belong to a pyro source or impulse from a crater.<code class="test">test: @crater or not(@heatFraction or @dustFraction or @specificHeat or @maxTemperature)</code></div><div class="assert"><span class="id">PYC3</span>a pyro impulse requires time unless it comes from a crater.<code class="test">test: not(self::pyroImpulse) or @time or @crater</code></div><div class="assert"><span class="id">PYC4</span>a pyro source or impulse from a crater must name a crater that grows from an impact.<code class="test">test: not(@crater) or /scene//crater[@id=current()/@crater and @source]</code></div></div>
+</main>
+<footer>Generated by sr-schemadoc from <a href="../scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>373e28a64f0a0b403ff2f81377e8b70a3ae27fc35937a4edc3f4819b5c41f204</code>) and <a href="../scene-render.sch">scene-render.sch</a> (SHA-256 <code>e84979657842c2d84550d0900c089fd607d965a06b8441318978f1bd88de7d38</code>).</footer>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+</body>
+</html>

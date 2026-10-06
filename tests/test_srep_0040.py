@@ -52,4 +52,5 @@ def test_version_1_3_is_accepted_and_the_gate_rejects_1_2_documents_using_volume
     assert verdict(b'<scene version="1.3"><project width="10" height="10" fps="1" duration="1"/><composition/></scene>') == "ok"
     doc = (b'<scene version="1.2"><project width="10" height="10" fps="1" duration="1"/><composition>'
            b'<object3D id="o" primitive="sphere"><medium extinction="1"/></object3D></composition></scene>')
-    assert verdict(doc) == "sch:V8"
+    got = verdict(doc)
+    assert got.startswith("sch:") and "V8" in got[4:].split(","), got

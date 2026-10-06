@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>pyroType — scene-render 1.2.0 schema</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body data-root="../">
+<header><div class="bar"><a class="brand" href="../index.html">scene-render 1.2.0 schema</a>
+<nav><a href="../index.html">Overview</a> <a href="../elements.html">Elements</a> <a href="../types.html">Types</a> <a href="../simple-types.html">Simple types</a> <a href="../groups.html">Groups</a> <a href="../rules.html">Rules</a></nav>
+<div class="search"><input id="q" type="search" placeholder="Search elements, attributes, types  ( / )" autocomplete="off" aria-label="Search"><ul id="res" class="results"></ul></div></div></header>
+<main>
+<h1>pyroType</h1>
+<div class="sub">Type of <code>&lt;pyro&gt;</code> in <a href="../type/object3DType.html"><code>object3DType</code></a></div>
+
+<h2>Content</h2>
+<ul class="model"><li><span class="lbl">one of</span><span class="occ">any number</span><ul class="model"><li><a href="../type/pyroSourceType.html"><code>&lt;pyroSource&gt;</code></a></li><li><a href="../type/pyroImpulseType.html"><code>&lt;pyroImpulse&gt;</code></a></li></ul></li></ul>
+<h2>Attributes</h2>
+<div class="wrap"><table><thead><tr><th>Attribute</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr class="from"><td colspan="4">declared here</td></tr>
+<tr id="a-colliders"><td class="n"><code>colliders</code></td><td><code>xs:IDREFS</code></td><td></td><td></td></tr>
+<tr id="a-colliderThickness"><td class="n"><code>colliderThickness</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td></td><td></td></tr>
+<tr id="a-forceFields"><td class="n"><code>forceFields</code></td><td><code>xs:IDREFS</code></td><td></td><td></td></tr>
+<tr id="a-useForceFields"><td class="n"><code>useForceFields</code></td><td><code>xs:boolean</code></td><td><code>true</code></td><td></td></tr>
+<tr id="a-width"><td class="n"><code>width</code> <span class="req">required</span></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td></td><td></td></tr>
+<tr id="a-height"><td class="n"><code>height</code> <span class="req">required</span></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td></td><td></td></tr>
+<tr id="a-depth"><td class="n"><code>depth</code> <span class="req">required</span></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td></td><td></td></tr>
+<tr id="a-voxelSize"><td class="n"><code>voxelSize</code> <span class="req">required</span></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td></td><td></td></tr>
+<tr id="a-dt"><td class="n"><code>dt</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td><code>.016666666666666666</code></td><td></td></tr>
+<tr id="a-ambientTemperature"><td class="n"><code>ambientTemperature</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a> ≤ 50000</td><td><code>300</code></td><td></td></tr>
+<tr id="a-dissipation"><td class="n"><code>dissipation</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-cooling"><td class="n"><code>cooling</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-buoyancy"><td class="n"><code>buoyancy</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-vorticity"><td class="n"><code>vorticity</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-turbulence"><td class="n"><code>turbulence</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td><code>0</code></td><td></td></tr>
+<tr id="a-seed"><td class="n"><code>seed</code></td><td><code>xs:unsignedLong</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-pressureTolerance"><td class="n"><code>pressureTolerance</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td><code>0.000001</code></td><td></td></tr>
+<tr id="a-boundary"><td class="n"><code>boundary</code></td><td>one of <span class="chip"><code>open</code></span> <span class="chip"><code>closed</code></span></td><td><code>closed</code></td><td></td></tr>
+<tr id="a-pressureIterations"><td class="n"><code>pressureIterations</code></td><td><code>xs:positiveInteger</code> ≤ 10000</td><td><code>200</code></td><td></td></tr>
+<tr id="a-solver"><td class="n"><code>solver</code></td><td>one of <span class="chip"><code>jacobi</code></span> <span class="chip"><code>multigrid</code></span></td><td><code>jacobi</code></td><td></td></tr>
+<tr id="a-advection"><td class="n"><code>advection</code></td><td>one of <span class="chip"><code>semilagrangian</code></span> <span class="chip"><code>maccormack</code></span></td><td><code>semilagrangian</code></td><td></td></tr>
+<tr id="a-maxMemoryMiB"><td class="n"><code>maxMemoryMiB</code></td><td><code>xs:positiveInteger</code> ≤ 4096</td><td><code>256</code></td><td></td></tr>
+<tr id="a-checkpointMemoryMiB"><td class="n"><code>checkpointMemoryMiB</code></td><td><code>xs:positiveInteger</code> ≤ 4096</td><td><code>256</code></td><td></td></tr>
+<tr id="a-meshMemoryMiB"><td class="n"><code>meshMemoryMiB</code></td><td><code>xs:positiveInteger</code> ≤ 4096</td><td><code>128</code></td><td></td></tr></tbody></table></div>
+<h2>Schematron rules</h2>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>*[@forceFields]</code> <a class="lbl" href="../rules.html#p56">p56</a></div><div class="assert"><span class="id">R34</span>every id in @forceFields of &quot;<code>{@id}</code>&quot; must name a physics/forceField.<code class="test">test: count(str:tokenize(normalize-space(@forceFields),&#x27; &#x27;)) = count(/scene/physics/forceField[contains(concat(&#x27; &#x27;,normalize-space(current()/@forceFields),&#x27; &#x27;), concat(&#x27; &#x27;,@id,&#x27; &#x27;))])</code></div></div>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>pyro</code> <a class="lbl" href="../rules.html#cinematic-volume">cinematic-volume</a></div><div class="assert"><span class="id">PYRO1</span>pyro dimensions must be integer multiples of voxelSize, with 2..1024 cells per axis.<code class="test">test: $nx&gt;=2 and $nx&lt;=1024 and $ny&gt;=2 and $ny&lt;=1024 and $nz&gt;=2 and $nz&lt;=1024 and $nx - round($nx)&lt;=0.00000001 and round($nx) - $nx&lt;=0.00000001 and $ny - round($ny)&lt;=0.00000001 and round($ny) - $ny&lt;=0.00000001 and $nz - round($nz)&lt;=0.00000001 and round($nz) - $nz&lt;=0.00000001</code></div><div class="assert"><span class="id">PYRO7</span>pyro colliders must name at most 4096 distinct supported surface objects, including text, extrude and clay solids.<code class="test">test: not(@colliders) or ($count &lt;= 4096 and $count = count($colliders[@primitive=&#x27;box&#x27; or @primitive=&#x27;sphere&#x27; or @primitive=&#x27;globe&#x27; or @primitive=&#x27;plane&#x27; or @primitive=&#x27;cylinder&#x27; or @primitive=&#x27;cone&#x27; or @primitive=&#x27;capsule&#x27; or @primitive=&#x27;torus&#x27; or @primitive=&#x27;mesh&#x27; or @primitive=&#x27;text&#x27; or @primitive=&#x27;extrude&#x27; or @primitive=&#x27;clay&#x27;]))</code></div><div class="assert"><span class="id">PYRO8</span>pyro collider geometry is static; animate its position, rotation or scale instead of shape parameters.<code class="test">test: not($colliders/*[@property=&#x27;primitive&#x27; or @property=&#x27;mesh&#x27; or @property=&#x27;radius&#x27; or @property=&#x27;width&#x27; or @property=&#x27;height&#x27; or @property=&#x27;depth&#x27; or @property=&#x27;segments&#x27; or (@property=&#x27;exaggeration&#x27; and ../@primitive=&#x27;globe&#x27; and ../@terrain) or (../@primitive=&#x27;text&#x27; and (@property=&#x27;text&#x27; or @property=&#x27;font&#x27; or @property=&#x27;bevel&#x27; or @property=&#x27;tracking&#x27;)) or (../@primitive=&#x27;extrude&#x27; and (@property=&#x27;path&#x27; or @property=&#x27;bevel&#x27;)) or (../@primitive=&#x27;clay&#x27; and (@property=&#x27;resolution&#x27; or @property=&#x27;fingerprints&#x27; or @property=&#x27;seed&#x27; or @property=&#x27;boil&#x27;))]) and not($colliders[@primitive=&#x27;clay&#x27;]/blob/*[@property]) and not($colliders[@primitive=&#x27;clay&#x27; and number(translate(@boil,&#x27;+&#x27;,&#x27;&#x27;))&gt;0 and number(translate(@fingerprints,&#x27;+&#x27;,&#x27;&#x27;))&gt;0])</code></div></div>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>object3D|pyro|particles3D</code> <a class="lbl" href="../rules.html#cinematic-mesh-sequence">cinematic-mesh-sequence</a></div><div class="assert"><span class="id">MSQ4</span>mesh sequences are changing render geometry; rigid collider consumers require an explicit static proxy.<code class="test">test: not(self::object3D[@primitive=&#x27;mesh&#x27; and rigidBody and not(fracture and rigidBody[@type=&#x27;static&#x27; or @type=&#x27;kinematic&#x27;]) and @mesh=/scene/assets/meshSequence/@id]) and not(/scene//object3D[@primitive=&#x27;mesh&#x27; and @mesh=/scene/assets/meshSequence/@id and contains(concat(&#x27; &#x27;,normalize-space(current()/@colliders),&#x27; &#x27;),concat(&#x27; &#x27;,@id,&#x27; &#x27;))])</code></div></div>
+</main>
+<footer>Generated by sr-schemadoc from <a href="../scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>373e28a64f0a0b403ff2f81377e8b70a3ae27fc35937a4edc3f4819b5c41f204</code>) and <a href="../scene-render.sch">scene-render.sch</a> (SHA-256 <code>e84979657842c2d84550d0900c089fd607d965a06b8441318978f1bd88de7d38</code>).</footer>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+</body>
+</html>
