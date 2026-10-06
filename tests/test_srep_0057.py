@@ -48,13 +48,15 @@ def test_a_dangling_poster_marker_is_no_longer_an_xsd_error():
 def test_an_explicit_marker_still_has_to_exist():
     doc = open(os.path.join(FIX, "valid", "gm-explicit.xml"), "rb").read()
     assert verdict(doc) == "ok"
-    names = re.findall(rb'startMarker="([^"]+)"', doc)
-    assert names, "the control document names a marker"
-    assert verdict(doc.replace(names[0], b"nosuch")).startswith("sch:")
+    assert b'startMarker="m3"' in doc and b'<marker id="m3"' in doc
+    got = verdict(doc.replace(b'startMarker="m3"', b'startMarker="nosuch"'))
+    assert got.startswith("sch:") and "R21" in got[4:].split(","), got
 
 
 def test_the_generated_id_needs_a_grid():
     doc = open(os.path.join(FIX, "valid", "gm-start.xml"), "rb").read()
     assert verdict(doc) == "ok"
-    no_grid = re.sub(rb"<beatGrid[^>]*/>", b"", doc)
-    assert verdict(no_grid).startswith("sch:") and "R21" in verdict(no_grid)
+    no_grid = re.sub(rb"<markers>.*?</markers>", b"", doc, flags=re.S)
+    assert b"beatGrid" not in no_grid
+    got = verdict(no_grid)
+    assert got.startswith("sch:") and "R21" in got[4:].split(","), got
