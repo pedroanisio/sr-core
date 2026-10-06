@@ -531,6 +531,23 @@ for path in sorted(glob.glob(os.path.join(HERE, "srep_cases", "*.json"))):
         cases[name] = case["xml"]
         expected[name] = case["expected"]
 
+# ---------------------------------------------------------------- SREP 50: key/@carry
+# A red square (40 x 40, centre anchor) moves in x: linear 100 -> 400 over 0.5 s, then a spring (100, 10, 1) back to 100.
+# The keys are shifted so that the render at composition time 0 is 0.15 s after the spring key (the kit renders frame 0).
+def carry_doc(carry):
+    u = 0.15
+    return doc12(
+        '<shape id="r" shape="rect" width="40" height="40" anchorX="20" anchorY="20" x="100" y="180" fill="#FF0000FF">'
+        '<animate property="x">'
+        f'<key time="{-u - 0.5}" value="100"/>'
+        f'<key time="{-u}" value="400" interpolation="spring" stiffness="100" damping="10" mass="1"{carry}/>'
+        f'<key time="{2 - u}" value="100"/>'
+        '</animate></shape>')
+
+
+cases["srep-0050-spring-carry"] = carry_doc(' carry="true"')
+cases["srep-0050-spring-carry-neutral"] = carry_doc("")
+
 os.makedirs(os.path.join(HERE, "cases"), exist_ok=True)
 for name, xml in cases.items():
     open(os.path.join(HERE, "cases", name + ".xml"), "w").write(xml)

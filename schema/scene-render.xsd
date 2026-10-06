@@ -386,6 +386,11 @@
     <xs:attribute name="spatialIn" type="pointType"/>
     <xs:attribute name="spatialOut" type="pointType"/>
     <xs:attribute name="roving" type="xs:boolean" default="false"/>
+    <xs:attribute name="carry" type="xs:boolean" default="false">
+      <xs:annotation><xs:documentation>On a key whose segment is a spring: start the spring with the velocity the previous
+      segment arrives at this key with (its rate of change at the end), instead of from rest, so a hit that follows another
+      keeps its momentum. Needs a previous key and a following key.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="steps" type="xs:positiveInteger"/>
     <xs:attribute name="stepPosition" default="end">
       <xs:simpleType><xs:restriction base="xs:string">
