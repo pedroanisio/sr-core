@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<assets><mesh id="mesh-marker" src="../assets/marker.glb" format="glb"/></assets>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<object3D id="target" primitive="sphere" material="m-yellow" radius="10" x="320" y="60" z="0"/>
+<object3D id="m" primitive="mesh" mesh="mesh-marker" material="m-red" x="320" y="200" z="0">
+<joint name="Hand" rotation="90"/>
+<joint name="Head" rotationX="10" rotationY="20" lookAt="target" lookAxis="minus-y" influence="0.5" maxAngle="30"/>
+<joint name="Arm"><animate property="rotation"><key time="0" value="0"/><key time="1" value="90"/></animate></joint>
+</object3D>
+</composition>
+</scene>
