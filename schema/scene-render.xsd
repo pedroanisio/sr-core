@@ -94,6 +94,18 @@
     <xs:annotation><xs:documentation>"x,y" pair, e.g. a bezier handle or tangent.</xs:documentation></xs:annotation>
     <xs:restriction base="xs:string"><xs:pattern value="-?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?,-?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?"/></xs:restriction>
   </xs:simpleType>
+  <xs:simpleType name="connectorAnchorType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="auto"/><xs:enumeration value="center"/>
+      <xs:enumeration value="top"/><xs:enumeration value="right"/>
+      <xs:enumeration value="bottom"/><xs:enumeration value="left"/>
+      <xs:enumeration value="top-left"/><xs:enumeration value="top-right"/>
+      <xs:enumeration value="bottom-right"/><xs:enumeration value="bottom-left"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="pointListType">
+    <xs:list itemType="pointType"/>
+  </xs:simpleType>
 
   <!-- ===================================================== length types -->
   <xs:simpleType name="relativeLength">
@@ -1442,7 +1454,8 @@
     <xs:attribute name="skewX" type="xs:double" default="0"/>
     <xs:attribute name="skewY" type="xs:double" default="0"/>
   </xs:attributeGroup>
-  <xs:attributeGroup name="nodeAttributes">
+  <xs:attributeGroup name="nodeCoreAttributes">
+    <xs:annotation><xs:documentation>The attributes every node takes, with no placement: identity, visibility, time window, condition, motion blur and track matte. A connector takes only this group.</xs:documentation></xs:annotation>
     <xs:attribute name="id" type="xs:ID" use="required"/>
     <xs:attribute name="name" type="xs:string"/>
     <xs:attribute name="tags" type="xs:NMTOKENS"/>
@@ -1456,21 +1469,24 @@
     <xs:attribute name="condition" type="expressionString">
       <xs:annotation><xs:documentation>Node is rendered only when the expression is truthy (e.g. "param('showPrice')").</xs:documentation></xs:annotation>
     </xs:attribute>
+    <xs:attribute name="motionBlur" type="triStateType" default="inherit"/>
+    <xs:attribute name="matte" type="xs:IDREF">
+      <xs:annotation><xs:documentation>Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="matteMode" type="matteModeType" default="alpha"/>
+    <xs:attribute name="matteVisible" type="xs:boolean" default="false"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="nodeAttributes">
+    <xs:attributeGroup ref="nodeCoreAttributes"/>
     <xs:attribute name="parent" type="xs:IDREF">
       <xs:annotation><xs:documentation>Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="motionBlur" type="triStateType" default="inherit"/>
     <xs:attribute name="threeD" type="xs:boolean" default="false">
       <xs:annotation><xs:documentation>2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="zDepth" type="xs:double" default="0"/>
     <xs:attribute name="rotationX" type="xs:double" default="0"/>
     <xs:attribute name="rotationY" type="xs:double" default="0"/>
-    <xs:attribute name="matte" type="xs:IDREF">
-      <xs:annotation><xs:documentation>Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".</xs:documentation></xs:annotation>
-    </xs:attribute>
-    <xs:attribute name="matteMode" type="matteModeType" default="alpha"/>
-    <xs:attribute name="matteVisible" type="xs:boolean" default="false"/>
     <xs:attribute name="alignX">
       <xs:annotation><xs:documentation>Responsive anchoring: overrides x so the node's box aligns within alignTo.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
@@ -1926,6 +1942,61 @@
     <xs:attributeGroup ref="strokeStyle"/>
     <xs:attributeGroup ref="trimPath"/>
     <xs:attributeGroup ref="strokeMarkers"/>
+  </xs:complexType>
+  <xs:complexType name="connectorType">
+    <xs:annotation><xs:documentation>
+      A line between two nodes (or fixed points) that is recomputed every frame, so it stays attached
+      while they move. @from and @to name a group, layer, shape or instance; with anchor auto the line is
+      cut where it leaves the start node's box and enters the end node's box, less fromGap and toGap.
+      route straight, orthogonal (axis-aligned elbows) or curved (bend in degrees); @points are
+      waypoints. A connector has no box and no transform of its own.
+    </xs:documentation></xs:annotation>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="animate" type="animateType"/>
+      <xs:element name="expression" type="expressionType"/>
+      <xs:element name="mask" type="maskType"/>
+    </xs:choice>
+    <xs:attributeGroup ref="nodeCoreAttributes"/>
+    <xs:attribute name="from" type="xs:IDREF"/>
+    <xs:attribute name="to" type="xs:IDREF"/>
+    <xs:attribute name="fromAnchor" type="connectorAnchorType" default="auto"/>
+    <xs:attribute name="toAnchor" type="connectorAnchorType" default="auto"/>
+    <xs:attribute name="fromX" type="lengthType"/>
+    <xs:attribute name="fromY" type="lengthType"/>
+    <xs:attribute name="toX" type="lengthType"/>
+    <xs:attribute name="toY" type="lengthType"/>
+    <xs:attribute name="fromGap" type="nonNegativeDecimal" default="0"/>
+    <xs:attribute name="toGap" type="nonNegativeDecimal" default="0"/>
+    <xs:attribute name="route" default="straight">
+      <xs:simpleType><xs:restriction base="xs:string">
+        <xs:enumeration value="straight"/><xs:enumeration value="orthogonal"/><xs:enumeration value="curved"/>
+      </xs:restriction></xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="points" type="pointListType"/>
+    <xs:attribute name="bend" default="30">
+      <xs:simpleType><xs:restriction base="xs:double">
+        <xs:minInclusive value="-90"/><xs:maxInclusive value="90"/>
+      </xs:restriction></xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="stroke" type="paintType" default="#FFFFFFFF"/>
+    <xs:attribute name="strokeWidth" type="nonNegativeDecimal" default="4"/>
+    <xs:attribute name="strokeCap" type="strokeCapType" default="butt"/>
+    <xs:attribute name="strokeJoin" type="strokeJoinType" default="miter"/>
+    <xs:attribute name="miterLimit" type="positiveDecimal" default="4"/>
+    <xs:attribute name="dash" type="numberListType"/>
+    <xs:attribute name="dashOffset" type="xs:double" default="0"/>
+    <xs:attribute name="blend" type="blendType" default="normal"/>
+    <xs:attribute name="effects" type="xs:IDREFS"/>
+    <xs:attributeGroup ref="trimPath"/>
+    <xs:attributeGroup ref="strokeMarkers"/>
+    <xs:attribute name="label" type="xs:IDREF"/>
+    <xs:attribute name="labelAt" type="unitDecimal" default="0.5"/>
+    <xs:attribute name="labelOffset" type="xs:double" default="0"/>
+    <xs:attribute name="labelOrient" default="horizontal">
+      <xs:simpleType><xs:restriction base="xs:string">
+        <xs:enumeration value="horizontal"/><xs:enumeration value="along"/>
+      </xs:restriction></xs:simpleType>
+    </xs:attribute>
   </xs:complexType>
 
   <xs:complexType name="burstType">
@@ -2586,6 +2657,7 @@
       <xs:element name="sequence" type="sequenceType"/>
       <xs:element name="layer" type="layerType"/>
       <xs:element name="shape" type="shapeType"/>
+      <xs:element name="connector" type="connectorType"/>
       <xs:element name="object3D" type="object3DType"/>
       <xs:element name="camera" type="cameraType"/>
       <xs:element name="particleEmitter" type="particleEmitterType"/>

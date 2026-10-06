@@ -397,4 +397,22 @@
       <sch:assert id="C65" test="@shape='path' or @shape='line'">markers need an open outline: shape="path" or "line".</sch:assert>
     </sch:rule>
   </sch:pattern>
+  <sch:pattern id="p70">
+    <sch:rule context="/scene[@version='1.0' or @version='1.1']">
+      <sch:assert id="V11" test="not(.//connector)">connector needs version="1.2".</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p71">
+    <sch:rule context="connector">
+      <sch:assert id="C60" test="(@from or (@fromX and @fromY)) and (@to or (@toX and @toY))">a connector end needs a node (@from, @to) or a point (@fromX and @fromY, @toX and @toY).</sch:assert>
+      <sch:assert id="C61" test="not(@fromAnchor[.!='auto'] and (@fromX or @fromY)) and not(@toAnchor[.!='auto'] and (@toX or @toY))">an anchor keyword and an explicit anchor point exclude each other.</sch:assert>
+      <sch:assert id="C62" test="count(@fromX|@fromY) != 1 and count(@toX|@toY) != 1">@fromX and @fromY (and @toX and @toY) come together.</sch:assert>
+      <sch:assert id="C63" test="not(@route='curved' and @points)">route="curved" takes no @points.</sch:assert>
+      <sch:assert id="C64" test="not(animate[@property='x' or @property='y' or @property='rotation' or @property='scaleX' or @property='scaleY' or @property='anchorX' or @property='anchorY' or @property='skewX' or @property='skewY']) and not(expression[@property!='opacity'])">a connector has no transform of its own: its geometry comes from its ends.</sch:assert>
+      <sch:assert id="R48-from" test="not(@from) or (ancestor::symbol and ancestor::symbol[1]//*[@id=current()/@from][self::group or self::layer or self::shape or self::instance][not(ancestor::repeat)][not(ancestor-or-self::*[@threeD='true'])]) or (not(ancestor::symbol) and /scene/composition//*[@id=current()/@from][self::group or self::layer or self::shape or self::instance][not(ancestor::repeat)][not(ancestor-or-self::*[@threeD='true'])])">@from must name a group, layer, shape or instance in the same composition or symbol, outside any repeat and not 2.5D.</sch:assert>
+      <sch:assert id="R48-to" test="not(@to) or (ancestor::symbol and ancestor::symbol[1]//*[@id=current()/@to][self::group or self::layer or self::shape or self::instance][not(ancestor::repeat)][not(ancestor-or-self::*[@threeD='true'])]) or (not(ancestor::symbol) and /scene/composition//*[@id=current()/@to][self::group or self::layer or self::shape or self::instance][not(ancestor::repeat)][not(ancestor-or-self::*[@threeD='true'])])">@to must name a group, layer, shape or instance in the same composition or symbol, outside any repeat and not 2.5D.</sch:assert>
+      <sch:assert id="R49" test="not(//transformConstraint[@target=current()/@id] | //*[@parent=current()/@id] | //link[starts-with(@source, concat(current()/@id, '.'))])">nothing may be positioned by a connector (transform parent, constraint target, link source).</sch:assert>
+      <sch:assert id="R50" test="not(@label) or /scene/assets/text[@id=current()/@label]">@label must name a text asset.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
 </sch:schema>
