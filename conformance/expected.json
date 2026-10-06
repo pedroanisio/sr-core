@@ -39340,6 +39340,212 @@
         "w": 14,
         "h": 42
       }
+    },
+    "srep-0057-generated-ids-start": {
+      "rule": "SREP 57 (startMarker=\"beat.3\" with a beatGrid validates)",
+      "findings": {
+        "valid": true,
+        "absent": [
+          "R21",
+          "W03",
+          "W04"
+        ]
+      },
+      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0057-generated-ids-bar": {
+      "rule": "SREP 57 (startMarker=\"bar.2\" with a beatGrid validates)",
+      "findings": {
+        "valid": true,
+        "absent": [
+          "R21"
+        ]
+      },
+      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0057-generated-ids-key": {
+      "rule": "SREP 57 (<key marker=\"beat.4\"/> with a beatGrid validates)",
+      "findings": {
+        "valid": true,
+        "absent": [
+          "R21"
+        ]
+      },
+      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0057-generated-ids-end": {
+      "rule": "SREP 57 (startMarker=\"beat.0\" and endMarker=\"bar.1\" with a beatGrid validate)",
+      "findings": {
+        "valid": true,
+        "absent": [
+          "R21"
+        ]
+      },
+      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0057-generated-ids-poster": {
+      "rule": "SREP 57 (poster marker=\"bar.1\" with a beatGrid validates with no warning)",
+      "findings": {
+        "valid": true,
+        "absent": [
+          "W04"
+        ]
+      },
+      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0057-generated-ids-poster-no-grid": {
+      "rule": "SREP 57 (a poster marker with no beatGrid validates and warns W04)",
+      "findings": {
+        "valid": true,
+        "codes": [
+          "W04"
+        ],
+        "counts": {
+          "W04": 1
+        }
+      },
+      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0057-generated-ids-poster-element-id": {
+      "rule": "SREP 57 (a poster marker naming an element that is not a marker validates and warns W04)",
+      "findings": {
+        "valid": true,
+        "codes": [
+          "W04"
+        ],
+        "counts": {
+          "W04": 1
+        }
+      },
+      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0057-generated-ids-poster-dangling": {
+      "rule": "SREP 57 (a poster marker naming no element validates and warns W04)",
+      "findings": {
+        "valid": true,
+        "codes": [
+          "W04"
+        ],
+        "counts": {
+          "W04": 1
+        }
+      },
+      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0057-generated-ids-no-grid": {
+      "rule": "SREP 57 (startMarker=\"beat.3\", no beatGrid, no marker of that id: fails R21)",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "R21"
+        ]
+      },
+      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0057-generated-ids-malformed-dots": {
+      "rule": "SREP 57 (beat.3.1 fails R21)",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "R21"
+        ]
+      },
+      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0057-generated-ids-malformed-empty": {
+      "rule": "SREP 57 (beat. fails R21)",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "R21"
+        ]
+      },
+      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0057-generated-ids-malformed-kind": {
+      "rule": "SREP 57 (beats.3 fails R21)",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "R21"
+        ]
+      },
+      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0057-generated-ids-malformed-letters": {
+      "rule": "SREP 57 (beat.x fails R21)",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "R21"
+        ]
+      },
+      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0057-generated-ids-too-many-digits": {
+      "rule": "SREP 57 (a twenty-digit N fails R21)",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "R21"
+        ]
+      },
+      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0057-generated-ids-element-id": {
+      "rule": "SREP 57 (an element id is not a marker: fails R21)",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "R21"
+        ]
+      },
+      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0057-generated-ids-leading-zeros": {
+      "rule": "SREP 57 (beat.007 validates)",
+      "findings": {
+        "valid": true,
+        "absent": [
+          "R21"
+        ]
+      },
+      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0057-generated-ids-collision": {
+      "rule": "SREP 57 (an explicit <marker id=\"beat.3\"/> beside a beatGrid validates and warns W03)",
+      "findings": {
+        "valid": true,
+        "codes": [
+          "W03"
+        ],
+        "counts": {
+          "W03": 1
+        }
+      },
+      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0057-generated-ids-collision-no-grid": {
+      "rule": "SREP 57 (the same marker without a beatGrid validates with no warning)",
+      "findings": {
+        "valid": true,
+        "absent": [
+          "W03"
+        ]
+      },
+      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+    },
+    "srep-0057-generated-ids-explicit": {
+      "rule": "SREP 57 (the explicit-marker control validates as before)",
+      "findings": {
+        "valid": true,
+        "absent": [
+          "R21",
+          "W03",
+          "W04"
+        ]
+      },
+      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
     }
   }
 }
