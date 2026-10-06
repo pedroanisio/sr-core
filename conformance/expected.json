@@ -520,33 +520,256 @@
     "srep-0015-arrow": {
       "rule": "SREP 15",
       "green": {
-        "cx": 320,
-        "cy": 180,
+        "cx": 331.02,
+        "cy": 180.0,
         "w": 280,
-        "h": 24
-      }
-    },
-    "srep-0015-both-ends": {
-      "rule": "SREP 15",
-      "green": {
-        "cx": 300,
-        "cy": 180,
-        "w": 400,
         "h": 24
       }
     },
     "srep-0015-trim-arrow": {
       "rule": "SREP 15",
       "green": {
-        "cx": 250,
-        "cy": 180,
+        "cx": 258.53,
+        "cy": 180.0,
+        "w": 140,
+        "h": 24
+      },
+      "regions": [
+        {
+          "box": [
+            324,
+            0,
+            640,
+            360
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    "srep-0015-both-ends": {
+      "rule": "SREP 15",
+      "green": {
+        "cx": 300.0,
+        "cy": 180.0,
+        "w": 400,
+        "h": 24
+      },
+      "regions": [
+        {
+          "box": [
+            0,
+            0,
+            98,
+            360
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    "srep-0015-union": {
+      "rule": "SREP 15",
+      "regions": [
+        {
+          "box": [
+            250,
+            178,
+            350,
+            182
+          ],
+          "rgb": [
+            0,
+            188,
+            0
+          ]
+        },
+        {
+          "box": [
+            434,
+            177,
+            438,
+            183
+          ],
+          "rgb": [
+            0,
+            188,
+            0
+          ]
+        },
+        {
+          "box": [
+            438,
+            172,
+            442,
+            188
+          ],
+          "rgb": [
+            0,
+            188,
+            0
+          ]
+        },
+        {
+          "box": [
+            448,
+            178,
+            454,
+            182
+          ],
+          "rgb": [
+            0,
+            188,
+            0
+          ]
+        }
+      ]
+    },
+    "srep-0015-trim-start": {
+      "rule": "SREP 15",
+      "green": {
+        "cx": 312.03,
+        "cy": 180.0,
         "w": 140,
         "h": 24
       }
     },
-    "srep-0015-union": {
+    "srep-0015-start-only": {
       "rule": "SREP 15",
-      "pending": "the SREP states no pixel level for the flat green, which depends on the blend space; needs a measured value"
+      "green": {
+        "cx": 309.69,
+        "cy": 180.0,
+        "w": 280,
+        "h": 24
+      }
+    },
+    "srep-0015-circle": {
+      "rule": "SREP 15",
+      "green": {
+        "cx": 340.69,
+        "cy": 180.0,
+        "w": 280,
+        "h": 24
+      }
+    },
+    "srep-0015-square": {
+      "rule": "SREP 15",
+      "green": {
+        "cx": 346.18,
+        "cy": 180.0,
+        "w": 280,
+        "h": 24
+      }
+    },
+    "srep-0015-diamond": {
+      "rule": "SREP 15",
+      "green": {
+        "cx": 331.98,
+        "cy": 180.0,
+        "w": 280,
+        "h": 24
+      }
+    },
+    "srep-0015-bar": {
+      "rule": "SREP 15",
+      "green": {
+        "cx": 329.78,
+        "cy": 180.0,
+        "w": 283,
+        "h": 24
+      }
+    },
+    "srep-0015-marker-size": {
+      "rule": "SREP 15",
+      "green": {
+        "cx": 357.27,
+        "cy": 180.0,
+        "w": 280,
+        "h": 48
+      }
+    },
+    "srep-0015-vertical": {
+      "rule": "SREP 15",
+      "green": {
+        "cx": 320.0,
+        "cy": 190.57,
+        "w": 24,
+        "h": 240
+      }
+    },
+    "srep-0015-diagonal": {
+      "rule": "SREP 15",
+      "green": {
+        "cx": 307.48,
+        "cy": 207.48,
+        "w": 242,
+        "h": 242
+      }
+    },
+    "srep-0015-union-open-arrow": {
+      "rule": "SREP 15",
+      "regions": [
+        {
+          "box": [
+            250,
+            178,
+            350,
+            182
+          ],
+          "rgb": [
+            0,
+            188,
+            0
+          ]
+        },
+        {
+          "box": [
+            450,
+            177,
+            456,
+            178
+          ],
+          "rgb": [
+            0,
+            188,
+            0
+          ]
+        },
+        {
+          "box": [
+            438,
+            168,
+            442,
+            172
+          ],
+          "rgb": [
+            0,
+            188,
+            0
+          ]
+        }
+      ]
+    },
+    "srep-0015-closed-no-marker": {
+      "rule": "SREP 15",
+      "green": {
+        "cx": 319.98,
+        "cy": 179.98,
+        "w": 166,
+        "h": 126
+      }
+    },
+    "srep-0015-zero-width": {
+      "rule": "SREP 15",
+      "absent": [
+        "green"
+      ]
     },
     "srep-0016-absent": {
       "rule": "SREP 16",
