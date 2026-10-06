@@ -1,16 +1,554 @@
 {
  "srep-0041-shadow-catcher": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-white\" baseColor=\"#FFFFFFFF\" roughness=\"1\"/></materials>\n<composition>\n<shape id=\"plate\" shape=\"rect\" width=\"640\" height=\"360\" x=\"0\" y=\"0\" fill=\"#808080FF\"/>\n<object3D id=\"floor\" primitive=\"plane\" width=\"600\" height=\"300\" rotationX=\"90\" material=\"m-white\" shadowCatcher=\"true\" opacity=\"1\" x=\"320\" y=\"300\" z=\"150\"/>\n<object3D id=\"caster\" primitive=\"box\" width=\"80\" height=\"80\" depth=\"80\" material=\"m-white\" x=\"320\" y=\"230\" z=\"150\"/>\n</composition>\n<lights><light id=\"key\" type=\"spot\" x=\"320\" y=\"-100\" z=\"150\" pitch=\"90\" spotAngle=\"60\" intensity=\"3\" castShadow=\"true\"/></lights>\n</scene>\n",
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-white\" baseColor=\"#FFFFFFFF\" roughness=\"1\" specular=\"0\"/></materials>\n<composition>\n<shape id=\"plate\" shape=\"rect\" width=\"640\" height=\"360\" x=\"0\" y=\"0\" fill=\"#808080FF\"/>\n<camera id=\"cam\" projection=\"orthographic\" orthoHeight=\"360\" x=\"320\" y=\"-200\" z=\"150\" pitch=\"-90\"/>\n<object3D id=\"floor\" primitive=\"plane\" width=\"600\" height=\"300\" rotationX=\"-90\" material=\"m-white\" shadowCatcher=\"true\" x=\"320\" y=\"300\" z=\"150\"/>\n<object3D id=\"caster\" primitive=\"box\" width=\"40\" height=\"20\" depth=\"40\" material=\"m-white\" x=\"320\" y=\"100\" z=\"150\"/>\n</composition>\n<lights><light id=\"key\" type=\"spot\" x=\"320\" y=\"-100\" z=\"150\" pitch=\"-90\" spotAngle=\"60\" intensity=\"3\" affectsSpecular=\"false\" castShadow=\"true\"/></lights>\n</scene>\n",
   "expected": {
-   "rule": "SREP 41",
-   "pending": "the darkening ratio E_sh / E_un depends on the engine's light model; needs a measured value"
+   "rule": "SREP 41 s3: geometry: light (320,-100,150) down, floor y=300 (400 px), caster top face y=90 half-width 20 -> shadow half-width 20*400/190 = 42.105 px: x 277.895..362.105, ortho camera 1 px/unit; no ambient so E_sh = 0, alpha = 1 inside (plate 128 -> 0); outside alpha = 0 (v=1, or E_un=0 beyond the cone): plate 128 unchanged. Strips 2 px inside and outside each edge",
+   "regions": [
+    {
+     "box": [
+      279,
+      150,
+      281,
+      210
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      360,
+      150,
+      362,
+      210
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      290,
+      139,
+      330,
+      141
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      290,
+      220,
+      330,
+      222
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      275,
+      150,
+      277,
+      210
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    },
+    {
+     "box": [
+      363,
+      150,
+      365,
+      210
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    },
+    {
+     "box": [
+      290,
+      135,
+      330,
+      137
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    },
+    {
+     "box": [
+      290,
+      224,
+      330,
+      226
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    },
+    {
+     "box": [
+      450,
+      150,
+      500,
+      200
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    },
+    {
+     "box": [
+      40,
+      100,
+      80,
+      140
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    }
+   ]
   }
  },
  "srep-0041-shadow-catcher-opacity": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-white\" baseColor=\"#FFFFFFFF\" roughness=\"1\"/></materials>\n<composition>\n<shape id=\"plate\" shape=\"rect\" width=\"640\" height=\"360\" x=\"0\" y=\"0\" fill=\"#808080FF\"/>\n<object3D id=\"floor\" primitive=\"plane\" width=\"600\" height=\"300\" rotationX=\"90\" material=\"m-white\" shadowCatcher=\"true\" opacity=\"0.5\" x=\"320\" y=\"300\" z=\"150\"/>\n<object3D id=\"caster\" primitive=\"box\" width=\"80\" height=\"80\" depth=\"80\" material=\"m-white\" x=\"320\" y=\"230\" z=\"150\"/>\n</composition>\n<lights><light id=\"key\" type=\"spot\" x=\"320\" y=\"-100\" z=\"150\" pitch=\"90\" spotAngle=\"60\" intensity=\"3\" castShadow=\"true\"/></lights>\n</scene>\n",
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-white\" baseColor=\"#FFFFFFFF\" roughness=\"1\" specular=\"0\"/></materials>\n<composition>\n<shape id=\"plate\" shape=\"rect\" width=\"640\" height=\"360\" x=\"0\" y=\"0\" fill=\"#808080FF\"/>\n<camera id=\"cam\" projection=\"orthographic\" orthoHeight=\"360\" x=\"320\" y=\"-200\" z=\"150\" pitch=\"-90\"/>\n<object3D id=\"floor\" primitive=\"plane\" width=\"600\" height=\"300\" rotationX=\"-90\" material=\"m-white\" shadowCatcher=\"true\" opacity=\"0.5\" x=\"320\" y=\"300\" z=\"150\"/>\n<object3D id=\"caster\" primitive=\"box\" width=\"40\" height=\"20\" depth=\"40\" material=\"m-white\" x=\"320\" y=\"100\" z=\"150\"/>\n</composition>\n<lights><light id=\"key\" type=\"spot\" x=\"320\" y=\"-100\" z=\"150\" pitch=\"-90\" spotAngle=\"60\" intensity=\"3\" affectsSpecular=\"false\" castShadow=\"true\"/></lights>\n</scene>\n",
   "expected": {
-   "rule": "SREP 41",
-   "pending": "the SREP states the darkening halves at opacity 0.5 (a ratio against the opacity 1 case), not an absolute value; needs measured values for both"
+   "rule": "SREP 41 s3-4: geometry: light (320,-100,150) down, floor y=300 (400 px), caster top face y=90 half-width 20 -> shadow half-width 20*400/190 = 42.105 px: x 277.895..362.105, ortho camera 1 px/unit; alpha = 0.5*(1-0) = 0.5; C' = C(1-alpha) in linear light (CONVENTIONS 1.4: colours are decoded before compositing): lin(128)=0.2159 -> 0.1079 -> sRGB 92.4",
+   "regions": [
+    {
+     "box": [
+      279,
+      150,
+      281,
+      210
+     ],
+     "rgb": [
+      92,
+      92,
+      92
+     ]
+    },
+    {
+     "box": [
+      360,
+      150,
+      362,
+      210
+     ],
+     "rgb": [
+      92,
+      92,
+      92
+     ]
+    },
+    {
+     "box": [
+      290,
+      139,
+      330,
+      141
+     ],
+     "rgb": [
+      92,
+      92,
+      92
+     ]
+    },
+    {
+     "box": [
+      290,
+      220,
+      330,
+      222
+     ],
+     "rgb": [
+      92,
+      92,
+      92
+     ]
+    },
+    {
+     "box": [
+      275,
+      150,
+      277,
+      210
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    },
+    {
+     "box": [
+      363,
+      150,
+      365,
+      210
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    },
+    {
+     "box": [
+      290,
+      135,
+      330,
+      137
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    },
+    {
+     "box": [
+      290,
+      224,
+      330,
+      226
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    },
+    {
+     "box": [
+      450,
+      150,
+      500,
+      200
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    },
+    {
+     "box": [
+      40,
+      100,
+      80,
+      140
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0041-shadow-catcher-ambient": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-white\" baseColor=\"#FFFFFFFF\" roughness=\"1\" specular=\"0\"/></materials>\n<composition>\n<shape id=\"plate\" shape=\"rect\" width=\"640\" height=\"360\" x=\"0\" y=\"0\" fill=\"#808080FF\"/>\n<camera id=\"cam\" projection=\"orthographic\" orthoHeight=\"360\" x=\"320\" y=\"-200\" z=\"150\" pitch=\"-90\"/>\n<object3D id=\"floor\" primitive=\"plane\" width=\"600\" height=\"300\" rotationX=\"-90\" material=\"m-white\" shadowCatcher=\"true\" x=\"320\" y=\"300\" z=\"150\"/>\n<object3D id=\"caster\" primitive=\"box\" width=\"40\" height=\"20\" depth=\"40\" material=\"m-white\" x=\"320\" y=\"100\" z=\"150\"/>\n</composition>\n<lights><light id=\"key\" type=\"spot\" x=\"320\" y=\"-100\" z=\"150\" pitch=\"-90\" spotAngle=\"60\" intensity=\"3\" affectsSpecular=\"false\" castShadow=\"true\"/><light id=\"amb\" type=\"ambient\" intensity=\"0.18\"/></lights>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 41 s2-4 with D11: geometry: light (320,-100,150) down, floor y=300 (400 px), caster top face y=90 half-width 20 -> shadow half-width 20*400/190 = 42.105 px: x 277.895..362.105, ortho camera 1 px/unit; ambient 0.18 white (A=0.18, D11: I*c_diff); spot E=3*(100/d)^2, L=(1-F0)*E*n.l with F0=0.04 (D11: pi*f*E*n.l, f=(1-F)c/pi), view and light along the normal; in shadow ratio=A/(A+L) ~ 0.50, C'=lin(128)*ratio, sRGB-encoded; per-region mean of the per-pixel values",
+   "regions": [
+    {
+     "box": [
+      279,
+      150,
+      281,
+      210
+     ],
+     "rgb": [
+      93,
+      93,
+      93
+     ]
+    },
+    {
+     "box": [
+      360,
+      150,
+      362,
+      210
+     ],
+     "rgb": [
+      93,
+      93,
+      93
+     ]
+    },
+    {
+     "box": [
+      290,
+      139,
+      330,
+      141
+     ],
+     "rgb": [
+      93,
+      93,
+      93
+     ]
+    },
+    {
+     "box": [
+      290,
+      220,
+      330,
+      222
+     ],
+     "rgb": [
+      93,
+      93,
+      93
+     ]
+    },
+    {
+     "box": [
+      275,
+      150,
+      277,
+      210
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    },
+    {
+     "box": [
+      363,
+      150,
+      365,
+      210
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    },
+    {
+     "box": [
+      290,
+      135,
+      330,
+      137
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    },
+    {
+     "box": [
+      290,
+      224,
+      330,
+      226
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    },
+    {
+     "box": [
+      450,
+      150,
+      500,
+      200
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    },
+    {
+     "box": [
+      40,
+      100,
+      80,
+      140
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    }
+   ]
+  }
+ },
+ "srep-0041-shadow-catcher-nolight-shadow": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-white\" baseColor=\"#FFFFFFFF\" roughness=\"1\" specular=\"0\"/></materials>\n<composition>\n<shape id=\"plate\" shape=\"rect\" width=\"640\" height=\"360\" x=\"0\" y=\"0\" fill=\"#808080FF\"/>\n<camera id=\"cam\" projection=\"orthographic\" orthoHeight=\"360\" x=\"320\" y=\"-200\" z=\"150\" pitch=\"-90\"/>\n<object3D id=\"floor\" primitive=\"plane\" width=\"600\" height=\"300\" rotationX=\"-90\" material=\"m-white\" shadowCatcher=\"true\" x=\"320\" y=\"300\" z=\"150\"/>\n<object3D id=\"caster\" primitive=\"box\" width=\"40\" height=\"20\" depth=\"40\" material=\"m-white\" x=\"320\" y=\"100\" z=\"150\"/>\n</composition>\n<lights><light id=\"key\" type=\"spot\" x=\"320\" y=\"-100\" z=\"150\" pitch=\"-90\" spotAngle=\"60\" intensity=\"3\" affectsSpecular=\"false\" castShadow=\"false\"/></lights>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 41 s6: the only light has castShadow=false: v=1, E_sh=E_un, alpha=0 on the whole catcher: the plate is unchanged (128) in every strip, inside the would-be shadow too",
+   "regions": [
+    {
+     "box": [
+      279,
+      150,
+      281,
+      210
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    },
+    {
+     "box": [
+      360,
+      150,
+      362,
+      210
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    },
+    {
+     "box": [
+      290,
+      139,
+      330,
+      141
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    },
+    {
+     "box": [
+      290,
+      220,
+      330,
+      222
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    },
+    {
+     "box": [
+      275,
+      150,
+      277,
+      210
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    },
+    {
+     "box": [
+      363,
+      150,
+      365,
+      210
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    },
+    {
+     "box": [
+      290,
+      135,
+      330,
+      137
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    },
+    {
+     "box": [
+      290,
+      224,
+      330,
+      226
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    },
+    {
+     "box": [
+      450,
+      150,
+      500,
+      200
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    },
+    {
+     "box": [
+      40,
+      100,
+      80,
+      140
+     ],
+     "rgb": [
+      128,
+      128,
+      128
+     ]
+    }
+   ]
   }
  }
 }

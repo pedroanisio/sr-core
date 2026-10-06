@@ -2,11 +2,12 @@
 <scene version="1.2">
 <project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
 <output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
-<materials><material id="m-white" baseColor="#FFFFFFFF" roughness="1"/></materials>
+<materials><material id="m-white" baseColor="#FFFFFFFF" roughness="1" specular="0"/></materials>
 <composition>
 <shape id="plate" shape="rect" width="640" height="360" x="0" y="0" fill="#808080FF"/>
-<object3D id="floor" primitive="plane" width="600" height="300" rotationX="90" material="m-white" shadowCatcher="true" opacity="1" x="320" y="300" z="150"/>
-<object3D id="caster" primitive="box" width="80" height="80" depth="80" material="m-white" x="320" y="230" z="150"/>
+<camera id="cam" projection="orthographic" orthoHeight="360" x="320" y="-200" z="150" pitch="-90"/>
+<object3D id="floor" primitive="plane" width="600" height="300" rotationX="-90" material="m-white" shadowCatcher="true" x="320" y="300" z="150"/>
+<object3D id="caster" primitive="box" width="40" height="20" depth="40" material="m-white" x="320" y="100" z="150"/>
 </composition>
-<lights><light id="key" type="spot" x="320" y="-100" z="150" pitch="90" spotAngle="60" intensity="3" castShadow="true"/></lights>
+<lights><light id="key" type="spot" x="320" y="-100" z="150" pitch="-90" spotAngle="60" intensity="3" affectsSpecular="false" castShadow="true"/></lights>
 </scene>

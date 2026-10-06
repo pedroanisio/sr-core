@@ -6,8 +6,8 @@
 <composition>
 <shape id="plate" shape="rect" width="640" height="360" x="0" y="0" fill="#808080FF"/>
 <camera id="cam" projection="orthographic" orthoHeight="360" x="320" y="-200" z="150" pitch="-90"/>
-<object3D id="floor" primitive="plane" width="600" height="300" rotationX="-90" material="m-white" shadowCatcher="true" opacity="0.5" x="320" y="300" z="150"/>
+<object3D id="floor" primitive="plane" width="600" height="300" rotationX="-90" material="m-white" shadowCatcher="true" x="320" y="300" z="150"/>
 <object3D id="caster" primitive="box" width="40" height="20" depth="40" material="m-white" x="320" y="100" z="150"/>
 </composition>
-<lights><light id="key" type="spot" x="320" y="-100" z="150" pitch="-90" spotAngle="60" intensity="3" affectsSpecular="false" castShadow="true"/></lights>
+<lights><light id="key" type="spot" x="320" y="-100" z="150" pitch="-90" spotAngle="60" intensity="3" affectsSpecular="false" castShadow="false"/></lights>
 </scene>
