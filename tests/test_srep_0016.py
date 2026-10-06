@@ -8,7 +8,8 @@ from srep_support import case_verdict, verdict12, xsd_error
 from test_schema_rules import doc
 
 CASES = ["srep-0016-" + n for n in
-         ("straight", "rotated-gap", "anchor", "orthogonal", "curved", "arrow", "trim-arrow", "follows", "absent")]
+         ("straight", "rotated-gap", "anchor", "orthogonal", "curved", "arrow", "trim-arrow", "follows", "absent",
+          "group-box")]
 RB = ('<shape id="r" shape="rect" width="80" height="60" x="100" y="150"/>'
       '<shape id="b" shape="rect" width="80" height="60" x="460" y="150"/>')
 

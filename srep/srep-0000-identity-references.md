@@ -1,0 +1,168 @@
+```
+SREP:            0
+Title:           Check ID references in every validator
+Author:          scene-render maintainers (drafted by gap-A)
+Status:          Draft
+Type:            Standards
+Created:         2026-10-06
+Schema-Version:  1.3
+```
+
+# SREP 0 (draft) — Check ID references in every validator
+
+## Abstract
+
+Two checks of the Rust reference have no Schematron rule, and the XSD processor sr-core validates with (libxml2,
+through lxml) does not make them:
+- **S06:** an ID-reference list that names nothing, such as `effects=" "`;
+- **S10:** an ID reference that names no element, such as an `audiogram` whose `source` names no id.
+
+Both are constraints XSD 1.0 itself states, so a document that breaks them is invalid today. The kit's oracle,
+however, accepts it.
+
+This SREP:
+1. says that validators MUST check the two XSD 1.0 identity constraints, whichever processor they use;
+2. adds two Schematron rules that a Schematron-only validator can run: R53 (an ID-reference list names at least one
+   id) and R54 (an `audiogram` names an audio track, which is what it means, not just any element).
+
+## Motivation
+
+**The reference's checks.** In `rs-scene-render`, `crates/sr-model/src/xsd/simple.rs` checks list types:
+
+```rust
+Builtin::IdRefs => {
+    if v.is_empty() {
+        return Err("expected at least one ID reference".into());
+    }
+    ...
+```
+
+The value is whitespace-collapsed first, and the caller (`xsd/structure.rs`, `attributes`) reports the error as
+`S06`. After the walk, `xsd/structure.rs`, `check_refs` tests every IDREF and IDREFS token against the ids found:
+
+```rust
+for r in std::mem::take(&mut self.refs) {
+    if self.ids.contains_key(&r.value) {
+        continue;
+    }
+    ...
+    let mut d = Diagnostic::error(
+        "S10",
+        format!("@{} of <{}> refers to {:?}, but no element has that id", r.attr, r.node.tag_name().name(), r.value),
+```
+
+**The oracle does not make them.** The engine's corpus builder (`tools/build_corpus.py`) lists both cases as
+`ORACLE_BLIND = {"s06-idrefs-empty", "s10-dangling-idref"}`, with the note "libxml2 (the oracle) skips two XSD 1.0
+checks that sr-model enforces". Checked on 2026-10-06 against the canonical 1.3.0 XSD, with lxml on libxml2 2.9.14,
+all three of these minimal documents validate:
+- `<adjustment id="a" effects=" "/>`;
+- `<audiogram id="w" source="nope" …/>`, naming no id;
+- `<audiogram id="w" source="s" …/>`, where `s` is a shape.
+
+So sr-core's own tools, and any engine that relies on libxml2, accept documents the reference rejects.
+
+**Existence is not enough for `audiogram/@source`.** An `audiogram` draws the analysis of an audio track. Naming a
+shape satisfies XSD's IDREF check, but nothing can draw it. The reference renders such an audiogram empty and lists it
+as not rendered ("audiogram source … has no analysis").
+
+## Specification
+
+### Syntax
+
+```xml
+None (XSD).
+```
+
+```xml
+<sch:pattern id="p77">
+  <sch:rule context="@audioBuses | @audioTracks | @captions | @colliders | @duckUnder | @effects | @fit | @forceFields | @lights | @looks | @splash">
+    <sch:assert id="R53" test="normalize-space(.) != ''">An ID reference list names at least one id.</sch:assert>
+  </sch:rule>
+  <sch:rule context="assets/audiogram">
+    <sch:assert id="R54" test="/scene/audioMix/audioTrack[@id = current()/@source]">audiogram/@source names an audioTrack of audioMix.</sch:assert>
+  </sch:rule>
+</sch:pattern>
+```
+
+The pattern and rule ids are proposals; the schema editor assigns them. The context of R53 lists every attribute of
+type `xs:IDREFS` in the 1.3.0 XSD (27 declarations, under the 11 names above). A later SREP that adds an `xs:IDREFS`
+attribute adds its name here.
+
+### Semantics
+
+1. **The identity constraints of XSD 1.0 are part of the format.** A validator MUST reject:
+   - a document in which an attribute of type `xs:IDREF` or `xs:IDREFS` contains a token that is not the value of
+     some attribute of type `xs:ID` (XML Schema Part 1, Validation Rule *Validation Root Valid (ID/IDREF Table)*);
+   - a document in which an `xs:IDREFS` value has no token (XML Schema Part 2, §3.3.10: `IDREFS` is a list type with
+     `minLength` 1).
+
+   A validator built on an XSD processor that skips these checks MUST make them itself. The Rust reference reports
+   them as S10 and S06.
+2. **R53** gives the second check to Schematron validators.
+3. **R54:** an `audiogram`'s `source` names an `audioTrack` of `audioMix`. That is the track whose analysis the
+   audiogram draws.
+4. The first check stays an XSD check, not a Schematron rule. It covers 120 attribute declarations, and the XSD
+   already states it.
+
+### Defaults and the neutral case
+
+None. The rules only reject documents.
+
+## Rationale
+
+- **The XSD already says it.** S06 and S10 are not engine extensions. They are what XSD 1.0 requires, and an oracle
+  that skips them is incomplete. Saying so keeps every engine's verdict the same as the reference's.
+- **R53 for Schematron-only validators.** The check is a single string test, and the list of IDREFS attributes is
+  short and stable.
+- **R54 checks meaning, not just existence.** An `audiogram` naming a shape is valid XSD and draws nothing. The rule
+  makes that an error.
+
+## Rejected alternatives
+
+- **A Schematron rule for every IDREF attribute.** It would mean 120 declarations to keep in step with the XSD by
+  hand. Clause 1 states the XSD rule instead.
+- **Leave S06 and S10 engine-only.** Then two conforming validators disagree on the same document, which is what the
+  conformance kit exists to prevent.
+
+## Backwards compatibility
+
+- **Clause 1 changes no verdict that the XSD gives.** Documents that libxml2 accepted and the reference rejected stay
+  rejected. Validators that relied on libxml2 alone start rejecting them, which is the fix.
+- **R53 adds no new rejection.** An empty `xs:IDREFS` list is already invalid under XSD 1.0.
+- **R54 rejects a document that is valid today:** an `audiogram` whose `source` names an element other than an
+  audio track of `audioMix`. Such an audiogram draws nothing in the reference, so the class is MINOR with a
+  correction.
+- **Evidence still to gather:** validate the local scene documents with and without R54 before Review.
+
+## Engine impact
+
+| Engine | Status | Work | Tracking |
+|---|---|---|---|
+| Rust (`rs-scene-render`), reference | partial | S06 and S10 exist. R53 is covered by S06. R54 is new: the Rust mirror of the rule, with corpus documents | |
+
+sr-core: the conformance tooling adds the XSD identity checks to its lxml validation (clause 1), and
+`tests/test_schema_rules.py` gains R53 and R54 cases.
+
+## Conformance
+
+| Case | Checks | Expected |
+|---|---|---|
+| `tests/test_schema_rules.py` | `effects=" "` on an adjustment; `source` naming nothing, a shape, and an audio track | R53; S10 (XSD identity) and R54; R54; valid |
+| `srep-NNNN-identity` (validation only) | an IDREF to a missing id | rejected by every validator |
+
+## Open issues
+
+- Whether R54 should also accept an output's own `audioTrack` (SREP 13). The reference draws the analysis of the
+  composition's `audioMix` tracks.
+
+## References
+
+- W3C XML Schema 1.0 Part 1, Validation Rule *Validation Root Valid (ID/IDREF Table)*; Part 2, §3.3.10 (`IDREFS`). <https://www.w3.org/TR/xmlschema-1/>, <https://www.w3.org/TR/xmlschema-2/#IDREFS>
+- rs-scene-render `crates/sr-model/src/xsd/simple.rs` and `xsd/structure.rs`; `tools/build_corpus.py` (`ORACLE_BLIND`).
+
+## History
+
+- 2026-10-06: first draft.
+- 2026-10-06: drafted with AI assistance (Claude Opus 5.5 via Claude Code (worker gap-A), from rs-scene-render's
+  structural validator and a check of the three documents above against lxml with libxml2 2.9.14). No statement here
+  should be taken for granted without its definition or reference.
