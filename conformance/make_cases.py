@@ -548,6 +548,17 @@ def carry_doc(carry):
 cases["srep-0050-spring-carry"] = carry_doc(' carry="true"')
 cases["srep-0050-spring-carry-neutral"] = carry_doc("")
 
+# ---------------------------------------------------------------- SREP 51: wiggle-path mode="smooth"
+def wiggle_doc(mode):
+    return doc12(
+        '<shape id="w" shape="path" width="200" height="10" x="220" y="180" path="M 0 5 L 200 5" '
+        'stroke="#FF0000FF" strokeWidth="3" fill="#00000000">'
+        f'<shapeModifier type="wiggle-path" size="8" detail="10" frequency="2" seed="7"{mode}/></shape>')
+
+
+cases["srep-0051-wiggle-smooth"] = wiggle_doc(' mode="smooth"')
+cases["srep-0051-wiggle-smooth-corner"] = wiggle_doc("")
+
 os.makedirs(os.path.join(HERE, "cases"), exist_ok=True)
 for name, xml in cases.items():
     open(os.path.join(HERE, "cases", name + ".xml"), "w").write(xml)
