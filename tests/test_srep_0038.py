@@ -22,14 +22,21 @@ def rules(v):
     return v.split(":", 1)[1].split(",") if v.startswith("sch:") else []
 
 
+# findings cases that are invalid on purpose: a pair naming no document material fails MOV2
+INVALID = {"srep-0038-override-unknown-id.xml", "srep-0038-override-first-pair-wrong.xml",
+           "srep-0038-override-last-pair-wrong.xml"}
+
+
 @pytest.mark.parametrize("case", CASES, ids=os.path.basename)
 def test_case_validates(case):
     # version 1.2 is added to the enumeration centrally; the attributes are accepted in every version.
-    assert verdict(open(case, "rb").read().replace(b'version="1.2"', b'version="1.1"')) == "ok"
+    want = "sch:MOV2" if os.path.basename(case) in INVALID else "ok"
+    assert verdict(open(case, "rb").read().replace(b'version="1.2"', b'version="1.1"')) == want
 
 
 def test_cases_exist():
-    assert len(CASES) == 2
+    assert len(CASES) == 9
+    assert INVALID <= {os.path.basename(c) for c in CASES}
 
 
 def test_node_alone_is_accepted():
