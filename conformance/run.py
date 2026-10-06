@@ -154,7 +154,8 @@ def findings(renderer, case, want):
         text = subprocess.run([exe, "validate", s_], cwd=d, capture_output=True, text=True, timeout=600,
                               env={**os.environ, **env}).stdout
     got = sorted({x["code"] for x in diags} | set(re.findall(r"\b(SA0[12])\b", text)))
-    counts = {c: sum(1 for x in diags if x["code"] == c) + len(re.findall(rf"\b{c}\b", text)) for c in want.get("counts", {})}
+    counts = {c: max(sum(1 for x in diags if x["code"] == c), len(re.findall(rf"\b{c}\b", text)))
+              for c in want.get("counts", {})}
     checks = {"codes": [(c, c in got) for c in want.get("codes", [])],
               "absent": [(c, c not in got) for c in want.get("absent", [])],
               "counts": [(f"{c} x{n}", counts[c] == n) for c, n in want.get("counts", {}).items()],
