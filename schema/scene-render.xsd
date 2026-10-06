@@ -2818,6 +2818,10 @@
       .3dl, @space), curves (@curve "x,y x,y ..." per @channel), levels,
       white-balance (temperature/tint), exposure, hue-saturation, tonemap.
       shader: GLSL fragment at @src with param children as uniforms.
+      selective-color: @hue (degrees) or @color (its hue) centres a window of width @tolerance; inside it @saturation
+      scales and @brightness adds; @amount mixes the result with the original. @channel is not read.
+      halftone: @size is the cell, @angle the screen's angle (default 0), @color the ink (default black) and
+      @paint the ground between the dots (default white).
     </xs:documentation></xs:annotation>
     <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:group ref="animationElements"/>
