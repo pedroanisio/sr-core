@@ -36290,9 +36290,108 @@
         "valid": false
       }
     },
-    "srep-0047-joint-pose": {
+    "srep-0047-joint-look-at": {
       "rule": "SREP 47",
-      "pending": "needs a model with named, jointed nodes; the kit's only model (marker.glb) has none, so the SREP's socket displacements and look-at angles cannot be reproduced without inventing a model or numbers"
+      "red": {
+        "cx": 320,
+        "cy": 280
+      },
+      "blue": {
+        "cx": 320,
+        "cy": 160
+      }
+    },
+    "srep-0047-joint-look-at-influence": {
+      "rule": "SREP 47",
+      "red": {
+        "cx": 320,
+        "cy": 280
+      },
+      "blue": {
+        "cx": 348.28,
+        "cy": 171.72
+      }
+    },
+    "srep-0047-joint-look-at-max-angle": {
+      "rule": "SREP 47",
+      "red": {
+        "cx": 320,
+        "cy": 280
+      },
+      "blue": {
+        "cx": 354.64,
+        "cy": 180.0
+      }
+    },
+    "srep-0047-joint-look-at-zero": {
+      "rule": "SREP 47",
+      "red": {
+        "cx": 320,
+        "cy": 280
+      },
+      "blue": {
+        "cx": 360,
+        "cy": 200
+      }
+    },
+    "srep-0047-joint-rotation": {
+      "rule": "SREP 47",
+      "red": {
+        "cx": 320,
+        "cy": 280
+      },
+      "green": {
+        "cx": 320,
+        "cy": 160
+      }
+    },
+    "srep-0047-joint-rotation-45": {
+      "rule": "SREP 47",
+      "red": {
+        "cx": 320,
+        "cy": 280
+      },
+      "green": {
+        "cx": 348.28,
+        "cy": 171.72
+      }
+    },
+    "srep-0047-joint-rotation-keyed": {
+      "rule": "SREP 47",
+      "red": {
+        "cx": 320,
+        "cy": 280
+      },
+      "green": {
+        "cx": 348.28,
+        "cy": 171.72
+      }
+    },
+    "srep-0047-joint-unknown": {
+      "rule": "SREP 47",
+      "pending": "needs the findings kind to read `render` output: the engine reports an unknown name only when a frame is evaluated (`validate --format json` lists nothing for it); form: {\"via\": \"render\", \"messages\": [...]} runs `render FILE -f 0 -o PNG`, ignores the exit status, and each message is a substring of some line of stdout or stderr",
+      "findings": {
+        "via": "render",
+        "messages": [
+          "NoSuchJoint",
+          "body",
+          "Hand",
+          "Arm",
+          "Head"
+        ]
+      }
+    },
+    "srep-0047-joint-version": {
+      "rule": "SREP 47",
+      "findings": {
+        "codes": [
+          "V5"
+        ],
+        "counts": {
+          "V5": 1
+        },
+        "valid": false
+      }
     },
     "srep-0048-expr-penner-prop-at-time": {
       "rule": "SREP 48",

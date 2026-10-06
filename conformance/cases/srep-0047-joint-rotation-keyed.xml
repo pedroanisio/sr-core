@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<assets><mesh id="mesh-m" src="../assets/joints.glb" format="glb"/></assets>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<object3D id="m" primitive="mesh" mesh="mesh-m" x="320" y="200" z="0" ><joint name="Arm"><animate property="rotation"><key time="-0.5" value="0"/><key time="0.5" value="90"/></animate></joint></object3D>
+<object3D id="p" primitive="plane" material="m-green" width="20" height="20" x="40" parent="m" parentJoint="Arm"/>
+</composition>
+</scene>
