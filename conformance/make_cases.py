@@ -520,7 +520,8 @@ expected["srep-0013-segment-overlay"] = {"rule": "SREP 13", "output": {"id": "sh
 
 # an overlay also draws on an output without segments, in output time (here from composition time 0)
 cases["srep-0013-overlay-plain"] = seg_doc("", fps=10, extra=TAG, overlay=' overlay="tag"')
-expected["srep-0013-overlay-plain"] = {"rule": "SREP 13", "output": {"id": "short", "time": 0.4},
+# (an output without segments takes its origin from the CLI start: output time 0.4 is frame 4 of a range from 0)
+expected["srep-0013-overlay-plain"] = {"rule": "SREP 13", "output": {"id": "short", "time": 0.4, "start": 0, "end": 0.5, "frame": 4},
                                        "yellow": box(310, 180, 20, 20)}
 
 # cases of SREPs 15 and later live in srep_cases/*.json, each {name: {"xml": <document text>, "expected": {...}}};

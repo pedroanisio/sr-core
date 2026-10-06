@@ -48,10 +48,15 @@
   }
  },
  "srep-0020-text-lines": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><font id=\"tf\" src=\"../assets/srep-test-font.ttf\" family=\"SREPTest\"/><text id=\"t\" text=\"HH&#10;HH&#10;HH\" width=\"400\" height=\"450\" size=\"100\" lineHeight=\"1.5\" fontAsset=\"tf\" color=\"#FF0000FF\" verticalAlign=\"top\" align=\"start\"/></assets>\n<composition>\n<layer id=\"l\" asset=\"t\" x=\"100\" y=\"30\"/>\n</composition>\n</scene>\n",
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"480\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><font id=\"tf\" src=\"../assets/srep-test-font.ttf\" family=\"SREPTest\"/><text id=\"t\" text=\"HH&#10;HH&#10;HH\" width=\"400\" height=\"450\" size=\"100\" lineHeight=\"1.5\" fontAsset=\"tf\" color=\"#FF0000FF\" verticalAlign=\"top\" align=\"start\"/></assets>\n<composition>\n<layer id=\"l\" asset=\"t\" x=\"100\" y=\"30\"/>\n</composition>\n</scene>\n",
   "expected": {
-   "rule": "SREP 20",
-   "pending": "the SREP's baselines 285 and 435 fall below the 360 px frame, so they cannot be measured; the coordinator must choose a geometry that fits"
+   "rule": "SREP 20 (1, 3): three lines of the pinned test font, verticalAlign top, box 400 x 450 at (100, 30), size 100, lineHeight 1.5: A = 0.8, D = 0.2, pitch 150, half-leading 25, so the baselines are at 30 + 25 + 80 + 150 i = 135, 285, 435 and the ink rows 65-135, 215-285, 365-435; the frame is 480 px high so that the third baseline (435) is inside it; the ink spans rows 65 to 435 (h 370, cy 250) and columns 105 to 215 (w 110, cx 160)",
+   "red": {
+    "cx": 160,
+    "cy": 250,
+    "w": 110,
+    "h": 370
+   }
   }
  },
  "srep-0020-text-middle": {
