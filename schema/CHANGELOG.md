@@ -17,6 +17,11 @@ computed from those classes by `python3 tools/release.py next schema`:
 
 ### Breaking
 
+### Added
+
+### Fixed
+
+## 1.2.0 — 2026-10-06
 
 ### Added
 
@@ -69,9 +74,6 @@ computed from those classes by `python3 tools/release.py next schema`:
 
 - Schematron rules R42, R43 and R44 check the kind of asset a reference names: a `pattern` paint's `@asset` and an `@emitterAsset` must name an `image` asset, and the `@source` of a `displacement-map`, `difference-key` or `shader` effect must name a node of `composition` or `symbols` (SREP 28).
 - the `effectType` documentation defines `selective-color` and `halftone` (halftone `@angle` default 0, ink `@color` default black, ground `@paint` default white; selective-color window, `@amount`, `@channel` not read). Semantics: `gradient-map` keeps the alpha of its stops, `matte-choke` grown by a negative amount takes the colour of the edge it grows from, `halftone` never paints outside the edge of its source. Visible change: a `halftone` with no `@angle` renders at 0 degrees, not 45 (SREP 29).
-
-### Docs
-
 
 ## 1.1.4 — 2026-09-30
 
