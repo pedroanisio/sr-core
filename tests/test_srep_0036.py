@@ -16,8 +16,10 @@ def geo(layer_attrs):
     return doc(assets=ASSETS + f'<map id="m" width="10" height="10"><geoLayer geo="g" {layer_attrs}/></map>')
 
 
-def test_two_cases_exist():
-    assert len(CASES) == 2
+def test_the_table_cases_exist():
+    # the two cases of the SREP's Conformance table, plus the progress 0 / 0.4 / 1 and fill-at-0 / 1 cases built on them
+    names = {os.path.basename(c)[:-4] for c in CASES}
+    assert {"srep-0036-geo-outline-progress", "srep-0036-geo-fill-whole"} <= names
 
 
 @pytest.mark.parametrize("case", CASES, ids=os.path.basename)
