@@ -460,4 +460,19 @@
       <sch:assert id="C79" test="not(animate[not(@property='spacingX' or @property='spacingY' or @property='width' or @property='height')])">points animates only spacingX, spacingY, width and height.</sch:assert>
     </sch:rule>
   </sch:pattern>
+  <sch:pattern id="p62">
+    <sch:rule context="paints/pattern">
+      <sch:assert id="R42" test="/scene/assets/image[@id=current()/@asset]">pattern/@asset must name an image asset: a pattern tiles an image.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p63">
+    <sch:rule context="*[@emitterAsset]">
+      <sch:assert id="R43" test="/scene/assets/image[@id=current()/@emitterAsset]">@emitterAsset must name an image asset: particles are emitted from its opaque pixels.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p64">
+    <sch:rule context="effect[@source][@type='displacement-map' or @type='difference-key' or @type='shader']">
+      <sch:assert id="R44" test="/scene/composition//*[@id=current()/@source] or /scene/symbols//*[@id=current()/@source]">effect @source must name a composition node; an asset is placed on a (hidden) layer, and the layer named.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
 </sch:schema>

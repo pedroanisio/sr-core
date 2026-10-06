@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<assets><image id="tile" src="../assets/tile.png" width="16" height="16"/><generator id="noise" kind="noise" width="16" height="16"/></assets>
+<paints><pattern id="p-tile" asset="tile"/></paints>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<shape id="r" shape="rect" width="40" height="20" x="200" y="120" fill="url(#p-tile)"/>
+<layer id="n-layer" asset="noise" visible="false"/>
+<particleEmitter id="sparks" color="#FFFF00FF" emitterShape="asset-alpha" emitterAsset="tile"/>
+</composition>
+<effects><effect id="dm" type="displacement-map" source="n-layer"/></effects>
+</scene>
