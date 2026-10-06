@@ -8,4 +8,4 @@ Three version lines, each Semantic Versioning, each moving only when its own con
 
 Release numbers are computed from the changelogs by ``tools/release.py``, never edited by hand.
 """
-__version__ = "1.3.0"
+__version__ = "1.4.0"

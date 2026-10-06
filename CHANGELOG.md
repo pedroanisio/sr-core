@@ -22,6 +22,16 @@ version:
 
 ### Fixed
 
+## 1.4.0 — 2026-10-06
+
+### Added
+
+- Validates and packs schema 1.4.0 documents: the packaged schema, the generated reference under `docs/schema` and the files `pack` and the lints read are schema 1.4.0 (SREP 57: a `beat.N` or `bar.N` marker id is accepted where a marker is named, when the scene has a `beatGrid`; document version 1.4). See [schema/CHANGELOG.md](schema/CHANGELOG.md).
+
+### Tooling
+
+- The compatibility kit has the 19 cases of SREP 57 (`conformance/srep_cases/srep-0057.json`), pending until the Rust reference implements it, and `tests/test_srep_0057.py` checks the schema side.
+
 ## 1.3.0 — 2026-10-06
 
 ### Added
