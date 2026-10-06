@@ -559,6 +559,18 @@ def wiggle_doc(mode):
 cases["srep-0051-wiggle-smooth"] = wiggle_doc(' mode="smooth"')
 cases["srep-0051-wiggle-smooth-corner"] = wiggle_doc("")
 
+# ---------------------------------------------------------------- SREP 52: captionTrack/@lineBreaks
+def caption_doc(line_breaks, text):
+    return doc12("", ).replace(
+        "</scene>",
+        f'<captions><captionTrack id="cap" language="en" preset="classic" lineBreaks="{line_breaks}">'
+        f'<cue start="0" end="1" text="{text}"/></captionTrack></captions>\n</scene>')
+
+
+CAP_TEXT = "alpha beta&#10;gamma&#10;delta epsilon zeta"
+cases["srep-0052-caption-lines-source"] = caption_doc("source", CAP_TEXT)
+cases["srep-0052-caption-lines-greedy"] = caption_doc("greedy", CAP_TEXT)
+
 os.makedirs(os.path.join(HERE, "cases"), exist_ok=True)
 for name, xml in cases.items():
     open(os.path.join(HERE, "cases", name + ".xml"), "w").write(xml)

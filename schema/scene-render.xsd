@@ -3519,6 +3519,14 @@
     <xs:attribute name="prompt" type="xs:string">
       <xs:annotation><xs:documentation>Text that primes the transcriber (names, spellings, vocabulary).</xs:documentation></xs:annotation>
     </xs:attribute>
+    <xs:attribute name="lineBreaks" default="greedy">
+      <xs:annotation><xs:documentation>greedy treats source newlines as spaces (legacy). source ends a line at each
+      cue newline; maxCharsPerLine, maxWordsPerLine and maxLines still apply. Blank source lines do not add empty caption
+      rows; one-word still pages each word.</xs:documentation></xs:annotation>
+      <xs:simpleType><xs:restriction base="xs:string">
+        <xs:enumeration value="greedy"/><xs:enumeration value="source"/>
+      </xs:restriction></xs:simpleType>
+    </xs:attribute>
     <xs:attribute name="mode" default="burn">
       <xs:simpleType><xs:restriction base="xs:string">
         <xs:enumeration value="burn"/><xs:enumeration value="sidecar"/><xs:enumeration value="both"/>
