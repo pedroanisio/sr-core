@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2">
+<project width="640" height="360" fps="30" duration="1" background="#000000FF"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<composition>
+<particleEmitter id="listed" x="100" y="60" preroll="2" rate="40" lifetime="10" speed="0" size="8" color="#FF0000FF" forceFields="push"/>
+<particleEmitter id="all" x="100" y="180" preroll="2" rate="40" lifetime="10" speed="0" size="8" color="#00FF00FF"/>
+<particleEmitter id="none" x="100" y="300" preroll="2" rate="40" lifetime="10" speed="0" size="8" color="#0000FFFF" useForceFields="false"/>
+</composition>
+<physics gravityY="0"><forceField id="push" type="directional" forceX="0.1" start="-2"/></physics>
+</scene>
