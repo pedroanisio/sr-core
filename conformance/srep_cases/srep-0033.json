@@ -1,9 +1,75 @@
 {
- "srep-0033-safe-area-force": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" safeArea=\"sa\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<safeAreas><safeArea id=\"sa\" preset=\"custom\" top=\"0.1\" right=\"0.1\" bottom=\"0.1\" left=\"0.1\" enforce=\"warn\"/></safeAreas>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<symbols><symbol id=\"sym-notch\" safeAreaForce=\"true\"><shape id=\"notch-shape\" shape=\"rect\" width=\"20\" height=\"20\" fill=\"#FFFF00FF\"/></symbol></symbols>\n<composition>\n<shape id=\"cta-inside\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"320\" y=\"180\" fill=\"#FF0000FF\" tags=\"cta\"/>\n<shape id=\"brand-notch\" shape=\"rect\" width=\"40\" height=\"20\" x=\"0\" y=\"0\" fill=\"#00FF00FF\" tags=\"logo\" safeAreaForce=\"true\"/>\n<instance id=\"notch-instance\" symbol=\"sym-notch\" x=\"600\" y=\"340\"/>\n<group id=\"forced-group\" safeAreaForce=\"true\"><shape id=\"bleed\" shape=\"rect\" width=\"20\" height=\"20\" x=\"620\" y=\"0\" fill=\"#0000FFFF\" tags=\"cta\"/></group>\n</composition>\n</scene>\n",
+ "srep-0033-safe-warn": {
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" safeArea=\"sa\"/>\n<safeAreas><safeArea id=\"sa\" preset=\"custom\" top=\"0.1\" right=\"0.1\" bottom=\"0.1\" left=\"0.1\" enforce=\"warn\"/></safeAreas>\n<composition>\n<shape id=\"cta\" shape=\"rect\" width=\"40\" height=\"20\" x=\"610\" y=\"170\" fill=\"#FF0000FF\"/>\n</composition>\n</scene>\n",
   "expected": {
    "rule": "SREP 33",
-   "pending": "report-channel finding (SA01/SA02) on validate, not a pixel result; the kit's run.py has no runner for report cases, and the finding is checked by the schema tests (tests/test_srep_0033.py) only as far as the attribute validates"
+   "findings": {
+    "codes": [
+     "SA01"
+    ],
+    "counts": {
+     "SA01": 1
+    }
+   }
+  }
+ },
+ "srep-0033-safe-hidden": {
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" safeArea=\"sa\"/>\n<safeAreas><safeArea id=\"sa\" preset=\"custom\" top=\"0.1\" right=\"0.1\" bottom=\"0.1\" left=\"0.1\" enforce=\"warn\"/></safeAreas>\n<composition>\n<shape id=\"cta\" shape=\"rect\" width=\"40\" height=\"20\" x=\"610\" y=\"170\" fill=\"#FF0000FF\" opacity=\"0\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 33",
+   "findings": {
+    "absent": [
+     "SA01"
+    ]
+   }
+  }
+ },
+ "srep-0033-safe-force": {
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" safeArea=\"sa\"/>\n<safeAreas><safeArea id=\"sa\" preset=\"custom\" top=\"0.1\" right=\"0.1\" bottom=\"0.1\" left=\"0.1\" enforce=\"warn\"/></safeAreas>\n<composition>\n<shape id=\"cta\" shape=\"rect\" width=\"40\" height=\"20\" x=\"610\" y=\"170\" fill=\"#FF0000FF\" safeAreaForce=\"true\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 33",
+   "findings": {
+    "absent": [
+     "SA01"
+    ],
+    "codes": [
+     "SA02"
+    ],
+    "counts": {
+     "SA02": 1
+    }
+   }
+  }
+ },
+ "srep-0033-safe-force-group": {
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" safeArea=\"sa\"/>\n<safeAreas><safeArea id=\"sa\" preset=\"custom\" top=\"0.1\" right=\"0.1\" bottom=\"0.1\" left=\"0.1\" enforce=\"warn\"/></safeAreas>\n<composition>\n<group id=\"gf\" safeAreaForce=\"true\"><shape id=\"cta\" shape=\"rect\" width=\"40\" height=\"20\" x=\"610\" y=\"170\" fill=\"#FF0000FF\"/></group>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 33",
+   "findings": {
+    "absent": [
+     "SA01"
+    ],
+    "codes": [
+     "SA02"
+    ],
+    "counts": {
+     "SA02": 1
+    }
+   }
+  }
+ },
+ "srep-0033-safe-force-symbol": {
+  "xml": "<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" safeArea=\"sa\"/>\n<safeAreas><safeArea id=\"sa\" preset=\"custom\" top=\"0.1\" right=\"0.1\" bottom=\"0.1\" left=\"0.1\" enforce=\"warn\"/></safeAreas>\n<symbols><symbol id=\"sy\" safeAreaForce=\"true\"><shape id=\"cta\" shape=\"rect\" width=\"40\" height=\"20\" x=\"610\" y=\"170\" fill=\"#FF0000FF\"/></symbol></symbols>\n<composition>\n<instance id=\"i\" symbol=\"sy\" x=\"0\" y=\"0\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 33",
+   "findings": {
+    "absent": [
+     "SA01"
+    ],
+    "codes": [
+     "SA02"
+    ]
+   }
   }
  }
 }

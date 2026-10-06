@@ -126,6 +126,42 @@ def render(renderer, case, output=None):
     return (png if os.path.exists(png) else None), p.returncode, dt, notes[:6]
 
 
+def findings(renderer, case, want):
+    """A case whose expected entry has "findings": the engine validates the document and reports these diagnostics.
+
+    {"codes": [...]} must all be present, {"absent": [...]} must not be, {"counts": {code: n}} gives exact numbers,
+    {"messages": [...]} are substrings some message holds, {"valid": bool} is the verdict. Only the Rust
+    engine is asked (`validate --format json`, which includes the evaluation warnings); another renderer is an error."""
+    label, _, env = RENDERERS[renderer]
+    if renderer != "rs":
+        return "error", 0.0, [f"{label} cannot report findings from this kit yet"], {}
+    d, s_ = prepare(case, renderer)
+    t0 = time.time()
+    exe = os.environ.get("RS_RENDER_BIN", "scene-render-rs")
+    try:
+        p = subprocess.run([exe, "validate", s_, "--format", "json"], cwd=d, capture_output=True, text=True,
+                           timeout=600, env={**os.environ, **env})
+        out = json.loads(p.stdout)["files"][0]
+    except (FileNotFoundError, subprocess.TimeoutExpired, ValueError, KeyError, IndexError) as e:
+        return "error", time.time() - t0, [f"validate failed: {type(e).__name__}: {e}"], {}
+    diags = out.get("diagnostics", [])
+    # the safe-area audit prints SA01 and SA02 lines in the text form of `validate`
+    text = ""
+    if any(c.startswith("SA") for c in list(want.get("codes", [])) + list(want.get("absent", []))):
+        text = subprocess.run([exe, "validate", s_], cwd=d, capture_output=True, text=True, timeout=600,
+                              env={**os.environ, **env}).stdout
+    got = sorted({x["code"] for x in diags} | set(re.findall(r"\b(SA0[12])\b", text)))
+    counts = {c: sum(1 for x in diags if x["code"] == c) + len(re.findall(rf"\b{c}\b", text)) for c in want.get("counts", {})}
+    checks = {"codes": [(c, c in got) for c in want.get("codes", [])],
+              "absent": [(c, c not in got) for c in want.get("absent", [])],
+              "counts": [(f"{c} x{n}", counts[c] == n) for c, n in want.get("counts", {}).items()],
+              "messages": [(m, any(m in x.get("message", "") for x in diags)) for m in want.get("messages", [])]}
+    if "valid" in want:
+        checks["valid"] = [(str(want["valid"]), out.get("valid") == want["valid"])]
+    ok = all(v for rows in checks.values() for _, v in rows)
+    return ("pass" if ok else "fail"), time.time() - t0, [], {"reported": got, "valid": out.get("valid"), "checks": checks}
+
+
 COLOUR_TOL = 3  # 8-bit code values
 
 
@@ -173,6 +209,11 @@ def main() -> int:
                 report["results"][r][c] = {"status": "pending", "reason": pending, "notes": []}
                 print(f"{r:3s} {c:22s} pending ({pending[:90]})", flush=True)
                 continue
+            if "findings" in spec["cases"][c]:
+                st, dt, notes, detail = findings(r, c, spec["cases"][c]["findings"])
+                report["results"][r][c] = {"status": st, "seconds": round(dt, 2), "notes": notes, **detail}
+                print(f"{r:3s} {c:22s} {st:5s} {dt:6.1f}s findings " + ("; ".join(notes)[:110] if st == "error" else ""), flush=True)
+                continue
             png, code, dt, notes = render(r, c, spec["cases"][c].get("output"))
             entry = {"exit": code, "seconds": round(dt, 2), "notes": notes}
             if png:
@@ -210,7 +251,10 @@ def write_md(report, spec, cases):
             elif e["status"] == "pass":
                 cells.append("✅")
             elif e["status"] == "error":
-                cells.append("⛔ " + (e["notes"][0][:60] if e["notes"] else f"exit {e['exit']}"))
+                cells.append("⛔ " + (e["notes"][0][:60] if e["notes"] else f"exit {e.get('exit')}"))
+            elif "checks" in e and "measured" not in e:
+                bad = [f"{k} {c}" for k, rows in e["checks"].items() for c, ok in rows if not ok]
+                cells.append("❌ findings: " + ", ".join(bad) + f" (reported {', '.join(e['reported']) or 'none'})")
             else:
                 bad = [x for x in e["checks"] if x["status"] != "pass"]
                 cells.append("❌ " + "; ".join(f"{x['colour']} " + ("present (must not appear)" if x["expected"] == "absent" else

@@ -1,0 +1,1 @@
+<scene version="1.2"><project width="64" height="64" fps="10" duration="1"/><assets><generator id="g" kind="fractal-noise" width="16" height="16"/></assets><composition><shape id="s" shape="rect" width="20" height="20" effects="dm"/></composition><effects><effect id="dm" type="displacement-map" source="g"/></effects></scene>

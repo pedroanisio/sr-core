@@ -1,0 +1,10 @@
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
+<composition>
+<shape id="src" shape="rect" width="40" height="40" x="200" y="20" fill="#FFFF00FF" opacity="0"/>
+<shape id="t" shape="rect" width="40" height="40" x="300" y="20" fill="#0000FFFF" effects="e"/>
+</composition>
+<effects>
+<effect id="e" type="displacement-map" source="src"/>
+</effects>
+</scene>

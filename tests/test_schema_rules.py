@@ -1,6 +1,7 @@
 """The canonical XSD and Schematron: documents they must reject, and valid documents they must keep accepting."""
 import glob
 import os
+import re
 
 import pytest
 
@@ -107,12 +108,29 @@ def pending_srep(case: str) -> str | None:
     return None
 
 
+SCH_RULE_IDS = set(re.findall(r'<sch:assert id="([^"]+)"', open(os.path.join(ROOT, "schema", "scene-render.sch")).read()))
+
+
+def findings_of(case):
+    """The "findings" entry of a case in expected.json, or None."""
+    import json
+    spec = json.load(open(os.path.join(ROOT, "conformance", "expected.json")))["cases"]
+    return spec.get(os.path.basename(case)[:-4], {}).get("findings")
+
+
 @pytest.mark.parametrize("case", sorted(glob.glob(os.path.join(ROOT, "conformance", "cases", "*.xml"))),
                          ids=os.path.basename)
 def test_conformance_cases_are_valid(case):
     reason = pending_srep(case)
     if reason:
         pytest.skip(f"{reason}: validated once the SREP is accepted")
+    want = findings_of(case)
+    if want is not None and want.get("valid") is False:
+        # a case that is invalid on purpose: the schema must reject it with the rules the case lists
+        got = verdict(open(case, "rb").read())
+        rules = {c for c in want.get("codes", []) if c in SCH_RULE_IDS}
+        assert got.startswith("sch:") and rules <= set(got[4:].split(",")), (got, rules)
+        return
     assert verdict(open(case, "rb").read()) == "ok"
 
 
