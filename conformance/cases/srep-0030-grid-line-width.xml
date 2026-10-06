@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<assets><generator id="grid-plain" kind="grid" width="200" height="200" scale="100" paint="#FF0000FF" paint2="#000000FF"/><generator id="grid-hair" kind="grid" width="200" height="200" scale="100" lineWidth="1" paint="#FF0000FF" paint2="#000000FF"/><generator id="grid-heavy" kind="grid" width="200" height="200" scale="100" lineWidth="3" paint="#FF0000FF" paint2="#000000FF"/><generator id="grid-none" kind="grid" width="200" height="200" scale="100" lineWidth="0" paint="#FF0000FF" paint2="#000000FF"/></assets>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<layer id="l-plain" asset="grid-plain" x="0" y="0"/>
+<layer id="l-hair" asset="grid-hair" x="220" y="0"/>
+<layer id="l-heavy" asset="grid-heavy" x="440" y="0"/>
+<layer id="l-none" asset="grid-none" x="0" y="200"/>
+</composition>
+</scene>
