@@ -36069,6 +36069,101 @@
         "h": 20
       }
     },
+    "srep-0045-link-follow-exponential-1p2": {
+      "rule": "SREP 45",
+      "output": {
+        "id": "still",
+        "time": 1.2
+      },
+      "red": {
+        "cx": 226.42,
+        "cy": 120,
+        "w": 40,
+        "h": 20
+      },
+      "green": {
+        "cx": 300,
+        "cy": 300,
+        "w": 40,
+        "h": 20
+      }
+    },
+    "srep-0045-link-follow-exponential-2p0": {
+      "rule": "SREP 45",
+      "output": {
+        "id": "still",
+        "time": 2.0
+      },
+      "red": {
+        "cx": 298.65,
+        "cy": 120,
+        "w": 40,
+        "h": 20
+      },
+      "green": {
+        "cx": 300,
+        "cy": 300,
+        "w": 40,
+        "h": 20
+      }
+    },
+    "srep-0045-link-follow-spring-rise": {
+      "rule": "SREP 45",
+      "output": {
+        "id": "still",
+        "time": 1.2
+      },
+      "blue": {
+        "cx": 269.89,
+        "cy": 210,
+        "w": 40,
+        "h": 20
+      },
+      "green": {
+        "cx": 300,
+        "cy": 300,
+        "w": 40,
+        "h": 20
+      }
+    },
+    "srep-0045-link-follow-spring-peak": {
+      "rule": "SREP 45",
+      "output": {
+        "id": "still",
+        "time": 1.3666666666666667
+      },
+      "blue": {
+        "cx": 332.58,
+        "cy": 210,
+        "w": 40,
+        "h": 20
+      },
+      "green": {
+        "cx": 300,
+        "cy": 300,
+        "w": 40,
+        "h": 20
+      }
+    },
+    "srep-0045-link-follow-spring-settled": {
+      "rule": "SREP 45",
+      "output": {
+        "id": "still",
+        "time": 3.0
+      },
+      "blue": {
+        "cx": 300.0,
+        "cy": 210,
+        "w": 40,
+        "h": 20
+      },
+      "green": {
+        "cx": 300,
+        "cy": 300,
+        "w": 40,
+        "h": 20
+      }
+    },
     "srep-0046-morph-by-name": {
       "rule": "SREP 46",
       "pending": "needs a model with named morph targets; the kit's only model (marker.glb) has none, so the SREP's 40 px displacements cannot be reproduced without inventing a model or numbers"
