@@ -36234,11 +36234,38 @@
     },
     "srep-0051-wiggle-smooth": {
       "rule": "SREP 51",
-      "pending": "the SREP states no pixel-level expectation: the wiggled points come from the engine's seeded noise, so no centroid or size can be computed analytically; its check compares vertices and turn angles of smooth against corner, which the kit's colour-centroid measure cannot express"
+      "red": {
+        "cx": 359.93,
+        "cy": 239.55
+      }
     },
     "srep-0051-wiggle-smooth-corner": {
       "rule": "SREP 51",
-      "pending": "companion of srep-0051-wiggle-smooth (same document without mode); see that entry"
+      "red": {
+        "cx": 360.0,
+        "cy": 234.21
+      }
+    },
+    "srep-0051-wiggle-smooth-mid-400": {
+      "rule": "SREP 51",
+      "red": {
+        "cx": 400.07,
+        "cy": 226.92
+      }
+    },
+    "srep-0051-wiggle-smooth-mid-280": {
+      "rule": "SREP 51",
+      "red": {
+        "cx": 280.05,
+        "cy": 181.43
+      }
+    },
+    "srep-0051-wiggle-smooth-vertex-340": {
+      "rule": "SREP 51",
+      "red": {
+        "cx": 340.03,
+        "cy": 216.44
+      }
     },
     "srep-0052-caption-lines-greedy": {
       "rule": "SREP 52",
