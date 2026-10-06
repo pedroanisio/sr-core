@@ -4152,8 +4152,7 @@
       0.0
      ]
     }
-   ],
-   "pending": "engine deviation (finding 1): SREP 29 says the amount is mixed in display-encoded values, so amount 0.5 on #B40000 gives (180,90,90); the engine mixes in linear light and gives (180,131,131). The entry holds the derived value; it becomes real when the engine follows the SREP."
+   ]
   }
  },
  "srep-0029-selective-color-hue-window": {
