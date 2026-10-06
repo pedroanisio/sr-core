@@ -53,6 +53,11 @@ its previous version.
 6. **`camera/@fov`.** Adds: "Horizontal field of view in degrees, across the frame width: the focal distance in pixels is
    (frame width / 2) / tan(fov / 2), whatever the frame's height, so a portrait frame sees a narrower vertical angle than a
    landscape one." This is the convention the compatibility kit already uses (CONVENTIONS, camera).
+7. **`transformAttributes`** (the attribute group that carries `anchorX` and `anchorY`). Adds the group documentation: "anchorX
+   and anchorY are in the node's local layout coordinates. On a fitted layer this is the fit box, not the source image's
+   pixel coordinates: the centre of a 1920 by 1080 box is anchorX="960", anchorY="540"." Found by the schema sync report
+   (2026-10-06): the engine's file carries this text and sr-core's file has none; the evidence behind it is not recorded in
+   the engine history I read.
 
 Not in this SREP: the documentation of `safeAreaForce`, `presetEase`, the effect types (`halftone`, `selective-color`)
 and `group/@collapse`. Those travel with the SREPs that define them (safe-area enforcement, preset ease, effect parameter
@@ -97,3 +102,4 @@ that behaviour cover it; `fov` is covered by the kit's cases b8 and b3 at `hfov`
 ## History
 
 - 2026-10-05: first draft, after the engine's edits landed.
+- 2026-10-06: item 7 (`transformAttributes`), found by the schema sync report as an engine annotation that no SREP text carried.
