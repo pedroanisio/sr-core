@@ -21,6 +21,16 @@ computed from those classes by `python3 tools/release.py next schema`:
 
 ### Fixed
 
+## 1.5.0 — 2026-10-06
+
+### Added
+
+- The capability manifest format as a file beside the schema, `capabilities-1.schema.json` (SREP 22), with the optional `when` conditions of SREP 63: an entry applies to a document that uses its construct and every construct listed (format 1, a MINOR addition; readers that ignore `when` over-warn and never under-warn). `scene/@version` accepts `1.5` (no version gate: nothing in documents changes).
+
+### Fixed
+
+- Rules R53 (an `xs:IDREFS` list names at least one id) and R54 (an `audiogram`'s `source` names an `audioTrack` of `audioMix`), pattern p77, so that Schematron validators make the checks XSD processors that skip the identity constraints miss (SREP 59). Both reject only documents whose meaning was undefined: an empty list the XSD already forbids, and an audiogram with no track to draw.
+
 ## 1.4.0 — 2026-10-06
 
 ### Added

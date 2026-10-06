@@ -22,6 +22,16 @@ version:
 
 ### Fixed
 
+## 1.5.0 — 2026-10-06
+
+### Added
+
+- Validates and packs schema 1.5.0 documents: the packaged schema, the generated reference under `docs/schema` and the files `pack` and the lints read are schema 1.5.0 (SREP 59: rules R53 and R54; document version 1.5), and the schema folder carries `capabilities-1.schema.json` (SREPs 22 and 63). See [schema/CHANGELOG.md](schema/CHANGELOG.md).
+
+### Tooling
+
+- The compatibility kit has the cases of SREPs 58 (`srep-0058-jump`, `-vertex`), 59 (`srep-0059-identity`, `-empty-idrefs`, `-audiogram-source`) and 63 (`srep-0063-when-raster`, `-pathtrace`), and `srep-0016-group-box` of the SREP 16 erratum; those the Rust reference does not pass yet are pending. `tests/test_srep_0059.py` and `tests/test_capabilities.py` check the schema side; a case invalid only by an XSD identity check that libxml2 skips is skipped by the generic case test.
+
 ## 1.4.0 — 2026-10-06
 
 ### Added
