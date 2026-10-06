@@ -2345,7 +2345,7 @@
     </xs:attribute>
     <xs:attribute name="isolate" type="xs:boolean" default="false"/>
     <xs:attribute name="collapse" type="xs:boolean" default="false">
-      <xs:annotation><xs:documentation>Collapse transformations: 2.5D children share the parent's camera space instead of being flattened.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Accepted, with no effect (an inert attribute, reported as such: SREP 18, rule I9). A group that is not isolated passes its 2.5D children through, so they share the frame's camera space; an isolated group (clip, mask, matte, effects or blend) draws its children in its own offscreen.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="width" type="positiveLengthType"/>
     <xs:attribute name="height" type="positiveLengthType"/>
