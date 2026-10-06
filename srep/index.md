@@ -59,4 +59,4 @@
 | [54](srep-0054.md) | Add a pole target and a soft reach to two-bone IK | Standards | Accepted | 1.2 |
 | [55](srep-0055.md) | Give nodes their own shutter angle | Standards | Accepted | 1.2 |
 | [56](srep-0056.md) | Add stroke-order text from single-line fonts | Standards | Accepted | 1.2 |
-| [57](srep-0057.md) | Accept the marker ids a beatGrid generates (beat.N, bar.N) | Standards | Draft | 1.1 |
+| [57](srep-0057.md) | Accept the marker ids a beatGrid generates (beat.N, bar.N) | Standards | Accepted | 1.4 |
