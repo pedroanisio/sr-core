@@ -24,7 +24,7 @@ Schema-Version:  1.1
 
 A `generator` of kind `grid` draws lines whose width is fixed at about 4 % of its pitch (`scale`), at least one pixel.
 The width cannot be chosen: a fine grid with one-pixel lines needs a small `scale`, which also shrinks the pitch.
-`generator` gains an optional `lineWidth`, the line width in asset pixels, independent of `scale`. A Schematron rule (R45)
+`generator` gains an optional `lineWidth`, the line width in asset pixels, independent of `scale`. A Schematron rule (R47)
 makes `lineWidth` valid only on a grid. Without it the lines are as before.
 
 ## Motivation
@@ -49,7 +49,7 @@ at `scale="100"` the lines are 4 px wide and at `scale="25"` they are 1 px wide 
 ```xml
 <sch:pattern id="p65">
   <sch:rule context="generator[@lineWidth]">
-    <sch:assert id="R45" test="@kind='grid'">@lineWidth is the line width of a grid generator.</sch:assert>
+    <sch:assert id="R47" test="@kind='grid'">@lineWidth is the line width of a grid generator.</sch:assert>
   </sch:rule>
 </sch:pattern>
 ```
@@ -64,7 +64,7 @@ For `kind="grid"`: the pitch is `@scale` in asset pixels, as before. With `@line
 pattern is centred on the asset, turned by `@angle` and scrolled by `@evolution` periods; a line starts at each multiple of
 the pitch). `@lineWidth` animates like `@scale`.
 
-For every other kind, `@lineWidth` is invalid (R45).
+For every other kind, `@lineWidth` is invalid (R47).
 
 ### Defaults and the neutral case
 
@@ -83,7 +83,7 @@ Absent `@lineWidth`, the lines are `max(1, 0.04 · @scale)` pixels, as in the ba
 
 ## Backwards compatibility
 
-Class: Added, MINOR in effect, accepted in every version (neutral default). R45 rejects a document only if it sets
+Class: Added, MINOR in effect, accepted in every version (neutral default). R47 rejects a document only if it sets
 `lineWidth` on a non-grid generator, where the attribute did not exist.
 
 ## Engine impact
@@ -97,7 +97,7 @@ Class: Added, MINOR in effect, accepted in every version (neutral default). R45 
 | Case | Checks | Tolerance |
 |---|---|---|
 | `srep-NNNN-grid-line-width` | a grid at `scale="100"`: lines 4 px with no `lineWidth`, 1 px with `lineWidth="1"`, 3 px with `lineWidth="3"`, none with `lineWidth="0"`; at `scale="25"` with `lineWidth="1"` the pitch is still 25 | 0 px |
-| `srep-NNNN-grid-line-width-rule` | `lineWidth` on a `fractal-noise` generator fails validation with R45; on a grid passes | exact |
+| `srep-NNNN-grid-line-width-rule` | `lineWidth` on a `fractal-noise` generator fails validation with R47; on a grid passes | exact |
 
 ## Open issues
 
