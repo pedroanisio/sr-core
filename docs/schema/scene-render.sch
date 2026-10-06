@@ -17,6 +17,12 @@
         version="1.0" documents cannot use 1.1 asset kinds.</sch:assert>
     </sch:rule>
   </sch:pattern>
+  <sch:pattern id="p1b">
+    <sch:rule context="/scene[@version='1.0' or @version='1.1']">
+      <sch:assert id="V5" test="not(assets/tiles|.//basemap|.//object3D/rigidBody|.//object3D/morph|.//object3D/joint|assets/strokeFont|.//shape[@shape='stroke-text']|.//object3D[@primitive='map' or @primitive='globe']|output/segment|output/audioTrack|output/captionTrack)">
+        documents before version="1.2" cannot use 1.2 elements or asset kinds; set version="1.2".</sch:assert>
+    </sch:rule>
+  </sch:pattern>
   <sch:pattern id="p2">
     <sch:rule context="vector">
       <sch:assert id="C1" test="not(@shape='path') or @path">vector shape="path" requires @path.</sch:assert>
@@ -72,7 +78,7 @@
   </sch:pattern>
   <sch:pattern id="p11">
     <sch:rule context="repeat">
-      <sch:assert id="C17" test="(@count and not(@over)) or (@over and not(@count))">repeat needs exactly one of @count or @over.</sch:assert>
+      <sch:assert id="C17" test="count(@count) + count(@over) + number(boolean(points)) = 1">repeat needs exactly one of @count, @over or a points child.</sch:assert>
       <sch:assert id="C18" test="not(@over) or /scene/parameters/data[@id=current()/@over] or /scene/parameters/param[@id=current()/@over][@type='list']">repeat/@over must name a data source or a list parameter.</sch:assert>
     </sch:rule>
   </sch:pattern>
@@ -83,7 +89,7 @@
   </sch:pattern>
   <sch:pattern id="p13">
     <sch:rule context="transition">
-      <sch:assert id="C20" test="@from or @to">transition needs @from, @to or both.</sch:assert>
+      <sch:assert id="C20" test="@from or @to or parent::segment">transition needs @from, @to or both.</sch:assert>
       <sch:assert id="C21" test="not(@type='shader') or @shader">transition type="shader" requires @shader.</sch:assert>
       <sch:assert id="C22" test="not(@type='luma') or @matte">transition type="luma" requires @matte.</sch:assert>
       <sch:assert id="C23" test="not(@from) or count(../*[@id=current()/@from])=1">transition/@from must be a sibling of the transition.</sch:assert>
@@ -112,7 +118,7 @@
     <sch:rule context="captionTrack">
       <sch:assert id="C31" test="count(cue[1]|@src|@transcribe)=1">captionTrack "<sch:value-of select="@id"/>" needs exactly one source: cue children, @src or @transcribe.</sch:assert>
       <sch:assert id="C32" test="not(@transcribe) or (@cache and @cacheSha256)">transcribed captions require @cache and @cacheSha256 (deterministic renders).</sch:assert>
-      <sch:assert id="C33" test="not(@transcribe) or /scene/audioMix/audioTrack[@id=current()/@transcribe]">captionTrack/@transcribe must name an audioTrack.</sch:assert>
+      <sch:assert id="C33" test="not(@transcribe) or parent::output or /scene/audioMix/audioTrack[@id=current()/@transcribe]">captionTrack/@transcribe must name an audioTrack.</sch:assert>
     </sch:rule>
   </sch:pattern>
   <sch:pattern id="p18">
@@ -163,6 +169,9 @@
   </sch:pattern>
   <sch:pattern id="p26">
     <sch:rule context="object3D">
+      <sch:assert id="C47" test="not(@primitive='map' or @primitive='globe') or @map">object3D primitive="map" or "globe" requires @map.</sch:assert>
+      <sch:assert id="R28" test="not(@map) or /scene/assets/map[@id=current()/@map]">object3D/@map must name a map asset.</sch:assert>
+      <sch:assert id="R29" test="not(@terrain) or /scene/assets/tiles[@id=current()/@terrain]">object3D/@terrain must name a tiles asset.</sch:assert>
       <sch:assert id="R4" test="not(@material) or /scene/materials/material[@id=current()/@material]">object3D/@material must name a material.</sch:assert>
       <sch:assert id="R5" test="not(@mesh) or /scene/assets/mesh[@id=current()/@mesh]">object3D/@mesh must name a mesh asset.</sch:assert>
     </sch:rule>
@@ -198,7 +207,7 @@
     <sch:rule context="output">
       <sch:assert id="R12" test="not(@layout) or /scene/layouts/layout[@id=current()/@layout]">output/@layout must name a layout.</sch:assert>
       <sch:assert id="R13" test="not(@variant) or /scene/parameters/variant[@id=current()/@variant]">output/@variant must name a variant.</sch:assert>
-      <sch:assert id="R14" test="not(@burnCaptions) or /scene/captions/captionTrack[@id=current()/@burnCaptions]">output/@burnCaptions must name a captionTrack.</sch:assert>
+      <sch:assert id="R14" test="not(@burnCaptions) or /scene/captions/captionTrack[@id=current()/@burnCaptions] or captionTrack[@id=current()/@burnCaptions]">output/@burnCaptions must name a captionTrack.</sch:assert>
     </sch:rule>
   </sch:pattern>
   <sch:pattern id="p33">
@@ -269,6 +278,12 @@
     <sch:rule context="route">
       <sch:assert id="R37" test="not(@geo) or /scene/assets/geo[@id=current()/@geo]">route/@geo must name a geo asset.</sch:assert>
       <sch:assert id="C45" test="@points or @geo">route needs @points or @geo.</sch:assert>
+    </sch:rule>
+    <sch:rule context="basemap">
+      <sch:assert id="R27" test="/scene/assets/tiles[@id=current()/@tiles]">basemap/@tiles must name a tiles asset.</sch:assert>
+    </sch:rule>
+    <sch:rule context="tiles">
+      <sch:assert id="C46" test="@src or (@url and @cache and @cacheSha256)">tiles need @src, or @url with @cache and @cacheSha256.</sch:assert>
     </sch:rule>
     <sch:rule context="map">
       <sch:assert id="R26" test="not(@fit) or count(str:tokenize(normalize-space(@fit),' ')) = count(/scene/assets/geo[contains(concat(' ',normalize-space(current()/@fit),' '), concat(' ',@id,' '))])">every id in map/@fit must name a geo asset.</sch:assert>
@@ -354,6 +369,138 @@
   <sch:pattern id="p60">
     <sch:rule context="geoLayer[@domain]">
       <sch:assert id="C53" test="not(str:tokenize(normalize-space(@domain),' ')[position() &gt; 1][number(.) &lt;= number(preceding-sibling::*[1])])">@domain values must increase.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p43">
+    <sch:rule context="object3D/rigidBody">
+      <sch:assert id="C48" test="not(@shape='trimesh') or @type='static' or @type='kinematic'">a trimesh rigidBody must be static or kinematic.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p61">
+    <sch:rule context="output">
+      <sch:let name="mixTracks" value="/scene/audioMix/audioTrack/@id"/>
+      <sch:let name="mixBuses" value="/scene/audioMix/bus/@id"/>
+      <sch:assert id="C54" test="not(segment) or ((not(@start) or number(@start) = 0) and not(@end))">an output with segments cannot also set start or end; put the range in a segment instead.</sch:assert>
+      <sch:assert id="R39" test="not(str:tokenize(normalize-space(@audioTracks),' ')[not(. = $mixTracks)]) and not(str:tokenize(normalize-space(@audioBuses),' ')[not(. = $mixBuses)])">every id in output/@audioTracks must name an audioMix track, and every id in output/@audioBuses a bus.</sch:assert>
+      <sch:assert id="R40" test="not(@overlay) or /scene/symbols/symbol[@id=current()/@overlay]">output/@overlay must name a symbol.</sch:assert>
+    </sch:rule>
+    <sch:rule context="segment">
+      <sch:assert id="C55" test="timeRemap or ((@from or @fromMarker) and (@to or @toMarker))">a segment needs from (or fromMarker) and to (or toMarker), or a timeRemap.</sch:assert>
+      <sch:assert id="C56" test="not(@from and @to) or (number(@from) &gt;= 0 and number(@to) &gt; number(@from) and number(@to) &lt;= number(/scene/project/@duration))">segment from and to must satisfy 0 ≤ from &lt; to ≤ project/@duration.</sch:assert>
+      <sch:assert id="C57" test="not(@from and @fromMarker) and not(@to and @toMarker)">a segment gives each end as a time or as a marker, not both.</sch:assert>
+      <sch:assert id="C58" test="count(timeRemap) &lt;= 1 and count(transition) &lt;= 1">a segment has at most one timeRemap and one transition.</sch:assert>
+      <sch:assert id="R38" test="(not(@fromMarker) or /scene/markers/marker[@id=current()/@fromMarker]) and (not(@toMarker) or /scene/markers/marker[@id=current()/@toMarker])">segment markers must name markers.</sch:assert>
+    </sch:rule>
+    <sch:rule context="segment/transition">
+      <sch:assert id="C59" test="not(@from or @to) and not(@type='morph' or @type='luma')">a segment transition joins two rendered pictures: no from, no to, not morph and not luma.</sch:assert>
+    </sch:rule>
+    <sch:rule context="output/captionTrack[@transcribe]">
+      <sch:assert id="R41" test="../audioTrack[@id=current()/@transcribe]">an output caption track transcribes one of that output's own audio tracks.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p66">
+    <sch:rule context="shape[@markerStart[.!='none'] or @markerEnd[.!='none']]">
+      <sch:assert id="C65" test="@shape='path' or @shape='line'">markers need an open outline: shape="path" or "line".</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p70">
+    <sch:rule context="/scene[@version='1.0' or @version='1.1']">
+      <sch:assert id="V11" test="not(.//connector)">connector needs version="1.2".</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p71">
+    <sch:rule context="connector">
+      <sch:assert id="C60" test="(@from or (@fromX and @fromY)) and (@to or (@toX and @toY))">a connector end needs a node (@from, @to) or a point (@fromX and @fromY, @toX and @toY).</sch:assert>
+      <sch:assert id="C61" test="not(@fromAnchor[.!='auto'] and (@fromX or @fromY)) and not(@toAnchor[.!='auto'] and (@toX or @toY))">an anchor keyword and an explicit anchor point exclude each other.</sch:assert>
+      <sch:assert id="C62" test="count(@fromX|@fromY) != 1 and count(@toX|@toY) != 1">@fromX and @fromY (and @toX and @toY) come together.</sch:assert>
+      <sch:assert id="C63" test="not(@route='curved' and @points)">route="curved" takes no @points.</sch:assert>
+      <sch:assert id="C64" test="not(animate[@property='x' or @property='y' or @property='rotation' or @property='scaleX' or @property='scaleY' or @property='anchorX' or @property='anchorY' or @property='skewX' or @property='skewY']) and not(expression[@property!='opacity'])">a connector has no transform of its own: its geometry comes from its ends.</sch:assert>
+      <sch:assert id="R48-from" test="not(@from) or (ancestor::symbol and ancestor::symbol[1]//*[@id=current()/@from][self::group or self::layer or self::shape or self::instance][not(ancestor::repeat)][not(ancestor-or-self::*[@threeD='true'])]) or (not(ancestor::symbol) and /scene/composition//*[@id=current()/@from][self::group or self::layer or self::shape or self::instance][not(ancestor::repeat)][not(ancestor-or-self::*[@threeD='true'])])">@from must name a group, layer, shape or instance in the same composition or symbol, outside any repeat and not 2.5D.</sch:assert>
+      <sch:assert id="R48-to" test="not(@to) or (ancestor::symbol and ancestor::symbol[1]//*[@id=current()/@to][self::group or self::layer or self::shape or self::instance][not(ancestor::repeat)][not(ancestor-or-self::*[@threeD='true'])]) or (not(ancestor::symbol) and /scene/composition//*[@id=current()/@to][self::group or self::layer or self::shape or self::instance][not(ancestor::repeat)][not(ancestor-or-self::*[@threeD='true'])])">@to must name a group, layer, shape or instance in the same composition or symbol, outside any repeat and not 2.5D.</sch:assert>
+      <sch:assert id="R49" test="not(//transformConstraint[@target=current()/@id] | //*[@parent=current()/@id] | //link[starts-with(@source, concat(current()/@id, '.'))])">nothing may be positioned by a connector (transform parent, constraint target, link source).</sch:assert>
+      <sch:assert id="R50" test="not(@label) or /scene/assets/text[@id=current()/@label]">@label must name a text asset.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p72">
+    <sch:rule context="/scene[@version='1.0' or @version='1.1']">
+      <sch:assert id="V9" test="not(assets/pdf)">pdf assets need version="1.2".</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p73">
+    <sch:rule context="assets/pdf">
+      <sch:assert id="C66" test="@sha256">a pdf asset pins its source with @sha256.</sch:assert>
+    </sch:rule>
+    <sch:rule context="shape[@region]">
+      <sch:assert id="C67" test="@regionLayer">@region needs @regionLayer, the layer that shows the page.</sch:assert>
+      <sch:assert id="C68" test="not(@parent) and not(transformConstraint)">a shape placed on a region has no other transform parent or constraint.</sch:assert>
+      <sch:assert id="R51" test="/scene/assets/pdf/region[@id=current()/@region]">@region must name a region of a pdf asset.</sch:assert>
+      <sch:assert id="R52" test="//layer[@id=current()/@regionLayer][@asset=/scene/assets/pdf[region/@id=current()/@region]/@id]">@regionLayer must name a layer whose asset holds the region.</sch:assert>
+    </sch:rule>
+    <sch:rule context="shape">
+      <sch:assert id="C69" test="@width and @height">shape needs @width and @height unless it takes its box from @region.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p74">
+    <sch:rule context="/scene[project/@fontPolicy='pinned']">
+      <sch:assert id="C70" test="not(//@fontFile)">fontPolicy="pinned": faces come from font assets, not @fontFile.</sch:assert>
+      <sch:assert id="C71" test="not(assets/font[not(@sha256)])">fontPolicy="pinned": every font asset carries @sha256.</sch:assert>
+      <sch:assert id="C72" test="not(//@font[not(. = /scene/assets/font/@family)])">fontPolicy="pinned": every @font names the family of a font asset.</sch:assert>
+      <sch:assert id="C73" test="not(//@fallback[str:tokenize(., ',')[not(normalize-space(.) = current()/assets/font/@family)]])">fontPolicy="pinned": every @fallback family names a font asset.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p75">
+    <sch:rule context="/scene[@version='1.0' or @version='1.1']">
+      <sch:assert id="V10" test="not(.//repeat/points)">points in a repeat needs version="1.2".</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p76">
+    <sch:rule context="repeat">
+      <sch:assert id="C74" test="count(points) &lt;= 1">a repeat takes at most one points child.</sch:assert>
+      <sch:assert id="C80" test="not(points and (@from[. != 0] or @step[. != 1]))">a repeat with a points child takes no @from other than 0 and no @step other than 1.</sch:assert>
+    </sch:rule>
+    <sch:rule context="repeat/points">
+      <sch:assert id="C75" test="not(@type='along-path') or (@path and @count)">points type="along-path" needs @path and @count.</sch:assert>
+      <sch:assert id="C76" test="not(@type='scatter') or (@count and ((@path and not(@width or @height)) or (not(@path) and @width and @height)))">points type="scatter" needs @count and either @path or both @width and @height.</sch:assert>
+      <sch:assert id="C77" test="not(@type='vertices') or @path">points type="vertices" needs @path.</sch:assert>
+      <sch:assert id="C78" test="not(@type='list') or @at">points type="list" needs @at.</sch:assert>
+      <sch:assert id="C79" test="not(animate[not(@property='spacingX' or @property='spacingY' or @property='width' or @property='height')])">points animates only spacingX, spacingY, width and height.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p62">
+    <sch:rule context="paints/pattern">
+      <sch:assert id="R42" test="/scene/assets/image[@id=current()/@asset]">pattern/@asset must name an image asset: a pattern tiles an image.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p63">
+    <sch:rule context="*[@emitterAsset]">
+      <sch:assert id="R43" test="/scene/assets/image[@id=current()/@emitterAsset]">@emitterAsset must name an image asset: particles are emitted from its opaque pixels.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p64">
+    <sch:rule context="effect[@source][@type='displacement-map' or @type='difference-key' or @type='shader']">
+      <sch:assert id="R44" test="/scene/composition//*[@id=current()/@source] or /scene/symbols//*[@id=current()/@source]">effect @source must name a composition node; an asset is placed on a (hidden) layer, and the layer named.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p65">
+    <sch:rule context="generator[@lineWidth]">
+      <sch:assert id="R47" test="@kind='grid'">@lineWidth is the line width of a grid generator.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p67">
+    <sch:rule context="object3D[@tracking]">
+      <sch:assert id="TXT2" test="@primitive='text'">@tracking applies to object3D primitive="text".</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p68">
+    <sch:rule context="object3D[@materialOverride]">
+      <sch:assert id="MOV1" test="count(str:tokenize(normalize-space(@materialOverride),' ')) &gt; 0 and count(str:tokenize(normalize-space(@materialOverride),' ')) = count(str:tokenize(normalize-space(@materialOverride),' ')[contains(.,':') and substring-before(.,':')!='' and substring-after(.,':')!=''])">@materialOverride is a space-separated list of name:id pairs.</sch:assert>
+      <sch:assert id="MOV2" test="not(str:tokenize(normalize-space(@materialOverride),' ')[not(substring-after(., ':') = current()/ancestor::scene/materials/material/@id)])">@materialOverride: each id after the colon must name a material.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="p69">
+    <sch:rule context="shape[@shape='stroke-text']">
+      <sch:assert id="PEN1" test="@text and @strokeFont">shape="stroke-text" needs @text and @strokeFont.</sch:assert>
+      <sch:assert id="PEN2" test="not(@strokeFont) or /scene/assets/strokeFont[@id=current()/@strokeFont]">shape/@strokeFont must name a strokeFont asset.</sch:assert>
     </sch:rule>
   </sch:pattern>
 </sch:schema>

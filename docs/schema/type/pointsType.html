@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>pointsType — scene-render 1.1.4 schema</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body data-root="../">
+<header><div class="bar"><a class="brand" href="../index.html">scene-render 1.1.4 schema</a>
+<nav><a href="../index.html">Overview</a> <a href="../elements.html">Elements</a> <a href="../types.html">Types</a> <a href="../simple-types.html">Simple types</a> <a href="../groups.html">Groups</a> <a href="../rules.html">Rules</a></nav>
+<div class="search"><input id="q" type="search" placeholder="Search elements, attributes, types  ( / )" autocomplete="off" aria-label="Search"><ul id="res" class="results"></ul></div></div></header>
+<main>
+<h1>pointsType</h1>
+<div class="sub">Type of <code>&lt;points&gt;</code> in <a href="../type/repeatType.html"><code>repeatType</code></a></div>
+<div class="doc"><p>Generates the points on which a repeat places its copies: one copy per point, copy i on point i, in the repeat&#x27;s own space (pixels, +y down). type grid (columns x rows, centred on the origin), along-path (count points at equal arc length along @path), scatter (count seeded points inside width x height centred on the origin, or inside @path), vertices (one point per vertex of @path) or list (the pairs of @at). Expressions inside the repeat read pointX, pointY, pointAngle, pointU and pointRandom.</p></div>
+<h2>Content</h2>
+<ul class="model"><li><span class="lbl">in this order</span><ol class="model"><li><a href="../type/animateType.html"><code>&lt;animate&gt;</code></a><span class="occ">any number</span></li></ol></li></ul>
+<h2>Attributes</h2>
+<div class="wrap"><table><thead><tr><th>Attribute</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr class="from"><td colspan="4">declared here</td></tr>
+<tr id="a-id"><td class="n"><code>id</code></td><td><code>xs:ID</code></td><td></td><td></td></tr>
+<tr id="a-type"><td class="n"><code>type</code> <span class="req">required</span></td><td>one of <span class="chip"><code>grid</code></span> <span class="chip"><code>along-path</code></span> <span class="chip"><code>scatter</code></span> <span class="chip"><code>vertices</code></span> <span class="chip"><code>list</code></span></td><td></td><td></td></tr>
+<tr id="a-columns"><td class="n"><code>columns</code></td><td><code>xs:positiveInteger</code></td><td><code>1</code></td><td></td></tr>
+<tr id="a-rows"><td class="n"><code>rows</code></td><td><code>xs:positiveInteger</code></td><td><code>1</code></td><td></td></tr>
+<tr id="a-spacingX"><td class="n"><code>spacingX</code></td><td><code>xs:double</code></td><td><code>100</code></td><td></td></tr>
+<tr id="a-spacingY"><td class="n"><code>spacingY</code></td><td><code>xs:double</code></td><td><code>100</code></td><td></td></tr>
+<tr id="a-count"><td class="n"><code>count</code></td><td><code>xs:nonNegativeInteger</code></td><td></td><td></td></tr>
+<tr id="a-path"><td class="n"><code>path</code></td><td><code>xs:string</code></td><td></td><td></td></tr>
+<tr id="a-fillRule"><td class="n"><code>fillRule</code></td><td><a href="../simple-types.html#fillRuleType"><code>fillRuleType</code></a></td><td><code>nonzero</code></td><td></td></tr>
+<tr id="a-orient"><td class="n"><code>orient</code></td><td><code>xs:boolean</code></td><td><code>false</code></td><td></td></tr>
+<tr id="a-width"><td class="n"><code>width</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td></td><td></td></tr>
+<tr id="a-height"><td class="n"><code>height</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td></td><td></td></tr>
+<tr id="a-at"><td class="n"><code>at</code></td><td><a href="../simple-types.html#pointListType"><code>pointListType</code></a></td><td></td><td></td></tr>
+<tr id="a-seed"><td class="n"><code>seed</code></td><td><code>xs:unsignedLong</code></td><td></td><td></td></tr></tbody></table></div>
+<h2>Schematron rules</h2>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>*[@parent][@id]</code> <a class="lbl" href="../rules.html#p30">p30</a></div><div class="assert"><span class="id">R10</span>a node cannot parent itself.<code class="test">test: @parent != @id</code></div></div>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>repeat/points</code> <a class="lbl" href="../rules.html#p76">p76</a></div><div class="assert"><span class="id">C75</span>points type=&quot;along-path&quot; needs @path and @count.<code class="test">test: not(@type=&#x27;along-path&#x27;) or (@path and @count)</code></div><div class="assert"><span class="id">C76</span>points type=&quot;scatter&quot; needs @count and either @path or both @width and @height.<code class="test">test: not(@type=&#x27;scatter&#x27;) or (@count and ((@path and not(@width or @height)) or (not(@path) and @width and @height)))</code></div><div class="assert"><span class="id">C77</span>points type=&quot;vertices&quot; needs @path.<code class="test">test: not(@type=&#x27;vertices&#x27;) or @path</code></div><div class="assert"><span class="id">C78</span>points type=&quot;list&quot; needs @at.<code class="test">test: not(@type=&#x27;list&#x27;) or @at</code></div><div class="assert"><span class="id">C79</span>points animates only spacingX, spacingY, width and height.<code class="test">test: not(animate[not(@property=&#x27;spacingX&#x27; or @property=&#x27;spacingY&#x27; or @property=&#x27;width&#x27; or @property=&#x27;height&#x27;)])</code></div></div>
+</main>
+<footer>Generated by sr-schemadoc from <a href="../scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>3e560f95c0224b48cfed1675e9b504f62402e74934c978789d8fb3cd3f9ff63e</code>) and <a href="../scene-render.sch">scene-render.sch</a> (SHA-256 <code>9cc4ab2c9d0a4f2694748ec7ccce520ff6ac64ffe9a7ac11ba7483eed9a55431</code>).</footer>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+</body>
+</html>
