@@ -173,7 +173,7 @@
       <sch:assert id="R28" test="not(@map) or /scene/assets/map[@id=current()/@map]">object3D/@map must name a map asset.</sch:assert>
       <sch:assert id="R29" test="not(@terrain) or /scene/assets/tiles[@id=current()/@terrain]">object3D/@terrain must name a tiles asset.</sch:assert>
       <sch:assert id="R4" test="not(@material) or /scene/materials/material[@id=current()/@material]">object3D/@material must name a material.</sch:assert>
-      <sch:assert id="R5" test="not(@mesh) or /scene/assets/mesh[@id=current()/@mesh]">object3D/@mesh must name a mesh asset.</sch:assert>
+      <sch:assert id="R5" test="not(@mesh) or /scene/assets/*[(self::mesh or self::meshSequence) and @id=current()/@mesh]">object3D/@mesh must name a mesh asset.</sch:assert>
     </sch:rule>
   </sch:pattern>
   <sch:pattern id="p27">
@@ -501,6 +501,155 @@
     <sch:rule context="shape[@shape='stroke-text']">
       <sch:assert id="PEN1" test="@text and @strokeFont">shape="stroke-text" needs @text and @strokeFont.</sch:assert>
       <sch:assert id="PEN2" test="not(@strokeFont) or /scene/assets/strokeFont[@id=current()/@strokeFont]">shape/@strokeFont must name a strokeFont asset.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+
+  <!-- ===================================================== volumetric and large-scale cinematic effects (SREP 40, version 1.3) -->
+  <sch:pattern id="cinematic-volume">
+    <sch:rule context="/scene[@version!='1.3']">
+      <sch:assert id="V8" test="not(assets/volume|.//medium|.//pyro|.//object3D[@primitive='volume' or @volume])">volumetric assets and media require version="1.3".</sch:assert>
+    </sch:rule>
+    <sch:rule context="object3D">
+      <sch:assert id="VOL1" test="not(@primitive='volume') or count(@volume|pyro)=1">volume primitive requires exactly one source: @volume or a pyro child.</sch:assert>
+      <sch:assert id="VOL2" test="not(@volume) or /scene/assets/volume[@id=current()/@volume]">object3D/@volume must name a volume asset.</sch:assert>
+      <sch:assert id="VOL3" test="count(medium)&lt;=1 and (@primitive='volume' or (not(medium) and not(@volume) and not(pyro)))">one medium child and @volume are permitted only on a volume primitive.</sch:assert>
+      <sch:assert id="VOL5" test="not(medium[@blackbody='true' or @blackbody='1']) or pyro or /scene/assets/volume[@id=current()/@volume]/@temperatureGrid">blackbody emission requires a declared temperatureGrid on the volume asset.</sch:assert>
+      <sch:assert id="VOL10" test="not(medium[@lightGridCell or @lightGridDomeDirections or @lightGridMemoryMiB]) or medium/@lighting='grid'">the lightGrid* attributes of a medium apply only with lighting="grid".</sch:assert>
+    </sch:rule>
+    <sch:rule context="pyro">
+      <sch:let name="nx" value="number(@width) div number(@voxelSize)"/>
+      <sch:let name="ny" value="number(@height) div number(@voxelSize)"/>
+      <sch:let name="nz" value="number(@depth) div number(@voxelSize)"/>
+      <sch:let name="colliders" value="/scene//object3D[contains(concat(' ',normalize-space(current()/@colliders),' '),concat(' ',@id,' '))]"/>
+      <sch:let name="count" value="count(str:tokenize(normalize-space(@colliders),' '))"/>
+      <sch:assert id="PYRO1" test="$nx&gt;=2 and $nx&lt;=1024 and $ny&gt;=2 and $ny&lt;=1024 and $nz&gt;=2 and $nz&lt;=1024 and $nx - round($nx)&lt;=0.00000001 and round($nx) - $nx&lt;=0.00000001 and $ny - round($ny)&lt;=0.00000001 and round($ny) - $ny&lt;=0.00000001 and $nz - round($nz)&lt;=0.00000001 and round($nz) - $nz&lt;=0.00000001">pyro dimensions must be integer multiples of voxelSize, with 2..1024 cells per axis.</sch:assert>
+      <sch:assert id="PYRO7" test="not(@colliders) or ($count &lt;= 4096 and $count = count($colliders[@primitive='box' or @primitive='sphere' or @primitive='globe' or @primitive='plane' or @primitive='cylinder' or @primitive='cone' or @primitive='capsule' or @primitive='torus' or @primitive='mesh' or @primitive='text' or @primitive='extrude' or @primitive='clay']))">pyro colliders must name at most 4096 distinct supported surface objects, including text, extrude and clay solids.</sch:assert>
+      <sch:assert id="PYRO8" test="not($colliders/*[@property='primitive' or @property='mesh' or @property='radius' or @property='width' or @property='height' or @property='depth' or @property='segments' or (@property='exaggeration' and ../@primitive='globe' and ../@terrain) or (../@primitive='text' and (@property='text' or @property='font' or @property='bevel' or @property='tracking')) or (../@primitive='extrude' and (@property='path' or @property='bevel')) or (../@primitive='clay' and (@property='resolution' or @property='fingerprints' or @property='seed' or @property='boil'))]) and not($colliders[@primitive='clay']/blob/*[@property]) and not($colliders[@primitive='clay' and number(translate(@boil,'+',''))&gt;0 and number(translate(@fingerprints,'+',''))&gt;0])">pyro collider geometry is static; animate its position, rotation or scale instead of shape parameters.</sch:assert>
+    </sch:rule>
+    <sch:rule context="pyroSource|pyroImpulse">
+      <sch:assert id="PYRO5" test="(@shape='mesh' and /scene/assets/mesh[@id=current()/@mesh]) or (not(@shape='mesh') and not(@mesh))">a mesh pyro source must name a mesh asset; @mesh is valid only for shape=mesh.</sch:assert>
+      <sch:assert id="PYRO6" test="not(*[@property='shape' or @property='mesh'])">pyro shape and mesh selection are static; animate the source transform instead.</sch:assert>
+      <sch:assert id="PYRO2" test="not(@end) or (@start and number(@end)&gt;number(@start)) or (not(@start) and number(@end)&gt;0)">pyro source end must be greater than start.</sch:assert>
+      <sch:assert id="PYRO3" test="not(@shape='box') or (@width and @height and @depth)">box pyro sources require width, height and depth.</sch:assert>
+      <sch:assert id="PYRO4" test="not(@scaleX=0 or @scaleY=0 or @scaleZ=0)">pyro source transforms must be invertible (nonzero scales).</sch:assert>
+      <sch:assert id="PYC1" test="not(@crater and (@start or @end or @time or @densityRate or @temperatureRate or @density or @temperature or @expansion or @shape or @mesh or @radius or @width or @height or @depth or @x or @y or @z or @rotation or @rotationX or @rotationY or @scaleX or @scaleY or @scaleZ))">a pyro source or impulse from a crater derives its shape, place, timing, density, temperature and expansion, so none of them may be given.</sch:assert>
+      <sch:assert id="PYC2" test="@crater or not(@heatFraction or @dustFraction or @specificHeat or @maxTemperature)">heatFraction, dustFraction, specificHeat and maxTemperature belong to a pyro source or impulse from a crater.</sch:assert>
+      <sch:assert id="PYC3" test="not(self::pyroImpulse) or @time or @crater">a pyro impulse requires time unless it comes from a crater.</sch:assert>
+      <sch:assert id="PYC4" test="not(@crater) or /scene//crater[@id=current()/@crater and @source]">a pyro source or impulse from a crater must name a crater that grows from an impact.</sch:assert>
+    </sch:rule>
+    <sch:rule context="assets/volume">
+      <sch:let name="first" value="number(substring(normalize-space(@first),1+number(starts-with(normalize-space(@first),'+'))))"/>
+      <sch:let name="last" value="number(substring(normalize-space(@last),1+number(starts-with(normalize-space(@last),'+'))))"/>
+      <sch:let name="fmt" value="substring-before(substring-after(@src,'%'),'d')"/>
+      <sch:let name="tail" value="substring-after(@src,'#')"/>
+      <sch:let name="nonhash" value="translate($tail,'#','')"/>
+      <sch:let name="pattern" value="(contains(@src,'%') and contains(substring-after(@src,'%'),'d') and translate($fmt,'0123456789','')='' and ($fmt='' or number($fmt)&lt;=64)) or (not(contains(@src,'%')) and contains(@src,'#') and (($nonhash='' and string-length($tail)&lt;64) or ($nonhash!='' and string-length(substring-before($tail,substring($nonhash,1,1)))&lt;64)))"/>
+      <sch:assert id="VOL6" test="@format='srvseq' or ((@first or @last) and @first and @last and $last&gt;=$first and $last - $first&lt;1000000 and $pattern) or (not(@first or @last) and not(@fps) and (not(@interpolation) or @interpolation='hold') and (not(@missingFrame) or @missingFrame='error'))">volume sequences require first/last, 1..1000000 ordered frames and a numbered src pattern; sequence options require a sequence.</sch:assert>
+      <sch:assert id="VOL9" test="(@interpolation='advect' and count(@velocityGridX|@velocityGridY|@velocityGridZ)=3) or ((not(@interpolation) or @interpolation!='advect') and not(@velocityGridX|@velocityGridY|@velocityGridZ))">advect requires all three velocity channels; velocity channels require advect interpolation.</sch:assert>
+      <sch:assert id="VOL8" test="not(@format='srvseq') or (@sha256 and not(@first or @last or @fps) and (not(@missingFrame) or @missingFrame='error'))">srvseq requires sha256 and owns its frame range and composition clock; first, last, fps and missing-frame substitution are not permitted.</sch:assert>
+      <sch:assert id="VOL7" test="not(@first or @last) or not(@sha256)">volume sha256 applies to a single cache file, not a numbered sequence.</sch:assert>
+      <sch:assert id="VOL4" test="not(@boundsMinX|@boundsMinY|@boundsMinZ|@boundsMaxX|@boundsMaxY|@boundsMaxZ) or (count(@boundsMinX|@boundsMinY|@boundsMinZ|@boundsMaxX|@boundsMaxY|@boundsMaxZ)=6 and number(@boundsMinX)&lt;number(@boundsMaxX) and number(@boundsMinY)&lt;number(@boundsMaxY) and number(@boundsMinZ)&lt;number(@boundsMaxZ))">volume bounds require all six finite coordinates with each minimum below its maximum.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="cinematic-mesh-sequence">
+    <sch:rule context="assets/meshSequence">
+      <sch:let name="first" value="number(substring(normalize-space(@first),1+number(starts-with(normalize-space(@first),'+'))))"/>
+      <sch:let name="last" value="number(substring(normalize-space(@last),1+number(starts-with(normalize-space(@last),'+'))))"/>
+      <sch:let name="fmt" value="substring-before(substring-after(@src,'%'),'d')"/>
+      <sch:let name="tail" value="substring-after(@src,'#')"/>
+      <sch:let name="nonhash" value="translate($tail,'#','')"/>
+      <sch:let name="pattern" value="(contains(@src,'%') and contains(substring-after(@src,'%'),'d') and translate($fmt,'0123456789','')='' and ($fmt='' or number($fmt)&lt;=64)) or (not(contains(@src,'%')) and contains(@src,'#') and (($nonhash='' and string-length($tail)&lt;64) or ($nonhash!='' and string-length(substring-before($tail,substring($nonhash,1,1)))&lt;64)))"/>
+      <sch:assert id="MSQ1" test="/scene/@version='1.3'">mesh sequences require version="1.3".</sch:assert>
+      <sch:assert id="MSQ2" test="$last&gt;=$first and $last - $first&lt;1000000 and $pattern">mesh sequences require 1..1000000 ordered frames and a numbered src pattern.</sch:assert>
+      <sch:assert id="MSQ3" test="not(@sha256)">mesh sequence sha256 cannot identify multiple numbered files.</sch:assert>
+    </sch:rule>
+    <sch:rule context="object3D|pyro|particles3D">
+      <sch:assert id="MSQ4" test="not(self::object3D[@primitive='mesh' and rigidBody and not(fracture and rigidBody[@type='static' or @type='kinematic']) and @mesh=/scene/assets/meshSequence/@id]) and not(/scene//object3D[@primitive='mesh' and @mesh=/scene/assets/meshSequence/@id and contains(concat(' ',normalize-space(current()/@colliders),' '),concat(' ',@id,' '))])">mesh sequences are changing render geometry; rigid collider consumers require an explicit static proxy.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="cinematic-particles">
+    <sch:rule context="particles3D">
+      <sch:let name="start" value="sum(@emissionStart)"/>
+      <sch:let name="life" value="sum(@lifetime) + 2 * not(@lifetime)"/>
+      <sch:let name="dy" value="sum(@directionY) - not(@directionY)"/>
+      <sch:let name="colliders" value="/scene//object3D[contains(concat(' ',normalize-space(current()/@colliders),' '),concat(' ',@id,' '))]"/>
+      <sch:assert id="P3D1" test="/scene/@version='1.3'">particles3D requires version="1.3".</sch:assert>
+      <sch:assert id="P3D2" test="((@emitterShape='mesh' and /scene/assets/mesh[@id=current()/@emitterMesh]) or (not(@emitterShape='mesh') and not(@emitterMesh))) and ((@shape='mesh' and /scene/assets/mesh[@id=current()/@mesh]) or (not(@shape='mesh') and not(@mesh))) and (not(@sprite) or (@shape='billboard' and /scene/assets/image[@id=current()/@sprite])) and (not(@material) or /scene/materials/material[@id=current()/@material])">particles3D mesh, emitterMesh, sprite and material must name the appropriate assets and match the selected shapes.</sch:assert>
+      <sch:assert id="P3D3" test="sum(@lifetimeVariance)&lt;$life and sum(@speedVariance)&lt;=sum(@speed) and (sum(@directionX)!=0 or $dy!=0 or sum(@directionZ)!=0) and (not(@emissionEnd) or number(@emissionEnd)&gt;=$start) and not(burst[not(@crater) and not(number(@time)&gt;=$start)])">particles3D requires bounded variances, a nonzero direction, an ordered emission window and bursts at or after emissionStart.</sch:assert>
+      <sch:assert id="P3D4" test="not(*[@property and not(@property='x' or @property='y' or @property='z' or @property='rotation' or @property='rotationX' or @property='rotationY' or @property='scaleX' or @property='scaleY' or @property='scaleZ' or @property='rate' or @property='opacity' or @property='size' or @property='sizeEnd' or @property='color' or @property='colorEnd' or @property='opacityEnd' or @property='trail')])">particles3D solver configuration is static; animate pose, rate or appearance instead.</sch:assert>
+      <sch:assert id="P3D5" test="not(@colliders) or (count(str:tokenize(normalize-space(@colliders),' '))&lt;=4096 and count(str:tokenize(normalize-space(@colliders),' '))=count($colliders[@primitive='box' or @primitive='sphere' or @primitive='globe' or @primitive='plane' or @primitive='cylinder' or @primitive='cone' or @primitive='capsule' or @primitive='torus' or @primitive='mesh' or @primitive='text' or @primitive='extrude' or @primitive='clay']))">particles3D colliders must name at most 4096 distinct supported rigid surface objects.</sch:assert>
+      <sch:assert id="P3D11" test="not(@gas) or /scene//object3D[@id=current()/@gas]/pyro">particles3D gas must name an object3D that holds a native pyro volume; a baked or asset volume has no velocity grid.</sch:assert>
+      <sch:assert id="P3D6" test="not($colliders/*[@property='primitive' or @property='mesh' or @property='radius' or @property='width' or @property='height' or @property='depth' or @property='segments' or (@property='exaggeration' and ../@primitive='globe' and ../@terrain) or (../@primitive='text' and (@property='text' or @property='font' or @property='bevel' or @property='tracking')) or (../@primitive='extrude' and (@property='path' or @property='bevel')) or (../@primitive='clay' and (@property='resolution' or @property='fingerprints' or @property='seed' or @property='boil'))]) and not($colliders[@primitive='clay']/blob/*[@property]) and not($colliders[@primitive='clay' and number(translate(@boil,'+',''))&gt;0 and number(translate(@fingerprints,'+',''))&gt;0])">particles3D collider geometry must be static; animate its rigid pose instead.</sch:assert>
+    </sch:rule>
+    <sch:rule context="particles3D/burst">
+      <sch:let name="angle" value="sum(@angle) + 45 * not(@angle)"/>
+      <sch:let name="spread" value="sum(@angleSpread) + 15 * not(@angleSpread)"/>
+      <sch:assert id="P3D7" test="(@crater and not(@time or @repeat or @interval)) or (not(@crater) and @time)">a burst requires time unless it comes from a crater, and a burst from a crater derives its instants, so time, repeat and interval may not be given.</sch:assert>
+      <sch:assert id="P3D8" test="not(@crater) or /scene//crater[@id=current()/@crater and @source]">a burst from a crater must name a crater that grows from an impact.</sch:assert>
+      <sch:assert id="P3D9" test="@crater or not(@angle or @angleSpread)">angle and angleSpread belong to a burst from a crater.</sch:assert>
+      <sch:assert id="P3D10" test="not(@crater) or ($angle - $spread &gt;= 0 and $angle + $spread &lt;= 90)">the launch angle of a burst from a crater and its spread must stay between 0 and 90 degrees.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="cinematic-ocean">
+    <sch:rule context="ocean">
+      <sch:let name="cell" value="sum(@cellSize)+not(@cellSize)"/>
+      <sch:let name="nx" value="(sum(@width)+64*not(@width)) div $cell"/>
+      <sch:let name="nz" value="(sum(@depth)+64*not(@depth)) div $cell"/>
+      <sch:let name="colliders" value="/scene//object3D[contains(concat(' ',normalize-space(current()/@colliders),' '),concat(' ',@id,' '))]"/>
+      <sch:let name="count" value="count(str:tokenize(normalize-space(@colliders),' '))"/>
+      <sch:assert id="OCN1" test="/scene/@version='1.3'">ocean requires version="1.3".</sch:assert>
+      <sch:assert id="OCN2" test="(not(@bathymetry) or /scene/assets/image[@id=current()/@bathymetry and not(@layer)] or /scene/assets/mesh[@id=current()/@bathymetry]) and (not(@material) or /scene/materials/material[@id=current()/@material]) and (@bathymetry or not(@bathymetryScale|@bathymetryOffset|@bathymetryEncoding)) and (not(@bathymetryEncoding) or @bathymetryEncoding='red' or /scene/assets/image[@id=current()/@bathymetry])">ocean bathymetry must name a primary-raster image (no layer selection) or mesh, material must name a material, and bathymetry options require the corresponding asset kind.</sch:assert>
+      <sch:assert id="OCN3" test="$nx&gt;=1 and $nz&gt;=1 and $nx - round($nx)&lt;=0.000000001*$nx and round($nx)-$nx&lt;=0.000000001*$nx and $nz - round($nz)&lt;=0.000000001*$nz and round($nz)-$nz&lt;=0.000000001*$nz and round($nx)*round($nz)&lt;=4000000 and (not(@dt) or number(@dt)&gt;=0.000001) and not((@waterLevel|@bathymetryScale|@bathymetryOffset|@initialVelocityX|@initialVelocityZ|wave/@direction|wave/@phase|waterImpulse/@x|waterImpulse/@z|waterImpulse/@amplitude|waterImpulse/@velocityX|waterImpulse/@velocityZ)[not(number(.)-number(.)=0)]) and count(wave)&lt;=64 and count(waterImpulse)&lt;=16384 and not(wave[(sum(@wavelength)+16*not(@wavelength))&lt;2*$cell]) and not(waterImpulse[@type='add-water' and @amplitude&lt;0])">ocean requires finite inputs, integral grid dimensions (at most 4000000 cells), dt &gt;= 0.000001, resolved wavelengths, at most 64 waves/16384 impulses and nonnegative added water.</sch:assert>
+      <sch:assert id="OCN4" test="not(*[@property and not(@property='x' or @property='y' or @property='z' or @property='rotation' or @property='rotationX' or @property='rotationY' or @property='scaleX' or @property='scaleY' or @property='scaleZ' or @property='opacity')])">ocean solver configuration is static; animate its pose or opacity instead.</sch:assert>
+      <sch:assert id="OCN5" test="count(whitewater)&lt;=1 and not(whitewater[@end and @end &lt; sum(@start)]) and not(whitewater/@foamMaterial[not(.=/scene/materials/material/@id)]|whitewater/@sprayMaterial[not(.=/scene/materials/material/@id)])">ocean accepts one whitewater source with end &gt;= start and valid foam/spray materials.</sch:assert>
+      <sch:assert id="OCN6" test="not(@colliders) or ($count &lt;= 4096 and $count = count($colliders[(crater and (@primitive='plane' or @primitive='mesh')) or (not(crater) and (@primitive='box' or @primitive='sphere' or @primitive='globe' or @primitive='cylinder' or @primitive='cone' or @primitive='capsule' or @primitive='torus' or @primitive='mesh' or @primitive='text' or @primitive='extrude' or @primitive='clay'))]))">ocean colliders must name at most 4096 distinct objects: a plane or mesh with a crater, or a closed body without one.</sch:assert>
+      <sch:assert id="OCN7" test="not($colliders/*[@property='primitive' or @property='mesh' or @property='radius' or @property='width' or @property='height' or @property='depth' or @property='segments' or (@property='exaggeration' and ../@primitive='globe' and ../@terrain) or (../@primitive='text' and (@property='text' or @property='font' or @property='bevel')) or (../@primitive='extrude' and (@property='path' or @property='bevel')) or (../@primitive='clay' and (@property='resolution' or @property='fingerprints' or @property='seed' or @property='boil'))]) and not($colliders[@primitive='clay']/blob/*[@property]) and not($colliders[@primitive='clay' and number(translate(@boil,'+',''))&gt;0 and number(translate(@fingerprints,'+',''))&gt;0])">ocean collider geometry is static; animate its position, rotation or scale instead of shape parameters.</sch:assert>
+      <sch:assert id="OCN13" test="not(@splash) or (count(str:tokenize(normalize-space(@splash),' '))&gt;0 and count(str:tokenize(normalize-space(@splash),' '))=count(/scene//particles3D[burst[@crater] and contains(concat(' ',normalize-space(current()/@splash),' '),concat(' ',@id,' '))]))">ocean splash must name distinct particles3D emitters that throw out the ejecta of a crater, whose particles have a mass.</sch:assert>
+      <sch:assert id="OCN8" test="not(@bodyCoupling) or @bodyCoupling='none' or @colliders">ocean bodyCoupling needs colliders that list the bodies.</sch:assert>
+      <sch:assert id="OCN9" test="not(@bodyDrag) or @colliders">ocean bodyDrag belongs to an ocean with colliders.</sch:assert>
+    </sch:rule>
+    <sch:rule context="ocean/waterImpulse">
+      <sch:assert id="OCN10" test="not(@source and (@time or @x or @z or @radius or @amplitude or @velocityX or @velocityZ or @type))">a water impulse from a body derives its instant, place, size and shape, so time, x, z, radius, amplitude, velocityX, velocityZ and type may not be given.</sch:assert>
+      <sch:assert id="OCN11" test="not(@source) or (contains(concat(' ',normalize-space(../@colliders),' '),concat(' ',@source,' ')) and /scene//object3D[@id=current()/@source and not(crater)]/rigidBody[not(@type) or @type='dynamic'])">the source of a water impulse must be a dynamic rigid body, without a crater, that the ocean lists in colliders.</sch:assert>
+      <sch:assert id="OCN12" test="not(@source) or count(../waterImpulse[@source=current()/@source])=1">a body makes one cavity: at most one water impulse names it.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="cinematic-crater">
+    <sch:rule context="object3D/crater">
+      <sch:let name="radius" value="number(concat(substring(normalize-space(@radius),1+number(starts-with(normalize-space(@radius),'+'))),substring('50',1,2*number(not(@radius)))))"/>
+      <sch:let name="depth" value="number(concat(substring(normalize-space(@depth),1+number(starts-with(normalize-space(@depth),'+'))),substring('10',1,2*number(not(@depth)))))"/>
+      <sch:let name="rimWidth" value="number(concat(substring(normalize-space(@rimWidth),1+number(starts-with(normalize-space(@rimWidth),'+'))),substring('10',1,2*number(not(@rimWidth)))))"/>
+      <sch:let name="rimHeight" value="number(concat(substring(normalize-space(@rimHeight),1+number(starts-with(normalize-space(@rimHeight),'+'))),substring('2',1,1*number(not(@rimHeight)))))"/>
+      <sch:let name="influenceDepth" value="number(concat(substring(normalize-space(@influenceDepth),1+number(starts-with(normalize-space(@influenceDepth),'+'))),substring('0',1,1*number(not(@influenceDepth)))))"/>
+      <sch:let name="normalX" value="number(concat(substring(normalize-space(@normalX),1+number(starts-with(normalize-space(@normalX),'+'))),substring('0',1,1*number(not(@normalX)))))"/>
+      <sch:let name="normalY" value="number(concat(substring(normalize-space(@normalY),1+number(starts-with(normalize-space(@normalY),'+'))),substring('0',1,1*number(not(@normalY)))))"/>
+      <sch:let name="normalZ" value="number(concat(substring(normalize-space(@normalZ),1+number(starts-with(normalize-space(@normalZ),'+'))),substring('-1',1,2*number(not(@normalZ)))))"/>
+      <sch:let name="start" value="number(concat(substring(normalize-space(@start),1+number(starts-with(normalize-space(@start),'+'))),substring('0',1,1*number(not(@start)))))"/>
+      <sch:let name="end" value="number(concat(substring(normalize-space(@end),1+number(starts-with(normalize-space(@end),'+'))),substring('1',1,1*number(not(@end)))))"/>
+      <sch:assert id="CRT1" test="/scene/@version='1.3'">crater deformation requires version="1.3".</sch:assert>
+      <sch:assert id="CRT2" test="parent::object3D[not(@primitive='volume')] and count(../crater)=1">one crater belongs to a surface object3D, not a volume.</sch:assert>
+      <sch:assert id="CRT3" test="$end &gt; $start">crater end must be greater than start in the object's local clock.</sch:assert>
+      <sch:assert id="CRT4" test="not(@*[name()!='curve' and name()!='id' and name()!='source' and name()!='capture' and name()!='targetMaterial' and not((number(substring(normalize-space(.),1+number(starts-with(normalize-space(.),'+')))) - number(substring(normalize-space(.),1+number(starts-with(normalize-space(.),'+')))))=0)]) and ($normalX!=0 or $normalY!=0 or $normalZ!=0) and $rimWidth&lt;=$radius and (not(@influenceDepth) or ($influenceDepth*0.5 &gt;= $depth and $influenceDepth*0.5 &gt;= $rimHeight))">crater values must be finite, its normal nonzero, rimWidth &lt;= radius and influenceDepth &gt;= twice max(depth,rimHeight).</sch:assert>
+      <sch:assert id="CRT6" test="not(@source and (@radius or @depth or @rimHeight or @rimWidth or @start or @end or @centerX or @centerY or @centerZ or @normalX or @normalY or @normalZ))">a crater that grows from a source derives its size, timing, centre and axis, so none of them may be given.</sch:assert>
+      <sch:assert id="CRT7" test="(@source and @targetMaterial) or not(@source or @targetMaterial or @targetDensity or @strength or @gravity)">crater source requires targetMaterial, and targetMaterial, targetDensity, strength and gravity belong to a crater with a source.</sch:assert>
+      <sch:assert id="CRT8" test="not(@source) or (/scene//object3D[@id=current()/@source and not(@id=current()/../@id)]/rigidBody[not(@type) or @type='dynamic'])">crater source must name another object3D whose rigidBody is dynamic.</sch:assert>
+      <sch:assert id="CRT9" test="not(@capture) or @source">crater capture belongs to a crater that grows from a source.</sch:assert>
+      <sch:assert id="CRT5" test="not(../rigidBody[not(@type='static' or @type='kinematic') or (@shape and not(@shape='auto' or @shape='trimesh'))])">crater rigid bodies require static/kinematic type with auto or trimesh collision geometry.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="cinematic-fracture">
+    <sch:rule context="fracture">
+      <sch:assert id="FRX1" test="/scene/@version='1.3'">fracture requires version="1.3".</sch:assert>
+      <sch:assert id="FRX2" test="parent::object3D[not(@primitive='volume' or @primitive='plane' or @primitive='map')] and count(../fracture)=1 and count(../rigidBody)=1">fracture requires one closed surface object3D owner and exactly one rigidBody.</sch:assert>
+      <sch:assert id="FRX3" test="@interiorMaterial=/scene/materials/material/@id">fracture interiorMaterial must reference a declared material.</sch:assert>
+      <sch:assert id="FRX4" test="not(@*[name()!='interiorMaterial' and not((number(substring(normalize-space(.),1+number(starts-with(normalize-space(.),'+')))) - number(substring(normalize-space(.),1+number(starts-with(normalize-space(.),'+')))))=0)])">fracture numeric values must be finite.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  <sch:pattern id="cinematic-globe">
+    <sch:rule context="object3D">
+      <sch:assert id="GEO1" test="/scene/@version='1.3' or not((@terrain and @primitive='globe') or @planetRadius or @terrainTileSize or @terrainZoom or @terrainMissing or @terrainMemoryMiB)">globe elevation and its physical-scale/budget options require version="1.3".</sch:assert>
+      <sch:assert id="GEO2" test="(not(@planetRadius) or @primitive='globe') and (not(@terrainTileSize|@terrainZoom|@terrainMissing|@terrainMemoryMiB) or (@primitive='globe' and @terrain)) and (not(@terrainTileSize) or @terrainTileSize=1 or @terrainTileSize=2 or @terrainTileSize=4 or @terrainTileSize=8 or @terrainTileSize=16 or @terrainTileSize=32 or @terrainTileSize=64 or @terrainTileSize=128 or @terrainTileSize=256 or @terrainTileSize=512 or @terrainTileSize=1024 or @terrainTileSize=2048 or @terrainTileSize=4096)">planetRadius belongs to globes; terrain sampling options require a globe with terrain and a power-of-two tile size.</sch:assert>
+      <sch:assert id="GEO3" test="not(@primitive='globe' and *[@property='terrain' or @property='terrainEncoding' or @property='planetRadius' or @property='terrainTileSize' or @property='terrainZoom' or @property='terrainMissing' or @property='terrainMemoryMiB']) and not(@primitive='globe' and @terrain and rigidBody and *[@property='radius' or @property='segments' or @property='exaggeration'])">globe terrain sampling and planetRadius are static; globe rigid collider relief cannot animate radius, segments or exaggeration.</sch:assert>
     </sch:rule>
   </sch:pattern>
 </sch:schema>
