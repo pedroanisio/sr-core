@@ -392,4 +392,9 @@
       <sch:assert id="R41" test="../audioTrack[@id=current()/@transcribe]">an output caption track transcribes one of that output's own audio tracks.</sch:assert>
     </sch:rule>
   </sch:pattern>
+  <sch:pattern id="p66">
+    <sch:rule context="shape[@markerStart[.!='none'] or @markerEnd[.!='none']]">
+      <sch:assert id="C65" test="@shape='path' or @shape='line'">markers need an open outline: shape="path" or "line".</sch:assert>
+    </sch:rule>
+  </sch:pattern>
 </sch:schema>
