@@ -303,28 +303,6 @@
    ]
   }
  },
- "srep-0029-halftone-coverage-mean": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- SREP 29 s1 step 3 and 4 halftone dot coverage and the mixing of ink and ground. Same source as srep-0029-halftone-default-angle, black ink, white ground. The 64x64 box 80..144 holds 8x8 whole cells; the SREP mixes ink and ground in display-encoded colour (all quantities are display-encoded unless stated), so the box mean is 255*(1 - mean coverage), coverage = 1 - smoothstep(r-0.05, r+0.05, d) with r = 0.4990 cell, evaluated at pixel centres: 52.38 (pixel corners: 66.21). Mixing in linear light would give 61.97. FINDING: the engine measures 61.9 (mean of all three channels) where the SREP formula (mixing in display-encoded colour) gives 52.4; 61.97 is what mixing ink and ground in LINEAR light gives; with linearLight=false the engine measures 144.4. This case fails on this build by design: the expectation is the SREP's, not the render's. Engine provenance: measured on rs-scene-render vendor/schema-1.3 build 2d9eb13d (binary sha256 prefix 4be4bebe002bc190), llvmpipe, frame 0 (render -f 0), VM style1; the expected values were derived from the SREP formulas first (script model) and then compared with the render. Proposals until re-verified on the vendoring commit. -->\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"256\" height=\"192\" x=\"64\" y=\"64\" fill=\"#808080FF\"/>\n<adjustment id=\"a\" effects=\"e\"/>\n</composition>\n<effects>\n<effect id=\"e\" type=\"halftone\" size=\"8\"/>\n</effects>\n</scene>\n",
-  "expected": {
-   "rule": "SREP 29",
-   "regions": [
-    {
-     "box": [
-      80,
-      80,
-      144,
-      144
-     ],
-     "rgb": [
-      52.4,
-      52.4,
-      52.4
-     ]
-    }
-   ],
-   "pending": "engine/derivation difference (finding 2, a row that is not in the SREP table): derived 52.4, measured 61.9 (the engine mixes ink and ground in linear light, 61.97); to be settled when the halftone coverage definition is checked against the SREP text."
-  }
- },
  "srep-0029-halftone-edge": {
   "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!-- SREP 29 s1 and rule 1.4: a halftone never paints outside the edge of its source. Four discs of diameter 120 (R=60): three grey (#808080) at (110,100), (320,100), (530,100) halftoned at angle 0 (default), 15 and 45, and one white at (320,270) at angle 0; ink red, ground blue, on black. The disc alpha is 0 beyond R (plus half a pixel of antialiasing), so the output must be transparent there and the frame black. 288 3x3 boxes sit on rings at R+3, R+6 and R+9 px at 24 angles around each disc, each box at least R+1 px from its centre: all black (0,0,0); a single painted pixel gives a mean above 28. The cells of the grey discs straddle the edge at every angle (cell 8 px), which is where the defect showed. Non-vacuity: the white disc has tone 1, dot radius sqrt(1-1)*0.7071 = 0, so its whole interior is the ground: the 64x64 box at its centre is blue (0,0,255) (at most 2 code values of error if the lattice anchor is fractional). Engine provenance: measured on rs-scene-render vendor/schema-1.3 build 2d9eb13d (binary sha256 prefix 4be4bebe002bc190), llvmpipe, frame 0 (render -f 0), VM style1; the expected values were derived from the SREP formulas first (script model) and then compared with the render. Proposals until re-verified on the vendoring commit. -->\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"d0\" shape=\"ellipse\" width=\"120\" height=\"120\" x=\"50\" y=\"40\" fill=\"#808080FF\" effects=\"e0\"/>\n<shape id=\"d1\" shape=\"ellipse\" width=\"120\" height=\"120\" x=\"260\" y=\"40\" fill=\"#808080FF\" effects=\"e15\"/>\n<shape id=\"d2\" shape=\"ellipse\" width=\"120\" height=\"120\" x=\"470\" y=\"40\" fill=\"#808080FF\" effects=\"e45\"/>\n<shape id=\"d3\" shape=\"ellipse\" width=\"120\" height=\"120\" x=\"260\" y=\"210\" fill=\"#FFFFFFFF\" effects=\"e0\"/>\n</composition>\n<effects>\n<effect id=\"e0\" type=\"halftone\" size=\"8\" color=\"#FF0000FF\" paint=\"#0000FFFF\"/>\n<effect id=\"e15\" type=\"halftone\" size=\"8\" angle=\"15\" color=\"#FF0000FF\" paint=\"#0000FFFF\"/>\n<effect id=\"e45\" type=\"halftone\" size=\"8\" angle=\"45\" color=\"#FF0000FF\" paint=\"#0000FFFF\"/>\n</effects>\n</scene>\n",
   "expected": {
