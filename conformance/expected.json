@@ -36494,13 +36494,261 @@
         "cy": 216.44
       }
     },
+    "srep-0052-caption-lines-blank": {
+      "rule": "SREP 52",
+      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+      "captions": {
+        "track": "cap",
+        "pages": [
+          "aa bb\ncc dd"
+        ],
+        "wordCount": 4,
+        "wordsAndTimesEqualTo": "srep-0052-caption-lines-blank-greedy"
+      }
+    },
+    "srep-0052-caption-lines-blank-greedy": {
+      "rule": "SREP 52",
+      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+      "captions": {
+        "track": "cap",
+        "pages": [
+          "aa bb cc dd"
+        ],
+        "wordCount": 4
+      }
+    },
+    "srep-0052-caption-lines-default": {
+      "rule": "SREP 52",
+      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+      "captions": {
+        "track": "cap",
+        "pages": [
+          "aa bb cc dd ee ff gg hh"
+        ]
+      }
+    },
     "srep-0052-caption-lines-greedy": {
       "rule": "SREP 52",
-      "pending": "companion of srep-0052-caption-lines-source (same cue, default layout); see that entry"
+      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+      "captions": {
+        "track": "cap",
+        "pages": [
+          "aa bb cc dd ee ff gg hh"
+        ]
+      }
+    },
+    "srep-0052-caption-lines-limits-chars": {
+      "rule": "SREP 52",
+      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+      "captions": {
+        "track": "cap",
+        "pages": [
+          "aa bb\ncc dd",
+          "ee ff\ngg hh"
+        ]
+      }
+    },
+    "srep-0052-caption-lines-limits-one-line": {
+      "rule": "SREP 52",
+      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+      "captions": {
+        "track": "cap",
+        "pages": [
+          "aa bb",
+          "cc dd ee ff",
+          "gg hh"
+        ]
+      }
+    },
+    "srep-0052-caption-lines-limits-words": {
+      "rule": "SREP 52",
+      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+      "captions": {
+        "track": "cap",
+        "pages": [
+          "aa bb\ncc dd",
+          "ee ff\ngg hh"
+        ]
+      }
+    },
+    "srep-0052-caption-lines-presets-boxed-word": {
+      "rule": "SREP 52",
+      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+      "captions": [
+        {
+          "track": "src",
+          "pages": [
+            "aa bb\ncc dd"
+          ],
+          "preset": "boxed-word",
+          "activeWord": [
+            [
+              0.5,
+              0
+            ],
+            [
+              1.5,
+              1
+            ],
+            [
+              2.5,
+              2
+            ],
+            [
+              3.5,
+              3
+            ]
+          ]
+        },
+        {
+          "track": "grd",
+          "pages": [
+            "aa bb cc dd"
+          ],
+          "preset": "boxed-word",
+          "activeWord": [
+            [
+              0.5,
+              0
+            ],
+            [
+              1.5,
+              1
+            ],
+            [
+              2.5,
+              2
+            ],
+            [
+              3.5,
+              3
+            ]
+          ]
+        }
+      ]
+    },
+    "srep-0052-caption-lines-presets-highlight": {
+      "rule": "SREP 52",
+      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+      "captions": [
+        {
+          "track": "src",
+          "pages": [
+            "aa bb\ncc dd"
+          ],
+          "preset": "highlight",
+          "activeWord": [
+            [
+              0.5,
+              0
+            ],
+            [
+              1.5,
+              1
+            ],
+            [
+              2.5,
+              2
+            ],
+            [
+              3.5,
+              3
+            ]
+          ]
+        },
+        {
+          "track": "grd",
+          "pages": [
+            "aa bb cc dd"
+          ],
+          "preset": "highlight",
+          "activeWord": [
+            [
+              0.5,
+              0
+            ],
+            [
+              1.5,
+              1
+            ],
+            [
+              2.5,
+              2
+            ],
+            [
+              3.5,
+              3
+            ]
+          ]
+        }
+      ]
+    },
+    "srep-0052-caption-lines-presets-karaoke": {
+      "rule": "SREP 52",
+      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+      "captions": [
+        {
+          "track": "src",
+          "pages": [
+            "aa bb\ncc dd"
+          ],
+          "preset": "karaoke",
+          "activeWord": [
+            [
+              0.5,
+              0
+            ],
+            [
+              1.5,
+              1
+            ],
+            [
+              2.5,
+              2
+            ],
+            [
+              3.5,
+              3
+            ]
+          ]
+        },
+        {
+          "track": "grd",
+          "pages": [
+            "aa bb cc dd"
+          ],
+          "preset": "karaoke",
+          "activeWord": [
+            [
+              0.5,
+              0
+            ],
+            [
+              1.5,
+              1
+            ],
+            [
+              2.5,
+              2
+            ],
+            [
+              3.5,
+              3
+            ]
+          ]
+        }
+      ]
     },
     "srep-0052-caption-lines-source": {
       "rule": "SREP 52",
-      "pending": "the SREP states exact page text, not a pixel position, and the kit measures colour centroids; the burned-in text layout depends on font metrics, which no definition in the SREP gives"
+      "pending": "needs the check form 'captions' (not in run.py): the engine's burned-in caption pages after paging, as text ('\\n' between the lines of a page); no sidecar or pixel shows them without font metrics",
+      "captions": {
+        "track": "cap",
+        "pages": [
+          "aa bb\ncc dd ee ff",
+          "gg hh"
+        ]
+      }
     },
     "srep-0053-wiggle-hold": {
       "rule": "SREP 53",

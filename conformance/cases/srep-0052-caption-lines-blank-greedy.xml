@@ -6,5 +6,5 @@
 <composition>
 
 </composition>
-<captions><captionTrack id="cap" language="en" preset="classic" lineBreaks="source" maxCharsPerLine="80" maxLines="2"><cue start="0" end="8" text="aa bb&#10;cc dd ee ff&#10;gg hh"/></captionTrack></captions>
+<captions><captionTrack id="cap" language="en" preset="classic" lineBreaks="greedy" maxCharsPerLine="80" maxLines="2"><cue start="0" end="8" text="&#10; aa bb&#13;&#10;&#10; cc dd&#10;"/></captionTrack></captions>
 </scene>
