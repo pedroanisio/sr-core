@@ -21,6 +21,12 @@ computed from those classes by `python3 tools/release.py next schema`:
 
 ### Fixed
 
+## 1.4.0 — 2026-10-06
+
+### Added
+
+- Generated marker ids (SREP 57): the five attributes that name a marker (`key/@marker`, the timing `startMarker` and `endMarker`, the audio track's `startMarker`, and `marker` of `poster` and `thumbnail`) are `xs:NCName` instead of `xs:IDREF`; rule R21 accepts a `beat.N` or `bar.N` id (N of one to nineteen digits) when the scene has a `beatGrid`, and does the existence check of explicit markers that the IDREF type did. The validator's warnings W03 (an explicit marker named like a generated id) and W04 (a `poster` or `thumbnail` marker that names no marker) are defined in the SREP, not in the schema. A document that was valid stays valid; a dangling `poster` or `thumbnail` marker, which the IDREF type rejected, is now valid with W04. `scene/@version` accepts `1.4` (no version gate: generated marker ids are accepted in every version).
+
 ## 1.3.0 — 2026-10-06
 
 ### Added
