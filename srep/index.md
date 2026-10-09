@@ -76,3 +76,4 @@
 | [71](srep-0071.md) | Add subsurface, a procedural sky and generator-fed maps | Standards | Draft | 1.6 |
 | [72](srep-0072.md) | Add pixel-exact options: precision, content rect, edges, supersampling | Standards | Draft | 1.6 |
 | [73](srep-0073.md) | Let flock agents keep their sprites upright | Standards | Draft | 1.6 |
+| [74](srep-0074.md) | Add viewport3D: a 3D scene with its own camera as a node | Standards | Draft | 1.6 |
