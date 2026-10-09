@@ -69,3 +69,4 @@
 | [64](srep-0064.md) | Define rounded corners by the circle, not the steps | Semantics | Accepted | 1.5 |
 | [65](srep-0065.md) | Amend SREPs 18 and 20: report text overflow by what it loses | Standards | Accepted | 1.5 |
 | [66](srep-0066.md) | Add `<program>`: deterministic WebAssembly generators | Standards | Draft | 1.6 |
+| [67](srep-0067.md) | Add compute accumulation, density tonemap, iterate, serial ops | Standards | Draft | 1.6 |

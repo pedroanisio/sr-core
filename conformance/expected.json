@@ -39843,6 +39843,566 @@
         ]
       },
       "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0067-compute-log-density": {
+      "rule": "SREP 67",
+      "regions": [
+        {
+          "box": [
+            100,
+            100,
+            101,
+            101
+          ],
+          "rgb": [
+            255.0,
+            255.0,
+            255.0
+          ]
+        },
+        {
+          "box": [
+            200,
+            100,
+            201,
+            101
+          ],
+          "rgb": [
+            170.3,
+            170.3,
+            170.3
+          ]
+        },
+        {
+          "box": [
+            300,
+            100,
+            301,
+            101
+          ],
+          "rgb": [
+            88.5,
+            88.5,
+            88.5
+          ]
+        }
+      ],
+      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0067-compute-order": {
+      "rule": "SREP 67",
+      "regions": [
+        {
+          "box": [
+            100,
+            100,
+            101,
+            101
+          ],
+          "rgb": [
+            255.0,
+            255.0,
+            255.0
+          ]
+        },
+        {
+          "box": [
+            200,
+            100,
+            201,
+            101
+          ],
+          "rgb": [
+            170.3,
+            170.3,
+            170.3
+          ]
+        },
+        {
+          "box": [
+            300,
+            100,
+            301,
+            101
+          ],
+          "rgb": [
+            88.5,
+            88.5,
+            88.5
+          ]
+        }
+      ],
+      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0067-compute-reference": {
+      "rule": "SREP 67",
+      "regions": [
+        {
+          "box": [
+            100,
+            100,
+            101,
+            101
+          ],
+          "rgb": [
+            231.8,
+            231.8,
+            231.8
+          ]
+        },
+        {
+          "box": [
+            200,
+            100,
+            201,
+            101
+          ],
+          "rgb": [
+            154.8,
+            154.8,
+            154.8
+          ]
+        },
+        {
+          "box": [
+            300,
+            100,
+            301,
+            101
+          ],
+          "rgb": [
+            80.4,
+            80.4,
+            80.4
+          ]
+        }
+      ],
+      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0067-compute-gain-gamma": {
+      "rule": "SREP 67",
+      "regions": [
+        {
+          "box": [
+            100,
+            100,
+            101,
+            101
+          ],
+          "rgb": [
+            255.0,
+            255.0,
+            255.0
+          ]
+        },
+        {
+          "box": [
+            200,
+            100,
+            201,
+            101
+          ],
+          "rgb": [
+            145.1,
+            145.1,
+            145.1
+          ]
+        },
+        {
+          "box": [
+            300,
+            100,
+            301,
+            101
+          ],
+          "rgb": [
+            58.9,
+            58.9,
+            58.9
+          ]
+        }
+      ],
+      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0067-compute-linear": {
+      "rule": "SREP 67",
+      "regions": [
+        {
+          "box": [
+            100,
+            100,
+            101,
+            101
+          ],
+          "rgb": [
+            255.0,
+            255.0,
+            255.0
+          ]
+        },
+        {
+          "box": [
+            200,
+            100,
+            201,
+            101
+          ],
+          "rgb": [
+            25.5,
+            25.5,
+            25.5
+          ]
+        },
+        {
+          "box": [
+            300,
+            100,
+            301,
+            101
+          ],
+          "rgb": [
+            2.6,
+            2.6,
+            2.6
+          ]
+        }
+      ],
+      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0067-compute-empty-pixel": {
+      "rule": "SREP 67",
+      "regions": [
+        {
+          "box": [
+            150,
+            150,
+            151,
+            151
+          ],
+          "rgb": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0067-compute-colour": {
+      "rule": "SREP 67",
+      "regions": [
+        {
+          "box": [
+            100,
+            100,
+            101,
+            101
+          ],
+          "rgb": [
+            255.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "box": [
+            200,
+            100,
+            201,
+            101
+          ],
+          "rgb": [
+            0.0,
+            0.0,
+            255.0
+          ]
+        }
+      ],
+      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0067-compute-version-gate": {
+      "rule": "SREP 67",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "V13"
+        ]
+      },
+      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0067-iterate-steps": {
+      "rule": "SREP 67",
+      "red": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 100
+      },
+      "absent": [
+        "blue"
+      ],
+      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0067-iterate-steps-short": {
+      "rule": "SREP 67",
+      "blue": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 100
+      },
+      "absent": [
+        "red"
+      ],
+      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0067-iterate-check-every": {
+      "rule": "SREP 67",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "ITR1"
+        ]
+      },
+      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0067-error-diffusion-floyd-steinberg": {
+      "rule": "SREP 67",
+      "regions": [
+        {
+          "box": [
+            100,
+            100,
+            164,
+            164
+          ],
+          "rgb": [
+            127.7,
+            127.7,
+            127.7
+          ]
+        },
+        {
+          "box": [
+            100,
+            100,
+            101,
+            101
+          ],
+          "rgb": [
+            255.0,
+            255.0,
+            255.0
+          ]
+        },
+        {
+          "box": [
+            101,
+            100,
+            102,
+            101
+          ],
+          "rgb": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "box": [
+            102,
+            100,
+            103,
+            101
+          ],
+          "rgb": [
+            255.0,
+            255.0,
+            255.0
+          ]
+        },
+        {
+          "box": [
+            103,
+            100,
+            104,
+            101
+          ],
+          "rgb": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0067-error-diffusion-atkinson": {
+      "rule": "SREP 67",
+      "regions": [
+        {
+          "box": [
+            100,
+            100,
+            164,
+            164
+          ],
+          "rgb": [
+            127.5,
+            127.5,
+            127.5
+          ]
+        },
+        {
+          "box": [
+            100,
+            100,
+            101,
+            101
+          ],
+          "rgb": [
+            255.0,
+            255.0,
+            255.0
+          ]
+        },
+        {
+          "box": [
+            101,
+            100,
+            102,
+            101
+          ],
+          "rgb": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "box": [
+            102,
+            100,
+            103,
+            101
+          ],
+          "rgb": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "box": [
+            103,
+            100,
+            104,
+            101
+          ],
+          "rgb": [
+            255.0,
+            255.0,
+            255.0
+          ]
+        }
+      ],
+      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0067-segmented-sort-ascending": {
+      "rule": "SREP 67",
+      "regions": [
+        {
+          "box": [
+            100,
+            100,
+            132,
+            108
+          ],
+          "rgb": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "box": [
+            132,
+            100,
+            164,
+            108
+          ],
+          "rgb": [
+            255.0,
+            255.0,
+            255.0
+          ]
+        }
+      ],
+      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0067-segmented-sort-descending": {
+      "rule": "SREP 67",
+      "regions": [
+        {
+          "box": [
+            100,
+            100,
+            132,
+            108
+          ],
+          "rgb": [
+            255.0,
+            255.0,
+            255.0
+          ]
+        },
+        {
+          "box": [
+            132,
+            100,
+            164,
+            108
+          ],
+          "rgb": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0067-segmented-sort-threshold": {
+      "rule": "SREP 67",
+      "regions": [
+        {
+          "box": [
+            100,
+            100,
+            132,
+            108
+          ],
+          "rgb": [
+            255.0,
+            255.0,
+            255.0
+          ]
+        },
+        {
+          "box": [
+            132,
+            100,
+            164,
+            108
+          ],
+          "rgb": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
     }
   }
 }
