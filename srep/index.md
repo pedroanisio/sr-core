@@ -72,3 +72,4 @@
 | [67](srep-0067.md) | Add compute accumulation, density tonemap, iterate, serial ops | Standards | Draft | 1.6 |
 | [68](srep-0068.md) | Step stateful effects per node, with prewarm and checkpoints | Standards | Draft | 1.6 |
 | [69](srep-0069.md) | Add stepping programs: `<program mode="step">` | Standards | Draft | 1.6 |
+| [70](srep-0070.md) | Add parametric paths, parametric surfaces and heightfields | Standards | Draft | 1.6 |

@@ -40753,6 +40753,145 @@
         ]
       },
       "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0070-path-ellipse": {
+      "rule": "SREP 70",
+      "red": {
+        "cx": 320,
+        "cy": 180,
+        "w": 200,
+        "h": 100
+      },
+      "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0070-path-lissajous": {
+      "rule": "SREP 70",
+      "red": {
+        "cx": 320,
+        "cy": 180,
+        "w": 204,
+        "h": 164
+      },
+      "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0070-path-break": {
+      "rule": "SREP 70",
+      "regions": [
+        {
+          "box": [
+            315,
+            176,
+            325,
+            184
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            196,
+            177,
+            204,
+            183
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        },
+        {
+          "box": [
+            436,
+            177,
+            444,
+            183
+          ],
+          "rgb": [
+            255,
+            0,
+            0
+          ]
+        }
+      ],
+      "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0070-path-needs-curve": {
+      "rule": "SREP 70",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "PAR1"
+        ]
+      },
+      "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0070-path-version-gate": {
+      "rule": "SREP 70",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "V14"
+        ]
+      },
+      "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0070-surface-plane": {
+      "rule": "SREP 70",
+      "red": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 50
+      },
+      "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0070-surface-plane-mirrored-culled": {
+      "rule": "SREP 70",
+      "absent": [
+        "red"
+      ],
+      "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0070-surface-plane-mirrored-double-sided": {
+      "rule": "SREP 70",
+      "red": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 50
+      },
+      "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0070-heightfield-flat": {
+      "rule": "SREP 70",
+      "red": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 50
+      },
+      "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0070-heightfield-underside-culled": {
+      "rule": "SREP 70",
+      "absent": [
+        "red"
+      ],
+      "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0070-surface-needs-child": {
+      "rule": "SREP 70",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "PAR2"
+        ]
+      },
+      "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
     }
   }
 }

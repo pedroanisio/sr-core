@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.6">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<composition>
+<shape id="e" shape="parametric" fill="#FF0000FF"/>
+</composition>
+</scene>
