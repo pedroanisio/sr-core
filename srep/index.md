@@ -73,3 +73,4 @@
 | [68](srep-0068.md) | Step stateful effects per node, with prewarm and checkpoints | Standards | Draft | 1.6 |
 | [69](srep-0069.md) | Add stepping programs: `<program mode="step">` | Standards | Draft | 1.6 |
 | [70](srep-0070.md) | Add parametric paths, parametric surfaces and heightfields | Standards | Draft | 1.6 |
+| [71](srep-0071.md) | Add subsurface, a procedural sky and generator-fed maps | Standards | Draft | 1.6 |

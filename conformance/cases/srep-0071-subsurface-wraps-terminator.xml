@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.6">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<materials><material id="m" baseColor="#B0B0B0FF" roughness="0.5" subsurface="1" subsurfaceColor="#E0F0D0FF" subsurfaceRadius="20"/></materials>
+<composition>
+<object3D id="o" primitive="sphere" radius="80" x="320" y="180" material="m"/>
+</composition>
+<lights><light id="sun" type="directional" yaw="60" intensity="3"/></lights>
+</scene>

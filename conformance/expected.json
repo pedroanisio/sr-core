@@ -40892,6 +40892,162 @@
         ]
       },
       "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0071-sky-gradient": {
+      "rule": "SREP 71",
+      "regions": [
+        {
+          "box": [
+            320,
+            0,
+            321,
+            1
+          ],
+          "rgb": [
+            163.6,
+            180.8,
+            207.0
+          ]
+        },
+        {
+          "box": [
+            320,
+            90,
+            321,
+            91
+          ],
+          "rgb": [
+            178.0,
+            194.6,
+            215.4
+          ]
+        },
+        {
+          "box": [
+            320,
+            270,
+            321,
+            271
+          ],
+          "rgb": [
+            178.9,
+            193.1,
+            207.5
+          ]
+        },
+        {
+          "box": [
+            320,
+            359,
+            321,
+            360
+          ],
+          "rgb": [
+            165.8,
+            178.1,
+            190.9
+          ]
+        },
+        {
+          "box": [
+            0,
+            0,
+            1,
+            1
+          ],
+          "rgb": [
+            167.4,
+            184.5,
+            209.2
+          ]
+        }
+      ],
+      "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0071-sky-horizon": {
+      "rule": "SREP 71",
+      "regions": [
+        {
+          "box": [
+            300,
+            179,
+            340,
+            181
+          ],
+          "rgb": [
+            192.0,
+            208.0,
+            224.0
+          ]
+        }
+      ],
+      "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0071-sky-sun": {
+      "rule": "SREP 71",
+      "red": {
+        "cx": 320,
+        "cy": 180,
+        "w": 48.4,
+        "h": 48.4
+      },
+      "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0071-sky-sun-azimuth": {
+      "rule": "SREP 71 (sun centre direction (sin10 cos5, -sin5, cos10 cos5) projected; the disc's own centroid is offset by under 1 px)",
+      "red": {
+        "cx": 417.7,
+        "cy": 130.8
+      },
+      "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0071-sky-not-dome": {
+      "rule": "SREP 71",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "SKY1"
+        ]
+      },
+      "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0071-sky-and-environment": {
+      "rule": "SREP 71",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "SKY2"
+        ]
+      },
+      "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0071-map-generator": {
+      "rule": "SREP 71",
+      "green": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 100
+      },
+      "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0071-map-not-an-image-source": {
+      "rule": "SREP 71",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "MTX1"
+        ]
+      },
+      "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0071-subsurface-zero-neutral": {
+      "rule": "SREP 71 (renders the same as the scene without the subsurface attributes)",
+      "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP; the check is equality with another render, which run.py cannot express yet"
+    },
+    "srep-0071-subsurface-wraps-terminator": {
+      "rule": "SREP 71 (the region just past the shadow terminator is brighter than with subsurface=0 (Semantics 1, item 3))",
+      "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP; the check is a comparison with another render, which run.py cannot express yet"
     }
   }
 }
