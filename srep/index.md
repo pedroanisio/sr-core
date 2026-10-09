@@ -70,3 +70,4 @@
 | [65](srep-0065.md) | Amend SREPs 18 and 20: report text overflow by what it loses | Standards | Accepted | 1.5 |
 | [66](srep-0066.md) | Add `<program>`: deterministic WebAssembly generators | Standards | Draft | 1.6 |
 | [67](srep-0067.md) | Add compute accumulation, density tonemap, iterate, serial ops | Standards | Draft | 1.6 |
+| [68](srep-0068.md) | Step stateful effects per node, with prewarm and checkpoints | Standards | Draft | 1.6 |

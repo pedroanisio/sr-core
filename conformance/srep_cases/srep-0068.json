@@ -1,0 +1,231 @@
+{
+ "srep-0068-one-step-per-frame": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"10\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"100\" height=\"100\" anchorX=\"50\" anchorY=\"50\" x=\"320\" y=\"180\" fill=\"#FFFFFFFF\" effects=\"fx\"/>\n</composition>\n<effects><effect id=\"fx\" type=\"shader\" src=\"../assets/srep68-counter.fs\"><param name=\"target\" value=\"1\"/></effect></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 68",
+   "red": {
+    "cx": 320,
+    "cy": 180,
+    "w": 100,
+    "h": 100
+   },
+   "absent": [
+    "blue"
+   ],
+   "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0068-one-step-per-frame-short": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"10\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"100\" height=\"100\" anchorX=\"50\" anchorY=\"50\" x=\"320\" y=\"180\" fill=\"#FFFFFFFF\" effects=\"fx\"/>\n</composition>\n<effects><effect id=\"fx\" type=\"shader\" src=\"../assets/srep68-counter.fs\"><param name=\"target\" value=\"2\"/></effect></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 68",
+   "blue": {
+    "cx": 320,
+    "cy": 180,
+    "w": 100,
+    "h": 100
+   },
+   "absent": [
+    "red"
+   ],
+   "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0068-steps-per-frame": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"10\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"100\" height=\"100\" anchorX=\"50\" anchorY=\"50\" x=\"320\" y=\"180\" fill=\"#FFFFFFFF\" effects=\"fx\"/>\n</composition>\n<effects><effect id=\"fx\" type=\"shader\" src=\"../assets/srep68-counter.fs\" stepsPerFrame=\"10\"><param name=\"target\" value=\"10\"/></effect></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 68",
+   "red": {
+    "cx": 320,
+    "cy": 180,
+    "w": 100,
+    "h": 100
+   },
+   "absent": [
+    "blue"
+   ],
+   "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0068-steps-per-frame-short": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"10\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"100\" height=\"100\" anchorX=\"50\" anchorY=\"50\" x=\"320\" y=\"180\" fill=\"#FFFFFFFF\" effects=\"fx\"/>\n</composition>\n<effects><effect id=\"fx\" type=\"shader\" src=\"../assets/srep68-counter.fs\" stepsPerFrame=\"10\"><param name=\"target\" value=\"11\"/></effect></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 68",
+   "blue": {
+    "cx": 320,
+    "cy": 180,
+    "w": 100,
+    "h": 100
+   },
+   "absent": [
+    "red"
+   ],
+   "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0068-prewarm": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"10\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"100\" height=\"100\" anchorX=\"50\" anchorY=\"50\" x=\"320\" y=\"180\" fill=\"#FFFFFFFF\" effects=\"fx\"/>\n</composition>\n<effects><effect id=\"fx\" type=\"shader\" src=\"../assets/srep68-counter.fs\" prewarm=\"9\"><param name=\"target\" value=\"10\"/></effect></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 68",
+   "red": {
+    "cx": 320,
+    "cy": 180,
+    "w": 100,
+    "h": 100
+   },
+   "absent": [
+    "blue"
+   ],
+   "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0068-prewarm-short": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"10\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"100\" height=\"100\" anchorX=\"50\" anchorY=\"50\" x=\"320\" y=\"180\" fill=\"#FFFFFFFF\" effects=\"fx\"/>\n</composition>\n<effects><effect id=\"fx\" type=\"shader\" src=\"../assets/srep68-counter.fs\" prewarm=\"9\"><param name=\"target\" value=\"11\"/></effect></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 68",
+   "blue": {
+    "cx": 320,
+    "cy": 180,
+    "w": 100,
+    "h": 100
+   },
+   "absent": [
+    "red"
+   ],
+   "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0068-seek": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"10\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"100\" height=\"100\" anchorX=\"50\" anchorY=\"50\" x=\"320\" y=\"180\" fill=\"#FFFFFFFF\" effects=\"fx\"/>\n</composition>\n<effects><effect id=\"fx\" type=\"shader\" src=\"../assets/srep68-counter.fs\"><param name=\"target\" value=\"5\"/></effect></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 68",
+   "output": {
+    "id": "still",
+    "time": 0.4
+   },
+   "red": {
+    "cx": 320,
+    "cy": 180,
+    "w": 100,
+    "h": 100
+   },
+   "absent": [
+    "blue"
+   ],
+   "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0068-seek-short": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"10\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"100\" height=\"100\" anchorX=\"50\" anchorY=\"50\" x=\"320\" y=\"180\" fill=\"#FFFFFFFF\" effects=\"fx\"/>\n</composition>\n<effects><effect id=\"fx\" type=\"shader\" src=\"../assets/srep68-counter.fs\"><param name=\"target\" value=\"6\"/></effect></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 68",
+   "output": {
+    "id": "still",
+    "time": 0.4
+   },
+   "blue": {
+    "cx": 320,
+    "cy": 180,
+    "w": 100,
+    "h": 100
+   },
+   "absent": [
+    "red"
+   ],
+   "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0068-seek-combined": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"10\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"100\" height=\"100\" anchorX=\"50\" anchorY=\"50\" x=\"320\" y=\"180\" fill=\"#FFFFFFFF\" effects=\"fx\"/>\n</composition>\n<effects><effect id=\"fx\" type=\"shader\" src=\"../assets/srep68-counter.fs\" stepsPerFrame=\"3\" prewarm=\"2\"><param name=\"target\" value=\"17\"/></effect></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 68",
+   "output": {
+    "id": "still",
+    "time": 0.4
+   },
+   "red": {
+    "cx": 320,
+    "cy": 180,
+    "w": 100,
+    "h": 100
+   },
+   "absent": [
+    "blue"
+   ],
+   "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0068-seek-combined-short": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"10\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"100\" height=\"100\" anchorX=\"50\" anchorY=\"50\" x=\"320\" y=\"180\" fill=\"#FFFFFFFF\" effects=\"fx\"/>\n</composition>\n<effects><effect id=\"fx\" type=\"shader\" src=\"../assets/srep68-counter.fs\" stepsPerFrame=\"3\" prewarm=\"2\"><param name=\"target\" value=\"18\"/></effect></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 68",
+   "output": {
+    "id": "still",
+    "time": 0.4
+   },
+   "blue": {
+    "cx": 320,
+    "cy": 180,
+    "w": 100,
+    "h": 100
+   },
+   "absent": [
+    "red"
+   ],
+   "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0068-late-start": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"10\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"100\" height=\"100\" anchorX=\"50\" anchorY=\"50\" x=\"320\" y=\"180\" fill=\"#FFFFFFFF\" effects=\"fx\" start=\"0.2\"/>\n</composition>\n<effects><effect id=\"fx\" type=\"shader\" src=\"../assets/srep68-counter.fs\"><param name=\"target\" value=\"3\"/></effect></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 68",
+   "output": {
+    "id": "still",
+    "time": 0.4
+   },
+   "red": {
+    "cx": 320,
+    "cy": 180,
+    "w": 100,
+    "h": 100
+   },
+   "absent": [
+    "blue"
+   ],
+   "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0068-late-start-short": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"10\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"100\" height=\"100\" anchorX=\"50\" anchorY=\"50\" x=\"320\" y=\"180\" fill=\"#FFFFFFFF\" effects=\"fx\" start=\"0.2\"/>\n</composition>\n<effects><effect id=\"fx\" type=\"shader\" src=\"../assets/srep68-counter.fs\"><param name=\"target\" value=\"4\"/></effect></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 68",
+   "output": {
+    "id": "still",
+    "time": 0.4
+   },
+   "blue": {
+    "cx": 320,
+    "cy": 180,
+    "w": 100,
+    "h": 100
+   },
+   "absent": [
+    "red"
+   ],
+   "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0068-not-a-stateful-effect": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"10\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"100\" height=\"100\" anchorX=\"50\" anchorY=\"50\" x=\"320\" y=\"180\" fill=\"#FFFFFFFF\" effects=\"fx\"/>\n</composition>\n<effects><effect id=\"fx\" type=\"blur\" src=\"../assets/srep68-counter.fs\" stepsPerFrame=\"2\"><param name=\"target\" value=\"1\"/></effect></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 68",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "STP1"
+    ]
+   },
+   "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+  }
+ }
+}

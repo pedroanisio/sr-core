@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.6">
+<project width="640" height="360" fps="10" duration="2" background="#000000FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<composition>
+<shape id="s" shape="rect" width="100" height="100" anchorX="50" anchorY="50" x="320" y="180" fill="#FFFFFFFF" effects="fx"/>
+</composition>
+<effects><effect id="fx" type="shader" src="../assets/srep68-counter.fs" stepsPerFrame="10"><param name="target" value="10"/></effect></effects>
+</scene>

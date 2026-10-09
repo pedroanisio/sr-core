@@ -40403,6 +40403,196 @@
         }
       ],
       "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0068-one-step-per-frame": {
+      "rule": "SREP 68",
+      "red": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 100
+      },
+      "absent": [
+        "blue"
+      ],
+      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0068-one-step-per-frame-short": {
+      "rule": "SREP 68",
+      "blue": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 100
+      },
+      "absent": [
+        "red"
+      ],
+      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0068-steps-per-frame": {
+      "rule": "SREP 68",
+      "red": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 100
+      },
+      "absent": [
+        "blue"
+      ],
+      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0068-steps-per-frame-short": {
+      "rule": "SREP 68",
+      "blue": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 100
+      },
+      "absent": [
+        "red"
+      ],
+      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0068-prewarm": {
+      "rule": "SREP 68",
+      "red": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 100
+      },
+      "absent": [
+        "blue"
+      ],
+      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0068-prewarm-short": {
+      "rule": "SREP 68",
+      "blue": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 100
+      },
+      "absent": [
+        "red"
+      ],
+      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0068-seek": {
+      "rule": "SREP 68",
+      "output": {
+        "id": "still",
+        "time": 0.4
+      },
+      "red": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 100
+      },
+      "absent": [
+        "blue"
+      ],
+      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0068-seek-short": {
+      "rule": "SREP 68",
+      "output": {
+        "id": "still",
+        "time": 0.4
+      },
+      "blue": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 100
+      },
+      "absent": [
+        "red"
+      ],
+      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0068-seek-combined": {
+      "rule": "SREP 68",
+      "output": {
+        "id": "still",
+        "time": 0.4
+      },
+      "red": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 100
+      },
+      "absent": [
+        "blue"
+      ],
+      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0068-seek-combined-short": {
+      "rule": "SREP 68",
+      "output": {
+        "id": "still",
+        "time": 0.4
+      },
+      "blue": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 100
+      },
+      "absent": [
+        "red"
+      ],
+      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0068-late-start": {
+      "rule": "SREP 68",
+      "output": {
+        "id": "still",
+        "time": 0.4
+      },
+      "red": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 100
+      },
+      "absent": [
+        "blue"
+      ],
+      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0068-late-start-short": {
+      "rule": "SREP 68",
+      "output": {
+        "id": "still",
+        "time": 0.4
+      },
+      "blue": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 100
+      },
+      "absent": [
+        "red"
+      ],
+      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0068-not-a-stateful-effect": {
+      "rule": "SREP 68",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "STP1"
+        ]
+      },
+      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
     }
   }
 }
