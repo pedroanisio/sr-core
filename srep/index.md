@@ -74,3 +74,4 @@
 | [69](srep-0069.md) | Add stepping programs: `<program mode="step">` | Standards | Draft | 1.6 |
 | [70](srep-0070.md) | Add parametric paths, parametric surfaces and heightfields | Standards | Draft | 1.6 |
 | [71](srep-0071.md) | Add subsurface, a procedural sky and generator-fed maps | Standards | Draft | 1.6 |
+| [72](srep-0072.md) | Add pixel-exact options: precision, content rect, edges, supersampling | Standards | Draft | 1.6 |
