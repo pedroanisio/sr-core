@@ -51,12 +51,21 @@ def i32_const(n): return b"\x41" + sleb(n)
 def i64_const(n): return b"\x42" + sleb(n if n < 1 << 63 else n - (1 << 64))
 def f64_const(x): return b"\x44" + struct.pack("<d", x)
 def call(i): return b"\x10" + uleb(i)
+def local_get(i): return b"\x20" + uleb(i)
+def local_set(i): return b"\x21" + uleb(i)
+def local_tee(i): return b"\x22" + uleb(i)
+def global_get(i): return b"\x23" + uleb(i)
+def global_set(i): return b"\x24" + uleb(i)
+def i32_store(offset): return b"\x36\x02" + uleb(offset)
+def br_if(depth): return b"\x0D" + uleb(depth)
 
 
 END, ELSE, UNREACHABLE, DROP = b"\x0B", b"\x05", b"\x00", b"\x1A"
 I64_AND, I64_EQZ, I64_EQ, I32_EQ = b"\x83", b"\x50", b"\x51", b"\x46"
 F64_GT, F64_DIV, I64_REINTERPRET_F64 = b"\x64", b"\xA3", b"\xBD"
 MEMORY_GROW = b"\x40\x00"
+I64_ADD, I64_XOR, I64_NE, I32_ADD, I32_LT_U = b"\x7C", b"\x85", b"\x52", b"\x6A", b"\x49"
+F64_GE, F64_CONVERT_I64_S = b"\x66", b"\xB9"
 
 
 def if_(result: int) -> bytes:
@@ -76,10 +85,11 @@ def packed(ptr: int, length: int) -> int:
     return (ptr << 32) | length
 
 
-def module(*, types, imports=(), funcs, memory=(1, None, False), exports, codes, data=()) -> bytes:
+def module(*, types, imports=(), funcs, memory=(1, None, False), globals_=(), exports, codes, data=()) -> bytes:
     """types: [(params, results)]; imports: [(module, field, typeidx)]; funcs: [typeidx] of the defined functions;
-    memory: (min pages, max pages or None, shared); exports: [(name, kind, index)] with kind 0 function, 2 memory;
-    codes: [body bytes without locals]; data: [(offset, bytes)]."""
+    memory: (min pages, max pages or None, shared); globals_: [(valtype, initial i64 or i32 value)], all mutable;
+    exports: [(name, kind, index)] with kind 0 function, 2 memory; codes: [body] or [(locals, body)] with locals
+    [(count, valtype)]; data: [(offset, bytes)]."""
     out = b"\x00asm" + b"\x01\x00\x00\x00"
     out += section(1, vec(b"\x60" + vec(bytes([p]) for p in ps) + vec(bytes([r]) for r in rs) for ps, rs in types))
     if imports:
@@ -93,8 +103,14 @@ def module(*, types, imports=(), funcs, memory=(1, None, False), exports, codes,
     else:
         lim = b"\x01" + uleb(lo) + uleb(hi)
     out += section(5, vec([lim]))
+    if globals_:
+        out += section(6, vec(bytes([t, 1]) + (i64_const(v) if t == I64 else i32_const(v)) + END for t, v in globals_))
     out += section(7, vec(name(n) + bytes([k]) + uleb(i) for n, k, i in exports))
-    out += section(10, vec(uleb(len(b"\x00" + c)) + b"\x00" + c for c in codes))
+    def entry(c):
+        locals_, body = c if isinstance(c, tuple) else ([], c)
+        b = vec(uleb(n) + bytes([t]) for n, t in locals_) + body
+        return uleb(len(b)) + b
+    out += section(10, vec(entry(c) for c in codes))
     if data:
         out += section(11, vec(b"\x00" + i32_const(off) + END + uleb(len(d)) + d for off, d in data))
     return out

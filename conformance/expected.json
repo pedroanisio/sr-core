@@ -40593,6 +40593,166 @@
         ]
       },
       "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0069-step-frame-0": {
+      "rule": "SREP 69",
+      "red": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 100
+      },
+      "absent": [
+        "blue"
+      ],
+      "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0069-step-frame-0-short": {
+      "rule": "SREP 69",
+      "blue": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 100
+      },
+      "absent": [
+        "red"
+      ],
+      "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0069-step-per-frame": {
+      "rule": "SREP 69",
+      "red": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 100
+      },
+      "absent": [
+        "blue"
+      ],
+      "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0069-step-per-frame-short": {
+      "rule": "SREP 69",
+      "blue": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 100
+      },
+      "absent": [
+        "red"
+      ],
+      "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0069-step-prewarm": {
+      "rule": "SREP 69",
+      "red": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 100
+      },
+      "absent": [
+        "blue"
+      ],
+      "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0069-step-seek": {
+      "rule": "SREP 69",
+      "output": {
+        "id": "still",
+        "time": 0.4
+      },
+      "red": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 100
+      },
+      "absent": [
+        "blue"
+      ],
+      "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0069-step-seek-short": {
+      "rule": "SREP 69",
+      "output": {
+        "id": "still",
+        "time": 0.4
+      },
+      "blue": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 100
+      },
+      "absent": [
+        "red"
+      ],
+      "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0069-step-rng-odd": {
+      "rule": "SREP 69",
+      "output": {
+        "id": "still",
+        "time": 0.4
+      },
+      "red": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 100
+      },
+      "absent": [
+        "blue"
+      ],
+      "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0069-step-rng-even": {
+      "rule": "SREP 69",
+      "output": {
+        "id": "still",
+        "time": 0.4
+      },
+      "blue": {
+        "cx": 320,
+        "cy": 180,
+        "w": 100,
+        "h": 100
+      },
+      "absent": [
+        "red"
+      ],
+      "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0069-step-missing-export": {
+      "rule": "SREP 69",
+      "failure": {
+        "code": "PRG11"
+      },
+      "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+    },
+    "srep-0069-step-needs-size": {
+      "rule": "SREP 69",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "PRG3"
+        ]
+      },
+      "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0069-build-mode-no-steps": {
+      "rule": "SREP 69",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "STP1"
+        ]
+      },
+      "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
     }
   }
 }
