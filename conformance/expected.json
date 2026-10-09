@@ -39626,6 +39626,223 @@
         ]
       },
       "pending": "the Rust reference does not implement SREP 63 yet (nor the SUP findings of SREP 22); the entry keeps the values derived from the SREP"
+    },
+    "srep-0066-program-nodes": {
+      "rule": "SREP 66",
+      "red": {
+        "cx": 200,
+        "cy": 120,
+        "w": 40,
+        "h": 20
+      },
+      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0066-program-group-transform": {
+      "rule": "SREP 66",
+      "red": {
+        "cx": 300,
+        "cy": 160,
+        "w": 40,
+        "h": 20
+      },
+      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0066-program-seed-even": {
+      "rule": "SREP 66",
+      "red": {
+        "cx": 480,
+        "cy": 180,
+        "w": 40,
+        "h": 20
+      },
+      "absent": [
+        "blue"
+      ],
+      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0066-program-seed-odd": {
+      "rule": "SREP 66",
+      "blue": {
+        "cx": 160,
+        "cy": 180,
+        "w": 40,
+        "h": 20
+      },
+      "absent": [
+        "red"
+      ],
+      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0066-program-param": {
+      "rule": "SREP 66",
+      "red": {
+        "cx": 480,
+        "cy": 180,
+        "w": 40,
+        "h": 20
+      },
+      "absent": [
+        "blue"
+      ],
+      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0066-program-param-default": {
+      "rule": "SREP 66",
+      "blue": {
+        "cx": 160,
+        "cy": 180,
+        "w": 40,
+        "h": 20
+      },
+      "absent": [
+        "red"
+      ],
+      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0066-program-nan-canonical": {
+      "rule": "SREP 66",
+      "red": {
+        "cx": 480,
+        "cy": 180,
+        "w": 40,
+        "h": 20
+      },
+      "absent": [
+        "blue"
+      ],
+      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0066-program-memory-limit": {
+      "rule": "SREP 66",
+      "red": {
+        "cx": 480,
+        "cy": 180,
+        "w": 40,
+        "h": 20
+      },
+      "absent": [
+        "blue"
+      ],
+      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0066-program-memory-limit-raised": {
+      "rule": "SREP 66",
+      "blue": {
+        "cx": 160,
+        "cy": 180,
+        "w": 40,
+        "h": 20
+      },
+      "absent": [
+        "red"
+      ],
+      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0066-program-data-rows": {
+      "rule": "SREP 66",
+      "red": {
+        "cx": 320,
+        "cy": 180,
+        "w": 360,
+        "h": 20
+      },
+      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0066-program-fuel": {
+      "rule": "SREP 66",
+      "failure": {
+        "code": "PRG12"
+      },
+      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+    },
+    "srep-0066-program-import-forbidden": {
+      "rule": "SREP 66",
+      "failure": {
+        "code": "PRG11"
+      },
+      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+    },
+    "srep-0066-program-threads-forbidden": {
+      "rule": "SREP 66",
+      "failure": {
+        "code": "PRG11"
+      },
+      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+    },
+    "srep-0066-program-relaxed-simd-forbidden": {
+      "rule": "SREP 66",
+      "failure": {
+        "code": "PRG11"
+      },
+      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+    },
+    "srep-0066-program-output-invalid": {
+      "rule": "SREP 66",
+      "failure": {
+        "code": "PRG14"
+      },
+      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+    },
+    "srep-0066-program-id-collision": {
+      "rule": "SREP 66",
+      "failure": {
+        "code": "PRG14"
+      },
+      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+    },
+    "srep-0066-program-sha256-mismatch": {
+      "rule": "SREP 66",
+      "failure": {
+        "code": "PRG10"
+      },
+      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+    },
+    "srep-0066-program-output-sha256": {
+      "rule": "SREP 66",
+      "red": {
+        "cx": 200,
+        "cy": 120,
+        "w": 40,
+        "h": 20
+      },
+      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0066-program-output-sha256-mismatch": {
+      "rule": "SREP 66",
+      "failure": {
+        "code": "PRG15"
+      },
+      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+    },
+    "srep-0066-program-version-gate": {
+      "rule": "SREP 66",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "V12"
+        ]
+      },
+      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0066-program-param-unique": {
+      "rule": "SREP 66",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "PRG1"
+        ]
+      },
+      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+    },
+    "srep-0066-program-over-names-data": {
+      "rule": "SREP 66",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "PRG2"
+        ]
+      },
+      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
     }
   }
 }

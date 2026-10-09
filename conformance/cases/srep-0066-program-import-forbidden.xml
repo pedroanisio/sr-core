@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.6">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<composition>
+<program id="p" src="../assets/srep66-wasi.wasm" sha256="4ea7d3820190e9b9812bd604a8a5e95acc00dd8fb8003a9c8faf912a50431dc8"></program>
+</composition>
+</scene>

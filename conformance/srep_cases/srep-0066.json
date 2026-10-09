@@ -1,0 +1,285 @@
+{
+ "srep-0066-program-nodes": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"p\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\"></program>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 66",
+   "red": {
+    "cx": 200,
+    "cy": 120,
+    "w": 40,
+    "h": 20
+   },
+   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0066-program-group-transform": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"p\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\" x=\"100\" y=\"40\"></program>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 66",
+   "red": {
+    "cx": 300,
+    "cy": 160,
+    "w": 40,
+    "h": 20
+   },
+   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0066-program-seed-even": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"p\" src=\"../assets/srep66-seed.wasm\" sha256=\"0e193170a743149588c169946340d92023713689fbad9a39f70241c414e0da67\" seed=\"4\"></program>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 66",
+   "red": {
+    "cx": 480,
+    "cy": 180,
+    "w": 40,
+    "h": 20
+   },
+   "absent": [
+    "blue"
+   ],
+   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0066-program-seed-odd": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"p\" src=\"../assets/srep66-seed.wasm\" sha256=\"0e193170a743149588c169946340d92023713689fbad9a39f70241c414e0da67\" seed=\"1\"></program>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 66",
+   "blue": {
+    "cx": 160,
+    "cy": 180,
+    "w": 40,
+    "h": 20
+   },
+   "absent": [
+    "red"
+   ],
+   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0066-program-param": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"p\" src=\"../assets/srep66-param.wasm\" sha256=\"86886519af364d8f21cad86046b9dd6902040e48d4f3a7d5d29e2fb5ef79930d\"><param name=\"side\" value=\"1\"/></program>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 66",
+   "red": {
+    "cx": 480,
+    "cy": 180,
+    "w": 40,
+    "h": 20
+   },
+   "absent": [
+    "blue"
+   ],
+   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0066-program-param-default": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"p\" src=\"../assets/srep66-param.wasm\" sha256=\"86886519af364d8f21cad86046b9dd6902040e48d4f3a7d5d29e2fb5ef79930d\"></program>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 66",
+   "blue": {
+    "cx": 160,
+    "cy": 180,
+    "w": 40,
+    "h": 20
+   },
+   "absent": [
+    "red"
+   ],
+   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0066-program-nan-canonical": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"p\" src=\"../assets/srep66-nan.wasm\" sha256=\"3c19b70db778177e376a5e9b12e941ca8a03db7b52c357d53c005c2dbecaad85\"><param name=\"z\" value=\"0\"/></program>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 66",
+   "red": {
+    "cx": 480,
+    "cy": 180,
+    "w": 40,
+    "h": 20
+   },
+   "absent": [
+    "blue"
+   ],
+   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0066-program-memory-limit": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"p\" src=\"../assets/srep66-grow.wasm\" sha256=\"92456737d6333b89df2f27707772e5bc1bd6365bc4177dbd892efc78e154fc8f\"></program>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 66",
+   "red": {
+    "cx": 480,
+    "cy": 180,
+    "w": 40,
+    "h": 20
+   },
+   "absent": [
+    "blue"
+   ],
+   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0066-program-memory-limit-raised": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"p\" src=\"../assets/srep66-grow.wasm\" sha256=\"92456737d6333b89df2f27707772e5bc1bd6365bc4177dbd892efc78e154fc8f\" memoryLimit=\"128\"></program>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 66",
+   "blue": {
+    "cx": 160,
+    "cy": 180,
+    "w": 40,
+    "h": 20
+   },
+   "absent": [
+    "red"
+   ],
+   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0066-program-data-rows": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<parameters><program id=\"rows\" src=\"../assets/srep66-rows.wasm\" sha256=\"30913dad3a42ec921501faa4c7402fb2b441c06743d3f5ceca607b45f64f9ba3\"/></parameters>\n<composition>\n<repeat id=\"rep\" over=\"rows\" offsetX=\"320\"><shape id=\"c\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"160\" y=\"180\" fill=\"#FF0000FF\"/></repeat>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 66",
+   "red": {
+    "cx": 320,
+    "cy": 180,
+    "w": 360,
+    "h": 20
+   },
+   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0066-program-fuel": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"p\" src=\"../assets/srep66-loop.wasm\" sha256=\"7b3bf9598edf963a8241d89ebe279382ae39987dcc0059072fa04d181e687b7d\" fuel=\"1000000\"></program>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 66",
+   "failure": {
+    "code": "PRG12"
+   },
+   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+  }
+ },
+ "srep-0066-program-import-forbidden": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"p\" src=\"../assets/srep66-wasi.wasm\" sha256=\"4ea7d3820190e9b9812bd604a8a5e95acc00dd8fb8003a9c8faf912a50431dc8\"></program>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 66",
+   "failure": {
+    "code": "PRG11"
+   },
+   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+  }
+ },
+ "srep-0066-program-threads-forbidden": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"p\" src=\"../assets/srep66-shared.wasm\" sha256=\"5bd7bf529173644473e08d9fcfdfcf4c0815493754f84839e2c00c46ba30ff71\"></program>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 66",
+   "failure": {
+    "code": "PRG11"
+   },
+   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+  }
+ },
+ "srep-0066-program-relaxed-simd-forbidden": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"p\" src=\"../assets/srep66-relaxed.wasm\" sha256=\"7522af5094c935efe00aa640037659f9cec80061aa614b83c38d5691094efb35\"></program>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 66",
+   "failure": {
+    "code": "PRG11"
+   },
+   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+  }
+ },
+ "srep-0066-program-output-invalid": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"p\" src=\"../assets/srep66-bad-output.wasm\" sha256=\"5d599c2ebd2406b705c0ad71d19c0b6f9e2f8de9688fc7ae302c85d605434ce4\"></program>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 66",
+   "failure": {
+    "code": "PRG14"
+   },
+   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+  }
+ },
+ "srep-0066-program-id-collision": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"p\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\"></program>\n<shape id=\"g1\" shape=\"rect\" width=\"10\" height=\"10\" fill=\"#00FF00FF\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 66",
+   "failure": {
+    "code": "PRG14"
+   },
+   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+  }
+ },
+ "srep-0066-program-sha256-mismatch": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"p\" src=\"../assets/srep66-rect.wasm\" sha256=\"0000000000000000000000000000000000000000000000000000000000000000\"></program>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 66",
+   "failure": {
+    "code": "PRG10"
+   },
+   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+  }
+ },
+ "srep-0066-program-output-sha256": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"p\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\" outputSha256=\"f80fb7c4603d5cdfe3b4cf6562e710b27d958f0d86b0b834c87a335eff437f91\"></program>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 66",
+   "red": {
+    "cx": 200,
+    "cy": 120,
+    "w": 40,
+    "h": 20
+   },
+   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0066-program-output-sha256-mismatch": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"p\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\" outputSha256=\"1111111111111111111111111111111111111111111111111111111111111111\"></program>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 66",
+   "failure": {
+    "code": "PRG15"
+   },
+   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+  }
+ },
+ "srep-0066-program-version-gate": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.5\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"p\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\"></program>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 66",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "V12"
+    ]
+   },
+   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0066-program-param-unique": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"p\" src=\"../assets/srep66-param.wasm\" sha256=\"86886519af364d8f21cad86046b9dd6902040e48d4f3a7d5d29e2fb5ef79930d\"><param name=\"side\" value=\"1\"/><param name=\"side\" value=\"0\"/></program>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 66",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "PRG1"
+    ]
+   },
+   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0066-program-over-names-data": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<repeat id=\"rep\" over=\"p2\" offsetX=\"320\"><shape id=\"c\" shape=\"rect\" width=\"4\" height=\"4\" fill=\"#FF0000FF\"/></repeat>\n<program id=\"p2\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\"></program>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 66",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "PRG2"
+    ]
+   },
+   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+  }
+ }
+}
