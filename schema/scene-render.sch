@@ -695,7 +695,7 @@
   </sch:pattern>
   <sch:pattern id="cinematic-black-hole">
     <sch:rule context="blackHole">
-      <sch:assert id="BH2" test="count(/scene//blackHole)=1">version 1.3 has one blackHole per scene.</sch:assert>
+      <sch:assert id="BH2" test="count(/scene//blackHole)=1">a scene has at most one blackHole.</sch:assert>
     </sch:rule>
     <sch:rule context="accretionDisk">
       <sch:let name="mass" value="number(substring(normalize-space(/scene//blackHole[@id=current()/@blackHole]/@mass),1+number(starts-with(normalize-space(/scene//blackHole[@id=current()/@blackHole]/@mass),'+'))))"/>
