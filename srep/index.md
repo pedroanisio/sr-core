@@ -68,3 +68,4 @@
 | [63](srep-0063.md) | Add conditions to capability manifest entries | Standards | Accepted | capabilities 1 |
 | [64](srep-0064.md) | Define rounded corners by the circle, not the steps | Semantics | Accepted | 1.5 |
 | [65](srep-0065.md) | Amend SREPs 18 and 20: report text overflow by what it loses | Standards | Accepted | 1.5 |
+| [82](srep-0082.md) | Mix the sound of video layers across a transition | Semantics | Draft | 1.6 |
