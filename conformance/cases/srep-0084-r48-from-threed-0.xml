@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2"><project width="64" height="64" fps="24" duration="1"/><composition><shape id="r" shape="rect" width="8" height="8" x="4" y="4" fill="#FF0000"/><shape id="b" shape="rect" width="8" height="8" x="40" y="40" fill="#0000FF"/><group id="g" threeD="0"><shape id="k" shape="rect" width="5" height="5" fill="#00FF00"/></group><connector id="c" from="k" to="b" stroke="#FFFFFF" strokeWidth="2"/></composition></scene>

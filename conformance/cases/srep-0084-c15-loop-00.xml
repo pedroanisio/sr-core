@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2"><project width="64" height="64" fps="24" duration="1"/><assets><image id="img" src="../assets/tile.png" width="16" height="16"/></assets><composition><layer id="l" asset="img" loop="00"><timeRemap><key time="0" value="0"/><key time="1" value="0.5"/></timeRemap></layer></composition></scene>
