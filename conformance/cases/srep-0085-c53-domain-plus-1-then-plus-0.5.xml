@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.1"><project width="64" height="64" fps="24" duration="1"/><assets><geo id="g" src="../assets/squares.geojson"/><map id="m" width="64" height="32"><geoLayer geo="g" fillBy="id" domain="0 +1 +0.5"/></map></assets><composition><layer id="l" asset="m"/></composition></scene>

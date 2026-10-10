@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.6"><project width="64" height="64" fps="24" duration="1"/><composition><group id="g" effects="ps"><shape id="s" shape="rect" width="10" height="10" fill="#FFFFFF"/></group></composition><effects><effect id="ps" type="segmented-sort" direction="horizontal" order="ascending" low="+1" high="+0.5"/></effects></scene>
