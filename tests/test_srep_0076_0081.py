@@ -181,3 +181,19 @@ def test_geodesics_and_mantle_are_read_in_every_boolean_form(form, on):
     assert schematron_rules(MEASURED, no_hole) == (["BH5"] if form == "true" else [])
     crater = CASES["srep-0077-crt12-repose-with-mantle"][1]["xml"].replace('mantle="true"', f'mantle="{form}"')
     assert schematron_rules(proposed, crater) == (["CRT12"] if on else [])
+
+
+# SREP 76's fourth amendment (open issue 1): the black-hole warnings are W11 and W12, not SREP 57's W03 and W04 (the
+# engine's XSD documentation at prep/srep-76-81-followups c2a66950); the measured text, which verify() compares with
+# the engine's 4bf7a9e files, keeps W03 and W04.
+def test_the_black_hole_warnings_are_w11_and_w12():
+    assert len(gap.srep_amendments([76])) >= 4
+    proposed = gap.proposed_schema()["schema/scene-render.xsd"].decode()
+    measured = MEASURED["schema/scene-render.xsd"].decode()
+    for text, undrawn, denoise in ((proposed, "W11", "W12"), (measured, "W03", "W04")):
+        assert f"without it nothing is drawn ({undrawn})." in text
+        assert f"used ({denoise}, W05)." in text and f"it is not rendered ({undrawn})." in text
+    assert not re.search(r"\(W0[34][,)]", proposed)
+    codes = {name: case["expected"]["findings"].get("codes", []) for name, (n, case) in CASES.items() if n == 76}
+    assert codes["srep-0076-valid-w11-no-lens"] == ["W11"] and codes["srep-0076-valid-w12-denoise"] == ["W12"]
+    assert not any(c in ("W03", "W04") for cs in codes.values() for c in cs)
