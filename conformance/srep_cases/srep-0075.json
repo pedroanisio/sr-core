@@ -2,7 +2,7 @@
  "srep-0075-mandelbrot-zoom-6": {
   "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><fractal id=\"f\" kind=\"mandelbrot\" width=\"640\" height=\"360\" centerX=\"-0.743643887037158704752191506114774\" centerY=\"0.131825904205311970493132056385139\" zoom=\"6\" maxIterations=\"3000\" colorMode=\"bands\" palette=\"#FF0000FF #0000FFFF\" insideColor=\"#000000FF\"/></assets>\n<composition>\n<layer id=\"l\" asset=\"f\"/>\n</composition>\n</scene>\n",
   "expected": {
-   "rule": "SREP 75 (escape counts at zoom 6: (40,30):223, (600,30):None, (320,180):1005, (40,330):275, (600,330):1308, (160,90):486, (480,270):None, (100,200):307, (520,120):None)",
+   "rule": "SREP 75 (escape counts at zoom 6: (40,30):223, (600,30):None, (320,180):1005, (40,330):275, (600,330):1308, (160,90):486, (480,270):None, (100,200):307, (520,120):None; the centre has 33 digits: valid, but a validator that limits xs:decimal to fewer digits, such as libxml2 before 2.13.0 (24 digits), refuses the document; such a validator is not the oracle for this case)",
    "regions": [
     {
      "box": [
@@ -128,7 +128,7 @@
  "srep-0075-mandelbrot-zoom-12": {
   "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><fractal id=\"f\" kind=\"mandelbrot\" width=\"640\" height=\"360\" centerX=\"-0.743643887037158704752191506114774\" centerY=\"0.131825904205311970493132056385139\" zoom=\"12\" maxIterations=\"12000\" colorMode=\"bands\" palette=\"#FF0000FF #0000FFFF\" insideColor=\"#000000FF\"/></assets>\n<composition>\n<layer id=\"l\" asset=\"f\"/>\n</composition>\n</scene>\n",
   "expected": {
-   "rule": "SREP 75 (escape counts at zoom 12: (40,30):2054, (600,30):1986, (320,180):4047, (40,330):1985, (600,330):2221, (160,90):2052, (480,270):2064, (100,200):1972, (520,120):2086)",
+   "rule": "SREP 75 (escape counts at zoom 12: (40,30):2054, (600,30):1986, (320,180):4047, (40,330):1985, (600,330):2221, (160,90):2052, (480,270):2064, (100,200):1972, (520,120):2086; the centre has 33 digits: valid, but a validator that limits xs:decimal to fewer digits, such as libxml2 before 2.13.0 (24 digits), refuses the document; such a validator is not the oracle for this case)",
    "regions": [
     {
      "box": [
@@ -254,7 +254,7 @@
  "srep-0075-mandelbrot-zoom-20": {
   "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><fractal id=\"f\" kind=\"mandelbrot\" width=\"640\" height=\"360\" centerX=\"-0.743643887037158704752191506114774\" centerY=\"0.131825904205311970493132056385139\" zoom=\"20\" maxIterations=\"20000\" colorMode=\"bands\" palette=\"#FF0000FF #0000FFFF\" insideColor=\"#000000FF\"/></assets>\n<composition>\n<layer id=\"l\" asset=\"f\"/>\n</composition>\n</scene>\n",
   "expected": {
-   "rule": "SREP 75 (escape counts at zoom 20: (40,30):8510, (600,30):9061, (320,180):10056, (40,330):9059, (600,330):8485, (160,90):9943, (480,270):9760, (100,200):10082, (520,120):9228)",
+   "rule": "SREP 75 (escape counts at zoom 20: (40,30):8510, (600,30):9061, (320,180):10056, (40,330):9059, (600,330):8485, (160,90):9943, (480,270):9760, (100,200):10082, (520,120):9228; the centre has 33 digits: valid, but a validator that limits xs:decimal to fewer digits, such as libxml2 before 2.13.0 (24 digits), refuses the document; such a validator is not the oracle for this case)",
    "regions": [
     {
      "box": [
@@ -386,6 +386,16 @@
     "codes": [
      "V16"
     ]
+   },
+   "pending": "SREP 75 is a draft; no engine implements the fractal asset yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0075-long-decimals-valid": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><fractal id=\"f\" kind=\"julia\" width=\"640\" height=\"360\" centerX=\"-0.743643887037158704752191506114774\" centerY=\"0.131825904205311970493132056385139\" zoom=\"6\" maxIterations=\"100\" colorMode=\"bands\" palette=\"#FF0000FF #0000FFFF\" insideColor=\"#000000FF\" juliaX=\"-0.7453000000000000000000000000000000000001\" juliaY=\"0.1127000000000000000000000000000000000001\"/></assets>\n<composition>\n<layer id=\"l\" asset=\"f\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 75 Semantics 1 (an engine reads the four decimal attributes at any length: 33-digit centre, 40-digit juliaX and juliaY; valid, no finding)",
+   "findings": {
+    "valid": true
    },
    "pending": "SREP 75 is a draft; no engine implements the fractal asset yet. The entry keeps the values derived from the SREP"
   }

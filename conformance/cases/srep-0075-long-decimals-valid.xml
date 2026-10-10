@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.6">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<assets><fractal id="f" kind="julia" width="640" height="360" centerX="-0.743643887037158704752191506114774" centerY="0.131825904205311970493132056385139" zoom="6" maxIterations="100" colorMode="bands" palette="#FF0000FF #0000FFFF" insideColor="#000000FF" juliaX="-0.7453000000000000000000000000000000000001" juliaY="0.1127000000000000000000000000000000000001"/></assets>
+<composition>
+<layer id="l" asset="f"/>
+</composition>
+</scene>
