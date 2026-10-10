@@ -1,0 +1,610 @@
+{
+ "srep-0067-compute-log-density": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<compute id=\"c\" src=\"../assets/srep67-three.wgsl\" width=\"400\" height=\"200\" invocations=\"1110\"><tonemap ramp=\"#000000FF #FFFFFFFF\"/></compute>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 67",
+   "regions": [
+    {
+     "box": [
+      100,
+      100,
+      101,
+      101
+     ],
+     "rgb": [
+      255.0,
+      255.0,
+      255.0
+     ]
+    },
+    {
+     "box": [
+      200,
+      100,
+      201,
+      101
+     ],
+     "rgb": [
+      170.3,
+      170.3,
+      170.3
+     ]
+    },
+    {
+     "box": [
+      300,
+      100,
+      301,
+      101
+     ],
+     "rgb": [
+      88.5,
+      88.5,
+      88.5
+     ]
+    }
+   ],
+   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0067-compute-order": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<compute id=\"c\" src=\"../assets/srep67-three-interleaved.wgsl\" width=\"400\" height=\"200\" invocations=\"1110\"><tonemap ramp=\"#000000FF #FFFFFFFF\"/></compute>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 67",
+   "regions": [
+    {
+     "box": [
+      100,
+      100,
+      101,
+      101
+     ],
+     "rgb": [
+      255.0,
+      255.0,
+      255.0
+     ]
+    },
+    {
+     "box": [
+      200,
+      100,
+      201,
+      101
+     ],
+     "rgb": [
+      170.3,
+      170.3,
+      170.3
+     ]
+    },
+    {
+     "box": [
+      300,
+      100,
+      301,
+      101
+     ],
+     "rgb": [
+      88.5,
+      88.5,
+      88.5
+     ]
+    }
+   ],
+   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0067-compute-reference": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<compute id=\"c\" src=\"../assets/srep67-three.wgsl\" width=\"400\" height=\"200\" invocations=\"1110\"><tonemap ramp=\"#000000FF #FFFFFFFF\" reference=\"2000\"/></compute>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 67",
+   "regions": [
+    {
+     "box": [
+      100,
+      100,
+      101,
+      101
+     ],
+     "rgb": [
+      231.8,
+      231.8,
+      231.8
+     ]
+    },
+    {
+     "box": [
+      200,
+      100,
+      201,
+      101
+     ],
+     "rgb": [
+      154.8,
+      154.8,
+      154.8
+     ]
+    },
+    {
+     "box": [
+      300,
+      100,
+      301,
+      101
+     ],
+     "rgb": [
+      80.4,
+      80.4,
+      80.4
+     ]
+    }
+   ],
+   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0067-compute-gain-gamma": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<compute id=\"c\" src=\"../assets/srep67-three.wgsl\" width=\"400\" height=\"200\" invocations=\"1110\"><tonemap ramp=\"#000000FF #FFFFFFFF\" gain=\"0.01\" gamma=\"2.2\"/></compute>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 67",
+   "regions": [
+    {
+     "box": [
+      100,
+      100,
+      101,
+      101
+     ],
+     "rgb": [
+      255.0,
+      255.0,
+      255.0
+     ]
+    },
+    {
+     "box": [
+      200,
+      100,
+      201,
+      101
+     ],
+     "rgb": [
+      145.1,
+      145.1,
+      145.1
+     ]
+    },
+    {
+     "box": [
+      300,
+      100,
+      301,
+      101
+     ],
+     "rgb": [
+      58.9,
+      58.9,
+      58.9
+     ]
+    }
+   ],
+   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0067-compute-linear": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<compute id=\"c\" src=\"../assets/srep67-three.wgsl\" width=\"400\" height=\"200\" invocations=\"1110\"><tonemap ramp=\"#000000FF #FFFFFFFF\" scale=\"linear\"/></compute>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 67",
+   "regions": [
+    {
+     "box": [
+      100,
+      100,
+      101,
+      101
+     ],
+     "rgb": [
+      255.0,
+      255.0,
+      255.0
+     ]
+    },
+    {
+     "box": [
+      200,
+      100,
+      201,
+      101
+     ],
+     "rgb": [
+      25.5,
+      25.5,
+      25.5
+     ]
+    },
+    {
+     "box": [
+      300,
+      100,
+      301,
+      101
+     ],
+     "rgb": [
+      2.6,
+      2.6,
+      2.6
+     ]
+    }
+   ],
+   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0067-compute-empty-pixel": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<compute id=\"c\" src=\"../assets/srep67-three.wgsl\" width=\"400\" height=\"200\" invocations=\"1110\"><tonemap ramp=\"#000000FF #FFFFFFFF\"/></compute>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 67",
+   "regions": [
+    {
+     "box": [
+      150,
+      150,
+      151,
+      151
+     ],
+     "rgb": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    }
+   ],
+   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0067-compute-colour": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<compute id=\"c\" src=\"../assets/srep67-colour.wgsl\" width=\"400\" height=\"200\" invocations=\"100\" channels=\"4\" fractionBits=\"8\"><tonemap ramp=\"#000000FF #FFFFFFFF\"/></compute>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 67",
+   "regions": [
+    {
+     "box": [
+      100,
+      100,
+      101,
+      101
+     ],
+     "rgb": [
+      255.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "box": [
+      200,
+      100,
+      201,
+      101
+     ],
+     "rgb": [
+      0.0,
+      0.0,
+      255.0
+     ]
+    }
+   ],
+   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0067-compute-version-gate": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.5\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<compute id=\"c\" src=\"../assets/srep67-three.wgsl\" width=\"400\" height=\"200\" invocations=\"1110\"><tonemap ramp=\"#000000FF #FFFFFFFF\"/></compute>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 67",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "V13"
+    ]
+   },
+   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0067-iterate-steps": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<iterate id=\"it\" steps=\"10\"><shape id=\"s\" shape=\"rect\" width=\"100\" height=\"100\" anchorX=\"50\" anchorY=\"50\" x=\"320\" y=\"180\" fill=\"#FFFFFFFF\" effects=\"fx\"/></iterate>\n</composition>\n<effects><effect id=\"fx\" type=\"shader\" src=\"../assets/srep67-counter.fs\"><param name=\"target\" value=\"10\"/></effect></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 67",
+   "red": {
+    "cx": 320,
+    "cy": 180,
+    "w": 100,
+    "h": 100
+   },
+   "absent": [
+    "blue"
+   ],
+   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0067-iterate-steps-short": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<iterate id=\"it\" steps=\"9\"><shape id=\"s\" shape=\"rect\" width=\"100\" height=\"100\" anchorX=\"50\" anchorY=\"50\" x=\"320\" y=\"180\" fill=\"#FFFFFFFF\" effects=\"fx\"/></iterate>\n</composition>\n<effects><effect id=\"fx\" type=\"shader\" src=\"../assets/srep67-counter.fs\"><param name=\"target\" value=\"10\"/></effect></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 67",
+   "blue": {
+    "cx": 320,
+    "cy": 180,
+    "w": 100,
+    "h": 100
+   },
+   "absent": [
+    "red"
+   ],
+   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0067-iterate-check-every": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<iterate id=\"it\" steps=\"10\" checkEvery=\"20\"><shape id=\"s\" shape=\"rect\" width=\"100\" height=\"100\" anchorX=\"50\" anchorY=\"50\" x=\"320\" y=\"180\" fill=\"#FFFFFFFF\" effects=\"fx\"/></iterate>\n</composition>\n<effects><effect id=\"fx\" type=\"shader\" src=\"../assets/srep67-counter.fs\"><param name=\"target\" value=\"10\"/></effect></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 67",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "ITR1"
+    ]
+   },
+   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0067-error-diffusion-floyd-steinberg": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"g\" shape=\"rect\" width=\"64\" height=\"64\" x=\"100\" y=\"100\" fill=\"#808080FF\" effects=\"ed\"/>\n</composition>\n<effects><effect id=\"ed\" type=\"error-diffusion\" kernel=\"floyd-steinberg\" palette=\"#000000FF #FFFFFFFF\"/></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 67",
+   "regions": [
+    {
+     "box": [
+      100,
+      100,
+      164,
+      164
+     ],
+     "rgb": [
+      127.7,
+      127.7,
+      127.7
+     ]
+    },
+    {
+     "box": [
+      100,
+      100,
+      101,
+      101
+     ],
+     "rgb": [
+      255.0,
+      255.0,
+      255.0
+     ]
+    },
+    {
+     "box": [
+      101,
+      100,
+      102,
+      101
+     ],
+     "rgb": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "box": [
+      102,
+      100,
+      103,
+      101
+     ],
+     "rgb": [
+      255.0,
+      255.0,
+      255.0
+     ]
+    },
+    {
+     "box": [
+      103,
+      100,
+      104,
+      101
+     ],
+     "rgb": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    }
+   ],
+   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0067-error-diffusion-atkinson": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"g\" shape=\"rect\" width=\"64\" height=\"64\" x=\"100\" y=\"100\" fill=\"#808080FF\" effects=\"ed\"/>\n</composition>\n<effects><effect id=\"ed\" type=\"error-diffusion\" kernel=\"atkinson\" palette=\"#000000FF #FFFFFFFF\"/></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 67",
+   "regions": [
+    {
+     "box": [
+      100,
+      100,
+      164,
+      164
+     ],
+     "rgb": [
+      127.5,
+      127.5,
+      127.5
+     ]
+    },
+    {
+     "box": [
+      100,
+      100,
+      101,
+      101
+     ],
+     "rgb": [
+      255.0,
+      255.0,
+      255.0
+     ]
+    },
+    {
+     "box": [
+      101,
+      100,
+      102,
+      101
+     ],
+     "rgb": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "box": [
+      102,
+      100,
+      103,
+      101
+     ],
+     "rgb": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "box": [
+      103,
+      100,
+      104,
+      101
+     ],
+     "rgb": [
+      255.0,
+      255.0,
+      255.0
+     ]
+    }
+   ],
+   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0067-segmented-sort-ascending": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<group id=\"g\" effects=\"ps\"><shape id=\"w\" shape=\"rect\" width=\"32\" height=\"8\" x=\"100\" y=\"100\" fill=\"#FFFFFFFF\"/><shape id=\"b\" shape=\"rect\" width=\"32\" height=\"8\" x=\"132\" y=\"100\" fill=\"#000000FF\"/></group>\n</composition>\n<effects><effect id=\"ps\" type=\"segmented-sort\" direction=\"horizontal\" order=\"ascending\"/></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 67",
+   "regions": [
+    {
+     "box": [
+      100,
+      100,
+      132,
+      108
+     ],
+     "rgb": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "box": [
+      132,
+      100,
+      164,
+      108
+     ],
+     "rgb": [
+      255.0,
+      255.0,
+      255.0
+     ]
+    }
+   ],
+   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0067-segmented-sort-descending": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<group id=\"g\" effects=\"ps\"><shape id=\"w\" shape=\"rect\" width=\"32\" height=\"8\" x=\"100\" y=\"100\" fill=\"#FFFFFFFF\"/><shape id=\"b\" shape=\"rect\" width=\"32\" height=\"8\" x=\"132\" y=\"100\" fill=\"#000000FF\"/></group>\n</composition>\n<effects><effect id=\"ps\" type=\"segmented-sort\" direction=\"horizontal\" order=\"descending\"/></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 67",
+   "regions": [
+    {
+     "box": [
+      100,
+      100,
+      132,
+      108
+     ],
+     "rgb": [
+      255.0,
+      255.0,
+      255.0
+     ]
+    },
+    {
+     "box": [
+      132,
+      100,
+      164,
+      108
+     ],
+     "rgb": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    }
+   ],
+   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0067-segmented-sort-threshold": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<group id=\"g\" effects=\"ps\"><shape id=\"w\" shape=\"rect\" width=\"32\" height=\"8\" x=\"100\" y=\"100\" fill=\"#FFFFFFFF\"/><shape id=\"b\" shape=\"rect\" width=\"32\" height=\"8\" x=\"132\" y=\"100\" fill=\"#000000FF\"/></group>\n</composition>\n<effects><effect id=\"ps\" type=\"segmented-sort\" direction=\"horizontal\" low=\"0\" high=\"0.5\"/></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 67",
+   "regions": [
+    {
+     "box": [
+      100,
+      100,
+      132,
+      108
+     ],
+     "rgb": [
+      255.0,
+      255.0,
+      255.0
+     ]
+    },
+    {
+     "box": [
+      132,
+      100,
+      164,
+      108
+     ],
+     "rgb": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    }
+   ],
+   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+  }
+ }
+}

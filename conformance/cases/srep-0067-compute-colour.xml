@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.6">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<composition>
+<compute id="c" src="../assets/srep67-colour.wgsl" width="400" height="200" invocations="100" channels="4" fractionBits="8"><tonemap ramp="#000000FF #FFFFFFFF"/></compute>
+</composition>
+</scene>

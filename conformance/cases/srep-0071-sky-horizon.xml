@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.6">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<composition>
+
+</composition>
+<lights><light id="sky" type="dome" sky="gradient" skyZenith="#2050A0" skyHorizon="#C0D0E0" skyGround="#403020" skyExponent="1" environmentVisible="true"/></lights>
+</scene>

@@ -1,0 +1,66 @@
+{
+ "srep-0073-upright-sprite": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><image id=\"spr\" src=\"../assets/srep73-halves.png\" width=\"8\" height=\"8\"/></assets>\n<composition>\n<flock id=\"f\" count=\"1\" seed=\"3\" width=\"1\" height=\"1\" x=\"320\" y=\"180\" shape=\"sprite\" sprite=\"spr\" size=\"40\" orientToVelocity=\"false\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 73",
+   "red": {
+    "cx": 310,
+    "cy": 180,
+    "w": 20,
+    "h": 40
+   },
+   "blue": {
+    "cx": 330,
+    "cy": 180,
+    "w": 20,
+    "h": 40
+   },
+   "pending": "SREP 73 is a draft; no engine implements flock/@orientToVelocity yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0073-upright-sprite-node-rotation": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><image id=\"spr\" src=\"../assets/srep73-halves.png\" width=\"8\" height=\"8\"/></assets>\n<composition>\n<flock id=\"f\" count=\"1\" seed=\"3\" width=\"1\" height=\"1\" x=\"320\" y=\"180\" shape=\"sprite\" sprite=\"spr\" size=\"40\" orientToVelocity=\"false\" rotation=\"90\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 73",
+   "red": {
+    "cx": 320,
+    "cy": 170,
+    "w": 40,
+    "h": 20
+   },
+   "blue": {
+    "cx": 320,
+    "cy": 190,
+    "w": 40,
+    "h": 20
+   },
+   "pending": "SREP 73 is a draft; no engine implements flock/@orientToVelocity yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0073-streak-inert": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><image id=\"spr\" src=\"../assets/srep73-halves.png\" width=\"8\" height=\"8\"/></assets>\n<composition>\n<flock id=\"f\" count=\"1\" seed=\"3\" width=\"1\" height=\"1\" x=\"320\" y=\"180\" shape=\"streak\" sprite=\"spr\" size=\"40\" orientToVelocity=\"false\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 73",
+   "findings": {
+    "valid": true,
+    "codes": [
+     "INERT-I16"
+    ]
+   },
+   "pending": "SREP 73 is a draft; no engine implements flock/@orientToVelocity yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0073-default-no-finding": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><image id=\"spr\" src=\"../assets/srep73-halves.png\" width=\"8\" height=\"8\"/></assets>\n<composition>\n<flock id=\"f\" count=\"1\" seed=\"3\" width=\"1\" height=\"1\" x=\"320\" y=\"180\" shape=\"sprite\" sprite=\"spr\" size=\"40\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 73",
+   "findings": {
+    "valid": true,
+    "absent": [
+     "INERT-I16"
+    ]
+   },
+   "pending": "SREP 73 is a draft; no engine implements flock/@orientToVelocity yet. The entry keeps the values derived from the SREP"
+  }
+ }
+}

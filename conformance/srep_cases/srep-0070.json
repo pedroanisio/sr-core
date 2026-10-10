@@ -1,0 +1,174 @@
+{
+ "srep-0070-path-ellipse": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"e\" shape=\"parametric\" fill=\"#FF0000FF\"><parametricPath x=\"320 + 100 * Math.cos(t)\" y=\"180 + 50 * Math.sin(t)\" t0=\"0\" t1=\"6.283185307179586\" samples=\"256\" closed=\"true\"/></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 70",
+   "red": {
+    "cx": 320,
+    "cy": 180,
+    "w": 200,
+    "h": 100
+   },
+   "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0070-path-lissajous": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"l\" shape=\"parametric\" fill=\"#00000000\" stroke=\"#FF0000FF\" strokeWidth=\"4\"><parametricPath x=\"320 + 100 * Math.sin(3 * t)\" y=\"180 + 80 * Math.sin(2 * t)\" t0=\"0\" t1=\"6.283185307179586\" samples=\"2000\"/></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 70",
+   "red": {
+    "cx": 320,
+    "cy": 180,
+    "w": 204,
+    "h": 164
+   },
+   "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0070-path-break": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"b\" shape=\"parametric\" fill=\"#00000000\" stroke=\"#FF0000FF\" strokeWidth=\"10\"><parametricPath x=\"120 + 400 * t\" y=\"(t &gt; 0.455 &amp;&amp; t &lt; 0.545) ? NaN : 180\" t0=\"0\" t1=\"1\" samples=\"101\"/></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 70",
+   "regions": [
+    {
+     "box": [
+      315,
+      176,
+      325,
+      184
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      196,
+      177,
+      204,
+      183
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    },
+    {
+     "box": [
+      436,
+      177,
+      444,
+      183
+     ],
+     "rgb": [
+      255,
+      0,
+      0
+     ]
+    }
+   ],
+   "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0070-path-needs-curve": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"e\" shape=\"parametric\" fill=\"#FF0000FF\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 70",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "PAR1"
+    ]
+   },
+   "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0070-path-version-gate": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.5\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"e\" shape=\"parametric\" fill=\"#FF0000FF\"><parametricPath x=\"t\" y=\"t\"/></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 70",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "V14"
+    ]
+   },
+   "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0070-surface-plane": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\"/><material id=\"m-red2\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"s\" primitive=\"parametric\" material=\"m-red\" x=\"320\" y=\"180\"><parametricSurface x=\"u\" y=\"v\" z=\"0\" u0=\"-50\" u1=\"50\" v0=\"-25\" v1=\"25\" uSamples=\"8\" vSamples=\"8\"/></object3D>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 70",
+   "red": {
+    "cx": 320,
+    "cy": 180,
+    "w": 100,
+    "h": 50
+   },
+   "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0070-surface-plane-mirrored-culled": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\"/><material id=\"m-red2\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"s\" primitive=\"parametric\" material=\"m-red\" x=\"320\" y=\"180\"><parametricSurface x=\"-u\" y=\"v\" z=\"0\" u0=\"-50\" u1=\"50\" v0=\"-25\" v1=\"25\" uSamples=\"8\" vSamples=\"8\"/></object3D>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 70",
+   "absent": [
+    "red"
+   ],
+   "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0070-surface-plane-mirrored-double-sided": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\"/><material id=\"m-red2\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"s\" primitive=\"parametric\" material=\"m-red2\" x=\"320\" y=\"180\"><parametricSurface x=\"-u\" y=\"v\" z=\"0\" u0=\"-50\" u1=\"50\" v0=\"-25\" v1=\"25\" uSamples=\"8\" vSamples=\"8\"/></object3D>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 70",
+   "red": {
+    "cx": 320,
+    "cy": 180,
+    "w": 100,
+    "h": 50
+   },
+   "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0070-heightfield-flat": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\"/><material id=\"m-red2\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"h\" primitive=\"heightfield\" material=\"m-red\" x=\"320\" y=\"180\" rotationX=\"90\"><heightfield height=\"0\" width=\"100\" depth=\"50\" xSamples=\"4\" zSamples=\"4\"/></object3D>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 70",
+   "red": {
+    "cx": 320,
+    "cy": 180,
+    "w": 100,
+    "h": 50
+   },
+   "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0070-heightfield-underside-culled": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\"/><material id=\"m-red2\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"h\" primitive=\"heightfield\" material=\"m-red\" x=\"320\" y=\"180\" rotationX=\"-90\"><heightfield height=\"0\" width=\"100\" depth=\"50\" xSamples=\"4\" zSamples=\"4\"/></object3D>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 70",
+   "absent": [
+    "red"
+   ],
+   "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0070-surface-needs-child": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\"/><material id=\"m-red2\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"s\" primitive=\"parametric\" material=\"m-red\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 70",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "PAR2"
+    ]
+   },
+   "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+  }
+ }
+}

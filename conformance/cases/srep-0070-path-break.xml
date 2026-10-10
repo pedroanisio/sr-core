@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.6">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<composition>
+<shape id="b" shape="parametric" fill="#00000000" stroke="#FF0000FF" strokeWidth="10"><parametricPath x="120 + 400 * t" y="(t &gt; 0.455 &amp;&amp; t &lt; 0.545) ? NaN : 180" t0="0" t1="1" samples="101"/></shape>
+</composition>
+</scene>

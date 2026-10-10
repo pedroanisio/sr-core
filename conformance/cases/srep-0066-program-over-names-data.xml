@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.6">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<composition>
+<repeat id="rep" over="p2" offsetX="320"><shape id="c" shape="rect" width="4" height="4" fill="#FF0000FF"/></repeat>
+<program id="p2" src="../assets/srep66-rect.wasm" sha256="2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96"></program>
+</composition>
+</scene>

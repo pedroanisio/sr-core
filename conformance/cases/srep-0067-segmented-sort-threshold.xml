@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.6">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<composition>
+<group id="g" effects="ps"><shape id="w" shape="rect" width="32" height="8" x="100" y="100" fill="#FFFFFFFF"/><shape id="b" shape="rect" width="32" height="8" x="132" y="100" fill="#000000FF"/></group>
+</composition>
+<effects><effect id="ps" type="segmented-sort" direction="horizontal" low="0" high="0.5"/></effects>
+</scene>

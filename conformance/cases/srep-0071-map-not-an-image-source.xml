@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.6">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<assets><generator id="g" kind="solid" width="16" height="16" paint="#00FF00FF"/><image id="im" src="../assets/tile.png" width="8" height="8"/></assets>
+<materials><material id="m" baseColor="#FFFFFFFF" unlit="true" baseColorMap="#m"/></materials>
+<composition>
+<object3D id="o" primitive="plane" width="100" height="100" x="320" y="180" material="m"/>
+</composition>
+</scene>

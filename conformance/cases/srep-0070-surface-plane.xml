@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.6">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true"/><material id="m-red2" baseColor="#FF0000FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<object3D id="s" primitive="parametric" material="m-red" x="320" y="180"><parametricSurface x="u" y="v" z="0" u0="-50" u1="50" v0="-25" v1="25" uSamples="8" vSamples="8"/></object3D>
+</composition>
+</scene>

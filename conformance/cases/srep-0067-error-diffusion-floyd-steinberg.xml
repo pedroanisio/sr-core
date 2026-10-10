@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.6">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<composition>
+<shape id="g" shape="rect" width="64" height="64" x="100" y="100" fill="#808080FF" effects="ed"/>
+</composition>
+<effects><effect id="ed" type="error-diffusion" kernel="floyd-steinberg" palette="#000000FF #FFFFFFFF"/></effects>
+</scene>
