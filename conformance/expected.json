@@ -39626,6 +39626,1044 @@
         ]
       },
       "pending": "the Rust reference does not implement SREP 63 yet (nor the SUP findings of SREP 22); the entry keeps the values derived from the SREP"
+    },
+    "srep-0076-bh1-version": {
+      "rule": "SREP 76 BH1",
+      "source": "engine corpus tests/corpus/invalid/bh1-version.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "BH1"
+        ]
+      }
+    },
+    "srep-0076-bh2-two-holes": {
+      "rule": "SREP 76 BH2",
+      "source": "engine corpus tests/corpus/invalid/bh2-two-holes.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "BH2"
+        ]
+      }
+    },
+    "srep-0076-bh3-disk-target": {
+      "rule": "SREP 76 BH3",
+      "source": "engine corpus tests/corpus/invalid/bh3-disk-target.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "BH3"
+        ]
+      }
+    },
+    "srep-0076-bh4-inside-isco": {
+      "rule": "SREP 76 BH4",
+      "source": "engine corpus tests/corpus/invalid/bh4-inside-isco.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "BH4"
+        ]
+      }
+    },
+    "srep-0076-bh4-outer-not-beyond-inner": {
+      "rule": "SREP 76 BH4",
+      "source": "engine corpus tests/corpus/invalid/bh4-outer-not-beyond-inner.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "BH4"
+        ]
+      }
+    },
+    "srep-0076-bh5-geodesics-without-hole": {
+      "rule": "SREP 76 BH5",
+      "source": "engine corpus tests/corpus/invalid/bh5-geodesics-without-hole.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "BH5"
+        ]
+      }
+    },
+    "srep-0076-bh6-fluid": {
+      "rule": "SREP 76 BH6",
+      "source": "engine corpus tests/corpus/invalid/bh6-fluid.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "BH6"
+        ]
+      }
+    },
+    "srep-0076-bh6-other-object": {
+      "rule": "SREP 76 BH6",
+      "source": "engine corpus tests/corpus/invalid/bh6-other-object.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "BH6"
+        ]
+      }
+    },
+    "srep-0076-bh6-particles": {
+      "rule": "SREP 76 BH6",
+      "source": "engine corpus tests/corpus/invalid/bh6-particles.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "BH6"
+        ]
+      }
+    },
+    "srep-0076-bh7-inside-photon-sphere": {
+      "rule": "SREP 76 BH7",
+      "source": "engine corpus tests/corpus/invalid/bh7-inside-photon-sphere.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "BH7"
+        ]
+      }
+    },
+    "srep-0076-bh8-two-cameras": {
+      "rule": "SREP 76 BH8",
+      "source": "engine corpus tests/corpus/invalid/bh8-two-cameras.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "BH8"
+        ]
+      }
+    },
+    "srep-0076-valid-black-hole": {
+      "rule": "SREP 76",
+      "source": "engine corpus tests/corpus/valid/black-hole.scene.xml (valid) at 4bf7a9e",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0076-valid-black-hole-disk-at-isco": {
+      "rule": "SREP 76",
+      "source": "engine corpus tests/corpus/valid/black-hole-disk-at-isco.scene.xml (valid) at 4bf7a9e",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0076-valid-black-hole-without-disk": {
+      "rule": "SREP 76",
+      "source": "engine corpus tests/corpus/valid/black-hole-without-disk.scene.xml (valid) at 4bf7a9e",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0076-valid-w03-no-lens": {
+      "rule": "SREP 76",
+      "source": "engine corpus tests/corpus/valid/w03-no-lens.scene.xml (warnings) at 4bf7a9e",
+      "findings": {
+        "valid": true,
+        "codes": [
+          "W03"
+        ]
+      }
+    },
+    "srep-0076-valid-w04-denoise": {
+      "rule": "SREP 76",
+      "source": "engine corpus tests/corpus/valid/w04-denoise.scene.xml (warnings) at 4bf7a9e",
+      "findings": {
+        "valid": true,
+        "codes": [
+          "W04"
+        ]
+      }
+    },
+    "srep-0076-valid-w05-lights": {
+      "rule": "SREP 76",
+      "source": "engine corpus tests/corpus/valid/w05-lights.scene.xml (warnings) at 4bf7a9e",
+      "findings": {
+        "valid": true,
+        "codes": [
+          "W05"
+        ]
+      }
+    },
+    "srep-0077-crt10-bulking-without-source": {
+      "rule": "SREP 77 CRT10 CRT11",
+      "source": "engine corpus tests/corpus/invalid/crt10-bulking-without-source.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "CRT10",
+          "CRT11"
+        ]
+      }
+    },
+    "srep-0077-crt10-mantle-without-source": {
+      "rule": "SREP 77 CRT10",
+      "source": "engine corpus tests/corpus/invalid/crt10-mantle-without-source.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "CRT10"
+        ]
+      }
+    },
+    "srep-0077-crt10-repose-without-source": {
+      "rule": "SREP 77 CRT10",
+      "source": "engine corpus tests/corpus/invalid/crt10-repose-without-source.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "CRT10"
+        ]
+      }
+    },
+    "srep-0077-crt11-bulking-without-mantle": {
+      "rule": "SREP 77 CRT11",
+      "source": "engine corpus tests/corpus/invalid/crt11-bulking-without-mantle.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "CRT11"
+        ]
+      }
+    },
+    "srep-0077-crt12-repose-with-mantle": {
+      "rule": "SREP 77 CRT12",
+      "source": "engine corpus tests/corpus/invalid/crt12-repose-with-mantle.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "CRT12"
+        ]
+      }
+    },
+    "srep-0077-crt4-envelope": {
+      "rule": "SREP 77 CRT4",
+      "source": "engine corpus tests/corpus/invalid/crt4-envelope.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "CRT4"
+        ]
+      }
+    },
+    "srep-0077-crt4": {
+      "rule": "SREP 77 CRT4",
+      "source": "engine corpus tests/corpus/invalid/crt4.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "CRT4"
+        ]
+      }
+    },
+    "srep-0077-frx5-source-self": {
+      "rule": "SREP 77 FRX5",
+      "source": "engine corpus tests/corpus/invalid/frx5-source-self.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "FRX5"
+        ]
+      }
+    },
+    "srep-0077-frx5-source-static": {
+      "rule": "SREP 77 FRX5",
+      "source": "engine corpus tests/corpus/invalid/frx5-source-static.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "FRX5"
+        ]
+      }
+    },
+    "srep-0077-frx6-push": {
+      "rule": "SREP 77 FRX6",
+      "source": "engine corpus tests/corpus/invalid/frx6-push.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "FRX6"
+        ]
+      }
+    },
+    "srep-0077-frx6-timed": {
+      "rule": "SREP 77 FRX6",
+      "source": "engine corpus tests/corpus/invalid/frx6-timed.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "FRX6"
+        ]
+      }
+    },
+    "srep-0077-frx7-orphan": {
+      "rule": "SREP 77 FRX7",
+      "source": "engine corpus tests/corpus/invalid/frx7-orphan.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "FRX7"
+        ]
+      }
+    },
+    "srep-0077-valid-crater-mantle": {
+      "rule": "SREP 77",
+      "source": "engine corpus tests/corpus/valid/crater-mantle.scene.xml (valid) at 4bf7a9e",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0077-valid-crater-mantle-bulking": {
+      "rule": "SREP 77",
+      "source": "engine corpus tests/corpus/valid/crater-mantle-bulking.scene.xml (valid) at 4bf7a9e",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0077-valid-crater-repose": {
+      "rule": "SREP 77",
+      "source": "engine corpus tests/corpus/valid/crater-repose.scene.xml (valid) at 4bf7a9e",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0077-valid-fracture-contact": {
+      "rule": "SREP 77",
+      "source": "engine corpus tests/corpus/valid/fracture-contact.scene.xml (valid) at 4bf7a9e",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0077-valid-fracture-contact-tuned": {
+      "rule": "SREP 77",
+      "source": "engine corpus tests/corpus/valid/fracture-contact-tuned.scene.xml (valid) at 4bf7a9e",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0077-valid-ocean-density": {
+      "rule": "SREP 77",
+      "source": "engine corpus tests/corpus/valid/ocean-density.scene.xml (valid) at 4bf7a9e",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0078-pyc5-closed": {
+      "rule": "SREP 78 PYC5",
+      "source": "engine corpus tests/corpus/invalid/pyc5-closed.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "PYC5"
+        ]
+      }
+    },
+    "srep-0078-pyc6-outside": {
+      "rule": "SREP 78 PYC6",
+      "source": "engine corpus tests/corpus/invalid/pyc6-outside.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "PYC6"
+        ]
+      }
+    },
+    "srep-0078-pyro10-orphan": {
+      "rule": "SREP 78 PYRO10",
+      "source": "engine corpus tests/corpus/invalid/pyro10-orphan.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "PYRO10"
+        ]
+      }
+    },
+    "srep-0078-pyro11-margin": {
+      "rule": "SREP 78 PYRO11",
+      "source": "engine corpus tests/corpus/invalid/pyro11-margin.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "PYRO11"
+        ]
+      }
+    },
+    "srep-0078-pyro9-closed": {
+      "rule": "SREP 78 PYRO9",
+      "source": "engine corpus tests/corpus/invalid/pyro9-closed.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "PYRO9"
+        ]
+      }
+    },
+    "srep-0078-valid-pyro-follow": {
+      "rule": "SREP 78",
+      "source": "engine corpus tests/corpus/valid/pyro-follow.scene.xml (valid) at 4bf7a9e",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0078-valid-pyro-blast": {
+      "rule": "SREP 78",
+      "source": "engine corpus tests/corpus/valid/pyro-blast.scene.xml (valid) at 4bf7a9e",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0078-valid-pyro-blast-gas": {
+      "rule": "SREP 78",
+      "source": "engine corpus tests/corpus/valid/pyro-blast-gas.scene.xml (valid) at 4bf7a9e",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0079-ocn14-foam-radius": {
+      "rule": "SREP 79 OCN14",
+      "source": "engine corpus tests/corpus/invalid/ocn14-foam-radius.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "OCN14"
+        ]
+      }
+    },
+    "srep-0079-valid-volume-scatter-bounces": {
+      "rule": "SREP 79",
+      "source": "engine corpus tests/corpus/valid/volume-scatter-bounces.scene.xml (valid) at 4bf7a9e",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0079-valid-volume-scatter-bounces-zero": {
+      "rule": "SREP 79",
+      "source": "engine corpus tests/corpus/valid/volume-scatter-bounces-zero.scene.xml (valid) at 4bf7a9e",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0079-valid-whitewater-foam-albedo": {
+      "rule": "SREP 79",
+      "source": "engine corpus tests/corpus/valid/whitewater-foam-albedo.scene.xml (valid) at 4bf7a9e",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0079-valid-w06-foam-material": {
+      "rule": "SREP 79",
+      "source": "engine corpus tests/corpus/valid/w06-foam-material.scene.xml (warnings) at 4bf7a9e",
+      "findings": {
+        "valid": true,
+        "codes": [
+          "W06"
+        ]
+      }
+    },
+    "srep-0079-valid-w07-foam-raster": {
+      "rule": "SREP 79",
+      "source": "engine corpus tests/corpus/valid/w07-foam-raster.scene.xml (warnings) at 4bf7a9e",
+      "findings": {
+        "valid": true,
+        "codes": [
+          "W07"
+        ]
+      }
+    },
+    "srep-0079-valid-w08-foam-unlit": {
+      "rule": "SREP 79",
+      "source": "engine corpus tests/corpus/valid/w08-foam-unlit.scene.xml (warnings) at 4bf7a9e",
+      "findings": {
+        "valid": true,
+        "codes": [
+          "W08"
+        ]
+      }
+    },
+    "srep-0079-valid-w10-scatter-black-albedo": {
+      "rule": "SREP 79",
+      "source": "engine corpus tests/corpus/valid/w10-scatter-black-albedo.scene.xml (warnings) at 4bf7a9e",
+      "findings": {
+        "valid": true,
+        "codes": [
+          "W10"
+        ]
+      }
+    },
+    "srep-0080-crt13-mantle": {
+      "rule": "SREP 80 CRT13",
+      "source": "engine corpus tests/corpus/invalid/crt13-mantle.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "CRT13"
+        ]
+      }
+    },
+    "srep-0080-crt14-curve": {
+      "rule": "SREP 80 CRT14",
+      "source": "engine corpus tests/corpus/invalid/crt14-curve.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "CRT14"
+        ]
+      }
+    },
+    "srep-0080-crt15-no-source": {
+      "rule": "SREP 80 CRT15",
+      "source": "engine corpus tests/corpus/invalid/crt15-no-source.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "CRT15"
+        ]
+      }
+    },
+    "srep-0080-crt16-count": {
+      "rule": "SREP 80 CRT16",
+      "source": "engine corpus tests/corpus/invalid/crt16-count.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "CRT16"
+        ]
+      }
+    },
+    "srep-0080-crt16-no-count": {
+      "rule": "SREP 80 CRT16",
+      "source": "engine corpus tests/corpus/invalid/crt16-no-count.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "CRT16"
+        ]
+      }
+    },
+    "srep-0080-crt17-angle": {
+      "rule": "SREP 80 CRT17",
+      "source": "engine corpus tests/corpus/invalid/crt17-angle.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "CRT17"
+        ]
+      }
+    },
+    "srep-0080-crt5": {
+      "rule": "SREP 80 CRT5",
+      "source": "engine corpus tests/corpus/invalid/crt5.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "CRT5"
+        ]
+      }
+    },
+    "srep-0080-frx10-pieces": {
+      "rule": "SREP 80 FRX10",
+      "source": "engine corpus tests/corpus/invalid/frx10-pieces.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "FRX10"
+        ]
+      }
+    },
+    "srep-0080-frx11-infinite": {
+      "rule": "SREP 80 FRX11",
+      "source": "engine corpus tests/corpus/invalid/frx11-infinite.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "FRX11"
+        ]
+      }
+    },
+    "srep-0080-frx11-no-partition": {
+      "rule": "SREP 80 FRX11",
+      "source": "engine corpus tests/corpus/invalid/frx11-no-partition.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "FRX11"
+        ]
+      }
+    },
+    "srep-0080-frx11-planes": {
+      "rule": "SREP 80 FRX11",
+      "source": "engine corpus tests/corpus/invalid/frx11-planes.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "FRX11"
+        ]
+      }
+    },
+    "srep-0080-frx11-zero-normal": {
+      "rule": "SREP 80 FRX11",
+      "source": "engine corpus tests/corpus/invalid/frx11-zero-normal.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "FRX11"
+        ]
+      }
+    },
+    "srep-0080-frx12-labels": {
+      "rule": "SREP 80 FRX12",
+      "source": "engine corpus tests/corpus/invalid/frx12-labels.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "FRX12"
+        ]
+      }
+    },
+    "srep-0080-frx13-no-strength": {
+      "rule": "SREP 80 FRX13",
+      "source": "engine corpus tests/corpus/invalid/frx13-no-strength.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "FRX13"
+        ]
+      }
+    },
+    "srep-0080-frx13-strength-alone": {
+      "rule": "SREP 80 FRX13",
+      "source": "engine corpus tests/corpus/invalid/frx13-strength-alone.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "FRX13"
+        ]
+      }
+    },
+    "srep-0080-frx14-static": {
+      "rule": "SREP 80 FRX14",
+      "source": "engine corpus tests/corpus/invalid/frx14-static.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "FRX14"
+        ]
+      }
+    },
+    "srep-0080-frx15-source": {
+      "rule": "SREP 80 FRX15",
+      "source": "engine corpus tests/corpus/invalid/frx15-source.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "FRX15"
+        ]
+      }
+    },
+    "srep-0080-frx3": {
+      "rule": "SREP 80 FRX3",
+      "source": "engine corpus tests/corpus/invalid/frx3.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "FRX3"
+        ]
+      }
+    },
+    "srep-0080-frx4": {
+      "rule": "SREP 80 FRX4",
+      "source": "engine corpus tests/corpus/invalid/frx4.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "FRX4"
+        ]
+      }
+    },
+    "srep-0080-frx8-interior": {
+      "rule": "SREP 80 FRX8",
+      "source": "engine corpus tests/corpus/invalid/frx8-interior.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "FRX8"
+        ]
+      }
+    },
+    "srep-0080-frx9-partition": {
+      "rule": "SREP 80 FRX9",
+      "source": "engine corpus tests/corpus/invalid/frx9-partition.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "FRX9"
+        ]
+      }
+    },
+    "srep-0080-vox1-version": {
+      "rule": "SREP 80 VOX1",
+      "source": "engine corpus tests/corpus/invalid/vox1-version.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX1"
+        ]
+      }
+    },
+    "srep-0080-vox10-mass": {
+      "rule": "SREP 80 VOX10",
+      "source": "engine corpus tests/corpus/invalid/vox10-mass.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX10"
+        ]
+      }
+    },
+    "srep-0080-vox10-no-density": {
+      "rule": "SREP 80 VOX10",
+      "source": "engine corpus tests/corpus/invalid/vox10-no-density.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX10"
+        ]
+      }
+    },
+    "srep-0080-vox11-slots": {
+      "rule": "SREP 80 VOX11",
+      "source": "engine corpus tests/corpus/invalid/vox11-slots.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX11"
+        ]
+      }
+    },
+    "srep-0080-vox12-anchor": {
+      "rule": "SREP 80 VOX12",
+      "source": "engine corpus tests/corpus/invalid/vox12-anchor.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX12"
+        ]
+      }
+    },
+    "srep-0080-vox13-scale": {
+      "rule": "SREP 80 VOX13",
+      "source": "engine corpus tests/corpus/invalid/vox13-scale.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX13"
+        ]
+      }
+    },
+    "srep-0080-vox14-both": {
+      "rule": "SREP 80 VOX14",
+      "source": "engine corpus tests/corpus/invalid/vox14-both.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX14"
+        ]
+      }
+    },
+    "srep-0080-vox15-fracture-box": {
+      "rule": "SREP 80 VOX15",
+      "source": "engine corpus tests/corpus/invalid/vox15-fracture-box.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX15"
+        ]
+      }
+    },
+    "srep-0080-vox15-mesh-collider": {
+      "rule": "SREP 80 VOX15",
+      "source": "engine corpus tests/corpus/invalid/vox15-mesh-collider.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX15"
+        ]
+      }
+    },
+    "srep-0080-vox2-both-sources": {
+      "rule": "SREP 80 VOX2",
+      "source": "engine corpus tests/corpus/invalid/vox2-both-sources.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX2"
+        ]
+      }
+    },
+    "srep-0080-vox2-cellsize-with-src": {
+      "rule": "SREP 80 VOX2",
+      "source": "engine corpus tests/corpus/invalid/vox2-cellsize-with-src.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX2"
+        ]
+      }
+    },
+    "srep-0080-vox2-grid-of-vox": {
+      "rule": "SREP 80 VOX2",
+      "source": "engine corpus tests/corpus/invalid/vox2-grid-of-vox.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX2"
+        ]
+      }
+    },
+    "srep-0080-vox2-model-of-mesh": {
+      "rule": "SREP 80 VOX2",
+      "source": "engine corpus tests/corpus/invalid/vox2-model-of-mesh.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX2"
+        ]
+      }
+    },
+    "srep-0080-vox2-model-of-srvol": {
+      "rule": "SREP 80 VOX2",
+      "source": "engine corpus tests/corpus/invalid/vox2-model-of-srvol.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX2"
+        ]
+      }
+    },
+    "srep-0080-vox2-no-source": {
+      "rule": "SREP 80 VOX2",
+      "source": "engine corpus tests/corpus/invalid/vox2-no-source.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX2"
+        ]
+      }
+    },
+    "srep-0080-vox3-frommesh": {
+      "rule": "SREP 80 VOX3",
+      "source": "engine corpus tests/corpus/invalid/vox3-frommesh.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX3"
+        ]
+      }
+    },
+    "srep-0080-vox4-asset": {
+      "rule": "SREP 80 VOX4",
+      "source": "engine corpus tests/corpus/invalid/vox4-asset.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX4"
+        ]
+      }
+    },
+    "srep-0080-vox4-no-asset": {
+      "rule": "SREP 80 VOX4",
+      "source": "engine corpus tests/corpus/invalid/vox4-no-asset.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX4"
+        ]
+      }
+    },
+    "srep-0080-vox5-orphan": {
+      "rule": "SREP 80 VOX5",
+      "source": "engine corpus tests/corpus/invalid/vox5-orphan.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX5"
+        ]
+      }
+    },
+    "srep-0080-vox5-surface-memory-orphan": {
+      "rule": "SREP 80 VOX5",
+      "source": "engine corpus tests/corpus/invalid/vox5-surface-memory-orphan.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX5"
+        ]
+      }
+    },
+    "srep-0080-vox6-palette": {
+      "rule": "SREP 80 VOX6",
+      "source": "engine corpus tests/corpus/invalid/vox6-palette.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX6"
+        ]
+      }
+    },
+    "srep-0080-vox7-exclusion": {
+      "rule": "SREP 80 VOX7",
+      "source": "engine corpus tests/corpus/invalid/vox7-exclusion.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX7"
+        ]
+      }
+    },
+    "srep-0080-vox8-shape": {
+      "rule": "SREP 80 VOX8",
+      "source": "engine corpus tests/corpus/invalid/vox8-shape.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX8"
+        ]
+      }
+    },
+    "srep-0080-vox9-density": {
+      "rule": "SREP 80 VOX9",
+      "source": "engine corpus tests/corpus/invalid/vox9-density.scene.xml at 4bf7a9e",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX9"
+        ]
+      }
+    },
+    "srep-0080-valid-voxels": {
+      "rule": "SREP 80",
+      "source": "engine corpus tests/corpus/valid/voxels.scene.xml (valid) at 4bf7a9e",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0080-valid-voxels-from-mesh": {
+      "rule": "SREP 80",
+      "source": "engine corpus tests/corpus/valid/voxels-from-mesh.scene.xml (valid) at 4bf7a9e",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0080-valid-voxels-srvol": {
+      "rule": "SREP 80",
+      "source": "engine corpus tests/corpus/valid/voxels-srvol.scene.xml (valid) at 4bf7a9e",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0080-valid-voxels-srvol-format": {
+      "rule": "SREP 80",
+      "source": "engine corpus tests/corpus/valid/voxels-srvol-format.scene.xml (valid) at 4bf7a9e",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0080-valid-voxels-surface-memory": {
+      "rule": "SREP 80",
+      "source": "engine corpus tests/corpus/valid/voxels-surface-memory.scene.xml (valid) at 4bf7a9e",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0080-valid-voxel-body": {
+      "rule": "SREP 80",
+      "source": "engine corpus tests/corpus/valid/voxel-body.scene.xml (warnings) at 4bf7a9e",
+      "findings": {
+        "valid": true,
+        "codes": [
+          "W09"
+        ]
+      }
+    },
+    "srep-0080-valid-voxel-crater": {
+      "rule": "SREP 80",
+      "source": "engine corpus tests/corpus/valid/voxel-crater.scene.xml (warnings) at 4bf7a9e",
+      "findings": {
+        "valid": true,
+        "codes": [
+          "W09"
+        ]
+      }
+    },
+    "srep-0080-valid-voxel-crater-signed-scale": {
+      "rule": "SREP 80",
+      "source": "engine corpus tests/corpus/valid/voxel-crater-signed-scale.scene.xml (valid) at 4bf7a9e",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0080-valid-voxel-ejecta": {
+      "rule": "SREP 80",
+      "source": "engine corpus tests/corpus/valid/voxel-ejecta.scene.xml (warnings) at 4bf7a9e",
+      "findings": {
+        "valid": true,
+        "codes": [
+          "W09"
+        ]
+      }
+    },
+    "srep-0080-valid-voxel-fracture": {
+      "rule": "SREP 80",
+      "source": "engine corpus tests/corpus/valid/voxel-fracture.scene.xml (warnings) at 4bf7a9e",
+      "findings": {
+        "valid": true,
+        "codes": [
+          "W09"
+        ]
+      }
+    },
+    "srep-0080-valid-voxel-fracture-labels": {
+      "rule": "SREP 80",
+      "source": "engine corpus tests/corpus/valid/voxel-fracture-labels.scene.xml (warnings) at 4bf7a9e",
+      "findings": {
+        "valid": true,
+        "codes": [
+          "W09"
+        ]
+      }
+    },
+    "srep-0080-valid-voxel-fracture-planes": {
+      "rule": "SREP 80",
+      "source": "engine corpus tests/corpus/valid/voxel-fracture-planes.scene.xml (warnings) at 4bf7a9e",
+      "findings": {
+        "valid": true,
+        "codes": [
+          "W09"
+        ]
+      }
+    },
+    "srep-0080-valid-voxel-fracture-stress": {
+      "rule": "SREP 80",
+      "source": "engine corpus tests/corpus/valid/voxel-fracture-stress.scene.xml (warnings) at 4bf7a9e",
+      "findings": {
+        "valid": true,
+        "codes": [
+          "W09"
+        ]
+      }
+    },
+    "srep-0080-valid-w09-voxel-cells-small": {
+      "rule": "SREP 80",
+      "source": "engine corpus tests/corpus/valid/w09-voxel-cells-small.scene.xml (warnings) at 4bf7a9e",
+      "findings": {
+        "valid": true,
+        "codes": [
+          "W09"
+        ]
+      }
     }
   }
 }

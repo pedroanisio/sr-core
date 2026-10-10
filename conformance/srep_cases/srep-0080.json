@@ -1,0 +1,751 @@
+{
+ "srep-0080-crt13-mantle": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"ground\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\" y=\"2\"><rigidBody type=\"static\" density=\"2400\" maxFragments=\"128\" fragmentMinCells=\"2\" fragmentOverflow=\"dust\" anchor=\"base\"/><crater id=\"pit\" source=\"ball\" targetMaterial=\"softRock\" mantle=\"true\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 CRT13",
+   "source": "engine corpus tests/corpus/invalid/crt13-mantle.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "CRT13"
+    ]
+   }
+  }
+ },
+ "srep-0080-crt14-curve": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"ground\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\" y=\"2\"><rigidBody type=\"static\" density=\"2400\" maxFragments=\"128\" fragmentMinCells=\"2\" fragmentOverflow=\"dust\" anchor=\"base\"/><crater id=\"pit\" source=\"ball\" targetMaterial=\"softRock\" curve=\"linear\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 CRT14",
+   "source": "engine corpus tests/corpus/invalid/crt14-curve.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "CRT14"
+    ]
+   }
+  }
+ },
+ "srep-0080-crt15-no-source": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"ground\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\" y=\"2\"><rigidBody type=\"static\" density=\"2400\" maxFragments=\"128\" fragmentMinCells=\"2\" fragmentOverflow=\"dust\" anchor=\"base\"/><crater id=\"pit\" radius=\"4\" rimWidth=\"1\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 CRT15",
+   "source": "engine corpus tests/corpus/invalid/crt15-no-source.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "CRT15"
+    ]
+   }
+  }
+ },
+ "srep-0080-crt16-count": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"ground\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\" y=\"2\"><rigidBody type=\"static\" density=\"2400\" maxFragments=\"128\" fragmentMinCells=\"2\" fragmentOverflow=\"dust\" anchor=\"base\"/><crater id=\"pit\" source=\"ball\" targetMaterial=\"softRock\"/></object3D><particles3D id=\"debris\" rate=\"0\" gravityY=\"9.8\" lifetime=\"3\" maxParticles=\"500\"><burst crater=\"pit\" count=\"200\"/></particles3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 CRT16",
+   "source": "engine corpus tests/corpus/invalid/crt16-count.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "CRT16"
+    ]
+   }
+  }
+ },
+ "srep-0080-crt16-no-count": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><composition><object3D id=\"rock\" primitive=\"sphere\" radius=\"1\" y=\"-8\"><rigidBody mass=\"5\"/></object3D><object3D id=\"ground\" primitive=\"plane\" width=\"20\" height=\"20\" segments=\"40\" y=\"2\"><crater id=\"pit\" source=\"rock\" targetMaterial=\"softRock\"/><rigidBody type=\"static\"/></object3D><particles3D id=\"debris\" rate=\"0\" gravityY=\"9.8\" lifetime=\"3\" maxParticles=\"500\"><burst crater=\"pit\"/></particles3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 CRT16",
+   "source": "engine corpus tests/corpus/invalid/crt16-no-count.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "CRT16"
+    ]
+   }
+  }
+ },
+ "srep-0080-crt17-angle": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"ground\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\" y=\"2\"><rigidBody type=\"static\" density=\"2400\" maxFragments=\"128\" fragmentMinCells=\"2\" fragmentOverflow=\"dust\" anchor=\"base\"/><crater id=\"pit\" source=\"ball\" targetMaterial=\"softRock\"/></object3D><particles3D id=\"debris\" rate=\"0\" gravityY=\"9.8\" lifetime=\"3\" maxParticles=\"500\"><burst crater=\"pit\" angle=\"30\" angleSpread=\"5\"/></particles3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 CRT17",
+   "source": "engine corpus tests/corpus/invalid/crt17-angle.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "CRT17"
+    ]
+   }
+  }
+ },
+ "srep-0080-crt5": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><composition><object3D id=\"ground\" primitive=\"plane\" width=\"20\" height=\"20\" segments=\"40\"><crater radius=\"4\" depth=\"3\" rimWidth=\"1\" rimHeight=\"0.5\" start=\"1\" end=\"2\"/><rigidBody type=\"dynamic\"/></object3D></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80 CRT5",
+   "source": "engine corpus tests/corpus/invalid/crt5.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "CRT5"
+    ]
+   }
+  }
+ },
+ "srep-0080-frx10-pieces": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"block\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\"><rigidBody density=\"2400\" maxFragments=\"32\" fragmentMinCells=\"1\"/><fracture source=\"ball\" partition=\"labels\" labels=\"material\" pieces=\"8\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 FRX10",
+   "source": "engine corpus tests/corpus/invalid/frx10-pieces.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "FRX10"
+    ]
+   }
+  }
+ },
+ "srep-0080-frx11-infinite": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"block\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\"><rigidBody density=\"2400\" maxFragments=\"32\" fragmentMinCells=\"1\"/><fracture source=\"ball\" partition=\"planes\" planes=\"1 0 0 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 FRX11",
+   "source": "engine corpus tests/corpus/invalid/frx11-infinite.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "FRX11"
+    ]
+   }
+  }
+ },
+ "srep-0080-frx11-no-partition": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"block\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\"><rigidBody density=\"2400\" maxFragments=\"32\" fragmentMinCells=\"1\"/><fracture source=\"ball\" planes=\"1 0 0 4\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 FRX11",
+   "source": "engine corpus tests/corpus/invalid/frx11-no-partition.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "FRX11"
+    ]
+   }
+  }
+ },
+ "srep-0080-frx11-planes": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"block\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\"><rigidBody density=\"2400\" maxFragments=\"32\" fragmentMinCells=\"1\"/><fracture source=\"ball\" partition=\"planes\" planes=\"1 0 0\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 FRX11",
+   "source": "engine corpus tests/corpus/invalid/frx11-planes.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "FRX11"
+    ]
+   }
+  }
+ },
+ "srep-0080-frx11-zero-normal": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"block\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\"><rigidBody density=\"2400\" maxFragments=\"32\" fragmentMinCells=\"1\"/><fracture source=\"ball\" partition=\"planes\" planes=\"1 0 0 4 0 0 0 2\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 FRX11",
+   "source": "engine corpus tests/corpus/invalid/frx11-zero-normal.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "FRX11"
+    ]
+   }
+  }
+ },
+ "srep-0080-frx12-labels": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"block\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\"><rigidBody density=\"2400\" maxFragments=\"32\" fragmentMinCells=\"1\"/><fracture source=\"ball\" partition=\"labels\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 FRX12",
+   "source": "engine corpus tests/corpus/invalid/frx12-labels.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "FRX12"
+    ]
+   }
+  }
+ },
+ "srep-0080-frx13-no-strength": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"block\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\"><rigidBody density=\"2400\" maxFragments=\"32\" fragmentMinCells=\"1\"/><fracture mode=\"stress\" pieces=\"8\" seed=\"3\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 FRX13",
+   "source": "engine corpus tests/corpus/invalid/frx13-no-strength.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "FRX13"
+    ]
+   }
+  }
+ },
+ "srep-0080-frx13-strength-alone": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"block\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\"><rigidBody density=\"2400\" maxFragments=\"32\" fragmentMinCells=\"1\"/><fracture strength=\"2e6\" source=\"ball\" pieces=\"8\" seed=\"3\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 FRX13",
+   "source": "engine corpus tests/corpus/invalid/frx13-strength-alone.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "FRX13"
+    ]
+   }
+  }
+ },
+ "srep-0080-frx14-static": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"block\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\"><rigidBody type=\"static\" density=\"2400\" maxFragments=\"32\" fragmentMinCells=\"1\"/><fracture mode=\"stress\" strength=\"2e6\" pieces=\"8\" seed=\"3\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 FRX14",
+   "source": "engine corpus tests/corpus/invalid/frx14-static.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "FRX14"
+    ]
+   }
+  }
+ },
+ "srep-0080-frx15-source": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"block\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\"><rigidBody density=\"2400\" maxFragments=\"32\" fragmentMinCells=\"1\"/><fracture source=\"ball\" mode=\"stress\" strength=\"2e6\" pieces=\"8\" seed=\"3\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 FRX15",
+   "source": "engine corpus tests/corpus/invalid/frx15-source.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "FRX15"
+    ]
+   }
+  }
+ },
+ "srep-0080-frx3": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><materials><material id=\"interior\" baseColor=\"#A06030\"/></materials><composition><object3D id=\"rock\" primitive=\"box\" width=\"4\" height=\"4\" depth=\"4\"><rigidBody mass=\"8\"/><fracture at=\"1\" pieces=\"8\" seed=\"18446744073709551615\" interiorMaterial=\"rock\" radialImpulse=\"4\"/></object3D></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80 FRX3",
+   "source": "engine corpus tests/corpus/invalid/frx3.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "FRX3"
+    ]
+   }
+  }
+ },
+ "srep-0080-frx4": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><materials><material id=\"interior\" baseColor=\"#A06030\"/></materials><composition><object3D id=\"rock\" primitive=\"box\" width=\"4\" height=\"4\" depth=\"4\"><rigidBody mass=\"8\"/><fracture at=\"1\" pieces=\"8\" seed=\"18446744073709551615\" interiorMaterial=\"interior\" radialImpulse=\"4\" impulseX=\"NaN\"/></object3D></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80 FRX4",
+   "source": "engine corpus tests/corpus/invalid/frx4.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "FRX4"
+    ]
+   }
+  }
+ },
+ "srep-0080-frx8-interior": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"block\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\"><rigidBody density=\"2400\" maxFragments=\"32\" fragmentMinCells=\"1\"/><fracture interiorMaterial=\"stone\" source=\"ball\" pieces=\"8\" seed=\"3\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 FRX8",
+   "source": "engine corpus tests/corpus/invalid/frx8-interior.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "FRX8"
+    ]
+   }
+  }
+ },
+ "srep-0080-frx9-partition": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><materials><material id=\"interior\" baseColor=\"#A06030\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"1\" x=\"-8\"><rigidBody mass=\"1\"/></object3D><object3D id=\"rock\" primitive=\"box\" width=\"4\" height=\"4\" depth=\"4\"><rigidBody mass=\"8\"/><fracture partition=\"voronoi\" source=\"ball\" pieces=\"8\" seed=\"3\" interiorMaterial=\"interior\"/></object3D></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80 FRX9",
+   "source": "engine corpus tests/corpus/invalid/frx9-partition.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "FRX9"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox1-version": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-voxels.vox\" maxCells=\"100000\"/><mesh id=\"shape\" src=\"../assets/srep80-robot.glb\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/><material id=\"moss\" baseColor=\"#406040\"/></materials><composition><object3D id=\"build\" primitive=\"voxels\" voxels=\"model\" cellSize=\"2\" palette=\"stone moss\" surface=\"blocks\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX1",
+   "source": "engine corpus tests/corpus/invalid/vox1-version.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX1"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox10-mass": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"block\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\"><rigidBody density=\"2400\" mass=\"5\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX10",
+   "source": "engine corpus tests/corpus/invalid/vox10-mass.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX10"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox10-no-density": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"block\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\"><rigidBody/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX10",
+   "source": "engine corpus tests/corpus/invalid/vox10-no-density.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX10"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox11-slots": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"block\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\"><rigidBody density=\"2400\" maxFragments=\"8\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX11",
+   "source": "engine corpus tests/corpus/invalid/vox11-slots.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX11"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox12-anchor": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"block\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\"><rigidBody density=\"2400\" anchor=\"base\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX12",
+   "source": "engine corpus tests/corpus/invalid/vox12-anchor.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX12"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox13-scale": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"ground\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\" y=\"2\" scaleX=\"2\"><rigidBody type=\"static\" density=\"2400\" maxFragments=\"128\" fragmentMinCells=\"2\" fragmentOverflow=\"dust\" anchor=\"base\"/><crater id=\"pit\" source=\"ball\" targetMaterial=\"softRock\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX13",
+   "source": "engine corpus tests/corpus/invalid/vox13-scale.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX13"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox14-both": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"ground\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\" y=\"2\"><rigidBody type=\"static\" density=\"2400\" maxFragments=\"128\" fragmentMinCells=\"2\" fragmentOverflow=\"dust\" anchor=\"base\"/><crater id=\"pit\" source=\"ball\" targetMaterial=\"softRock\"/><fracture source=\"ball\" pieces=\"4\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX14",
+   "source": "engine corpus tests/corpus/invalid/vox14-both.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX14"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox15-fracture-box": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"block\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\"><rigidBody shape=\"box\"/><fracture source=\"ball\" pieces=\"8\" seed=\"3\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX15",
+   "source": "engine corpus tests/corpus/invalid/vox15-fracture-box.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX15"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox15-mesh-collider": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"ground\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\" y=\"2\" scaleX=\"2\"><rigidBody type=\"static\" shape=\"trimesh\"/><crater id=\"pit\" source=\"ball\" targetMaterial=\"softRock\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX15",
+   "source": "engine corpus tests/corpus/invalid/vox15-mesh-collider.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX15"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox2-both-sources": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-voxels.vox\" fromMesh=\"shape\" cellSize=\"1\" maxCells=\"100000\"/><mesh id=\"shape\" src=\"../assets/srep80-robot.glb\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/><material id=\"moss\" baseColor=\"#406040\"/></materials><composition><object3D id=\"build\" primitive=\"voxels\" voxels=\"model\" cellSize=\"2\" palette=\"stone moss\" surface=\"blocks\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX2",
+   "source": "engine corpus tests/corpus/invalid/vox2-both-sources.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX2"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox2-cellsize-with-src": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-voxels.vox\" cellSize=\"1\" maxCells=\"100000\"/><mesh id=\"shape\" src=\"../assets/srep80-robot.glb\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/><material id=\"moss\" baseColor=\"#406040\"/></materials><composition><object3D id=\"build\" primitive=\"voxels\" voxels=\"model\" cellSize=\"2\" palette=\"stone moss\" surface=\"blocks\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX2",
+   "source": "engine corpus tests/corpus/invalid/vox2-cellsize-with-src.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX2"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox2-grid-of-vox": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-voxels.vox\" voxelGrid=\"voxels\" maxCells=\"100000\"/><mesh id=\"shape\" src=\"../assets/srep80-robot.glb\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/><material id=\"moss\" baseColor=\"#406040\"/></materials><composition><object3D id=\"build\" primitive=\"voxels\" voxels=\"model\" cellSize=\"2\" palette=\"stone moss\" surface=\"blocks\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX2",
+   "source": "engine corpus tests/corpus/invalid/vox2-grid-of-vox.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX2"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox2-model-of-mesh": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/><assets><voxelAsset id=\"model\" fromMesh=\"shape\" model=\"0\" cellSize=\"0.5\"/><mesh id=\"shape\" src=\"../assets/srep80-robot.glb\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/><material id=\"moss\" baseColor=\"#406040\"/></materials><composition><object3D id=\"build\" primitive=\"voxels\" voxels=\"model\" cellSize=\"2\" palette=\"file\" surface=\"blocks\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX2",
+   "source": "engine corpus tests/corpus/invalid/vox2-model-of-mesh.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX2"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox2-model-of-srvol": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep79-uniform.srvol\" model=\"0\" maxCells=\"100000\"/><mesh id=\"shape\" src=\"../assets/srep80-robot.glb\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/><material id=\"moss\" baseColor=\"#406040\"/></materials><composition><object3D id=\"build\" primitive=\"voxels\" voxels=\"model\" cellSize=\"2\" palette=\"stone moss\" surface=\"blocks\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX2",
+   "source": "engine corpus tests/corpus/invalid/vox2-model-of-srvol.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX2"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox2-no-source": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/><assets><voxelAsset id=\"model\" maxCells=\"100000\"/><mesh id=\"shape\" src=\"../assets/srep80-robot.glb\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/><material id=\"moss\" baseColor=\"#406040\"/></materials><composition><object3D id=\"build\" primitive=\"voxels\" voxels=\"model\" cellSize=\"2\" palette=\"stone moss\" surface=\"blocks\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX2",
+   "source": "engine corpus tests/corpus/invalid/vox2-no-source.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX2"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox3-frommesh": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/><assets><voxelAsset id=\"model\" fromMesh=\"stone\" cellSize=\"0.5\"/><mesh id=\"shape\" src=\"../assets/srep80-robot.glb\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/><material id=\"moss\" baseColor=\"#406040\"/></materials><composition><object3D id=\"build\" primitive=\"voxels\" voxels=\"model\" cellSize=\"2\" palette=\"file\" surface=\"blocks\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX3",
+   "source": "engine corpus tests/corpus/invalid/vox3-frommesh.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX3"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox4-asset": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-voxels.vox\" maxCells=\"100000\"/><mesh id=\"shape\" src=\"../assets/srep80-robot.glb\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/><material id=\"moss\" baseColor=\"#406040\"/></materials><composition><object3D id=\"build\" primitive=\"voxels\" voxels=\"shape\" cellSize=\"2\" palette=\"stone moss\" surface=\"blocks\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX4",
+   "source": "engine corpus tests/corpus/invalid/vox4-asset.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX4"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox4-no-asset": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-voxels.vox\" maxCells=\"100000\"/><mesh id=\"shape\" src=\"../assets/srep80-robot.glb\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/><material id=\"moss\" baseColor=\"#406040\"/></materials><composition><object3D id=\"build\" primitive=\"voxels\" cellSize=\"2\" palette=\"stone moss\" surface=\"blocks\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX4",
+   "source": "engine corpus tests/corpus/invalid/vox4-no-asset.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX4"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox5-orphan": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-voxels.vox\" maxCells=\"100000\"/><mesh id=\"shape\" src=\"../assets/srep80-robot.glb\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/><material id=\"moss\" baseColor=\"#406040\"/></materials><composition><object3D id=\"build\" primitive=\"box\" voxels=\"model\" cellSize=\"2\" palette=\"stone moss\" surface=\"blocks\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX5",
+   "source": "engine corpus tests/corpus/invalid/vox5-orphan.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX5"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox5-surface-memory-orphan": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-voxels.vox\" maxCells=\"100000\"/><mesh id=\"shape\" src=\"../assets/srep80-robot.glb\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/><material id=\"moss\" baseColor=\"#406040\"/></materials><composition><object3D id=\"build\" primitive=\"box\" surfaceMemoryMiB=\"64\" voxels=\"model\" cellSize=\"2\" palette=\"stone moss\" surface=\"blocks\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX5",
+   "source": "engine corpus tests/corpus/invalid/vox5-surface-memory-orphan.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX5"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox6-palette": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-voxels.vox\" maxCells=\"100000\"/><mesh id=\"shape\" src=\"../assets/srep80-robot.glb\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/><material id=\"moss\" baseColor=\"#406040\"/></materials><composition><object3D id=\"build\" primitive=\"voxels\" voxels=\"model\" cellSize=\"2\" palette=\"stone nothing\" surface=\"blocks\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX6",
+   "source": "engine corpus tests/corpus/invalid/vox6-palette.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX6"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox7-exclusion": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-voxels.vox\" maxCells=\"100000\"/><mesh id=\"shape\" src=\"../assets/srep80-robot.glb\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/><material id=\"moss\" baseColor=\"#406040\"/></materials><composition><object3D id=\"build\" primitive=\"voxels\" voxels=\"model\" cellSize=\"2\" palette=\"stone moss\" surface=\"blocks\" mesh=\"shape\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX7",
+   "source": "engine corpus tests/corpus/invalid/vox7-exclusion.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX7"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox8-shape": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><composition><object3D id=\"rock\" primitive=\"sphere\" radius=\"1\" y=\"-8\"><rigidBody mass=\"5\"/></object3D><object3D id=\"ground\" primitive=\"plane\" width=\"20\" height=\"20\" segments=\"40\" y=\"2\"><crater id=\"pit\" source=\"rock\" targetMaterial=\"softRock\"/><rigidBody type=\"static\" shape=\"voxels\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX8",
+   "source": "engine corpus tests/corpus/invalid/vox8-shape.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX8"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox9-density": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><materials><material id=\"interior\" baseColor=\"#A06030\"/></materials><composition><object3D id=\"rock\" primitive=\"box\" width=\"4\" height=\"4\" depth=\"4\"><rigidBody mass=\"8\" density=\"2400\"/><fracture at=\"1\" pieces=\"8\" seed=\"18446744073709551615\" interiorMaterial=\"interior\" radialImpulse=\"4\"/></object3D></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX9",
+   "source": "engine corpus tests/corpus/invalid/vox9-density.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX9"
+    ]
+   }
+  }
+ },
+ "srep-0080-valid-voxels": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-voxels.vox\" maxCells=\"100000\"/><mesh id=\"shape\" src=\"../assets/srep80-robot.glb\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/><material id=\"moss\" baseColor=\"#406040\"/></materials><composition><object3D id=\"build\" primitive=\"voxels\" voxels=\"model\" cellSize=\"2\" palette=\"stone moss\" surface=\"blocks\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80",
+   "source": "engine corpus tests/corpus/valid/voxels.scene.xml (valid) at 4bf7a9e",
+   "findings": {
+    "valid": true
+   }
+  }
+ },
+ "srep-0080-valid-voxels-from-mesh": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/><assets><voxelAsset id=\"model\" fromMesh=\"shape\" cellSize=\"0.5\"/><mesh id=\"shape\" src=\"../assets/srep80-robot.glb\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/><material id=\"moss\" baseColor=\"#406040\"/></materials><composition><object3D id=\"build\" primitive=\"voxels\" voxels=\"model\" cellSize=\"2\" palette=\"file\" surface=\"blocks\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80",
+   "source": "engine corpus tests/corpus/valid/voxels-from-mesh.scene.xml (valid) at 4bf7a9e",
+   "findings": {
+    "valid": true
+   }
+  }
+ },
+ "srep-0080-valid-voxels-srvol": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep79-uniform.srvol\" voxelGrid=\"voxels\" maxCells=\"100000\"/><mesh id=\"shape\" src=\"../assets/srep80-robot.glb\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/><material id=\"moss\" baseColor=\"#406040\"/></materials><composition><object3D id=\"build\" primitive=\"voxels\" voxels=\"model\" cellSize=\"2\" palette=\"stone moss\" surface=\"blocks\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80",
+   "source": "engine corpus tests/corpus/valid/voxels-srvol.scene.xml (valid) at 4bf7a9e",
+   "findings": {
+    "valid": true
+   }
+  }
+ },
+ "srep-0080-valid-voxels-srvol-format": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep79-uniform.srvol\" format=\"srvol\" voxelGrid=\"voxels\" maxCells=\"100000\"/><mesh id=\"shape\" src=\"../assets/srep80-robot.glb\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/><material id=\"moss\" baseColor=\"#406040\"/></materials><composition><object3D id=\"build\" primitive=\"voxels\" voxels=\"model\" cellSize=\"2\" palette=\"stone moss\" surface=\"blocks\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80",
+   "source": "engine corpus tests/corpus/valid/voxels-srvol-format.scene.xml (valid) at 4bf7a9e",
+   "findings": {
+    "valid": true
+   }
+  }
+ },
+ "srep-0080-valid-voxels-surface-memory": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-voxels.vox\" maxCells=\"100000\"/><mesh id=\"shape\" src=\"../assets/srep80-robot.glb\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/><material id=\"moss\" baseColor=\"#406040\"/></materials><composition><object3D id=\"build\" primitive=\"voxels\" voxels=\"model\" cellSize=\"2\" palette=\"stone moss\" surface=\"blocks\" surfaceMemoryMiB=\"64\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80",
+   "source": "engine corpus tests/corpus/valid/voxels-surface-memory.scene.xml (valid) at 4bf7a9e",
+   "findings": {
+    "valid": true
+   }
+  }
+ },
+ "srep-0080-valid-voxel-body": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"block\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\"><rigidBody density=\"2400\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80",
+   "source": "engine corpus tests/corpus/valid/voxel-body.scene.xml (warnings) at 4bf7a9e",
+   "findings": {
+    "valid": true,
+    "codes": [
+     "W09"
+    ]
+   }
+  }
+ },
+ "srep-0080-valid-voxel-crater": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"ground\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\" y=\"2\"><rigidBody type=\"static\" density=\"2400\" maxFragments=\"128\" fragmentMinCells=\"2\" fragmentOverflow=\"dust\" anchor=\"base\"/><crater id=\"pit\" source=\"ball\" targetMaterial=\"softRock\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80",
+   "source": "engine corpus tests/corpus/valid/voxel-crater.scene.xml (warnings) at 4bf7a9e",
+   "findings": {
+    "valid": true,
+    "codes": [
+     "W09"
+    ]
+   }
+  }
+ },
+ "srep-0080-valid-voxel-crater-signed-scale": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"ground\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\" y=\"2\" scaleX=\"+3\" scaleY=\"3\" scaleZ=\" 3.0 \"><rigidBody type=\"static\" density=\"2400\" maxFragments=\"128\" fragmentMinCells=\"2\" fragmentOverflow=\"dust\" anchor=\"base\"/><crater id=\"pit\" source=\"ball\" targetMaterial=\"softRock\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80",
+   "source": "engine corpus tests/corpus/valid/voxel-crater-signed-scale.scene.xml (valid) at 4bf7a9e",
+   "findings": {
+    "valid": true
+   }
+  }
+ },
+ "srep-0080-valid-voxel-ejecta": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"ground\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\" y=\"2\"><rigidBody type=\"static\" density=\"2400\" maxFragments=\"128\" fragmentMinCells=\"2\" fragmentOverflow=\"dust\" anchor=\"base\"/><crater id=\"pit\" source=\"ball\" targetMaterial=\"softRock\"/></object3D><particles3D id=\"debris\" rate=\"0\" gravityY=\"9.8\" lifetime=\"3\" maxParticles=\"500\"><burst crater=\"pit\"/></particles3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80",
+   "source": "engine corpus tests/corpus/valid/voxel-ejecta.scene.xml (warnings) at 4bf7a9e",
+   "findings": {
+    "valid": true,
+    "codes": [
+     "W09"
+    ]
+   }
+  }
+ },
+ "srep-0080-valid-voxel-fracture": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"block\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\"><rigidBody density=\"2400\" maxFragments=\"32\" fragmentMinCells=\"1\"/><fracture source=\"ball\" pieces=\"8\" seed=\"3\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80",
+   "source": "engine corpus tests/corpus/valid/voxel-fracture.scene.xml (warnings) at 4bf7a9e",
+   "findings": {
+    "valid": true,
+    "codes": [
+     "W09"
+    ]
+   }
+  }
+ },
+ "srep-0080-valid-voxel-fracture-labels": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"block\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\"><rigidBody density=\"2400\" maxFragments=\"32\" fragmentMinCells=\"1\"/><fracture source=\"ball\" partition=\"labels\" labels=\"material\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80",
+   "source": "engine corpus tests/corpus/valid/voxel-fracture-labels.scene.xml (warnings) at 4bf7a9e",
+   "findings": {
+    "valid": true,
+    "codes": [
+     "W09"
+    ]
+   }
+  }
+ },
+ "srep-0080-valid-voxel-fracture-planes": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"block\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\"><rigidBody density=\"2400\" maxFragments=\"32\" fragmentMinCells=\"1\"/><fracture source=\"ball\" partition=\"planes\" planes=\"1 0 0 2 0 1 0 0.5\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80",
+   "source": "engine corpus tests/corpus/valid/voxel-fracture-planes.scene.xml (warnings) at 4bf7a9e",
+   "findings": {
+    "valid": true,
+    "codes": [
+     "W09"
+    ]
+   }
+  }
+ },
+ "srep-0080-valid-voxel-fracture-stress": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"block\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\"><rigidBody density=\"2400\" maxFragments=\"32\" fragmentMinCells=\"1\"/><fracture mode=\"stress\" strength=\"2e6\" pieces=\"8\" seed=\"3\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
+  "expected": {
+   "rule": "SREP 80",
+   "source": "engine corpus tests/corpus/valid/voxel-fracture-stress.scene.xml (warnings) at 4bf7a9e",
+   "findings": {
+    "valid": true,
+    "codes": [
+     "W09"
+    ]
+   }
+  }
+ },
+ "srep-0080-valid-w09-voxel-cells-small": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-voxels.vox\" maxCells=\"100000\"/><mesh id=\"shape\" src=\"../assets/srep80-robot.glb\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/><material id=\"moss\" baseColor=\"#406040\"/></materials><composition><object3D id=\"build\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" palette=\"stone moss\" surface=\"blocks\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80",
+   "source": "engine corpus tests/corpus/valid/w09-voxel-cells-small.scene.xml (warnings) at 4bf7a9e",
+   "findings": {
+    "valid": true,
+    "codes": [
+     "W09"
+    ]
+   }
+  }
+ }
+}

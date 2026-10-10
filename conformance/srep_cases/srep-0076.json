@@ -1,0 +1,214 @@
+{
+ "srep-0076-bh1-version": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\" geodesics=\"true\"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/><accretionDisk id=\"disk\" blackHole=\"hole\" outerRadius=\"20\" temperatureScale=\"6000\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76 BH1",
+   "source": "engine corpus tests/corpus/invalid/bh1-version.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "BH1"
+    ]
+   }
+  }
+ },
+ "srep-0076-bh2-two-holes": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\" geodesics=\"true\"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/><blackHole id=\"second\" mass=\"2\"/><accretionDisk id=\"disk\" blackHole=\"hole\" outerRadius=\"20\" temperatureScale=\"6000\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76 BH2",
+   "source": "engine corpus tests/corpus/invalid/bh2-two-holes.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "BH2"
+    ]
+   }
+  }
+ },
+ "srep-0076-bh3-disk-target": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\" geodesics=\"true\"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/><accretionDisk id=\"disk\" blackHole=\"eye\" outerRadius=\"20\" temperatureScale=\"6000\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76 BH3",
+   "source": "engine corpus tests/corpus/invalid/bh3-disk-target.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "BH3"
+    ]
+   }
+  }
+ },
+ "srep-0076-bh4-inside-isco": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\" geodesics=\"true\"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/><accretionDisk id=\"disk\" innerRadius=\"5\" blackHole=\"hole\" outerRadius=\"20\" temperatureScale=\"6000\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76 BH4",
+   "source": "engine corpus tests/corpus/invalid/bh4-inside-isco.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "BH4"
+    ]
+   }
+  }
+ },
+ "srep-0076-bh4-outer-not-beyond-inner": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\" geodesics=\"true\"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/><accretionDisk id=\"disk\" blackHole=\"hole\" outerRadius=\"6\" temperatureScale=\"6000\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76 BH4",
+   "source": "engine corpus tests/corpus/invalid/bh4-outer-not-beyond-inner.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "BH4"
+    ]
+   }
+  }
+ },
+ "srep-0076-bh5-geodesics-without-hole": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\" geodesics=\"true\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76 BH5",
+   "source": "engine corpus tests/corpus/invalid/bh5-geodesics-without-hole.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "BH5"
+    ]
+   }
+  }
+ },
+ "srep-0076-bh6-fluid": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\" geodesics=\"true\"/><ocean id=\"sea\"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/><accretionDisk id=\"disk\" blackHole=\"hole\" outerRadius=\"20\" temperatureScale=\"6000\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76 BH6",
+   "source": "engine corpus tests/corpus/invalid/bh6-fluid.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "BH6"
+    ]
+   }
+  }
+ },
+ "srep-0076-bh6-other-object": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\" geodesics=\"true\"/><object3D id=\"ball\" primitive=\"sphere\" radius=\"1\"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/><accretionDisk id=\"disk\" blackHole=\"hole\" outerRadius=\"20\" temperatureScale=\"6000\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76 BH6",
+   "source": "engine corpus tests/corpus/invalid/bh6-other-object.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "BH6"
+    ]
+   }
+  }
+ },
+ "srep-0076-bh6-particles": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\" geodesics=\"true\"/><particles3D id=\"dust\" rate=\"1\"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/><accretionDisk id=\"disk\" blackHole=\"hole\" outerRadius=\"20\" temperatureScale=\"6000\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76 BH6",
+   "source": "engine corpus tests/corpus/invalid/bh6-particles.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "BH6"
+    ]
+   }
+  }
+ },
+ "srep-0076-bh7-inside-photon-sphere": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-2.5\" geodesics=\"true\"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/><accretionDisk id=\"disk\" blackHole=\"hole\" outerRadius=\"20\" temperatureScale=\"6000\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76 BH7",
+   "source": "engine corpus tests/corpus/invalid/bh7-inside-photon-sphere.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "BH7"
+    ]
+   }
+  }
+ },
+ "srep-0076-bh8-two-cameras": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\" geodesics=\"true\"/><camera id=\"eye2\" x=\"0\" y=\"0\" z=\"-80\" geodesics=\"true\"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/><accretionDisk id=\"disk\" blackHole=\"hole\" outerRadius=\"20\" temperatureScale=\"6000\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76 BH8",
+   "source": "engine corpus tests/corpus/invalid/bh8-two-cameras.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "BH8"
+    ]
+   }
+  }
+ },
+ "srep-0076-valid-black-hole": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\" geodesics=\"true\"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/><accretionDisk id=\"disk\" blackHole=\"hole\" outerRadius=\"20\" temperatureScale=\"6000\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76",
+   "source": "engine corpus tests/corpus/valid/black-hole.scene.xml (valid) at 4bf7a9e",
+   "findings": {
+    "valid": true
+   }
+  }
+ },
+ "srep-0076-valid-black-hole-disk-at-isco": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\" geodesics=\"true\"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/><accretionDisk id=\"disk\" innerRadius=\"6\" seed=\"3\" angularPattern=\"spiral\" contrast=\"0.3\" intensity=\"2\" timeScale=\"0.5\" rotationX=\"20\" rotationY=\"5\" rotation=\"-10\" blackHole=\"hole\" outerRadius=\"20\" temperatureScale=\"6000\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76",
+   "source": "engine corpus tests/corpus/valid/black-hole-disk-at-isco.scene.xml (valid) at 4bf7a9e",
+   "findings": {
+    "valid": true
+   }
+  }
+ },
+ "srep-0076-valid-black-hole-without-disk": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\" geodesics=\"true\"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76",
+   "source": "engine corpus tests/corpus/valid/black-hole-without-disk.scene.xml (valid) at 4bf7a9e",
+   "findings": {
+    "valid": true
+   }
+  }
+ },
+ "srep-0076-valid-w03-no-lens": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/><accretionDisk id=\"disk\" blackHole=\"hole\" outerRadius=\"20\" temperatureScale=\"6000\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76",
+   "source": "engine corpus tests/corpus/valid/w03-no-lens.scene.xml (warnings) at 4bf7a9e",
+   "findings": {
+    "valid": true,
+    "codes": [
+     "W03"
+    ]
+   }
+  }
+ },
+ "srep-0076-valid-w04-denoise": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\" geodesics=\"true\" denoise=\"true\"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/><accretionDisk id=\"disk\" blackHole=\"hole\" outerRadius=\"20\" temperatureScale=\"6000\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76",
+   "source": "engine corpus tests/corpus/valid/w04-denoise.scene.xml (warnings) at 4bf7a9e",
+   "findings": {
+    "valid": true,
+    "codes": [
+     "W04"
+    ]
+   }
+  }
+ },
+ "srep-0076-valid-w05-lights": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\" geodesics=\"true\"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/><accretionDisk id=\"disk\" blackHole=\"hole\" outerRadius=\"20\" temperatureScale=\"6000\"/></composition><lights><light id=\"sun\" type=\"directional\"/></lights></scene>\n",
+  "expected": {
+   "rule": "SREP 76",
+   "source": "engine corpus tests/corpus/valid/w05-lights.scene.xml (warnings) at 4bf7a9e",
+   "findings": {
+    "valid": true,
+    "codes": [
+     "W05"
+    ]
+   }
+  }
+ }
+}

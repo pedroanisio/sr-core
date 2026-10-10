@@ -1,0 +1,4434 @@
+{
+ "engine": {
+  "ref": "4bf7a9e",
+  "commit": "4bf7a9ea0a0a9ffa999f20f98f44d557be82e26d",
+  "upstream_note": "Scene-render schema based on sr-core release 1.5.0, tag schema-1.5.0, commit 3f14a20cce58401db6d2bd3906728be0ab1fe17c."
+ },
+ "base": {
+  "ref": "schema-1.5.0",
+  "commit": "3f14a20cce58401db6d2bd3906728be0ab1fe17c"
+ },
+ "excluded_sreps": {
+  "ref": "origin/srep/drafts-2026-10",
+  "numbers": [
+   66,
+   67,
+   68,
+   69,
+   70,
+   71,
+   72,
+   73,
+   74,
+   75
+  ]
+ },
+ "features": [
+  {
+   "feature": "black-hole",
+   "srep": 76,
+   "title": "Schwarzschild black hole, accretion disk and geodesic camera"
+  },
+  {
+   "feature": "impact",
+   "srep": 77,
+   "title": "Impacts: ejecta that become ground, fractures from a body, the density of water"
+  },
+  {
+   "feature": "pyro",
+   "srep": 78,
+   "title": "Pyro: a window that follows the plume, and blasts"
+  },
+  {
+   "feature": "light",
+   "srep": 79,
+   "title": "Multiple scattering in media, and foam in the water's albedo"
+  },
+  {
+   "feature": "voxels",
+   "srep": 80,
+   "title": "Voxel assets, objects of cells and their physics"
+  },
+  {
+   "feature": "annotations",
+   "srep": 81,
+   "title": "Documentation of SREP 40 attributes (no change of meaning)"
+  }
+ ],
+ "files": {
+  "schema/scene-render.xsd": {
+   "engine_path": "schema/scene-render-1.1.xsd",
+   "base_sha256": "c068e48a36b605a682920da33eeb6b33aaee397f7c7b9a9f7276c607fd918218",
+   "engine_sha256": "b0413ee237317c77ebfe5363be5439c20ab312ef4e1d2effaefa2159da638c58"
+  },
+  "schema/scene-render.sch": {
+   "engine_path": "schema/scene-render-1.1.sch",
+   "base_sha256": "89b3e6de9215ac907792058ae442c2280a35deae330f4bba5f8e7e73aa572b6d",
+   "engine_sha256": "db5231c271ae67a77216c734d887535f131472993efb8377c1612caff4497152"
+  }
+ },
+ "items": [
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[assetsType]/element[voxelAsset]",
+   "status": "added",
+   "lines": [
+    1485,
+    1485
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "anchor",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[rigidBody3DType]/attribute[shape]/enumeration[voxels]",
+   "status": "added",
+   "lines": [
+    1774,
+    1774
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "line",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[rigidBody3DType]/attribute[density]",
+   "status": "added",
+   "lines": [
+    1778,
+    1783
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "line",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[rigidBody3DType]/attribute[density]/documentation",
+   "status": "added",
+   "lines": [
+    1779,
+    1782
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "parent",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[rigidBody3DType]/attribute[maxFragments]",
+   "status": "added",
+   "lines": [
+    1784,
+    1791
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "anchor",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[rigidBody3DType]/attribute[maxFragments]/documentation",
+   "status": "added",
+   "lines": [
+    1785,
+    1789
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "parent",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[rigidBody3DType]/attribute[fragmentMinCells]",
+   "status": "added",
+   "lines": [
+    1792,
+    1796
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "anchor",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[rigidBody3DType]/attribute[fragmentMinCells]/documentation",
+   "status": "added",
+   "lines": [
+    1793,
+    1795
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "parent",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[rigidBody3DType]/attribute[fragmentOverflow]",
+   "status": "added",
+   "lines": [
+    1797,
+    1802
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "anchor",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[rigidBody3DType]/attribute[fragmentOverflow]/documentation",
+   "status": "added",
+   "lines": [
+    1798,
+    1800
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "parent",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[rigidBody3DType]/attribute[fragmentOverflow]/enumeration[error]",
+   "status": "added",
+   "lines": [
+    1801,
+    1801
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "parent",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[rigidBody3DType]/attribute[fragmentOverflow]/enumeration[dust]",
+   "status": "added",
+   "lines": [
+    1801,
+    1801
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "parent",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[rigidBody3DType]/attribute[anchor]",
+   "status": "added",
+   "lines": [
+    1803,
+    1811
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "anchor",
+   "last_touched": [
+    "29ab659",
+    "dc9e034"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[rigidBody3DType]/attribute[anchor]/documentation",
+   "status": "added",
+   "lines": [
+    1804,
+    1809
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "parent",
+   "last_touched": [
+    "29ab659",
+    "dc9e034"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[rigidBody3DType]/attribute[anchor]/enumeration[largest]",
+   "status": "added",
+   "lines": [
+    1810,
+    1810
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "parent",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[rigidBody3DType]/attribute[anchor]/enumeration[base]",
+   "status": "added",
+   "lines": [
+    1810,
+    1810
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "parent",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[blackHoleType]",
+   "status": "added",
+   "lines": [
+    2283,
+    2296
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "anchor",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[blackHoleType]/documentation",
+   "status": "added",
+   "lines": [
+    2284,
+    2289
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[blackHoleType]/attribute[id]",
+   "status": "added",
+   "lines": [
+    2290,
+    2290
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[blackHoleType]/attribute[name]",
+   "status": "added",
+   "lines": [
+    2291,
+    2291
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[blackHoleType]/attribute[mass]",
+   "status": "added",
+   "lines": [
+    2292,
+    2292
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[blackHoleType]/attribute[x]",
+   "status": "added",
+   "lines": [
+    2293,
+    2293
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[blackHoleType]/attribute[y]",
+   "status": "added",
+   "lines": [
+    2294,
+    2294
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[blackHoleType]/attribute[z]",
+   "status": "added",
+   "lines": [
+    2295,
+    2295
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[accretionDiskType]",
+   "status": "added",
+   "lines": [
+    2297,
+    2331
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "anchor",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[accretionDiskType]/documentation",
+   "status": "added",
+   "lines": [
+    2298,
+    2312
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[accretionDiskType]/attribute[id]",
+   "status": "added",
+   "lines": [
+    2313,
+    2313
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[accretionDiskType]/attribute[name]",
+   "status": "added",
+   "lines": [
+    2314,
+    2314
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[accretionDiskType]/attribute[blackHole]",
+   "status": "added",
+   "lines": [
+    2315,
+    2315
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "anchor",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[accretionDiskType]/attribute[innerRadius]",
+   "status": "added",
+   "lines": [
+    2316,
+    2316
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[accretionDiskType]/attribute[outerRadius]",
+   "status": "added",
+   "lines": [
+    2317,
+    2317
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[accretionDiskType]/attribute[temperatureScale]",
+   "status": "added",
+   "lines": [
+    2318,
+    2318
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[accretionDiskType]/attribute[seed]",
+   "status": "added",
+   "lines": [
+    2319,
+    2319
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[accretionDiskType]/attribute[angularPattern]",
+   "status": "added",
+   "lines": [
+    2320,
+    2324
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "anchor",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[accretionDiskType]/attribute[angularPattern]/enumeration[none]",
+   "status": "added",
+   "lines": [
+    2322,
+    2322
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[accretionDiskType]/attribute[angularPattern]/enumeration[clumps]",
+   "status": "added",
+   "lines": [
+    2322,
+    2322
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[accretionDiskType]/attribute[angularPattern]/enumeration[spiral]",
+   "status": "added",
+   "lines": [
+    2322,
+    2322
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[accretionDiskType]/attribute[contrast]",
+   "status": "added",
+   "lines": [
+    2325,
+    2325
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[accretionDiskType]/attribute[intensity]",
+   "status": "added",
+   "lines": [
+    2326,
+    2326
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[accretionDiskType]/attribute[timeScale]",
+   "status": "added",
+   "lines": [
+    2327,
+    2327
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[accretionDiskType]/attribute[rotationX]",
+   "status": "added",
+   "lines": [
+    2328,
+    2328
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[accretionDiskType]/attribute[rotationY]",
+   "status": "added",
+   "lines": [
+    2329,
+    2329
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[accretionDiskType]/attribute[rotation]",
+   "status": "added",
+   "lines": [
+    2330,
+    2330
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "b385cb8"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[object3DType]/attribute[primitive]/enumeration[voxels]",
+   "status": "added",
+   "lines": [
+    2386,
+    2386
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "line",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[object3DType]/attribute[voxels]",
+   "status": "added",
+   "lines": [
+    2504,
+    2509
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "anchor",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[object3DType]/attribute[voxels]/documentation",
+   "status": "added",
+   "lines": [
+    2505,
+    2508
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "parent",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[object3DType]/attribute[cellSize]",
+   "status": "added",
+   "lines": [
+    2510,
+    2515
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "line",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[object3DType]/attribute[cellSize]/documentation",
+   "status": "added",
+   "lines": [
+    2511,
+    2514
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "parent",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[object3DType]/attribute[palette]",
+   "status": "added",
+   "lines": [
+    2516,
+    2523
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "line",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[object3DType]/attribute[palette]/documentation",
+   "status": "added",
+   "lines": [
+    2517,
+    2522
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "parent",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[object3DType]/attribute[surface]",
+   "status": "added",
+   "lines": [
+    2524,
+    2530
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "anchor",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[object3DType]/attribute[surface]/documentation",
+   "status": "added",
+   "lines": [
+    2525,
+    2528
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "parent",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[object3DType]/attribute[surface]/enumeration[blocks]",
+   "status": "added",
+   "lines": [
+    2529,
+    2529
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "parent",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[object3DType]/attribute[surfaceMemoryMiB]",
+   "status": "added",
+   "lines": [
+    2531,
+    2539
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "96ac10d",
+   "introduced_subject": "feat(model): surfaceMemoryMiB, the budget of the surface of a voxels object, in the schema, the rules and the corpus",
+   "date": "2026-10-07",
+   "merged_by": "96b7bfe",
+   "method": "line",
+   "last_touched": [
+    "96ac10d"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[object3DType]/attribute[surfaceMemoryMiB]/documentation",
+   "status": "added",
+   "lines": [
+    2532,
+    2537
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "96ac10d",
+   "introduced_subject": "feat(model): surfaceMemoryMiB, the budget of the surface of a voxels object, in the schema, the rules and the corpus",
+   "date": "2026-10-07",
+   "merged_by": "96b7bfe",
+   "method": "parent",
+   "last_touched": [
+    "96ac10d"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[cameraType]/attribute[geodesics]",
+   "status": "added",
+   "lines": [
+    2612,
+    2625
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "anchor",
+   "last_touched": [
+    "a74cd40",
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[cameraType]/attribute[geodesics]/documentation",
+   "status": "added",
+   "lines": [
+    2613,
+    2624
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "a74cd40",
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "group[nodeChoice]/element[blackHole]",
+   "status": "added",
+   "lines": [
+    3109,
+    3109
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "anchor",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "group[nodeChoice]/element[accretionDisk]",
+   "status": "added",
+   "lines": [
+    3110,
+    3110
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "anchor",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "attributeGroup[pyroCrater]/documentation",
+   "status": "changed",
+   "lines": [
+    4292,
+    4307
+   ],
+   "feature": "annotations",
+   "srep": 81,
+   "introduced": "928c683",
+   "introduced_subject": "docs(schema): defaults and contracts that were only in the code",
+   "date": "2026-10-06",
+   "merged_by": "2b2a1f8",
+   "method": "changed-line",
+   "last_touched": [
+    "cdf3630",
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[voxelAssetType]",
+   "status": "added",
+   "lines": [
+    4336,
+    4364
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "anchor",
+   "last_touched": [
+    "61e854b",
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[voxelAssetType]/documentation",
+   "status": "added",
+   "lines": [
+    4337,
+    4347
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "parent",
+   "last_touched": [
+    "61e854b",
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[voxelAssetType]/attribute[id]",
+   "status": "added",
+   "lines": [
+    4348,
+    4348
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "parent",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[voxelAssetType]/attribute[src]",
+   "status": "added",
+   "lines": [
+    4349,
+    4349
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "parent",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[voxelAssetType]/attribute[format]",
+   "status": "added",
+   "lines": [
+    4350,
+    4352
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "parent",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[voxelAssetType]/attribute[format]/enumeration[vox]",
+   "status": "added",
+   "lines": [
+    4351,
+    4351
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "parent",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[voxelAssetType]/attribute[format]/enumeration[srvol]",
+   "status": "added",
+   "lines": [
+    4351,
+    4351
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "parent",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[voxelAssetType]/attribute[model]",
+   "status": "added",
+   "lines": [
+    4353,
+    4353
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "parent",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[voxelAssetType]/attribute[fromMesh]",
+   "status": "added",
+   "lines": [
+    4354,
+    4354
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "anchor",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[voxelAssetType]/attribute[cellSize]",
+   "status": "added",
+   "lines": [
+    4355,
+    4355
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "parent",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[voxelAssetType]/attribute[voxelGrid]",
+   "status": "added",
+   "lines": [
+    4356,
+    4356
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "anchor",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[voxelAssetType]/attribute[maxCells]",
+   "status": "added",
+   "lines": [
+    4357,
+    4359
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "anchor",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[voxelAssetType]/attribute[maxMemoryMiB]",
+   "status": "added",
+   "lines": [
+    4360,
+    4362
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "parent",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[voxelAssetType]/attributeGroup[ref=assetProvenance]",
+   "status": "added",
+   "lines": [
+    4363,
+    4363
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "parent",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[mediumType]/attribute[scatterBounces]",
+   "status": "added",
+   "lines": [
+    4399,
+    4402
+   ],
+   "feature": "light",
+   "srep": 79,
+   "introduced": "42ee573",
+   "introduced_subject": "feat(model): medium@scatterBounces, the most collisions a path may have in a medium, in the schema, the rules, the corpus and the SREP",
+   "date": "2026-10-08",
+   "merged_by": "52ab3c3",
+   "method": "anchor",
+   "last_touched": [
+    "42ee573"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[mediumType]/attribute[scatterBounces]/documentation",
+   "status": "added",
+   "lines": [
+    4400,
+    4400
+   ],
+   "feature": "light",
+   "srep": 79,
+   "introduced": "42ee573",
+   "introduced_subject": "feat(model): medium@scatterBounces, the most collisions a path may have in a medium, in the schema, the rules, the corpus and the SREP",
+   "date": "2026-10-08",
+   "merged_by": "52ab3c3",
+   "method": "parent",
+   "last_touched": [
+    "42ee573"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[particles3DType]/attribute[gas]/documentation",
+   "status": "changed",
+   "lines": [
+    4490,
+    4503
+   ],
+   "feature": "annotations",
+   "srep": 81,
+   "introduced": "a26493f",
+   "introduced_subject": "docs: ledger milestones for the impact features, and the counts and scope of the SREP's inventory",
+   "date": "2026-10-06",
+   "merged_by": "98b17db",
+   "method": "changed-line",
+   "last_touched": [
+    "cdf3630",
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[burst3DType]/documentation",
+   "status": "changed",
+   "lines": [
+    4516,
+    4531
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "4ea3b74",
+   "introduced_subject": "fix(model): the burst of the crater of cells has no angle or spread (CRT17), and CRT14 says only what it alone refuses",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "changed-line",
+   "last_touched": [
+    "4ea3b74",
+    "cdf3630"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[burst3DType]/attribute[count]",
+   "status": "changed",
+   "lines": [
+    4533,
+    4533
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "changed-line",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[burst3DType]/attribute[angle]",
+   "status": "changed",
+   "lines": [
+    4537,
+    4537
+   ],
+   "feature": "annotations",
+   "srep": 81,
+   "introduced": "928c683",
+   "introduced_subject": "docs(schema): defaults and contracts that were only in the code",
+   "date": "2026-10-06",
+   "merged_by": "2b2a1f8",
+   "method": "changed-line",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[burst3DType]/attribute[angle]/documentation",
+   "status": "added",
+   "lines": [
+    4537,
+    4537
+   ],
+   "feature": "annotations",
+   "srep": 81,
+   "introduced": "928c683",
+   "introduced_subject": "docs(schema): defaults and contracts that were only in the code",
+   "date": "2026-10-06",
+   "merged_by": "2b2a1f8",
+   "method": "line",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[burst3DType]/attribute[angleSpread]",
+   "status": "changed",
+   "lines": [
+    4538,
+    4538
+   ],
+   "feature": "annotations",
+   "srep": 81,
+   "introduced": "928c683",
+   "introduced_subject": "docs(schema): defaults and contracts that were only in the code",
+   "date": "2026-10-06",
+   "merged_by": "2b2a1f8",
+   "method": "changed-line",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[burst3DType]/attribute[angleSpread]/documentation",
+   "status": "added",
+   "lines": [
+    4538,
+    4538
+   ],
+   "feature": "annotations",
+   "srep": 81,
+   "introduced": "928c683",
+   "introduced_subject": "docs(schema): defaults and contracts that were only in the code",
+   "date": "2026-10-06",
+   "merged_by": "2b2a1f8",
+   "method": "line",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[oceanType]/attribute[density]",
+   "status": "added",
+   "lines": [
+    4641,
+    4648
+   ],
+   "feature": "impact",
+   "srep": 77,
+   "introduced": "dda3ae8",
+   "introduced_subject": "feat(schema): ocean@density, the density of the water",
+   "date": "2026-10-06",
+   "merged_by": "e897f96",
+   "method": "line",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[oceanType]/attribute[density]/documentation",
+   "status": "added",
+   "lines": [
+    4642,
+    4647
+   ],
+   "feature": "impact",
+   "srep": 77,
+   "introduced": "dda3ae8",
+   "introduced_subject": "feat(schema): ocean@density, the density of the water",
+   "date": "2026-10-06",
+   "merged_by": "e897f96",
+   "method": "parent",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[oceanType]/attribute[bodyDrag]/documentation",
+   "status": "changed",
+   "lines": [
+    4650,
+    4657
+   ],
+   "feature": "annotations",
+   "srep": 81,
+   "introduced": "928c683",
+   "introduced_subject": "docs(schema): defaults and contracts that were only in the code",
+   "date": "2026-10-06",
+   "merged_by": "2b2a1f8",
+   "method": "changed-line",
+   "last_touched": [
+    "cdf3630",
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[whitewaterType]/attribute[foamMode]",
+   "status": "added",
+   "lines": [
+    4709,
+    4712
+   ],
+   "feature": "light",
+   "srep": 79,
+   "introduced": "721a6d3",
+   "introduced_subject": "feat(schema): whitewater foam can be mixed into the water's albedo instead of drawn as particles",
+   "date": "2026-10-06",
+   "merged_by": "a590300",
+   "method": "anchor",
+   "last_touched": [
+    "721a6d3",
+    "c92474e"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[whitewaterType]/attribute[foamMode]/documentation",
+   "status": "added",
+   "lines": [
+    4710,
+    4710
+   ],
+   "feature": "light",
+   "srep": 79,
+   "introduced": "721a6d3",
+   "introduced_subject": "feat(schema): whitewater foam can be mixed into the water's albedo instead of drawn as particles",
+   "date": "2026-10-06",
+   "merged_by": "a590300",
+   "method": "parent",
+   "last_touched": [
+    "c92474e"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[whitewaterType]/attribute[foamMode]/enumeration[particles]",
+   "status": "added",
+   "lines": [
+    4711,
+    4711
+   ],
+   "feature": "light",
+   "srep": 79,
+   "introduced": "721a6d3",
+   "introduced_subject": "feat(schema): whitewater foam can be mixed into the water's albedo instead of drawn as particles",
+   "date": "2026-10-06",
+   "merged_by": "a590300",
+   "method": "parent",
+   "last_touched": [
+    "721a6d3"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[whitewaterType]/attribute[foamMode]/enumeration[albedo]",
+   "status": "added",
+   "lines": [
+    4711,
+    4711
+   ],
+   "feature": "light",
+   "srep": 79,
+   "introduced": "721a6d3",
+   "introduced_subject": "feat(schema): whitewater foam can be mixed into the water's albedo instead of drawn as particles",
+   "date": "2026-10-06",
+   "merged_by": "a590300",
+   "method": "parent",
+   "last_touched": [
+    "721a6d3"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[whitewaterType]/attribute[foamRadius]",
+   "status": "added",
+   "lines": [
+    4713,
+    4715
+   ],
+   "feature": "light",
+   "srep": 79,
+   "introduced": "721a6d3",
+   "introduced_subject": "feat(schema): whitewater foam can be mixed into the water's albedo instead of drawn as particles",
+   "date": "2026-10-06",
+   "merged_by": "a590300",
+   "method": "anchor",
+   "last_touched": [
+    "721a6d3",
+    "9ccd258"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[whitewaterType]/attribute[foamRadius]/documentation",
+   "status": "added",
+   "lines": [
+    4714,
+    4714
+   ],
+   "feature": "light",
+   "srep": 79,
+   "introduced": "721a6d3",
+   "introduced_subject": "feat(schema): whitewater foam can be mixed into the water's albedo instead of drawn as particles",
+   "date": "2026-10-06",
+   "merged_by": "a590300",
+   "method": "parent",
+   "last_touched": [
+    "9ccd258"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[whitewaterType]/attribute[foamAlbedo]",
+   "status": "added",
+   "lines": [
+    4716,
+    4718
+   ],
+   "feature": "light",
+   "srep": 79,
+   "introduced": "721a6d3",
+   "introduced_subject": "feat(schema): whitewater foam can be mixed into the water's albedo instead of drawn as particles",
+   "date": "2026-10-06",
+   "merged_by": "a590300",
+   "method": "anchor",
+   "last_touched": [
+    "721a6d3"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[whitewaterType]/attribute[foamAlbedo]/documentation",
+   "status": "added",
+   "lines": [
+    4717,
+    4717
+   ],
+   "feature": "light",
+   "srep": 79,
+   "introduced": "721a6d3",
+   "introduced_subject": "feat(schema): whitewater foam can be mixed into the water's albedo instead of drawn as particles",
+   "date": "2026-10-06",
+   "merged_by": "a590300",
+   "method": "parent",
+   "last_touched": [
+    "721a6d3"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[whitewaterType]/attribute[foamRoughness]",
+   "status": "added",
+   "lines": [
+    4719,
+    4721
+   ],
+   "feature": "light",
+   "srep": 79,
+   "introduced": "721a6d3",
+   "introduced_subject": "feat(schema): whitewater foam can be mixed into the water's albedo instead of drawn as particles",
+   "date": "2026-10-06",
+   "merged_by": "a590300",
+   "method": "anchor",
+   "last_touched": [
+    "721a6d3"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[whitewaterType]/attribute[foamRoughness]/documentation",
+   "status": "added",
+   "lines": [
+    4720,
+    4720
+   ],
+   "feature": "light",
+   "srep": 79,
+   "introduced": "721a6d3",
+   "introduced_subject": "feat(schema): whitewater foam can be mixed into the water's albedo instead of drawn as particles",
+   "date": "2026-10-06",
+   "merged_by": "a590300",
+   "method": "parent",
+   "last_touched": [
+    "721a6d3"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[pyroBlastType]",
+   "status": "added",
+   "lines": [
+    4754,
+    4774
+   ],
+   "feature": "pyro",
+   "srep": 78,
+   "introduced": "f1269d9",
+   "introduced_subject": "feat(model): pyroBlast in the schema, with PYC5 and PYC6, the corpus and the tests of the rules",
+   "date": "2026-10-07",
+   "merged_by": "4d34643",
+   "method": "anchor",
+   "last_touched": [
+    "361c88f",
+    "f1269d9"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[pyroBlastType]/documentation",
+   "status": "added",
+   "lines": [
+    4755,
+    4765
+   ],
+   "feature": "pyro",
+   "srep": 78,
+   "introduced": "f1269d9",
+   "introduced_subject": "feat(model): pyroBlast in the schema, with PYC5 and PYC6, the corpus and the tests of the rules",
+   "date": "2026-10-07",
+   "merged_by": "4d34643",
+   "method": "parent",
+   "last_touched": [
+    "f1269d9"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[pyroBlastType]/attribute[time]",
+   "status": "added",
+   "lines": [
+    4766,
+    4766
+   ],
+   "feature": "pyro",
+   "srep": 78,
+   "introduced": "f1269d9",
+   "introduced_subject": "feat(model): pyroBlast in the schema, with PYC5 and PYC6, the corpus and the tests of the rules",
+   "date": "2026-10-07",
+   "merged_by": "4d34643",
+   "method": "parent",
+   "last_touched": [
+    "f1269d9"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[pyroBlastType]/attribute[energy]",
+   "status": "added",
+   "lines": [
+    4767,
+    4767
+   ],
+   "feature": "pyro",
+   "srep": 78,
+   "introduced": "f1269d9",
+   "introduced_subject": "feat(model): pyroBlast in the schema, with PYC5 and PYC6, the corpus and the tests of the rules",
+   "date": "2026-10-07",
+   "merged_by": "4d34643",
+   "method": "anchor",
+   "last_touched": [
+    "f1269d9"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[pyroBlastType]/attribute[x]",
+   "status": "added",
+   "lines": [
+    4768,
+    4768
+   ],
+   "feature": "pyro",
+   "srep": 78,
+   "introduced": "f1269d9",
+   "introduced_subject": "feat(model): pyroBlast in the schema, with PYC5 and PYC6, the corpus and the tests of the rules",
+   "date": "2026-10-07",
+   "merged_by": "4d34643",
+   "method": "parent",
+   "last_touched": [
+    "f1269d9"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[pyroBlastType]/attribute[y]",
+   "status": "added",
+   "lines": [
+    4769,
+    4769
+   ],
+   "feature": "pyro",
+   "srep": 78,
+   "introduced": "f1269d9",
+   "introduced_subject": "feat(model): pyroBlast in the schema, with PYC5 and PYC6, the corpus and the tests of the rules",
+   "date": "2026-10-07",
+   "merged_by": "4d34643",
+   "method": "parent",
+   "last_touched": [
+    "f1269d9"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[pyroBlastType]/attribute[z]",
+   "status": "added",
+   "lines": [
+    4770,
+    4770
+   ],
+   "feature": "pyro",
+   "srep": 78,
+   "introduced": "f1269d9",
+   "introduced_subject": "feat(model): pyroBlast in the schema, with PYC5 and PYC6, the corpus and the tests of the rules",
+   "date": "2026-10-07",
+   "merged_by": "4d34643",
+   "method": "parent",
+   "last_touched": [
+    "f1269d9"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[pyroBlastType]/attribute[ambientDensity]",
+   "status": "added",
+   "lines": [
+    4771,
+    4771
+   ],
+   "feature": "pyro",
+   "srep": 78,
+   "introduced": "f1269d9",
+   "introduced_subject": "feat(model): pyroBlast in the schema, with PYC5 and PYC6, the corpus and the tests of the rules",
+   "date": "2026-10-07",
+   "merged_by": "4d34643",
+   "method": "anchor",
+   "last_touched": [
+    "f1269d9"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[pyroBlastType]/attribute[ambientPressure]",
+   "status": "added",
+   "lines": [
+    4772,
+    4772
+   ],
+   "feature": "pyro",
+   "srep": 78,
+   "introduced": "f1269d9",
+   "introduced_subject": "feat(model): pyroBlast in the schema, with PYC5 and PYC6, the corpus and the tests of the rules",
+   "date": "2026-10-07",
+   "merged_by": "4d34643",
+   "method": "anchor",
+   "last_touched": [
+    "f1269d9"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[pyroBlastType]/attribute[gamma]",
+   "status": "added",
+   "lines": [
+    4773,
+    4773
+   ],
+   "feature": "pyro",
+   "srep": 78,
+   "introduced": "f1269d9",
+   "introduced_subject": "feat(model): pyroBlast in the schema, with PYC5 and PYC6, the corpus and the tests of the rules",
+   "date": "2026-10-07",
+   "merged_by": "4d34643",
+   "method": "parent",
+   "last_touched": [
+    "361c88f"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[pyroType]/element[pyroBlast]",
+   "status": "added",
+   "lines": [
+    4776,
+    4776
+   ],
+   "feature": "pyro",
+   "srep": 78,
+   "introduced": "f1269d9",
+   "introduced_subject": "feat(model): pyroBlast in the schema, with PYC5 and PYC6, the corpus and the tests of the rules",
+   "date": "2026-10-07",
+   "merged_by": "4d34643",
+   "method": "anchor",
+   "last_touched": [
+    "f1269d9"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[pyroType]/attribute[follow]",
+   "status": "added",
+   "lines": [
+    4795,
+    4806
+   ],
+   "feature": "pyro",
+   "srep": 78,
+   "introduced": "162a8ba",
+   "introduced_subject": "feat(eval): pyro@follow, a smoke window that follows its plume, with rules PYRO9 to PYRO11",
+   "date": "2026-10-06",
+   "merged_by": "99e4d6b",
+   "method": "line",
+   "last_touched": [
+    "162a8ba"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[pyroType]/attribute[follow]/documentation",
+   "status": "added",
+   "lines": [
+    4796,
+    4805
+   ],
+   "feature": "pyro",
+   "srep": 78,
+   "introduced": "162a8ba",
+   "introduced_subject": "feat(eval): pyro@follow, a smoke window that follows its plume, with rules PYRO9 to PYRO11",
+   "date": "2026-10-06",
+   "merged_by": "99e4d6b",
+   "method": "parent",
+   "last_touched": [
+    "162a8ba"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[pyroType]/attribute[followMargin]",
+   "status": "added",
+   "lines": [
+    4807,
+    4813
+   ],
+   "feature": "pyro",
+   "srep": 78,
+   "introduced": "162a8ba",
+   "introduced_subject": "feat(eval): pyro@follow, a smoke window that follows its plume, with rules PYRO9 to PYRO11",
+   "date": "2026-10-06",
+   "merged_by": "99e4d6b",
+   "method": "anchor",
+   "last_touched": [
+    "162a8ba"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[pyroType]/attribute[followMargin]/documentation",
+   "status": "added",
+   "lines": [
+    4808,
+    4812
+   ],
+   "feature": "pyro",
+   "srep": 78,
+   "introduced": "162a8ba",
+   "introduced_subject": "feat(eval): pyro@follow, a smoke window that follows its plume, with rules PYRO9 to PYRO11",
+   "date": "2026-10-06",
+   "merged_by": "99e4d6b",
+   "method": "parent",
+   "last_touched": [
+    "162a8ba"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[pyroType]/attribute[followLoss]",
+   "status": "added",
+   "lines": [
+    4814,
+    4822
+   ],
+   "feature": "pyro",
+   "srep": 78,
+   "introduced": "162a8ba",
+   "introduced_subject": "feat(eval): pyro@follow, a smoke window that follows its plume, with rules PYRO9 to PYRO11",
+   "date": "2026-10-06",
+   "merged_by": "99e4d6b",
+   "method": "anchor",
+   "last_touched": [
+    "162a8ba"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[pyroType]/attribute[followLoss]/documentation",
+   "status": "added",
+   "lines": [
+    4815,
+    4821
+   ],
+   "feature": "pyro",
+   "srep": 78,
+   "introduced": "162a8ba",
+   "introduced_subject": "feat(eval): pyro@follow, a smoke window that follows its plume, with rules PYRO9 to PYRO11",
+   "date": "2026-10-06",
+   "merged_by": "99e4d6b",
+   "method": "parent",
+   "last_touched": [
+    "162a8ba"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[fractureType]/documentation",
+   "status": "changed",
+   "lines": [
+    4831,
+    4852
+   ],
+   "feature": "impact",
+   "srep": 77,
+   "introduced": "2820484",
+   "introduced_subject": "feat(schema): fracture@source, the body that breaks it",
+   "date": "2026-10-06",
+   "merged_by": "96ce006",
+   "method": "changed-line",
+   "last_touched": [
+    "cdf3630",
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[fractureType]/attribute[source]",
+   "status": "added",
+   "lines": [
+    4853,
+    4853
+   ],
+   "feature": "impact",
+   "srep": 77,
+   "introduced": "2820484",
+   "introduced_subject": "feat(schema): fracture@source, the body that breaks it",
+   "date": "2026-10-06",
+   "merged_by": "96ce006",
+   "method": "line",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[fractureType]/attribute[minImpulse]",
+   "status": "added",
+   "lines": [
+    4854,
+    4854
+   ],
+   "feature": "impact",
+   "srep": 77,
+   "introduced": "2820484",
+   "introduced_subject": "feat(schema): fracture@source, the body that breaks it",
+   "date": "2026-10-06",
+   "merged_by": "96ce006",
+   "method": "anchor",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[fractureType]/attribute[energyFraction]",
+   "status": "added",
+   "lines": [
+    4855,
+    4855
+   ],
+   "feature": "impact",
+   "srep": 77,
+   "introduced": "2820484",
+   "introduced_subject": "feat(schema): fracture@source, the body that breaks it",
+   "date": "2026-10-06",
+   "merged_by": "96ce006",
+   "method": "anchor",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[fractureType]/attribute[interiorMaterial]",
+   "status": "changed",
+   "lines": [
+    4859,
+    4859
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "changed-line",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[fractureType]/attribute[partition]",
+   "status": "added",
+   "lines": [
+    4861,
+    4869
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "anchor",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[fractureType]/attribute[partition]/documentation",
+   "status": "added",
+   "lines": [
+    4862,
+    4867
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "parent",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[fractureType]/attribute[partition]/enumeration[voronoi]",
+   "status": "added",
+   "lines": [
+    4868,
+    4868
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "parent",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[fractureType]/attribute[partition]/enumeration[planes]",
+   "status": "added",
+   "lines": [
+    4868,
+    4868
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "parent",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[fractureType]/attribute[partition]/enumeration[labels]",
+   "status": "added",
+   "lines": [
+    4868,
+    4868
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "parent",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[fractureType]/attribute[planes]",
+   "status": "added",
+   "lines": [
+    4870,
+    4876
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "anchor",
+   "last_touched": [
+    "29ab659",
+    "4fb67e6"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[fractureType]/attribute[planes]/documentation",
+   "status": "added",
+   "lines": [
+    4871,
+    4875
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "parent",
+   "last_touched": [
+    "29ab659",
+    "4fb67e6"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[fractureType]/attribute[labels]",
+   "status": "added",
+   "lines": [
+    4877,
+    4882
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "line",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[fractureType]/attribute[labels]/documentation",
+   "status": "added",
+   "lines": [
+    4878,
+    4880
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "parent",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[fractureType]/attribute[labels]/enumeration[material]",
+   "status": "added",
+   "lines": [
+    4881,
+    4881
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "parent",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[fractureType]/attribute[mode]",
+   "status": "added",
+   "lines": [
+    4883,
+    4894
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "0efd166",
+   "introduced_subject": "feat(model): fracture mode=\"stress\" and strength: the schema and the rules of the fracture by stress (FRX13 to FRX15)",
+   "date": "2026-10-07",
+   "merged_by": "a54089e",
+   "method": "line",
+   "last_touched": [
+    "0efd166",
+    "c59d084"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[fractureType]/attribute[mode]/documentation",
+   "status": "added",
+   "lines": [
+    4884,
+    4892
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "0efd166",
+   "introduced_subject": "feat(model): fracture mode=\"stress\" and strength: the schema and the rules of the fracture by stress (FRX13 to FRX15)",
+   "date": "2026-10-07",
+   "merged_by": "a54089e",
+   "method": "parent",
+   "last_touched": [
+    "0efd166",
+    "c59d084"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[fractureType]/attribute[mode]/enumeration[impact]",
+   "status": "added",
+   "lines": [
+    4893,
+    4893
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "0efd166",
+   "introduced_subject": "feat(model): fracture mode=\"stress\" and strength: the schema and the rules of the fracture by stress (FRX13 to FRX15)",
+   "date": "2026-10-07",
+   "merged_by": "a54089e",
+   "method": "parent",
+   "last_touched": [
+    "0efd166"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[fractureType]/attribute[mode]/enumeration[stress]",
+   "status": "added",
+   "lines": [
+    4893,
+    4893
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "0efd166",
+   "introduced_subject": "feat(model): fracture mode=\"stress\" and strength: the schema and the rules of the fracture by stress (FRX13 to FRX15)",
+   "date": "2026-10-07",
+   "merged_by": "a54089e",
+   "method": "parent",
+   "last_touched": [
+    "0efd166"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[fractureType]/attribute[strength]",
+   "status": "added",
+   "lines": [
+    4895,
+    4900
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "0efd166",
+   "introduced_subject": "feat(model): fracture mode=\"stress\" and strength: the schema and the rules of the fracture by stress (FRX13 to FRX15)",
+   "date": "2026-10-07",
+   "merged_by": "a54089e",
+   "method": "line",
+   "last_touched": [
+    "0efd166"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[fractureType]/attribute[strength]/documentation",
+   "status": "added",
+   "lines": [
+    4896,
+    4899
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "0efd166",
+   "introduced_subject": "feat(model): fracture mode=\"stress\" and strength: the schema and the rules of the fracture by stress (FRX13 to FRX15)",
+   "date": "2026-10-07",
+   "merged_by": "a54089e",
+   "method": "parent",
+   "last_touched": [
+    "0efd166"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[craterType]/documentation",
+   "status": "changed",
+   "lines": [
+    4909,
+    4947
+   ],
+   "feature": "impact",
+   "srep": 77,
+   "introduced": "c1ccf6a",
+   "introduced_subject": "fix(schema): CRT4's envelope applies to a crater without a source",
+   "date": "2026-10-06",
+   "merged_by": "2b2a1f8",
+   "method": "changed-line",
+   "last_touched": [
+    "cdf3630",
+    "db80223",
+    "ef03a40"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[craterType]/attribute[mantle]",
+   "status": "added",
+   "lines": [
+    4976,
+    4983
+   ],
+   "feature": "impact",
+   "srep": 77,
+   "introduced": "1c1514f",
+   "introduced_subject": "feat(model): crater@mantle and crater@bulking (CRT10, CRT11)",
+   "date": "2026-10-06",
+   "merged_by": "8508fa6",
+   "method": "anchor",
+   "last_touched": [
+    "1c1514f"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[craterType]/attribute[mantle]/documentation",
+   "status": "added",
+   "lines": [
+    4977,
+    4982
+   ],
+   "feature": "impact",
+   "srep": 77,
+   "introduced": "1c1514f",
+   "introduced_subject": "feat(model): crater@mantle and crater@bulking (CRT10, CRT11)",
+   "date": "2026-10-06",
+   "merged_by": "8508fa6",
+   "method": "parent",
+   "last_touched": [
+    "1c1514f"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[craterType]/attribute[bulking]",
+   "status": "added",
+   "lines": [
+    4984,
+    4992
+   ],
+   "feature": "impact",
+   "srep": 77,
+   "introduced": "1c1514f",
+   "introduced_subject": "feat(model): crater@mantle and crater@bulking (CRT10, CRT11)",
+   "date": "2026-10-06",
+   "merged_by": "8508fa6",
+   "method": "anchor",
+   "last_touched": [
+    "1c1514f"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[craterType]/attribute[bulking]/documentation",
+   "status": "added",
+   "lines": [
+    4985,
+    4990
+   ],
+   "feature": "impact",
+   "srep": 77,
+   "introduced": "1c1514f",
+   "introduced_subject": "feat(model): crater@mantle and crater@bulking (CRT10, CRT11)",
+   "date": "2026-10-06",
+   "merged_by": "8508fa6",
+   "method": "parent",
+   "last_touched": [
+    "1c1514f"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[craterType]/attribute[repose]",
+   "status": "added",
+   "lines": [
+    4993,
+    5003
+   ],
+   "feature": "impact",
+   "srep": 77,
+   "introduced": "3abf7b4",
+   "introduced_subject": "feat(model): crater@repose (CRT10 extended, CRT12 exclusive with mantle)",
+   "date": "2026-10-07",
+   "merged_by": "963b614",
+   "method": "anchor",
+   "last_touched": [
+    "3abf7b4"
+   ]
+  },
+  {
+   "file": "schema/scene-render.xsd",
+   "key": "complexType[craterType]/attribute[repose]/documentation",
+   "status": "added",
+   "lines": [
+    4994,
+    5001
+   ],
+   "feature": "impact",
+   "srep": 77,
+   "introduced": "3abf7b4",
+   "introduced_subject": "feat(model): crater@repose (CRT10 extended, CRT12 exclusive with mantle)",
+   "date": "2026-10-07",
+   "merged_by": "963b614",
+   "method": "parent",
+   "last_touched": [
+    "3abf7b4"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-volume]/rule[pyro]/assert[PYRO9]",
+   "status": "added",
+   "lines": [
+    528,
+    528
+   ],
+   "feature": "pyro",
+   "srep": 78,
+   "introduced": "162a8ba",
+   "introduced_subject": "feat(eval): pyro@follow, a smoke window that follows its plume, with rules PYRO9 to PYRO11",
+   "date": "2026-10-06",
+   "merged_by": "99e4d6b",
+   "method": "anchor",
+   "last_touched": [
+    "162a8ba"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-volume]/rule[pyro]/assert[PYRO10]",
+   "status": "added",
+   "lines": [
+    529,
+    529
+   ],
+   "feature": "pyro",
+   "srep": 78,
+   "introduced": "162a8ba",
+   "introduced_subject": "feat(eval): pyro@follow, a smoke window that follows its plume, with rules PYRO9 to PYRO11",
+   "date": "2026-10-06",
+   "merged_by": "99e4d6b",
+   "method": "anchor",
+   "last_touched": [
+    "162a8ba"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-volume]/rule[pyro]/assert[PYRO11]",
+   "status": "added",
+   "lines": [
+    530,
+    530
+   ],
+   "feature": "pyro",
+   "srep": 78,
+   "introduced": "162a8ba",
+   "introduced_subject": "feat(eval): pyro@follow, a smoke window that follows its plume, with rules PYRO9 to PYRO11",
+   "date": "2026-10-06",
+   "merged_by": "99e4d6b",
+   "method": "anchor",
+   "last_touched": [
+    "162a8ba"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-volume]/rule[pyro]/assert[PYC5]",
+   "status": "added",
+   "lines": [
+    531,
+    531
+   ],
+   "feature": "pyro",
+   "srep": 78,
+   "introduced": "f1269d9",
+   "introduced_subject": "feat(model): pyroBlast in the schema, with PYC5 and PYC6, the corpus and the tests of the rules",
+   "date": "2026-10-07",
+   "merged_by": "4d34643",
+   "method": "anchor",
+   "last_touched": [
+    "f1269d9"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-volume]/rule[pyroBlast]",
+   "status": "added",
+   "lines": [
+    533,
+    535
+   ],
+   "feature": "pyro",
+   "srep": 78,
+   "introduced": "f1269d9",
+   "introduced_subject": "feat(model): pyroBlast in the schema, with PYC5 and PYC6, the corpus and the tests of the rules",
+   "date": "2026-10-07",
+   "merged_by": "4d34643",
+   "method": "anchor",
+   "last_touched": [
+    "cdf3630",
+    "f1269d9"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-volume]/rule[pyroBlast]/assert[PYC6]",
+   "status": "added",
+   "lines": [
+    534,
+    534
+   ],
+   "feature": "pyro",
+   "srep": 78,
+   "introduced": "f1269d9",
+   "introduced_subject": "feat(model): pyroBlast in the schema, with PYC5 and PYC6, the corpus and the tests of the rules",
+   "date": "2026-10-07",
+   "merged_by": "4d34643",
+   "method": "anchor",
+   "last_touched": [
+    "f1269d9"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxels-version]",
+   "status": "added",
+   "lines": [
+    561,
+    565
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "anchor",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxels-version]/rule[/scene[@version!='1.3']]",
+   "status": "added",
+   "lines": [
+    562,
+    564
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "line",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxels-version]/rule[/scene[@version!='1.3']]/assert[VOX1]",
+   "status": "added",
+   "lines": [
+    563,
+    563
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "anchor",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-assets]",
+   "status": "added",
+   "lines": [
+    566,
+    571
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "anchor",
+   "last_touched": [
+    "4fbde80",
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-assets]/rule[assets/voxelAsset]",
+   "status": "added",
+   "lines": [
+    567,
+    570
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "anchor",
+   "last_touched": [
+    "4fbde80",
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-assets]/rule[assets/voxelAsset]/assert[VOX2]",
+   "status": "added",
+   "lines": [
+    568,
+    568
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "anchor",
+   "last_touched": [
+    "4fbde80"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-assets]/rule[assets/voxelAsset]/assert[VOX3]",
+   "status": "added",
+   "lines": [
+    569,
+    569
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "anchor",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-objects]",
+   "status": "added",
+   "lines": [
+    572,
+    595
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "anchor",
+   "last_touched": [
+    "29ab659",
+    "96ac10d",
+    "b0856b2",
+    "d4f94af",
+    "ff053f4"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-objects]/rule[object3D]",
+   "status": "added",
+   "lines": [
+    573,
+    580
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "parent",
+   "last_touched": [
+    "96ac10d",
+    "b0856b2",
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-objects]/rule[object3D]/let[materials]",
+   "status": "added",
+   "lines": [
+    574,
+    574
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "parent",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-objects]/rule[object3D]/assert[VOX4]",
+   "status": "added",
+   "lines": [
+    575,
+    575
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "anchor",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-objects]/rule[object3D]/assert[VOX5]",
+   "status": "added",
+   "lines": [
+    576,
+    576
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "anchor",
+   "last_touched": [
+    "96ac10d"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-objects]/rule[object3D]/assert[VOX6]",
+   "status": "added",
+   "lines": [
+    577,
+    577
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "anchor",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-objects]/rule[object3D]/assert[VOX7]",
+   "status": "added",
+   "lines": [
+    578,
+    578
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "d4f94af",
+   "introduced_subject": "feat(model): voxelAsset, the voxels primitive and rules VOX1 to VOX7, with corpus and tests",
+   "date": "2026-10-07",
+   "merged_by": "464d3a0",
+   "method": "anchor",
+   "last_touched": [
+    "d4f94af"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-objects]/rule[object3D]/assert[VOX15]",
+   "status": "added",
+   "lines": [
+    579,
+    579
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "b0856b2",
+   "introduced_subject": "fix(model): an object of cells that a crater or a fracture breaks has the cells for its collider (VOX15)",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "anchor",
+   "last_touched": [
+    "b0856b2"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-objects]/rule[object3D/rigidBody]",
+   "status": "added",
+   "lines": [
+    581,
+    594
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "line",
+   "last_touched": [
+    "29ab659",
+    "d4f94af",
+    "ff053f4"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-objects]/rule[object3D/rigidBody]/let[voxels]",
+   "status": "added",
+   "lines": [
+    582,
+    582
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "parent",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-objects]/rule[object3D/rigidBody]/let[cells]",
+   "status": "added",
+   "lines": [
+    583,
+    583
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "parent",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-objects]/rule[object3D/rigidBody]/let[sx]",
+   "status": "added",
+   "lines": [
+    584,
+    584
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "parent",
+   "last_touched": [
+    "ff053f4"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-objects]/rule[object3D/rigidBody]/let[sy]",
+   "status": "added",
+   "lines": [
+    585,
+    585
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "parent",
+   "last_touched": [
+    "ff053f4"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-objects]/rule[object3D/rigidBody]/let[sz]",
+   "status": "added",
+   "lines": [
+    586,
+    586
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "parent",
+   "last_touched": [
+    "ff053f4"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-objects]/rule[object3D/rigidBody]/assert[VOX8]",
+   "status": "added",
+   "lines": [
+    587,
+    587
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "anchor",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-objects]/rule[object3D/rigidBody]/assert[VOX9]",
+   "status": "added",
+   "lines": [
+    588,
+    588
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "anchor",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-objects]/rule[object3D/rigidBody]/assert[VOX10]",
+   "status": "added",
+   "lines": [
+    589,
+    589
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "anchor",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-objects]/rule[object3D/rigidBody]/assert[VOX11]",
+   "status": "added",
+   "lines": [
+    590,
+    590
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "anchor",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-objects]/rule[object3D/rigidBody]/assert[VOX12]",
+   "status": "added",
+   "lines": [
+    591,
+    591
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "anchor",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-objects]/rule[object3D/rigidBody]/assert[VOX13]",
+   "status": "added",
+   "lines": [
+    592,
+    592
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "anchor",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-voxel-objects]/rule[object3D/rigidBody]/assert[VOX14]",
+   "status": "added",
+   "lines": [
+    593,
+    593
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "anchor",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-particles]/rule[particles3D/burst]/assert[P3D10]",
+   "status": "changed",
+   "lines": [
+    632,
+    632
+   ],
+   "feature": "annotations",
+   "srep": 81,
+   "introduced": "928c683",
+   "introduced_subject": "docs(schema): defaults and contracts that were only in the code",
+   "date": "2026-10-06",
+   "merged_by": "2b2a1f8",
+   "method": "changed-line",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-particles]/rule[particles3D/burst]/assert[CRT17]",
+   "status": "added",
+   "lines": [
+    633,
+    633
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "4ea3b74",
+   "introduced_subject": "fix(model): the burst of the crater of cells has no angle or spread (CRT17), and CRT14 says only what it alone refuses",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "anchor",
+   "last_touched": [
+    "4ea3b74"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-particles]/rule[particles3D/burst]/assert[CRT16]",
+   "status": "added",
+   "lines": [
+    634,
+    634
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "anchor",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-ocean]/rule[ocean]/assert[OCN14]",
+   "status": "added",
+   "lines": [
+    652,
+    652
+   ],
+   "feature": "light",
+   "srep": 79,
+   "introduced": "9ccd258",
+   "introduced_subject": "fix(eval): the foam coverage is budgeted in work and in memory, and its radius is at most 64 cells",
+   "date": "2026-10-07",
+   "merged_by": "a590300",
+   "method": "anchor",
+   "last_touched": [
+    "9ccd258"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-crater]/rule[object3D/crater]/assert[CRT4]",
+   "status": "changed",
+   "lines": [
+    677,
+    677
+   ],
+   "feature": "impact",
+   "srep": 77,
+   "introduced": "1c1514f",
+   "introduced_subject": "feat(model): crater@mantle and crater@bulking (CRT10, CRT11)",
+   "date": "2026-10-06",
+   "merged_by": "8508fa6",
+   "method": "changed-line",
+   "last_touched": [
+    "1c1514f"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-crater]/rule[object3D/crater]/assert[CRT10]",
+   "status": "added",
+   "lines": [
+    682,
+    682
+   ],
+   "feature": "impact",
+   "srep": 77,
+   "introduced": "1c1514f",
+   "introduced_subject": "feat(model): crater@mantle and crater@bulking (CRT10, CRT11)",
+   "date": "2026-10-06",
+   "merged_by": "8508fa6",
+   "method": "anchor",
+   "last_touched": [
+    "3abf7b4"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-crater]/rule[object3D/crater]/assert[CRT11]",
+   "status": "added",
+   "lines": [
+    683,
+    683
+   ],
+   "feature": "impact",
+   "srep": 77,
+   "introduced": "1c1514f",
+   "introduced_subject": "feat(model): crater@mantle and crater@bulking (CRT10, CRT11)",
+   "date": "2026-10-06",
+   "merged_by": "8508fa6",
+   "method": "anchor",
+   "last_touched": [
+    "1c1514f"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-crater]/rule[object3D/crater]/assert[CRT12]",
+   "status": "added",
+   "lines": [
+    684,
+    684
+   ],
+   "feature": "impact",
+   "srep": 77,
+   "introduced": "3abf7b4",
+   "introduced_subject": "feat(model): crater@repose (CRT10 extended, CRT12 exclusive with mantle)",
+   "date": "2026-10-07",
+   "merged_by": "963b614",
+   "method": "anchor",
+   "last_touched": [
+    "3abf7b4"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-crater]/rule[object3D/crater]/assert[CRT5]",
+   "status": "changed",
+   "lines": [
+    685,
+    685
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "changed-line",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-crater]/rule[object3D/crater]/assert[CRT13]",
+   "status": "added",
+   "lines": [
+    686,
+    686
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "anchor",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-crater]/rule[object3D/crater]/assert[CRT14]",
+   "status": "added",
+   "lines": [
+    687,
+    687
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "anchor",
+   "last_touched": [
+    "4ea3b74"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-crater]/rule[object3D/crater]/assert[CRT15]",
+   "status": "added",
+   "lines": [
+    688,
+    688
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "anchor",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-black-hole-version]",
+   "status": "added",
+   "lines": [
+    691,
+    695
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "anchor",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-black-hole-version]/rule[blackHole|accretionDisk|camera[@geodesics]]",
+   "status": "added",
+   "lines": [
+    692,
+    694
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-black-hole-version]/rule[blackHole|accretionDisk|camera[@geodesics]]/assert[BH1]",
+   "status": "added",
+   "lines": [
+    693,
+    693
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "anchor",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-black-hole]",
+   "status": "added",
+   "lines": [
+    696,
+    718
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "anchor",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-black-hole]/rule[blackHole]",
+   "status": "added",
+   "lines": [
+    697,
+    699
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "anchor",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-black-hole]/rule[blackHole]/assert[BH2]",
+   "status": "added",
+   "lines": [
+    698,
+    698
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "anchor",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-black-hole]/rule[accretionDisk]",
+   "status": "added",
+   "lines": [
+    700,
+    706
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "anchor",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-black-hole]/rule[accretionDisk]/let[mass]",
+   "status": "added",
+   "lines": [
+    701,
+    701
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-black-hole]/rule[accretionDisk]/let[inner]",
+   "status": "added",
+   "lines": [
+    702,
+    702
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-black-hole]/rule[accretionDisk]/let[outer]",
+   "status": "added",
+   "lines": [
+    703,
+    703
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-black-hole]/rule[accretionDisk]/assert[BH3]",
+   "status": "added",
+   "lines": [
+    704,
+    704
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "anchor",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-black-hole]/rule[accretionDisk]/assert[BH4]",
+   "status": "added",
+   "lines": [
+    705,
+    705
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "anchor",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-black-hole]/rule[camera[@geodesics]]",
+   "status": "added",
+   "lines": [
+    707,
+    717
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-black-hole]/rule[camera[@geodesics]]/let[hole]",
+   "status": "added",
+   "lines": [
+    708,
+    708
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-black-hole]/rule[camera[@geodesics]]/let[mass]",
+   "status": "added",
+   "lines": [
+    709,
+    709
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-black-hole]/rule[camera[@geodesics]]/let[dx]",
+   "status": "added",
+   "lines": [
+    710,
+    710
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-black-hole]/rule[camera[@geodesics]]/let[dy]",
+   "status": "added",
+   "lines": [
+    711,
+    711
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-black-hole]/rule[camera[@geodesics]]/let[dz]",
+   "status": "added",
+   "lines": [
+    712,
+    712
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "parent",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-black-hole]/rule[camera[@geodesics]]/assert[BH5]",
+   "status": "added",
+   "lines": [
+    713,
+    713
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "anchor",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-black-hole]/rule[camera[@geodesics]]/assert[BH6]",
+   "status": "added",
+   "lines": [
+    714,
+    714
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "anchor",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-black-hole]/rule[camera[@geodesics]]/assert[BH7]",
+   "status": "added",
+   "lines": [
+    715,
+    715
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "anchor",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-black-hole]/rule[camera[@geodesics]]/assert[BH8]",
+   "status": "added",
+   "lines": [
+    716,
+    716
+   ],
+   "feature": "black-hole",
+   "srep": 76,
+   "introduced": "b385cb8",
+   "introduced_subject": "feat(schema): a Schwarzschild black hole, its disk and the camera that traces geodesics",
+   "date": "2026-10-06",
+   "merged_by": "ada1875",
+   "method": "anchor",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-fracture]/rule[fracture]/assert[FRX3]",
+   "status": "changed",
+   "lines": [
+    723,
+    723
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "changed-line",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-fracture]/rule[fracture]/assert[FRX4]",
+   "status": "changed",
+   "lines": [
+    724,
+    724
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "0efd166",
+   "introduced_subject": "feat(model): fracture mode=\"stress\" and strength: the schema and the rules of the fracture by stress (FRX13 to FRX15)",
+   "date": "2026-10-07",
+   "merged_by": "a54089e",
+   "method": "changed-line",
+   "last_touched": [
+    "0efd166"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-fracture]/rule[fracture]/assert[FRX5]",
+   "status": "added",
+   "lines": [
+    725,
+    725
+   ],
+   "feature": "impact",
+   "srep": 77,
+   "introduced": "2820484",
+   "introduced_subject": "feat(schema): fracture@source, the body that breaks it",
+   "date": "2026-10-06",
+   "merged_by": "96ce006",
+   "method": "anchor",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-fracture]/rule[fracture]/assert[FRX6]",
+   "status": "added",
+   "lines": [
+    726,
+    726
+   ],
+   "feature": "impact",
+   "srep": 77,
+   "introduced": "2820484",
+   "introduced_subject": "feat(schema): fracture@source, the body that breaks it",
+   "date": "2026-10-06",
+   "merged_by": "96ce006",
+   "method": "anchor",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-fracture]/rule[fracture]/assert[FRX7]",
+   "status": "added",
+   "lines": [
+    727,
+    727
+   ],
+   "feature": "impact",
+   "srep": 77,
+   "introduced": "2820484",
+   "introduced_subject": "feat(schema): fracture@source, the body that breaks it",
+   "date": "2026-10-06",
+   "merged_by": "96ce006",
+   "method": "anchor",
+   "last_touched": [
+    "db80223"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-fracture]/rule[fracture]/assert[FRX8]",
+   "status": "added",
+   "lines": [
+    728,
+    728
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "anchor",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-fracture]/rule[fracture]/assert[FRX9]",
+   "status": "added",
+   "lines": [
+    729,
+    729
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "anchor",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-fracture]/rule[fracture]/assert[FRX10]",
+   "status": "added",
+   "lines": [
+    730,
+    730
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "anchor",
+   "last_touched": [
+    "29ab659"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-fracture]/rule[fracture]/assert[FRX11]",
+   "status": "added",
+   "lines": [
+    731,
+    731
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "anchor",
+   "last_touched": [
+    "4fb67e6"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-fracture]/rule[fracture]/assert[FRX13]",
+   "status": "added",
+   "lines": [
+    732,
+    732
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "0efd166",
+   "introduced_subject": "feat(model): fracture mode=\"stress\" and strength: the schema and the rules of the fracture by stress (FRX13 to FRX15)",
+   "date": "2026-10-07",
+   "merged_by": "a54089e",
+   "method": "anchor",
+   "last_touched": [
+    "0efd166"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-fracture]/rule[fracture]/assert[FRX14]",
+   "status": "added",
+   "lines": [
+    733,
+    733
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "0efd166",
+   "introduced_subject": "feat(model): fracture mode=\"stress\" and strength: the schema and the rules of the fracture by stress (FRX13 to FRX15)",
+   "date": "2026-10-07",
+   "merged_by": "a54089e",
+   "method": "anchor",
+   "last_touched": [
+    "0efd166"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-fracture]/rule[fracture]/assert[FRX15]",
+   "status": "added",
+   "lines": [
+    734,
+    734
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "0efd166",
+   "introduced_subject": "feat(model): fracture mode=\"stress\" and strength: the schema and the rules of the fracture by stress (FRX13 to FRX15)",
+   "date": "2026-10-07",
+   "merged_by": "a54089e",
+   "method": "anchor",
+   "last_touched": [
+    "0efd166"
+   ]
+  },
+  {
+   "file": "schema/scene-render.sch",
+   "key": "pattern[cinematic-fracture]/rule[fracture]/assert[FRX12]",
+   "status": "added",
+   "lines": [
+    735,
+    735
+   ],
+   "feature": "voxels",
+   "srep": 80,
+   "introduced": "29ab659",
+   "introduced_subject": "feat(model): the schema and the rules of a body of cells in the scene: rigidBody, crater, fracture and burst on an object of primitive voxels",
+   "date": "2026-10-07",
+   "merged_by": "c829ca3",
+   "method": "anchor",
+   "last_touched": [
+    "29ab659"
+   ]
+  }
+ ],
+ "excluded": [],
+ "unclassified": [],
+ "removed": [],
+ "rule_id_collisions": [],
+ "intermediates": [
+  {
+   "file": "schema/scene-render.sch",
+   "line": "id=\"FRX4\"",
+   "feature": "impact",
+   "from_engine_commit": "2820484"
+  }
+ ],
+ "stage_problems": [],
+ "patches": {
+  "black-hole": {
+   "srep": 76,
+   "sha256": "723687afda226a9a171dbf6e69bfb6d8230915b89554c2716aa44149872b51c3",
+   "files": 2
+  },
+  "impact": {
+   "srep": 77,
+   "sha256": "aba03246af9b047082c1a0e3e12d68006f1c96c8fd181be8542182537d2391e1",
+   "files": 2
+  },
+  "pyro": {
+   "srep": 78,
+   "sha256": "268f3c5baa09730c56dda0709f7d99a12b5c4db30e598de7dd24d8a640758179",
+   "files": 2
+  },
+  "light": {
+   "srep": 79,
+   "sha256": "3cdd7b996e67c056ea5a99ecbada68bc4870fc8b6d3fe6bed81abe1500f58d57",
+   "files": 2
+  },
+  "voxels": {
+   "srep": 80,
+   "sha256": "4fa4603d1631fe9c93154287528d0ffd3acfde8c2edc50cc02237bf43995c629",
+   "files": 2
+  },
+  "annotations": {
+   "srep": 81,
+   "sha256": "751ef0e8444f7b65735fd0109c810510d85abbc33088a2aa0a35ce82b701eebf",
+   "files": 2
+  }
+ },
+ "counts": {
+  "voxels": {
+   "srep": 80,
+   "xsd": {
+    "added": 58,
+    "changed": 3
+   },
+   "sch": {
+    "added": 41,
+    "changed": 3
+   }
+  },
+  "black-hole": {
+   "srep": 76,
+   "xsd": {
+    "added": 31,
+    "changed": 0
+   },
+   "sch": {
+    "added": 22,
+    "changed": 0
+   }
+  },
+  "annotations": {
+   "srep": 81,
+   "xsd": {
+    "added": 2,
+    "changed": 5
+   },
+   "sch": {
+    "added": 0,
+    "changed": 1
+   }
+  },
+  "light": {
+   "srep": 79,
+   "xsd": {
+    "added": 12,
+    "changed": 0
+   },
+   "sch": {
+    "added": 1,
+    "changed": 0
+   }
+  },
+  "impact": {
+   "srep": 77,
+   "xsd": {
+    "added": 11,
+    "changed": 2
+   },
+   "sch": {
+    "added": 6,
+    "changed": 1
+   }
+  },
+  "pyro": {
+   "srep": 78,
+   "xsd": {
+    "added": 17,
+    "changed": 0
+   },
+   "sch": {
+    "added": 6,
+    "changed": 0
+   }
+  }
+ }
+}
