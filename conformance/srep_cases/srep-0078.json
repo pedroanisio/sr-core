@@ -1,0 +1,97 @@
+{
+ "srep-0078-pyc5-closed": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/>\n<composition><object3D id=\"cloud\" primitive=\"volume\"><pyro width=\"8\" height=\"8\" depth=\"8\" voxelSize=\"1\" dt=\"0.1\"><pyroSource shape=\"sphere\" radius=\"2\" densityRate=\"2\" start=\"0.15\" end=\"0.35\"/><pyroImpulse shape=\"box\" width=\"2\" height=\"2\" depth=\"2\" time=\"0.5\" density=\"1\" temperature=\"3000\"/><pyroBlast time=\"0.3\" energy=\"1000000\" x=\"1\" y=\"-1\"/></pyro><medium blackbody=\"true\" emissionScale=\"0.1\"/></object3D></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 78 PYC5",
+   "source": "engine corpus tests/corpus/invalid/pyc5-closed.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "PYC5"
+    ]
+   }
+  }
+ },
+ "srep-0078-pyc6-outside": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/>\n<composition><object3D id=\"cloud\" primitive=\"volume\"><pyro boundary=\"open\" width=\"8\" height=\"8\" depth=\"8\" voxelSize=\"1\" dt=\"0.1\"><pyroSource shape=\"sphere\" radius=\"2\" densityRate=\"2\" start=\"0.15\" end=\"0.35\"/><pyroImpulse shape=\"box\" width=\"2\" height=\"2\" depth=\"2\" time=\"0.5\" density=\"1\" temperature=\"3000\"/><pyroBlast time=\"0.3\" energy=\"1000000\" x=\"5\" y=\"-1\"/></pyro><medium blackbody=\"true\" emissionScale=\"0.1\"/></object3D></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 78 PYC6",
+   "source": "engine corpus tests/corpus/invalid/pyc6-outside.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "PYC6"
+    ]
+   }
+  }
+ },
+ "srep-0078-pyro10-orphan": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/>\n<composition><object3D id=\"cloud\" primitive=\"volume\"><pyro followLoss=\"0.1\" width=\"8\" height=\"8\" depth=\"8\" voxelSize=\"1\" dt=\"0.1\"><pyroSource shape=\"sphere\" radius=\"2\" densityRate=\"2\" start=\"0.15\" end=\"0.35\"/><pyroImpulse shape=\"box\" width=\"2\" height=\"2\" depth=\"2\" time=\"0.5\" density=\"1\" temperature=\"3000\"/></pyro><medium blackbody=\"true\" emissionScale=\"0.1\"/></object3D></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 78 PYRO10",
+   "source": "engine corpus tests/corpus/invalid/pyro10-orphan.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "PYRO10"
+    ]
+   }
+  }
+ },
+ "srep-0078-pyro11-margin": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/>\n<composition><object3D id=\"cloud\" primitive=\"volume\"><pyro boundary=\"open\" follow=\"true\" followMargin=\"4\" followLoss=\"0.000001\" width=\"8\" height=\"8\" depth=\"8\" voxelSize=\"1\" dt=\"0.1\"><pyroSource shape=\"sphere\" radius=\"2\" densityRate=\"2\" start=\"0.15\" end=\"0.35\"/><pyroImpulse shape=\"box\" width=\"2\" height=\"2\" depth=\"2\" time=\"0.5\" density=\"1\" temperature=\"3000\"/></pyro><medium blackbody=\"true\" emissionScale=\"0.1\"/></object3D></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 78 PYRO11",
+   "source": "engine corpus tests/corpus/invalid/pyro11-margin.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "PYRO11"
+    ]
+   }
+  }
+ },
+ "srep-0078-pyro9-closed": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/>\n<composition><object3D id=\"cloud\" primitive=\"volume\"><pyro follow=\"true\" followMargin=\"2\" followLoss=\"0.000001\" width=\"8\" height=\"8\" depth=\"8\" voxelSize=\"1\" dt=\"0.1\"><pyroSource shape=\"sphere\" radius=\"2\" densityRate=\"2\" start=\"0.15\" end=\"0.35\"/><pyroImpulse shape=\"box\" width=\"2\" height=\"2\" depth=\"2\" time=\"0.5\" density=\"1\" temperature=\"3000\"/></pyro><medium blackbody=\"true\" emissionScale=\"0.1\"/></object3D></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 78 PYRO9",
+   "source": "engine corpus tests/corpus/invalid/pyro9-closed.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "PYRO9"
+    ]
+   }
+  }
+ },
+ "srep-0078-valid-pyro-follow": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/>\n<composition><object3D id=\"cloud\" primitive=\"volume\"><pyro boundary=\"open\" follow=\"true\" followMargin=\"2\" followLoss=\"0.000001\" width=\"8\" height=\"8\" depth=\"8\" voxelSize=\"1\" dt=\"0.1\"><pyroSource shape=\"sphere\" radius=\"2\" densityRate=\"2\" start=\"0.15\" end=\"0.35\"/><pyroImpulse shape=\"box\" width=\"2\" height=\"2\" depth=\"2\" time=\"0.5\" density=\"1\" temperature=\"3000\"/></pyro><medium blackbody=\"true\" emissionScale=\"0.1\"/></object3D></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 78",
+   "source": "engine corpus tests/corpus/valid/pyro-follow.scene.xml (valid) at 4bf7a9e",
+   "findings": {
+    "valid": true
+   }
+  }
+ },
+ "srep-0078-valid-pyro-blast": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/>\n<composition><object3D id=\"cloud\" primitive=\"volume\"><pyro boundary=\"open\" width=\"8\" height=\"8\" depth=\"8\" voxelSize=\"1\" dt=\"0.1\"><pyroSource shape=\"sphere\" radius=\"2\" densityRate=\"2\" start=\"0.15\" end=\"0.35\"/><pyroImpulse shape=\"box\" width=\"2\" height=\"2\" depth=\"2\" time=\"0.5\" density=\"1\" temperature=\"3000\"/><pyroBlast time=\"0.3\" energy=\"1000000\" x=\"1\" y=\"-1\"/></pyro><medium blackbody=\"true\" emissionScale=\"0.1\"/></object3D></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 78",
+   "source": "engine corpus tests/corpus/valid/pyro-blast.scene.xml (valid) at 4bf7a9e",
+   "findings": {
+    "valid": true
+   }
+  }
+ },
+ "srep-0078-valid-pyro-blast-gas": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/>\n<composition><object3D id=\"cloud\" primitive=\"volume\"><pyro boundary=\"open\" width=\"8\" height=\"8\" depth=\"8\" voxelSize=\"1\" dt=\"0.1\"><pyroSource shape=\"sphere\" radius=\"2\" densityRate=\"2\" start=\"0.15\" end=\"0.35\"/><pyroImpulse shape=\"box\" width=\"2\" height=\"2\" depth=\"2\" time=\"0.5\" density=\"1\" temperature=\"3000\"/><pyroBlast ambientDensity=\"0.9\" ambientPressure=\"90000\" gamma=\"1.67\" time=\"0.3\" energy=\"1000000\" x=\"1\" y=\"-1\"/></pyro><medium blackbody=\"true\" emissionScale=\"0.1\"/></object3D></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 78",
+   "source": "engine corpus tests/corpus/valid/pyro-blast-gas.scene.xml (valid) at 4bf7a9e",
+   "findings": {
+    "valid": true
+   }
+  }
+ }
+}

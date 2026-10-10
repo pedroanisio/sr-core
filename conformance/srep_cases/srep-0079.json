@@ -1,0 +1,97 @@
+{
+ "srep-0079-ocn14-foam-radius": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><ocean id=\"sea\" width=\"8\" depth=\"8\" cellSize=\"0.5\" bottomDepth=\"2\"><waterImpulse time=\"0.3\" radius=\"2\" amplitude=\"0.1\"/><wave wavelength=\"4\" amplitude=\"0.1\" phase=\"0\"/><whitewater foamMode=\"albedo\" foamRadius=\"40\" emissionRate=\"2\" threshold=\"0.3\"/></ocean><camera id=\"cam\" renderer=\"pathtrace\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 79 OCN14",
+   "source": "engine corpus tests/corpus/invalid/ocn14-foam-radius.scene.xml at 4bf7a9e",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "OCN14"
+    ]
+   }
+  }
+ },
+ "srep-0079-valid-volume-scatter-bounces": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/>\n<assets><volume id=\"smoke\" src=\"../assets/srep79-uniform.srvol\" boundsMinX=\"0\" boundsMinY=\"0\" boundsMinZ=\"0\" boundsMaxX=\"32\" boundsMaxY=\"32\" boundsMaxZ=\"2\"/></assets>\n<composition><object3D id=\"cloud\" primitive=\"volume\" volume=\"smoke\"><medium albedo=\"#808080\" scatterBounces=\"4\" emissionColor=\"#FF4000\" emissionScale=\"0.2\"/></object3D></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 79",
+   "source": "engine corpus tests/corpus/valid/volume-scatter-bounces.scene.xml (valid) at 4bf7a9e",
+   "findings": {
+    "valid": true
+   }
+  }
+ },
+ "srep-0079-valid-volume-scatter-bounces-zero": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/>\n<assets><volume id=\"smoke\" src=\"../assets/srep79-uniform.srvol\" boundsMinX=\"0\" boundsMinY=\"0\" boundsMinZ=\"0\" boundsMaxX=\"32\" boundsMaxY=\"32\" boundsMaxZ=\"2\"/></assets>\n<composition><object3D id=\"cloud\" primitive=\"volume\" volume=\"smoke\"><medium albedo=\"#808080\" scatterBounces=\"0\" emissionColor=\"#FF4000\" emissionScale=\"0.2\"/></object3D></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 79",
+   "source": "engine corpus tests/corpus/valid/volume-scatter-bounces-zero.scene.xml (valid) at 4bf7a9e",
+   "findings": {
+    "valid": true
+   }
+  }
+ },
+ "srep-0079-valid-whitewater-foam-albedo": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><ocean id=\"sea\" width=\"8\" depth=\"8\" cellSize=\"0.5\" bottomDepth=\"2\"><waterImpulse time=\"0.3\" radius=\"2\" amplitude=\"0.1\"/><wave wavelength=\"4\" amplitude=\"0.1\" phase=\"0\"/><whitewater emissionRate=\"2\" threshold=\"0.3\" foamMode=\"albedo\" foamRadius=\"0.75\" foamAlbedo=\"0.9\" foamRoughness=\"0.8\"/></ocean><camera id=\"cam\" renderer=\"pathtrace\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 79",
+   "source": "engine corpus tests/corpus/valid/whitewater-foam-albedo.scene.xml (valid) at 4bf7a9e",
+   "findings": {
+    "valid": true
+   }
+  }
+ },
+ "srep-0079-valid-w06-foam-material": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><materials><material id=\"foam\"/></materials><composition><ocean id=\"sea\" width=\"8\" depth=\"8\" cellSize=\"0.5\" bottomDepth=\"2\"><waterImpulse time=\"0.3\" radius=\"2\" amplitude=\"0.1\"/><wave wavelength=\"4\" amplitude=\"0.1\" phase=\"0\"/><whitewater foamMode=\"albedo\" foamMaterial=\"foam\"/></ocean><camera id=\"cam\" renderer=\"pathtrace\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 79",
+   "source": "engine corpus tests/corpus/valid/w06-foam-material.scene.xml (warnings) at 4bf7a9e",
+   "findings": {
+    "valid": true,
+    "codes": [
+     "W06"
+    ]
+   }
+  }
+ },
+ "srep-0079-valid-w07-foam-raster": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><ocean id=\"sea\" width=\"8\" depth=\"8\" cellSize=\"0.5\" bottomDepth=\"2\"><waterImpulse time=\"0.3\" radius=\"2\" amplitude=\"0.1\"/><wave wavelength=\"4\" amplitude=\"0.1\" phase=\"0\"/><whitewater foamMode=\"albedo\"/></ocean></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 79",
+   "source": "engine corpus tests/corpus/valid/w07-foam-raster.scene.xml (warnings) at 4bf7a9e",
+   "findings": {
+    "valid": true,
+    "codes": [
+     "W07"
+    ]
+   }
+  }
+ },
+ "srep-0079-valid-w08-foam-unlit": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><materials><material id=\"glow\" unlit=\"true\"/></materials><composition><ocean id=\"sea\" material=\"glow\" width=\"8\" depth=\"8\" cellSize=\"0.5\" bottomDepth=\"2\"><waterImpulse time=\"0.3\" radius=\"2\" amplitude=\"0.1\"/><wave wavelength=\"4\" amplitude=\"0.1\" phase=\"0\"/><whitewater foamMode=\"albedo\"/></ocean><camera id=\"cam\" renderer=\"pathtrace\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 79",
+   "source": "engine corpus tests/corpus/valid/w08-foam-unlit.scene.xml (warnings) at 4bf7a9e",
+   "findings": {
+    "valid": true,
+    "codes": [
+     "W08"
+    ]
+   }
+  }
+ },
+ "srep-0079-valid-w10-scatter-black-albedo": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/>\n<assets><volume id=\"smoke\" src=\"../assets/srep79-uniform.srvol\" boundsMinX=\"0\" boundsMinY=\"0\" boundsMinZ=\"0\" boundsMaxX=\"32\" boundsMaxY=\"32\" boundsMaxZ=\"2\"/></assets>\n<composition><object3D id=\"cloud\" primitive=\"volume\" volume=\"smoke\"><medium albedo=\"#000000\" scatterBounces=\"4\" emissionColor=\"#FF4000\" emissionScale=\"0.2\"/></object3D></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 79",
+   "source": "engine corpus tests/corpus/valid/w10-scatter-black-albedo.scene.xml (warnings) at 4bf7a9e",
+   "findings": {
+    "valid": true,
+    "codes": [
+     "W10"
+    ]
+   }
+  }
+ }
+}
