@@ -4,7 +4,7 @@ srep_cases/srep-0084.json.
 
 Each case writes one attribute that a changed rule reads in a lexical form other than the one the rule compared
 literally: "1", "0", a padded " true ", a "+0" or "00". The documents are small and written here; the pyro cases
-are SREP 78's own kit cases (draft) with one attribute rewritten, and need that draft ("requires").
+are SREP 78's own kit cases with one attribute rewritten, and need its syntax ("requires").
 
 A case whose document names a file the kit does not ship (a video with an audio track) checks only that the rule is
 absent ({"absent": [rule]}), not the whole verdict, since a renderer reports the missing file. Every other case
@@ -14,6 +14,7 @@ python3 conformance/make_cases.py.
 """
 import json
 import os
+import kit_pending  # which cases are pending (SREP 0)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CONF = os.path.dirname(HERE)
@@ -79,7 +80,7 @@ def srep78(case, old, new):
     xml = json.load(open(os.path.join(CONF, "srep_cases", "srep-0078.json")))[case]["xml"]
     assert xml.count(old) == 1, (case, old)
     out = xml.replace(old, new)
-    SOURCES[out] = f"kit case {case} (SREP 78, draft) with {old} written {new}, by conformance/tools/srep84_cases.py"
+    SOURCES[out] = f"kit case {case} (SREP 78) with {old} written {new}, by conformance/tools/srep84_cases.py"
     return out
 
 
@@ -119,7 +120,7 @@ CASES = {
     "geo2-tile-size-plus-64": ("GEO2", geo2("+64"), {"valid": True}, "sch:GEO2", None),
     "geo2-tile-size-064": ("GEO2", geo2("064"), {"valid": True}, "ok", None),
     "geo2-tile-size-plus-48": ("GEO2", geo2("+48"), {"valid": False, "codes": ["GEO2"]}, "sch:GEO2", None),
-    # PYRO9, PYRO10, PYRO11 (draft SREP 78: pyro/@follow xs:boolean, pyro/@followMargin xs:positiveInteger)
+    # PYRO9, PYRO10, PYRO11 (SREP 78: pyro/@follow xs:boolean, pyro/@followMargin xs:positiveInteger)
     "pyro9-follow-padded-true-closed": ("PYRO9", srep78("srep-0078-pyro9-closed", 'follow="true"', 'follow=" true "'),
                                         {"valid": False, "codes": ["PYRO9"]}, "sch:PYRO10", [78]),
     "pyro10-follow-padded-1": ("PYRO10", srep78("srep-0078-valid-pyro-follow", 'follow="true"', 'follow=" 1 "'),
@@ -142,6 +143,7 @@ def main():
         if requires:
             expected["requires"] = requires
         out[f"srep-0084-{name}"] = {"xml": xml, "expected": expected}
+    kit_pending.settle(out, 84)
     with open(os.path.join(CONF, "srep_cases", "srep-0084.json"), "w") as fh:
         json.dump(out, fh, indent=1, ensure_ascii=False)
         fh.write("\n")

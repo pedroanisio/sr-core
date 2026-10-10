@@ -43719,14 +43719,16 @@
       "source": "written by conformance/tools/srep84_cases.py",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with C15"
     },
     "srep-0084-c15-reverse-padded-false": {
       "rule": "SREP 84 C15",
       "source": "written by conformance/tools/srep84_cases.py",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with C15"
     },
     "srep-0084-c15-reverse-1": {
       "rule": "SREP 84 C15",
@@ -43743,21 +43745,24 @@
       "source": "written by conformance/tools/srep84_cases.py",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with C15"
     },
     "srep-0084-c15-loop-plus-0": {
       "rule": "SREP 84 C15",
       "source": "written by conformance/tools/srep84_cases.py",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with C15"
     },
     "srep-0084-c15-loop-padded-0": {
       "rule": "SREP 84 C15",
       "source": "written by conformance/tools/srep84_cases.py",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with C15"
     },
     "srep-0084-c15-loop-plus-2": {
       "rule": "SREP 84 C15",
@@ -43777,7 +43782,8 @@
         "codes": [
           "C43"
         ]
-      }
+      },
+      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report C43"
     },
     "srep-0084-c43-alpha-padded-true": {
       "rule": "SREP 84 C43",
@@ -43787,7 +43793,8 @@
         "codes": [
           "C43"
         ]
-      }
+      },
+      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report C43"
     },
     "srep-0084-c43-alpha-0": {
       "rule": "SREP 84 C43",
@@ -43803,7 +43810,8 @@
         "absent": [
           "R15"
         ]
-      }
+      },
+      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) reports R15"
     },
     "srep-0084-r15-has-audio-padded-1": {
       "rule": "SREP 84 R15",
@@ -43812,7 +43820,8 @@
         "absent": [
           "R15"
         ]
-      }
+      },
+      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) reports R15"
     },
     "srep-0084-r15-has-audio-0": {
       "rule": "SREP 84 R15",
@@ -43832,7 +43841,8 @@
         "codes": [
           "R48-from"
         ]
-      }
+      },
+      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report R48-from"
     },
     "srep-0084-r48-from-threed-padded-true": {
       "rule": "SREP 84 R48-from",
@@ -43842,7 +43852,8 @@
         "codes": [
           "R48-from"
         ]
-      }
+      },
+      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report R48-from"
     },
     "srep-0084-r48-to-threed-1": {
       "rule": "SREP 84 R48-to",
@@ -43852,7 +43863,8 @@
         "codes": [
           "R48-to"
         ]
-      }
+      },
+      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report R48-to"
     },
     "srep-0084-r48-from-threed-0": {
       "rule": "SREP 84 R48-from",
@@ -43869,7 +43881,8 @@
         "codes": [
           "VOL5"
         ]
-      }
+      },
+      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report VOL5"
     },
     "srep-0084-vol5-blackbody-padded-1": {
       "rule": "SREP 84 VOL5",
@@ -43879,7 +43892,8 @@
         "codes": [
           "VOL5"
         ]
-      }
+      },
+      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report VOL5"
     },
     "srep-0084-vol5-blackbody-0": {
       "rule": "SREP 84 VOL5",
@@ -43893,14 +43907,16 @@
       "source": "written by conformance/tools/srep84_cases.py",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with C80"
     },
     "srep-0084-c80-step-plus-1": {
       "rule": "SREP 84 C80",
       "source": "written by conformance/tools/srep84_cases.py",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with C80"
     },
     "srep-0084-c80-step-01": {
       "rule": "SREP 84 C80",
@@ -43945,7 +43961,7 @@
     },
     "srep-0084-pyro9-follow-padded-true-closed": {
       "rule": "SREP 84 PYRO9",
-      "source": "kit case srep-0078-pyro9-closed (SREP 78, draft) with follow=\"true\" written follow=\" true \", by conformance/tools/srep84_cases.py",
+      "source": "kit case srep-0078-pyro9-closed (SREP 78) with follow=\"true\" written follow=\" true \", by conformance/tools/srep84_cases.py",
       "findings": {
         "valid": false,
         "codes": [
@@ -43954,21 +43970,23 @@
       },
       "requires": [
         78
-      ]
+      ],
+      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) reports PYRO10, not PYRO9"
     },
     "srep-0084-pyro10-follow-padded-1": {
       "rule": "SREP 84 PYRO10",
-      "source": "kit case srep-0078-valid-pyro-follow (SREP 78, draft) with follow=\"true\" written follow=\" 1 \", by conformance/tools/srep84_cases.py",
+      "source": "kit case srep-0078-valid-pyro-follow (SREP 78) with follow=\"true\" written follow=\" 1 \", by conformance/tools/srep84_cases.py",
       "findings": {
         "valid": true
       },
       "requires": [
         78
-      ]
+      ],
+      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with PYRO10"
     },
     "srep-0084-pyro10-follow-0": {
       "rule": "SREP 84 PYRO10",
-      "source": "kit case srep-0078-valid-pyro-follow (SREP 78, draft) with follow=\"true\" written follow=\"0\", by conformance/tools/srep84_cases.py",
+      "source": "kit case srep-0078-valid-pyro-follow (SREP 78) with follow=\"true\" written follow=\"0\", by conformance/tools/srep84_cases.py",
       "findings": {
         "valid": false,
         "codes": [
@@ -43981,17 +43999,18 @@
     },
     "srep-0084-pyro11-margin-plus-2": {
       "rule": "SREP 84 PYRO11",
-      "source": "kit case srep-0078-valid-pyro-follow (SREP 78, draft) with followMargin=\"2\" written followMargin=\"+2\", by conformance/tools/srep84_cases.py",
+      "source": "kit case srep-0078-valid-pyro-follow (SREP 78) with followMargin=\"2\" written followMargin=\"+2\", by conformance/tools/srep84_cases.py",
       "findings": {
         "valid": true
       },
       "requires": [
         78
-      ]
+      ],
+      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with PYRO11"
     },
     "srep-0084-pyro11-margin-plus-4": {
       "rule": "SREP 84 PYRO11",
-      "source": "kit case srep-0078-pyro11-margin (SREP 78, draft) with followMargin=\"4\" written followMargin=\"+4\", by conformance/tools/srep84_cases.py",
+      "source": "kit case srep-0078-pyro11-margin (SREP 78) with followMargin=\"4\" written followMargin=\"+4\", by conformance/tools/srep84_cases.py",
       "findings": {
         "valid": false,
         "codes": [

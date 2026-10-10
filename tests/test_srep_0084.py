@@ -1,7 +1,8 @@
-"""SREP 84 (draft): boolean and integer attributes are tested by value, not by spelling. The SREP's diff block, applied
+"""SREP 84: boolean and integer attributes are tested by value, not by spelling. The SREP's diff block, applied
 to the 1.5.0 Schematron (exactly) and, by content, to the files with the drafts of SREPs 76 to 81 and SREP 83, and
 its drafts block (SREP 78's PYRO9 to PYRO11), applied by content to the latter, give its kit cases their verdicts;
-the diff changes only the rules the SREP lists; no other kit case changes verdict.
+the diff changes only the rules the SREP lists; no other kit case changes verdict. SREP 84 is accepted: the canonical
+Schematron carries both blocks, and with them taken back out no kit case outside SREP 84 changes verdict either.
 """
 import glob
 import json
@@ -138,3 +139,51 @@ def test_no_other_kit_case_changes_verdict(case):
     xml = open(case, "rb").read()
     assert verdict(BASE84, xml) == verdict(BASE, xml)
     assert verdict(DRAFTS84, xml) == verdict(DRAFTS, xml)
+
+
+CANONICAL = {p: open(os.path.join(ROOT, p), "rb").read() for p in ("schema/scene-render.xsd", "schema/scene-render.sch")}
+
+
+def unapplied(files):
+    """The canonical files with SREP 84's two blocks reversed (each + line put back to its - line)."""
+    lines = files["schema/scene-render.sch"].decode().split("\n")
+    for block in (MAIN, DRAFT):
+        b = block.split("\n")
+        old = [x[1:] for x in b if x.startswith("-") and not x.startswith("---")]
+        new = [x[1:] for x in b if x.startswith("+") and not x.startswith("+++")]
+        for o, n in zip(old, new):
+            assert lines.count(n) == 1, n[:80]
+            lines[lines.index(n)] = o
+    return {**files, "schema/scene-render.sch": "\n".join(lines).encode()}
+
+
+def test_the_canonical_schematron_carries_both_blocks():
+    """Every line the two blocks add is in schema/scene-render.sch once, and no line they remove is."""
+    have = CANONICAL["schema/scene-render.sch"].decode().split("\n")
+    for block in (MAIN, DRAFT):
+        b = block.split("\n")
+        assert all(have.count(x[1:]) == 1 for x in b if x.startswith("+") and not x.startswith("+++"))
+        assert not {x[1:] for x in b if x.startswith("-") and not x.startswith("---")} & set(have)
+    assert changed_ids(unapplied(CANONICAL)["schema/scene-render.sch"],
+                       CANONICAL["schema/scene-render.sch"]) == set(ACCEPTED + DRAFTED)
+
+
+CANON = validators(CANONICAL)
+CANON_BEFORE = validators(unapplied(CANONICAL))
+
+
+@pytest.mark.parametrize("name", sorted(CASES))
+def test_kit_case_verdict_on_the_canonical_schema(name):
+    want = CASES[name]["expected"]["findings"]
+    got, ids = failed(CANON, CASES[name]["xml"])
+    if "absent" in want:
+        assert got == "ok" and not ids & set(want["absent"]), (name, got)
+    else:
+        assert got == ("ok" if want["valid"] else "sch:" + ",".join(sorted(want["codes"]))), (name, got)
+    assert verdict(CANON_BEFORE, CASES[name]["xml"]) == srep84_cases.BEFORE[name], name
+
+
+@pytest.mark.parametrize("case", OTHER, ids=os.path.basename)
+def test_no_other_kit_case_changes_verdict_on_the_canonical_schema(case):
+    xml = open(case, "rb").read()
+    assert verdict(CANON, xml) == verdict(CANON_BEFORE, xml)

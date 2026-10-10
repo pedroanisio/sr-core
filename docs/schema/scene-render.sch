@@ -67,7 +67,7 @@
   </sch:pattern>
   <sch:pattern id="p9">
     <sch:rule context="layer[timeRemap]">
-      <sch:assert id="C15" test="(not(@speed) or number(@speed)=1) and (not(@reverse) or @reverse='false') and (not(@loop) or @loop='0')">
+      <sch:assert id="C15" test="(not(@speed) or number(@speed)=1) and (not(@reverse) or normalize-space(@reverse)='false' or normalize-space(@reverse)='0') and (not(@loop) or number(substring(normalize-space(@loop),1+number(starts-with(normalize-space(@loop),'+'))))=0)">
         layer "<sch:value-of select="@id"/>": timeRemap replaces speed, reverse and loop; remove them.</sch:assert>
     </sch:rule>
   </sch:pattern>
@@ -156,7 +156,7 @@
   <sch:pattern id="p24">
     <sch:rule context="output">
       <sch:assert id="C42" test="not(@proresProfile) or @codec='prores'">proresProfile applies only to codec="prores".</sch:assert>
-      <sch:assert id="C43" test="not(@alpha='true') or @codec='prores' or @codec='vp9' or @codec='ffv1' or @codec='png-sequence' or @codec='exr-sequence' or @codec='tiff-sequence' or @codec='apng' or @codec='webp' or @codec='gif'">alpha="true" needs a codec that carries alpha.</sch:assert>
+      <sch:assert id="C43" test="not(normalize-space(@alpha)='true' or normalize-space(@alpha)='1') or @codec='prores' or @codec='vp9' or @codec='ffv1' or @codec='png-sequence' or @codec='exr-sequence' or @codec='tiff-sequence' or @codec='apng' or @codec='webp' or @codec='gif'">alpha="true" needs a codec that carries alpha.</sch:assert>
       <sch:assert id="C44" test="not(@end) or (not(@start) and number(@end) &gt; 0) or number(@end) &gt; number(@start)">output end must be after start.</sch:assert>
     </sch:rule>
   </sch:pattern>
@@ -212,7 +212,7 @@
   </sch:pattern>
   <sch:pattern id="p33">
     <sch:rule context="audioTrack">
-      <sch:assert id="R15" test="/scene/assets/audio[@id=current()/@asset] or /scene/assets/generated[@id=current()/@asset][@kind='speech' or @kind='music' or @kind='sound-effect'] or /scene/assets/video[@id=current()/@asset][@hasAudio='true' or @hasAudio='1']">audioTrack/@asset must name audio, generated audio, or video with hasAudio="true".</sch:assert>
+      <sch:assert id="R15" test="/scene/assets/audio[@id=current()/@asset] or /scene/assets/generated[@id=current()/@asset][@kind='speech' or @kind='music' or @kind='sound-effect'] or /scene/assets/video[@id=current()/@asset][normalize-space(@hasAudio)='true' or normalize-space(@hasAudio)='1']">audioTrack/@asset must name audio, generated audio, or video with hasAudio="true".</sch:assert>
       <sch:assert id="R16" test="not(@bus) or /scene/audioMix/bus[@id=current()/@bus]">audioTrack/@bus must name a bus.</sch:assert>
       <sch:assert id="R17" test="not(@duckUnder) or not(contains(concat(' ',normalize-space(@duckUnder),' '), concat(' ',@id,' ')))">a track cannot duck under itself.</sch:assert>
     </sch:rule>
@@ -415,8 +415,8 @@
       <sch:assert id="C62" test="count(@fromX|@fromY) != 1 and count(@toX|@toY) != 1">@fromX and @fromY (and @toX and @toY) come together.</sch:assert>
       <sch:assert id="C63" test="not(@route='curved' and @points)">route="curved" takes no @points.</sch:assert>
       <sch:assert id="C64" test="not(animate[@property='x' or @property='y' or @property='rotation' or @property='scaleX' or @property='scaleY' or @property='anchorX' or @property='anchorY' or @property='skewX' or @property='skewY']) and not(expression[@property!='opacity'])">a connector has no transform of its own: its geometry comes from its ends.</sch:assert>
-      <sch:assert id="R48-from" test="not(@from) or (ancestor::symbol and ancestor::symbol[1]//*[@id=current()/@from][self::group or self::layer or self::shape or self::instance][not(ancestor::repeat)][not(ancestor-or-self::*[@threeD='true'])]) or (not(ancestor::symbol) and /scene/composition//*[@id=current()/@from][self::group or self::layer or self::shape or self::instance][not(ancestor::repeat)][not(ancestor-or-self::*[@threeD='true'])])">@from must name a group, layer, shape or instance in the same composition or symbol, outside any repeat and not 2.5D.</sch:assert>
-      <sch:assert id="R48-to" test="not(@to) or (ancestor::symbol and ancestor::symbol[1]//*[@id=current()/@to][self::group or self::layer or self::shape or self::instance][not(ancestor::repeat)][not(ancestor-or-self::*[@threeD='true'])]) or (not(ancestor::symbol) and /scene/composition//*[@id=current()/@to][self::group or self::layer or self::shape or self::instance][not(ancestor::repeat)][not(ancestor-or-self::*[@threeD='true'])])">@to must name a group, layer, shape or instance in the same composition or symbol, outside any repeat and not 2.5D.</sch:assert>
+      <sch:assert id="R48-from" test="not(@from) or (ancestor::symbol and ancestor::symbol[1]//*[@id=current()/@from][self::group or self::layer or self::shape or self::instance][not(ancestor::repeat)][not(ancestor-or-self::*[normalize-space(@threeD)='true' or normalize-space(@threeD)='1'])]) or (not(ancestor::symbol) and /scene/composition//*[@id=current()/@from][self::group or self::layer or self::shape or self::instance][not(ancestor::repeat)][not(ancestor-or-self::*[normalize-space(@threeD)='true' or normalize-space(@threeD)='1'])])">@from must name a group, layer, shape or instance in the same composition or symbol, outside any repeat and not 2.5D.</sch:assert>
+      <sch:assert id="R48-to" test="not(@to) or (ancestor::symbol and ancestor::symbol[1]//*[@id=current()/@to][self::group or self::layer or self::shape or self::instance][not(ancestor::repeat)][not(ancestor-or-self::*[normalize-space(@threeD)='true' or normalize-space(@threeD)='1'])]) or (not(ancestor::symbol) and /scene/composition//*[@id=current()/@to][self::group or self::layer or self::shape or self::instance][not(ancestor::repeat)][not(ancestor-or-self::*[normalize-space(@threeD)='true' or normalize-space(@threeD)='1'])])">@to must name a group, layer, shape or instance in the same composition or symbol, outside any repeat and not 2.5D.</sch:assert>
       <sch:assert id="R49" test="not(//transformConstraint[@target=current()/@id] | //*[@parent=current()/@id] | //link[starts-with(@source, concat(current()/@id, '.'))])">nothing may be positioned by a connector (transform parent, constraint target, link source).</sch:assert>
       <sch:assert id="R50" test="not(@label) or /scene/assets/text[@id=current()/@label]">@label must name a text asset.</sch:assert>
     </sch:rule>
@@ -456,7 +456,7 @@
   <sch:pattern id="p76">
     <sch:rule context="repeat">
       <sch:assert id="C74" test="count(points) &lt;= 1">a repeat takes at most one points child.</sch:assert>
-      <sch:assert id="C80" test="not(points and (@from[. != 0] or @step[. != 1]))">a repeat with a points child takes no @from other than 0 and no @step other than 1.</sch:assert>
+      <sch:assert id="C80" test="not(points and (@from[number(substring(normalize-space(.),1+number(starts-with(normalize-space(.),'+')))) != 0] or @step[number(substring(normalize-space(.),1+number(starts-with(normalize-space(.),'+')))) != 1]))">a repeat with a points child takes no @from other than 0 and no @step other than 1.</sch:assert>
     </sch:rule>
     <sch:rule context="repeat/points">
       <sch:assert id="C75" test="not(@type='along-path') or (@path and @count)">points type="along-path" needs @path and @count.</sch:assert>
@@ -513,7 +513,7 @@
       <sch:assert id="VOL1" test="not(@primitive='volume') or count(@volume|pyro)=1">volume primitive requires exactly one source: @volume or a pyro child.</sch:assert>
       <sch:assert id="VOL2" test="not(@volume) or /scene/assets/volume[@id=current()/@volume]">object3D/@volume must name a volume asset.</sch:assert>
       <sch:assert id="VOL3" test="count(medium)&lt;=1 and (@primitive='volume' or (not(medium) and not(@volume) and not(pyro)))">one medium child and @volume are permitted only on a volume primitive.</sch:assert>
-      <sch:assert id="VOL5" test="not(medium[@blackbody='true' or @blackbody='1']) or pyro or /scene/assets/volume[@id=current()/@volume]/@temperatureGrid">blackbody emission requires a declared temperatureGrid on the volume asset.</sch:assert>
+      <sch:assert id="VOL5" test="not(medium[normalize-space(@blackbody)='true' or normalize-space(@blackbody)='1']) or pyro or /scene/assets/volume[@id=current()/@volume]/@temperatureGrid">blackbody emission requires a declared temperatureGrid on the volume asset.</sch:assert>
       <sch:assert id="VOL10" test="not(medium[@lightGridCell or @lightGridDomeDirections or @lightGridMemoryMiB]) or medium/@lighting='grid'">the lightGrid* attributes of a medium apply only with lighting="grid".</sch:assert>
     </sch:rule>
     <sch:rule context="pyro">
@@ -525,9 +525,9 @@
       <sch:assert id="PYRO1" test="$nx&gt;=2 and $nx&lt;=1024 and $ny&gt;=2 and $ny&lt;=1024 and $nz&gt;=2 and $nz&lt;=1024 and $nx - round($nx)&lt;=0.00000001 and round($nx) - $nx&lt;=0.00000001 and $ny - round($ny)&lt;=0.00000001 and round($ny) - $ny&lt;=0.00000001 and $nz - round($nz)&lt;=0.00000001 and round($nz) - $nz&lt;=0.00000001">pyro dimensions must be integer multiples of voxelSize, with 2..1024 cells per axis.</sch:assert>
       <sch:assert id="PYRO7" test="not(@colliders) or ($count &lt;= 4096 and $count = count($colliders[@primitive='box' or @primitive='sphere' or @primitive='globe' or @primitive='plane' or @primitive='cylinder' or @primitive='cone' or @primitive='capsule' or @primitive='torus' or @primitive='mesh' or @primitive='text' or @primitive='extrude' or @primitive='clay']))">pyro colliders must name at most 4096 distinct supported surface objects, including text, extrude and clay solids.</sch:assert>
       <sch:assert id="PYRO8" test="not($colliders/*[@property='primitive' or @property='mesh' or @property='radius' or @property='width' or @property='height' or @property='depth' or @property='segments' or (@property='exaggeration' and ../@primitive='globe' and ../@terrain) or (../@primitive='text' and (@property='text' or @property='font' or @property='bevel' or @property='tracking')) or (../@primitive='extrude' and (@property='path' or @property='bevel')) or (../@primitive='clay' and (@property='resolution' or @property='fingerprints' or @property='seed' or @property='boil'))]) and not($colliders[@primitive='clay']/blob/*[@property]) and not($colliders[@primitive='clay' and number(translate(@boil,'+',''))&gt;0 and number(translate(@fingerprints,'+',''))&gt;0])">pyro collider geometry is static; animate its position, rotation or scale instead of shape parameters.</sch:assert>
-      <sch:assert id="PYRO9" test="not(@follow='true' or @follow='1') or @boundary='open'">a pyro whose window follows its plume needs boundary="open".</sch:assert>
-      <sch:assert id="PYRO10" test="@follow='true' or @follow='1' or not(@followMargin or @followLoss)">followMargin and followLoss belong to a pyro that follows its plume.</sch:assert>
-      <sch:assert id="PYRO11" test="not(@followMargin) or (2 * number(@followMargin) * number(@voxelSize) &lt; number(@width) and 2 * number(@followMargin) * number(@voxelSize) &lt; number(@height) and 2 * number(@followMargin) * number(@voxelSize) &lt; number(@depth))">followMargin must leave a cell between the faces of the window on every axis.</sch:assert>
+      <sch:assert id="PYRO9" test="not(normalize-space(@follow)='true' or normalize-space(@follow)='1') or @boundary='open'">a pyro whose window follows its plume needs boundary="open".</sch:assert>
+      <sch:assert id="PYRO10" test="normalize-space(@follow)='true' or normalize-space(@follow)='1' or not(@followMargin or @followLoss)">followMargin and followLoss belong to a pyro that follows its plume.</sch:assert>
+      <sch:assert id="PYRO11" test="not(@followMargin) or (2 * number(substring(normalize-space(@followMargin),1+number(starts-with(normalize-space(@followMargin),'+')))) * number(@voxelSize) &lt; number(@width) and 2 * number(substring(normalize-space(@followMargin),1+number(starts-with(normalize-space(@followMargin),'+')))) * number(@voxelSize) &lt; number(@height) and 2 * number(substring(normalize-space(@followMargin),1+number(starts-with(normalize-space(@followMargin),'+')))) * number(@voxelSize) &lt; number(@depth))">followMargin must leave a cell between the faces of the window on every axis.</sch:assert>
       <sch:assert id="PYC5" test="not(pyroBlast) or @boundary='open'">a pyro with a blast needs boundary="open": a blast is a source of divergence, which a closed domain cannot let out.</sch:assert>
     </sch:rule>
     <sch:rule context="pyroBlast">
@@ -743,7 +743,7 @@
   <sch:pattern id="cinematic-globe">
     <sch:rule context="object3D">
       <sch:assert id="GEO1" test="not(/scene/@version='1.0' or /scene/@version='1.1' or /scene/@version='1.2') or not((@terrain and @primitive='globe') or @planetRadius or @terrainTileSize or @terrainZoom or @terrainMissing or @terrainMemoryMiB)">globe elevation and its physical-scale/budget options require version="1.3" or later.</sch:assert>
-      <sch:assert id="GEO2" test="(not(@planetRadius) or @primitive='globe') and (not(@terrainTileSize|@terrainZoom|@terrainMissing|@terrainMemoryMiB) or (@primitive='globe' and @terrain)) and (not(@terrainTileSize) or @terrainTileSize=1 or @terrainTileSize=2 or @terrainTileSize=4 or @terrainTileSize=8 or @terrainTileSize=16 or @terrainTileSize=32 or @terrainTileSize=64 or @terrainTileSize=128 or @terrainTileSize=256 or @terrainTileSize=512 or @terrainTileSize=1024 or @terrainTileSize=2048 or @terrainTileSize=4096)">planetRadius belongs to globes; terrain sampling options require a globe with terrain and a power-of-two tile size.</sch:assert>
+      <sch:assert id="GEO2" test="(not(@planetRadius) or @primitive='globe') and (not(@terrainTileSize|@terrainZoom|@terrainMissing|@terrainMemoryMiB) or (@primitive='globe' and @terrain)) and (not(@terrainTileSize) or contains(' 1 2 4 8 16 32 64 128 256 512 1024 2048 4096 ', concat(' ',number(substring(normalize-space(@terrainTileSize),1+number(starts-with(normalize-space(@terrainTileSize),'+')))),' ')))">planetRadius belongs to globes; terrain sampling options require a globe with terrain and a power-of-two tile size.</sch:assert>
       <sch:assert id="GEO3" test="not(@primitive='globe' and *[@property='terrain' or @property='terrainEncoding' or @property='planetRadius' or @property='terrainTileSize' or @property='terrainZoom' or @property='terrainMissing' or @property='terrainMemoryMiB']) and not(@primitive='globe' and @terrain and rigidBody and *[@property='radius' or @property='segments' or @property='exaggeration'])">globe terrain sampling and planetRadius are static; globe rigid collider relief cannot animate radius, segments or exaggeration.</sch:assert>
     </sch:rule>
   </sch:pattern>

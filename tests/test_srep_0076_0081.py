@@ -70,6 +70,21 @@ EDITED = {'      <!-- draft SREP 76, open issue 4: geodesics is an xs:boolean, t
           '      <!-- SREP 76, open issue 4: geodesics is an xs:boolean, true in its forms "true" and "1", whitespace collapsed -->'}
 
 
+def _srep84_drafts_block():
+    """SREP 84 (accepted) rewrites SREP 78's PYRO9 to PYRO11 to read follow and followMargin by value: its "diff drafts"
+    block maps each line SREP 78 added to the line the canonical schema carries."""
+    text = open(os.path.join(ROOT, "srep", "srep-0084.md"), encoding="utf-8").read()
+    (block,) = re.findall(r"^```diff drafts\n(.*?)^```", text, re.S | re.M)
+    lines = block.split("\n")
+    old = [x[1:] for x in lines if x.startswith("-") and not x.startswith("---")]
+    new = [x[1:] for x in lines if x.startswith("+") and not x.startswith("+++")]
+    assert len(old) == len(new) == 3
+    return dict(zip(old, new))
+
+
+EDITED.update(_srep84_drafts_block())
+
+
 def test_the_canonical_schema_carries_every_line_the_sreps_add():
     """SREPs 76 to 81 are accepted: every line their diff and amendment blocks add to the 1.5.0 files is in schema/
     (SREP 83 and SREPs 66 to 75 change other lines; tests/test_srep_0083.py and the kit cases cover those)."""
