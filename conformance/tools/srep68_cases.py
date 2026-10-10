@@ -2,7 +2,7 @@
 """Writes the SREP 68 kit cases (stepsPerFrame, prewarm, render-order independence) to srep_cases/srep-0068.json and
 the counter shader to srep_cases/assets/srep68-counter.fs. The shader adds 1 to a persistent float buffer per step and
 draws red once the count reaches the parameter "target", blue before; the expected colour follows from the step count
-of SREP 68, Semantics 1: prewarm + (f - f0 + 1) * stepsPerFrame at frame f for a node first active at frame f0.
+of SREP 68, Semantics 1: prewarm + s(f) * stepsPerFrame, s(f) the frames from f0 to f at which the node is drawn.
 Usage: python3 conformance/tools/srep68_cases.py; then python3 conformance/make_cases.py."""
 import json
 import os
@@ -70,6 +70,9 @@ def main():
     # a node first active at frame 2 steps at frames 2, 3 and 4
     add("late-start", doc(steps(4, f0=2), node_attrs=' start="0.2"'), True, time=0.4)
     add("late-start-short", doc(steps(4, f0=2) + 1, node_attrs=' start="0.2"'), False, time=0.4)
+    # a node hidden at frame 2 takes no step there: stepping frames 0, 1, 3 and 4
+    add("hidden-frame", doc(4, node_attrs=' condition="frame != 2"'), True, time=0.4)
+    add("hidden-frame-short", doc(5, node_attrs=' condition="frame != 2"'), False, time=0.4)
     cases["srep-0068-not-a-stateful-effect"] = {
         "xml": doc(1, ' stepsPerFrame="2"', effect_type="blur"),
         "expected": {"rule": "SREP 68", "findings": {"valid": False, "codes": ["STP1"]}, "pending": PENDING}}
