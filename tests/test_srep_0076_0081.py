@@ -88,10 +88,17 @@ def test_kit_case_verdict(name):
         assert got == ("ok" if want["valid"] else "sch:" + ",".join(rules)), (name, got)
 
 
+# kit cases of later drafts that need these drafts' syntax ("requires", e.g. SREP 84's pyro cases)
+REQUIRES = {n for n, c in json.load(open(os.path.join(ROOT, "conformance", "expected.json")))["cases"].items()
+            if c.get("requires")}
+
+
 @pytest.mark.parametrize("case", sorted(p for p in glob.glob(os.path.join(ROOT, "conformance", "cases", "*.xml"))
-                                        if not re.search(r"srep-00(7[6-9]|8[013])-", p)), ids=os.path.basename)
+                                        if not re.search(r"srep-00(7[6-9]|8[013])-", p)
+                                        and os.path.basename(p)[:-4] not in REQUIRES), ids=os.path.basename)
 def test_existing_cases_keep_their_verdict(case):
-    # (SREP 83's cases, a draft stacked on these, use their syntax at versions the gates refuse; its own test checks them)
+    # (SREP 83's cases, a draft stacked on these, use their syntax at versions the gates refuse; its own test checks them;
+    # so do the cases of later drafts that require these)
     xml = open(case, "rb").read()
     assert verdict(PROPOSED, xml) == verdict(BASE, xml)
 
