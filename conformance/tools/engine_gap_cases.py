@@ -8,7 +8,9 @@ validation corpus, so that the cases are the documents the engine's own corpus t
 Every invalid corpus document whose expected codes include a rule of an SREP becomes a findings case of that SREP:
 {"valid": false, "codes": [its Schematron rule ids]} (the engine's warnings in the corpus entry, such as W09, are
 left out: they are not what the case checks). The valid corpus documents that use an SREP's syntax become
-{"valid": true} cases, with the warnings the corpus expects of them (W03 to W10) as codes. Asset paths "../media/<f>" become "../assets/<prefix>-<f>", and the files are copied.
+{"valid": true} cases, with the warnings the corpus expects of them (W03 to W10) as codes; SREP 76's black-hole
+warnings W03 and W04 take the codes its fourth amendment gives them, W11 and W12, in the codes and the case name
+(RENAMED). Asset paths "../media/<f>" become "../assets/<prefix>-<f>", and the files are copied.
 The "<!-- expect: ... -->" line of a corpus document is dropped; nothing else changes.
 """
 import argparse
@@ -38,6 +40,10 @@ VALID = {
          "voxel-crater", "voxel-crater-signed-scale", "voxel-ejecta", "voxel-fracture", "voxel-fracture-labels",
          "voxel-fracture-planes", "voxel-fracture-stress", "w09-voxel-cells-small"],
 }
+# SREP 76's fourth amendment (open issue 1): the black-hole warnings W03 and W04 of the corpus at 4bf7a9e, which
+# collide with SREP 57's, are W11 and W12, as in the engine's corpus since c2a66950 (w11-no-lens, w12-denoise).
+# corpus stem at the measured ref: (case stem, {measured code: amended code}).
+RENAMED = {76: {"w03-no-lens": ("w11-no-lens", {"W03": "W11"}), "w04-denoise": ("w12-denoise", {"W04": "W12"})}}
 SCHEMATRON_CODE = re.compile(r"^(BH|VOX|CRT|FRX|PYRO|PYC|OCN|P3D)\d+$")
 # The amendments of SREPs 76 and 80: BH1 and VOX1 refuse only the versions before 1.3. These cases are a valid corpus
 # document with nothing but scene/@version changed: to 1.4 and 1.5, which the amended gate accepts, and to 1.0 and
@@ -103,11 +109,14 @@ def main():
                 raise SystemExit(f"{f} is not a valid corpus document at {ref}")
             text = convert(show(repo, ref, f"tests/corpus/valid/{f}"), srep)   # warnings documents are in valid/ too
             findings = {"valid": True}
+            name, codes = RENAMED.get(srep, {}).get(stem, (stem, {}))
             if manifest[kind][f]:
-                findings["codes"] = manifest[kind][f]
-            cases[f"srep-{srep:04d}-valid-{stem}"] = {"xml": text, "expected": {
-                "rule": f"SREP {srep}", "source": f"engine corpus tests/corpus/valid/{f} ({kind}) at {commit}",
-                "findings": findings}}
+                findings["codes"] = [codes.get(c, c) for c in manifest[kind][f]]
+            source = f"engine corpus tests/corpus/valid/{f} ({kind}) at {commit}"
+            if codes:
+                source += ", warning " + ", ".join(f"{a} written {b}" for a, b in codes.items()) + " (amendment)"
+            cases[f"srep-{srep:04d}-valid-{name}"] = {"xml": text, "expected": {
+                "rule": f"SREP {srep}", "source": source, "findings": findings}}
         if srep in LATER:
             stem, gate = LATER[srep]
             f = f"{stem}.scene.xml"

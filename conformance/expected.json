@@ -39758,23 +39758,23 @@
         "valid": true
       }
     },
-    "srep-0076-valid-w03-no-lens": {
+    "srep-0076-valid-w11-no-lens": {
       "rule": "SREP 76",
-      "source": "engine corpus tests/corpus/valid/w03-no-lens.scene.xml (warnings) at 4bf7a9e",
+      "source": "engine corpus tests/corpus/valid/w03-no-lens.scene.xml (warnings) at 4bf7a9e, warning W03 written W11 (amendment)",
       "findings": {
         "valid": true,
         "codes": [
-          "W03"
+          "W11"
         ]
       }
     },
-    "srep-0076-valid-w04-denoise": {
+    "srep-0076-valid-w12-denoise": {
       "rule": "SREP 76",
-      "source": "engine corpus tests/corpus/valid/w04-denoise.scene.xml (warnings) at 4bf7a9e",
+      "source": "engine corpus tests/corpus/valid/w04-denoise.scene.xml (warnings) at 4bf7a9e, warning W04 written W12 (amendment)",
       "findings": {
         "valid": true,
         "codes": [
-          "W04"
+          "W12"
         ]
       }
     },
