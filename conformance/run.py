@@ -11,8 +11,9 @@ render frame 0 to PNG (or, for a case whose expected entry names an "output", de
 output time), find each colour's pixels (pure red/green/blue/yellow on black) and compare the
 centroid (and size, where expected) with the normative value. Writes out/report.json and out/report.md.
 
-Two forms check something other than a picture: "findings" (the engine's diagnostics, `validate --format json`)
-and "captions" (the caption pages after paging and the current word per time, `captions --at`; SREP 52).
+Three forms check something other than a picture: "findings" (the engine's diagnostics, `validate --format json`),
+"captions" (the caption pages after paging and the current word per time, `captions --at`; SREP 52) and "audio"
+(the gain of each test tone at given times in an audio-only WAV output; SREP 82).
 """
 import argparse
 import glob
@@ -250,6 +251,91 @@ def captions(renderer, case, want):
     return ("pass" if ok else "fail"), time.time() - t0, [], {"form": "captions", "reported": reported, "checks": checks}
 
 
+def read_wav(path):
+    """(rate, first channel as float in [-1, 1]) of a RIFF/WAVE file: integer PCM of 16, 24 or 32 bits, or 32/64-bit
+    float, plain or WAVE_FORMAT_EXTENSIBLE."""
+    data = open(path, "rb").read()
+    if data[:4] != b"RIFF" or data[8:12] != b"WAVE":
+        raise ValueError(f"{os.path.basename(path)} is not a RIFF/WAVE file")
+    i, fmt, body = 12, None, None
+    while i + 8 <= len(data):
+        cid, size = data[i:i + 4], int.from_bytes(data[i + 4:i + 8], "little")
+        if cid == b"fmt ":
+            fmt = data[i + 8:i + 8 + size]
+        elif cid == b"data":
+            body = data[i + 8:i + 8 + size]
+        i += 8 + size + (size & 1)
+    if fmt is None or body is None:
+        raise ValueError(f"{os.path.basename(path)} lacks a fmt or data chunk")
+    tag, channels, rate = (int.from_bytes(fmt[a:b], "little") for a, b in ((0, 2), (2, 4), (4, 8)))
+    bits = int.from_bytes(fmt[14:16], "little")
+    if tag == 0xFFFE:                       # WAVE_FORMAT_EXTENSIBLE: the sub-format's first two bytes are the tag
+        tag = int.from_bytes(fmt[24:26], "little")
+    width = bits // 8
+    n = len(body) // (width * channels)
+    if tag == 3:
+        x = np.frombuffer(body[:n * width * channels], dtype="<f4" if bits == 32 else "<f8").astype(np.float64)
+    elif tag == 1 and bits in (16, 32):
+        x = np.frombuffer(body[:n * width * channels], dtype=f"<i{width}").astype(np.float64) / 2.0 ** (bits - 1)
+    elif tag == 1 and bits == 24:
+        b = np.frombuffer(body[:n * 3 * channels], dtype=np.uint8).reshape(-1, 3).astype(np.int32)
+        v = b[:, 0] | (b[:, 1] << 8) | (b[:, 2] << 16)
+        x = np.where(v >= 1 << 23, v - (1 << 24), v).astype(np.float64) / 2.0 ** 23
+    else:
+        raise ValueError(f"{os.path.basename(path)}: unsupported WAVE format {tag} with {bits} bits")
+    return rate, x.reshape(-1, channels)[:, 0]
+
+
+def tone_amplitude(x, rate, freq, t, window):
+    """The amplitude of the sine of `freq` Hz in `x` over the window of `window` seconds centred on `t` (a single DFT
+    bin: 2/N |sum x[n] e^(-2 pi i f n / rate)|). A tone completing a whole number of cycles in the window does not
+    leak into another such tone's bin."""
+    n = int(round(window * rate))
+    i0 = int(round((t - window / 2) * rate))
+    seg = x[max(i0, 0):max(i0, 0) + n]
+    if len(seg) < n:
+        return 0.0
+    k = np.arange(n) + i0
+    return float(2.0 / n * abs(np.sum(seg * np.exp(-2j * np.pi * freq * k / rate))))
+
+
+def audio(renderer, case, want):
+    """A case whose expected entry has "audio": the engine delivers the document's audio-only WAV output and the gain
+    of each sound source is measured at given times (SREP 82). The entry is {"output": id, "tones": {name: Hz},
+    "level": amplitude, "window": seconds, "tolerance": gain, "gains": [[time, {name: gain}], ...]}: each source plays
+    a sine of its frequency at `level`, and its gain at a time is the amplitude of that sine over the window centred on
+    the time, divided by `level` (tone_amplitude). Every listed gain must be within `tolerance`. Only the Rust engine
+    is asked (`encode <scene> --output <id>`); another renderer is an error."""
+    label, _, env = RENDERERS[renderer]
+    if renderer != "rs":
+        return "error", 0.0, [f"{label} cannot deliver an audio output from this kit yet"], {}
+    d, s_ = prepare(case, renderer)
+    exe = os.environ.get("RS_RENDER_BIN", "scene-render-rs")
+    t0 = time.time()
+    try:
+        p = subprocess.run([exe, "encode", s_, "--output", want["output"]], cwd=d, capture_output=True, text=True,
+                           timeout=600, env={**os.environ, **env})
+        if p.returncode != 0:
+            tail = ((p.stderr or p.stdout).strip().splitlines() or [""])[-1][:160]
+            raise RuntimeError(f"exit status {p.returncode}: {tail}")
+        xml = open(s_).read()
+        m = re.search(r'<output\b[^>]*\bid="%s"[^>]*>' % re.escape(want["output"]), xml)
+        path = re.search(r'\bpath="([^"]+)"', m.group(0)).group(1) if m else ""
+        rate, x = read_wav(os.path.join(d, path))
+    except (FileNotFoundError, subprocess.TimeoutExpired, RuntimeError, ValueError, AttributeError) as e:
+        return "error", time.time() - t0, [f"audio failed: {type(e).__name__}: {e}"], {}
+    tol, level, window = want["tolerance"], want["level"], want["window"]
+    rows, measured = [], []
+    for t, gains in want["gains"]:
+        got = {k: round(tone_amplitude(x, rate, want["tones"][k], t, window) / level, 4) for k in gains}
+        measured.append([t, got])
+        for k, g in gains.items():
+            rows.append((f"{k} at {t}: {g} (got {got[k]})", abs(got[k] - g) <= tol))
+    ok = all(v for _, v in rows)
+    return ("pass" if ok else "fail"), time.time() - t0, [], {"form": "audio", "measured": measured,
+                                                              "checks": {"gains": rows}}
+
+
 COLOUR_TOL = 3  # 8-bit code values
 
 
@@ -302,6 +388,11 @@ def main() -> int:
                 report["results"][r][c] = {"status": st, "seconds": round(dt, 2), "notes": notes, **detail}
                 print(f"{r:3s} {c:22s} {st:5s} {dt:6.1f}s captions " + ("; ".join(notes)[:110] if st == "error" else ""), flush=True)
                 continue
+            if "audio" in spec["cases"][c]:
+                st, dt, notes, detail = audio(r, c, spec["cases"][c]["audio"])
+                report["results"][r][c] = {"status": st, "seconds": round(dt, 2), "notes": notes, **detail}
+                print(f"{r:3s} {c:22s} {st:5s} {dt:6.1f}s audio " + ("; ".join(notes)[:110] if st == "error" else ""), flush=True)
+                continue
             if "findings" in spec["cases"][c]:
                 st, dt, notes, detail = findings(r, c, spec["cases"][c]["findings"])
                 report["results"][r][c] = {"status": st, "seconds": round(dt, 2), "notes": notes, **detail}
@@ -345,9 +436,9 @@ def write_md(report, spec, cases):
                 cells.append("✅")
             elif e["status"] == "error":
                 cells.append("⛔ " + (e["notes"][0][:60] if e["notes"] else f"exit {e.get('exit')}"))
-            elif e.get("form") == "captions":
+            elif e.get("form") in ("captions", "audio"):
                 bad = [f"{k} {c}" for k, rows in e["checks"].items() for c, ok in rows if not ok]
-                cells.append("❌ captions: " + "; ".join(bad))
+                cells.append(f"❌ {e['form']}: " + "; ".join(bad))
             elif "checks" in e and "measured" not in e:
                 bad = [f"{k} {c}" for k, rows in e["checks"].items() for c, ok in rows if not ok]
                 cells.append("❌ findings: " + ", ".join(bad) + f" (reported {', '.join(e['reported']) or 'none'})")

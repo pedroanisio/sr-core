@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.5">
+<project width="64" height="36" fps="25" duration="2" background="#000000FF" seed="1"/>
+<output id="mix" path="out/mix.wav" codec="audio-only" container="wav"/>
+<assets>
+<video id="ta" src="../assets/srep82-tone-500.mkv" width="64" height="36" fps="25" duration="2.2" hasAudio="true"/>
+<video id="tb" src="../assets/srep82-tone-1250.mkv" width="64" height="36" fps="25" duration="2.2" hasAudio="true"/>
+</assets>
+<composition>
+<layer id="a" asset="ta" end="1"/>
+<layer id="b" asset="tb" start="1" clipIn="1"/>
+<transition type="cut" from="a" to="b" duration="0.4" curve="linear"/>
+</composition>
+</scene>

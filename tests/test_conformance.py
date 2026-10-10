@@ -26,13 +26,15 @@ def _run(tmp_path, engine_script: str | None, cases="a1"):
     pytest.importorskip("PIL")
     copy = tmp_path / "conformance"
     shutil.copytree(CONF, copy, ignore=shutil.ignore_patterns("out", "__pycache__"))
-    # the stand-in engines below implement what a pending case waits for (the captions command of SREP 52), so the
-    # copy runs those cases instead of listing them as pending
-    if engine_script is not None and "srep-0052" in cases:
+    # the stand-in engines below implement what a pending case waits for (the captions command of SREP 52, the
+    # transition audio of SREP 82), so the copy runs those cases instead of listing them as pending
+    for srep in ("srep-0052", "srep-0082"):     # captions (SREP 52) and audio (SREP 82)
+        if engine_script is None or srep not in cases:
+            continue
         import json
         spec = json.loads((copy / "expected.json").read_text())
         for c in spec["cases"]:
-            if c.startswith("srep-0052-"):
+            if c.startswith(srep + "-"):
                 spec["cases"][c].pop("pending", None)
         (copy / "expected.json").write_text(json.dumps(spec, indent=2))
     env = {k: v for k, v in os.environ.items() if k != "RS_RENDER_BIN"}
@@ -153,3 +155,56 @@ def test_a_captions_case_compares_words_and_times_with_another_case(tmp_path):
 def test_a_captions_case_errors_when_the_engine_fails(tmp_path):
     r = _run(tmp_path, _captions_engine(["aa bb\ncc dd"], status=1), cases="srep-0052-caption-lines-limits-chars")
     assert r.returncode == 1 and "error" in r.stdout and "Traceback" not in r.stderr, r.stdout + r.stderr
+
+
+def _audio_engine(gains: str, status=0, bits=24):
+    """A stand-in engine for `encode <scene> --output <id>`: writes the output's WAV (48 kHz stereo, `bits`-bit PCM)
+    holding the SREP 82 test tones a (500 Hz) and b (1250 Hz) at amplitude 0.25, each times the gain that the Python
+    expression `gains` gives as a pair (ga, gb) of the time t in seconds."""
+    return ("import re, sys, numpy as np\n"
+            "a = sys.argv\n"
+            "assert a[1] == 'encode' and a[3] == '--output', a\n"
+            "xml = open(a[2]).read()\n"
+            "out = re.search(r'<output\\b[^>]*id=\"%s\"[^>]*path=\"([^\"]+)\"' % a[4], xml).group(1)\n"
+            "import os; path = os.path.join(os.path.dirname(a[2]), out); os.makedirs(os.path.dirname(path), exist_ok=True)\n"
+            "r = 48000; t = np.arange(2 * r) / r\n"
+            f"def g(t):\n    return {gains}\n"
+            "ga, gb = np.vectorize(g)(t)\n"
+            "x = 0.25 * (ga * np.sin(2 * np.pi * 500 * t) + gb * np.sin(2 * np.pi * 1250 * t))\n"
+            f"bits = {bits}; w = bits // 8\n"
+            "v = np.round(x * (2 ** (bits - 1) - 1)).astype(np.int64)\n"
+            "s = np.repeat(v, 2)\n"
+            "body = b''.join(int(q).to_bytes(w, 'little', signed=True) for q in s)\n"
+            "fmt = (1).to_bytes(2, 'little') + (2).to_bytes(2, 'little') + r.to_bytes(4, 'little') + "
+            "(r * 2 * w).to_bytes(4, 'little') + (2 * w).to_bytes(2, 'little') + bits.to_bytes(2, 'little')\n"
+            "riff = b'WAVE' + b'fmt ' + len(fmt).to_bytes(4, 'little') + fmt + b'data' + len(body).to_bytes(4, 'little') + body\n"
+            "open(path, 'wb').write(b'RIFF' + len(riff).to_bytes(4, 'little') + riff)\n"
+            f"sys.exit({status})\n")
+
+
+# SREP 82's default crossfade over the window [0.8, 1.2) of srep-0082-crossfade-default; before, a alone, after, b alone
+CROSSFADE = "(1.0, 0.0) if t < 0.8 else (0.0, 1.0) if t >= 1.2 else (1 - (t - 0.8) / 0.4, (t - 0.8) / 0.4)"
+
+
+def test_an_audio_case_passes_on_the_gains_it_expects(tmp_path):
+    r = _run(tmp_path, _audio_engine(CROSSFADE), cases="srep-0082-crossfade-default")
+    assert r.returncode == 0 and "pass" in r.stdout, r.stdout + r.stderr
+
+
+def test_an_audio_case_reads_16_bit_wav_too(tmp_path):
+    r = _run(tmp_path, _audio_engine(CROSSFADE, bits=16), cases="srep-0082-crossfade-default")
+    assert r.returncode == 0 and "pass" in r.stdout, r.stdout + r.stderr
+
+
+def test_an_audio_case_fails_when_the_transition_does_not_mix_the_sound(tmp_path):
+    # what the reference did before SREP 82: both sides at full volume over the handles
+    r = _run(tmp_path, _audio_engine("(1.0 if t < 1.2 else 0.0, 1.0 if t >= 0.8 else 0.0)"),
+             cases="srep-0082-crossfade-default")
+    assert r.returncode == 1 and "fail" in r.stdout, r.stdout + r.stderr
+    report = (tmp_path / "conformance" / "out" / "report.md").read_text()
+    assert "audio: gains a at 0.9: 0.75 (got 1.0)" in report, report
+
+
+def test_an_audio_case_errors_when_the_engine_fails(tmp_path):
+    r = _run(tmp_path, _audio_engine(CROSSFADE, status=1), cases="srep-0082-crossfade-default")
+    assert r.returncode == 1 and "error" in r.stdout, r.stdout + r.stderr
