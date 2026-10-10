@@ -91,7 +91,7 @@
      "C43"
     ]
    },
-   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report C43"
+   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report C43; its encoder then refuses the output (H264 cannot carry alpha)"
   }
  },
  "srep-0084-c43-alpha-padded-true": {
@@ -105,7 +105,7 @@
      "C43"
     ]
    },
-   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report C43"
+   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report C43; its encoder then refuses the output (H264 cannot carry alpha)"
   }
  },
  "srep-0084-c43-alpha-0": {
@@ -220,7 +220,7 @@
      "VOL5"
     ]
    },
-   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report VOL5"
+   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report VOL5; the render then fails (blackbody requires temperatureGrid)"
   }
  },
  "srep-0084-vol5-blackbody-padded-1": {
@@ -234,7 +234,7 @@
      "VOL5"
     ]
    },
-   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report VOL5"
+   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report VOL5; the render then fails (blackbody requires temperatureGrid)"
   }
  },
  "srep-0084-vol5-blackbody-0": {

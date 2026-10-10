@@ -78,15 +78,18 @@ PENDING = {
         ("c15-loop-00", "refuses the document with C15"),
         ("c15-loop-plus-0", "refuses the document with C15"),
         ("c15-loop-padded-0", "refuses the document with C15"),
-        ("c43-alpha-1", "does not report C43"),
-        ("c43-alpha-padded-true", "does not report C43"),
+        ("c43-alpha-1", "does not report C43; its encoder then refuses the output (H264 cannot carry alpha)"),
+        ("c43-alpha-padded-true", "does not report C43; its encoder then refuses the output (H264 cannot carry "
+                                   "alpha)"),
         ("r15-has-audio-padded-true", "reports R15"),
         ("r15-has-audio-padded-1", "reports R15"),
         ("r48-from-threed-1", "does not report R48-from"),
         ("r48-from-threed-padded-true", "does not report R48-from"),
         ("r48-to-threed-1", "does not report R48-to"),
-        ("vol5-blackbody-padded-true", "does not report VOL5"),
-        ("vol5-blackbody-padded-1", "does not report VOL5"),
+        ("vol5-blackbody-padded-true", "does not report VOL5; the render then fails (blackbody requires "
+                                        "temperatureGrid)"),
+        ("vol5-blackbody-padded-1", "does not report VOL5; the render then fails (blackbody requires "
+                                     "temperatureGrid)"),
         ("c80-from-plus-0", "refuses the document with C80"),
         ("c80-step-plus-1", "refuses the document with C80"),
         ("pyro9-follow-padded-true-closed", "reports PYRO10, not PYRO9"),
