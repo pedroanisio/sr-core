@@ -210,5 +210,51 @@
     ]
    }
   }
+ },
+ "srep-0076-valid-black-hole-version-1.4": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.4\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\" geodesics=\"true\"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/><accretionDisk id=\"disk\" blackHole=\"hole\" outerRadius=\"20\" temperatureScale=\"6000\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76 BH1 (amendment)",
+   "source": "engine corpus tests/corpus/valid/black-hole.scene.xml at 4bf7a9e, scene/@version 1.4",
+   "findings": {
+    "valid": true
+   }
+  }
+ },
+ "srep-0076-valid-black-hole-version-1.5": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.5\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\" geodesics=\"true\"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/><accretionDisk id=\"disk\" blackHole=\"hole\" outerRadius=\"20\" temperatureScale=\"6000\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76 BH1 (amendment)",
+   "source": "engine corpus tests/corpus/valid/black-hole.scene.xml at 4bf7a9e, scene/@version 1.5",
+   "findings": {
+    "valid": true
+   }
+  }
+ },
+ "srep-0076-bh1-version-1.0": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.0\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\" geodesics=\"true\"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/><accretionDisk id=\"disk\" blackHole=\"hole\" outerRadius=\"20\" temperatureScale=\"6000\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76 BH1",
+   "source": "engine corpus tests/corpus/valid/black-hole.scene.xml at 4bf7a9e, scene/@version 1.0",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "BH1"
+    ]
+   }
+  }
+ },
+ "srep-0076-bh1-version-1.1": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.1\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\" geodesics=\"true\"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/><accretionDisk id=\"disk\" blackHole=\"hole\" outerRadius=\"20\" temperatureScale=\"6000\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76 BH1",
+   "source": "engine corpus tests/corpus/valid/black-hole.scene.xml at 4bf7a9e, scene/@version 1.1",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "BH1"
+    ]
+   }
+  }
  }
 }

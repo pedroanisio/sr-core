@@ -39,6 +39,12 @@ VALID = {
          "voxel-fracture-planes", "voxel-fracture-stress", "w09-voxel-cells-small"],
 }
 SCHEMATRON_CODE = re.compile(r"^(BH|VOX|CRT|FRX|PYRO|PYC|OCN|P3D)\d+$")
+# The amendments of SREPs 76 and 80: BH1 and VOX1 refuse only the versions before 1.3. These cases are a valid corpus
+# document with nothing but scene/@version changed: to 1.4 and 1.5, which the amended gate accepts, and to 1.0 and
+# 1.1, which it still refuses (the corpus's own bh1-version and vox1-version are 1.2). sr-core's schema up to 1.5.0
+# has no version 1.6, so no case uses it; the engine's corpus has black-hole-version-1.6 and voxels-version-1.6.
+LATER = {76: ("black-hole", "BH1"), 80: ("voxels", "VOX1")}
+LATER_VERSIONS = {"1.4": True, "1.5": True, "1.0": False, "1.1": False}
 
 
 def show(repo, ref, path, binary=False):
@@ -89,6 +95,22 @@ def main():
             cases[f"srep-{srep:04d}-valid-{stem}"] = {"xml": text, "expected": {
                 "rule": f"SREP {srep}", "source": f"engine corpus tests/corpus/valid/{f} ({kind}) at {commit}",
                 "findings": findings}}
+        if srep in LATER:
+            stem, gate = LATER[srep]
+            f = f"{stem}.scene.xml"
+            base = convert(show(repo, ref, f"tests/corpus/valid/{f}"), srep)
+            assert base.count('<scene version="1.3">') == 1, f
+            for version, valid in LATER_VERSIONS.items():
+                text = base.replace('<scene version="1.3">', f'<scene version="{version}">')
+                source = f"engine corpus tests/corpus/valid/{f} at {commit}, scene/@version {version}"
+                if valid:
+                    cases[f"srep-{srep:04d}-valid-{stem}-version-{version}"] = {"xml": text, "expected": {
+                        "rule": f"SREP {srep} {gate} (amendment)", "source": source,
+                        "findings": {"valid": True}}}
+                else:
+                    cases[f"srep-{srep:04d}-{gate.lower()}-version-{version}"] = {"xml": text, "expected": {
+                        "rule": f"SREP {srep} {gate}", "source": source,
+                        "findings": {"valid": False, "codes": [gate]}}}
         with open(os.path.join(CONF, "srep_cases", f"srep-{srep:04d}.json"), "w") as fh:
             json.dump(cases, fh, indent=1, ensure_ascii=False)
             fh.write("\n")

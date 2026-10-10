@@ -140,3 +140,30 @@ def test_black_hole_rules_keep_to_the_camera_scope(name):
     xml = VP_HEAD + inside + VP_TAIL
     assert schematron_rules(gap.proposed_schema(), xml) == amended
     assert schematron_rules(MEASURED, xml) == measured
+
+
+# The amendments of SREPs 76 and 80: BH1 and VOX1 refuse only the versions before 1.3 (the engine's text at
+# prep/srep-76-81-followups c2a66950). The kit cases srep-0076-*-version-* and srep-0080-*-version-* check the verdicts;
+# this checks that the measured text, which verify() compares with the engine's 4bf7a9e files, keeps the exact gate.
+def test_the_version_amendments_are_separate_from_the_measured_patches():
+    assert len(gap.srep_amendments([76])) >= 2 and gap.srep_amendments([80])
+    proposed = gap.proposed_schema()["schema/scene-render.sch"].decode()
+    measured = MEASURED["schema/scene-render.sch"].decode()
+    for rule in ("""<sch:assert id="BH1" test="not(/scene/@version='1.0' or /scene/@version='1.1' or /scene/@version='1.2')">""",
+                 """<sch:rule context="/scene[@version='1.0' or @version='1.1' or @version='1.2']">
+      <sch:assert id="VOX1" """):
+        assert rule in proposed and rule not in measured
+    assert """<sch:assert id="BH1" test="/scene/@version='1.3'">""" in measured
+    assert """<sch:rule context="/scene[@version!='1.3']">
+      <sch:assert id="VOX1" """ in measured
+
+
+@pytest.mark.parametrize("version,refused", [("1.0", True), ("1.1", True), ("1.2", True), ("1.3", False),
+                                             ("1.4", False), ("1.5", False)])
+def test_bh1_and_vox1_refuse_only_the_versions_before_1_3(version, refused):
+    hole = CASES["srep-0076-valid-black-hole"][1]["xml"].replace('<scene version="1.3">', f'<scene version="{version}">')
+    cells = CASES["srep-0080-valid-voxels"][1]["xml"].replace('<scene version="1.3">', f'<scene version="{version}">')
+    assert verdict(PROPOSED, hole) == ("sch:BH1" if refused else "ok")
+    assert verdict(PROPOSED, cells) == ("sch:VOX1" if refused else "ok")
+    # the measured text refuses every version but 1.3
+    assert schematron_rules(MEASURED, hole) == ([] if version == "1.3" else ["BH1"])

@@ -747,5 +747,51 @@
     ]
    }
   }
+ },
+ "srep-0080-valid-voxels-version-1.4": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.4\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-voxels.vox\" maxCells=\"100000\"/><mesh id=\"shape\" src=\"../assets/srep80-robot.glb\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/><material id=\"moss\" baseColor=\"#406040\"/></materials><composition><object3D id=\"build\" primitive=\"voxels\" voxels=\"model\" cellSize=\"2\" palette=\"stone moss\" surface=\"blocks\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX1 (amendment)",
+   "source": "engine corpus tests/corpus/valid/voxels.scene.xml at 4bf7a9e, scene/@version 1.4",
+   "findings": {
+    "valid": true
+   }
+  }
+ },
+ "srep-0080-valid-voxels-version-1.5": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.5\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-voxels.vox\" maxCells=\"100000\"/><mesh id=\"shape\" src=\"../assets/srep80-robot.glb\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/><material id=\"moss\" baseColor=\"#406040\"/></materials><composition><object3D id=\"build\" primitive=\"voxels\" voxels=\"model\" cellSize=\"2\" palette=\"stone moss\" surface=\"blocks\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX1 (amendment)",
+   "source": "engine corpus tests/corpus/valid/voxels.scene.xml at 4bf7a9e, scene/@version 1.5",
+   "findings": {
+    "valid": true
+   }
+  }
+ },
+ "srep-0080-vox1-version-1.0": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.0\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-voxels.vox\" maxCells=\"100000\"/><mesh id=\"shape\" src=\"../assets/srep80-robot.glb\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/><material id=\"moss\" baseColor=\"#406040\"/></materials><composition><object3D id=\"build\" primitive=\"voxels\" voxels=\"model\" cellSize=\"2\" palette=\"stone moss\" surface=\"blocks\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX1",
+   "source": "engine corpus tests/corpus/valid/voxels.scene.xml at 4bf7a9e, scene/@version 1.0",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX1"
+    ]
+   }
+  }
+ },
+ "srep-0080-vox1-version-1.1": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.1\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-voxels.vox\" maxCells=\"100000\"/><mesh id=\"shape\" src=\"../assets/srep80-robot.glb\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/><material id=\"moss\" baseColor=\"#406040\"/></materials><composition><object3D id=\"build\" primitive=\"voxels\" voxels=\"model\" cellSize=\"2\" palette=\"stone moss\" surface=\"blocks\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 80 VOX1",
+   "source": "engine corpus tests/corpus/valid/voxels.scene.xml at 4bf7a9e, scene/@version 1.1",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "VOX1"
+    ]
+   }
+  }
  }
 }

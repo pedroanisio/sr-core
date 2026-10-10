@@ -39788,6 +39788,40 @@
         ]
       }
     },
+    "srep-0076-valid-black-hole-version-1.4": {
+      "rule": "SREP 76 BH1 (amendment)",
+      "source": "engine corpus tests/corpus/valid/black-hole.scene.xml at 4bf7a9e, scene/@version 1.4",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0076-valid-black-hole-version-1.5": {
+      "rule": "SREP 76 BH1 (amendment)",
+      "source": "engine corpus tests/corpus/valid/black-hole.scene.xml at 4bf7a9e, scene/@version 1.5",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0076-bh1-version-1.0": {
+      "rule": "SREP 76 BH1",
+      "source": "engine corpus tests/corpus/valid/black-hole.scene.xml at 4bf7a9e, scene/@version 1.0",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "BH1"
+        ]
+      }
+    },
+    "srep-0076-bh1-version-1.1": {
+      "rule": "SREP 76 BH1",
+      "source": "engine corpus tests/corpus/valid/black-hole.scene.xml at 4bf7a9e, scene/@version 1.1",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "BH1"
+        ]
+      }
+    },
     "srep-0077-crt10-bulking-without-source": {
       "rule": "SREP 77 CRT10 CRT11",
       "source": "engine corpus tests/corpus/invalid/crt10-bulking-without-source.scene.xml at 4bf7a9e",
@@ -40662,6 +40696,40 @@
         "valid": true,
         "codes": [
           "W09"
+        ]
+      }
+    },
+    "srep-0080-valid-voxels-version-1.4": {
+      "rule": "SREP 80 VOX1 (amendment)",
+      "source": "engine corpus tests/corpus/valid/voxels.scene.xml at 4bf7a9e, scene/@version 1.4",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0080-valid-voxels-version-1.5": {
+      "rule": "SREP 80 VOX1 (amendment)",
+      "source": "engine corpus tests/corpus/valid/voxels.scene.xml at 4bf7a9e, scene/@version 1.5",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0080-vox1-version-1.0": {
+      "rule": "SREP 80 VOX1",
+      "source": "engine corpus tests/corpus/valid/voxels.scene.xml at 4bf7a9e, scene/@version 1.0",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX1"
+        ]
+      }
+    },
+    "srep-0080-vox1-version-1.1": {
+      "rule": "SREP 80 VOX1",
+      "source": "engine corpus tests/corpus/valid/voxels.scene.xml at 4bf7a9e, scene/@version 1.1",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOX1"
         ]
       }
     }
