@@ -90,8 +90,8 @@ def sha(b: bytes) -> str:
 def doc(body, version="1.6", seed=1, params=""):
     return (f'<?xml version="1.0" encoding="UTF-8"?>\n<scene version="{version}">\n'
             f'<project width="640" height="360" fps="24" duration="1" background="#000000FF" seed="{seed}"/>\n'
-            '<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>\n'
-            f'{params}<composition>\n{body}\n</composition>\n</scene>\n')
+            f'{params}<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>\n'
+            f'<composition>\n{body}\n</composition>\n</scene>\n')
 
 
 def prog(name, mods, attrs="", inner=""):

@@ -138,7 +138,7 @@
   }
  },
  "srep-0066-program-data-rows": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<parameters><program id=\"rows\" src=\"../assets/srep66-rows.wasm\" sha256=\"30913dad3a42ec921501faa4c7402fb2b441c06743d3f5ceca607b45f64f9ba3\"/></parameters>\n<composition>\n<repeat id=\"rep\" over=\"rows\" offsetX=\"320\"><shape id=\"c\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"160\" y=\"180\" fill=\"#FF0000FF\"/></repeat>\n</composition>\n</scene>\n",
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<parameters><program id=\"rows\" src=\"../assets/srep66-rows.wasm\" sha256=\"30913dad3a42ec921501faa4c7402fb2b441c06743d3f5ceca607b45f64f9ba3\"/></parameters>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<repeat id=\"rep\" over=\"rows\" offsetX=\"320\"><shape id=\"c\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"160\" y=\"180\" fill=\"#FF0000FF\"/></repeat>\n</composition>\n</scene>\n",
   "expected": {
    "rule": "SREP 66",
    "red": {

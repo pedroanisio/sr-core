@@ -79,6 +79,8 @@ def main():
     sq = '<shape id="s" shape="rect" width="100" height="100" anchorX="50" anchorY="50" x="320" y="180" fill="#FFFFFFFF" effects="fx"/>'
     fx = '<effects><effect id="fx" type="shader" src="../assets/srep72-{}.fs"/></effects>\n'
     add("precision-f32", doc(sq, ' precision="f32"', fx.format("f32")), red={"cx": 320, "cy": 180, "w": 100, "h": 100}, absent=["blue"])
+    add("precision-3d-note", doc('<object3D id="o" primitive="sphere" radius="40" x="320" y="180"/>', ' precision="f32"'),
+        findings={"valid": True, "codes": ["PREC1"]})
     add("content-rect-stripe", doc(sq, "", fx.format("stripe")), red={"cx": 275, "cy": 180, "w": 10, "h": 100})
     add("content-rect-stripe-fractional", doc(sq.replace('x="320"', 'x="320.4"'), "", fx.format("stripe")),
         red={"cx": 275.4, "cy": 180, "w": 10, "h": 100})

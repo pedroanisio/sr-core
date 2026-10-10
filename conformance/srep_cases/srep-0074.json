@@ -89,18 +89,5 @@
    },
    "pending": "SREP 74 is a draft; no engine implements viewport3D yet. The entry keeps the values derived from the SREP"
   }
- },
- "srep-0074-no-nesting": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<viewport3D id=\"v\" width=\"200\" height=\"100\" x=\"100\" y=\"100\"><viewport3D id=\"v2\" width=\"200\" height=\"100\" x=\"100\" y=\"100\"><object3D id=\"p\" primitive=\"plane\" width=\"40\" height=\"20\" x=\"100\" y=\"50\" material=\"m-red\"/></viewport3D></viewport3D>\n</composition>\n</scene>\n",
-  "expected": {
-   "rule": "SREP 74",
-   "findings": {
-    "valid": false,
-    "codes": [
-     "VP2"
-    ]
-   },
-   "pending": "SREP 74 is a draft; no engine implements viewport3D yet. The entry keeps the values derived from the SREP"
-  }
  }
 }

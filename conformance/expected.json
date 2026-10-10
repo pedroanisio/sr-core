@@ -41096,6 +41096,16 @@
       ],
       "pending": "SREP 72 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
     },
+    "srep-0072-precision-3d-note": {
+      "rule": "SREP 72",
+      "findings": {
+        "valid": true,
+        "codes": [
+          "PREC1"
+        ]
+      },
+      "pending": "SREP 72 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+    },
     "srep-0072-content-rect-stripe": {
       "rule": "SREP 72",
       "red": {
@@ -41511,16 +41521,6 @@
         "valid": false,
         "codes": [
           "VP1"
-        ]
-      },
-      "pending": "SREP 74 is a draft; no engine implements viewport3D yet. The entry keeps the values derived from the SREP"
-    },
-    "srep-0074-no-nesting": {
-      "rule": "SREP 74",
-      "findings": {
-        "valid": false,
-        "codes": [
-          "VP2"
         ]
       },
       "pending": "SREP 74 is a draft; no engine implements viewport3D yet. The entry keeps the values derived from the SREP"

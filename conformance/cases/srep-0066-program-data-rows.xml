@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scene version="1.6">
 <project width="640" height="360" fps="24" duration="1" background="#000000FF" seed="1"/>
-<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
 <parameters><program id="rows" src="../assets/srep66-rows.wasm" sha256="30913dad3a42ec921501faa4c7402fb2b441c06743d3f5ceca607b45f64f9ba3"/></parameters>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
 <composition>
 <repeat id="rep" over="rows" offsetX="320"><shape id="c" shape="rect" width="40" height="20" anchorX="20" anchorY="10" x="160" y="180" fill="#FF0000FF"/></repeat>
 </composition>

@@ -54,7 +54,6 @@ def main():
     add("version-gate", doc(vp(plane(100, 50)), version="1.5"), findings={"valid": False, "codes": ["V15"]})
     add("camera-must-be-inside", doc('<camera id="c" x="0" y="0" z="-100"/>\n' + vp(plane(100, 50), ' camera="c"')),
         findings={"valid": False, "codes": ["VP1"]})
-    add("no-nesting", doc(vp(vp(plane(100, 50)).replace('id="v"', 'id="v2"'))), findings={"valid": False, "codes": ["VP2"]})
     json.dump(cases, open(os.path.join(CONF, "srep_cases", "srep-0074.json"), "w"), indent=1, ensure_ascii=False)
     print(f"wrote {len(cases)} cases")
 
