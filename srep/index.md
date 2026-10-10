@@ -68,21 +68,21 @@
 | [63](srep-0063.md) | Add conditions to capability manifest entries | Standards | Accepted | capabilities 1 |
 | [64](srep-0064.md) | Define rounded corners by the circle, not the steps | Semantics | Accepted | 1.5 |
 | [65](srep-0065.md) | Amend SREPs 18 and 20: report text overflow by what it loses | Standards | Accepted | 1.5 |
-| [66](srep-0066.md) | Add `<program>`: deterministic WebAssembly generators | Standards | Draft | 1.6 |
-| [67](srep-0067.md) | Add compute accumulation, density tonemap, iterate, serial ops | Standards | Draft | 1.6 |
-| [68](srep-0068.md) | Step stateful effects per node, with prewarm and checkpoints | Standards | Draft | 1.6 |
-| [69](srep-0069.md) | Add stepping programs: `<program mode="step">` | Standards | Draft | 1.6 |
-| [70](srep-0070.md) | Add parametric paths, parametric surfaces and heightfields | Standards | Draft | 1.6 |
-| [71](srep-0071.md) | Add subsurface, a procedural sky and generator-fed maps | Standards | Draft | 1.6 |
-| [72](srep-0072.md) | Add pixel-exact options: precision, content rect, edges, supersampling | Standards | Draft | 1.6 |
-| [73](srep-0073.md) | Let flock agents keep their sprites upright | Standards | Draft | 1.6 |
-| [74](srep-0074.md) | Add viewport3D: a 3D scene with its own camera as a node | Standards | Draft | 1.6 |
-| [75](srep-0075.md) | Add fractal assets with deep-zoom precision | Standards | Draft | 1.6 |
-| [76](srep-0076.md) | Add a Schwarzschild black hole and a geodesic camera | Standards | Draft | 1.6 |
-| [77](srep-0077.md) | Add impact ejecta ground, fracture sources, water density | Standards | Draft | 1.6 |
-| [78](srep-0078.md) | Let a pyro window follow its plume, and add blasts | Standards | Draft | 1.6 |
-| [79](srep-0079.md) | Add multiple scattering in media and foam albedo | Standards | Draft | 1.6 |
-| [80](srep-0080.md) | Add voxel assets and breakable objects of cells | Standards | Draft | 1.6 |
-| [81](srep-0081.md) | Clarify SREP 40 annotations (documentation only) | Standards | Draft | 1.6 |
-| [83](srep-0083.md) | Amend SREP 40: version gates of the 1.3 extensions admit later versions | Standards | Draft | 1.6 |
-| [82](srep-0082.md) | Mix the sound of video layers across a transition | Semantics | Draft | 1.6 |
+| [66](srep-0066.md) | Add `<program>`: deterministic WebAssembly generators | Standards | Accepted | 1.6 |
+| [67](srep-0067.md) | Add compute accumulation, density tonemap, iterate, serial ops | Standards | Accepted | 1.6 |
+| [68](srep-0068.md) | Step stateful effects per node, with prewarm and checkpoints | Standards | Accepted | 1.6 |
+| [69](srep-0069.md) | Add stepping programs: `<program mode="step">` | Standards | Accepted | 1.6 |
+| [70](srep-0070.md) | Add parametric paths, parametric surfaces and heightfields | Standards | Accepted | 1.6 |
+| [71](srep-0071.md) | Add subsurface, a procedural sky and generator-fed maps | Standards | Accepted | 1.6 |
+| [72](srep-0072.md) | Add pixel-exact options: precision, content rect, edges, supersampling | Standards | Accepted | 1.6 |
+| [73](srep-0073.md) | Let flock agents keep their sprites upright | Standards | Accepted | 1.6 |
+| [74](srep-0074.md) | Add viewport3D: a 3D scene with its own camera as a node | Standards | Accepted | 1.6 |
+| [75](srep-0075.md) | Add fractal assets with deep-zoom precision | Standards | Accepted | 1.6 |
+| [76](srep-0076.md) | Add a Schwarzschild black hole and a geodesic camera | Standards | Accepted | 1.6 |
+| [77](srep-0077.md) | Add impact ejecta ground, fracture sources, water density | Standards | Accepted | 1.6 |
+| [78](srep-0078.md) | Let a pyro window follow its plume, and add blasts | Standards | Accepted | 1.6 |
+| [79](srep-0079.md) | Add multiple scattering in media and foam albedo | Standards | Accepted | 1.6 |
+| [80](srep-0080.md) | Add voxel assets and breakable objects of cells | Standards | Accepted | 1.6 |
+| [81](srep-0081.md) | Clarify SREP 40 annotations (documentation only) | Standards | Accepted | 1.6 |
+| [82](srep-0082.md) | Mix the sound of video layers across a transition | Semantics | Accepted | 1.6 |
+| [83](srep-0083.md) | Amend SREP 40: version gates of the 1.3 extensions admit later versions | Standards | Accepted | 1.6 |

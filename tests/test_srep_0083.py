@@ -1,4 +1,4 @@
-"""SREP 83 (draft): the version gates of SREP 40 (V8, MSQ1, P3D1, OCN1, CRT1, FRX1, GEO1) refuse only the versions
+"""SREP 83: the version gates of SREP 40 (V8, MSQ1, P3D1, OCN1, CRT1, FRX1, GEO1) refuse only the versions
 before 1.3. The SREP's diff block, applied to the 1.5.0 Schematron (and, by content, to the files with the drafts of
 SREPs 76 to 81), gives its kit cases their verdicts; no document of version 1.0 to 1.3 changes verdict; a 1.3 document
 declared 1.4 or 1.5 keeps the verdict it had as 1.3.
@@ -127,3 +127,13 @@ def test_a_1_3_document_keeps_its_verdict_in_every_version(case):
         assert verdict(new, at_version(xml, version)) == verdict(base, at_version(xml, version)), version
     for version in ("1.4", "1.5"):
         assert verdict(new, at_version(xml, version)) == as13, version
+
+
+def test_the_canonical_schematron_carries_the_diff():
+    """SREP 83 is accepted: every line its diff adds is in schema/scene-render.sch, and no line it removes is."""
+    have = set(open(os.path.join(ROOT, "schema", "scene-render.sch"), encoding="utf-8").read().split("\n"))
+    lines = diff_block().split("\n")
+    added = [x[1:] for x in lines if x.startswith("+") and not x.startswith("+++")]
+    removed = [x[1:] for x in lines if x.startswith("-") and not x.startswith("---")]
+    assert len(added) == 8 and set(added) <= have
+    assert not set(removed) & have

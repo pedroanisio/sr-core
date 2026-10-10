@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fractalAssetType — scene-render 1.5.0 schema</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body data-root="../">
+<header><div class="bar"><a class="brand" href="../index.html">scene-render 1.5.0 schema</a>
+<nav><a href="../index.html">Overview</a> <a href="../elements.html">Elements</a> <a href="../types.html">Types</a> <a href="../simple-types.html">Simple types</a> <a href="../groups.html">Groups</a> <a href="../rules.html">Rules</a></nav>
+<div class="search"><input id="q" type="search" placeholder="Search elements, attributes, types  ( / )" autocomplete="off" aria-label="Search"><ul id="res" class="results"></ul></div></div></header>
+<main>
+<h1>fractalAssetType</h1>
+<div class="sub">Type of <code>&lt;fractal&gt;</code> in <a href="../type/assetsType.html"><code>assetsType</code></a></div>
+<div class="doc"><p>Escape-time fractal image of width x height pixels. Each pixel shows the escape count of its centre in exact arithmetic (up to 2^-20 of a pixel; SREP 75), whatever the zoom.</p></div>
+<h2>Content</h2>
+<ul class="model"><li><details><summary>group <a href="../groups.html#animationElements"><code>animationElements</code></a><span class="occ">any number</span></summary><ul class="model"><li><span class="lbl">one of</span><ul class="model"><li><a href="../type/animateType.html"><code>&lt;animate&gt;</code></a></li><li><a href="../type/expressionType.html"><code>&lt;expression&gt;</code></a></li><li><a href="../type/motionPathType.html"><code>&lt;motionPath&gt;</code></a></li><li><a href="../type/linkType.html"><code>&lt;link&gt;</code></a></li></ul></li></ul></details></li></ul>
+<h2>Attributes</h2>
+<div class="wrap"><table><thead><tr><th>Attribute</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr class="from"><td colspan="4">declared here</td></tr>
+<tr id="a-id"><td class="n"><code>id</code> <span class="req">required</span></td><td><code>xs:ID</code></td><td></td><td></td></tr>
+<tr id="a-kind"><td class="n"><code>kind</code> <span class="req">required</span></td><td>one of <span class="chip"><code>mandelbrot</code></span> <span class="chip"><code>julia</code></span></td><td></td><td></td></tr>
+<tr id="a-width"><td class="n"><code>width</code> <span class="req">required</span></td><td><code>xs:positiveInteger</code></td><td></td><td></td></tr>
+<tr id="a-height"><td class="n"><code>height</code> <span class="req">required</span></td><td><code>xs:positiveInteger</code></td><td></td><td></td></tr>
+<tr id="a-centerX"><td class="n"><code>centerX</code></td><td><code>xs:decimal</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-centerY"><td class="n"><code>centerY</code></td><td><code>xs:decimal</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-juliaX"><td class="n"><code>juliaX</code></td><td><code>xs:decimal</code></td><td></td><td></td></tr>
+<tr id="a-juliaY"><td class="n"><code>juliaY</code></td><td><code>xs:decimal</code></td><td></td><td></td></tr>
+<tr id="a-span"><td class="n"><code>span</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td><code>4</code></td><td></td></tr>
+<tr id="a-zoom"><td class="n"><code>zoom</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-rotation"><td class="n"><code>rotation</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-maxIterations"><td class="n"><code>maxIterations</code></td><td><code>xs:positiveInteger</code> ≤ 100000000</td><td><code>1000</code></td><td></td></tr>
+<tr id="a-bailout"><td class="n"><code>bailout</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td><code>2</code></td><td></td></tr>
+<tr id="a-colorMode"><td class="n"><code>colorMode</code></td><td>one of <span class="chip"><code>bands</code></span> <span class="chip"><code>smooth</code></span></td><td><code>smooth</code></td><td></td></tr>
+<tr id="a-palette"><td class="n"><code>palette</code></td><td><code>xs:string</code></td><td><code>#000764FF #206BCBFF #EDFFFFFF #FFAA00FF #000200FF</code></td><td></td></tr>
+<tr id="a-paletteScale"><td class="n"><code>paletteScale</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td><code>0.05</code></td><td></td></tr>
+<tr id="a-paletteOffset"><td class="n"><code>paletteOffset</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-insideColor"><td class="n"><code>insideColor</code></td><td><a href="../simple-types.html#colorType"><code>colorType</code></a></td><td><code>#000000FF</code></td><td></td></tr></tbody></table></div>
+<h2>Schematron rules</h2>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>*[@parent][@id]</code> <a class="lbl" href="../rules.html#p30">p30</a></div><div class="assert"><span class="id">R10</span>a node cannot parent itself.<code class="test">test: @parent != @id</code></div></div>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>assets/fractal</code> <a class="lbl" href="../rules.html#p-srep75">p-srep75</a></div><div class="assert"><span class="id">FRC1</span>a julia fractal has juliaX and juliaY; a mandelbrot has neither.<code class="test">test: (@kind=&#x27;julia&#x27;) = (boolean(@juliaX) and boolean(@juliaY))</code></div></div>
+</main>
+<footer>Generated by sr-schemadoc from <a href="../scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>174655d5215a09b504ebf5752d1e373284bc04c4a6b4750da8cf52a3760e1eaa</code>) and <a href="../scene-render.sch">scene-render.sch</a> (SHA-256 <code>13c855587608f6c2af2000c2176bf7af5061e81432e2f6f283d9b80a39cf1e88</code>).</footer>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+</body>
+</html>

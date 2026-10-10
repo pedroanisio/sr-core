@@ -19,7 +19,33 @@ computed from those classes by `python3 tools/release.py next schema`:
 
 ### Added
 
+- Document version 1.6: `scene/@version` accepts `1.6`. The version gates V12 to V16 of SREPs 66, 67, 70, 74 and 75 refuse their constructs in versions 1.0 to 1.5; every other addition below is accepted in every version that admits its parent element (SREPs 66 to 75).
+- Element `program` (`programNodeType` in `nodeChoice`, `programDataType` in `parameters`) with the attribute group `programAttributes` (`src`, `sha256`, `seed`, `fuel`, `memoryLimit`, `outputSha256`): a deterministic WebAssembly module run once when the document is built, whose output is nodes drawn as a group or JSON rows for `repeat/@over`; rule C18 amended to accept a data program; version gate V12 and rules PRG1 and PRG2, pattern p-srep66 (SREP 66).
+- Elements `compute` (`computeType`, with `tonemap` of `densityTonemapType`) and `iterate` (`iterateType`) in `nodeChoice`; effect types `error-diffusion` and `segmented-sort` with the `effectType` attributes `kernel`, `palette`, `serpentine`, `direction`, `order`, `sortKey`, `low` and `high`; version gate V13 and rules ITR1, ITR2, CMP13 and SRT1, pattern p-srep67 (SREP 67).
+- `effectType/@stepsPerFrame` (default 1) and `@prewarm` (default 0) for shader effects with persistent passes; rule STP1, pattern p-srep68; no version gate (SREP 68).
+- `program/@mode` (`build` default, `step`), `@width`, `@height`, `@stepsPerFrame` and `@prewarm`: a program that keeps state and draws a picture each frame; rule PRG3, pattern p-srep69; STP1 covers programs in build mode (SREP 69).
+- `shape="parametric"` with the child `parametricPath` (`parametricPathType`), and `object3D` primitives `parametric` and `heightfield` with the children `parametricSurface` (`parametricSurfaceType`) and `heightfield` (`heightfieldType`), sized by `surfaceSamplesType`; rule C69 amended to exempt `shape="parametric"`; version gate V14 and rules PAR1 and PAR2, pattern p-srep70 (SREP 70).
+- `materialType` gains `subsurface`, `subsurfaceColor`, `subsurfaceRadius` and `subsurfaceRadiusScale` (`unitTripleType`); `lightType` gains the procedural sky of a dome, `sky` (`none` default, `gradient`), `skyZenith`, `skyHorizon`, `skyGround`, `skyExponent`, `sunAzimuth`, `sunElevation`, `sunSize`, `sunColor` and `sunIntensity`; a material map that begins with `#` names a generator or image asset of the document; rules SKY1, SKY2 (pattern p-srep71) and MTX1-*map* (one pattern per map attribute); no version gate (SREP 71).
+- `project/@precision` (`f16` default, `f32`), `@supersample` (1 to 4, default 1) and `@supersampleFilter` (`box` default, `lanczos3`); `edgeBlend` (`inherit` default, `linear`, `encoded`) on every node (`nodeCoreAttributes`); the `shader` effect documents its tile and the inputs `sr_ContentRect` and `sr_PixelCoord`; no Schematron rule, no version gate (SREP 72).
+- `flock/@orientToVelocity` (xs:boolean, default true); with false an agent's disc or sprite keeps rotation 0 (SREP 73).
+- Element `viewport3D` (`viewport3DType`) in `nodeChoice`: a 3D scene with its own camera and lights, drawn as a node; version gate V15 and rules VP1 and VP3, pattern p-srep74 (SREP 74).
+- Asset kind `fractal` (`fractalAssetType`): an escape-time Mandelbrot or Julia image whose centre is an exact `xs:decimal`; version gate V16 and rule FRC1, pattern p-srep75 (SREP 75).
+- Elements `blackHole` (`blackHoleType`) and `accretionDisk` (`accretionDiskType`) in `nodeChoice`, and `camera/@geodesics`: a Schwarzschild black hole drawn by tracing null geodesics; rules BH1 to BH8 (patterns cinematic-black-hole-version and cinematic-black-hole), BH1 admitting version 1.3 and later, BH5 to BH8 scoped to the camera's `viewport3D` (SREP 74) and reading every xs:boolean form of `geodesics`; the warnings W11 and W12 are defined in the SREP (SREP 76).
+- `crater/@mantle`, `@bulking` and `@repose`; `fracture/@source`, `@minImpulse` and `@energyFraction`; `ocean/@density`; rules CRT10 to CRT12 (reading every xs:boolean form of `mantle`) and FRX5 to FRX7; CRT4 amended, which makes valid some documents that 1.5.0 refused (SREP 77).
+- `pyro/@follow`, `@followMargin` and `@followLoss`, and the `pyro` child `pyroBlast` (`pyroBlastType`); rules PYRO9 to PYRO11, PYC5 and PYC6 (SREP 78).
+- `medium/@scatterBounces`; `whitewater/@foamMode` (`particles`, `albedo`), `@foamRadius`, `@foamAlbedo` and `@foamRoughness`; rule OCN14 (SREP 79).
+- Asset kind `voxelAsset` (`voxelAssetType`); `object3D` primitive `voxels` with `voxels`, `cellSize`, `palette`, `surface` and `surfaceMemoryMiB`; `rigidBody` shape `voxels` with `density`, `maxFragments`, `fragmentMinCells`, `fragmentOverflow` and `anchor`; `fracture/@partition`, `@planes`, `@labels`, `@mode` and `@strength`; rules VOX1 (version 1.3 and later) to VOX15, CRT13 to CRT17 and FRX8 to FRX15; CRT5, FRX3, FRX4 and `burst3D/@count` amended (SREP 80).
+- The version gates of SREP 40 (V8, MSQ1, P3D1, OCN1, CRT1, FRX1, GEO1) refuse versions 1.0 to 1.2 only: documents of 1.4 and later that use volumes, media, pyro, mesh sequences, `particles3D`, `ocean`, craters, fractures or globe elevation, refused by 1.5.0 for their version alone, are valid; no document of 1.0 to 1.3 changes verdict; the messages say "1.3 or later" (SREP 83).
+
+### Changed
+
+- `transition/@audio` is documented: the transition mixes the sound of the video layers on its sides at its eased progress (`crossfade` 1 - p and p, `equal-power`, `cut` at p = 1/2, `none`), multiplying their volume, and a sequence junction cuts its sound when its type is `cut`. No declaration changes; DEFINITIONS D19 gains its Sound item and no longer reports `audio` as having no effect. Sound changes for documents with a transition between sound-carrying video layers, against reference engines up to v0.3.1, which ignored `audio`. (Class chosen by me, the SREP gives no class line: a Semantics SREP defining an attribute D19 reported as inert, as SREP 36's Changed in 1.2.0.) (SREP 82).
+
 ### Fixed
+
+### Docs
+
+- The documentation of `pyroCrater`, `particles3D/@gas`, `burst3D/@angle` and `@angleSpread` and `ocean/@bodyDrag`, and the message of P3D10, take the reference engine's wording; no declaration, default or rule test changes (SREP 81).
 
 ## 1.5.0 — 2026-10-06
 

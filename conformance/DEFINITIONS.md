@@ -535,9 +535,16 @@ included document's line numbers but not its name.
   type shows b where its coordinate s ∈ [0, 1] satisfies
   s < e − w, blends across [e − w, e], and shows a beyond, with
   e = p·(1 + w).
+- **Sound:** a transition mixes the sound of the video layers with `hasAudio="true"` that are its sides or sit
+  inside them, by `audio` at the eased progress p: `crossfade` (the default) gives the outgoing side 1 − p and the
+  incoming side p, `equal-power` cos(πp/2) and sin(πp/2), `cut` the outgoing side while p < ½ and the incoming
+  side from p = ½, and `none` both 1. A sequence junction cuts its sound when its type is `cut` and crossfades
+  it otherwise. A layer's gain is the product over the active transitions, and multiplies its `volume`. The gain
+  is sampled once per frame, at the composition's frame times, and interpolated linearly between them, so a
+  sound `cut` is a one-frame ramp that ends at the first frame with p ≥ ½ (SREP 82).
 
 **Types:**
-- `cut`: nothing is combined.
+- `cut`: nothing is combined. The picture shows a while p < ½ and b from p = ½.
 - `crossfade`: a·(1 − p) + b·p.
 - `additive-dissolve`: a·min(1, 2(1 − p)) + b·min(1, 2p), clamped at 1.
 - `dip-to-color`: a to `color` over the first half, `color` to b over the
@@ -565,7 +572,7 @@ included document's line numbers but not its name.
 - **Needs a GLSL runtime:** `shader`.
 - **Also reported:** transition `param` children and animation, and
   motion blur on moving types (`motionBlur` defaults to true; set it
-  false). Visual nodes carry no sound, so `audio` has nothing to mix.
+  false).
 
 ## D20. Group layout, clocks and clips; layer media boxes
 

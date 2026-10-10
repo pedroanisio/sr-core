@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>accretionDiskType — scene-render 1.5.0 schema</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body data-root="../">
+<header><div class="bar"><a class="brand" href="../index.html">scene-render 1.5.0 schema</a>
+<nav><a href="../index.html">Overview</a> <a href="../elements.html">Elements</a> <a href="../types.html">Types</a> <a href="../simple-types.html">Simple types</a> <a href="../groups.html">Groups</a> <a href="../rules.html">Rules</a></nav>
+<div class="search"><input id="q" type="search" placeholder="Search elements, attributes, types  ( / )" autocomplete="off" aria-label="Search"><ul id="res" class="results"></ul></div></div></header>
+<main>
+<h1>accretionDiskType</h1>
+<div class="sub">Type of <code>&lt;accretionDisk&gt;</code> in <a href="../type/groupType.html"><code>groupType</code></a>, <a href="../type/sequenceType.html"><code>sequenceType</code></a>, <a href="../type/repeatType.html"><code>repeatType</code></a>, <a href="../type/iterateType.html"><code>iterateType</code></a>, <a href="../type/compositionType.html"><code>compositionType</code></a>, <a href="../type/symbolType.html"><code>symbolType</code></a></div>
+<div class="doc"><p>Version 1.3. A geometrically thin, optically thick disk of gas on circular orbits in the equatorial plane of the <code>blackHole</code> it names (BH3), from <code>innerRadius</code> to <code>outerRadius</code> in the Schwarzschild radial coordinate, scene units. <code>innerRadius</code> is at least the innermost stable circular orbit, 6 <code>mass</code> (BH4), and is that when absent; <code>outerRadius</code> is beyond it (BH4). Its temperature is the thin-disk profile with a zero-torque inner edge, T(r) = <code>temperatureScale</code> f(r) / f(49/36 r_in), f(r) = (r_in / r)^(3/4) (1 - (r_in / r)^(1/2))^(1/4): <code>temperatureScale</code>, in kelvin, is the local temperature at the peak, r = 49/36 r_in, before the shift of light. The gas orbits with the angular velocity sqrt(<code>mass</code> / r^3) times <code>timeScale</code>, in radians per scene second, about the axis of the disk, which is the scene&#x27;s up, (0, -1, 0), turned by <code>rotationX</code>, <code>rotationY</code> and <code>rotation</code> (about z) degrees composed as an object3D composes them, Rz Ry Rx; seen from above it turns counter-clockwise. The disk is centred on its <code>blackHole</code> and has no place of its own. <code>angularPattern</code> is the azimuthal structure the gas carries and <code>seed</code> fixes it: <code>none</code> is a smooth disk, <code>clumps</code> (the default) seeded azimuthal noise that rotates differentially, <code>spiral</code> seeded logarithmic spiral arms; <code>contrast</code> is its amplitude, 0 to 1, and <code>intensity</code> scales the brightness. The disk is analytic, a surface the rays meet, and is not made of particles.</p></div>
+<h2>Content</h2>
+<p>Empty: attributes only.</p>
+<h2>Attributes</h2>
+<div class="wrap"><table><thead><tr><th>Attribute</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr class="from"><td colspan="4">declared here</td></tr>
+<tr id="a-id"><td class="n"><code>id</code> <span class="req">required</span></td><td><code>xs:ID</code></td><td></td><td></td></tr>
+<tr id="a-name"><td class="n"><code>name</code></td><td><code>xs:string</code></td><td></td><td></td></tr>
+<tr id="a-blackHole"><td class="n"><code>blackHole</code> <span class="req">required</span></td><td><code>xs:IDREF</code></td><td></td><td></td></tr>
+<tr id="a-innerRadius"><td class="n"><code>innerRadius</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td></td><td></td></tr>
+<tr id="a-outerRadius"><td class="n"><code>outerRadius</code> <span class="req">required</span></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td></td><td></td></tr>
+<tr id="a-temperatureScale"><td class="n"><code>temperatureScale</code> <span class="req">required</span></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td></td><td></td></tr>
+<tr id="a-seed"><td class="n"><code>seed</code></td><td><code>xs:unsignedLong</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-angularPattern"><td class="n"><code>angularPattern</code></td><td>one of <span class="chip"><code>none</code></span> <span class="chip"><code>clumps</code></span> <span class="chip"><code>spiral</code></span></td><td><code>clumps</code></td><td></td></tr>
+<tr id="a-contrast"><td class="n"><code>contrast</code></td><td><a href="../simple-types.html#unitDecimal"><code>unitDecimal</code></a></td><td><code>0.5</code></td><td></td></tr>
+<tr id="a-intensity"><td class="n"><code>intensity</code></td><td><a href="../simple-types.html#nonNegativeDecimal"><code>nonNegativeDecimal</code></a></td><td><code>1</code></td><td></td></tr>
+<tr id="a-timeScale"><td class="n"><code>timeScale</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td><code>1</code></td><td></td></tr>
+<tr id="a-rotationX"><td class="n"><code>rotationX</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-rotationY"><td class="n"><code>rotationY</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr>
+<tr id="a-rotation"><td class="n"><code>rotation</code></td><td><code>xs:double</code></td><td><code>0</code></td><td></td></tr></tbody></table></div>
+<h2>Schematron rules</h2>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>*[@parent][@id]</code> <a class="lbl" href="../rules.html#p30">p30</a></div><div class="assert"><span class="id">R10</span>a node cannot parent itself.<code class="test">test: @parent != @id</code></div></div>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>blackHole|accretionDisk|camera[@geodesics]</code> <a class="lbl" href="../rules.html#cinematic-black-hole-version">cinematic-black-hole-version</a></div><div class="assert"><span class="id">BH1</span>black holes require version=&quot;1.3&quot; or later.<code class="test">test: not(/scene/@version=&#x27;1.0&#x27; or /scene/@version=&#x27;1.1&#x27; or /scene/@version=&#x27;1.2&#x27;)</code></div></div>
+<div class="rule"><div class="ctx"><span class="lbl">context</span> <code>accretionDisk</code> <a class="lbl" href="../rules.html#cinematic-black-hole">cinematic-black-hole</a></div><div class="assert"><span class="id">BH3</span>an accretionDisk must name a blackHole.<code class="test">test: /scene//blackHole[@id=current()/@blackHole]</code></div><div class="assert"><span class="id">BH4</span>the inner radius of an accretionDisk is at least 6 times the mass of its blackHole (the innermost stable circular orbit), and the outer radius is beyond the inner one.<code class="test">test: not(/scene//blackHole[@id=current()/@blackHole]) or ((not(@innerRadius) or $inner &gt;= 6*$mass) and ((@innerRadius and $outer &gt; $inner) or (not(@innerRadius) and $outer &gt; 6*$mass)))</code></div></div>
+</main>
+<footer>Generated by sr-schemadoc from <a href="../scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>174655d5215a09b504ebf5752d1e373284bc04c4a6b4750da8cf52a3760e1eaa</code>) and <a href="../scene-render.sch">scene-render.sch</a> (SHA-256 <code>13c855587608f6c2af2000c2176bf7af5061e81432e2f6f283d9b80a39cf1e88</code>).</footer>
+<script src="../search-index.js"></script>
+<script src="../search.js"></script>
+</body>
+</html>

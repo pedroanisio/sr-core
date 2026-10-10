@@ -40,9 +40,17 @@ def test_invalid_documents_are_rejected_with_the_expected_rule(path):
     assert got.startswith("sch:") and want <= set(got[4:].split(",")), (want, got)
 
 
+def rejected_by_kit_cases():
+    """The rules the kit's invalid findings cases name: SREPs 77 to 80 add rules to SREP 40's families, and their
+    rejecting documents are their own kit cases rather than this SREP's fixtures."""
+    import json
+    spec = json.load(open(os.path.join(ROOT, "conformance", "expected.json")))["cases"]
+    return {c for e in spec.values() if e.get("findings", {}).get("valid") is False for c in e["findings"].get("codes", [])}
+
+
 def test_every_rule_family_of_the_srep_has_a_rejecting_document():
     families = ("VOL", "PYRO", "PYC", "P3D", "OCN", "CRT", "FRX", "MSQ", "GEO")
-    covered = {c for p in INVALID for c in expected_codes(p)}
+    covered = {c for p in INVALID for c in expected_codes(p)} | rejected_by_kit_cases()
     ids = {i for i in SCH_IDS if i.startswith(families) or i == "V8"}
     missing = sorted(ids - covered)
     assert missing == [], f"rules without a rejecting fixture: {missing}"

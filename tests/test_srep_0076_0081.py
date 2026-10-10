@@ -62,7 +62,22 @@ def test_every_srep_has_its_diff_block_and_lists_its_items():
     for f in GAP["features"]:
         text = open(os.path.join(ROOT, "srep", f"srep-{f['srep']:04d}.md"), encoding="utf-8").read()
         assert re.search(r"^```diff\n", text, re.M), f"SREP {f['srep']} has no diff block"
-        assert re.search(r"^Status:\s+Draft", text, re.M)
+        assert re.search(r"^Status:\s+(Accepted|Final)", text, re.M)
+
+
+# the canonical schema's wording of lines the SREPs' blocks carry, where it changed on acceptance
+EDITED = {'      <!-- draft SREP 76, open issue 4: geodesics is an xs:boolean, true in its forms "true" and "1", whitespace collapsed -->':
+          '      <!-- SREP 76, open issue 4: geodesics is an xs:boolean, true in its forms "true" and "1", whitespace collapsed -->'}
+
+
+def test_the_canonical_schema_carries_every_line_the_sreps_add():
+    """SREPs 76 to 81 are accepted: every line their diff and amendment blocks add to the 1.5.0 files is in schema/
+    (SREP 83 and SREPs 66 to 75 change other lines; tests/test_srep_0083.py and the kit cases cover those)."""
+    base = {p: set(b.decode().split("\n")) for p, b in gap.baseline().items()}
+    for p, b in gap.proposed_schema().items():
+        have = set(open(os.path.join(ROOT, p), encoding="utf-8").read().split("\n"))
+        gone = {EDITED.get(line, line) for line in b.decode().split("\n") if line not in base[p]} - have
+        assert not gone, (p, sorted(gone)[:5])
 
 
 def test_the_diff_blocks_rebuild_the_engine_files_byte_for_byte():
