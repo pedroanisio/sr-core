@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Writes the SREP 73 kit cases (flock/@orientToVelocity) to srep_cases/srep-0073.json and the sprite
-srep_cases/assets/srep73-halves.png (8 x 8: the left half red, the right half blue). A one-agent flock in a 1 x 1 box
+srep_cases/assets/srep73-halves.png (40 x 40: the left half red, the right half blue, drawn at size 40, one texel
+per pixel, so that the halves' widths do not depend on how an engine filters a magnified sprite). A one-agent flock in a 1 x 1 box
 places its agent within 1 px of the node's origin at time 0 (the reference's flock init draws positions in the box:
 crates/sr-sim/src/flock.rs, init). Upright, the sprite's red half is left of its blue half at the same height.
 Assumption (stated in the SREP): a sprite is drawn as a size x size square centred on the agent.
@@ -29,13 +30,13 @@ def doc(flock, version="1.6"):
             f'<scene version="{version}">\n'
             '<project width="640" height="360" fps="24" duration="1" background="#000000FF" seed="1"/>\n'
             '<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>\n'
-            '<assets><image id="spr" src="../assets/srep73-halves.png" width="8" height="8"/></assets>\n'
+            '<assets><image id="spr" src="../assets/srep73-halves.png" width="40" height="40"/></assets>\n'
             f'<composition>\n{flock}\n</composition>\n</scene>\n')
 
 
 def main():
     open(os.path.join(CONF, "srep_cases", "assets", "srep73-halves.png"), "wb").write(
-        png(8, 8, lambda x, y: (255, 0, 0, 255) if x < 4 else (0, 0, 255, 255)))
+        png(40, 40, lambda x, y: (255, 0, 0, 255) if x < 20 else (0, 0, 255, 255)))
     cases = {}
 
     def add(slug, xml, **e):

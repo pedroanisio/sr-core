@@ -118,12 +118,25 @@ def findings_of(case):
     return spec.get(os.path.basename(case)[:-4], {}).get("findings")
 
 
+# XSD 1.0 Part 2, 3.2.3: a minimally conforming processor supports xs:decimal values of at least 18 digits, and may
+# refuse longer ones. libxml2 before 2.13.0 refuses more than 24 (SREP 75, Semantics 1; its long-centre cases say so).
+LONG_DECIMAL = re.compile(r'="[+-]?(\d*)\.(\d+)"')
+SHORT_DECIMALS = etree.LIBXML_VERSION < (2, 13, 0)
+
+
+def longest_decimal(xml: bytes) -> int:
+    return max((len((a + b).lstrip("0")) for a, b in LONG_DECIMAL.findall(xml.decode("utf-8"))), default=0)
+
+
 @pytest.mark.parametrize("case", sorted(glob.glob(os.path.join(ROOT, "conformance", "cases", "*.xml"))),
                          ids=os.path.basename)
 def test_conformance_cases_are_valid(case):
     reason = pending_srep(case)
     if reason:
         pytest.skip(f"{reason}: validated once the SREP is accepted")
+    if SHORT_DECIMALS and longest_decimal(open(case, "rb").read()) > 24:
+        pytest.skip(f"an xs:decimal of more than 24 digits, which libxml2 {etree.LIBXML_VERSION} refuses (XSD 1.0 lets "
+                    "a validator limit decimals to 18 digits; SREP 75)")
     want = findings_of(case)
     if want is not None and want.get("valid") is False:
         # a case that is invalid on purpose: the schema must reject it with the rules the case lists
@@ -135,6 +148,18 @@ def test_conformance_cases_are_valid(case):
         assert got.startswith("sch:") and rules <= set(got[4:].split(",")), (got, rules)
         return
     assert verdict(open(case, "rb").read()) == "ok"
+
+
+def test_long_decimals_are_counted():
+    assert longest_decimal(b'<a x="-0.743643887037158704752191506114774" y="1.5"/>') == 33
+    assert longest_decimal(b'<a x="0.1318259042053120"/>') == 16
+    assert longest_decimal(b'<a x="12"/>') == 0
+
+
+def test_rule_cases_of_srep_75_use_short_decimals():
+    """The version gate and FRC1 must run on every validator, so their cases carry no long decimal."""
+    for name in ("srep-0075-version-gate", "srep-0075-julia-needs-c"):
+        assert longest_decimal(open(os.path.join(ROOT, "conformance", "cases", name + ".xml"), "rb").read()) <= 18
 
 
 def test_pending_srep_rule(tmp_path):

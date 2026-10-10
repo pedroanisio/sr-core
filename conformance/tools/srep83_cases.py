@@ -21,7 +21,7 @@ CONF = os.path.dirname(HERE)
 # gate: (SREP, base case, what it shows)
 BASES = {
     "V8": (40, "srep-0040-pyro", "a pyro volume and its medium"),
-    "MSQ1": (40, "srep-0040-msq1-rejected", "a mesh sequence"),
+    "MSQ1": (40, "srep-0040-msq1-rejected", "a mesh sequence"),   # its media path is replaced (MESH_SRC)
     "P3D1": (40, "srep-0040-particles3d", "particles3D"),
     "OCN1": (40, "srep-0040-ocean", "an ocean"),
     "CRT1": (40, "srep-0040-crater", "a crater"),
@@ -56,12 +56,27 @@ def with_version(xml, version):
     return out
 
 
+# SREP 40's MSQ1 case names ../media/mesh-frame-%d.obj, which the kit does not carry: it is refused at 1.2 before the
+# asset matters. The cases of 1.4 and 1.5 are valid, so they name two frames the kit does carry (one triangle each, the
+# same topology, the third vertex moved), written here.
+MESH_SRC = ("../media/mesh-frame-%d.obj", "../assets/srep83-mesh-frame-%d.obj")
+MESH_FRAMES = {0: "v 0 0 0\nv 10 0 0\nv 0 10 0\nf 1 2 3\n", 1: "v 0 0 0\nv 10 0 0\nv 0 12 0\nf 1 2 3\n"}
+
+
 def main():
     cases = {}
     kit = {40: load(40)}
+    for i, text in MESH_FRAMES.items():
+        with open(os.path.join(CONF, "srep_cases", "assets", MESH_SRC[1].split("/")[-1] % i), "w") as fh:
+            fh.write(f"# SREP 83 kit: mesh sequence frame {i}\n" + text)
     for gate, (srep, base, what) in BASES.items():
         xml = GLOBE if base is None else kit[srep][base]["xml"]
+        if gate == "MSQ1":
+            assert MESH_SRC[0] in xml
+            xml = xml.replace(*MESH_SRC)
         source = "written by conformance/tools/srep83_cases.py" if base is None else f"kit case {base}, scene/@version changed"
+        if gate == "MSQ1":
+            source += ", and its mesh frames are kit assets"
         stem = gate.lower()
         for version in ("1.4", "1.5"):
             cases[f"srep-0083-{stem}-version-{version}"] = {"xml": with_version(xml, version), "expected": {

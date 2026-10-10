@@ -1,0 +1,5 @@
+# SREP 83 kit: mesh sequence frame 1
+v 0 0 0
+v 10 0 0
+v 0 12 0
+f 1 2 3

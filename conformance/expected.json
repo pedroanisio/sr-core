@@ -41333,8 +41333,7 @@
         "cy": 180,
         "w": 20,
         "h": 40
-      },
-      "pending": "the Rust reference (main 82ad2091 and b7eb4edc) keeps the sprite upright as SREP 73 requires (red left of blue), but its red half measures 17 px across where the case expects 20 (tolerance 2; blue 18 px): the case's assumption that the sprite is drawn as an unfiltered size x size square is not checked"
+      }
     },
     "srep-0073-upright-sprite-node-rotation": {
       "rule": "SREP 73",
@@ -41349,8 +41348,7 @@
         "cy": 190,
         "w": 40,
         "h": 20
-      },
-      "pending": "the Rust reference (main 82ad2091 and b7eb4edc) keeps the sprite upright as SREP 73 requires (red above blue), but its red half measures 17 px across where the case expects 20 (tolerance 2; blue 18 px): the case's assumption that the sprite is drawn as an unfiltered size x size square is not checked"
+      }
     },
     "srep-0073-streak-inert": {
       "rule": "SREP 73",
@@ -43488,19 +43486,19 @@
     },
     "srep-0083-msq1-version-1.4": {
       "rule": "SREP 83 MSQ1",
-      "source": "kit case srep-0040-msq1-rejected, scene/@version changed",
+      "source": "kit case srep-0040-msq1-rejected, scene/@version changed, and its mesh frames are kit assets",
       "findings": {
         "valid": true
       },
-      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with MSQ1; it also reports A04, because the case (from srep-0040-msq1-rejected) names ../media/mesh-frame-%d.obj, which the kit does not carry, so the case needs that asset before it can pass on any engine"
+      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with MSQ1"
     },
     "srep-0083-msq1-version-1.5": {
       "rule": "SREP 83 MSQ1",
-      "source": "kit case srep-0040-msq1-rejected, scene/@version changed",
+      "source": "kit case srep-0040-msq1-rejected, scene/@version changed, and its mesh frames are kit assets",
       "findings": {
         "valid": true
       },
-      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with MSQ1; it also reports A04, because the case (from srep-0040-msq1-rejected) names ../media/mesh-frame-%d.obj, which the kit does not carry, so the case needs that asset before it can pass on any engine"
+      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with MSQ1"
     },
     "srep-0083-p3d1-version-1.4": {
       "rule": "SREP 83 P3D1",

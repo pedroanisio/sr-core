@@ -53,12 +53,16 @@ def robust(i, j, zoom, max_iter):
     return counts.pop() if len(counts) == 1 else "unstable"
 
 
-def doc(zoom, max_iter, extra="", version="1.6"):
+# The cases that check a rule, not the long centre, use a short one (16 digits), so that every validator runs the rule.
+SHORT = ("-0.7436438870371587", "0.1318259042053120")
+
+
+def doc(zoom, max_iter, extra="", version="1.6", centre=(CX, CY)):
     return ('<?xml version="1.0" encoding="UTF-8"?>\n'
             f'<scene version="{version}">\n'
             '<project width="640" height="360" fps="24" duration="1" background="#000000FF" seed="1"/>\n'
             '<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>\n'
-            f'<assets><fractal id="f" kind="mandelbrot" width="640" height="360" centerX="{CX}" centerY="{CY}" zoom="{zoom}" '
+            f'<assets><fractal id="f" kind="mandelbrot" width="640" height="360" centerX="{centre[0]}" centerY="{centre[1]}" zoom="{zoom}" '
             f'maxIterations="{max_iter}" colorMode="bands" palette="#FF0000FF #0000FFFF" insideColor="#000000FF"{extra}/></assets>\n'
             '<composition>\n<layer id="l" asset="f"/>\n</composition>\n</scene>\n')
 
@@ -80,14 +84,14 @@ def main():
             "xml": doc(zoom, max_iter),
             "expected": {"rule": f"SREP 75 (escape counts at zoom {zoom}: " + ", ".join(notes) + "; " + LONG + ")",
                          "regions": regions, "pending": PENDING}}
-    cases["srep-0075-version-gate"] = {"xml": doc(6, 100, version="1.5"),
+    cases["srep-0075-version-gate"] = {"xml": doc(6, 100, version="1.5", centre=SHORT),
                                        "expected": {"rule": "SREP 75", "findings": {"valid": False, "codes": ["V16"]}, "pending": PENDING}}
     cases["srep-0075-long-decimals-valid"] = {
         "xml": doc(6, 100, extra=f' juliaX="{JX}" juliaY="{JY}"').replace('kind="mandelbrot"', 'kind="julia"'),
         "expected": {"rule": "SREP 75 Semantics 1 (an engine reads the four decimal attributes at any length: 33-digit "
                              "centre, 40-digit juliaX and juliaY; valid, no finding)",
                      "findings": {"valid": True}, "pending": PENDING}}
-    cases["srep-0075-julia-needs-c"] = {"xml": doc(6, 100).replace('kind="mandelbrot"', 'kind="julia"'),
+    cases["srep-0075-julia-needs-c"] = {"xml": doc(6, 100, centre=SHORT).replace('kind="mandelbrot"', 'kind="julia"'),
                                         "expected": {"rule": "SREP 75", "findings": {"valid": False, "codes": ["FRC1"]}, "pending": PENDING}}
     kit_pending.settle(cases, 75)
     json.dump(cases, open(os.path.join(CONF, "srep_cases", "srep-0075.json"), "w"), indent=1, ensure_ascii=False)

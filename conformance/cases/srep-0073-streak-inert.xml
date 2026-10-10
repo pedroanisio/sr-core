@@ -2,7 +2,7 @@
 <scene version="1.6">
 <project width="640" height="360" fps="24" duration="1" background="#000000FF" seed="1"/>
 <output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
-<assets><image id="spr" src="../assets/srep73-halves.png" width="8" height="8"/></assets>
+<assets><image id="spr" src="../assets/srep73-halves.png" width="40" height="40"/></assets>
 <composition>
 <flock id="f" count="1" seed="3" width="1" height="1" x="320" y="180" shape="streak" sprite="spr" size="40" orientToVelocity="false"/>
 </composition>

@@ -8,7 +8,10 @@ every other case runs. When the Rust reference passes a case, delete its entry h
 Recorded 2026-10-10 from conformance/run.py with "pending" removed, on rs-scene-render main 82ad2091 (SREPs 66 to 75)
 and b7eb4edc (all), on llvmpipe (sr-prod-01): every case of SREPs 66 to 75 and 82 not listed here passes on both
 (SREP 82's on b7eb4edc, which merged its reference implementation), as do the cases of SREPs 76 to 80 and 83 not
-listed here.
+listed here. SREP 73's two sprite cases were rewritten on 2026-10-10 with a sprite drawn one texel per pixel (the
+earlier 8 x 8 sprite, magnified five times, measured the engine's filtering, which SREP 73 does not specify); they pass
+on v0.3.1 (1ae5ce10), which draws the earlier case exactly as main 82ad2091 and b7eb4edc did (the same centroids,
+extents and pixel counts), so they are not pending.
 """
 
 _FAILURE = ("the expected result is a failed render with the error code in 'failure', which expected.json and run.py "
@@ -34,12 +37,6 @@ PENDING = {
     # SREP 72
     "srep-0072-precision-3d-note": ("the Rust reference (main 82ad2091 and b7eb4edc) reports E23 for this document, not "
                                     "the information finding PREC1 that SREP 72 requires"),
-    # SREP 73
-    **{f"srep-0073-{slug}": ("the Rust reference (main 82ad2091 and b7eb4edc) keeps the sprite upright as SREP 73 "
-                             f"requires ({order}), but its red half measures 17 px across where the case expects 20 "
-                             "(tolerance 2; blue 18 px): the case's assumption that the sprite is drawn as an unfiltered "
-                             "size x size square is not checked")
-       for slug, order in [("upright-sprite", "red left of blue"), ("upright-sprite-node-rotation", "red above blue")]},
     # SREPs 76, 77 and 80: the amendments
     "srep-0076-valid-w11-no-lens": _FOLLOWUPS.format(what="the warning numbers W11 and W12 (c2a66950)", got="reports W03"),
     "srep-0076-valid-w12-denoise": _FOLLOWUPS.format(what="the warning numbers W11 and W12 (c2a66950)", got="reports W04"),
@@ -60,10 +57,6 @@ PENDING = {
     # SREP 83
     **{f"srep-0083-{gate.lower()}-version-{v}": _SREP83.format(got=gate)
        for gate in ("V8", "MSQ1", "P3D1", "OCN1", "CRT1", "FRX1", "GEO1") for v in ("1.4", "1.5")},
-    **{f"srep-0083-msq1-version-{v}": _SREP83.format(got="MSQ1") + (
-        "; it also reports A04, because the case (from srep-0040-msq1-rejected) names ../media/mesh-frame-%d.obj, "
-        "which the kit does not carry, so the case needs that asset before it can pass on any engine")
-       for v in ("1.4", "1.5")},
     "srep-0083-srep77-crater-mantle-version-1.5": _SREP83.format(got="CRT1"),
     "srep-0083-srep77-fracture-contact-version-1.5": _SREP83.format(got="FRX1"),
     "srep-0083-srep77-ocean-density-version-1.5": _SREP83.format(got="OCN1"),
