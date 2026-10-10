@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2"><project width="64" height="64" fps="24" duration="1"/><composition><repeat id="r" x="32" y="32" from="+2"><points type="grid" columns="3" rows="2"/><shape id="s" shape="rect" width="4" height="4" fill="#FF0000"/></repeat></composition></scene>

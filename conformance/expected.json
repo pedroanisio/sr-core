@@ -41038,6 +41038,294 @@
       "findings": {
         "valid": true
       }
+    },
+    "srep-0084-c15-reverse-0": {
+      "rule": "SREP 84 C15",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0084-c15-reverse-padded-false": {
+      "rule": "SREP 84 C15",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0084-c15-reverse-1": {
+      "rule": "SREP 84 C15",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "C15"
+        ]
+      }
+    },
+    "srep-0084-c15-loop-00": {
+      "rule": "SREP 84 C15",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0084-c15-loop-plus-0": {
+      "rule": "SREP 84 C15",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0084-c15-loop-padded-0": {
+      "rule": "SREP 84 C15",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0084-c15-loop-plus-2": {
+      "rule": "SREP 84 C15",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "C15"
+        ]
+      }
+    },
+    "srep-0084-c43-alpha-1": {
+      "rule": "SREP 84 C43",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "C43"
+        ]
+      }
+    },
+    "srep-0084-c43-alpha-padded-true": {
+      "rule": "SREP 84 C43",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "C43"
+        ]
+      }
+    },
+    "srep-0084-c43-alpha-0": {
+      "rule": "SREP 84 C43",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0084-r15-has-audio-padded-true": {
+      "rule": "SREP 84 R15",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "absent": [
+          "R15"
+        ]
+      }
+    },
+    "srep-0084-r15-has-audio-padded-1": {
+      "rule": "SREP 84 R15",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "absent": [
+          "R15"
+        ]
+      }
+    },
+    "srep-0084-r15-has-audio-0": {
+      "rule": "SREP 84 R15",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "R15"
+        ]
+      }
+    },
+    "srep-0084-r48-from-threed-1": {
+      "rule": "SREP 84 R48-from",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "R48-from"
+        ]
+      }
+    },
+    "srep-0084-r48-from-threed-padded-true": {
+      "rule": "SREP 84 R48-from",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "R48-from"
+        ]
+      }
+    },
+    "srep-0084-r48-to-threed-1": {
+      "rule": "SREP 84 R48-to",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "R48-to"
+        ]
+      }
+    },
+    "srep-0084-r48-from-threed-0": {
+      "rule": "SREP 84 R48-from",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0084-vol5-blackbody-padded-true": {
+      "rule": "SREP 84 VOL5",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOL5"
+        ]
+      }
+    },
+    "srep-0084-vol5-blackbody-padded-1": {
+      "rule": "SREP 84 VOL5",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "VOL5"
+        ]
+      }
+    },
+    "srep-0084-vol5-blackbody-0": {
+      "rule": "SREP 84 VOL5",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0084-c80-from-plus-0": {
+      "rule": "SREP 84 C80",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0084-c80-step-plus-1": {
+      "rule": "SREP 84 C80",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0084-c80-step-01": {
+      "rule": "SREP 84 C80",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0084-c80-from-plus-2": {
+      "rule": "SREP 84 C80",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "C80"
+        ]
+      }
+    },
+    "srep-0084-geo2-tile-size-plus-64": {
+      "rule": "SREP 84 GEO2",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0084-geo2-tile-size-064": {
+      "rule": "SREP 84 GEO2",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0084-geo2-tile-size-plus-48": {
+      "rule": "SREP 84 GEO2",
+      "source": "written by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "GEO2"
+        ]
+      }
+    },
+    "srep-0084-pyro9-follow-padded-true-closed": {
+      "rule": "SREP 84 PYRO9",
+      "source": "kit case srep-0078-pyro9-closed (SREP 78, draft) with follow=\"true\" written follow=\" true \", by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "PYRO9"
+        ]
+      },
+      "requires": [
+        78
+      ]
+    },
+    "srep-0084-pyro10-follow-padded-1": {
+      "rule": "SREP 84 PYRO10",
+      "source": "kit case srep-0078-valid-pyro-follow (SREP 78, draft) with follow=\"true\" written follow=\" 1 \", by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": true
+      },
+      "requires": [
+        78
+      ]
+    },
+    "srep-0084-pyro10-follow-0": {
+      "rule": "SREP 84 PYRO10",
+      "source": "kit case srep-0078-valid-pyro-follow (SREP 78, draft) with follow=\"true\" written follow=\"0\", by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "PYRO10"
+        ]
+      },
+      "requires": [
+        78
+      ]
+    },
+    "srep-0084-pyro11-margin-plus-2": {
+      "rule": "SREP 84 PYRO11",
+      "source": "kit case srep-0078-valid-pyro-follow (SREP 78, draft) with followMargin=\"2\" written followMargin=\"+2\", by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": true
+      },
+      "requires": [
+        78
+      ]
+    },
+    "srep-0084-pyro11-margin-plus-4": {
+      "rule": "SREP 84 PYRO11",
+      "source": "kit case srep-0078-pyro11-margin (SREP 78, draft) with followMargin=\"4\" written followMargin=\"+4\", by conformance/tools/srep84_cases.py",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "PYRO11"
+        ]
+      },
+      "requires": [
+        78
+      ]
     }
   }
 }

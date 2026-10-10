@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2"><project width="64" height="64" fps="24" duration="1"/><assets><video id="v" src="../assets/srep84-absent.mp4" width="64" height="64" fps="24" duration="1" hasAudio="0"/></assets><composition><shape id="s" shape="rect" width="10" height="10" fill="#FFFFFF"/></composition><audioMix><audioTrack id="t" asset="v"/></audioMix></scene>
