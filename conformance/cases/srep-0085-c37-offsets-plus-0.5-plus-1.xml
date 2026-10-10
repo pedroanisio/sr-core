@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2"><project width="64" height="64" fps="24" duration="1"/><paints><linearGradient id="g"><stop offset="0" color="#FF0000"/><stop offset="+0.5" color="#00FF00"/><stop offset="+1" color="#0000FF"/></linearGradient></paints><composition><shape id="s" shape="rect" width="10" height="10" fill="url(#g)"/></composition></scene>

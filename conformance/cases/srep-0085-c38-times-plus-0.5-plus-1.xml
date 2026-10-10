@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2"><project width="64" height="64" fps="24" duration="1"/><composition><shape id="s" shape="rect" width="10" height="10" fill="#FFFFFF"><animate property="opacity"><key time="0" value="0"/><key time="+0.5" value="0.5"/><key time="+1" value="1"/></animate></shape></composition></scene>

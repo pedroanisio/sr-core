@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.3"><project width="64" height="64" fps="24" duration="2"/><composition><object3D id="ball" primitive="sphere" radius="1" y="-10"><rigidBody mass="1" velocityY="20"/></object3D><object3D id="ground" primitive="plane" width="40" height="40" segments="8" y="2" rotationX="-90"><crater id="pit" source="ball" targetMaterial="softRock"/></object3D><particles3D id="debris" rate="0" lifetime="1"><burst crater="pit" count="12" angle="+0.5" angleSpread="+1"/></particles3D></composition><physics pixelsPerMeter="1"/></scene>

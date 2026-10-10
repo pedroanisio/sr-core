@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.3"><project width="64" height="64" fps="24" duration="2"/><composition><particles3D id="dust" rate="0" speed="5" spread="120" gravityY="8" lifetime="2" ><burst time="+0.5" count="12"/></particles3D></composition></scene>
