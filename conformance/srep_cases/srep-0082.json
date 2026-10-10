@@ -438,7 +438,55 @@
       }
      ]
     ],
-    "note": "a sequence junction crossfades its sound, whatever its picture type (Semantics 3)"
+    "note": "a sequence junction of a type other than cut crossfades its sound (Semantics 3)"
+   },
+   "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
+  }
+ },
+ "srep-0082-sequence-cut-junction": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.5\">\n<project width=\"64\" height=\"36\" fps=\"25\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"mix\" path=\"out/mix.wav\" codec=\"audio-only\" container=\"wav\"/>\n<assets>\n<video id=\"ta\" src=\"../assets/srep82-tone-500.mkv\" width=\"64\" height=\"36\" fps=\"25\" duration=\"2.2\" hasAudio=\"true\"/>\n<video id=\"tb\" src=\"../assets/srep82-tone-1250.mkv\" width=\"64\" height=\"36\" fps=\"25\" duration=\"2.2\" hasAudio=\"true\"/>\n</assets>\n<composition>\n<sequence id=\"s\" transition=\"cut\" transitionDuration=\"0.4\">\n<layer id=\"a\" asset=\"ta\" end=\"1\"/>\n<layer id=\"b\" asset=\"tb\" end=\"1\" clipIn=\"1\"/>\n</sequence>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 82",
+   "audio": {
+    "output": "mix",
+    "tones": {
+     "a": 500,
+     "b": 1250
+    },
+    "level": 0.25,
+    "window": 0.04,
+    "tolerance": 0.01,
+    "gains": [
+     [
+      0.6,
+      {
+       "a": 1,
+       "b": 0
+      }
+     ],
+     [
+      0.9,
+      {
+       "a": 1,
+       "b": 0
+      }
+     ],
+     [
+      1.1,
+      {
+       "a": 0,
+       "b": 1
+      }
+     ],
+     [
+      1.4,
+      {
+       "a": 0,
+       "b": 1
+      }
+     ]
+    ],
+    "note": "a cut junction cuts its sound where its picture cuts (Semantics 3, 5)"
    },
    "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
   }

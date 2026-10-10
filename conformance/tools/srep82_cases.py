@@ -115,7 +115,14 @@ def main():
         '<sequence id="s" transition="wipe" transitionDuration="0.4">\n'
         '<layer id="a" asset="ta" end="1"/>\n<layer id="b" asset="tb" end="1" clipIn="1"/>\n</sequence>',
         [[0.6, {"a": 1, "b": 0}], [1.0, {"a": 0.5, "b": 0.5}], [1.4, {"a": 0, "b": 1}]],
-        "a sequence junction crossfades its sound, whatever its picture type (Semantics 3)")
+        "a sequence junction of a type other than cut crossfades its sound (Semantics 3)")
+    # a cut junction switches its sound where its picture switches (p = 1/2, the window's centre under the symmetric
+    # ease-in-out); at 0.9 s and 1.1 s p is below and above 1/2, and both are more than a frame from the step
+    add("sequence-cut-junction",
+        '<sequence id="s" transition="cut" transitionDuration="0.4">\n'
+        '<layer id="a" asset="ta" end="1"/>\n<layer id="b" asset="tb" end="1" clipIn="1"/>\n</sequence>',
+        [[0.6, {"a": 1, "b": 0}], [0.9, {"a": 1, "b": 0}], [1.1, {"a": 0, "b": 1}], [1.4, {"a": 0, "b": 1}]],
+        "a cut junction cuts its sound where its picture cuts (Semantics 3, 5)")
     json.dump(cases, open(os.path.join(CONF, "srep_cases", "srep-0082.json"), "w"), indent=1, ensure_ascii=False)
     print(f"wrote {len(cases)} cases")
 

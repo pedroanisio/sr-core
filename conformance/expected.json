@@ -40037,7 +40037,52 @@
             }
           ]
         ],
-        "note": "a sequence junction crossfades its sound, whatever its picture type (Semantics 3)"
+        "note": "a sequence junction of a type other than cut crossfades its sound (Semantics 3)"
+      },
+      "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
+    },
+    "srep-0082-sequence-cut-junction": {
+      "rule": "SREP 82",
+      "audio": {
+        "output": "mix",
+        "tones": {
+          "a": 500,
+          "b": 1250
+        },
+        "level": 0.25,
+        "window": 0.04,
+        "tolerance": 0.01,
+        "gains": [
+          [
+            0.6,
+            {
+              "a": 1,
+              "b": 0
+            }
+          ],
+          [
+            0.9,
+            {
+              "a": 1,
+              "b": 0
+            }
+          ],
+          [
+            1.1,
+            {
+              "a": 0,
+              "b": 1
+            }
+          ],
+          [
+            1.4,
+            {
+              "a": 0,
+              "b": 1
+            }
+          ]
+        ],
+        "note": "a cut junction cuts its sound where its picture cuts (Semantics 3, 5)"
       },
       "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
     }
