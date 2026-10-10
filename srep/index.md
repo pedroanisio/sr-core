@@ -87,4 +87,4 @@
 | [82](srep-0082.md) | Mix the sound of video layers across a transition | Semantics | Accepted | 1.6 |
 | [83](srep-0083.md) | Amend SREP 40: version gates of the 1.3 extensions admit later versions | Standards | Accepted | 1.6 |
 | [84](srep-0084.md) | Boolean and integer attributes are tested by value, not by spelling | Standards | Accepted | 1.6 |
-| [85](srep-0085.md) | Decimal and double attributes are tested by value (amends SREP 67) | Standards | Draft | 1.6 |
+| [85](srep-0085.md) | Decimal and double attributes are tested by value (amends SREP 67) | Standards | Accepted | 1.6 |

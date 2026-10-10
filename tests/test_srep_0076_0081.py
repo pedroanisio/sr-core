@@ -70,10 +70,10 @@ EDITED = {'      <!-- draft SREP 76, open issue 4: geodesics is an xs:boolean, t
           '      <!-- SREP 76, open issue 4: geodesics is an xs:boolean, true in its forms "true" and "1", whitespace collapsed -->'}
 
 
-def _srep84_drafts_block():
-    """SREP 84 (accepted) rewrites SREP 78's PYRO9 to PYRO11 to read follow and followMargin by value: its "diff drafts"
-    block maps each line SREP 78 added to the line the canonical schema carries."""
-    text = open(os.path.join(ROOT, "srep", "srep-0084.md"), encoding="utf-8").read()
+def _drafts_block(n):
+    """SREP n's "diff drafts" block (it rewrites lines of these SREPs) as a map from each line it removes to the line it
+    adds."""
+    text = open(os.path.join(ROOT, "srep", f"srep-{n:04d}.md"), encoding="utf-8").read()
     (block,) = re.findall(r"^```diff drafts\n(.*?)^```", text, re.S | re.M)
     lines = block.split("\n")
     old = [x[1:] for x in lines if x.startswith("-") and not x.startswith("---")]
@@ -82,7 +82,12 @@ def _srep84_drafts_block():
     return dict(zip(old, new))
 
 
-EDITED.update(_srep84_drafts_block())
+# SREP 84 (accepted) rewrites SREP 78's PYRO9 to PYRO11 to read follow and followMargin by value; SREP 85 (accepted)
+# then rewrites PYRO11 as SREP 84 left it, SREP 78's PYC6 and SREP 80's FRX11 to read their numbers by value. Each
+# line SREP 78 or 80 added maps to the line the canonical schema carries after both.
+_SREP84, _SREP85 = _drafts_block(84), _drafts_block(85)
+EDITED.update({k: _SREP85.get(v, v) for k, v in _SREP84.items()})
+EDITED.update({k: v for k, v in _SREP85.items() if k not in _SREP84.values()})
 
 
 def test_the_canonical_schema_carries_every_line_the_sreps_add():

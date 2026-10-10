@@ -1,9 +1,10 @@
-"""Which kit cases of SREPs 66 to 84 are pending, and why (SREP 0: an active implementer that cannot pass a case yet
+"""Which kit cases of SREPs 66 to 85 are pending, and why (SREP 0: an active implementer that cannot pass a case yet
 is marked pending, and the SREP stays Accepted until none is).
 
 The case generators (srep66_cases.py to srep75_reference.py, engine_gap_cases.py, srep82_cases.py, srep83_cases.py,
-srep84_cases.py) call settle() before they write their srep_cases/*.json: a case named in PENDING keeps "pending" with its reason, and
-every other case runs. When the Rust reference passes a case, delete its entry here and rerun the generator.
+srep84_cases.py, srep85_cases.py) call settle() before they write their srep_cases/*.json: a case named in PENDING
+keeps "pending" with its reason, and every other case runs. When the Rust reference passes a case, delete its entry
+here and rerun the generator.
 
 Recorded 2026-10-10 from conformance/run.py with "pending" removed, on rs-scene-render main 82ad2091 (SREPs 66 to 75)
 and b7eb4edc (all), on llvmpipe (sr-prod-01): every case of SREPs 66 to 75 and 82 not listed here passes on both
@@ -17,6 +18,14 @@ SREP 84, recorded 2026-10-10 the same way on rs-scene-render main a8310ca7 and o
 (ea8750bd, the reference implementation), on llvmpipe (sr-prod-01): all 32 cases pass on the branch; on main the 13
 not listed here pass (those whose verdict SREP 84 does not change, and srep-0084-geo2-tile-size-plus-64, since main's
 native GEO2 already reads "+64" as 64), and the 19 listed fail with the literal reading.
+
+SREP 85, recorded 2026-10-10 the same way on rs-scene-render release/0.4.0 (a86e3c72, which merges the branches of
+SREPs 76 to 81, 83 and 84 but not prep/srep-85-decimal-forms, ceffcb57, the reference implementation) and on v0.3.2
+(a6f158e2), on llvmpipe (sr-prod-01), with the same results on both: the 38 cases not listed here pass (23 whose
+verdict SREP 85 does not change, and 15 of PYRO1, PYRO2, PYRO4, VOL4, PYRO11, ITR1, SRT1, OCN3's wavelength and OCN5,
+to which the native rules already give their SREP 85 verdict), and the 27 listed fail: 26 whose verdict SREP 85
+changes, and srep-0085-ocn5-whitewater-plus-0.5-to-plus-1, valid before and after SREP 85 in the Schematron, which the
+native OCN5 refuses. They stay pending until release/0.4.0 carries that branch.
 """
 
 _FAILURE = ("the expected result is a failed render with the error code in 'failure', which expected.json and run.py "
@@ -28,6 +37,8 @@ _FOLLOWUPS = ("the Rust reference implements {what} on its branch prep/srep-76-8
               "(b7eb4edc) {got}")
 _SREP83 = ("the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; "
            "main (b7eb4edc) refuses the document with {got}")
+_SREP85 = ("the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on "
+           "release/0.4.0; release/0.4.0 (a86e3c72) {got}")
 _SREP84 = ("the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; "
            "main (a8310ca7) {got}")
 
@@ -95,6 +106,35 @@ PENDING = {
         ("pyro9-follow-padded-true-closed", "reports PYRO10, not PYRO9"),
         ("pyro10-follow-padded-1", "refuses the document with PYRO10"),
         ("pyro11-margin-plus-2", "refuses the document with PYRO11")]},
+    # SREP 85: release/0.4.0 reads these decimal and double attributes through XPath 1.0's number(), without the sign
+    **{f"srep-0085-{c}": _SREP85.format(got=got) for c, got in [
+        ("c13-min-size-plus-0.5", "refuses the document with C13"),
+        ("c13-max-size-plus-1", "refuses the document with C13"),
+        ("c14-size-plus-1", "refuses the document with C14"),
+        ("c14-letter-spacing-plus-0.5", "refuses the document with C14"),
+        ("c15-speed-plus-1", "refuses the document with C15"),
+        ("c37-offsets-plus-1-then-plus-0.5", "does not report C37"),
+        ("c38-times-plus-1-then-plus-0.5", "refuses the document with E04, not C38"),
+        ("c44-end-plus-1", "refuses the document with C44"),
+        ("c44-start-plus-0.5", "refuses the document with C44"),
+        ("c52-end-plus-1", "refuses the document with C52"),
+        ("c52-start-plus-0.5", "refuses the document with C52"),
+        ("c53-domain-plus-1-then-plus-0.5", "does not report C53"),
+        ("c54-start-plus-0", "refuses the document with C54"),
+        ("c56-to-plus-1", "refuses the document with C56"),
+        ("c56-from-plus-0.5", "refuses the document with C56"),
+        ("c56-duration-plus-1", "refuses the document with C56"),
+        ("p3d3-lifetime-plus-1", "refuses the document with P3D3"),
+        ("p3d3-speed-variance-plus-0.5", "refuses the document with P3D3"),
+        ("p3d3-burst-time-plus-0.5", "refuses the document with P3D3"),
+        ("p3d10-angle-plus-1-spread-plus-0.5", "refuses the document with P3D10"),
+        ("ocn3-cell-size-plus-0.5", "refuses the document with OCN3"),
+        ("ocn3-impulse-x-plus-1", "refuses the document with OCN3"),
+        ("ocn5-whitewater-plus-0.5-to-plus-1", "refuses the document with OCN5"),
+        ("pyc6-x-plus-1", "refuses the document with PYC6"),
+        ("pyc6-y-plus-0.5", "refuses the document with PYC6"),
+        ("frx11-planes-plus-1", "refuses the document with FRX11"),
+        ("frx11-planes-plus-0.5", "refuses the document with FRX11")]},
 }
 
 

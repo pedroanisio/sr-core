@@ -2,7 +2,9 @@
 to the 1.5.0 Schematron (exactly) and, by content, to the files with the drafts of SREPs 76 to 81 and SREP 83, and
 its drafts block (SREP 78's PYRO9 to PYRO11), applied by content to the latter, give its kit cases their verdicts;
 the diff changes only the rules the SREP lists; no other kit case changes verdict. SREP 84 is accepted: the canonical
-Schematron carries both blocks, and with them taken back out no kit case outside SREP 84 changes verdict either.
+Schematron carries both blocks, and with them taken back out no kit case outside SREP 84 changes verdict either. SREP
+85, accepted after it, rewrites two of the lines these blocks add (C15 and PYRO11); the canonical files are read here
+with SREP 85's blocks taken back out, and tests/test_srep_0085.py checks SREP 85's lines.
 """
 import glob
 import json
@@ -141,7 +143,25 @@ def test_no_other_kit_case_changes_verdict(case):
     assert verdict(DRAFTS84, xml) == verdict(DRAFTS, xml)
 
 
-CANONICAL = {p: open(os.path.join(ROOT, p), "rb").read() for p in ("schema/scene-render.xsd", "schema/scene-render.sch")}
+def reverse(block):
+    """A diff block with its sides swapped: applied by content, it takes the block back out."""
+    swap = {"-": "+", "+": "-"}
+    return "\n".join(x if x.startswith(("---", "+++")) or x[:1] not in swap else swap[x[0]] + x[1:]
+                     for x in block.split("\n"))
+
+
+def without_srep85(files):
+    """The files with SREP 85's three blocks taken back out. SREP 85 (accepted after this SREP) rewrites C15's speed and
+    PYRO11's voxel size and dimensions, lines this SREP also changes, to read decimals by value."""
+    srep85 = os.path.join(ROOT, "srep", "srep-0085.md")
+    for fence in ("diff amendment 67", "diff drafts", "diff"):
+        (block,) = blocks(srep85, fence)
+        files = apply(files, reverse(block), exact=False)
+    return files
+
+
+CANONICAL = without_srep85({p: open(os.path.join(ROOT, p), "rb").read()
+                            for p in ("schema/scene-render.xsd", "schema/scene-render.sch")})
 
 
 def unapplied(files):

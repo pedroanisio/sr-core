@@ -6,7 +6,8 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   }
+   },
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C13"
   }
  },
  "srep-0085-c13-max-size-plus-1": {
@@ -16,7 +17,8 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   }
+   },
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C13"
   }
  },
  "srep-0085-c13-min-size-plus-1-above-max": {
@@ -39,7 +41,8 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   }
+   },
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C14"
   }
  },
  "srep-0085-c14-letter-spacing-plus-0.5": {
@@ -49,7 +52,8 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   }
+   },
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C14"
   }
  },
  "srep-0085-c14-letter-spacing-plus-5-size-plus-1": {
@@ -72,7 +76,8 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   }
+   },
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C15"
   }
  },
  "srep-0085-c15-speed-plus-0.5": {
@@ -119,7 +124,8 @@
     "codes": [
      "C37"
     ]
-   }
+   },
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) does not report C37"
   }
  },
  "srep-0085-c38-times-plus-0.5-plus-1": {
@@ -142,7 +148,8 @@
     "codes": [
      "C38"
     ]
-   }
+   },
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with E04, not C38"
   }
  },
  "srep-0085-c44-end-plus-1": {
@@ -152,7 +159,8 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   }
+   },
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C44"
   }
  },
  "srep-0085-c44-start-plus-0.5": {
@@ -162,7 +170,8 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   }
+   },
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C44"
   }
  },
  "srep-0085-c44-end-plus-0.5-before-start-plus-1": {
@@ -185,7 +194,8 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   }
+   },
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C54"
   }
  },
  "srep-0085-c54-start-plus-0.5": {
@@ -221,7 +231,8 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   }
+   },
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C52"
   }
  },
  "srep-0085-c52-start-plus-0.5": {
@@ -231,7 +242,8 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   }
+   },
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C52"
   }
  },
  "srep-0085-c52-end-plus-0.5-before-start-plus-1": {
@@ -267,7 +279,8 @@
     "codes": [
      "C53"
     ]
-   }
+   },
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) does not report C53"
   }
  },
  "srep-0085-c56-to-plus-1": {
@@ -277,7 +290,8 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   }
+   },
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C56"
   }
  },
  "srep-0085-c56-from-plus-0.5": {
@@ -287,7 +301,8 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   }
+   },
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C56"
   }
  },
  "srep-0085-c56-duration-plus-1": {
@@ -297,7 +312,8 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   }
+   },
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C56"
   }
  },
  "srep-0085-c56-to-plus-1-after-duration-0.5": {
@@ -452,7 +468,8 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   }
+   },
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with P3D3"
   }
  },
  "srep-0085-p3d3-speed-variance-plus-0.5": {
@@ -462,7 +479,8 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   }
+   },
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with P3D3"
   }
  },
  "srep-0085-p3d3-burst-time-plus-0.5": {
@@ -472,7 +490,8 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   }
+   },
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with P3D3"
   }
  },
  "srep-0085-p3d3-lifetime-variance-plus-1-lifetime-plus-0.5": {
@@ -495,7 +514,8 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   }
+   },
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with P3D10"
   }
  },
  "srep-0085-p3d10-angle-plus-0.5-spread-plus-1": {
@@ -518,7 +538,8 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   }
+   },
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with OCN3"
   }
  },
  "srep-0085-ocn3-impulse-x-plus-1": {
@@ -528,7 +549,8 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   }
+   },
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with OCN3"
   }
  },
  "srep-0085-ocn3-wavelength-plus-0.5": {
@@ -551,7 +573,8 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   }
+   },
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with OCN5"
   }
  },
  "srep-0085-ocn5-whitewater-end-plus-0.5-before-start-plus-1": {
@@ -571,7 +594,7 @@
   "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/>\n<composition><object3D id=\"cloud\" primitive=\"volume\"><pyro boundary=\"open\" follow=\"true\" followMargin=\"2\" followLoss=\"0.000001\" width=\"8\" height=\"8\" depth=\"8\" voxelSize=\"+1\" dt=\"0.1\"><pyroSource shape=\"sphere\" radius=\"2\" densityRate=\"2\" start=\"0.15\" end=\"0.35\"/><pyroImpulse shape=\"box\" width=\"2\" height=\"2\" depth=\"2\" time=\"0.5\" density=\"1\" temperature=\"3000\"/></pyro><medium blackbody=\"true\" emissionScale=\"0.1\"/></object3D></composition></scene>\n",
   "expected": {
    "rule": "SREP 85 PYRO11",
-   "source": "kit case srep-0078-valid-pyro-follow (SREP 78, draft) with voxelSize=\"1\" written voxelSize=\"+1\", by conformance/tools/srep85_cases.py",
+   "source": "kit case srep-0078-valid-pyro-follow (SREP 78) with voxelSize=\"1\" written voxelSize=\"+1\", by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
    },
@@ -584,7 +607,7 @@
   "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/>\n<composition><object3D id=\"cloud\" primitive=\"volume\"><pyro boundary=\"open\" follow=\"true\" followMargin=\"2\" followLoss=\"0.000001\" width=\"8\" height=\"8\" depth=\"8\" voxelSize=\"+0.5\" dt=\"0.1\"><pyroSource shape=\"sphere\" radius=\"2\" densityRate=\"2\" start=\"0.15\" end=\"0.35\"/><pyroImpulse shape=\"box\" width=\"2\" height=\"2\" depth=\"2\" time=\"0.5\" density=\"1\" temperature=\"3000\"/></pyro><medium blackbody=\"true\" emissionScale=\"0.1\"/></object3D></composition></scene>\n",
   "expected": {
    "rule": "SREP 85 PYRO11",
-   "source": "kit case srep-0078-valid-pyro-follow (SREP 78, draft) with voxelSize=\"1\" written voxelSize=\"+0.5\", by conformance/tools/srep85_cases.py",
+   "source": "kit case srep-0078-valid-pyro-follow (SREP 78) with voxelSize=\"1\" written voxelSize=\"+0.5\", by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
    },
@@ -597,33 +620,35 @@
   "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/>\n<composition><object3D id=\"cloud\" primitive=\"volume\"><pyro boundary=\"open\" width=\"8\" height=\"8\" depth=\"8\" voxelSize=\"1\" dt=\"0.1\"><pyroSource shape=\"sphere\" radius=\"2\" densityRate=\"2\" start=\"0.15\" end=\"0.35\"/><pyroImpulse shape=\"box\" width=\"2\" height=\"2\" depth=\"2\" time=\"0.5\" density=\"1\" temperature=\"3000\"/><pyroBlast time=\"0.3\" energy=\"1000000\" x=\"+1\" y=\"-1\"/></pyro><medium blackbody=\"true\" emissionScale=\"0.1\"/></object3D></composition></scene>\n",
   "expected": {
    "rule": "SREP 85 PYC6",
-   "source": "kit case srep-0078-valid-pyro-blast (SREP 78, draft) with x=\"1\" written x=\"+1\", by conformance/tools/srep85_cases.py",
+   "source": "kit case srep-0078-valid-pyro-blast (SREP 78) with x=\"1\" written x=\"+1\", by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
    },
    "requires": [
     78
-   ]
+   ],
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with PYC6"
   }
  },
  "srep-0085-pyc6-y-plus-0.5": {
   "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/>\n<composition><object3D id=\"cloud\" primitive=\"volume\"><pyro boundary=\"open\" width=\"8\" height=\"8\" depth=\"8\" voxelSize=\"1\" dt=\"0.1\"><pyroSource shape=\"sphere\" radius=\"2\" densityRate=\"2\" start=\"0.15\" end=\"0.35\"/><pyroImpulse shape=\"box\" width=\"2\" height=\"2\" depth=\"2\" time=\"0.5\" density=\"1\" temperature=\"3000\"/><pyroBlast time=\"0.3\" energy=\"1000000\" x=\"1\" y=\"+0.5\"/></pyro><medium blackbody=\"true\" emissionScale=\"0.1\"/></object3D></composition></scene>\n",
   "expected": {
    "rule": "SREP 85 PYC6",
-   "source": "kit case srep-0078-valid-pyro-blast (SREP 78, draft) with y=\"-1\" written y=\"+0.5\", by conformance/tools/srep85_cases.py",
+   "source": "kit case srep-0078-valid-pyro-blast (SREP 78) with y=\"-1\" written y=\"+0.5\", by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
    },
    "requires": [
     78
-   ]
+   ],
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with PYC6"
   }
  },
  "srep-0085-pyc6-x-plus-5": {
   "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"32\" height=\"32\" fps=\"30\" duration=\"1\"/>\n<composition><object3D id=\"cloud\" primitive=\"volume\"><pyro boundary=\"open\" width=\"8\" height=\"8\" depth=\"8\" voxelSize=\"1\" dt=\"0.1\"><pyroSource shape=\"sphere\" radius=\"2\" densityRate=\"2\" start=\"0.15\" end=\"0.35\"/><pyroImpulse shape=\"box\" width=\"2\" height=\"2\" depth=\"2\" time=\"0.5\" density=\"1\" temperature=\"3000\"/><pyroBlast time=\"0.3\" energy=\"1000000\" x=\"+5\" y=\"-1\"/></pyro><medium blackbody=\"true\" emissionScale=\"0.1\"/></object3D></composition></scene>\n",
   "expected": {
    "rule": "SREP 85 PYC6",
-   "source": "kit case srep-0078-valid-pyro-blast (SREP 78, draft) with x=\"1\" written x=\"+5\", by conformance/tools/srep85_cases.py",
+   "source": "kit case srep-0078-valid-pyro-blast (SREP 78) with x=\"1\" written x=\"+5\", by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": false,
     "codes": [
@@ -639,33 +664,35 @@
   "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"block\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\"><rigidBody density=\"2400\" maxFragments=\"32\" fragmentMinCells=\"1\"/><fracture source=\"ball\" partition=\"planes\" planes=\"+1 0 0 2 0 +1 0 0.5\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
   "expected": {
    "rule": "SREP 85 FRX11",
-   "source": "kit case srep-0080-valid-voxel-fracture-planes (SREP 80, draft) with planes=\"1 0 0 2 0 1 0 0.5\" written planes=\"+1 0 0 2 0 +1 0 0.5\", by conformance/tools/srep85_cases.py",
+   "source": "kit case srep-0080-valid-voxel-fracture-planes (SREP 80) with planes=\"1 0 0 2 0 1 0 0.5\" written planes=\"+1 0 0 2 0 +1 0 0.5\", by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
    },
    "requires": [
     80
-   ]
+   ],
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with FRX11"
   }
  },
  "srep-0085-frx11-planes-plus-0.5": {
   "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"block\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\"><rigidBody density=\"2400\" maxFragments=\"32\" fragmentMinCells=\"1\"/><fracture source=\"ball\" partition=\"planes\" planes=\"1 0 0 2 0 1 0 +0.5\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
   "expected": {
    "rule": "SREP 85 FRX11",
-   "source": "kit case srep-0080-valid-voxel-fracture-planes (SREP 80, draft) with planes=\"1 0 0 2 0 1 0 0.5\" written planes=\"1 0 0 2 0 1 0 +0.5\", by conformance/tools/srep85_cases.py",
+   "source": "kit case srep-0080-valid-voxel-fracture-planes (SREP 80) with planes=\"1 0 0 2 0 1 0 0.5\" written planes=\"1 0 0 2 0 1 0 +0.5\", by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
    },
    "requires": [
     80
-   ]
+   ],
+   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with FRX11"
   }
  },
  "srep-0085-frx11-planes-plus-0-normal": {
   "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"3\"/><assets><voxelAsset id=\"model\" src=\"../assets/srep80-block.vox\" maxCells=\"100000\"/></assets><materials><material id=\"stone\" baseColor=\"#808080\"/></materials><composition><object3D id=\"ball\" primitive=\"sphere\" radius=\"0.2\" x=\"2\" y=\"-8\" z=\"2\"><rigidBody mass=\"500\" velocityY=\"120\"/></object3D><object3D id=\"block\" primitive=\"voxels\" voxels=\"model\" cellSize=\"0.25\" material=\"stone\"><rigidBody density=\"2400\" maxFragments=\"32\" fragmentMinCells=\"1\"/><fracture source=\"ball\" partition=\"planes\" planes=\"1 0 0 2 +0 +0 +0 0.5\"/></object3D></composition><physics pixelsPerMeter=\"1\"/></scene>\n",
   "expected": {
    "rule": "SREP 85 FRX11",
-   "source": "kit case srep-0080-valid-voxel-fracture-planes (SREP 80, draft) with planes=\"1 0 0 2 0 1 0 0.5\" written planes=\"1 0 0 2 +0 +0 +0 0.5\", by conformance/tools/srep85_cases.py",
+   "source": "kit case srep-0080-valid-voxel-fracture-planes (SREP 80) with planes=\"1 0 0 2 0 1 0 0.5\" written planes=\"1 0 0 2 +0 +0 +0 0.5\", by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": false,
     "codes": [

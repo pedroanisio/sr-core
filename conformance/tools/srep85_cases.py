@@ -12,13 +12,13 @@ One case, srep-0085-c15-speed-exponent, writes speed="1e0", which a strict XPath
 native validator of SREP 85 does (its Semantics, 4): its entry has "native_only". libxml2, which the kit's tests use,
 reads exponents, so the tests check it like the others.
 
-The cases of SREP 78 (PYRO11, PYC6) and SREP 80 (FRX11) are those drafts' kit cases with one attribute rewritten, and
-need those drafts ("requires"). The cases of ITR1 and SRT1 are documents of the draft SREP 67's syntax (version 1.6),
-which this branch's kit does not have; they need it ("requires": [67]). Usage:
-python3 conformance/tools/srep85_cases.py; then python3 conformance/make_cases.py.
+The cases of SREP 78 (PYRO11, PYC6) and SREP 80 (FRX11) are those SREPs' kit cases with one attribute rewritten, and
+need their syntax ("requires"). The cases of ITR1 and SRT1 are documents of SREP 67's syntax (version 1.6); they need
+it ("requires": [67]). Usage: python3 conformance/tools/srep85_cases.py; then python3 conformance/make_cases.py.
 """
 import json
 import os
+import kit_pending  # which cases are pending (SREP 0)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CONF = os.path.dirname(HERE)
@@ -125,12 +125,12 @@ def kit(srep, case, old, new):
     for o, n in zip(old, new):
         assert xml.count(o) == 1, (case, o)
         xml = xml.replace(o, n)
-    SOURCES[xml] = (f"kit case {case} (SREP {srep}, draft) with " + ", ".join(f"{o} written {n}" for o, n in zip(old, new))
+    SOURCES[xml] = (f"kit case {case} (SREP {srep}) with " + ", ".join(f"{o} written {n}" for o, n in zip(old, new))
                     + ", by conformance/tools/srep85_cases.py")
     return xml
 
 
-# Draft SREP 67 (version 1.6): an iterate around a plain shape, and a segmented-sort effect (its kit case
+# SREP 67 (version 1.6): an iterate around a plain shape, and a segmented-sort effect (its kit case
 # srep-0067-segmented-sort-ascending, with low and high)
 def itr1(attrs):
     return (HEAD.format(v="1.6", d="1") + f'<composition><iterate id="it" {attrs}>{RECT}</iterate></composition>'
@@ -224,16 +224,16 @@ CASES = {
     "ocn5-whitewater-end-plus-0.5-before-start-plus-1": ("OCN5", ocean('threshold="0.3"',
                                                                        'threshold="0.3" start="+1" end="+0.5"'),
                                                          bad("OCN5"), "ok", None),
-    # PYRO11 (draft SREP 78: pyro/@voxelSize, @width, @height, @depth; the 1.5.0 lets of PYRO1 read voxelSize too)
+    # PYRO11 (SREP 78: pyro/@voxelSize, @width, @height, @depth; the 1.5.0 lets of PYRO1 read voxelSize too)
     "pyro11-voxel-size-plus-1": ("PYRO11", kit(78, "srep-0078-valid-pyro-follow", ['voxelSize="1"'], ['voxelSize="+1"']),
                                  OK, "sch:PYRO1,PYRO11", [78]),
     "pyro11-voxel-size-plus-0.5": ("PYRO11", kit(78, "srep-0078-valid-pyro-follow", ['voxelSize="1"'],
                                                  ['voxelSize="+0.5"']), OK, "sch:PYRO1,PYRO11", [78]),
-    # PYC6 (draft SREP 78: pyroBlast/@x, @y, xs:double, against the pyro's width and height)
+    # PYC6 (SREP 78: pyroBlast/@x, @y, xs:double, against the pyro's width and height)
     "pyc6-x-plus-1": ("PYC6", kit(78, "srep-0078-valid-pyro-blast", ['x="1"'], ['x="+1"']), OK, "sch:PYC6", [78]),
     "pyc6-y-plus-0.5": ("PYC6", kit(78, "srep-0078-valid-pyro-blast", ['y="-1"'], ['y="+0.5"']), OK, "sch:PYC6", [78]),
     "pyc6-x-plus-5": ("PYC6", kit(78, "srep-0078-valid-pyro-blast", ['x="1"'], ['x="+5"']), bad("PYC6"), "sch:PYC6", [78]),
-    # FRX11 (draft SREP 80: fracture/@planes, four numbers per plane)
+    # FRX11 (SREP 80: fracture/@planes, four numbers per plane)
     "frx11-planes-plus-1": ("FRX11", kit(80, "srep-0080-valid-voxel-fracture-planes", ['planes="1 0 0 2 0 1 0 0.5"'],
                                          ['planes="+1 0 0 2 0 +1 0 0.5"']), OK, "sch:FRX11", [80]),
     "frx11-planes-plus-0.5": ("FRX11", kit(80, "srep-0080-valid-voxel-fracture-planes", ['planes="1 0 0 2 0 1 0 0.5"'],
@@ -241,11 +241,11 @@ CASES = {
     "frx11-planes-plus-0-normal": ("FRX11", kit(80, "srep-0080-valid-voxel-fracture-planes",
                                                 ['planes="1 0 0 2 0 1 0 0.5"'], ['planes="1 0 0 2 +0 +0 +0 0.5"']),
                                    bad("FRX11"), "sch:FRX11", [80]),
-    # ITR1 (draft SREP 67: iterate/@checkEvery, @steps, xs:positiveInteger)
+    # ITR1 (SREP 67: iterate/@checkEvery, @steps, xs:positiveInteger)
     "itr1-check-every-plus-1": ("ITR1", itr1('steps="10" checkEvery="+1"'), OK, "sch:ITR1", [67]),
     "itr1-steps-plus-20": ("ITR1", itr1('steps="+20" checkEvery="20"'), OK, "sch:ITR1", [67]),
     "itr1-check-every-plus-20-above-steps": ("ITR1", itr1('steps="10" checkEvery="+20"'), bad("ITR1"), "sch:ITR1", [67]),
-    # SRT1 (draft SREP 67: effect/@low, @high, unitDecimal)
+    # SRT1 (SREP 67: effect/@low, @high, unitDecimal)
     "srt1-low-plus-0.5": ("SRT1", srt1('low="+0.5" high="1"'), OK, "sch:SRT1", [67]),
     "srt1-high-plus-1": ("SRT1", srt1('low="0.5" high="+1"'), OK, "sch:SRT1", [67]),
     "srt1-low-plus-1-above-high-plus-0.5": ("SRT1", srt1('low="+1" high="+0.5"'), bad("SRT1"), "sch:SRT1", [67]),
@@ -265,6 +265,7 @@ def main():
         if name in NATIVE_ONLY:
             expected["native_only"] = NATIVE_ONLY[name]
         out[f"srep-0085-{name}"] = {"xml": xml, "expected": expected}
+    kit_pending.settle(out, 85)
     with open(os.path.join(CONF, "srep_cases", "srep-0085.json"), "w") as fh:
         json.dump(out, fh, indent=1, ensure_ascii=False)
         fh.write("\n")

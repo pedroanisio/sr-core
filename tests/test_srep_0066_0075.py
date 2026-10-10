@@ -1,12 +1,12 @@
 """SREPs 66 to 75 are accepted: the canonical schema carries their Syntax as the SREPs write it.
 
 Each SREP's ```xml blocks are its normative syntax. For every Schematron assertion they write, schema/scene-render.sch
-has an assertion with the same id, test and message, in a rule with the same context and a pattern with the same id,
-and each pattern the SREPs write has their rules in their order. For every type they declare, the XSD has that type
-with the same content, and every attribute they add to an existing type is declared there as written. The
-documentation is the SREPs' too, except where ANNOTATIONS lists a difference and its reason. The reference engine
-vendored these SREPs with a few local differences (listed in the acceptance commit); this test keeps sr-core on the
-SREPs' text.
+has an assertion with the same id, test and message (the tests of ITR1 and SRT1 as SREP 85 amends them), in a rule
+with the same context and a pattern with the same id, and each pattern the SREPs write has their rules in their order.
+For every type they declare, the XSD has that type with the same content, and every attribute they add to an existing
+type is declared there as written. The documentation is the SREPs' too, except where ANNOTATIONS lists a difference
+and its reason. The reference engine vendored these SREPs with a few local differences (listed in the acceptance
+commit); this test keeps sr-core on the SREPs' text.
 """
 import os
 import re
@@ -48,6 +48,23 @@ ANNOTATIONS = {
 }
 
 XSD = etree.parse(os.path.join(ROOT, "schema", "scene-render.xsd")).getroot()
+
+
+def _amended_by_srep85():
+    """SREP 85 (accepted) amends SREP 67's ITR1 and SRT1 to read their numbers by value: its "diff amendment 67"
+    block gives each the test the canonical schema carries (the message, rule and pattern are unchanged)."""
+    text = open(os.path.join(ROOT, "srep", "srep-0085.md"), encoding="utf-8").read()
+    (block,) = re.findall(r"^```diff amendment 67\n(.*?)^```", text, re.S | re.M)
+    out = {}
+    for line in block.split("\n"):
+        if line.startswith("+") and not line.startswith("+++"):
+            a = etree.fromstring(f'<root xmlns:sch="{SCH}">{line[1:]}</root>')[0]
+            out[a.get("id")] = a.get("test")
+    assert set(out) == {"ITR1", "SRT1"}
+    return out
+
+
+AMENDED_TESTS = _amended_by_srep85()
 SCHEMATRON = etree.parse(os.path.join(ROOT, "schema", "scene-render.sch")).getroot()
 
 
@@ -112,7 +129,7 @@ def test_every_assertion_of_the_srep_is_in_the_schematron(n):
         for a in root.iter(f"{{{SCH}}}assert"):
             have = SCHEMATRON.xpath(".//sch:assert[@id=$i]", namespaces=NS, i=a.get("id"))
             assert len(have) == 1, a.get("id")
-            assert norm(have[0].get("test")) == norm(a.get("test")), a.get("id")
+            assert norm(have[0].get("test")) == norm(AMENDED_TESTS.get(a.get("id"), a.get("test"))), a.get("id")
             assert norm(have[0].text) == norm(a.text), a.get("id")
             rule = a.getparent()
             if rule.tag == f"{{{SCH}}}rule":          # an amended assertion may be written without its rule

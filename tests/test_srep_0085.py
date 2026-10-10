@@ -1,15 +1,15 @@
-"""SREP 85 (draft): decimal and double attributes are tested by value. The SREP's diff block, applied to the 1.5.0
+"""SREP 85: decimal and double attributes are tested by value. The SREP's diff block, applied to the 1.5.0
 Schematron with SREP 84 (exactly) and, by content, to the files with the drafts of SREPs 76 to 81, 83 and 84, its drafts
-block (SREP 78's PYRO11 and PYC6, SREP 80's FRX11), applied by content to the latter, and its amendment of the draft
-SREP 67 (ITR1, SRT1) give its kit cases their verdicts; each changed line is the line before with every numeric read of
-an attribute in the '+'-stripping form; no numeric read of an attribute is left outside that form; no other kit case
-changes verdict.
+block (SREP 78's PYRO11 and PYC6, SREP 80's FRX11), applied by content to the latter, and its amendment of SREP 67
+(ITR1, SRT1) give its kit cases their verdicts; each changed line is the line before with every numeric read of an
+attribute in the '+'-stripping form; no numeric read of an attribute is left outside that form; no other kit case
+changes verdict. SREP 85 is accepted: the canonical Schematron carries the three blocks, and with them taken back out
+each kit case of this SREP has its verdict before SREP 85 and no other kit case changes verdict.
 """
 import glob
 import json
 import os
 import re
-import subprocess
 import sys
 
 import pytest
@@ -36,7 +36,6 @@ AMENDED = {"ITR1", "SRT1"}
 # the rules whose verdicts change: the assertions above, and PYRO1 and P3D10 through the lets they read
 RULES = {"C13", "C14", "C15", "C37", "C38", "C44", "C52", "C53", "C54", "C56", "PYRO1", "PYRO2", "PYRO4", "VOL4", "P3D3",
          "P3D10", "OCN3", "OCN5", "PYRO11", "PYC6", "FRX11", "ITR1", "SRT1"}
-ACCEPT_REF = "accept/66-83"   # the branch on which the draft SREP 67 is being accepted (its schema files)
 
 if gap.baseline() is None:
     pytest.skip("the schema 1.5.0 files are not available (no git tag, and schema/ has moved on)",
@@ -125,18 +124,6 @@ def changed(old, new):
     return out
 
 
-def accept_files():
-    """The schema files of the branch that accepts the draft SREP 67, with SREP 84 applied, or None."""
-    for ref in (ACCEPT_REF, "origin/" + ACCEPT_REF):
-        try:
-            files = {p: subprocess.run(["git", "-C", ROOT, "show", f"{ref}:{p}"], check=True, capture_output=True).stdout
-                     for p in ("schema/scene-render.sch", "schema/scene-render.xsd")}
-        except (subprocess.CalledProcessError, FileNotFoundError):
-            continue
-        return apply(apply(files, MAIN84, exact=False), DRAFT84, exact=False)
-    return None
-
-
 def amendment_lines():
     """The removed and added lines of the amendment of SREP 67."""
     lines = AMEND67.split("\n")
@@ -208,7 +195,8 @@ def test_kit_case_verdict(name):
     case = CASES[name]
     requires = case["expected"].get("requires")
     if requires == [67]:
-        # the draft SREP 67 is not in this branch: its two rules, before and after the amendment, without XSD
+        # SREP 67's two rules, before and after the amendment, without XSD (the canonical schema, with SREP 67, is
+        # checked below)
         old, new = amendment_lines()
         assert verdict(srep67_rules(new), case["xml"]) == want(case), name
         assert verdict(srep67_rules(old), case["xml"]) == srep85_cases.BEFORE[name], name
@@ -217,20 +205,6 @@ def test_kit_case_verdict(name):
     for v in after:
         assert verdict(v, case["xml"]) == want(case), name
     assert verdict(before, case["xml"]) == srep85_cases.BEFORE[name], name
-
-
-def test_the_srep_67_cases_with_its_schema():
-    """With the files of the branch that accepts SREP 67 (when git has it), the amendment applies by content and
-    gives the ITR1 and SRT1 cases their verdicts, XSD included; no kit case of that branch's SREPs changes verdict."""
-    files = accept_files()
-    if files is None:
-        pytest.skip(f"git has no {ACCEPT_REF} (a shallow checkout)")
-    before = validators(files)
-    after = validators(apply(apply(apply(files, MAIN, exact=False), DRAFT, exact=False), AMEND67, exact=False))
-    for name, case in CASES.items():
-        if case["expected"].get("requires") == [67]:
-            assert verdict(after, case["xml"]) == want(case), name
-            assert verdict(before, case["xml"]) == srep85_cases.BEFORE[name], name
 
 
 def test_the_cases_cover_every_changed_rule_with_a_changed_verdict():
@@ -262,3 +236,52 @@ def test_no_other_kit_case_changes_verdict(case):
     xml = open(case, "rb").read()
     assert verdict(BASE85, xml) == verdict(BASE84, xml)
     assert verdict(DRAFTS85, xml) == verdict(DRAFTS84, xml)
+
+
+CANONICAL = {p: open(os.path.join(ROOT, p), "rb").read() for p in ("schema/scene-render.xsd", "schema/scene-render.sch")}
+
+
+def reverse(block):
+    """A diff block with its sides swapped: applied by content, it takes the block back out."""
+    swap = {"-": "+", "+": "-"}
+    return "\n".join(x if x.startswith(("---", "+++")) or x[:1] not in swap else swap[x[0]] + x[1:]
+                     for x in block.split("\n"))
+
+
+def unapplied(files):
+    """The files with SREP 85's three blocks taken back out, by content."""
+    for block in (AMEND67, DRAFT, MAIN):
+        files = apply(files, reverse(block), exact=False)
+    return files
+
+
+CANON, CANON_BEFORE = validators(CANONICAL), validators(unapplied(CANONICAL))
+
+
+def test_the_canonical_schematron_carries_the_three_blocks():
+    """Every line the three blocks add is in schema/scene-render.sch once and no line they remove is; taken back out,
+    they change exactly the listed lines; the XSD is the one the blocks leave alone."""
+    have = CANONICAL["schema/scene-render.sch"].decode().split("\n")
+    for block in (MAIN, DRAFT, AMEND67):
+        b = block.split("\n")
+        assert all(have.count(x[1:]) == 1 for x in b if x.startswith("+") and not x.startswith("+++"))
+        assert not {x[1:] for x in b if x.startswith("-") and not x.startswith("---")} & set(have)
+    before = unapplied(CANONICAL)
+    assert set(changed(before["schema/scene-render.sch"], CANONICAL["schema/scene-render.sch"])) == \
+        ACCEPTED | DRAFTED | AMENDED
+    assert before["schema/scene-render.xsd"] == CANONICAL["schema/scene-render.xsd"]
+
+
+@pytest.mark.parametrize("name", sorted(CASES))
+def test_kit_case_verdict_on_the_canonical_schema(name):
+    """With the canonical files (SREP 67, 78 and 80 included, XSD and all) each case has its verdict, and with SREP 85
+    taken back out its verdict before SREP 85."""
+    case = CASES[name]
+    assert verdict(CANON, case["xml"]) == want(case), name
+    assert verdict(CANON_BEFORE, case["xml"]) == srep85_cases.BEFORE[name], name
+
+
+@pytest.mark.parametrize("case", OTHER, ids=os.path.basename)
+def test_no_other_kit_case_changes_verdict_on_the_canonical_schema(case):
+    xml = open(case, "rb").read()
+    assert verdict(CANON, xml) == verdict(CANON_BEFORE, xml)
