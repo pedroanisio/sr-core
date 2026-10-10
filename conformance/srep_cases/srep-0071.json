@@ -69,8 +69,7 @@
       209.2
      ]
     }
-   ],
-   "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0071-sky-horizon": {
@@ -91,8 +90,7 @@
       224.0
      ]
     }
-   ],
-   "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0071-sky-sun": {
@@ -104,8 +102,7 @@
     "cy": 180,
     "w": 48.4,
     "h": 48.4
-   },
-   "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0071-sky-sun-azimuth": {
@@ -115,8 +112,7 @@
    "red": {
     "cx": 417.7,
     "cy": 130.8
-   },
-   "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0071-sky-not-dome": {
@@ -128,8 +124,7 @@
     "codes": [
      "SKY1"
     ]
-   },
-   "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0071-sky-and-environment": {
@@ -141,8 +136,7 @@
     "codes": [
      "SKY2"
     ]
-   },
-   "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0071-map-generator": {
@@ -154,8 +148,7 @@
     "cy": 180,
     "w": 100,
     "h": 100
-   },
-   "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0071-map-not-an-image-source": {
@@ -167,22 +160,21 @@
     "codes": [
      "MTX1-baseColorMap"
     ]
-   },
-   "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0071-subsurface-zero-neutral": {
   "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m\" baseColor=\"#B0B0B0FF\" roughness=\"0.5\" subsurface=\"0\" subsurfaceColor=\"#E0F0D0FF\" subsurfaceRadius=\"20\"/></materials>\n<composition>\n<object3D id=\"o\" primitive=\"sphere\" radius=\"80\" x=\"320\" y=\"180\" material=\"m\"/>\n</composition>\n<lights><light id=\"sun\" type=\"directional\" yaw=\"60\" intensity=\"3\"/></lights>\n</scene>\n",
   "expected": {
    "rule": "SREP 71 (renders the same as the scene without the subsurface attributes)",
-   "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP; the check is equality with another render, which run.py cannot express yet"
+   "pending": "the check is a comparison with another render, which run.py cannot express yet; not checked on the Rust reference"
   }
  },
  "srep-0071-subsurface-wraps-terminator": {
   "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m\" baseColor=\"#B0B0B0FF\" roughness=\"0.5\" subsurface=\"1\" subsurfaceColor=\"#E0F0D0FF\" subsurfaceRadius=\"20\"/></materials>\n<composition>\n<object3D id=\"o\" primitive=\"sphere\" radius=\"80\" x=\"320\" y=\"180\" material=\"m\"/>\n</composition>\n<lights><light id=\"sun\" type=\"directional\" yaw=\"60\" intensity=\"3\"/></lights>\n</scene>\n",
   "expected": {
    "rule": "SREP 71 (the region just past the shadow terminator is brighter than with subsurface=0 (Semantics 1, item 3))",
-   "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP; the check is a comparison with another render, which run.py cannot express yet"
+   "pending": "the check is a comparison with another render, which run.py cannot express yet; not checked on the Rust reference"
   }
  }
 }

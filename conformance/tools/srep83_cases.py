@@ -13,6 +13,7 @@ python3 conformance/make_cases.py.
 import json
 import os
 import re
+import kit_pending  # which cases are pending (SREP 0)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CONF = os.path.dirname(HERE)
@@ -80,6 +81,7 @@ def main():
                 "source": f"kit case {base}, scene/@version changed",
                 "requires": [srep] + ([80] if "VOX1" in gates and srep != 80 else []),
                 "findings": {"valid": True}}}
+    kit_pending.settle(cases, 83)
     with open(os.path.join(CONF, "srep_cases", "srep-0083.json"), "w") as fh:
         json.dump(cases, fh, indent=1, ensure_ascii=False)
         fh.write("\n")

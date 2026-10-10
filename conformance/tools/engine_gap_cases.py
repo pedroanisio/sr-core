@@ -19,6 +19,8 @@ import os
 import re
 import subprocess
 
+import kit_pending  # which cases are pending (SREP 0)
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 CONF = os.path.dirname(HERE)
 
@@ -147,6 +149,7 @@ def main():
                 cases[f"srep-{srep:04d}-{stem}"] = {"xml": text, "expected": {
                     "rule": f"SREP {srep} " + " ".join(codes) + " (boolean forms)", "source": source,
                     "findings": {"valid": False, "codes": codes}}}
+        kit_pending.settle(cases, srep)
         with open(os.path.join(CONF, "srep_cases", f"srep-{srep:04d}.json"), "w") as fh:
             json.dump(cases, fh, indent=1, ensure_ascii=False)
             fh.write("\n")

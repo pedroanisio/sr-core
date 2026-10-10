@@ -39634,8 +39634,7 @@
         "cy": 120,
         "w": 40,
         "h": 20
-      },
-      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0066-program-group-transform": {
       "rule": "SREP 66",
@@ -39644,8 +39643,7 @@
         "cy": 160,
         "w": 40,
         "h": 20
-      },
-      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0066-program-seed-even": {
       "rule": "SREP 66",
@@ -39657,8 +39655,7 @@
       },
       "absent": [
         "blue"
-      ],
-      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0066-program-seed-odd": {
       "rule": "SREP 66",
@@ -39670,8 +39667,7 @@
       },
       "absent": [
         "red"
-      ],
-      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0066-program-param": {
       "rule": "SREP 66",
@@ -39683,8 +39679,7 @@
       },
       "absent": [
         "blue"
-      ],
-      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0066-program-param-default": {
       "rule": "SREP 66",
@@ -39696,8 +39691,7 @@
       },
       "absent": [
         "red"
-      ],
-      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0066-program-nan-canonical": {
       "rule": "SREP 66",
@@ -39709,8 +39703,7 @@
       },
       "absent": [
         "blue"
-      ],
-      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0066-program-memory-limit": {
       "rule": "SREP 66",
@@ -39722,8 +39715,7 @@
       },
       "absent": [
         "blue"
-      ],
-      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0066-program-memory-limit-raised": {
       "rule": "SREP 66",
@@ -39735,8 +39727,7 @@
       },
       "absent": [
         "red"
-      ],
-      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0066-program-data-rows": {
       "rule": "SREP 66",
@@ -39745,57 +39736,56 @@
         "cy": 180,
         "w": 360,
         "h": 20
-      },
-      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0066-program-fuel": {
       "rule": "SREP 66",
       "failure": {
         "code": "PRG12"
       },
-      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG12, checked by hand on 2026-10-10"
     },
     "srep-0066-program-import-forbidden": {
       "rule": "SREP 66",
       "failure": {
         "code": "PRG11"
       },
-      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG11, checked by hand on 2026-10-10"
     },
     "srep-0066-program-threads-forbidden": {
       "rule": "SREP 66",
       "failure": {
         "code": "PRG11"
       },
-      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG11, checked by hand on 2026-10-10"
     },
     "srep-0066-program-relaxed-simd-forbidden": {
       "rule": "SREP 66",
       "failure": {
         "code": "PRG11"
       },
-      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG11, checked by hand on 2026-10-10"
     },
     "srep-0066-program-output-invalid": {
       "rule": "SREP 66",
       "failure": {
         "code": "PRG14"
       },
-      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG14, checked by hand on 2026-10-10"
     },
     "srep-0066-program-id-collision": {
       "rule": "SREP 66",
       "failure": {
         "code": "PRG14"
       },
-      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG14, checked by hand on 2026-10-10"
     },
     "srep-0066-program-sha256-mismatch": {
       "rule": "SREP 66",
       "failure": {
         "code": "PRG10"
       },
-      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG10, checked by hand on 2026-10-10"
     },
     "srep-0066-program-output-sha256": {
       "rule": "SREP 66",
@@ -39804,15 +39794,14 @@
         "cy": 120,
         "w": 40,
         "h": 20
-      },
-      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0066-program-output-sha256-mismatch": {
       "rule": "SREP 66",
       "failure": {
         "code": "PRG15"
       },
-      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG15, checked by hand on 2026-10-10"
     },
     "srep-0066-program-version-gate": {
       "rule": "SREP 66",
@@ -39821,8 +39810,7 @@
         "codes": [
           "V12"
         ]
-      },
-      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0066-program-param-unique": {
       "rule": "SREP 66",
@@ -39831,8 +39819,7 @@
         "codes": [
           "PRG1"
         ]
-      },
-      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0066-program-over-names-data": {
       "rule": "SREP 66",
@@ -39841,8 +39828,7 @@
         "codes": [
           "PRG2"
         ]
-      },
-      "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0067-compute-log-density": {
       "rule": "SREP 67",
@@ -39886,8 +39872,7 @@
             88.5
           ]
         }
-      ],
-      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0067-compute-order": {
       "rule": "SREP 67",
@@ -39931,8 +39916,7 @@
             88.5
           ]
         }
-      ],
-      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0067-compute-reference": {
       "rule": "SREP 67",
@@ -39976,8 +39960,7 @@
             80.4
           ]
         }
-      ],
-      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0067-compute-gain-gamma": {
       "rule": "SREP 67",
@@ -40021,8 +40004,7 @@
             58.9
           ]
         }
-      ],
-      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0067-compute-linear": {
       "rule": "SREP 67",
@@ -40066,8 +40048,7 @@
             2.6
           ]
         }
-      ],
-      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0067-compute-empty-pixel": {
       "rule": "SREP 67",
@@ -40085,8 +40066,7 @@
             0.0
           ]
         }
-      ],
-      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0067-compute-colour": {
       "rule": "SREP 67",
@@ -40117,8 +40097,7 @@
             255.0
           ]
         }
-      ],
-      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0067-compute-version-gate": {
       "rule": "SREP 67",
@@ -40127,8 +40106,7 @@
         "codes": [
           "V13"
         ]
-      },
-      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0067-iterate-steps": {
       "rule": "SREP 67",
@@ -40140,8 +40118,7 @@
       },
       "absent": [
         "blue"
-      ],
-      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0067-iterate-steps-short": {
       "rule": "SREP 67",
@@ -40153,8 +40130,7 @@
       },
       "absent": [
         "red"
-      ],
-      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0067-iterate-check-every": {
       "rule": "SREP 67",
@@ -40163,8 +40139,7 @@
         "codes": [
           "ITR1"
         ]
-      },
-      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0067-error-diffusion-floyd-steinberg": {
       "rule": "SREP 67",
@@ -40234,8 +40209,7 @@
             0.0
           ]
         }
-      ],
-      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0067-error-diffusion-atkinson": {
       "rule": "SREP 67",
@@ -40305,8 +40279,7 @@
             255.0
           ]
         }
-      ],
-      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0067-segmented-sort-ascending": {
       "rule": "SREP 67",
@@ -40337,8 +40310,7 @@
             255.0
           ]
         }
-      ],
-      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0067-segmented-sort-descending": {
       "rule": "SREP 67",
@@ -40369,8 +40341,7 @@
             0.0
           ]
         }
-      ],
-      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0067-segmented-sort-threshold": {
       "rule": "SREP 67",
@@ -40401,8 +40372,7 @@
             0.0
           ]
         }
-      ],
-      "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0068-one-step-per-frame": {
       "rule": "SREP 68",
@@ -40414,8 +40384,7 @@
       },
       "absent": [
         "blue"
-      ],
-      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0068-one-step-per-frame-short": {
       "rule": "SREP 68",
@@ -40427,8 +40396,7 @@
       },
       "absent": [
         "red"
-      ],
-      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0068-steps-per-frame": {
       "rule": "SREP 68",
@@ -40440,8 +40408,7 @@
       },
       "absent": [
         "blue"
-      ],
-      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0068-steps-per-frame-short": {
       "rule": "SREP 68",
@@ -40453,8 +40420,7 @@
       },
       "absent": [
         "red"
-      ],
-      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0068-prewarm": {
       "rule": "SREP 68",
@@ -40466,8 +40432,7 @@
       },
       "absent": [
         "blue"
-      ],
-      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0068-prewarm-short": {
       "rule": "SREP 68",
@@ -40479,8 +40444,7 @@
       },
       "absent": [
         "red"
-      ],
-      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0068-seek": {
       "rule": "SREP 68",
@@ -40496,8 +40460,7 @@
       },
       "absent": [
         "blue"
-      ],
-      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0068-seek-short": {
       "rule": "SREP 68",
@@ -40513,8 +40476,7 @@
       },
       "absent": [
         "red"
-      ],
-      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0068-seek-combined": {
       "rule": "SREP 68",
@@ -40530,8 +40492,7 @@
       },
       "absent": [
         "blue"
-      ],
-      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0068-seek-combined-short": {
       "rule": "SREP 68",
@@ -40547,8 +40508,7 @@
       },
       "absent": [
         "red"
-      ],
-      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0068-late-start": {
       "rule": "SREP 68",
@@ -40564,8 +40524,7 @@
       },
       "absent": [
         "blue"
-      ],
-      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0068-late-start-short": {
       "rule": "SREP 68",
@@ -40581,8 +40540,7 @@
       },
       "absent": [
         "red"
-      ],
-      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0068-hidden-frame": {
       "rule": "SREP 68",
@@ -40598,8 +40556,7 @@
       },
       "absent": [
         "blue"
-      ],
-      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0068-hidden-frame-short": {
       "rule": "SREP 68",
@@ -40615,8 +40572,7 @@
       },
       "absent": [
         "red"
-      ],
-      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0068-not-a-stateful-effect": {
       "rule": "SREP 68",
@@ -40625,8 +40581,7 @@
         "codes": [
           "STP1"
         ]
-      },
-      "pending": "SREP 68 is a draft; no engine implements stepsPerFrame, prewarm or node-local replay yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0069-step-frame-0": {
       "rule": "SREP 69",
@@ -40638,8 +40593,7 @@
       },
       "absent": [
         "blue"
-      ],
-      "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0069-step-frame-0-short": {
       "rule": "SREP 69",
@@ -40651,8 +40605,7 @@
       },
       "absent": [
         "red"
-      ],
-      "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0069-step-per-frame": {
       "rule": "SREP 69",
@@ -40664,8 +40617,7 @@
       },
       "absent": [
         "blue"
-      ],
-      "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0069-step-per-frame-short": {
       "rule": "SREP 69",
@@ -40677,8 +40629,7 @@
       },
       "absent": [
         "red"
-      ],
-      "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0069-step-prewarm": {
       "rule": "SREP 69",
@@ -40690,8 +40641,7 @@
       },
       "absent": [
         "blue"
-      ],
-      "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0069-step-seek": {
       "rule": "SREP 69",
@@ -40707,8 +40657,7 @@
       },
       "absent": [
         "blue"
-      ],
-      "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0069-step-seek-short": {
       "rule": "SREP 69",
@@ -40724,8 +40673,7 @@
       },
       "absent": [
         "red"
-      ],
-      "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0069-step-rng-odd": {
       "rule": "SREP 69",
@@ -40741,8 +40689,7 @@
       },
       "absent": [
         "blue"
-      ],
-      "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0069-step-rng-even": {
       "rule": "SREP 69",
@@ -40758,15 +40705,14 @@
       },
       "absent": [
         "red"
-      ],
-      "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0069-step-missing-export": {
       "rule": "SREP 69",
       "failure": {
         "code": "PRG11"
       },
-      "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG11, checked by hand on 2026-10-10"
     },
     "srep-0069-step-needs-size": {
       "rule": "SREP 69",
@@ -40775,8 +40721,7 @@
         "codes": [
           "PRG3"
         ]
-      },
-      "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0069-build-mode-no-steps": {
       "rule": "SREP 69",
@@ -40785,8 +40730,7 @@
         "codes": [
           "STP1"
         ]
-      },
-      "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0070-path-ellipse": {
       "rule": "SREP 70",
@@ -40795,8 +40739,7 @@
         "cy": 180,
         "w": 200,
         "h": 100
-      },
-      "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0070-path-lissajous": {
       "rule": "SREP 70",
@@ -40805,8 +40748,7 @@
         "cy": 180,
         "w": 204,
         "h": 164
-      },
-      "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0070-path-break": {
       "rule": "SREP 70",
@@ -40850,8 +40792,7 @@
             0
           ]
         }
-      ],
-      "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0070-path-needs-curve": {
       "rule": "SREP 70",
@@ -40860,8 +40801,7 @@
         "codes": [
           "PAR1"
         ]
-      },
-      "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0070-path-version-gate": {
       "rule": "SREP 70",
@@ -40870,8 +40810,7 @@
         "codes": [
           "V14"
         ]
-      },
-      "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0070-surface-plane": {
       "rule": "SREP 70",
@@ -40880,15 +40819,13 @@
         "cy": 180,
         "w": 100,
         "h": 50
-      },
-      "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0070-surface-plane-mirrored-culled": {
       "rule": "SREP 70",
       "absent": [
         "red"
-      ],
-      "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0070-surface-plane-mirrored-double-sided": {
       "rule": "SREP 70",
@@ -40897,8 +40834,7 @@
         "cy": 180,
         "w": 100,
         "h": 50
-      },
-      "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0070-heightfield-flat": {
       "rule": "SREP 70",
@@ -40907,15 +40843,13 @@
         "cy": 180,
         "w": 100,
         "h": 50
-      },
-      "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0070-heightfield-underside-culled": {
       "rule": "SREP 70",
       "absent": [
         "red"
-      ],
-      "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0070-surface-needs-child": {
       "rule": "SREP 70",
@@ -40924,8 +40858,7 @@
         "codes": [
           "PAR2"
         ]
-      },
-      "pending": "SREP 70 is a draft; no engine implements parametric geometry yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0071-sky-gradient": {
       "rule": "SREP 71",
@@ -40995,8 +40928,7 @@
             209.2
           ]
         }
-      ],
-      "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0071-sky-horizon": {
       "rule": "SREP 71",
@@ -41014,8 +40946,7 @@
             224.0
           ]
         }
-      ],
-      "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0071-sky-sun": {
       "rule": "SREP 71",
@@ -41024,16 +40955,14 @@
         "cy": 180,
         "w": 48.4,
         "h": 48.4
-      },
-      "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0071-sky-sun-azimuth": {
       "rule": "SREP 71 (sun centre direction (sin10 cos5, -sin5, cos10 cos5) projected; the disc's own centroid is offset by under 1 px)",
       "red": {
         "cx": 417.7,
         "cy": 130.8
-      },
-      "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0071-sky-not-dome": {
       "rule": "SREP 71",
@@ -41042,8 +40971,7 @@
         "codes": [
           "SKY1"
         ]
-      },
-      "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0071-sky-and-environment": {
       "rule": "SREP 71",
@@ -41052,8 +40980,7 @@
         "codes": [
           "SKY2"
         ]
-      },
-      "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0071-map-generator": {
       "rule": "SREP 71",
@@ -41062,8 +40989,7 @@
         "cy": 180,
         "w": 100,
         "h": 100
-      },
-      "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0071-map-not-an-image-source": {
       "rule": "SREP 71",
@@ -41072,16 +40998,15 @@
         "codes": [
           "MTX1-baseColorMap"
         ]
-      },
-      "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0071-subsurface-zero-neutral": {
       "rule": "SREP 71 (renders the same as the scene without the subsurface attributes)",
-      "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP; the check is equality with another render, which run.py cannot express yet"
+      "pending": "the check is a comparison with another render, which run.py cannot express yet; not checked on the Rust reference"
     },
     "srep-0071-subsurface-wraps-terminator": {
       "rule": "SREP 71 (the region just past the shadow terminator is brighter than with subsurface=0 (Semantics 1, item 3))",
-      "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP; the check is a comparison with another render, which run.py cannot express yet"
+      "pending": "the check is a comparison with another render, which run.py cannot express yet; not checked on the Rust reference"
     },
     "srep-0072-precision-f32": {
       "rule": "SREP 72",
@@ -41093,8 +41018,7 @@
       },
       "absent": [
         "blue"
-      ],
-      "pending": "SREP 72 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0072-precision-3d-note": {
       "rule": "SREP 72",
@@ -41104,7 +41028,7 @@
           "PREC1"
         ]
       },
-      "pending": "SREP 72 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      "pending": "the Rust reference (main 82ad2091 and b7eb4edc) reports E23 for this document, not the information finding PREC1 that SREP 72 requires"
     },
     "srep-0072-content-rect-stripe": {
       "rule": "SREP 72",
@@ -41113,8 +41037,7 @@
         "cy": 180,
         "w": 10,
         "h": 100
-      },
-      "pending": "SREP 72 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0072-content-rect-stripe-fractional": {
       "rule": "SREP 72",
@@ -41123,8 +41046,7 @@
         "cy": 180,
         "w": 10,
         "h": 100
-      },
-      "pending": "SREP 72 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0072-edge-blend-linear": {
       "rule": "SREP 72",
@@ -41142,8 +41064,7 @@
             187.5
           ]
         }
-      ],
-      "pending": "SREP 72 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0072-edge-blend-encoded": {
       "rule": "SREP 72",
@@ -41161,8 +41082,7 @@
             127.5
           ]
         }
-      ],
-      "pending": "SREP 72 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0072-edge-blend-inherit": {
       "rule": "SREP 72",
@@ -41180,8 +41100,7 @@
             187.5
           ]
         }
-      ],
-      "pending": "SREP 72 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0072-supersample-box": {
       "rule": "SREP 72",
@@ -41290,8 +41209,7 @@
             255.0
           ]
         }
-      ],
-      "pending": "SREP 72 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0072-supersample-lanczos3": {
       "rule": "SREP 72",
@@ -41400,8 +41318,7 @@
             255.0
           ]
         }
-      ],
-      "pending": "SREP 72 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0073-upright-sprite": {
       "rule": "SREP 73",
@@ -41417,7 +41334,7 @@
         "w": 20,
         "h": 40
       },
-      "pending": "SREP 73 is a draft; no engine implements flock/@orientToVelocity yet. The entry keeps the values derived from the SREP"
+      "pending": "the Rust reference (main 82ad2091 and b7eb4edc) keeps the sprite upright as SREP 73 requires (red left of blue), but its red half measures 17 px across where the case expects 20 (tolerance 2; blue 18 px): the case's assumption that the sprite is drawn as an unfiltered size x size square is not checked"
     },
     "srep-0073-upright-sprite-node-rotation": {
       "rule": "SREP 73",
@@ -41433,7 +41350,7 @@
         "w": 40,
         "h": 20
       },
-      "pending": "SREP 73 is a draft; no engine implements flock/@orientToVelocity yet. The entry keeps the values derived from the SREP"
+      "pending": "the Rust reference (main 82ad2091 and b7eb4edc) keeps the sprite upright as SREP 73 requires (red above blue), but its red half measures 17 px across where the case expects 20 (tolerance 2; blue 18 px): the case's assumption that the sprite is drawn as an unfiltered size x size square is not checked"
     },
     "srep-0073-streak-inert": {
       "rule": "SREP 73",
@@ -41442,8 +41359,7 @@
         "codes": [
           "INERT-I16"
         ]
-      },
-      "pending": "SREP 73 is a draft; no engine implements flock/@orientToVelocity yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0073-default-no-finding": {
       "rule": "SREP 73",
@@ -41452,8 +41368,7 @@
         "absent": [
           "INERT-I16"
         ]
-      },
-      "pending": "SREP 73 is a draft; no engine implements flock/@orientToVelocity yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0074-implicit-camera": {
       "rule": "SREP 74",
@@ -41462,8 +41377,7 @@
         "cy": 150,
         "w": 40,
         "h": 20
-      },
-      "pending": "SREP 74 is a draft; no engine implements viewport3D yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0074-main-camera-does-not-reach": {
       "rule": "SREP 74",
@@ -41472,8 +41386,7 @@
         "cy": 150,
         "w": 40,
         "h": 20
-      },
-      "pending": "SREP 74 is a draft; no engine implements viewport3D yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0074-own-camera": {
       "rule": "SREP 74",
@@ -41482,8 +41395,7 @@
         "cy": 150,
         "w": 40,
         "h": 20
-      },
-      "pending": "SREP 74 is a draft; no engine implements viewport3D yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0074-viewport-camera-stays-inside": {
       "rule": "SREP 74",
@@ -41492,8 +41404,7 @@
         "cy": 300,
         "w": 40,
         "h": 20
-      },
-      "pending": "SREP 74 is a draft; no engine implements viewport3D yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0074-clipped": {
       "rule": "SREP 74",
@@ -41502,8 +41413,7 @@
         "cy": 150,
         "w": 50,
         "h": 20
-      },
-      "pending": "SREP 74 is a draft; no engine implements viewport3D yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0074-version-gate": {
       "rule": "SREP 74",
@@ -41512,8 +41422,7 @@
         "codes": [
           "V15"
         ]
-      },
-      "pending": "SREP 74 is a draft; no engine implements viewport3D yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0074-camera-must-be-inside": {
       "rule": "SREP 74",
@@ -41522,8 +41431,7 @@
         "codes": [
           "VP1"
         ]
-      },
-      "pending": "SREP 74 is a draft; no engine implements viewport3D yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0075-mandelbrot-zoom-6": {
       "rule": "SREP 75 (escape counts at zoom 6: (40,30):223, (600,30):None, (320,180):1005, (40,330):275, (600,330):1308, (160,90):486, (480,270):None, (100,200):307, (520,120):None; the centre has 33 digits: valid, but a validator that limits xs:decimal to fewer digits, such as libxml2 before 2.13.0 (24 digits), refuses the document; such a validator is not the oracle for this case)",
@@ -41645,8 +41553,7 @@
             0
           ]
         }
-      ],
-      "pending": "SREP 75 is a draft; no engine implements the fractal asset yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0075-mandelbrot-zoom-12": {
       "rule": "SREP 75 (escape counts at zoom 12: (40,30):2054, (600,30):1986, (320,180):4047, (40,330):1985, (600,330):2221, (160,90):2052, (480,270):2064, (100,200):1972, (520,120):2086; the centre has 33 digits: valid, but a validator that limits xs:decimal to fewer digits, such as libxml2 before 2.13.0 (24 digits), refuses the document; such a validator is not the oracle for this case)",
@@ -41768,8 +41675,7 @@
             0
           ]
         }
-      ],
-      "pending": "SREP 75 is a draft; no engine implements the fractal asset yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0075-mandelbrot-zoom-20": {
       "rule": "SREP 75 (escape counts at zoom 20: (40,30):8510, (600,30):9061, (320,180):10056, (40,330):9059, (600,330):8485, (160,90):9943, (480,270):9760, (100,200):10082, (520,120):9228; the centre has 33 digits: valid, but a validator that limits xs:decimal to fewer digits, such as libxml2 before 2.13.0 (24 digits), refuses the document; such a validator is not the oracle for this case)",
@@ -41891,8 +41797,7 @@
             0
           ]
         }
-      ],
-      "pending": "SREP 75 is a draft; no engine implements the fractal asset yet. The entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0075-version-gate": {
       "rule": "SREP 75",
@@ -41901,15 +41806,13 @@
         "codes": [
           "V16"
         ]
-      },
-      "pending": "SREP 75 is a draft; no engine implements the fractal asset yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0075-long-decimals-valid": {
       "rule": "SREP 75 Semantics 1 (an engine reads the four decimal attributes at any length: 33-digit centre, 40-digit juliaX and juliaY; valid, no finding)",
       "findings": {
         "valid": true
-      },
-      "pending": "SREP 75 is a draft; no engine implements the fractal asset yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0075-julia-needs-c": {
       "rule": "SREP 75",
@@ -41918,8 +41821,7 @@
         "codes": [
           "FRC1"
         ]
-      },
-      "pending": "SREP 75 is a draft; no engine implements the fractal asset yet. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0076-bh1-version": {
       "rule": "SREP 76 BH1",
@@ -42060,7 +41962,8 @@
         "codes": [
           "W11"
         ]
-      }
+      },
+      "pending": "the Rust reference implements the warning numbers W11 and W12 (c2a66950) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) reports W03"
     },
     "srep-0076-valid-w12-denoise": {
       "rule": "SREP 76",
@@ -42070,7 +41973,8 @@
         "codes": [
           "W12"
         ]
-      }
+      },
+      "pending": "the Rust reference implements the warning numbers W11 and W12 (c2a66950) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) reports W04"
     },
     "srep-0076-valid-w05-lights": {
       "rule": "SREP 76",
@@ -42087,14 +41991,16 @@
       "source": "engine corpus tests/corpus/valid/black-hole.scene.xml at 4bf7a9e, scene/@version 1.4",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements BH1 for version 1.3 or later (c2a66950) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) refuses the document with BH1"
     },
     "srep-0076-valid-black-hole-version-1.5": {
       "rule": "SREP 76 BH1 (amendment)",
       "source": "engine corpus tests/corpus/valid/black-hole.scene.xml at 4bf7a9e, scene/@version 1.5",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements BH1 for version 1.3 or later (c2a66950) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) refuses the document with BH1"
     },
     "srep-0076-bh1-version-1.0": {
       "rule": "SREP 76 BH1",
@@ -42124,7 +42030,8 @@
         "codes": [
           "BH5"
         ]
-      }
+      },
+      "pending": "the Rust reference implements the boolean forms of geodesics (298bddd6) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) does not report BH5"
     },
     "srep-0076-bh6-geodesics-1-other-object": {
       "rule": "SREP 76 BH6 (boolean forms)",
@@ -42134,7 +42041,8 @@
         "codes": [
           "BH6"
         ]
-      }
+      },
+      "pending": "the Rust reference implements the boolean forms of geodesics (298bddd6) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) does not report BH6"
     },
     "srep-0076-bh7-geodesics-1-inside-photon-sphere": {
       "rule": "SREP 76 BH7 (boolean forms)",
@@ -42144,7 +42052,8 @@
         "codes": [
           "BH7"
         ]
-      }
+      },
+      "pending": "the Rust reference implements the boolean forms of geodesics (298bddd6) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) does not report BH7"
     },
     "srep-0076-bh8-geodesics-1-and-true": {
       "rule": "SREP 76 BH8 (boolean forms)",
@@ -42154,7 +42063,8 @@
         "codes": [
           "BH8"
         ]
-      }
+      },
+      "pending": "the Rust reference implements the boolean forms of geodesics (298bddd6) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) does not report BH8"
     },
     "srep-0076-valid-black-hole-geodesics-1": {
       "rule": "SREP 76 (boolean forms)",
@@ -42341,14 +42251,16 @@
         "codes": [
           "CRT12"
         ]
-      }
+      },
+      "pending": "the Rust reference implements the boolean forms of mantle (f91dbfcc) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) does not report CRT12"
     },
     "srep-0077-valid-crater-mantle-1-bulking": {
       "rule": "SREP 77 (boolean forms)",
       "source": "engine corpus tests/corpus/valid/crater-mantle-bulking.scene.xml at 4bf7a9e, the first mantle=\"true\" written mantle=\"1\"",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements the boolean forms of mantle (f91dbfcc) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) refuses the document with CRT11"
     },
     "srep-0078-pyc5-closed": {
       "rule": "SREP 78 PYC5",
@@ -43069,14 +42981,16 @@
       "source": "engine corpus tests/corpus/valid/voxels.scene.xml at 4bf7a9e, scene/@version 1.4",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements VOX1 for version 1.3 or later (c2a66950) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) refuses the document with VOX1"
     },
     "srep-0080-valid-voxels-version-1.5": {
       "rule": "SREP 80 VOX1 (amendment)",
       "source": "engine corpus tests/corpus/valid/voxels.scene.xml at 4bf7a9e, scene/@version 1.5",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements VOX1 for version 1.3 or later (c2a66950) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) refuses the document with VOX1"
     },
     "srep-0080-vox1-version-1.0": {
       "rule": "SREP 80 VOX1",
@@ -43147,8 +43061,7 @@
           ]
         ],
         "note": "no audio attribute: crossfade, a = 1 - p, b = p (Semantics 1, 2)"
-      },
-      "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0082-crossfade-explicit": {
       "rule": "SREP 82",
@@ -43185,8 +43098,7 @@
           ]
         ],
         "note": "audio=crossfade (Semantics 2)"
-      },
-      "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0082-equal-power": {
       "rule": "SREP 82",
@@ -43223,8 +43135,7 @@
           ]
         ],
         "note": "a = cos(pi p / 2), b = sin(pi p / 2) (Semantics 2)"
-      },
-      "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0082-cut": {
       "rule": "SREP 82",
@@ -43254,8 +43165,7 @@
           ]
         ],
         "note": "a while p < 1/2, b from p = 1/2; measured a frame or more from the step (Semantics 2, 5)"
-      },
-      "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0082-none": {
       "rule": "SREP 82",
@@ -43306,8 +43216,7 @@
           ]
         ],
         "note": "both sides at their own volume over the whole window, handles included (Semantics 2)"
-      },
-      "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0082-volume-multiplies": {
       "rule": "SREP 82",
@@ -43351,8 +43260,7 @@
           ]
         ],
         "note": "the gain multiplies the layer's own volume (Semantics 4)"
-      },
-      "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0082-cut-picture-crossfades-sound": {
       "rule": "SREP 82",
@@ -43389,8 +43297,7 @@
           ]
         ],
         "note": "type=cut with no audio attribute: the picture cuts, the sound crossfades (Semantics 1)"
-      },
-      "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0082-one-sided-group-out": {
       "rule": "SREP 82",
@@ -43430,8 +43337,7 @@
           ]
         ],
         "note": "the outgoing side is a group: the layer inside it fades with 1 - p (Semantics 3)"
-      },
-      "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0082-one-sided-layer-in": {
       "rule": "SREP 82",
@@ -43471,8 +43377,7 @@
           ]
         ],
         "note": "the incoming side alone fades in with p (Semantics 3)"
-      },
-      "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0082-sequence-junction": {
       "rule": "SREP 82",
@@ -43509,8 +43414,7 @@
           ]
         ],
         "note": "a sequence junction of a type other than cut crossfades its sound (Semantics 3)"
-      },
-      "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0082-sequence-cut-junction": {
       "rule": "SREP 82",
@@ -43554,22 +43458,23 @@
           ]
         ],
         "note": "a cut junction cuts its sound where its picture cuts (Semantics 3, 5)"
-      },
-      "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
+      }
     },
     "srep-0083-v8-version-1.4": {
       "rule": "SREP 83 V8",
       "source": "kit case srep-0040-pyro, scene/@version changed",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with V8"
     },
     "srep-0083-v8-version-1.5": {
       "rule": "SREP 83 V8",
       "source": "kit case srep-0040-pyro, scene/@version changed",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with V8"
     },
     "srep-0083-v8-rejected-version-1.2": {
       "rule": "SREP 83 V8",
@@ -43586,28 +43491,32 @@
       "source": "kit case srep-0040-msq1-rejected, scene/@version changed",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with MSQ1; it also reports A04, because the case (from srep-0040-msq1-rejected) names ../media/mesh-frame-%d.obj, which the kit does not carry, so the case needs that asset before it can pass on any engine"
     },
     "srep-0083-msq1-version-1.5": {
       "rule": "SREP 83 MSQ1",
       "source": "kit case srep-0040-msq1-rejected, scene/@version changed",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with MSQ1; it also reports A04, because the case (from srep-0040-msq1-rejected) names ../media/mesh-frame-%d.obj, which the kit does not carry, so the case needs that asset before it can pass on any engine"
     },
     "srep-0083-p3d1-version-1.4": {
       "rule": "SREP 83 P3D1",
       "source": "kit case srep-0040-particles3d, scene/@version changed",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with P3D1"
     },
     "srep-0083-p3d1-version-1.5": {
       "rule": "SREP 83 P3D1",
       "source": "kit case srep-0040-particles3d, scene/@version changed",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with P3D1"
     },
     "srep-0083-p3d1-rejected-version-1.2": {
       "rule": "SREP 83 P3D1",
@@ -43624,14 +43533,16 @@
       "source": "kit case srep-0040-ocean, scene/@version changed",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with OCN1"
     },
     "srep-0083-ocn1-version-1.5": {
       "rule": "SREP 83 OCN1",
       "source": "kit case srep-0040-ocean, scene/@version changed",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with OCN1"
     },
     "srep-0083-ocn1-rejected-version-1.2": {
       "rule": "SREP 83 OCN1",
@@ -43648,14 +43559,16 @@
       "source": "kit case srep-0040-crater, scene/@version changed",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with CRT1"
     },
     "srep-0083-crt1-version-1.5": {
       "rule": "SREP 83 CRT1",
       "source": "kit case srep-0040-crater, scene/@version changed",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with CRT1"
     },
     "srep-0083-crt1-rejected-version-1.2": {
       "rule": "SREP 83 CRT1",
@@ -43672,14 +43585,16 @@
       "source": "kit case srep-0040-fracture, scene/@version changed",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with FRX1"
     },
     "srep-0083-frx1-version-1.5": {
       "rule": "SREP 83 FRX1",
       "source": "kit case srep-0040-fracture, scene/@version changed",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with FRX1"
     },
     "srep-0083-frx1-rejected-version-1.2": {
       "rule": "SREP 83 FRX1",
@@ -43696,14 +43611,16 @@
       "source": "written by conformance/tools/srep83_cases.py",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with GEO1"
     },
     "srep-0083-geo1-version-1.5": {
       "rule": "SREP 83 GEO1",
       "source": "written by conformance/tools/srep83_cases.py",
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with GEO1"
     },
     "srep-0083-geo1-rejected-version-1.2": {
       "rule": "SREP 83 GEO1",
@@ -43730,7 +43647,8 @@
       ],
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with CRT1"
     },
     "srep-0083-srep77-fracture-contact-version-1.5": {
       "rule": "SREP 83 FRX1",
@@ -43740,7 +43658,8 @@
       ],
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with FRX1"
     },
     "srep-0083-srep77-ocean-density-version-1.5": {
       "rule": "SREP 83 OCN1",
@@ -43750,7 +43669,8 @@
       ],
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with OCN1"
     },
     "srep-0083-srep78-pyro-follow-version-1.5": {
       "rule": "SREP 83 V8",
@@ -43760,7 +43680,8 @@
       ],
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with V8"
     },
     "srep-0083-srep79-volume-scatter-bounces-version-1.5": {
       "rule": "SREP 83 V8",
@@ -43770,7 +43691,8 @@
       ],
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with V8"
     },
     "srep-0083-srep80-voxel-crater-version-1.5": {
       "rule": "SREP 83 CRT1",
@@ -43780,7 +43702,8 @@
       ],
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with CRT1 and VOX1"
     },
     "srep-0083-srep80-voxel-fracture-version-1.5": {
       "rule": "SREP 83 FRX1",
@@ -43790,7 +43713,8 @@
       ],
       "findings": {
         "valid": true
-      }
+      },
+      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with FRX1 and VOX1"
     }
   }
 }

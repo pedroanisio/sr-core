@@ -5,6 +5,7 @@ the plane z = 0 pixel for pixel) and 2.5 (object3D rotations), not from an engin
 Usage: python3 conformance/tools/srep70_cases.py; then python3 conformance/make_cases.py."""
 import json
 import os
+import kit_pending  # which cases are pending (SREP 0)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CONF = os.path.dirname(HERE)
@@ -60,6 +61,7 @@ def main():
         absent=["red"])
     add("surface-needs-child", doc('<object3D id="s" primitive="parametric" material="m-red"/>', materials=MATERIALS),
         findings={"valid": False, "codes": ["PAR2"]})
+    kit_pending.settle(cases, 70)
     json.dump(cases, open(os.path.join(CONF, "srep_cases", "srep-0070.json"), "w"), indent=1, ensure_ascii=False)
     print(f"wrote {len(cases)} cases")
 

@@ -11,6 +11,7 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import wasm_min as w  # noqa: E402
+import kit_pending  # which cases are pending (SREP 0)
 
 CONF = os.path.dirname(HERE)
 ASSETS = os.path.join(CONF, "srep_cases", "assets")
@@ -152,6 +153,7 @@ def main():
     add("program-over-names-data", doc('<repeat id="rep" over="p2" offsetX="320"><shape id="c" shape="rect" width="4" height="4" fill="#FF0000FF"/></repeat>\n'
                                        + prog("rect", mods).replace('id="p"', 'id="p2"')),
         {"findings": {"valid": False, "codes": ["PRG2"]}})
+    kit_pending.settle(cases, 66)
     json.dump(cases, open(os.path.join(CONF, "srep_cases", "srep-0066.json"), "w"), indent=1, ensure_ascii=False)
     print(f"wrote {len(cases)} cases, {len(mods)} modules; even seed {even}, odd seed {odd}")
 

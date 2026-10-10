@@ -8,8 +8,7 @@
     "cy": 150,
     "w": 40,
     "h": 20
-   },
-   "pending": "SREP 74 is a draft; no engine implements viewport3D yet. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0074-main-camera-does-not-reach": {
@@ -21,8 +20,7 @@
     "cy": 150,
     "w": 40,
     "h": 20
-   },
-   "pending": "SREP 74 is a draft; no engine implements viewport3D yet. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0074-own-camera": {
@@ -34,8 +32,7 @@
     "cy": 150,
     "w": 40,
     "h": 20
-   },
-   "pending": "SREP 74 is a draft; no engine implements viewport3D yet. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0074-viewport-camera-stays-inside": {
@@ -47,8 +44,7 @@
     "cy": 300,
     "w": 40,
     "h": 20
-   },
-   "pending": "SREP 74 is a draft; no engine implements viewport3D yet. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0074-clipped": {
@@ -60,8 +56,7 @@
     "cy": 150,
     "w": 50,
     "h": 20
-   },
-   "pending": "SREP 74 is a draft; no engine implements viewport3D yet. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0074-version-gate": {
@@ -73,8 +68,7 @@
     "codes": [
      "V15"
     ]
-   },
-   "pending": "SREP 74 is a draft; no engine implements viewport3D yet. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0074-camera-must-be-inside": {
@@ -86,8 +80,7 @@
     "codes": [
      "VP1"
     ]
-   },
-   "pending": "SREP 74 is a draft; no engine implements viewport3D yet. The entry keeps the values derived from the SREP"
+   }
   }
  }
 }

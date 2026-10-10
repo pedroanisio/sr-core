@@ -6,6 +6,7 @@ Usage: python3 conformance/tools/srep74_cases.py; then python3 conformance/make_
 import json
 import math
 import os
+import kit_pending  # which cases are pending (SREP 0)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CONF = os.path.dirname(HERE)
@@ -54,6 +55,7 @@ def main():
     add("version-gate", doc(vp(plane(100, 50)), version="1.5"), findings={"valid": False, "codes": ["V15"]})
     add("camera-must-be-inside", doc('<camera id="c" x="0" y="0" z="-100"/>\n' + vp(plane(100, 50), ' camera="c"')),
         findings={"valid": False, "codes": ["VP1"]})
+    kit_pending.settle(cases, 74)
     json.dump(cases, open(os.path.join(CONF, "srep_cases", "srep-0074.json"), "w"), indent=1, ensure_ascii=False)
     print(f"wrote {len(cases)} cases")
 

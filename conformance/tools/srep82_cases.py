@@ -16,6 +16,7 @@ import math
 import os
 import subprocess
 import sys
+import kit_pending  # which cases are pending (SREP 0)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CONF = os.path.dirname(HERE)
@@ -123,6 +124,7 @@ def main():
         '<layer id="a" asset="ta" end="1"/>\n<layer id="b" asset="tb" end="1" clipIn="1"/>\n</sequence>',
         [[0.6, {"a": 1, "b": 0}], [0.9, {"a": 1, "b": 0}], [1.1, {"a": 0, "b": 1}], [1.4, {"a": 0, "b": 1}]],
         "a cut junction cuts its sound where its picture cuts (Semantics 3, 5)")
+    kit_pending.settle(cases, 82)
     json.dump(cases, open(os.path.join(CONF, "srep_cases", "srep-0082.json"), "w"), indent=1, ensure_ascii=False)
     print(f"wrote {len(cases)} cases")
 

@@ -121,8 +121,7 @@
       0
      ]
     }
-   ],
-   "pending": "SREP 75 is a draft; no engine implements the fractal asset yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0075-mandelbrot-zoom-12": {
@@ -247,8 +246,7 @@
       0
      ]
     }
-   ],
-   "pending": "SREP 75 is a draft; no engine implements the fractal asset yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0075-mandelbrot-zoom-20": {
@@ -373,8 +371,7 @@
       0
      ]
     }
-   ],
-   "pending": "SREP 75 is a draft; no engine implements the fractal asset yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0075-version-gate": {
@@ -386,8 +383,7 @@
     "codes": [
      "V16"
     ]
-   },
-   "pending": "SREP 75 is a draft; no engine implements the fractal asset yet. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0075-long-decimals-valid": {
@@ -396,8 +392,7 @@
    "rule": "SREP 75 Semantics 1 (an engine reads the four decimal attributes at any length: 33-digit centre, 40-digit juliaX and juliaY; valid, no finding)",
    "findings": {
     "valid": true
-   },
-   "pending": "SREP 75 is a draft; no engine implements the fractal asset yet. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0075-julia-needs-c": {
@@ -409,8 +404,7 @@
     "codes": [
      "FRC1"
     ]
-   },
-   "pending": "SREP 75 is a draft; no engine implements the fractal asset yet. The entry keeps the values derived from the SREP"
+   }
   }
  }
 }

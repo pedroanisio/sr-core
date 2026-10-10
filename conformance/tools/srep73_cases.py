@@ -9,6 +9,7 @@ import json
 import os
 import struct
 import zlib
+import kit_pending  # which cases are pending (SREP 0)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CONF = os.path.dirname(HERE)
@@ -50,6 +51,7 @@ def main():
         findings={"valid": True, "codes": ["INERT-I16"]})
     add("default-no-finding", doc(f.format(shape="sprite", attr="")),
         findings={"valid": True, "absent": ["INERT-I16"]})
+    kit_pending.settle(cases, 73)
     json.dump(cases, open(os.path.join(CONF, "srep_cases", "srep-0073.json"), "w"), indent=1, ensure_ascii=False)
     print(f"wrote {len(cases)} cases")
 

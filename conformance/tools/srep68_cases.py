@@ -6,6 +6,7 @@ of SREP 68, Semantics 1: prewarm + s(f) * stepsPerFrame, s(f) the frames from f0
 Usage: python3 conformance/tools/srep68_cases.py; then python3 conformance/make_cases.py."""
 import json
 import os
+import kit_pending  # which cases are pending (SREP 0)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CONF = os.path.dirname(HERE)
@@ -76,6 +77,7 @@ def main():
     cases["srep-0068-not-a-stateful-effect"] = {
         "xml": doc(1, ' stepsPerFrame="2"', effect_type="blur"),
         "expected": {"rule": "SREP 68", "findings": {"valid": False, "codes": ["STP1"]}, "pending": PENDING}}
+    kit_pending.settle(cases, 68)
     json.dump(cases, open(os.path.join(CONF, "srep_cases", "srep-0068.json"), "w"), indent=1, ensure_ascii=False)
     print(f"wrote {len(cases)} cases")
 

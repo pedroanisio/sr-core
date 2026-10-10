@@ -12,6 +12,7 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import wasm_min as w  # noqa: E402
+import kit_pending  # which cases are pending (SREP 0)
 
 CONF = os.path.dirname(HERE)
 PENDING = "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
@@ -113,6 +114,7 @@ def main():
         findings={"valid": False, "codes": ["PRG3"]})
     add("build-mode-no-steps", doc(mods, "counter", ' stepsPerFrame="2"').replace(' mode="step"', ""),
         findings={"valid": False, "codes": ["STP1"]})
+    kit_pending.settle(cases, 69)
     json.dump(cases, open(os.path.join(CONF, "srep_cases", "srep-0069.json"), "w"), indent=1, ensure_ascii=False)
     print(f"wrote {len(cases)} cases; odd seed {seeds[1]}, even seed {seeds[0]}")
 

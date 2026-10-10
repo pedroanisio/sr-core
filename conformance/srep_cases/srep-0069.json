@@ -11,8 +11,7 @@
    },
    "absent": [
     "blue"
-   ],
-   "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0069-step-frame-0-short": {
@@ -27,8 +26,7 @@
    },
    "absent": [
     "red"
-   ],
-   "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0069-step-per-frame": {
@@ -43,8 +41,7 @@
    },
    "absent": [
     "blue"
-   ],
-   "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0069-step-per-frame-short": {
@@ -59,8 +56,7 @@
    },
    "absent": [
     "red"
-   ],
-   "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0069-step-prewarm": {
@@ -75,8 +71,7 @@
    },
    "absent": [
     "blue"
-   ],
-   "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0069-step-seek": {
@@ -95,8 +90,7 @@
    },
    "absent": [
     "blue"
-   ],
-   "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0069-step-seek-short": {
@@ -115,8 +109,7 @@
    },
    "absent": [
     "red"
-   ],
-   "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0069-step-rng-odd": {
@@ -135,8 +128,7 @@
    },
    "absent": [
     "blue"
-   ],
-   "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0069-step-rng-even": {
@@ -155,8 +147,7 @@
    },
    "absent": [
     "red"
-   ],
-   "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0069-step-missing-export": {
@@ -166,7 +157,7 @@
    "failure": {
     "code": "PRG11"
    },
-   "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG11, checked by hand on 2026-10-10"
   }
  },
  "srep-0069-step-needs-size": {
@@ -178,8 +169,7 @@
     "codes": [
      "PRG3"
     ]
-   },
-   "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0069-build-mode-no-steps": {
@@ -191,8 +181,7 @@
     "codes": [
      "STP1"
     ]
-   },
-   "pending": "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
+   }
   }
  }
 }

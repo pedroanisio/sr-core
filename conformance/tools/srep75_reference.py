@@ -7,6 +7,7 @@ Usage: python3 conformance/tools/srep75_reference.py; then python3 conformance/m
 import json
 import os
 from decimal import Decimal, localcontext
+import kit_pending  # which cases are pending (SREP 0)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CONF = os.path.dirname(HERE)
@@ -88,6 +89,7 @@ def main():
                      "findings": {"valid": True}, "pending": PENDING}}
     cases["srep-0075-julia-needs-c"] = {"xml": doc(6, 100).replace('kind="mandelbrot"', 'kind="julia"'),
                                         "expected": {"rule": "SREP 75", "findings": {"valid": False, "codes": ["FRC1"]}, "pending": PENDING}}
+    kit_pending.settle(cases, 75)
     json.dump(cases, open(os.path.join(CONF, "srep_cases", "srep-0075.json"), "w"), indent=1, ensure_ascii=False)
     print(f"wrote {len(cases)} cases")
 

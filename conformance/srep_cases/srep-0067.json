@@ -43,8 +43,7 @@
       88.5
      ]
     }
-   ],
-   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0067-compute-order": {
@@ -91,8 +90,7 @@
       88.5
      ]
     }
-   ],
-   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0067-compute-reference": {
@@ -139,8 +137,7 @@
       80.4
      ]
     }
-   ],
-   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0067-compute-gain-gamma": {
@@ -187,8 +184,7 @@
       58.9
      ]
     }
-   ],
-   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0067-compute-linear": {
@@ -235,8 +231,7 @@
       2.6
      ]
     }
-   ],
-   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0067-compute-empty-pixel": {
@@ -257,8 +252,7 @@
       0.0
      ]
     }
-   ],
-   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0067-compute-colour": {
@@ -292,8 +286,7 @@
       255.0
      ]
     }
-   ],
-   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0067-compute-version-gate": {
@@ -305,8 +298,7 @@
     "codes": [
      "V13"
     ]
-   },
-   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0067-iterate-steps": {
@@ -321,8 +313,7 @@
    },
    "absent": [
     "blue"
-   ],
-   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0067-iterate-steps-short": {
@@ -337,8 +328,7 @@
    },
    "absent": [
     "red"
-   ],
-   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0067-iterate-check-every": {
@@ -350,8 +340,7 @@
     "codes": [
      "ITR1"
     ]
-   },
-   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0067-error-diffusion-floyd-steinberg": {
@@ -424,8 +413,7 @@
       0.0
      ]
     }
-   ],
-   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0067-error-diffusion-atkinson": {
@@ -498,8 +486,7 @@
       255.0
      ]
     }
-   ],
-   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0067-segmented-sort-ascending": {
@@ -533,8 +520,7 @@
       255.0
      ]
     }
-   ],
-   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0067-segmented-sort-descending": {
@@ -568,8 +554,7 @@
       0.0
      ]
     }
-   ],
-   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0067-segmented-sort-threshold": {
@@ -603,8 +588,7 @@
       0.0
      ]
     }
-   ],
-   "pending": "SREP 67 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
+   ]
   }
  }
 }

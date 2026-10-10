@@ -8,8 +8,7 @@
     "cy": 120,
     "w": 40,
     "h": 20
-   },
-   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0066-program-group-transform": {
@@ -21,8 +20,7 @@
     "cy": 160,
     "w": 40,
     "h": 20
-   },
-   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0066-program-seed-even": {
@@ -37,8 +35,7 @@
    },
    "absent": [
     "blue"
-   ],
-   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0066-program-seed-odd": {
@@ -53,8 +50,7 @@
    },
    "absent": [
     "red"
-   ],
-   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0066-program-param": {
@@ -69,8 +65,7 @@
    },
    "absent": [
     "blue"
-   ],
-   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0066-program-param-default": {
@@ -85,8 +80,7 @@
    },
    "absent": [
     "red"
-   ],
-   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0066-program-nan-canonical": {
@@ -101,8 +95,7 @@
    },
    "absent": [
     "blue"
-   ],
-   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0066-program-memory-limit": {
@@ -117,8 +110,7 @@
    },
    "absent": [
     "blue"
-   ],
-   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0066-program-memory-limit-raised": {
@@ -133,8 +125,7 @@
    },
    "absent": [
     "red"
-   ],
-   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0066-program-data-rows": {
@@ -146,8 +137,7 @@
     "cy": 180,
     "w": 360,
     "h": 20
-   },
-   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0066-program-fuel": {
@@ -157,7 +147,7 @@
    "failure": {
     "code": "PRG12"
    },
-   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG12, checked by hand on 2026-10-10"
   }
  },
  "srep-0066-program-import-forbidden": {
@@ -167,7 +157,7 @@
    "failure": {
     "code": "PRG11"
    },
-   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG11, checked by hand on 2026-10-10"
   }
  },
  "srep-0066-program-threads-forbidden": {
@@ -177,7 +167,7 @@
    "failure": {
     "code": "PRG11"
    },
-   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG11, checked by hand on 2026-10-10"
   }
  },
  "srep-0066-program-relaxed-simd-forbidden": {
@@ -187,7 +177,7 @@
    "failure": {
     "code": "PRG11"
    },
-   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG11, checked by hand on 2026-10-10"
   }
  },
  "srep-0066-program-output-invalid": {
@@ -197,7 +187,7 @@
    "failure": {
     "code": "PRG14"
    },
-   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG14, checked by hand on 2026-10-10"
   }
  },
  "srep-0066-program-id-collision": {
@@ -207,7 +197,7 @@
    "failure": {
     "code": "PRG14"
    },
-   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG14, checked by hand on 2026-10-10"
   }
  },
  "srep-0066-program-sha256-mismatch": {
@@ -217,7 +207,7 @@
    "failure": {
     "code": "PRG10"
    },
-   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG10, checked by hand on 2026-10-10"
   }
  },
  "srep-0066-program-output-sha256": {
@@ -229,8 +219,7 @@
     "cy": 120,
     "w": 40,
     "h": 20
-   },
-   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0066-program-output-sha256-mismatch": {
@@ -240,7 +229,7 @@
    "failure": {
     "code": "PRG15"
    },
-   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
+   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG15, checked by hand on 2026-10-10"
   }
  },
  "srep-0066-program-version-gate": {
@@ -252,8 +241,7 @@
     "codes": [
      "V12"
     ]
-   },
-   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0066-program-param-unique": {
@@ -265,8 +253,7 @@
     "codes": [
      "PRG1"
     ]
-   },
-   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0066-program-over-names-data": {
@@ -278,8 +265,7 @@
     "codes": [
      "PRG2"
     ]
-   },
-   "pending": "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
+   }
   }
  }
 }

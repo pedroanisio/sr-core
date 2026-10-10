@@ -7,6 +7,7 @@ Usage: python3 conformance/tools/srep71_cases.py; then python3 conformance/make_
 import json
 import math
 import os
+import kit_pending  # which cases are pending (SREP 0)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CONF = os.path.dirname(HERE)
@@ -99,6 +100,7 @@ def main():
     add("subsurface-wraps-terminator", doc(ball, lights=lit, materials=sss.format(w=1)),
         note="the region just past the shadow terminator is brighter than with subsurface=0 (Semantics 1, item 3)",
         pending=PENDING + "; the check is a comparison with another render, which run.py cannot express yet")
+    kit_pending.settle(cases, 71)
     json.dump(cases, open(os.path.join(CONF, "srep_cases", "srep-0071.json"), "w"), indent=1, ensure_ascii=False)
     print(f"wrote {len(cases)} cases")
     for k in ("srep-0071-sky-gradient", "srep-0071-sky-horizon", "srep-0071-sky-sun", "srep-0071-sky-sun-azimuth"):

@@ -7,6 +7,7 @@ Usage: python3 conformance/tools/srep72_cases.py; then python3 conformance/make_
 import json
 import math
 import os
+import kit_pending  # which cases are pending (SREP 0)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CONF = os.path.dirname(HERE)
@@ -99,6 +100,7 @@ def main():
         cols = range(96, 104)
         add(f"supersample-{kernel}", doc(step, f' supersample="2" supersampleFilter="{kernel}"'),
             regions=[{"box": [i, 110, i + 1, 140], "rgb": [round(enc(down(2, 100, i, kernel)), 1)] * 3} for i in cols])
+    kit_pending.settle(cases, 72)
     json.dump(cases, open(os.path.join(CONF, "srep_cases", "srep-0072.json"), "w"), indent=1, ensure_ascii=False)
     print(f"wrote {len(cases)} cases")
     for k in ("srep-0072-supersample-lanczos3", "srep-0072-edge-blend-linear"):

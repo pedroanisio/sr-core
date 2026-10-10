@@ -226,7 +226,8 @@
     "codes": [
      "CRT12"
     ]
-   }
+   },
+   "pending": "the Rust reference implements the boolean forms of mantle (f91dbfcc) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) does not report CRT12"
   }
  },
  "srep-0077-valid-crater-mantle-1-bulking": {
@@ -236,7 +237,8 @@
    "source": "engine corpus tests/corpus/valid/crater-mantle-bulking.scene.xml at 4bf7a9e, the first mantle=\"true\" written mantle=\"1\"",
    "findings": {
     "valid": true
-   }
+   },
+   "pending": "the Rust reference implements the boolean forms of mantle (f91dbfcc) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) refuses the document with CRT11"
   }
  }
 }

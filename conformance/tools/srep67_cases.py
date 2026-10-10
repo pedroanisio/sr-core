@@ -7,6 +7,7 @@ Usage: python3 conformance/tools/srep67_cases.py; then python3 conformance/make_
 import json
 import math
 import os
+import kit_pending  # which cases are pending (SREP 0)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CONF = os.path.dirname(HERE)
@@ -174,6 +175,7 @@ def main():
     add("segmented-sort-threshold",
         doc(strip, extra='<effects><effect id="ps" type="segmented-sort" direction="horizontal" low="0" high="0.5"/></effects>\n'),
         {"regions": [{"box": [100, 100, 132, 108], "rgb": [255.0] * 3}, {"box": [132, 100, 164, 108], "rgb": [0.0] * 3}]})
+    kit_pending.settle(cases, 67)
     json.dump(cases, open(os.path.join(CONF, "srep_cases", "srep-0067.json"), "w"), indent=1, ensure_ascii=False)
     print(f"wrote {len(cases)} cases")
     for k, v in cases.items():

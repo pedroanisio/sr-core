@@ -50,8 +50,7 @@
      ]
     ],
     "note": "no audio attribute: crossfade, a = 1 - p, b = p (Semantics 1, 2)"
-   },
-   "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0082-crossfade-explicit": {
@@ -91,8 +90,7 @@
      ]
     ],
     "note": "audio=crossfade (Semantics 2)"
-   },
-   "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0082-equal-power": {
@@ -132,8 +130,7 @@
      ]
     ],
     "note": "a = cos(pi p / 2), b = sin(pi p / 2) (Semantics 2)"
-   },
-   "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0082-cut": {
@@ -166,8 +163,7 @@
      ]
     ],
     "note": "a while p < 1/2, b from p = 1/2; measured a frame or more from the step (Semantics 2, 5)"
-   },
-   "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0082-none": {
@@ -221,8 +217,7 @@
      ]
     ],
     "note": "both sides at their own volume over the whole window, handles included (Semantics 2)"
-   },
-   "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0082-volume-multiplies": {
@@ -269,8 +264,7 @@
      ]
     ],
     "note": "the gain multiplies the layer's own volume (Semantics 4)"
-   },
-   "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0082-cut-picture-crossfades-sound": {
@@ -310,8 +304,7 @@
      ]
     ],
     "note": "type=cut with no audio attribute: the picture cuts, the sound crossfades (Semantics 1)"
-   },
-   "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0082-one-sided-group-out": {
@@ -354,8 +347,7 @@
      ]
     ],
     "note": "the outgoing side is a group: the layer inside it fades with 1 - p (Semantics 3)"
-   },
-   "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0082-one-sided-layer-in": {
@@ -398,8 +390,7 @@
      ]
     ],
     "note": "the incoming side alone fades in with p (Semantics 3)"
-   },
-   "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0082-sequence-junction": {
@@ -439,8 +430,7 @@
      ]
     ],
     "note": "a sequence junction of a type other than cut crossfades its sound (Semantics 3)"
-   },
-   "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0082-sequence-cut-junction": {
@@ -487,8 +477,7 @@
      ]
     ],
     "note": "a cut junction cuts its sound where its picture cuts (Semantics 3, 5)"
-   },
-   "pending": "SREP 82 is a draft; the Rust reference implements it on branch fix/transition-audio (61a85ebf), not yet on main. The entry keeps the values derived from the SREP"
+   }
   }
  }
 }
