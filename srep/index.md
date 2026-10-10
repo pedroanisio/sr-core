@@ -68,3 +68,9 @@
 | [63](srep-0063.md) | Add conditions to capability manifest entries | Standards | Accepted | capabilities 1 |
 | [64](srep-0064.md) | Define rounded corners by the circle, not the steps | Semantics | Accepted | 1.5 |
 | [65](srep-0065.md) | Amend SREPs 18 and 20: report text overflow by what it loses | Standards | Accepted | 1.5 |
+| [76](srep-0076.md) | Add a Schwarzschild black hole and a geodesic camera | Standards | Draft | 1.6 |
+| [77](srep-0077.md) | Add impact ejecta ground, fracture sources, water density | Standards | Draft | 1.6 |
+| [78](srep-0078.md) | Let a pyro window follow its plume, and add blasts | Standards | Draft | 1.6 |
+| [79](srep-0079.md) | Add multiple scattering in media and foam albedo | Standards | Draft | 1.6 |
+| [80](srep-0080.md) | Add voxel assets and breakable objects of cells | Standards | Draft | 1.6 |
+| [81](srep-0081.md) | Clarify SREP 40 annotations (documentation only) | Standards | Draft | 1.6 |
