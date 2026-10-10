@@ -87,7 +87,7 @@ def main():
     plane = '<object3D id="o" primitive="plane" width="100" height="100" x="320" y="180" material="m"/>'
     add("map-generator", doc(plane, assets=gen, materials=mat.format(ref="#g")), green={"cx": 320, "cy": 180, "w": 100, "h": 100})
     add("map-not-an-image-source", doc(plane, assets=gen, materials=mat.format(ref="#m")),
-        findings={"valid": False, "codes": ["MTX1"]})
+        findings={"valid": False, "codes": ["MTX1-baseColorMap"]})
     # subsurface: weight 0 is the neutral case; no pixel values are stated for the scattering itself
     sss = ('<materials><material id="m" baseColor="#B0B0B0FF" roughness="0.5" subsurface="{w}" subsurfaceColor="#E0F0D0FF" '
            'subsurfaceRadius="20"/></materials>\n')

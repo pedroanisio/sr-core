@@ -165,7 +165,7 @@
    "findings": {
     "valid": false,
     "codes": [
-     "MTX1"
+     "MTX1-baseColorMap"
     ]
    },
    "pending": "SREP 71 is a draft; no engine implements it yet. The entry keeps the values derived from the SREP"
