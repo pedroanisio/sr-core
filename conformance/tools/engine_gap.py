@@ -17,6 +17,11 @@ byte for byte.
   # offline: apply the diff blocks of SREPs 76 to 81 in order to the 1.5.0 files and compare the hashes
   python3 conformance/tools/engine_gap.py verify
 
+A ```diff block of an SREP is the measured patch: the engine's text at the measured commit, which `verify` rebuilds byte
+for byte. A ```diff amendment block is a later change the SREP makes to its own text (for example the engine's text on
+a later branch). Amendments are not part of the measurement: `verify` ignores them, and `proposed_schema` applies them
+after every measured block, each hunk where its removed and context lines occur exactly once.
+
 An item is one declaration: in the XSD a named type, group or attribute group, an element or attribute declaration,
 an enumeration value, or a documentation block; in the Schematron a pattern, rule, assert, report or let. Its key is
 the path of named items that contain it, e.g. complexType[fractureType]/attribute[source]. An item is "added" when
@@ -585,16 +590,62 @@ def measure(args) -> dict:
 
 
 # ------------------------------------------------------------------------------------------------------ the SREP side
-def srep_patches(numbers=None) -> list[tuple[int, str]]:
-    """The ```diff blocks of the SREPs, in SREP order."""
+def srep_patches(numbers=None, fence: str = "diff") -> list[tuple[int, str]]:
+    """The ```diff blocks of the SREPs (or, with fence="diff amendment", their amendment blocks), in SREP order."""
     out = []
     for n in (numbers if numbers is not None else [f[1] for f in FEATURES]):
         path = os.path.join(ROOT, "srep", f"srep-{n:04d}.md")
         if not os.path.exists(path):
             continue
-        for block in re.findall(r"^```diff\n(.*?)^```", open(path, encoding="utf-8").read(), re.S | re.M):
+        for block in re.findall(rf"^```{re.escape(fence)}\n(.*?)^```", open(path, encoding="utf-8").read(),
+                                re.S | re.M):
             out.append((n, block))
     return out
+
+
+def srep_amendments(numbers=None) -> list[tuple[int, str]]:
+    """The ```diff amendment blocks of the SREPs, in SREP order."""
+    return srep_patches(numbers, fence="diff amendment")
+
+
+def apply_amendment(files: dict[str, list[str]], patch: str) -> None:
+    """Apply a unified diff by content: each hunk's removed and context lines must occur exactly once in the file,
+    wherever the earlier blocks have put them (the line numbers of its hunk headers are not used)."""
+    lines = patch.split("\n")
+    if lines and lines[-1] == "":
+        lines.pop()
+    i, path = 0, None
+    while i < len(lines):
+        line = lines[i]
+        if line.startswith("--- "):
+            i += 1
+            continue
+        if line.startswith("+++ "):
+            path = line[4:].strip()
+            path = path[2:] if path.startswith("b/") else path
+            i += 1
+            continue
+        if not line.startswith("@@"):
+            raise ValueError(f"unexpected patch line: {line[:80]}")
+        i += 1
+        old, new = [], []
+        while i < len(lines) and not lines[i].startswith(("@@", "--- ")):
+            t = lines[i]
+            if t.startswith(" ") or t == "":
+                old.append(t[1:])
+                new.append(t[1:])
+            elif t.startswith("-"):
+                old.append(t[1:])
+            elif t.startswith("+"):
+                new.append(t[1:])
+            elif not t.startswith("\\"):
+                raise ValueError(f"unexpected hunk line: {t[:80]}")
+            i += 1
+        text = files[path]
+        at = [k for k in range(len(text) - len(old) + 1) if text[k:k + len(old)] == old]
+        if len(at) != 1:
+            raise ValueError(f"{path}: an amendment hunk matches {len(at)} places, not one")
+        text[at[0]:at[0] + len(old)] = new
 
 
 def apply_patch(files: dict[str, list[str]], patch: str) -> None:
@@ -687,8 +738,9 @@ def verify(gap_path: str = DEFAULT_OUT) -> list[str]:
     return problems
 
 
-def proposed_schema(upto: int | None = None) -> dict[str, bytes]:
-    """The 1.5.0 files with the diff blocks of SREPs 76.. applied (all of them, or those up to SREP `upto`)."""
+def proposed_schema(upto: int | None = None, amendments: bool = True) -> dict[str, bytes]:
+    """The 1.5.0 files with the diff blocks of SREPs 76.. applied (all of them, or those up to SREP `upto`), then their
+    amendment blocks (unless amendments=False, which gives the measured engine text)."""
     base = baseline()
     if base is None:
         raise RuntimeError("the 1.5.0 schema files are not available")
@@ -696,6 +748,10 @@ def proposed_schema(upto: int | None = None) -> dict[str, bytes]:
     for n, block in srep_patches():
         if upto is None or n <= upto:
             apply_patch(files, block)
+    if amendments:
+        for n, block in srep_amendments():
+            if upto is None or n <= upto:
+                apply_amendment(files, block)
     return {p: "\n".join(v).encode() for p, v in files.items()}
 
 

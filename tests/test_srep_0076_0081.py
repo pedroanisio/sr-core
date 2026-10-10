@@ -93,3 +93,50 @@ def test_kit_case_verdict(name):
 def test_existing_cases_keep_their_verdict(case):
     xml = open(case, "rb").read()
     assert verdict(PROPOSED, xml) == verdict(BASE, xml)
+
+
+# SREP 76's amendment: BH5 to BH8 keep to the camera's scope, the viewport3D (SREP 74) it is in, else the document.
+# The documents are the engine's corpus at feat/srep-74-viewport3d 2f79b14c (tests/corpus/invalid/<name>.scene.xml);
+# viewport3D is not in this branch's XSD (SREP 74 is a draft on srep/drafts-2026-10), so only the Schematron is
+# run, and V15 (SREP 74's version gate, which the engine's manifest also lists) is not part of it.
+VP_HEAD = ('<scene version="1.3"><project width="64" height="64" fps="24" duration="2"/><composition>'
+           '<shape id="sky" shape="rect" x="0" y="0" width="64" height="64" fill="#000000"/>'
+           '<camera id="eye" x="0" y="0" z="-60" geodesics="true"/><viewport3D id="v" width="16" height="16">')
+VP_TAIL = ('</viewport3D><blackHole id="hole" mass="1" x="0" y="0" z="0"/>'
+           '<accretionDisk id="disk" blackHole="hole" outerRadius="20" temperatureScale="6000"/></composition></scene>')
+VIEWPORT_CASES = {  # name: (inside the viewport, rules with the amendment, rules of the measured 4bf7a9e text)
+    "bh6-viewport-objects-isolated": ('<object3D id="ball" primitive="sphere" radius="1"/><particles3D id="dust" rate="1"/>',
+                                      [], ["BH6"]),
+    "bh5-viewport-camera-sees-no-hole": ('<camera id="eye2" x="0" y="0" z="-80" geodesics="true"/>',
+                                         ["BH5"], ["BH8"]),
+    "bh6-viewport-camera-sees-its-objects": ('<camera id="eye2" x="0" y="0" z="-80" geodesics="true"/>'
+                                             '<object3D id="ball" primitive="sphere" radius="1"/>',
+                                             ["BH5", "BH6"], ["BH6", "BH8"]),
+    "bh8-per-viewport": ('<camera id="eye2" x="0" y="0" z="-80" geodesics="true"/>'
+                         '<camera id="eye3" x="0" y="0" z="-90" geodesics="true"/>', ["BH5", "BH8"], ["BH8"]),
+}
+MEASURED = gap.proposed_schema(amendments=False)
+
+
+def schematron_rules(files, xml):
+    sch = isoschematron.Schematron(etree.fromstring(files["schema/scene-render.sch"]), store_report=True)
+    sch.validate(etree.fromstring(xml.encode()))
+    return sorted(set(sch.validation_report.xpath("//svrl:failed-assert/@id", namespaces=SVRL)))
+
+
+def test_the_amendment_is_separate_from_the_measured_patch():
+    assert gap.srep_amendments([76]), "SREP 76 has its amendment block"
+    proposed = gap.proposed_schema()["schema/scene-render.sch"].decode()
+    measured = MEASURED["schema/scene-render.sch"].decode()
+    assert 'name="scope" value="generate-id(ancestor::viewport3D[1])"' in proposed
+    assert "viewport3D" not in measured
+    # the measured text is what verify() compares with the engine's 4bf7a9e files
+    assert gap.sha256(MEASURED["schema/scene-render.sch"]) == GAP["files"]["schema/scene-render.sch"]["engine_sha256"]
+
+
+@pytest.mark.parametrize("name", sorted(VIEWPORT_CASES))
+def test_black_hole_rules_keep_to_the_camera_scope(name):
+    inside, amended, measured = VIEWPORT_CASES[name]
+    xml = VP_HEAD + inside + VP_TAIL
+    assert schematron_rules(gap.proposed_schema(), xml) == amended
+    assert schematron_rules(MEASURED, xml) == measured
