@@ -74,3 +74,4 @@
 | [79](srep-0079.md) | Add multiple scattering in media and foam albedo | Standards | Draft | 1.6 |
 | [80](srep-0080.md) | Add voxel assets and breakable objects of cells | Standards | Draft | 1.6 |
 | [81](srep-0081.md) | Clarify SREP 40 annotations (documentation only) | Standards | Draft | 1.6 |
+| [83](srep-0083.md) | Amend SREP 40: version gates of the 1.3 extensions admit later versions | Standards | Draft | 1.6 |

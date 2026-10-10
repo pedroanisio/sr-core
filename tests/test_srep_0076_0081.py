@@ -89,8 +89,9 @@ def test_kit_case_verdict(name):
 
 
 @pytest.mark.parametrize("case", sorted(p for p in glob.glob(os.path.join(ROOT, "conformance", "cases", "*.xml"))
-                                        if not re.search(r"srep-00(7[6-9]|8[01])-", p)), ids=os.path.basename)
+                                        if not re.search(r"srep-00(7[6-9]|8[013])-", p)), ids=os.path.basename)
 def test_existing_cases_keep_their_verdict(case):
+    # (SREP 83's cases, a draft stacked on these, use their syntax at versions the gates refuse; its own test checks them)
     xml = open(case, "rb").read()
     assert verdict(PROPOSED, xml) == verdict(BASE, xml)
 

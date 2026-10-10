@@ -40803,6 +40803,241 @@
           "VOX1"
         ]
       }
+    },
+    "srep-0083-v8-version-1.4": {
+      "rule": "SREP 83 V8",
+      "source": "kit case srep-0040-pyro, scene/@version changed",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0083-v8-version-1.5": {
+      "rule": "SREP 83 V8",
+      "source": "kit case srep-0040-pyro, scene/@version changed",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0083-v8-rejected-version-1.2": {
+      "rule": "SREP 83 V8",
+      "source": "kit case srep-0040-pyro, scene/@version changed",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "V8"
+        ]
+      }
+    },
+    "srep-0083-msq1-version-1.4": {
+      "rule": "SREP 83 MSQ1",
+      "source": "kit case srep-0040-msq1-rejected, scene/@version changed",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0083-msq1-version-1.5": {
+      "rule": "SREP 83 MSQ1",
+      "source": "kit case srep-0040-msq1-rejected, scene/@version changed",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0083-p3d1-version-1.4": {
+      "rule": "SREP 83 P3D1",
+      "source": "kit case srep-0040-particles3d, scene/@version changed",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0083-p3d1-version-1.5": {
+      "rule": "SREP 83 P3D1",
+      "source": "kit case srep-0040-particles3d, scene/@version changed",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0083-p3d1-rejected-version-1.2": {
+      "rule": "SREP 83 P3D1",
+      "source": "kit case srep-0040-particles3d, scene/@version changed",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "P3D1"
+        ]
+      }
+    },
+    "srep-0083-ocn1-version-1.4": {
+      "rule": "SREP 83 OCN1",
+      "source": "kit case srep-0040-ocean, scene/@version changed",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0083-ocn1-version-1.5": {
+      "rule": "SREP 83 OCN1",
+      "source": "kit case srep-0040-ocean, scene/@version changed",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0083-ocn1-rejected-version-1.2": {
+      "rule": "SREP 83 OCN1",
+      "source": "kit case srep-0040-ocean, scene/@version changed",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "OCN1"
+        ]
+      }
+    },
+    "srep-0083-crt1-version-1.4": {
+      "rule": "SREP 83 CRT1",
+      "source": "kit case srep-0040-crater, scene/@version changed",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0083-crt1-version-1.5": {
+      "rule": "SREP 83 CRT1",
+      "source": "kit case srep-0040-crater, scene/@version changed",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0083-crt1-rejected-version-1.2": {
+      "rule": "SREP 83 CRT1",
+      "source": "kit case srep-0040-crater, scene/@version changed",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "CRT1"
+        ]
+      }
+    },
+    "srep-0083-frx1-version-1.4": {
+      "rule": "SREP 83 FRX1",
+      "source": "kit case srep-0040-fracture, scene/@version changed",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0083-frx1-version-1.5": {
+      "rule": "SREP 83 FRX1",
+      "source": "kit case srep-0040-fracture, scene/@version changed",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0083-frx1-rejected-version-1.2": {
+      "rule": "SREP 83 FRX1",
+      "source": "kit case srep-0040-fracture, scene/@version changed",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "FRX1"
+        ]
+      }
+    },
+    "srep-0083-geo1-version-1.4": {
+      "rule": "SREP 83 GEO1",
+      "source": "written by conformance/tools/srep83_cases.py",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0083-geo1-version-1.5": {
+      "rule": "SREP 83 GEO1",
+      "source": "written by conformance/tools/srep83_cases.py",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0083-geo1-rejected-version-1.2": {
+      "rule": "SREP 83 GEO1",
+      "source": "written by conformance/tools/srep83_cases.py",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "GEO1"
+        ]
+      }
+    },
+    "srep-0083-geo1-version-1.3": {
+      "rule": "SREP 83 GEO1",
+      "source": "written by conformance/tools/srep83_cases.py",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0083-srep77-crater-mantle-version-1.5": {
+      "rule": "SREP 83 CRT1",
+      "source": "kit case srep-0077-valid-crater-mantle, scene/@version changed",
+      "requires": [
+        77
+      ],
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0083-srep77-fracture-contact-version-1.5": {
+      "rule": "SREP 83 FRX1",
+      "source": "kit case srep-0077-valid-fracture-contact, scene/@version changed",
+      "requires": [
+        77
+      ],
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0083-srep77-ocean-density-version-1.5": {
+      "rule": "SREP 83 OCN1",
+      "source": "kit case srep-0077-valid-ocean-density, scene/@version changed",
+      "requires": [
+        77
+      ],
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0083-srep78-pyro-follow-version-1.5": {
+      "rule": "SREP 83 V8",
+      "source": "kit case srep-0078-valid-pyro-follow, scene/@version changed",
+      "requires": [
+        78
+      ],
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0083-srep79-volume-scatter-bounces-version-1.5": {
+      "rule": "SREP 83 V8",
+      "source": "kit case srep-0079-valid-volume-scatter-bounces, scene/@version changed",
+      "requires": [
+        79
+      ],
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0083-srep80-voxel-crater-version-1.5": {
+      "rule": "SREP 83 CRT1",
+      "source": "kit case srep-0080-valid-voxel-crater, scene/@version changed",
+      "requires": [
+        80
+      ],
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0083-srep80-voxel-fracture-version-1.5": {
+      "rule": "SREP 83 FRX1",
+      "source": "kit case srep-0080-valid-voxel-fracture, scene/@version changed",
+      "requires": [
+        80
+      ],
+      "findings": {
+        "valid": true
+      }
     }
   }
 }
