@@ -167,3 +167,17 @@ def test_bh1_and_vox1_refuse_only_the_versions_before_1_3(version, refused):
     assert verdict(PROPOSED, cells) == ("sch:VOX1" if refused else "ok")
     # the measured text refuses every version but 1.3
     assert schematron_rules(MEASURED, hole) == ([] if version == "1.3" else ["BH1"])
+
+
+# The boolean amendments of SREPs 76 and 77: BH5 to BH8 and CRT11, CRT12 read "1" (and padded forms) as true, as the
+# engine's model does (prep/srep-76-81-followups 298bddd6, f91dbfcc); the measured text tests only the literal 'true'.
+@pytest.mark.parametrize("form,on", [("true", True), ("1", True), (" true ", True), ("false", False), ("0", False)])
+def test_geodesics_and_mantle_are_read_in_every_boolean_form(form, on):
+    proposed = gap.proposed_schema()
+    camera = '<camera id="eye" x="0" y="0" z="-60" geodesics="true"/>'
+    no_hole = VP_HEAD.split("<viewport3D")[0].replace('geodesics="true"', f'geodesics="{form}"') + "</composition></scene>"
+    assert camera.replace("true", form) in no_hole
+    assert schematron_rules(proposed, no_hole) == (["BH5"] if on else [])
+    assert schematron_rules(MEASURED, no_hole) == (["BH5"] if form == "true" else [])
+    crater = CASES["srep-0077-crt12-repose-with-mantle"][1]["xml"].replace('mantle="true"', f'mantle="{form}"')
+    assert schematron_rules(proposed, crater) == (["CRT12"] if on else [])

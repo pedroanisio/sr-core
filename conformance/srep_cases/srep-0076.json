@@ -256,5 +256,77 @@
     ]
    }
   }
+ },
+ "srep-0076-bh5-geodesics-1-without-hole": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\" geodesics=\"1\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76 BH5 (boolean forms)",
+   "source": "engine corpus tests/corpus/invalid/bh5-geodesics-without-hole.scene.xml at 4bf7a9e, the first geodesics=\"true\" written geodesics=\"1\"",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "BH5"
+    ]
+   }
+  }
+ },
+ "srep-0076-bh6-geodesics-1-other-object": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\" geodesics=\"1\"/><object3D id=\"ball\" primitive=\"sphere\" radius=\"1\"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/><accretionDisk id=\"disk\" blackHole=\"hole\" outerRadius=\"20\" temperatureScale=\"6000\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76 BH6 (boolean forms)",
+   "source": "engine corpus tests/corpus/invalid/bh6-other-object.scene.xml at 4bf7a9e, the first geodesics=\"true\" written geodesics=\"1\"",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "BH6"
+    ]
+   }
+  }
+ },
+ "srep-0076-bh7-geodesics-1-inside-photon-sphere": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-2.5\" geodesics=\"1\"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/><accretionDisk id=\"disk\" blackHole=\"hole\" outerRadius=\"20\" temperatureScale=\"6000\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76 BH7 (boolean forms)",
+   "source": "engine corpus tests/corpus/invalid/bh7-inside-photon-sphere.scene.xml at 4bf7a9e, the first geodesics=\"true\" written geodesics=\"1\"",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "BH7"
+    ]
+   }
+  }
+ },
+ "srep-0076-bh8-geodesics-1-and-true": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\" geodesics=\"1\"/><camera id=\"eye2\" x=\"0\" y=\"0\" z=\"-80\" geodesics=\"true\"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/><accretionDisk id=\"disk\" blackHole=\"hole\" outerRadius=\"20\" temperatureScale=\"6000\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76 BH8 (boolean forms)",
+   "source": "engine corpus tests/corpus/invalid/bh8-two-cameras.scene.xml at 4bf7a9e, the first geodesics=\"true\" written geodesics=\"1\"",
+   "findings": {
+    "valid": false,
+    "codes": [
+     "BH8"
+    ]
+   }
+  }
+ },
+ "srep-0076-valid-black-hole-geodesics-1": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\" geodesics=\"1\"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/><accretionDisk id=\"disk\" blackHole=\"hole\" outerRadius=\"20\" temperatureScale=\"6000\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76 (boolean forms)",
+   "source": "engine corpus tests/corpus/valid/black-hole.scene.xml at 4bf7a9e, the first geodesics=\"true\" written geodesics=\"1\"",
+   "findings": {
+    "valid": true
+   }
+  }
+ },
+ "srep-0076-valid-black-hole-geodesics-padded": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.3\"><project width=\"64\" height=\"64\" fps=\"24\" duration=\"2\"/><composition><shape id=\"sky\" shape=\"rect\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" fill=\"#000000\"/><camera id=\"eye\" x=\"0\" y=\"0\" z=\"-60\" geodesics=\" true \"/><blackHole id=\"hole\" mass=\"1\" x=\"0\" y=\"0\" z=\"0\"/><accretionDisk id=\"disk\" blackHole=\"hole\" outerRadius=\"20\" temperatureScale=\"6000\"/></composition></scene>\n",
+  "expected": {
+   "rule": "SREP 76 (boolean forms)",
+   "source": "engine corpus tests/corpus/valid/black-hole.scene.xml at 4bf7a9e, the first geodesics=\"true\" written geodesics=\" true \"",
+   "findings": {
+    "valid": true
+   }
+  }
  }
 }

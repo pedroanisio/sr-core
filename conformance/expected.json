@@ -39822,6 +39822,60 @@
         ]
       }
     },
+    "srep-0076-bh5-geodesics-1-without-hole": {
+      "rule": "SREP 76 BH5 (boolean forms)",
+      "source": "engine corpus tests/corpus/invalid/bh5-geodesics-without-hole.scene.xml at 4bf7a9e, the first geodesics=\"true\" written geodesics=\"1\"",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "BH5"
+        ]
+      }
+    },
+    "srep-0076-bh6-geodesics-1-other-object": {
+      "rule": "SREP 76 BH6 (boolean forms)",
+      "source": "engine corpus tests/corpus/invalid/bh6-other-object.scene.xml at 4bf7a9e, the first geodesics=\"true\" written geodesics=\"1\"",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "BH6"
+        ]
+      }
+    },
+    "srep-0076-bh7-geodesics-1-inside-photon-sphere": {
+      "rule": "SREP 76 BH7 (boolean forms)",
+      "source": "engine corpus tests/corpus/invalid/bh7-inside-photon-sphere.scene.xml at 4bf7a9e, the first geodesics=\"true\" written geodesics=\"1\"",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "BH7"
+        ]
+      }
+    },
+    "srep-0076-bh8-geodesics-1-and-true": {
+      "rule": "SREP 76 BH8 (boolean forms)",
+      "source": "engine corpus tests/corpus/invalid/bh8-two-cameras.scene.xml at 4bf7a9e, the first geodesics=\"true\" written geodesics=\"1\"",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "BH8"
+        ]
+      }
+    },
+    "srep-0076-valid-black-hole-geodesics-1": {
+      "rule": "SREP 76 (boolean forms)",
+      "source": "engine corpus tests/corpus/valid/black-hole.scene.xml at 4bf7a9e, the first geodesics=\"true\" written geodesics=\"1\"",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0076-valid-black-hole-geodesics-padded": {
+      "rule": "SREP 76 (boolean forms)",
+      "source": "engine corpus tests/corpus/valid/black-hole.scene.xml at 4bf7a9e, the first geodesics=\"true\" written geodesics=\" true \"",
+      "findings": {
+        "valid": true
+      }
+    },
     "srep-0077-crt10-bulking-without-source": {
       "rule": "SREP 77 CRT10 CRT11",
       "source": "engine corpus tests/corpus/invalid/crt10-bulking-without-source.scene.xml at 4bf7a9e",
@@ -39981,6 +40035,23 @@
     "srep-0077-valid-ocean-density": {
       "rule": "SREP 77",
       "source": "engine corpus tests/corpus/valid/ocean-density.scene.xml (valid) at 4bf7a9e",
+      "findings": {
+        "valid": true
+      }
+    },
+    "srep-0077-crt12-repose-with-mantle-1": {
+      "rule": "SREP 77 CRT12 (boolean forms)",
+      "source": "engine corpus tests/corpus/invalid/crt12-repose-with-mantle.scene.xml at 4bf7a9e, the first mantle=\"true\" written mantle=\"1\"",
+      "findings": {
+        "valid": false,
+        "codes": [
+          "CRT12"
+        ]
+      }
+    },
+    "srep-0077-valid-crater-mantle-1-bulking": {
+      "rule": "SREP 77 (boolean forms)",
+      "source": "engine corpus tests/corpus/valid/crater-mantle-bulking.scene.xml at 4bf7a9e, the first mantle=\"true\" written mantle=\"1\"",
       "findings": {
         "valid": true
       }

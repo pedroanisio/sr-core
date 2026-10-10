@@ -45,6 +45,19 @@ SCHEMATRON_CODE = re.compile(r"^(BH|VOX|CRT|FRX|PYRO|PYC|OCN|P3D)\d+$")
 # has no version 1.6, so no case uses it; the engine's corpus has black-hole-version-1.6 and voxels-version-1.6.
 LATER = {76: ("black-hole", "BH1"), 80: ("voxels", "VOX1")}
 LATER_VERSIONS = {"1.4": True, "1.5": True, "1.0": False, "1.1": False}
+# The boolean amendments of SREPs 76 and 77: camera/@geodesics and crater/@mantle are xs:boolean, true as "true" or
+# "1" (whitespace collapsed); the rules read every form. These cases are corpus documents whose first such attribute
+# is written in another form: (corpus file, attribute as written, the other form, case stem).
+FORMS = {
+    76: [("invalid/bh5-geodesics-without-hole", 'geodesics="true"', 'geodesics="1"', "bh5-geodesics-1-without-hole"),
+         ("invalid/bh6-other-object", 'geodesics="true"', 'geodesics="1"', "bh6-geodesics-1-other-object"),
+         ("invalid/bh7-inside-photon-sphere", 'geodesics="true"', 'geodesics="1"', "bh7-geodesics-1-inside-photon-sphere"),
+         ("invalid/bh8-two-cameras", 'geodesics="true"', 'geodesics="1"', "bh8-geodesics-1-and-true"),
+         ("valid/black-hole", 'geodesics="true"', 'geodesics="1"', "black-hole-geodesics-1"),
+         ("valid/black-hole", 'geodesics="true"', 'geodesics=" true "', "black-hole-geodesics-padded")],
+    77: [("invalid/crt12-repose-with-mantle", 'mantle="true"', 'mantle="1"', "crt12-repose-with-mantle-1"),
+         ("valid/crater-mantle-bulking", 'mantle="true"', 'mantle="1"', "crater-mantle-1-bulking")],
+}
 
 
 def show(repo, ref, path, binary=False):
@@ -111,6 +124,20 @@ def main():
                     cases[f"srep-{srep:04d}-{gate.lower()}-version-{version}"] = {"xml": text, "expected": {
                         "rule": f"SREP {srep} {gate}", "source": source,
                         "findings": {"valid": False, "codes": [gate]}}}
+        for path, written, other, stem in FORMS.get(srep, []):
+            kind, f = path.split("/")
+            text = convert(show(repo, ref, f"tests/corpus/{path}.scene.xml"), srep)
+            assert written in text, path
+            text = text.replace(written, other, 1)
+            source = f"engine corpus tests/corpus/{path}.scene.xml at {commit}, the first {written} written {other}"
+            if kind == "valid":
+                cases[f"srep-{srep:04d}-valid-{stem}"] = {"xml": text, "expected": {
+                    "rule": f"SREP {srep} (boolean forms)", "source": source, "findings": {"valid": True}}}
+            else:
+                codes = [c for c in manifest["invalid"][f"{f}.scene.xml"] if SCHEMATRON_CODE.match(c)]
+                cases[f"srep-{srep:04d}-{stem}"] = {"xml": text, "expected": {
+                    "rule": f"SREP {srep} " + " ".join(codes) + " (boolean forms)", "source": source,
+                    "findings": {"valid": False, "codes": codes}}}
         with open(os.path.join(CONF, "srep_cases", f"srep-{srep:04d}.json"), "w") as fh:
             json.dump(cases, fh, indent=1, ensure_ascii=False)
             fh.write("\n")
