@@ -49,10 +49,10 @@ def test_xsd_documentation_is_the_text_srep_89_gives():
 
 
 def test_header_and_index():
-    assert re.search(r"^Status:\s+Accepted$", SREP, re.M)
+    assert re.search(r"^Status:\s+Final$", SREP, re.M)    # Final with schema 1.6.0: its kit passes on the reference
     assert re.search(r"^Requires:\s+72$", SREP, re.M)
     index = open(os.path.join(ROOT, "srep", "index.md"), encoding="utf-8").read()
-    assert "| [89](srep-0089.md) | Amend SREP 72: the supersample clamp keeps values above 1 | Semantics | Accepted | 1.6 |" in index
+    assert "| [89](srep-0089.md) | Amend SREP 72: the supersample clamp keeps values above 1 | Semantics | Final | 1.6 |" in index
     srep72 = open(os.path.join(ROOT, "srep", "srep-0072.md"), encoding="utf-8").read()
     assert re.search(r"^- 2026-10-10: SREP 89, .*amends Semantics 4, \"Edges and range\"", srep72, re.M)
 
