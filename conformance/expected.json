@@ -39743,49 +39743,49 @@
       "failure": {
         "code": "PRG12"
       },
-      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG12, checked by hand on 2026-10-10"
+      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG12 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
     },
     "srep-0066-program-import-forbidden": {
       "rule": "SREP 66",
       "failure": {
         "code": "PRG11"
       },
-      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG11, checked by hand on 2026-10-10"
+      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG11 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
     },
     "srep-0066-program-threads-forbidden": {
       "rule": "SREP 66",
       "failure": {
         "code": "PRG11"
       },
-      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG11, checked by hand on 2026-10-10"
+      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG11 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
     },
     "srep-0066-program-relaxed-simd-forbidden": {
       "rule": "SREP 66",
       "failure": {
         "code": "PRG11"
       },
-      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG11, checked by hand on 2026-10-10"
+      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG11 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
     },
     "srep-0066-program-output-invalid": {
       "rule": "SREP 66",
       "failure": {
         "code": "PRG14"
       },
-      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG14, checked by hand on 2026-10-10"
+      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG14 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
     },
     "srep-0066-program-id-collision": {
       "rule": "SREP 66",
       "failure": {
         "code": "PRG14"
       },
-      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG14, checked by hand on 2026-10-10"
+      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG14 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
     },
     "srep-0066-program-sha256-mismatch": {
       "rule": "SREP 66",
       "failure": {
         "code": "PRG10"
       },
-      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG10, checked by hand on 2026-10-10"
+      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG10 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
     },
     "srep-0066-program-output-sha256": {
       "rule": "SREP 66",
@@ -39801,7 +39801,7 @@
       "failure": {
         "code": "PRG15"
       },
-      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG15, checked by hand on 2026-10-10"
+      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG15 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
     },
     "srep-0066-program-version-gate": {
       "rule": "SREP 66",
@@ -40712,7 +40712,7 @@
       "failure": {
         "code": "PRG11"
       },
-      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG11, checked by hand on 2026-10-10"
+      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG11 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
     },
     "srep-0069-step-needs-size": {
       "rule": "SREP 69",
@@ -41002,11 +41002,11 @@
     },
     "srep-0071-subsurface-zero-neutral": {
       "rule": "SREP 71 (renders the same as the scene without the subsurface attributes)",
-      "pending": "the check is a comparison with another render, which run.py cannot express yet; not checked on the Rust reference"
+      "pending": "the check is a comparison with another render, which run.py cannot express yet; checked by hand on the Rust reference (release/0.4.0 at 6e0e4f71, 2026-10-11): with subsurface=\"0\" the render is pixel-identical to the scene without the subsurface attributes"
     },
     "srep-0071-subsurface-wraps-terminator": {
       "rule": "SREP 71 (the region just past the shadow terminator is brighter than with subsurface=0 (Semantics 1, item 3))",
-      "pending": "the check is a comparison with another render, which run.py cannot express yet; not checked on the Rust reference"
+      "pending": "the check is a comparison with another render, which run.py cannot express yet; checked by hand on the Rust reference (release/0.4.0 at 6e0e4f71, 2026-10-11): with subsurface=\"1\", 20574 pixels are brighter than with \"0\" and none darker, and the lit span on row 180 reaches column 400 instead of 364"
     },
     "srep-0072-precision-f32": {
       "rule": "SREP 72",
@@ -41028,7 +41028,7 @@
           "PREC1"
         ]
       },
-      "pending": "the Rust reference (main 82ad2091 and b7eb4edc) reports E23 for this document, not the information finding PREC1 that SREP 72 requires"
+      "pending": "the Rust reference (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71) reports E23 for this document, not the information finding PREC1 that SREP 72 requires; it has no PREC1 code"
     },
     "srep-0072-content-rect-stripe": {
       "rule": "SREP 72",
@@ -41960,8 +41960,7 @@
         "codes": [
           "W11"
         ]
-      },
-      "pending": "the Rust reference implements the warning numbers W11 and W12 (c2a66950) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) reports W03"
+      }
     },
     "srep-0076-valid-w12-denoise": {
       "rule": "SREP 76",
@@ -41971,8 +41970,7 @@
         "codes": [
           "W12"
         ]
-      },
-      "pending": "the Rust reference implements the warning numbers W11 and W12 (c2a66950) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) reports W04"
+      }
     },
     "srep-0076-valid-w05-lights": {
       "rule": "SREP 76",
@@ -41989,16 +41987,14 @@
       "source": "engine corpus tests/corpus/valid/black-hole.scene.xml at 4bf7a9e, scene/@version 1.4",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements BH1 for version 1.3 or later (c2a66950) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) refuses the document with BH1"
+      }
     },
     "srep-0076-valid-black-hole-version-1.5": {
       "rule": "SREP 76 BH1 (amendment)",
       "source": "engine corpus tests/corpus/valid/black-hole.scene.xml at 4bf7a9e, scene/@version 1.5",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements BH1 for version 1.3 or later (c2a66950) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) refuses the document with BH1"
+      }
     },
     "srep-0076-bh1-version-1.0": {
       "rule": "SREP 76 BH1",
@@ -42028,8 +42024,7 @@
         "codes": [
           "BH5"
         ]
-      },
-      "pending": "the Rust reference implements the boolean forms of geodesics (298bddd6) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) does not report BH5"
+      }
     },
     "srep-0076-bh6-geodesics-1-other-object": {
       "rule": "SREP 76 BH6 (boolean forms)",
@@ -42039,8 +42034,7 @@
         "codes": [
           "BH6"
         ]
-      },
-      "pending": "the Rust reference implements the boolean forms of geodesics (298bddd6) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) does not report BH6"
+      }
     },
     "srep-0076-bh7-geodesics-1-inside-photon-sphere": {
       "rule": "SREP 76 BH7 (boolean forms)",
@@ -42050,8 +42044,7 @@
         "codes": [
           "BH7"
         ]
-      },
-      "pending": "the Rust reference implements the boolean forms of geodesics (298bddd6) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) does not report BH7"
+      }
     },
     "srep-0076-bh8-geodesics-1-and-true": {
       "rule": "SREP 76 BH8 (boolean forms)",
@@ -42061,8 +42054,7 @@
         "codes": [
           "BH8"
         ]
-      },
-      "pending": "the Rust reference implements the boolean forms of geodesics (298bddd6) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) does not report BH8"
+      }
     },
     "srep-0076-valid-black-hole-geodesics-1": {
       "rule": "SREP 76 (boolean forms)",
@@ -42249,16 +42241,14 @@
         "codes": [
           "CRT12"
         ]
-      },
-      "pending": "the Rust reference implements the boolean forms of mantle (f91dbfcc) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) does not report CRT12"
+      }
     },
     "srep-0077-valid-crater-mantle-1-bulking": {
       "rule": "SREP 77 (boolean forms)",
       "source": "engine corpus tests/corpus/valid/crater-mantle-bulking.scene.xml at 4bf7a9e, the first mantle=\"true\" written mantle=\"1\"",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements the boolean forms of mantle (f91dbfcc) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) refuses the document with CRT11"
+      }
     },
     "srep-0078-pyc5-closed": {
       "rule": "SREP 78 PYC5",
@@ -42979,16 +42969,14 @@
       "source": "engine corpus tests/corpus/valid/voxels.scene.xml at 4bf7a9e, scene/@version 1.4",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements VOX1 for version 1.3 or later (c2a66950) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) refuses the document with VOX1"
+      }
     },
     "srep-0080-valid-voxels-version-1.5": {
       "rule": "SREP 80 VOX1 (amendment)",
       "source": "engine corpus tests/corpus/valid/voxels.scene.xml at 4bf7a9e, scene/@version 1.5",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements VOX1 for version 1.3 or later (c2a66950) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) refuses the document with VOX1"
+      }
     },
     "srep-0080-vox1-version-1.0": {
       "rule": "SREP 80 VOX1",
@@ -43463,16 +43451,14 @@
       "source": "kit case srep-0040-pyro, scene/@version changed",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with V8"
+      }
     },
     "srep-0083-v8-version-1.5": {
       "rule": "SREP 83 V8",
       "source": "kit case srep-0040-pyro, scene/@version changed",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with V8"
+      }
     },
     "srep-0083-v8-rejected-version-1.2": {
       "rule": "SREP 83 V8",
@@ -43489,32 +43475,28 @@
       "source": "kit case srep-0040-msq1-rejected, scene/@version changed, and its mesh frames are kit assets",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with MSQ1"
+      }
     },
     "srep-0083-msq1-version-1.5": {
       "rule": "SREP 83 MSQ1",
       "source": "kit case srep-0040-msq1-rejected, scene/@version changed, and its mesh frames are kit assets",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with MSQ1"
+      }
     },
     "srep-0083-p3d1-version-1.4": {
       "rule": "SREP 83 P3D1",
       "source": "kit case srep-0040-particles3d, scene/@version changed",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with P3D1"
+      }
     },
     "srep-0083-p3d1-version-1.5": {
       "rule": "SREP 83 P3D1",
       "source": "kit case srep-0040-particles3d, scene/@version changed",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with P3D1"
+      }
     },
     "srep-0083-p3d1-rejected-version-1.2": {
       "rule": "SREP 83 P3D1",
@@ -43531,16 +43513,14 @@
       "source": "kit case srep-0040-ocean, scene/@version changed",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with OCN1"
+      }
     },
     "srep-0083-ocn1-version-1.5": {
       "rule": "SREP 83 OCN1",
       "source": "kit case srep-0040-ocean, scene/@version changed",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with OCN1"
+      }
     },
     "srep-0083-ocn1-rejected-version-1.2": {
       "rule": "SREP 83 OCN1",
@@ -43557,16 +43537,14 @@
       "source": "kit case srep-0040-crater, scene/@version changed",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with CRT1"
+      }
     },
     "srep-0083-crt1-version-1.5": {
       "rule": "SREP 83 CRT1",
       "source": "kit case srep-0040-crater, scene/@version changed",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with CRT1"
+      }
     },
     "srep-0083-crt1-rejected-version-1.2": {
       "rule": "SREP 83 CRT1",
@@ -43583,16 +43561,14 @@
       "source": "kit case srep-0040-fracture, scene/@version changed",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with FRX1"
+      }
     },
     "srep-0083-frx1-version-1.5": {
       "rule": "SREP 83 FRX1",
       "source": "kit case srep-0040-fracture, scene/@version changed",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with FRX1"
+      }
     },
     "srep-0083-frx1-rejected-version-1.2": {
       "rule": "SREP 83 FRX1",
@@ -43609,16 +43585,14 @@
       "source": "written by conformance/tools/srep83_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with GEO1"
+      }
     },
     "srep-0083-geo1-version-1.5": {
       "rule": "SREP 83 GEO1",
       "source": "written by conformance/tools/srep83_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with GEO1"
+      }
     },
     "srep-0083-geo1-rejected-version-1.2": {
       "rule": "SREP 83 GEO1",
@@ -43645,8 +43619,7 @@
       ],
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with CRT1"
+      }
     },
     "srep-0083-srep77-fracture-contact-version-1.5": {
       "rule": "SREP 83 FRX1",
@@ -43656,8 +43629,7 @@
       ],
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with FRX1"
+      }
     },
     "srep-0083-srep77-ocean-density-version-1.5": {
       "rule": "SREP 83 OCN1",
@@ -43667,8 +43639,7 @@
       ],
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with OCN1"
+      }
     },
     "srep-0083-srep78-pyro-follow-version-1.5": {
       "rule": "SREP 83 V8",
@@ -43678,8 +43649,7 @@
       ],
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with V8"
+      }
     },
     "srep-0083-srep79-volume-scatter-bounces-version-1.5": {
       "rule": "SREP 83 V8",
@@ -43689,8 +43659,7 @@
       ],
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with V8"
+      }
     },
     "srep-0083-srep80-voxel-crater-version-1.5": {
       "rule": "SREP 83 CRT1",
@@ -43700,8 +43669,7 @@
       ],
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with CRT1 and VOX1"
+      }
     },
     "srep-0083-srep80-voxel-fracture-version-1.5": {
       "rule": "SREP 83 FRX1",
@@ -43711,24 +43679,21 @@
       ],
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with FRX1 and VOX1"
+      }
     },
     "srep-0084-c15-reverse-0": {
       "rule": "SREP 84 C15",
       "source": "written by conformance/tools/srep84_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with C15"
+      }
     },
     "srep-0084-c15-reverse-padded-false": {
       "rule": "SREP 84 C15",
       "source": "written by conformance/tools/srep84_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with C15"
+      }
     },
     "srep-0084-c15-reverse-1": {
       "rule": "SREP 84 C15",
@@ -43745,24 +43710,21 @@
       "source": "written by conformance/tools/srep84_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with C15"
+      }
     },
     "srep-0084-c15-loop-plus-0": {
       "rule": "SREP 84 C15",
       "source": "written by conformance/tools/srep84_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with C15"
+      }
     },
     "srep-0084-c15-loop-padded-0": {
       "rule": "SREP 84 C15",
       "source": "written by conformance/tools/srep84_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with C15"
+      }
     },
     "srep-0084-c15-loop-plus-2": {
       "rule": "SREP 84 C15",
@@ -43782,8 +43744,7 @@
         "codes": [
           "C43"
         ]
-      },
-      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report C43; its encoder then refuses the output (H264 cannot carry alpha)"
+      }
     },
     "srep-0084-c43-alpha-padded-true": {
       "rule": "SREP 84 C43",
@@ -43793,8 +43754,7 @@
         "codes": [
           "C43"
         ]
-      },
-      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report C43; its encoder then refuses the output (H264 cannot carry alpha)"
+      }
     },
     "srep-0084-c43-alpha-0": {
       "rule": "SREP 84 C43",
@@ -43810,8 +43770,7 @@
         "absent": [
           "R15"
         ]
-      },
-      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) reports R15"
+      }
     },
     "srep-0084-r15-has-audio-padded-1": {
       "rule": "SREP 84 R15",
@@ -43820,8 +43779,7 @@
         "absent": [
           "R15"
         ]
-      },
-      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) reports R15"
+      }
     },
     "srep-0084-r15-has-audio-0": {
       "rule": "SREP 84 R15",
@@ -43841,8 +43799,7 @@
         "codes": [
           "R48-from"
         ]
-      },
-      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report R48-from"
+      }
     },
     "srep-0084-r48-from-threed-padded-true": {
       "rule": "SREP 84 R48-from",
@@ -43852,8 +43809,7 @@
         "codes": [
           "R48-from"
         ]
-      },
-      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report R48-from"
+      }
     },
     "srep-0084-r48-to-threed-1": {
       "rule": "SREP 84 R48-to",
@@ -43863,8 +43819,7 @@
         "codes": [
           "R48-to"
         ]
-      },
-      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report R48-to"
+      }
     },
     "srep-0084-r48-from-threed-0": {
       "rule": "SREP 84 R48-from",
@@ -43881,8 +43836,7 @@
         "codes": [
           "VOL5"
         ]
-      },
-      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report VOL5; the render then fails (blackbody requires temperatureGrid)"
+      }
     },
     "srep-0084-vol5-blackbody-padded-1": {
       "rule": "SREP 84 VOL5",
@@ -43892,8 +43846,7 @@
         "codes": [
           "VOL5"
         ]
-      },
-      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report VOL5; the render then fails (blackbody requires temperatureGrid)"
+      }
     },
     "srep-0084-vol5-blackbody-0": {
       "rule": "SREP 84 VOL5",
@@ -43907,16 +43860,14 @@
       "source": "written by conformance/tools/srep84_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with C80"
+      }
     },
     "srep-0084-c80-step-plus-1": {
       "rule": "SREP 84 C80",
       "source": "written by conformance/tools/srep84_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with C80"
+      }
     },
     "srep-0084-c80-step-01": {
       "rule": "SREP 84 C80",
@@ -43970,8 +43921,7 @@
       },
       "requires": [
         78
-      ],
-      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) reports PYRO10, not PYRO9"
+      ]
     },
     "srep-0084-pyro10-follow-padded-1": {
       "rule": "SREP 84 PYRO10",
@@ -43981,8 +43931,7 @@
       },
       "requires": [
         78
-      ],
-      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with PYRO10"
+      ]
     },
     "srep-0084-pyro10-follow-0": {
       "rule": "SREP 84 PYRO10",
@@ -44005,8 +43954,7 @@
       },
       "requires": [
         78
-      ],
-      "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with PYRO11"
+      ]
     },
     "srep-0084-pyro11-margin-plus-4": {
       "rule": "SREP 84 PYRO11",
@@ -44026,16 +43974,14 @@
       "source": "written by conformance/tools/srep85_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C13"
+      }
     },
     "srep-0085-c13-max-size-plus-1": {
       "rule": "SREP 85 C13",
       "source": "written by conformance/tools/srep85_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C13"
+      }
     },
     "srep-0085-c13-min-size-plus-1-above-max": {
       "rule": "SREP 85 C13",
@@ -44052,16 +43998,14 @@
       "source": "written by conformance/tools/srep85_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C14"
+      }
     },
     "srep-0085-c14-letter-spacing-plus-0.5": {
       "rule": "SREP 85 C14",
       "source": "written by conformance/tools/srep85_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C14"
+      }
     },
     "srep-0085-c14-letter-spacing-plus-5-size-plus-1": {
       "rule": "SREP 85 C14",
@@ -44078,8 +44022,7 @@
       "source": "written by conformance/tools/srep85_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C15"
+      }
     },
     "srep-0085-c15-speed-plus-0.5": {
       "rule": "SREP 85 C15",
@@ -44114,8 +44057,7 @@
         "codes": [
           "C37"
         ]
-      },
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) does not report C37"
+      }
     },
     "srep-0085-c38-times-plus-0.5-plus-1": {
       "rule": "SREP 85 C38",
@@ -44132,24 +44074,21 @@
         "codes": [
           "C38"
         ]
-      },
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with E04, not C38"
+      }
     },
     "srep-0085-c44-end-plus-1": {
       "rule": "SREP 85 C44",
       "source": "written by conformance/tools/srep85_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C44"
+      }
     },
     "srep-0085-c44-start-plus-0.5": {
       "rule": "SREP 85 C44",
       "source": "written by conformance/tools/srep85_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C44"
+      }
     },
     "srep-0085-c44-end-plus-0.5-before-start-plus-1": {
       "rule": "SREP 85 C44",
@@ -44166,8 +44105,7 @@
       "source": "written by conformance/tools/srep85_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C54"
+      }
     },
     "srep-0085-c54-start-plus-0.5": {
       "rule": "SREP 85 C54",
@@ -44194,16 +44132,14 @@
       "source": "written by conformance/tools/srep85_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C52"
+      }
     },
     "srep-0085-c52-start-plus-0.5": {
       "rule": "SREP 85 C52",
       "source": "written by conformance/tools/srep85_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C52"
+      }
     },
     "srep-0085-c52-end-plus-0.5-before-start-plus-1": {
       "rule": "SREP 85 C52",
@@ -44230,32 +44166,28 @@
         "codes": [
           "C53"
         ]
-      },
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) does not report C53"
+      }
     },
     "srep-0085-c56-to-plus-1": {
       "rule": "SREP 85 C56",
       "source": "written by conformance/tools/srep85_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C56"
+      }
     },
     "srep-0085-c56-from-plus-0.5": {
       "rule": "SREP 85 C56",
       "source": "written by conformance/tools/srep85_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C56"
+      }
     },
     "srep-0085-c56-duration-plus-1": {
       "rule": "SREP 85 C56",
       "source": "written by conformance/tools/srep85_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C56"
+      }
     },
     "srep-0085-c56-to-plus-1-after-duration-0.5": {
       "rule": "SREP 85 C56",
@@ -44368,24 +44300,21 @@
       "source": "written by conformance/tools/srep85_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with P3D3"
+      }
     },
     "srep-0085-p3d3-speed-variance-plus-0.5": {
       "rule": "SREP 85 P3D3",
       "source": "written by conformance/tools/srep85_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with P3D3"
+      }
     },
     "srep-0085-p3d3-burst-time-plus-0.5": {
       "rule": "SREP 85 P3D3",
       "source": "written by conformance/tools/srep85_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with P3D3"
+      }
     },
     "srep-0085-p3d3-lifetime-variance-plus-1-lifetime-plus-0.5": {
       "rule": "SREP 85 P3D3",
@@ -44402,8 +44331,7 @@
       "source": "written by conformance/tools/srep85_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with P3D10"
+      }
     },
     "srep-0085-p3d10-angle-plus-0.5-spread-plus-1": {
       "rule": "SREP 85 P3D10",
@@ -44420,16 +44348,14 @@
       "source": "written by conformance/tools/srep85_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with OCN3"
+      }
     },
     "srep-0085-ocn3-impulse-x-plus-1": {
       "rule": "SREP 85 OCN3",
       "source": "written by conformance/tools/srep85_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with OCN3"
+      }
     },
     "srep-0085-ocn3-wavelength-plus-0.5": {
       "rule": "SREP 85 OCN3",
@@ -44446,8 +44372,7 @@
       "source": "written by conformance/tools/srep85_cases.py",
       "findings": {
         "valid": true
-      },
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with OCN5"
+      }
     },
     "srep-0085-ocn5-whitewater-end-plus-0.5-before-start-plus-1": {
       "rule": "SREP 85 OCN5",
@@ -44487,8 +44412,7 @@
       },
       "requires": [
         78
-      ],
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with PYC6"
+      ]
     },
     "srep-0085-pyc6-y-plus-0.5": {
       "rule": "SREP 85 PYC6",
@@ -44498,8 +44422,7 @@
       },
       "requires": [
         78
-      ],
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with PYC6"
+      ]
     },
     "srep-0085-pyc6-x-plus-5": {
       "rule": "SREP 85 PYC6",
@@ -44522,8 +44445,7 @@
       },
       "requires": [
         80
-      ],
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with FRX11"
+      ]
     },
     "srep-0085-frx11-planes-plus-0.5": {
       "rule": "SREP 85 FRX11",
@@ -44533,8 +44455,7 @@
       },
       "requires": [
         80
-      ],
-      "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with FRX11"
+      ]
     },
     "srep-0085-frx11-planes-plus-0-normal": {
       "rule": "SREP 85 FRX11",

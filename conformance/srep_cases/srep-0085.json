@@ -6,8 +6,7 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C13"
+   }
   }
  },
  "srep-0085-c13-max-size-plus-1": {
@@ -17,8 +16,7 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C13"
+   }
   }
  },
  "srep-0085-c13-min-size-plus-1-above-max": {
@@ -41,8 +39,7 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C14"
+   }
   }
  },
  "srep-0085-c14-letter-spacing-plus-0.5": {
@@ -52,8 +49,7 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C14"
+   }
   }
  },
  "srep-0085-c14-letter-spacing-plus-5-size-plus-1": {
@@ -76,8 +72,7 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C15"
+   }
   }
  },
  "srep-0085-c15-speed-plus-0.5": {
@@ -124,8 +119,7 @@
     "codes": [
      "C37"
     ]
-   },
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) does not report C37"
+   }
   }
  },
  "srep-0085-c38-times-plus-0.5-plus-1": {
@@ -148,8 +142,7 @@
     "codes": [
      "C38"
     ]
-   },
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with E04, not C38"
+   }
   }
  },
  "srep-0085-c44-end-plus-1": {
@@ -159,8 +152,7 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C44"
+   }
   }
  },
  "srep-0085-c44-start-plus-0.5": {
@@ -170,8 +162,7 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C44"
+   }
   }
  },
  "srep-0085-c44-end-plus-0.5-before-start-plus-1": {
@@ -194,8 +185,7 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C54"
+   }
   }
  },
  "srep-0085-c54-start-plus-0.5": {
@@ -231,8 +221,7 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C52"
+   }
   }
  },
  "srep-0085-c52-start-plus-0.5": {
@@ -242,8 +231,7 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C52"
+   }
   }
  },
  "srep-0085-c52-end-plus-0.5-before-start-plus-1": {
@@ -279,8 +267,7 @@
     "codes": [
      "C53"
     ]
-   },
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) does not report C53"
+   }
   }
  },
  "srep-0085-c56-to-plus-1": {
@@ -290,8 +277,7 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C56"
+   }
   }
  },
  "srep-0085-c56-from-plus-0.5": {
@@ -301,8 +287,7 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C56"
+   }
   }
  },
  "srep-0085-c56-duration-plus-1": {
@@ -312,8 +297,7 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with C56"
+   }
   }
  },
  "srep-0085-c56-to-plus-1-after-duration-0.5": {
@@ -468,8 +452,7 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with P3D3"
+   }
   }
  },
  "srep-0085-p3d3-speed-variance-plus-0.5": {
@@ -479,8 +462,7 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with P3D3"
+   }
   }
  },
  "srep-0085-p3d3-burst-time-plus-0.5": {
@@ -490,8 +472,7 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with P3D3"
+   }
   }
  },
  "srep-0085-p3d3-lifetime-variance-plus-1-lifetime-plus-0.5": {
@@ -514,8 +495,7 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with P3D10"
+   }
   }
  },
  "srep-0085-p3d10-angle-plus-0.5-spread-plus-1": {
@@ -538,8 +518,7 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with OCN3"
+   }
   }
  },
  "srep-0085-ocn3-impulse-x-plus-1": {
@@ -549,8 +528,7 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with OCN3"
+   }
   }
  },
  "srep-0085-ocn3-wavelength-plus-0.5": {
@@ -573,8 +551,7 @@
    "source": "written by conformance/tools/srep85_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with OCN5"
+   }
   }
  },
  "srep-0085-ocn5-whitewater-end-plus-0.5-before-start-plus-1": {
@@ -626,8 +603,7 @@
    },
    "requires": [
     78
-   ],
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with PYC6"
+   ]
   }
  },
  "srep-0085-pyc6-y-plus-0.5": {
@@ -640,8 +616,7 @@
    },
    "requires": [
     78
-   ],
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with PYC6"
+   ]
   }
  },
  "srep-0085-pyc6-x-plus-5": {
@@ -670,8 +645,7 @@
    },
    "requires": [
     80
-   ],
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with FRX11"
+   ]
   }
  },
  "srep-0085-frx11-planes-plus-0.5": {
@@ -684,8 +658,7 @@
    },
    "requires": [
     80
-   ],
-   "pending": "the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on release/0.4.0; release/0.4.0 (a86e3c72) refuses the document with FRX11"
+   ]
   }
  },
  "srep-0085-frx11-planes-plus-0-normal": {

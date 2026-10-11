@@ -6,8 +6,7 @@
    "source": "kit case srep-0040-pyro, scene/@version changed",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with V8"
+   }
   }
  },
  "srep-0083-v8-version-1.5": {
@@ -17,8 +16,7 @@
    "source": "kit case srep-0040-pyro, scene/@version changed",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with V8"
+   }
   }
  },
  "srep-0083-v8-rejected-version-1.2": {
@@ -41,8 +39,7 @@
    "source": "kit case srep-0040-msq1-rejected, scene/@version changed, and its mesh frames are kit assets",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with MSQ1"
+   }
   }
  },
  "srep-0083-msq1-version-1.5": {
@@ -52,8 +49,7 @@
    "source": "kit case srep-0040-msq1-rejected, scene/@version changed, and its mesh frames are kit assets",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with MSQ1"
+   }
   }
  },
  "srep-0083-p3d1-version-1.4": {
@@ -63,8 +59,7 @@
    "source": "kit case srep-0040-particles3d, scene/@version changed",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with P3D1"
+   }
   }
  },
  "srep-0083-p3d1-version-1.5": {
@@ -74,8 +69,7 @@
    "source": "kit case srep-0040-particles3d, scene/@version changed",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with P3D1"
+   }
   }
  },
  "srep-0083-p3d1-rejected-version-1.2": {
@@ -98,8 +92,7 @@
    "source": "kit case srep-0040-ocean, scene/@version changed",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with OCN1"
+   }
   }
  },
  "srep-0083-ocn1-version-1.5": {
@@ -109,8 +102,7 @@
    "source": "kit case srep-0040-ocean, scene/@version changed",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with OCN1"
+   }
   }
  },
  "srep-0083-ocn1-rejected-version-1.2": {
@@ -133,8 +125,7 @@
    "source": "kit case srep-0040-crater, scene/@version changed",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with CRT1"
+   }
   }
  },
  "srep-0083-crt1-version-1.5": {
@@ -144,8 +135,7 @@
    "source": "kit case srep-0040-crater, scene/@version changed",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with CRT1"
+   }
   }
  },
  "srep-0083-crt1-rejected-version-1.2": {
@@ -168,8 +158,7 @@
    "source": "kit case srep-0040-fracture, scene/@version changed",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with FRX1"
+   }
   }
  },
  "srep-0083-frx1-version-1.5": {
@@ -179,8 +168,7 @@
    "source": "kit case srep-0040-fracture, scene/@version changed",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with FRX1"
+   }
   }
  },
  "srep-0083-frx1-rejected-version-1.2": {
@@ -203,8 +191,7 @@
    "source": "written by conformance/tools/srep83_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with GEO1"
+   }
   }
  },
  "srep-0083-geo1-version-1.5": {
@@ -214,8 +201,7 @@
    "source": "written by conformance/tools/srep83_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with GEO1"
+   }
   }
  },
  "srep-0083-geo1-rejected-version-1.2": {
@@ -251,8 +237,7 @@
    ],
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with CRT1"
+   }
   }
  },
  "srep-0083-srep77-fracture-contact-version-1.5": {
@@ -265,8 +250,7 @@
    ],
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with FRX1"
+   }
   }
  },
  "srep-0083-srep77-ocean-density-version-1.5": {
@@ -279,8 +263,7 @@
    ],
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with OCN1"
+   }
   }
  },
  "srep-0083-srep78-pyro-follow-version-1.5": {
@@ -293,8 +276,7 @@
    ],
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with V8"
+   }
   }
  },
  "srep-0083-srep79-volume-scatter-bounces-version-1.5": {
@@ -307,8 +289,7 @@
    ],
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with V8"
+   }
   }
  },
  "srep-0083-srep80-voxel-crater-version-1.5": {
@@ -321,8 +302,7 @@
    ],
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with CRT1 and VOX1"
+   }
   }
  },
  "srep-0083-srep80-voxel-fracture-version-1.5": {
@@ -335,8 +315,7 @@
    ],
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 83 on its branch prep/srep-83-version-gates (6f9d13c0), not yet on main; main (b7eb4edc) refuses the document with FRX1 and VOX1"
+   }
   }
  }
 }

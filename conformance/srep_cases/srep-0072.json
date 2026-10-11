@@ -24,7 +24,7 @@
      "PREC1"
     ]
    },
-   "pending": "the Rust reference (main 82ad2091 and b7eb4edc) reports E23 for this document, not the information finding PREC1 that SREP 72 requires"
+   "pending": "the Rust reference (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71) reports E23 for this document, not the information finding PREC1 that SREP 72 requires; it has no PREC1 code"
   }
  },
  "srep-0072-content-rect-stripe": {

@@ -755,8 +755,7 @@
    "source": "engine corpus tests/corpus/valid/voxels.scene.xml at 4bf7a9e, scene/@version 1.4",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements VOX1 for version 1.3 or later (c2a66950) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) refuses the document with VOX1"
+   }
   }
  },
  "srep-0080-valid-voxels-version-1.5": {
@@ -766,8 +765,7 @@
    "source": "engine corpus tests/corpus/valid/voxels.scene.xml at 4bf7a9e, scene/@version 1.5",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements VOX1 for version 1.3 or later (c2a66950) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) refuses the document with VOX1"
+   }
   }
  },
  "srep-0080-vox1-version-1.0": {

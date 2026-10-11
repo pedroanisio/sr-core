@@ -6,8 +6,7 @@
    "source": "written by conformance/tools/srep84_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with C15"
+   }
   }
  },
  "srep-0084-c15-reverse-padded-false": {
@@ -17,8 +16,7 @@
    "source": "written by conformance/tools/srep84_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with C15"
+   }
   }
  },
  "srep-0084-c15-reverse-1": {
@@ -41,8 +39,7 @@
    "source": "written by conformance/tools/srep84_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with C15"
+   }
   }
  },
  "srep-0084-c15-loop-plus-0": {
@@ -52,8 +49,7 @@
    "source": "written by conformance/tools/srep84_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with C15"
+   }
   }
  },
  "srep-0084-c15-loop-padded-0": {
@@ -63,8 +59,7 @@
    "source": "written by conformance/tools/srep84_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with C15"
+   }
   }
  },
  "srep-0084-c15-loop-plus-2": {
@@ -90,8 +85,7 @@
     "codes": [
      "C43"
     ]
-   },
-   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report C43; its encoder then refuses the output (H264 cannot carry alpha)"
+   }
   }
  },
  "srep-0084-c43-alpha-padded-true": {
@@ -104,8 +98,7 @@
     "codes": [
      "C43"
     ]
-   },
-   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report C43; its encoder then refuses the output (H264 cannot carry alpha)"
+   }
   }
  },
  "srep-0084-c43-alpha-0": {
@@ -127,8 +120,7 @@
     "absent": [
      "R15"
     ]
-   },
-   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) reports R15"
+   }
   }
  },
  "srep-0084-r15-has-audio-padded-1": {
@@ -140,8 +132,7 @@
     "absent": [
      "R15"
     ]
-   },
-   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) reports R15"
+   }
   }
  },
  "srep-0084-r15-has-audio-0": {
@@ -167,8 +158,7 @@
     "codes": [
      "R48-from"
     ]
-   },
-   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report R48-from"
+   }
   }
  },
  "srep-0084-r48-from-threed-padded-true": {
@@ -181,8 +171,7 @@
     "codes": [
      "R48-from"
     ]
-   },
-   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report R48-from"
+   }
   }
  },
  "srep-0084-r48-to-threed-1": {
@@ -195,8 +184,7 @@
     "codes": [
      "R48-to"
     ]
-   },
-   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report R48-to"
+   }
   }
  },
  "srep-0084-r48-from-threed-0": {
@@ -219,8 +207,7 @@
     "codes": [
      "VOL5"
     ]
-   },
-   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report VOL5; the render then fails (blackbody requires temperatureGrid)"
+   }
   }
  },
  "srep-0084-vol5-blackbody-padded-1": {
@@ -233,8 +220,7 @@
     "codes": [
      "VOL5"
     ]
-   },
-   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) does not report VOL5; the render then fails (blackbody requires temperatureGrid)"
+   }
   }
  },
  "srep-0084-vol5-blackbody-0": {
@@ -254,8 +240,7 @@
    "source": "written by conformance/tools/srep84_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with C80"
+   }
   }
  },
  "srep-0084-c80-step-plus-1": {
@@ -265,8 +250,7 @@
    "source": "written by conformance/tools/srep84_cases.py",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with C80"
+   }
   }
  },
  "srep-0084-c80-step-01": {
@@ -338,8 +322,7 @@
    },
    "requires": [
     78
-   ],
-   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) reports PYRO10, not PYRO9"
+   ]
   }
  },
  "srep-0084-pyro10-follow-padded-1": {
@@ -352,8 +335,7 @@
    },
    "requires": [
     78
-   ],
-   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with PYRO10"
+   ]
   }
  },
  "srep-0084-pyro10-follow-0": {
@@ -382,8 +364,7 @@
    },
    "requires": [
     78
-   ],
-   "pending": "the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; main (a8310ca7) refuses the document with PYRO11"
+   ]
   }
  },
  "srep-0084-pyro11-margin-plus-4": {

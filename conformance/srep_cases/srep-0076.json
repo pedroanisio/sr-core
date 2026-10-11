@@ -182,8 +182,7 @@
     "codes": [
      "W11"
     ]
-   },
-   "pending": "the Rust reference implements the warning numbers W11 and W12 (c2a66950) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) reports W03"
+   }
   }
  },
  "srep-0076-valid-w12-denoise": {
@@ -196,8 +195,7 @@
     "codes": [
      "W12"
     ]
-   },
-   "pending": "the Rust reference implements the warning numbers W11 and W12 (c2a66950) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) reports W04"
+   }
   }
  },
  "srep-0076-valid-w05-lights": {
@@ -220,8 +218,7 @@
    "source": "engine corpus tests/corpus/valid/black-hole.scene.xml at 4bf7a9e, scene/@version 1.4",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements BH1 for version 1.3 or later (c2a66950) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) refuses the document with BH1"
+   }
   }
  },
  "srep-0076-valid-black-hole-version-1.5": {
@@ -231,8 +228,7 @@
    "source": "engine corpus tests/corpus/valid/black-hole.scene.xml at 4bf7a9e, scene/@version 1.5",
    "findings": {
     "valid": true
-   },
-   "pending": "the Rust reference implements BH1 for version 1.3 or later (c2a66950) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) refuses the document with BH1"
+   }
   }
  },
  "srep-0076-bh1-version-1.0": {
@@ -271,8 +267,7 @@
     "codes": [
      "BH5"
     ]
-   },
-   "pending": "the Rust reference implements the boolean forms of geodesics (298bddd6) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) does not report BH5"
+   }
   }
  },
  "srep-0076-bh6-geodesics-1-other-object": {
@@ -285,8 +280,7 @@
     "codes": [
      "BH6"
     ]
-   },
-   "pending": "the Rust reference implements the boolean forms of geodesics (298bddd6) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) does not report BH6"
+   }
   }
  },
  "srep-0076-bh7-geodesics-1-inside-photon-sphere": {
@@ -299,8 +293,7 @@
     "codes": [
      "BH7"
     ]
-   },
-   "pending": "the Rust reference implements the boolean forms of geodesics (298bddd6) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) does not report BH7"
+   }
   }
  },
  "srep-0076-bh8-geodesics-1-and-true": {
@@ -313,8 +306,7 @@
     "codes": [
      "BH8"
     ]
-   },
-   "pending": "the Rust reference implements the boolean forms of geodesics (298bddd6) on its branch prep/srep-76-81-followups, not yet on main; main (b7eb4edc) does not report BH8"
+   }
   }
  },
  "srep-0076-valid-black-hole-geodesics-1": {

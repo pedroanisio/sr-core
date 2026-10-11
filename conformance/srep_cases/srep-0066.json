@@ -147,7 +147,7 @@
    "failure": {
     "code": "PRG12"
    },
-   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG12, checked by hand on 2026-10-10"
+   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG12 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
   }
  },
  "srep-0066-program-import-forbidden": {
@@ -157,7 +157,7 @@
    "failure": {
     "code": "PRG11"
    },
-   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG11, checked by hand on 2026-10-10"
+   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG11 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
   }
  },
  "srep-0066-program-threads-forbidden": {
@@ -167,7 +167,7 @@
    "failure": {
     "code": "PRG11"
    },
-   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG11, checked by hand on 2026-10-10"
+   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG11 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
   }
  },
  "srep-0066-program-relaxed-simd-forbidden": {
@@ -177,7 +177,7 @@
    "failure": {
     "code": "PRG11"
    },
-   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG11, checked by hand on 2026-10-10"
+   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG11 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
   }
  },
  "srep-0066-program-output-invalid": {
@@ -187,7 +187,7 @@
    "failure": {
     "code": "PRG14"
    },
-   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG14, checked by hand on 2026-10-10"
+   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG14 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
   }
  },
  "srep-0066-program-id-collision": {
@@ -197,7 +197,7 @@
    "failure": {
     "code": "PRG14"
    },
-   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG14, checked by hand on 2026-10-10"
+   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG14 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
   }
  },
  "srep-0066-program-sha256-mismatch": {
@@ -207,7 +207,7 @@
    "failure": {
     "code": "PRG10"
    },
-   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG10, checked by hand on 2026-10-10"
+   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG10 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
   }
  },
  "srep-0066-program-output-sha256": {
@@ -229,7 +229,7 @@
    "failure": {
     "code": "PRG15"
    },
-   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference (main 82ad2091 and b7eb4edc) fails the render with PRG15, checked by hand on 2026-10-10"
+   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG15 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
   }
  },
  "srep-0066-program-version-gate": {
