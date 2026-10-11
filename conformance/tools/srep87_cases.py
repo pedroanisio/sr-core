@@ -123,12 +123,16 @@ def main(conf=CONF):
                               "hand in a group a, with the id g1",
         doc(f'<group id="a">{FRAGMENTS["particles"]}</group>'), dict(at_half))
     grid = '<markers><beatGrid bpm="120" offset="0"/></markers>\n'
+    # n starts at the marker beat.1 and takes its x from the emitted node by its namespaced id beat.g1 (Semantics 4),
+    # so the case needs both readings: beat.1 as the grid's generated id and beat.g1 as an element id. Without SREP 87
+    # the emitted id is g1, beat.g1 names nothing and the document fails to build.
     late = ('<shape id="n" shape="rect" width="40" height="20" anchorX="20" anchorY="10" x="480" y="240" '
-            'fill="#0000FFFF" startMarker="beat.1"/>')
-    # beat.1 is at offset + 60/bpm = 0.5 s (SREP 57); the program beat emits g1, whose id is beat.g1
-    add("beat-program", "a program with the id beat beside a beatGrid: beat.1 is still the grid's beat at 0.5 s, Hazards",
+            'fill="#0000FFFF" startMarker="beat.1"><expression property="x">prop("beat.g1.x")</expression></shape>')
+    # beat.1 is at offset + 60/bpm = 0.5 s (SREP 57); the program beat emits g1, whose id is beat.g1 (x 200)
+    add("beat-program", "a program with the id beat beside a beatGrid: beat.1 is still the grid's beat at 0.5 s, and "
+                        "prop(\"beat.g1.x\") names the emitted node, Hazards",
         doc(prog("beat", "rect") + "\n" + late, markers=grid),
-        {"output": {"id": "still", "time": 0.75}, "red": box(200, 120), "blue": box(480, 240)})
+        {"output": {"id": "still", "time": 0.75}, "red": box(200, 120), "blue": box(200, 240)})
     add("beat-program-before", "the same document before beat.1, Hazards",
         doc(prog("beat", "rect") + "\n" + late, markers=grid),
         {"output": {"id": "still", "time": 0.25}, "red": box(200, 120), "absent": ["blue"]})

@@ -44672,7 +44672,7 @@
       "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main; the check is a comparison with another render, which run.py cannot express yet: the reference picture of srep-0087-program-ids-seed-local"
     },
     "srep-0087-program-ids-beat-program": {
-      "rule": "SREP 87 (a program with the id beat beside a beatGrid: beat.1 is still the grid's beat at 0.5 s, Hazards)",
+      "rule": "SREP 87 (a program with the id beat beside a beatGrid: beat.1 is still the grid's beat at 0.5 s, and prop(\"beat.g1.x\") names the emitted node, Hazards)",
       "output": {
         "id": "still",
         "time": 0.75
@@ -44684,7 +44684,7 @@
         "h": 20
       },
       "blue": {
-        "cx": 480,
+        "cx": 200,
         "cy": 240,
         "w": 40,
         "h": 20

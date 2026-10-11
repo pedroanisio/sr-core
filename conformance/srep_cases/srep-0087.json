@@ -171,9 +171,9 @@
   }
  },
  "srep-0087-program-ids-beat-program": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<markers><beatGrid bpm=\"120\" offset=\"0\"/></markers>\n<composition>\n<program id=\"beat\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\"/>\n<shape id=\"n\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"480\" y=\"240\" fill=\"#0000FFFF\" startMarker=\"beat.1\"/>\n</composition>\n</scene>\n",
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<markers><beatGrid bpm=\"120\" offset=\"0\"/></markers>\n<composition>\n<program id=\"beat\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\"/>\n<shape id=\"n\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"480\" y=\"240\" fill=\"#0000FFFF\" startMarker=\"beat.1\"><expression property=\"x\">prop(\"beat.g1.x\")</expression></shape>\n</composition>\n</scene>\n",
   "expected": {
-   "rule": "SREP 87 (a program with the id beat beside a beatGrid: beat.1 is still the grid's beat at 0.5 s, Hazards)",
+   "rule": "SREP 87 (a program with the id beat beside a beatGrid: beat.1 is still the grid's beat at 0.5 s, and prop(\"beat.g1.x\") names the emitted node, Hazards)",
    "output": {
     "id": "still",
     "time": 0.75
@@ -185,7 +185,7 @@
     "h": 20
    },
    "blue": {
-    "cx": 480,
+    "cx": 200,
     "cy": 240,
     "w": 40,
     "h": 20
@@ -194,7 +194,7 @@
   }
  },
  "srep-0087-program-ids-beat-program-before": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<markers><beatGrid bpm=\"120\" offset=\"0\"/></markers>\n<composition>\n<program id=\"beat\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\"/>\n<shape id=\"n\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"480\" y=\"240\" fill=\"#0000FFFF\" startMarker=\"beat.1\"/>\n</composition>\n</scene>\n",
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<markers><beatGrid bpm=\"120\" offset=\"0\"/></markers>\n<composition>\n<program id=\"beat\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\"/>\n<shape id=\"n\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"480\" y=\"240\" fill=\"#0000FFFF\" startMarker=\"beat.1\"><expression property=\"x\">prop(\"beat.g1.x\")</expression></shape>\n</composition>\n</scene>\n",
   "expected": {
    "rule": "SREP 87 (the same document before beat.1, Hazards)",
    "output": {

@@ -60,17 +60,89 @@ def test_index_and_srep_66_record_the_amendment():
     assert re.search(r"^- \*\*Id scoping\.\*\* .*\*\*Resolved 2026-10-11\*\* by SREP 87", srep66, re.M | re.S)
 
 
-def test_no_schema_change_and_the_class_calls_for_1_7_0():
-    log = open(os.path.join(ROOT, "schema", "CHANGELOG.md"), encoding="utf-8").read()
-    unreleased = log.split("## Unreleased", 1)[1].split("\n## ", 1)[0]
-    added = unreleased.split("### Added", 1)[1].split("### ", 1)[0]
-    assert "(SREP 87, amends SREP 66)" in added
-    assert "### Breaking\n\n### Added" in unreleased                  # nothing recorded as Breaking
+LOG = open(os.path.join(ROOT, "schema", "CHANGELOG.md"), encoding="utf-8").read()
+UNRELEASED = LOG.split("## Unreleased", 1)[1].split("\n## ", 1)[0]
+ENTRY = UNRELEASED.split("### Added", 1)[1].split("### ", 1)[0]
+
+
+def section(title):
+    return SREP.split(f"\n## {title}\n", 1)[1].split("\n## ", 1)[0]
+
+
+def test_no_schema_change_and_the_provisional_class_calls_for_1_7_0():
+    """The class is open for the schema editor (Open issues 7). The changelog carries it provisionally as Added, as
+    Backwards compatibility does, so `release.py next schema` gives 1.7.0 until the editor decides."""
+    assert "(SREP 87, amends SREP 66)" in ENTRY
+    assert "### Breaking\n\n### Added" in UNRELEASED                  # the provisional class, not a settled one
+    assert "provisional" in ENTRY and "**Class: Added (SREP 4), provisional" in section("Backwards compatibility")
     nxt = subprocess.run([sys.executable, os.path.join(ROOT, "tools", "release.py"), "next", "schema"],
                          check=True, capture_output=True, text=True).stdout.strip()
     assert nxt.endswith("1.7.0"), nxt
     for f in ("scene-render.xsd", "scene-render.sch"):
         assert "SREP 87" not in open(os.path.join(ROOT, "schema", f), encoding="utf-8").read()
+
+
+def test_the_class_is_not_derived_from_the_srep_85_decision():
+    """SREP 0 (Versioning): a MINOR keeps every 1.N document valid. The SREP 85 decision answered SREP 85 (refusals
+    argued as SREP 4's fourth Fixed kind); SREP 87's newly refused documents had a meaning under SREP 66. The record
+    must not attribute the class to that decision, and Open issues 7 must offer the version gate, Breaking and an
+    exception granted by the editor."""
+    for text in (ENTRY, SREP):
+        assert "after the schema editor's decision" not in text
+        assert "which kept narrow refusals of that kind out of a MAJOR release" not in text
+    issue = section("Open issues").split("\n7. ", 1)[1]
+    assert "SREP 0" in issue and "version gate" in issue and "Breaking" in issue and "2.0.0" in issue
+    assert "version gate" in ENTRY and "SREP 0" in ENTRY
+
+
+def test_the_three_kinds_of_newly_refused_or_changed_documents_are_recorded():
+    """Writing p.g1, a composed collision, and a link whose source names an emitted node (Open issues 6) are each
+    named in the changelog entry, the Abstract, the neutral case and Backwards compatibility."""
+    for text in (ENTRY, section("Abstract"), section("Specification").split("### Defaults and the neutral case", 1)[1],
+                 section("Backwards compatibility")):
+        squashed = " ".join(text.split())
+        assert "p.g1" in squashed or "namespaced" in squashed, text[:80]
+        assert "compose" in squashed, text[:80]
+        assert "link/@source" in squashed, text[:80]
+    assert "Two narrow kinds" not in ENTRY
+
+
+def test_rejected_alternatives_no_longer_say_nothing_breaks():
+    rejected = " ".join(section("Rejected alternatives").split())
+    assert "the opt-in protects nothing" not in rejected
+    assert "version gate" in rejected
+
+
+def test_engine_impact_records_the_reference_branch_and_its_link_source_reading():
+    impact = " ".join(section("Engine impact").split())
+    assert "d1a45c8b" in impact and "link/@source" in impact and "Open issues, item 6" in impact
+
+
+def test_srep_66_records_that_its_collision_case_now_waits_for_srep_87():
+    srep66 = open(os.path.join(ROOT, "srep", "srep-0066.md"), encoding="utf-8").read()
+    impact = " ".join(srep66.split("\n## Engine impact\n", 1)[1].split("\n## ", 1)[0].split())
+    assert "amended by SREP 87" in impact and "p.g1" in impact
+    assert "becomes Final only when the reference implementation of SREP 87 is on main" in impact
+    conformance = srep66.split("\n## Conformance\n", 1)[1].split("\n## ", 1)[0]
+    assert "`-id-collision` (amended by SREP 87: `p.g1`)" in conformance
+
+
+def test_the_released_1_6_0_changelog_entry_is_left_as_released():
+    """SREP 0 defines errata for SREPs only; the SREP 85 decision is recorded in SREP 85, not in the 1.6.0 entry."""
+    released = LOG.split("## 1.6.0 — 2026-10-11", 1)[1].split("\n## ", 1)[0]
+    assert "The class is SREP 85's open issue for the schema editor." in released
+    assert "erratum of 2026-10-11" not in released and "Schema is 1.6 not 2.0" not in released
+    srep85 = open(os.path.join(ROOT, "srep", "srep-0085.md"), encoding="utf-8").read()
+    assert "**Decided 2026-10-11:**" in srep85 and "an erratum" not in srep85.split("## History", 1)[1][-900:]
+
+
+def test_beat_program_cases_need_the_namespaced_id():
+    """The beat hazard cases name the emitted node by its namespaced id beat.g1, so an engine without SREP 87 (where
+    the id is g1) cannot pass them, and an engine that read beat.g1 as a generated marker id would not either."""
+    for slug in ("beat-program", "beat-program-before"):
+        xml = CASES[f"srep-0087-program-ids-{slug}"]["xml"]
+        assert 'prop("beat.g1.x")' in xml and 'startMarker="beat.1"' in xml, slug
+    assert CASES["srep-0087-program-ids-beat-program"]["expected"]["blue"] == {"cx": 200, "cy": 240, "w": 40, "h": 20}
 
 
 def test_cases_are_in_the_kit_as_generated_and_pending():
