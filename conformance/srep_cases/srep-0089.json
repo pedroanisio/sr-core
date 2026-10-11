@@ -43,8 +43,7 @@
       187.5
      ]
     }
-   ],
-   "pending": "the reference implementation is rs-scene-render d7f12a2f, on the branch fix/atlas-findings, not yet on main; the case has not been run on any engine"
+   ]
   }
  },
  "srep-0089-supersample-hdr-box-n2": {
@@ -91,8 +90,7 @@
       187.5
      ]
     }
-   ],
-   "pending": "the reference implementation is rs-scene-render d7f12a2f, on the branch fix/atlas-findings, not yet on main; the case has not been run on any engine"
+   ]
   }
  },
  "srep-0089-supersample-hdr-lanczos3-n3": {
@@ -139,8 +137,7 @@
       187.5
      ]
     }
-   ],
-   "pending": "the reference implementation is rs-scene-render d7f12a2f, on the branch fix/atlas-findings, not yet on main; the case has not been run on any engine"
+   ]
   }
  }
 }

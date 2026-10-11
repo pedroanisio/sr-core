@@ -1,10 +1,10 @@
 """SREP 89 (amends SREP 72): the supersample clamp is [0, max(1, M)], M the largest sample of non-zero weight.
 
-The XSD documents `project/@supersample` with the text SREP 89's Specification gives, and changes nothing else. The kit
-cases of SREP 89 are valid, pending with their reason, and discriminate: their expected values (the filter with SREP
-89's clamp) differ from what SREP 72's clamp gives by more than the kit's tolerance at n > 1, and equal the value at
-n = 1. The neutral case holds: for SREP 72's own supersample cases (values in [0, 1]) the amended clamp gives the
-values the kit already expects.
+The XSD documents `project/@supersample` with the text SREP 89's Specification gives, and changes nothing else. The
+kit cases of SREP 89 are valid, not pending (they pass on the reference), and discriminate: their expected values (the
+filter with SREP 89's clamp) differ from what SREP 72's clamp gives by more than the kit's tolerance at n > 1, and
+equal the value at n = 1. The neutral case holds: for SREP 72's own supersample cases (values in [0, 1]) the amended
+clamp gives the values the kit already expects.
 """
 import json
 import os
@@ -57,12 +57,12 @@ def test_header_and_index():
     assert re.search(r"^- 2026-10-10: SREP 89, .*amends Semantics 4, \"Edges and range\"", srep72, re.M)
 
 
-def test_cases_are_in_the_kit_as_generated_and_pending():
+def test_cases_are_in_the_kit_as_generated_and_not_pending():
+    # they pass on the reference, rs-scene-render main 1c989c9f (SREP 89, Conformance)
     assert set(CASES) == {f"srep-0089-supersample-hdr-{s}" for s, _, _ in srep89_cases.RUNS}
     for name, case in CASES.items():
         assert KIT[name] == case["expected"], name
-        assert case["expected"]["pending"] == kit_pending.PENDING[name], name
-        assert "d7f12a2f" in case["expected"]["pending"]
+        assert "pending" not in case["expected"] and name not in kit_pending.PENDING, name
         with open(os.path.join(ROOT, "conformance", "cases", name + ".xml"), encoding="utf-8") as f:
             assert f.read() == case["xml"], name
 

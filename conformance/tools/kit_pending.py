@@ -27,10 +27,9 @@ to which the native rules already give their SREP 85 verdict), and the 27 listed
 changes, and srep-0085-ocn5-whitewater-plus-0.5-to-plus-1, valid before and after SREP 85 in the Schematron, which the
 native OCN5 refuses. They stay pending until release/0.4.0 carries that branch.
 
-SREP 89, recorded 2026-10-10 at its acceptance: its three cases have not been run on any engine. The reference
-implementation is rs-scene-render d7f12a2f, on the branch fix/atlas-findings, not yet on main; there the engine's own
-tests of the change (crates/sr-gpu/tests/bloom_hdr.rs) pass on lavapipe, as SREP 89 states. Run the cases on the
-reference before deleting their entries.
+SREP 89, recorded 2026-10-11 the same way on rs-scene-render main 1c989c9f (which contains the reference
+implementation, d7f12a2f), on llvmpipe (sr-prod-01): its three cases pass, each region measuring 188.0 against the
+expected 187.5 (SREP 72 as written would give 99.1 at n = 2 and 3), so none is pending.
 """
 
 _FAILURE = ("the expected result is a failed render with the error code in 'failure', which expected.json and run.py "
@@ -44,8 +43,6 @@ _SREP83 = ("the Rust reference implements SREP 83 on its branch prep/srep-83-ver
            "main (b7eb4edc) refuses the document with {got}")
 _SREP85 = ("the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on "
            "release/0.4.0; release/0.4.0 (a86e3c72) {got}")
-_SREP89 = ("the reference implementation is rs-scene-render d7f12a2f, on the branch fix/atlas-findings, not yet on "
-           "main; the case has not been run on any engine")
 _SREP84 = ("the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; "
            "main (a8310ca7) {got}")
 
@@ -142,8 +139,6 @@ PENDING = {
         ("pyc6-y-plus-0.5", "refuses the document with PYC6"),
         ("frx11-planes-plus-1", "refuses the document with FRX11"),
         ("frx11-planes-plus-0.5", "refuses the document with FRX11")]},
-    # SREP 89: the supersample clamp keeps values above 1
-    **{f"srep-0089-supersample-hdr-{slug}": _SREP89 for slug in ("n1", "box-n2", "lanczos3-n3")},
 }
 
 
