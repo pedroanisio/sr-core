@@ -140,8 +140,10 @@ def main():
     add("program-threads-forbidden", doc(prog("shared", mods)), fail("PRG11"))
     add("program-relaxed-simd-forbidden", doc(prog("relaxed", mods)), fail("PRG11"))
     add("program-output-invalid", doc(prog("bad-output", mods)), fail("PRG14"))
+    # amended by SREP 87 (its Backwards compatibility): the emitted g1 of program p is p.g1, so the document node that
+    # collides with it is written p.g1; a document node g1 beside it is valid under SREP 87
     add("program-id-collision", doc(prog("rect", mods) + "\n" +
-                                    '<shape id="g1" shape="rect" width="10" height="10" fill="#00FF00FF"/>'), fail("PRG14"))
+                                    '<shape id="p.g1" shape="rect" width="10" height="10" fill="#00FF00FF"/>'), fail("PRG14"))
     add("program-sha256-mismatch", doc(prog("rect", mods).replace(sha(mods["rect"]), "0" * 64)), fail("PRG10"))
     add("program-output-sha256", doc(prog("rect", mods, f' outputSha256="{sha(RECT.encode())}"')), {"red": box(200, 120)})
     add("program-output-sha256-mismatch", doc(prog("rect", mods, f' outputSha256="{"1" * 64}"')), fail("PRG15"))

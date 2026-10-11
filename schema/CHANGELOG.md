@@ -19,6 +19,8 @@ computed from those classes by `python3 tools/release.py next schema`:
 
 ### Added
 
+- Ids emitted by a program are scoped by the program's id (SREP 87, amends SREP 66): an id `E` that the program `P` emits is `P.E` in the document (an NCName); inside the output, the tokens of `xs:IDREF` and `xs:IDREFS` attributes and the ids of `prop` and `propAtTime` resolve to the program's own ids first; a bare reference from outside (at those positions, or `override/@target` of a layout or a variant) resolves when exactly one program emitted the id, with the warning W13, and fails with the new error PRG17 when several did; PRG14 covers a repeated id within one output and a namespaced id equal to another id; values derived from an emitted element's id use its local id. No declaration, default or rule changes, and there is no version gate. Documents that 1.6.0 refuses with PRG14 because two programs, or a program and the document, use the same id become valid. Two narrow kinds of documents that 1.6.0 accepts become invalid with PRG14: one that writes an id equal to a namespaced id (`<shape id="p.g1">` beside a program `p` that emits `g1`), and two programs whose namespaced ids compose to one value (`a` emitting `b.c` beside `a.b` emitting `c`). Under the letter of SREP 4 those two kinds are Breaking; the entry is Added after the schema editor's decision of 2026-10-11 on SREP 85 ("Schema is 1.6 not 2.0"), and the editor confirms the class (SREP 87, Open issues). Known documents affected: none outside the kit cases written for the rule. The kit case `srep-0066-program-id-collision` is amended to write `p.g1`. Class: Added (SREP 4); `tools/release.py next schema` gives 1.7.0, and the release adds `1.7` to `scene/@version`.
+
 ### Fixed
 
 ## 1.6.0 — 2026-10-11

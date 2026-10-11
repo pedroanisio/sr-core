@@ -89,4 +89,5 @@
 | [84](srep-0084.md) | Boolean and integer attributes are tested by value, not by spelling | Standards | Final | 1.6 |
 | [85](srep-0085.md) | Decimal and double attributes are tested by value (amends SREP 67) | Standards | Final | 1.6 |
 | [86](srep-0086.md) | Keep the 1.3 gates of the upstreamed engine extensions | Process | Active | n/a |
+| [87](srep-0087.md) | Amend SREP 66: scope emitted ids by their program | Semantics | Accepted | 1.7 |
 | [89](srep-0089.md) | Amend SREP 72: the supersample clamp keeps values above 1 | Semantics | Final | 1.6 |

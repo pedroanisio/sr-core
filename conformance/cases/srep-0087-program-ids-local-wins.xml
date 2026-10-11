@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.6">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<composition>
+<shape id="m" shape="rect" width="40" height="20" anchorX="20" anchorY="10" x="480" y="240" fill="#0000FFFF"/>
+<program id="p" src="../assets/srep87-matted.wasm" sha256="2dda0584c761727a55e09e6d8cb8a8c317cc5354f7af24cb8a8521ddff04246a"/>
+</composition>
+</scene>

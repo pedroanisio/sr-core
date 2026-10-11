@@ -191,13 +191,13 @@
   }
  },
  "srep-0066-program-id-collision": {
-  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"p\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\"></program>\n<shape id=\"g1\" shape=\"rect\" width=\"10\" height=\"10\" fill=\"#00FF00FF\"/>\n</composition>\n</scene>\n",
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"p\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\"></program>\n<shape id=\"p.g1\" shape=\"rect\" width=\"10\" height=\"10\" fill=\"#00FF00FF\"/>\n</composition>\n</scene>\n",
   "expected": {
    "rule": "SREP 66",
    "failure": {
     "code": "PRG14"
    },
-   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG14 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
+   "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet"
   }
  },
  "srep-0066-program-sha256-mismatch": {

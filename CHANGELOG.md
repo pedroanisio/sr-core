@@ -22,6 +22,10 @@ version:
 
 ### Fixed
 
+### Tooling
+
+- The compatibility kit has the 15 cases of SREP 87 (`conformance/srep_cases/srep-0087.json`, written by `conformance/tools/srep87_cases.py`, with the modules `srep87-*.wasm`), and SREP 66's `srep-0066-program-id-collision` is amended by SREP 87. All 16 are pending in `conformance/tools/kit_pending.py` until the reference implementation of SREP 87 reaches the reference engine's main branch. See [schema/CHANGELOG.md](schema/CHANGELOG.md).
+
 ## 1.6.0 — 2026-10-11
 
 ### Added

@@ -1,0 +1,229 @@
+{
+ "srep-0087-program-ids-reuse": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"a\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\"/>\n<program id=\"b\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\" x=\"240\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 87 (two programs running one module draw: a.g1 and b.g1, Semantics 2)",
+   "red": {
+    "cx": 320,
+    "cy": 120,
+    "w": 280,
+    "h": 20
+   },
+   "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main"
+  }
+ },
+ "srep-0087-program-ids-local-ref": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"a\" src=\"../assets/srep87-matted.wasm\" sha256=\"2dda0584c761727a55e09e6d8cb8a8c317cc5354f7af24cb8a8521ddff04246a\"/>\n<program id=\"b\" src=\"../assets/srep87-matted.wasm\" sha256=\"2dda0584c761727a55e09e6d8cb8a8c317cc5354f7af24cb8a8521ddff04246a\" x=\"240\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 87 (each output's matte=\"m\" names its own m, Semantics 3.1)",
+   "red": {
+    "cx": 310,
+    "cy": 120,
+    "w": 260,
+    "h": 20
+   },
+   "absent": [
+    "green"
+   ],
+   "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main"
+  }
+ },
+ "srep-0087-program-ids-local-wins": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"m\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"480\" y=\"240\" fill=\"#0000FFFF\"/>\n<program id=\"p\" src=\"../assets/srep87-matted.wasm\" sha256=\"2dda0584c761727a55e09e6d8cb8a8c317cc5354f7af24cb8a8521ddff04246a\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 87 (the output's matte=\"m\" names p.m, not the document's m, Semantics 3.1)",
+   "red": {
+    "cx": 190,
+    "cy": 120,
+    "w": 20,
+    "h": 20
+   },
+   "blue": {
+    "cx": 480,
+    "cy": 240,
+    "w": 40,
+    "h": 20
+   },
+   "absent": [
+    "green"
+   ],
+   "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main"
+  }
+ },
+ "srep-0087-program-ids-qualified-prop": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"a\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\"/>\n<shape id=\"o\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"0\" y=\"240\" fill=\"#0000FFFF\"><expression property=\"x\">prop(\"a.g1.x\")</expression></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 87 (prop(\"a.g1.x\") from outside follows a.g1 with no warning, Semantics 4)",
+   "red": {
+    "cx": 200,
+    "cy": 120,
+    "w": 40,
+    "h": 20
+   },
+   "blue": {
+    "cx": 200,
+    "cy": 240,
+    "w": 40,
+    "h": 20
+   },
+   "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main"
+  }
+ },
+ "srep-0087-program-ids-bare-prop": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"a\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\"/>\n<shape id=\"o\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"0\" y=\"240\" fill=\"#0000FFFF\"><expression property=\"x\">prop(\"g1.x\")</expression></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 87 (prop(\"g1.x\") from outside with one emitter follows a.g1, Semantics 4)",
+   "red": {
+    "cx": 200,
+    "cy": 120,
+    "w": 40,
+    "h": 20
+   },
+   "blue": {
+    "cx": 200,
+    "cy": 240,
+    "w": 40,
+    "h": 20
+   },
+   "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main"
+  }
+ },
+ "srep-0087-program-ids-bare-prop-warning": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"a\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\"/>\n<shape id=\"o\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"0\" y=\"240\" fill=\"#0000FFFF\"><expression property=\"x\">prop(\"g1.x\")</expression></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 87 (the same bare reference warns W13, Semantics 4)",
+   "findings": {
+    "via": "render",
+    "messages": [
+     "W13"
+    ]
+   },
+   "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main"
+  }
+ },
+ "srep-0087-program-ids-bare-override": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<parameters><variant id=\"v\"><override target=\"g1\" property=\"x\" value=\"440\"/></variant></parameters>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\" variant=\"v\"/>\n<composition>\n<program id=\"a\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 87 (a variant's override target=\"g1\" with one emitter applies to a.g1, Semantics 4)",
+   "output": {
+    "id": "still",
+    "time": 0
+   },
+   "red": {
+    "cx": 440,
+    "cy": 120,
+    "w": 40,
+    "h": 20
+   },
+   "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main"
+  }
+ },
+ "srep-0087-program-ids-ambiguous": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"a\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\"/>\n<program id=\"b\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\" x=\"240\"/>\n<shape id=\"o\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"0\" y=\"240\" fill=\"#0000FFFF\"><expression property=\"x\">prop(\"g1.x\")</expression></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 87 (prop(\"g1.x\") from outside with emitters a and b fails PRG17, Semantics 4)",
+   "failure": {
+    "code": "PRG17"
+   },
+   "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet"
+  }
+ },
+ "srep-0087-program-ids-composed-collision": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"a\" src=\"../assets/srep87-b-c.wasm\" sha256=\"958a8d660d3bb0e4e94f7eb48be09be4acb54b0ab650bca88719e97d8bec19ec\"/>\n<program id=\"a.b\" src=\"../assets/srep87-c.wasm\" sha256=\"1d16a5f6cc340c4c78f8b812ca0dad6567ea8988abc508f021091507541a5b4e\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 87 (a emitting b.c beside a.b emitting c: both a.b.c, PRG14, Semantics 2)",
+   "failure": {
+    "code": "PRG14"
+   },
+   "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet"
+  }
+ },
+ "srep-0087-program-ids-duplicate-local": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"p\" src=\"../assets/srep87-duplicate.wasm\" sha256=\"d22d83ee9185a14d2ae444099f0eab87f83f7fca7bd29d40cbb8119ce8bcc058\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 87 (an output with two elements g1 fails PRG14, Semantics 1)",
+   "failure": {
+    "code": "PRG14"
+   },
+   "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet"
+  }
+ },
+ "srep-0087-program-ids-seed-local": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"a\" src=\"../assets/srep87-particles.wasm\" sha256=\"ac8125941055e6d70bc9b9584e15cd43a357e471ae67db1f13a7c8694820f677\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 87 (an emitted emitter without a seed draws as srep-0087-program-ids-seed-local-by-hand, its id written by hand as g1: seeds use the local id, Semantics 7)",
+   "output": {
+    "id": "still",
+    "time": 0.5
+   },
+   "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main; the check is a comparison with another render, which run.py cannot express yet: the picture at 0.5 s equals that of srep-0087-program-ids-seed-local-by-hand"
+  }
+ },
+ "srep-0087-program-ids-seed-local-by-hand": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<group id=\"a\"><particleEmitter id=\"g1\" x=\"320\" y=\"180\" rate=\"0\" lifetime=\"2\" speed=\"120\" speedVariance=\"80\" spread=\"360\" size=\"6\" color=\"#FF0000FF\"><burst time=\"0\" count=\"40\"/></particleEmitter></group>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 87 (the reference picture of srep-0087-program-ids-seed-local: the same emitter written by hand in a group a, with the id g1)",
+   "output": {
+    "id": "still",
+    "time": 0.5
+   },
+   "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main; the check is a comparison with another render, which run.py cannot express yet: the reference picture of srep-0087-program-ids-seed-local"
+  }
+ },
+ "srep-0087-program-ids-beat-program": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<markers><beatGrid bpm=\"120\" offset=\"0\"/></markers>\n<composition>\n<program id=\"beat\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\"/>\n<shape id=\"n\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"480\" y=\"240\" fill=\"#0000FFFF\" startMarker=\"beat.1\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 87 (a program with the id beat beside a beatGrid: beat.1 is still the grid's beat at 0.5 s, Hazards)",
+   "output": {
+    "id": "still",
+    "time": 0.75
+   },
+   "red": {
+    "cx": 200,
+    "cy": 120,
+    "w": 40,
+    "h": 20
+   },
+   "blue": {
+    "cx": 480,
+    "cy": 240,
+    "w": 40,
+    "h": 20
+   },
+   "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main"
+  }
+ },
+ "srep-0087-program-ids-beat-program-before": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<markers><beatGrid bpm=\"120\" offset=\"0\"/></markers>\n<composition>\n<program id=\"beat\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\"/>\n<shape id=\"n\" shape=\"rect\" width=\"40\" height=\"20\" anchorX=\"20\" anchorY=\"10\" x=\"480\" y=\"240\" fill=\"#0000FFFF\" startMarker=\"beat.1\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 87 (the same document before beat.1, Hazards)",
+   "output": {
+    "id": "still",
+    "time": 0.25
+   },
+   "red": {
+    "cx": 200,
+    "cy": 120,
+    "w": 40,
+    "h": 20
+   },
+   "absent": [
+    "blue"
+   ],
+   "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main"
+  }
+ },
+ "srep-0087-program-ids-output-sha256": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<program id=\"a\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\" outputSha256=\"f80fb7c4603d5cdfe3b4cf6562e710b27d958f0d86b0b834c87a335eff437f91\"/>\n<program id=\"b\" src=\"../assets/srep66-rect.wasm\" sha256=\"2b2cbfb8eed8624f6aa8a112626fae8cdc0e15c220557f0afdc6e5da56d48c96\" x=\"240\" outputSha256=\"f80fb7c4603d5cdfe3b4cf6562e710b27d958f0d86b0b834c87a335eff437f91\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 87 (outputSha256 of srep66-rect.wasm's output holds for programs a and b, Semantics 6)",
+   "red": {
+    "cx": 320,
+    "cy": 120,
+    "w": 280,
+    "h": 20
+   },
+   "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main"
+  }
+ }
+}
