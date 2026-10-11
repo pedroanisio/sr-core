@@ -19,10 +19,16 @@ computed from those classes by `python3 tools/release.py next schema`:
 
 ### Added
 
+### Fixed
+
+## 1.6.0 — 2026-10-11
+
+### Added
+
 - Document version 1.6: `scene/@version` accepts `1.6`. The additions below follow three version policies:
-  - the version gates V12 to V16 (SREPs 66, 67, 70, 74 and 75) refuse their elements, asset kind and enumeration values in versions 1.0 to 1.5;
-  - BH1 (SREP 76) and VOX1 (SREP 80) refuse black holes, accretion disks, geodesic cameras, voxel assets and objects of cells only in versions 1.0 to 1.2, and `pyroBlast` (SREP 78) has no gate but V8, which refuses 1.0 to 1.2 (SREP 83). These new elements and asset kinds are therefore valid in documents of version 1.3 to 1.5, where SREP 0 (Versioning) requires the new version. SREP 76 chose 1.3 so that documents of 1.3 that have a black hole, the engine's corpus among them, stay valid (its Open issues, item 2); SREP 86 (Process) records this as an exception to SREP 0 for exactly these constructs;
-  - the other additions are attributes and rules, accepted in every version that admits their parent element (SREPs 68, 71, 72, 73, 77 and 79, and the attributes of SREP 67 on `effect`).
+- the version gates V12 to V16 (SREPs 66, 67, 70, 74 and 75) refuse their elements, asset kind and enumeration values in versions 1.0 to 1.5;
+- BH1 (SREP 76) and VOX1 (SREP 80) refuse black holes, accretion disks, geodesic cameras, voxel assets and objects of cells only in versions 1.0 to 1.2, and `pyroBlast` (SREP 78) has no gate but V8, which refuses 1.0 to 1.2 (SREP 83). These new elements and asset kinds are therefore valid in documents of version 1.3 to 1.5, where SREP 0 (Versioning) requires the new version. SREP 76 chose 1.3 so that documents of 1.3 that have a black hole, the engine's corpus among them, stay valid (its Open issues, item 2); SREP 86 (Process) records this as an exception to SREP 0 for exactly these constructs;
+- the other additions are attributes and rules, accepted in every version that admits their parent element (SREPs 68, 71, 72, 73, 77 and 79, and the attributes of SREP 67 on `effect`).
 - Element `program` (`programNodeType` in `nodeChoice`, `programDataType` in `parameters`) with the attribute group `programAttributes` (`src`, `sha256`, `seed`, `fuel`, `memoryLimit`, `outputSha256`): a deterministic WebAssembly module run once when the document is built, whose output is nodes drawn as a group or JSON rows for `repeat/@over`; rule C18 amended to accept a data program; version gate V12 and rules PRG1 and PRG2, pattern p-srep66 (SREP 66).
 - Elements `compute` (`computeType`, with `tonemap` of `densityTonemapType`) and `iterate` (`iterateType`) in `nodeChoice`; effect types `error-diffusion` and `segmented-sort` with the `effectType` attributes `kernel`, `palette`, `serpentine`, `direction`, `order`, `sortKey`, `low` and `high`; version gate V13 and rules ITR1, ITR2, CMP13 and SRT1, pattern p-srep67 (SREP 67).
 - `effectType/@stepsPerFrame` (default 1) and `@prewarm` (default 0) for shader effects with persistent passes; rule STP1, pattern p-srep68; no version gate (SREP 68).

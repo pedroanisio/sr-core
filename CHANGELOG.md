@@ -22,6 +22,19 @@ version:
 
 ### Fixed
 
+## 1.6.0 — 2026-10-11
+
+### Added
+
+- Validates and packs schema 1.6.0 documents: the source release carries schema 1.6.0 and its generated reference under `docs/schema`, with pages for the new types (SREPs 66 to 85 and 89; document version 1.6). See [schema/CHANGELOG.md](schema/CHANGELOG.md).
+- `conformance/run.py` gains the check form `audio`: it delivers the document's audio-only WAV output (`encode --output`) and measures the gain of each test tone at given times (SREP 82).
+
+### Tooling
+
+- The compatibility kit has the 377 cases of SREPs 66 to 80, 82 to 85 and 89 (`conformance/srep_cases/srep-0066.json` to `srep-0089.json`, written by the generators in `conformance/tools/`); `conformance/tools/kit_pending.py` lists the 12 that stay pending, with the reason for each: 11 whose check `run.py` cannot express yet (failed renders of SREPs 66 and 69, render comparisons of SREP 71), each checked by hand on the reference, and SREP 72's `srep-0072-precision-3d-note`, which the reference fails.
+- `conformance/tools/engine_gap.py` measures the gap between sr-core's schema and a reference engine's vendored copy (SREPs 76 to 81; `conformance/tools/engine-gap-1.5.0.json`).
+- CI checks out the tags, which the tests of SREPs 76 to 83 read.
+
 ## 1.5.0 — 2026-10-06
 
 ### Added
