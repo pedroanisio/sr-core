@@ -1,8 +1,8 @@
-"""Which kit cases of SREPs 66 to 85 are pending, and why (SREP 0: an active implementer that cannot pass a case yet
+"""Which kit cases of SREPs 66 to 85 and 89 are pending, and why (SREP 0: an active implementer that cannot pass a case yet
 is marked pending, and the SREP stays Accepted until none is).
 
 The case generators (srep66_cases.py to srep75_reference.py, engine_gap_cases.py, srep82_cases.py, srep83_cases.py,
-srep84_cases.py, srep85_cases.py) call settle() before they write their srep_cases/*.json: a case named in PENDING
+srep84_cases.py, srep85_cases.py, srep89_cases.py) call settle() before they write their srep_cases/*.json: a case named in PENDING
 keeps "pending" with its reason, and every other case runs. When the Rust reference passes a case, delete its entry
 here and rerun the generator.
 
@@ -26,6 +26,11 @@ verdict SREP 85 does not change, and 15 of PYRO1, PYRO2, PYRO4, VOL4, PYRO11, IT
 to which the native rules already give their SREP 85 verdict), and the 27 listed fail: 26 whose verdict SREP 85
 changes, and srep-0085-ocn5-whitewater-plus-0.5-to-plus-1, valid before and after SREP 85 in the Schematron, which the
 native OCN5 refuses. They stay pending until release/0.4.0 carries that branch.
+
+SREP 89, recorded 2026-10-10 at its acceptance: its three cases have not been run on any engine. The reference
+implementation is rs-scene-render d7f12a2f, on the branch fix/atlas-findings, not yet on main; there the engine's own
+tests of the change (crates/sr-gpu/tests/bloom_hdr.rs) pass on lavapipe, as SREP 89 states. Run the cases on the
+reference before deleting their entries.
 """
 
 _FAILURE = ("the expected result is a failed render with the error code in 'failure', which expected.json and run.py "
@@ -39,6 +44,8 @@ _SREP83 = ("the Rust reference implements SREP 83 on its branch prep/srep-83-ver
            "main (b7eb4edc) refuses the document with {got}")
 _SREP85 = ("the Rust reference implements SREP 85 on its branch prep/srep-85-decimal-forms (ceffcb57), not yet on "
            "release/0.4.0; release/0.4.0 (a86e3c72) {got}")
+_SREP89 = ("the reference implementation is rs-scene-render d7f12a2f, on the branch fix/atlas-findings, not yet on "
+           "main; the case has not been run on any engine")
 _SREP84 = ("the Rust reference implements SREP 84 on its branch prep/srep-84-boolean-forms (ea8750bd), not yet on main; "
            "main (a8310ca7) {got}")
 
@@ -135,6 +142,8 @@ PENDING = {
         ("pyc6-y-plus-0.5", "refuses the document with PYC6"),
         ("frx11-planes-plus-1", "refuses the document with FRX11"),
         ("frx11-planes-plus-0.5", "refuses the document with FRX11")]},
+    # SREP 89: the supersample clamp keeps values above 1
+    **{f"srep-0089-supersample-hdr-{slug}": _SREP89 for slug in ("n1", "box-n2", "lanczos3-n3")},
 }
 
 

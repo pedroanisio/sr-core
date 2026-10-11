@@ -44614,6 +44614,141 @@
       "requires": [
         67
       ]
+    },
+    "srep-0089-supersample-hdr-n1": {
+      "rule": "SREP 89",
+      "regions": [
+        {
+          "box": [
+            300,
+            160,
+            340,
+            200
+          ],
+          "rgb": [
+            187.5,
+            187.5,
+            187.5
+          ]
+        },
+        {
+          "box": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "rgb": [
+            187.5,
+            187.5,
+            187.5
+          ]
+        },
+        {
+          "box": [
+            632,
+            352,
+            640,
+            360
+          ],
+          "rgb": [
+            187.5,
+            187.5,
+            187.5
+          ]
+        }
+      ],
+      "pending": "the reference implementation is rs-scene-render d7f12a2f, on the branch fix/atlas-findings, not yet on main; the case has not been run on any engine"
+    },
+    "srep-0089-supersample-hdr-box-n2": {
+      "rule": "SREP 89",
+      "regions": [
+        {
+          "box": [
+            300,
+            160,
+            340,
+            200
+          ],
+          "rgb": [
+            187.5,
+            187.5,
+            187.5
+          ]
+        },
+        {
+          "box": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "rgb": [
+            187.5,
+            187.5,
+            187.5
+          ]
+        },
+        {
+          "box": [
+            632,
+            352,
+            640,
+            360
+          ],
+          "rgb": [
+            187.5,
+            187.5,
+            187.5
+          ]
+        }
+      ],
+      "pending": "the reference implementation is rs-scene-render d7f12a2f, on the branch fix/atlas-findings, not yet on main; the case has not been run on any engine"
+    },
+    "srep-0089-supersample-hdr-lanczos3-n3": {
+      "rule": "SREP 89",
+      "regions": [
+        {
+          "box": [
+            300,
+            160,
+            340,
+            200
+          ],
+          "rgb": [
+            187.5,
+            187.5,
+            187.5
+          ]
+        },
+        {
+          "box": [
+            0,
+            0,
+            8,
+            8
+          ],
+          "rgb": [
+            187.5,
+            187.5,
+            187.5
+          ]
+        },
+        {
+          "box": [
+            632,
+            352,
+            640,
+            360
+          ],
+          "rgb": [
+            187.5,
+            187.5,
+            187.5
+          ]
+        }
+      ],
+      "pending": "the reference implementation is rs-scene-render d7f12a2f, on the branch fix/atlas-findings, not yet on main; the case has not been run on any engine"
     }
   }
 }

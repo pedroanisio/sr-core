@@ -1,0 +1,146 @@
+{
+ "srep-0089-supersample-hdr-n1": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<colorManagement toneMapping=\"none\" exposure=\"-3\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"640\" height=\"360\" x=\"0\" y=\"0\" fill=\"#FFFFFFFF\" effects=\"e\"/>\n</composition>\n<effects><effect id=\"e\" type=\"exposure\" exposure=\"2\"/></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 89",
+   "regions": [
+    {
+     "box": [
+      300,
+      160,
+      340,
+      200
+     ],
+     "rgb": [
+      187.5,
+      187.5,
+      187.5
+     ]
+    },
+    {
+     "box": [
+      0,
+      0,
+      8,
+      8
+     ],
+     "rgb": [
+      187.5,
+      187.5,
+      187.5
+     ]
+    },
+    {
+     "box": [
+      632,
+      352,
+      640,
+      360
+     ],
+     "rgb": [
+      187.5,
+      187.5,
+      187.5
+     ]
+    }
+   ],
+   "pending": "the reference implementation is rs-scene-render d7f12a2f, on the branch fix/atlas-findings, not yet on main; the case has not been run on any engine"
+  }
+ },
+ "srep-0089-supersample-hdr-box-n2": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\" supersample=\"2\" supersampleFilter=\"box\"/>\n<colorManagement toneMapping=\"none\" exposure=\"-3\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"640\" height=\"360\" x=\"0\" y=\"0\" fill=\"#FFFFFFFF\" effects=\"e\"/>\n</composition>\n<effects><effect id=\"e\" type=\"exposure\" exposure=\"2\"/></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 89",
+   "regions": [
+    {
+     "box": [
+      300,
+      160,
+      340,
+      200
+     ],
+     "rgb": [
+      187.5,
+      187.5,
+      187.5
+     ]
+    },
+    {
+     "box": [
+      0,
+      0,
+      8,
+      8
+     ],
+     "rgb": [
+      187.5,
+      187.5,
+      187.5
+     ]
+    },
+    {
+     "box": [
+      632,
+      352,
+      640,
+      360
+     ],
+     "rgb": [
+      187.5,
+      187.5,
+      187.5
+     ]
+    }
+   ],
+   "pending": "the reference implementation is rs-scene-render d7f12a2f, on the branch fix/atlas-findings, not yet on main; the case has not been run on any engine"
+  }
+ },
+ "srep-0089-supersample-hdr-lanczos3-n3": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\" supersample=\"3\" supersampleFilter=\"lanczos3\"/>\n<colorManagement toneMapping=\"none\" exposure=\"-3\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<composition>\n<shape id=\"s\" shape=\"rect\" width=\"640\" height=\"360\" x=\"0\" y=\"0\" fill=\"#FFFFFFFF\" effects=\"e\"/>\n</composition>\n<effects><effect id=\"e\" type=\"exposure\" exposure=\"2\"/></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 89",
+   "regions": [
+    {
+     "box": [
+      300,
+      160,
+      340,
+      200
+     ],
+     "rgb": [
+      187.5,
+      187.5,
+      187.5
+     ]
+    },
+    {
+     "box": [
+      0,
+      0,
+      8,
+      8
+     ],
+     "rgb": [
+      187.5,
+      187.5,
+      187.5
+     ]
+    },
+    {
+     "box": [
+      632,
+      352,
+      640,
+      360
+     ],
+     "rgb": [
+      187.5,
+      187.5,
+      187.5
+     ]
+    }
+   ],
+   "pending": "the reference implementation is rs-scene-render d7f12a2f, on the branch fix/atlas-findings, not yet on main; the case has not been run on any engine"
+  }
+ }
+}

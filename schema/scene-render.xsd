@@ -4310,7 +4310,7 @@
       <xs:annotation><xs:documentation>n > 1 renders the frame at n x width by n x height, every length scaled by n, and filters
       it down with supersampleFilter: output pixel i is the weighted mean of the samples, sample k centred at (k + 0.5)/n
       output pixels, the weights renormalised at the frame's edges, in the working space before output encoding, and
-      clamped to [0, 1]. SREP 72.</xs:documentation></xs:annotation>
+      clamped to [0, max(1, M)], M the largest sample of non-zero weight. SREPs 72 and 89.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:positiveInteger"><xs:maxInclusive value="4"/></xs:restriction></xs:simpleType>
     </xs:attribute>
     <xs:attribute name="supersampleFilter" default="box">

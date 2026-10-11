@@ -42,7 +42,7 @@ ANNOTATIONS = {
     (70, "parametricSurfaceType"): "SREP 70 gives none; the text matches Semantics 3",
     (70, "heightfieldType"): "SREP 70 gives none; the text matches Semantics 4",
     (71, "unitTripleType"): "SREP 71 gives none",
-    (72, "@supersample"): "SREP 72 gives none; the text matches its Semantics",
+    (72, "@supersample"): "SREP 72 gives none; the text matches its Semantics, with the range SREP 89 gives",
     (72, "@supersampleFilter"): "SREP 72 gives none; the text matches its Semantics",
     (72, "@edgeBlend"): "SREP 72 gives none; the text matches its Semantics",
 }

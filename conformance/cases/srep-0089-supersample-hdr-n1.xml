@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.6">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF" seed="1"/>
+<colorManagement toneMapping="none" exposure="-3"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<composition>
+<shape id="s" shape="rect" width="640" height="360" x="0" y="0" fill="#FFFFFFFF" effects="e"/>
+</composition>
+<effects><effect id="e" type="exposure" exposure="2"/></effects>
+</scene>
