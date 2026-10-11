@@ -69,24 +69,24 @@
 | [64](srep-0064.md) | Define rounded corners by the circle, not the steps | Semantics | Accepted | 1.5 |
 | [65](srep-0065.md) | Amend SREPs 18 and 20: report text overflow by what it loses | Standards | Accepted | 1.5 |
 | [66](srep-0066.md) | Add `<program>`: deterministic WebAssembly generators | Standards | Accepted | 1.6 |
-| [67](srep-0067.md) | Add compute accumulation, density tonemap, iterate, serial ops | Standards | Accepted | 1.6 |
-| [68](srep-0068.md) | Step stateful effects per node, with prewarm and checkpoints | Standards | Accepted | 1.6 |
+| [67](srep-0067.md) | Add compute accumulation, density tonemap, iterate, serial ops | Standards | Final | 1.6 |
+| [68](srep-0068.md) | Step stateful effects per node, with prewarm and checkpoints | Standards | Final | 1.6 |
 | [69](srep-0069.md) | Add stepping programs: `<program mode="step">` | Standards | Accepted | 1.6 |
-| [70](srep-0070.md) | Add parametric paths, parametric surfaces and heightfields | Standards | Accepted | 1.6 |
+| [70](srep-0070.md) | Add parametric paths, parametric surfaces and heightfields | Standards | Final | 1.6 |
 | [71](srep-0071.md) | Add subsurface, a procedural sky and generator-fed maps | Standards | Accepted | 1.6 |
 | [72](srep-0072.md) | Add pixel-exact options: precision, content rect, edges, supersampling | Standards | Accepted | 1.6 |
-| [73](srep-0073.md) | Let flock agents keep their sprites upright | Standards | Accepted | 1.6 |
-| [74](srep-0074.md) | Add viewport3D: a 3D scene with its own camera as a node | Standards | Accepted | 1.6 |
-| [75](srep-0075.md) | Add fractal assets with deep-zoom precision | Standards | Accepted | 1.6 |
-| [76](srep-0076.md) | Add a Schwarzschild black hole and a geodesic camera | Standards | Accepted | 1.6 |
-| [77](srep-0077.md) | Add impact ejecta ground, fracture sources, water density | Standards | Accepted | 1.6 |
-| [78](srep-0078.md) | Let a pyro window follow its plume, and add blasts | Standards | Accepted | 1.6 |
-| [79](srep-0079.md) | Add multiple scattering in media and foam albedo | Standards | Accepted | 1.6 |
-| [80](srep-0080.md) | Add voxel assets and breakable objects of cells | Standards | Accepted | 1.6 |
-| [81](srep-0081.md) | Clarify SREP 40 annotations (documentation only) | Standards | Accepted | 1.6 |
-| [82](srep-0082.md) | Mix the sound of video layers across a transition | Semantics | Accepted | 1.6 |
-| [83](srep-0083.md) | Amend SREP 40: version gates of the 1.3 extensions admit later versions | Standards | Accepted | 1.6 |
-| [84](srep-0084.md) | Boolean and integer attributes are tested by value, not by spelling | Standards | Accepted | 1.6 |
-| [85](srep-0085.md) | Decimal and double attributes are tested by value (amends SREP 67) | Standards | Accepted | 1.6 |
-| [86](srep-0086.md) | Keep the 1.3 gates of the upstreamed engine extensions | Process | Accepted | n/a |
-| [89](srep-0089.md) | Amend SREP 72: the supersample clamp keeps values above 1 | Semantics | Accepted | 1.6 |
+| [73](srep-0073.md) | Let flock agents keep their sprites upright | Standards | Final | 1.6 |
+| [74](srep-0074.md) | Add viewport3D: a 3D scene with its own camera as a node | Standards | Final | 1.6 |
+| [75](srep-0075.md) | Add fractal assets with deep-zoom precision | Standards | Final | 1.6 |
+| [76](srep-0076.md) | Add a Schwarzschild black hole and a geodesic camera | Standards | Final | 1.6 |
+| [77](srep-0077.md) | Add impact ejecta ground, fracture sources, water density | Standards | Final | 1.6 |
+| [78](srep-0078.md) | Let a pyro window follow its plume, and add blasts | Standards | Final | 1.6 |
+| [79](srep-0079.md) | Add multiple scattering in media and foam albedo | Standards | Final | 1.6 |
+| [80](srep-0080.md) | Add voxel assets and breakable objects of cells | Standards | Final | 1.6 |
+| [81](srep-0081.md) | Clarify SREP 40 annotations (documentation only) | Standards | Final | 1.6 |
+| [82](srep-0082.md) | Mix the sound of video layers across a transition | Semantics | Final | 1.6 |
+| [83](srep-0083.md) | Amend SREP 40: version gates of the 1.3 extensions admit later versions | Standards | Final | 1.6 |
+| [84](srep-0084.md) | Boolean and integer attributes are tested by value, not by spelling | Standards | Final | 1.6 |
+| [85](srep-0085.md) | Decimal and double attributes are tested by value (amends SREP 67) | Standards | Final | 1.6 |
+| [86](srep-0086.md) | Keep the 1.3 gates of the upstreamed engine extensions | Process | Active | n/a |
+| [89](srep-0089.md) | Amend SREP 72: the supersample clamp keeps values above 1 | Semantics | Final | 1.6 |
