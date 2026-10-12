@@ -39,6 +39,9 @@ open("out.scene.xml", "wb").write(scene.to_bytes(layout="pretty"))
 doc = read("in.scene.xml")                        # comments, attribute order and lexical forms survive a rewrite
 ```
 
+- `to_bytes(layout=...)` takes `"preserve"` (the default), `"pretty"` (re-indents, content-model order) or `"indent"`
+  (keeps order, indents only where libxml2's pretty-printer does). A number or boolean attribute also takes a valid
+  lexical `str` (`shutterPhase="0.3000"`), written as given.
 - XML names are kept as they are: `layer.safeAreaForce`, `layer.rotationX`; the only change is `from`, which is written `from_`.
 - Each allowed child has a factory named `add_<name>`, and simple content is held in `.content`.
 - A value or a child that the schema refuses raises `SchemaValueError` as soon as it is set. An attribute that the

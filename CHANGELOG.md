@@ -27,7 +27,11 @@ version:
   - version gates compiled from the Schematron, with `min_version()` and `version="auto"`;
   - checks at four levels (construction, standard library, lxml, engine);
   - the `sr-scene` command (`check`, `min-version`, `format`);
-  - the optional extra `sr-core[validate]` (lxml).
+  - the optional extra `sr-core[validate]` (lxml);
+  - a valid lexical `str` is accepted for every attribute whose type is not string-valued (numbers, booleans,
+    `xs:dateTime`) and written as given, so a ported builder can write the exact text of the one it replaces;
+  - `layout="indent"` for `to_bytes` and `write`: libxml2's pretty-print rule (indentation only inside elements that
+    have no text child), equal to `lxml.etree.tostring(..., pretty_print=True)`.
 - Drift controls:
   - `python3 -m sr_core.scene.generate --check`, run by `tools/release.py check`;
   - `release schema` regenerates the SDK and needs an Unreleased entry for it.

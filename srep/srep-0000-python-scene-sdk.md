@@ -119,16 +119,25 @@ what it offers. Section 9 of the Specification answers it.
    | XSD type | Python value accepted | Written as |
    |---|---|---|
    | enumeration | `str` in the list (`typing.Literal` in the hints) | itself |
-   | `xs:integer` family, with facets | `int` | decimal digits |
-   | `xs:decimal` and its restrictions, with facets | `int`, `float`, `decimal.Decimal`, or a lexically valid `str` | section 4.3 |
-   | `xs:double` | `float`, `int` | shortest round-trip form |
-   | `xs:boolean` | `bool` | `true` / `false` |
+   | `xs:integer` family, with facets | `int`, or a lexically valid `str` | decimal digits; a `str` as given |
+   | `xs:decimal` and its restrictions, with facets | `int`, `float`, `decimal.Decimal`, or a lexically valid `str` | section 4.3; a `str` as given |
+   | `xs:double` | `float`, `int`, or a lexically valid `str` | shortest round-trip form; a `str` as given |
+   | `xs:boolean` | `bool`, or a lexically valid `str` | `true` / `false`; a `str` as given |
    | `xs:ID` | an NCName `str` (the name characters of XML 1.0 Second Edition, which XSD 1.0 references: productions 84 to 89) | itself |
    | `xs:IDREF` | an NCName `str`, or an element that has an `id` | the id |
    | `xs:IDREFS` | a sequence of the above | ids separated by spaces |
    | list types | a sequence of the item type | items separated by spaces |
    | union types | a value any member type accepts | the first member type that accepts it |
    | string types with `xs:pattern` | `str` | itself |
+
+   **Lexical `str` values.** For every type that is not string-valued (the integer family, `xs:decimal`,
+   `xs:double`, `xs:boolean`, `xs:dateTime`, and restrictions of them), a `str` is a lexical form. It is accepted when
+   it is a valid lexical form of the type and meets every facet (range, pattern, enumeration), and is refused with
+   the same `SchemaValueError` otherwise. An accepted `str` is stored exactly as `read` stores a lexical form found
+   in a file (4.2), with no normalisation, not even of white space around it. It is written as given, and the getter
+   gives what it gives after a read (`"0.3000"` reads as `0.3`). Python-native values (`int`, `float`, `bool`,
+   `Decimal`, `datetime`) are formatted as before. This is what lets a ported builder write the exact text of the
+   builder it replaces (part 3).
 
 6. **Patterns.** The generator MUST translate each `xs:pattern` into a Python regular expression matched against
    the whole value (XSD patterns are anchored implicitly).
@@ -169,7 +178,18 @@ what it offers. Section 9 of the Specification answers it.
    - `write(scene, target, *, layout="preserve")`;
    - `to_bytes(scene, *, layout="preserve")`.
 
-   `layout="pretty"` writes 2-space indentation, and new attributes in the order the schema declares them.
+   Three layouts exist:
+   - `"preserve"` writes the stored whitespace, attribute order and child order;
+   - `"pretty"` writes 2-space indentation, new attributes in the order the schema declares them, and sequence
+     children in content-model order, and drops the whitespace it replaces;
+   - `"indent"` keeps the stored order and applies libxml2's pretty-print rule, which is what
+     `lxml.etree.tostring(..., pretty_print=True)` does. An element none of whose children is a text node (white
+     space included) is written with each child (element, comment or processing instruction) on its own line, indented
+     2 spaces per level, and its end tag on a line of its own. An element that has a text node is written exactly as
+     stored, and so is everything below it. An element without children is `<x/>`. The XML declaration and each
+     comment or processing instruction outside the root stand on their own lines, and the document ends with a
+     newline. The rule was determined against lxml 6.1.3 (libxml2 `xmlsave`, format mode) and is tested against it on
+     random trees. It never reorders or drops anything.
 2. **Round trip.** For every document the SDK reads, writing it back unchanged with `layout="preserve"` MUST give a
    document whose C14N 2.0 form, with comments, equals that of the original.
    - An attribute value that was not changed keeps its lexical form: `1.50` stays `1.50`.
@@ -413,3 +433,5 @@ None. The SREP changes no rendering. Its checks are sr-core tests: D1, D4, D5, D
 - 2026-10-12: drafted, at the owner's request, with a proposal for keeping the SDK equal to the schema (section 9).
 - 2026-10-12: parts 1 and 2 implemented on the branch `feat/scene-sdk`. The factories became `add_<name>`, simple
   content `.content` (3.11), the level 1 codes were completed (6.2), and open issues 3 to 5 were settled.
+- 2026-10-12: for the part 3 acceptance (raw C14N equality with a ported builder): a valid lexical `str` is accepted
+  and stored verbatim for every non-string type (3.5), and `layout="indent"` was added (4.1).
