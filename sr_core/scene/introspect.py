@@ -41,6 +41,7 @@ __all__ = ["FORMAT", "AmbiguousNameError", "AttributeDescription", "ChildDescrip
            "TypeDescription", "describe", "describe_all", "element_names"]
 
 FORMAT = "sr-scene-describe/1"
+_CLASSES: dict[str, Any] = _gen.CLASSES
 
 
 class AmbiguousNameError(SchemaValueError):
@@ -254,7 +255,7 @@ def _element_min(name: str, parent: Optional[str]) -> str:
     return _lowest_clean(refused)
 
 
-def _parents_of(cls: type[Element]) -> list[Optional[str]]:
+def _parents_of(cls: Any) -> list[Optional[str]]:
     out: list[Optional[str]] = []
     for (pkey, _name), klass in _gen.ELEMENT_CLASSES.items():
         if klass is cls:
@@ -262,13 +263,13 @@ def _parents_of(cls: type[Element]) -> list[Optional[str]]:
                 if None not in out:
                     out.append(None)
             else:
-                for pname in _gen.CLASSES[pkey]._element_names:
+                for pname in _CLASSES[pkey]._element_names:
                     if pname not in out:
                         out.append(pname)
     return out
 
 
-def _class_min(cls: type[Element]) -> str:
+def _class_min(cls: Any) -> str:
     parents = _parents_of(cls) or [None]
     best = _gen.VERSIONS[-1]
     for name in cls._element_names or ("",):
@@ -281,7 +282,7 @@ def _class_min(cls: type[Element]) -> str:
 
 # ------------------------------------------------------------------------------------------ content model
 
-def _children(cls: type[Element]) -> tuple[ChildDescription, ...]:
+def _children(cls: Any) -> tuple[ChildDescription, ...]:
     content = cls._content
     if content is None:
         return ()
@@ -302,13 +303,13 @@ def _children(cls: type[Element]) -> tuple[ChildDescription, ...]:
     own = cls._element_names[0] if cls._element_names else ""
     out = []
     for name, slot in slots.items():
-        klass = _gen.CLASSES[slot.type_key]
+        klass = _CLASSES[slot.type_key]
         out.append(ChildDescription(name, klass.__name__, mins.get(name, 0), None if slot.max == -1 else slot.max,
                                     slot.rank, _element_min(name, own)))
     return tuple(out)
 
 
-def _content_model(cls: type[Element]) -> str:
+def _content_model(cls: Any) -> str:
     if cls._simple_content is not None:
         return "simple"
     return "empty" if cls._content is None else str(cls._content[0])
@@ -316,7 +317,7 @@ def _content_model(cls: type[Element]) -> str:
 
 # ------------------------------------------------------------------------------------------ describe
 
-def _attribute(cls: type[Element], attr: Attr[Any, Any]) -> AttributeDescription:
+def _attribute(cls: Any, attr: Attr[Any, Any]) -> AttributeDescription:
     names = cls._element_names
     _elements, attributes, values = _gate_index()
     gated = [_lowest_clean(attributes[(n, attr.xml_name)]) for n in names if (n, attr.xml_name) in attributes]
@@ -330,8 +331,17 @@ def _attribute(cls: type[Element], attr: Attr[Any, Any]) -> AttributeDescription
                                 _resolve(attr.spec), min_version, tuple(by_value.items()), attr.doc)
 
 
-@functools.lru_cache(maxsize=None)
-def _describe_class(cls: type[Element]) -> Description:
+_CLASS_CACHE: dict[Any, Description] = {}
+
+
+def _describe_class(cls: Any) -> Description:
+    found = _CLASS_CACHE.get(cls)
+    if found is None:
+        found = _CLASS_CACHE[cls] = _build(cls)
+    return found
+
+
+def _build(cls: Any) -> Description:
     simple = _resolve(cls._simple_content) if cls._simple_content is not None else None
     return Description(
         format=FORMAT, schema_release=_gen.SCHEMA_RELEASE, xml_names=tuple(cls._element_names),
@@ -340,9 +350,9 @@ def _describe_class(cls: type[Element]) -> Description:
         children=_children(cls), attributes=tuple(_attribute(cls, a) for a in _attr_specs(cls).values()))
 
 
-def _by_name() -> dict[str, list[type[Element]]]:
-    found: dict[str, list[type[Element]]] = {}
-    for cls in _gen.CLASSES.values():
+def _by_name() -> dict[str, list[Any]]:
+    found: dict[str, list[Any]] = {}
+    for cls in _CLASSES.values():
         for name in cls._element_names:
             found.setdefault(name, []).append(cls)
     return found
@@ -364,7 +374,7 @@ def describe(target: Any) -> Description:
     if isinstance(target, Element):
         return _describe_class(type(target))
     if isinstance(target, str):
-        classes = {cls.__name__: cls for cls in _gen.CLASSES.values()}
+        classes = {cls.__name__: cls for cls in _CLASSES.values()}
         found = _by_name().get(target)
         if found is None:
             if target in classes:
@@ -427,4 +437,4 @@ def describe_all() -> dict[str, Any]:
     (it is ``required`` or ``optional``) and ``min_version`` when it is the first version."""
     types = {name: _strip(_resolve(name).to_dict()) for name in _gen.SIMPLE_TYPES}
     return {"format": FORMAT, "schema_release": _gen.SCHEMA_RELEASE, "versions": list(_gen.VERSIONS), "types": types,
-            "elements": [_compact_element(_describe_class(cls).to_dict(shared=True)) for cls in _gen.CLASSES.values()]}
+            "elements": [_compact_element(_describe_class(cls).to_dict(shared=True)) for cls in _CLASSES.values()]}
