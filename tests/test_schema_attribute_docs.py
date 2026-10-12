@@ -105,3 +105,83 @@ def test_corpus_verdicts_equal_the_base_schema():
     for n in names:
         doc = etree.parse(os.path.join(CASES, n))
         assert base.validate(doc) == now.validate(doc), n
+
+
+# ---- reviewed corrections (adversarial review against the engine code) ----
+
+# The facets reject out-of-range values at validation time, so a doc must not say they are clamped. These three
+# are not facet-bounded input: the clamp applies to a value computed from the attribute (a blend weight, the
+# filtered pixel).
+COMPUTED_VALUE_CLAMPS = {
+    "complexType:textAnimatorType/@easeHigh",
+    "complexType:textAnimatorType/@easeLow",
+    "complexType:projectType/@supersample",
+}
+RANGE_LIMIT_WORDS = re.compile(r"clamp|capped|limited to", re.I)
+
+
+def _facet_bounded(att, simple_types) -> bool:
+    node = att.find(_q("simpleType"))
+    if node is None:
+        node = simple_types.get((att.get("type") or "").split(":")[-1])
+    seen: set[str] = set()
+    while node is not None:
+        restriction = node.find(_q("restriction"))
+        if restriction is None:
+            return False
+        if any(c.tag in {_q(f) for f in ("minInclusive", "maxInclusive", "minExclusive", "maxExclusive")}
+               for c in restriction):
+            return True
+        base = (restriction.get("base") or "").split(":")[-1]
+        if base in seen or base not in simple_types:
+            return False
+        seen.add(base)
+        node = simple_types[base]
+    return False
+
+
+def test_no_doc_claims_clamping_for_a_facet_bounded_attribute():
+    tree = etree.parse(XSD)
+    simple_types = {s.get("name"): s for s in tree.iter(_q("simpleType")) if s.get("name")}
+    offenders = []
+    for att in tree.iter(_q("attribute")):
+        owner = next(a for a in att.iterancestors() if a.tag in {_q(o) for o in OWNERS} and a.get("name"))
+        key = f"{etree.QName(owner).localname}:{owner.get('name')}/@{att.get('name') or att.get('ref')}"
+        doc = "".join(att.xpath("xs:annotation/xs:documentation//text()", namespaces={"xs": XS}))
+        if key in COMPUTED_VALUE_CLAMPS or not re.search("clamp", doc, re.I):
+            continue
+        if _facet_bounded(att, simple_types):
+            offenders.append(key)
+    assert not offenders, f"facet-bounded attributes whose doc says clamped (out-of-range is invalid): {offenders}"
+
+
+@pytest.mark.parametrize("key", [
+    "complexType:parametricPathType/@samples",
+    "complexType:parametricSurfaceType/@uSamples",
+    "complexType:parametricSurfaceType/@vSamples",
+    "complexType:heightfieldType/@xSamples",
+    "complexType:heightfieldType/@zSamples",
+    "complexType:fractalAssetType/@maxIterations",
+    "complexType:lightType/@shadowMapSize",
+])
+def test_range_limited_attribute_doc_does_not_claim_clamp_or_cap(key):
+    doc = attribute_docs(etree.parse(XSD))[key]
+    assert not RANGE_LIMIT_WORDS.search(doc), f"{key}: {doc}"
+
+
+@pytest.mark.parametrize("key, phrase", [
+    ("attributeGroup:transformAttributes/@scaleX", "before skew"),
+    ("attributeGroup:transformAttributes/@scaleY", "before skew"),
+    ("complexType:particleEmitterType/@preset", "all but rate"),
+    ("complexType:particles3DType/@color", "colorEnd"),
+    ("complexType:outputType/@codec", "png-sequence"),
+    ("complexType:lightType/@range", "lighting effect"),
+])
+def test_reviewed_correction_is_present(key, phrase):
+    doc = attribute_docs(etree.parse(XSD))[key]
+    assert phrase in doc, f"{key}: {doc}"
+
+
+def test_particles3d_color_is_not_described_as_a_birth_only_tint():
+    doc = attribute_docs(etree.parse(XSD))["complexType:particles3DType/@color"]
+    assert "Tint of the particles at birth" not in doc, doc
