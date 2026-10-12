@@ -314,6 +314,17 @@ class Element:
     __slots__ = ("_attrs", "_owner", "_nodes", "_name", "_pre", "_post", "_api_auto", "source_line",
                  "source_column")
 
+    # Annotations only (no value, so they do not clash with the slots): they tell a type checker what ``_reset`` stores.
+    _attrs: dict[str, str]
+    _owner: Optional["Element"]
+    _nodes: list[Any]
+    _name: str
+    _pre: list[Any]
+    _post: list[Any]
+    _api_auto: bool
+    source_line: Optional[int]
+    source_column: Optional[int]
+
     _xsd_type: ClassVar[str] = ""
     _element_names: ClassVar[tuple[str, ...]] = ()
     _content: ClassVar[Optional[tuple[Any, ...]]] = None

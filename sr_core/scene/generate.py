@@ -336,6 +336,8 @@ class Generator:
         if p.kind in ("sequence", "choice"):
             return (p.kind, lo, hi, tuple(self.particle(c, owner, stack) for c in p.children))
         if p.kind == "group":
+            if p.name is None:
+                raise SchemaError(f"{owner}: a group reference without a name")
             if p.name in stack:
                 raise SchemaError(f"{owner}: group cycle through {p.name!r}")
             inner = self.particle(self.s.groups[p.name].content, owner, stack + (p.name,))
@@ -367,6 +369,8 @@ class Generator:
         for p in self.s.children(key):
             if p.type is None or p.type not in self.s.complex:
                 raise SchemaError(f"{key}: element {p.name!r} has no complex type ({p.type!r})")
+            if p.name is None:
+                raise SchemaError(f"{key}: an element particle without a name")
             if out.setdefault(p.name, p.type) != p.type:
                 raise SchemaError(f"{key}: element {p.name!r} has two types ({out[p.name]!r} and {p.type!r})")
         return out
@@ -393,6 +397,7 @@ class Generator:
                 spec: Any = a.type
                 hint, got = self.ref_hint(a.type), self.ref_hint(a.type, True)
             else:
+                assert a.inline is not None  # the check above: exactly one of type and inline type
                 self._validate_simple(a.inline, f"{key}/@{a.name}")
                 spec = self.spec(a.inline)
                 hint, got = self.type_hint(a.inline), self.type_hint(a.inline, True)
@@ -480,7 +485,7 @@ class Generator:
     def versions(self) -> tuple[str, ...]:
         for a in self.s.complex[model.ROOT_TYPE].attributes:
             if a.name == "version":
-                st = a.inline if a.inline is not None else self.s.simple.get(a.type)
+                st = a.inline if a.inline is not None else self.s.simple.get(a.type or "")
                 while st is not None and not st.enums and st.base in self.s.simple:
                     st = self.s.simple[st.base]
                 if st is not None and st.enums:
@@ -584,8 +589,8 @@ class Generator:
                "import datetime as _dt", "import typing as _t", "from decimal import Decimal as _Decimal", "",
                "from sr_core.scene._runtime import Attr, Element, SceneBase, set_simple_types",
                "from sr_core.scene.gates import Gate", "",
-               f"SCHEMA_RELEASE = {quote(s.version)}", f"XSD_SHA256 = {quote(s.xsd_sha256)}",
-               f"SCH_SHA256 = {quote(s.sch_sha256)}", f"GENERATOR_VERSION = {quote(GENERATOR_VERSION)}",
+               f"SCHEMA_RELEASE = {quote(s.version or '')}", f"XSD_SHA256 = {quote(s.xsd_sha256 or "")}",
+               f"SCH_SHA256 = {quote(s.sch_sha256 or "")}", f"GENERATOR_VERSION = {quote(GENERATOR_VERSION)}",
                "COUNTS = " + fmt(counts, 0, len("COUNTS = ")), "",
                "# Simple types by name, in schema order (CONTRACT C5).",
                "SIMPLE_TYPES = " + fmt(simple_specs, 0, len("SIMPLE_TYPES = ")), "",
