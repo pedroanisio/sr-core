@@ -54,7 +54,7 @@ RESERVED_MODULE_NAMES = {
     "GENERATOR_VERSION", "COUNTS", "SIMPLE_TYPES", "ELEMENT_CLASSES", "CLASSES", "VERSIONS", "GATES",
     # sr_core.scene re-exports the generated classes beside these names (sr_core/scene/__init__.py)
     "PI", "Comment", "Text", "Unknown", "Finding", "EngineError", "EngineInfo", "IntegrityError", "SchemaError",
-    "SchemaValueError",
+    "SchemaValueError", "UnknownNameError",
 }
 
 _BUILTIN_HINTS = {

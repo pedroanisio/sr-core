@@ -23,7 +23,7 @@ from sr_core.scene._generated import CLASSES, ELEMENT_CLASSES, GATES, SCHEMA_REL
 from sr_core.scene._runtime import PI, Comment, Element, Text, Unknown, default_of
 from sr_core.scene.checks import check, min_version, new_id
 from sr_core.scene.engine import EngineError, EngineInfo, engine_info
-from sr_core.scene.errors import IntegrityError, SchemaError, SchemaValueError
+from sr_core.scene.errors import IntegrityError, SchemaError, SchemaValueError, UnknownNameError
 from sr_core.scene.findings import Finding
 from sr_core.scene.gates import Gate
 from sr_core.scene.io import read, to_bytes, write
@@ -35,7 +35,7 @@ if _t.TYPE_CHECKING:  # the classes are bound by the line above; type checkers n
 __all__ = sorted(
     ["CLASSES", "ELEMENT_CLASSES", "GATES", "SCHEMA_RELEASE", "VERSIONS", "PI", "Comment", "Element", "Text",
      "Unknown", "default_of", "check", "min_version", "new_id", "EngineError", "EngineInfo", "engine_info",
-     "IntegrityError", "SchemaError", "SchemaValueError", "Finding", "Gate", "read", "to_bytes", "write"]
+     "IntegrityError", "SchemaError", "SchemaValueError", "UnknownNameError", "Finding", "Gate", "read", "to_bytes", "write"]
     + [cls.__name__ for cls in CLASSES.values()])
 
 del _generated
