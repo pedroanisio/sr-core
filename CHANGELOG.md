@@ -22,6 +22,12 @@ version:
 
 ### Fixed
 
+## 1.7.0 — 2026-10-12
+
+### Added
+
+- Validates and packs schema 1.7.0 documents: the source release carries schema 1.7.0 and its generated reference under `docs/schema` (SREP 87, with the exception of SREP 90; document version 1.7). See [schema/CHANGELOG.md](schema/CHANGELOG.md).
+
 ### Tooling
 
 - The compatibility kit has the 15 cases of SREP 87 (`conformance/srep_cases/srep-0087.json`, written by `conformance/tools/srep87_cases.py`, with the modules `srep87-*.wasm`), and SREP 66's `srep-0066-program-id-collision` is amended by SREP 87. The reference implementation of SREP 87 is on rs-scene-render main (6602b81d) and passes all 16; 10 of them run (no longer pending), and the 3 failure cases of SREP 87, the amended SREP 66 case and the 2 render-comparison cases of `seed-local` stay pending in `conformance/tools/kit_pending.py` with the result of the check by hand, because `run.py` cannot express their check. `srep-0072-precision-3d-note` is no longer pending: the reference reports PREC1 since main 285a6931. See [schema/CHANGELOG.md](schema/CHANGELOG.md).
