@@ -1,0 +1,195 @@
+---
+disclaimer:
+  notice: >-
+    No information within this document should be taken for granted.
+    Any statement or premise not backed by a real logical definition
+    or verifiable reference may be invalid, erroneous, or a hallucination.
+  generated_by: "Claude Sonnet 5.5 via Claude Code, from schema/scene-render.xsd at a960b65 (schema 1.7.0), a read of the reference implementation's source, and a sampled second reading"
+  date: "2026-10-12"
+---
+
+```
+SREP:            0
+Title:           Document every schema attribute
+Author:          Pedro Anisio Silva (drafted with Claude Sonnet 5.5)
+Status:          Draft
+Type:            Standards
+Created:         2026-10-12
+Schema-Version:  1.7
+Requires:        0, 4, 5
+```
+
+# SREP 0 (draft) — Document every schema attribute
+
+## Abstract
+
+At schema 1.7.0, 1900 of the 2023 `xs:attribute` declarations carry no `xs:documentation`. This SREP adds a documentation
+sentence to 1831 of them, each checked against the behaviour of the reference implementation, and lists the other
+69 in an allow-list with a reason. It adds a test that fails when an attribute is declared without documentation and
+without an allow-list entry, so coverage cannot regress and the allow-list can only shrink. The change is annotation-only: the
+same documents are accepted and rejected, no default, type, facet or rule changes, and there is no version gate.
+
+## Motivation
+
+The schema is the interchange contract (the header of `scene-render.xsd`), but for most attributes the contract is the name
+and a type. A reader cannot tell the unit of `fontSize`, whether `trimOffset` is a fraction or a length, or what `loop` counts.
+Every engine and every generated binding (the Python SDK of the draft SREP 0, "Generate a Python scene SDK from the schema")
+then answers these questions separately, and the answers drift. The reference implementation is the only place the answers
+were written down, and only as code.
+
+## Specification
+
+### Syntax
+
+Documentation uses the form of the 123 attributes that already have it: the declaration becomes the open form, with the
+annotation as its first child on its own line, indented two spaces deeper than the declaration.
+
+```xml
+<xs:attribute name="timeGap" type="xs:double" default="0">
+  <xs:annotation><xs:documentation>Seconds between the end of one child and the start of the next.</xs:documentation></xs:annotation>
+</xs:attribute>
+```
+
+No Schematron rule changes.
+
+### Semantics
+
+1. A documentation sentence describes behaviour: what the attribute controls, its unit, what the ends of its range mean, and
+   its effect when absent if that is a real behaviour. It names no implementation, file, path or product, and states a
+   dependency on another attribute only where the reference implementation shows one.
+2. A sentence is published only when the behaviour it states was read in the reference implementation, in the schema or its
+   rules, or in an accepted SREP. An attribute whose meaning could not be established that way is not documented by
+   inference; it is listed in the allow-list.
+3. Text is EN-US, plain (no markup), and short (at most 300 characters).
+4. The documentation is informative. Where it and a rule or facet of the schema differ, the rule or facet governs.
+
+### Coverage and the allow-list
+
+Every `xs:attribute` of `scene-render.xsd` MUST carry a non-empty `xs:documentation`, or be listed in
+`tests/undocumented-attributes.txt` as `owner/@name # reason`, where `owner` is the nearest enclosing named `complexType`,
+`attributeGroup` or `element` (for example `complexType:layerType/@opacity`). The test `tests/test_schema_attribute_docs.py`
+fails when
+
+- an attribute has neither a documentation nor an entry;
+- an entry names an attribute that is documented or no longer exists (the list can only shrink).
+
+A new attribute therefore comes with a sentence, or with an entry and a reason that a reviewer can challenge.
+
+### Defaults and the neutral case
+
+The change adds annotations only. `tests/test_schema_attribute_docs.py` strips every `xs:annotation` from the schema and from
+its state at schema 1.7.0 (`a960b65`) and compares the canonical forms; they are equal. It also validates every document of
+`conformance/cases/` against both and compares the verdicts; they are equal.
+
+## Rationale
+
+SREP 5 asks for engine-neutral wording in the schema's documentation; a sentence per attribute extends it from elements and
+types to attributes. Coverage as a failing test follows how the schema's other invariants are kept (the Schematron cases, the
+hash check): a convention that is not checked is lost within a few SREPs. The allow-list exists so that the rule can start at
+once without publishing guesses, and it names its own size.
+
+## Rejected alternatives
+
+- **Document only the attributes of Accepted SREPs.** The undocumented ones are mostly the oldest and the most used.
+- **Publish best-reading sentences marked as unverified.** A wrong unit in a contract costs more than a missing sentence.
+- **A separate attribute reference outside the XSD.** It would drift from the schema; generators already read the XSD.
+- **Require documentation with no allow-list.** It would force a guess for the attributes whose meaning no source establishes.
+
+## Backwards compatibility
+
+Every document valid before is valid, and none is rendered differently. No version gate. By SREP 4 the change is class Docs
+(PATCH): `tools/release.py next schema` gives 1.7.1 for it alone; a release also regenerates the SDK, the schema hashes and
+the generated reference.
+
+## Engine impact
+
+None. The reference implementation was only read.
+
+## Conformance
+
+| Case | Checks | Tolerance |
+|---|---|---|
+| `tests/test_schema_attribute_docs.py` | coverage and allow-list; annotation-only diff against 1.7.0; same verdict on every conformance case | exact |
+
+## Observed schema/engine differences
+
+Reading the reference implementation attribute by attribute showed the differences below. None is changed here: each needs its
+own decision (fix the schema, fix the implementation, or document the difference). Where an attribute below is documented, the
+sentence states what the implementation does, because that is what a document author gets today.
+
+### Declared but not used
+
+- Mesh-gradient point coordinates `x` and `y` (the grid uses `row` and `col`); video `pixelAspect` and `timecodeStart`;
+  asset `license` and `credit`; representation `width`, `height` and `language`; audio asset `duration`, `sampleRate`,
+  `channels` and `language`; the `format` of a stroke font; the `kind` of a track data element and its `sha256` (a wrong
+  digest is not detected, where the physics cache digest is); the `language` of an audio track.
+- Labels and descriptive metadata: `label` and `description` of `param`, `label` of `variant`, the `metadata` attributes
+  `revision`, `created`, `modified`, `generator` and `language`, the accessibility texts, the `duration` and `color` of a
+  marker, the `label` and `kind` of a caption track.
+- Layout and project: `layout/@aspect`, the `bitDepth` of colour management, the project `mode`, `antialias3d`,
+  `timecodeStart` and `pixelAspect`.
+- Parsed and then unused: the `emphasis` of a caption word, the `position` of a cue, the `z` of a caption track (captions are
+  always drawn on top), the `sensorHeight` of a camera (only the width is used), the `falloff` of an effect, the `name` of a
+  symbol, of a text animator and of a puppet pin (pins are addressed by position), the `name` of a chart series (there is no
+  legend).
+- Used for only part of what the schema suggests: the `proxy` of an asset only produces the missing-file warning and
+  never replaces the source in rendering; `clipOut`, `fit`, `boxWidth` and `boxHeight` apply to layers and not to instances,
+  although rule C16 still requires the box when `fit` is not `none`; `outputSha256` is checked for build and data programs and
+  not for step programs; `softness` is read only by one of the effects that declare it, and `position` likewise.
+
+### Ranges and defaults that differ
+
+- Narrower in the implementation than in the schema: `pdfAssetType/@dpi` (the 18 to 1200 range is not enforced; only the image
+  size is limited); the `smoothing` of an audiogram (capped at 0.99, schema allows 1); the `pan` of an audio track (clamped to
+  -1 to 1); the `ridges` of a shape modifier (clamped to 1 to 1024, schema accepts more); the `rows` and `cols` of a mesh
+  warp (at least 2, no upper bound); the `pathSamples` of a camera with geodesics (clamped to 4096, schema allows 65536); the
+  `step` of a graticule (at least 0.1); the `opacity` of a node (no clamp to 0 to 1).
+- A default that exists only in the implementation: the `seed` of a modifier (0), the `width` and `height` of a program node
+  (1), the `energyFraction` and `minImpulse` of fracture, the `gravity` of a crater (falls back to the physics gravity), the
+  `bathymetryScale` (1) and `bathymetryOffset` (0) of an ocean. Some fallbacks differ from the schema default: the colour of a
+  slime, the `pathSamples` of a camera (16 against 64), the `albedo` of a medium (white in one renderer, black in a volume
+  library).
+- A value of 0 that cannot be chosen: the `overlap` of a text animator treats 0 as absent, so a preset's overlap cannot be set
+  to 0; an explicit `unit` of `character` does not override a preset's unit.
+- No consistent unit: the `gravity` of an ocean is scene units per second squared in the solver and metres per second squared
+  in buoyancy.
+- `required` in the schema, filled in by resolution: the `x`, `y`, `width` and `height` of a PDF region when `text` is set.
+- Optional in the schema but required by a rule: the `width` and `height` of a shape (rule C69); `boxWidth` and `boxHeight`
+  of a layer (C16); the `width` and `height` of a program node for mode `step` (PRG3).
+- An enumeration the implementation does not honour: a chart `kind` that falls back to `column`; the `aces` and `aces2` tone
+  mappings give the same operator; a particle emitter `sprite` of kinds the schema rule R32 allows but that the implementation
+  accepts only as an image; the `sensorHeight` above.
+
+### Documentation that contradicts the implementation
+
+- The documentation of `tokenType` says "colour/number tokens"; only colours are resolved.
+- The documentation of text-animator rotation says 3D movement; only foreshortening is applied.
+- Particle-emitter `preset` overrides any attribute equal to its default, even one written explicitly.
+- The ocean `boundary` enumeration lacks a value the solver has (an absorbing boundary), which is never produced.
+- Attributes with an undocumented dependency: `startMarker` and `endMarker` add the marker time to the start and end instead
+  of replacing them; the `seed` of an accretion disk also seeds the background starfield; flock bounds also clamp agents at
+  the box edge; `zDepth`, `rotationX` and `rotationY` are read only when `threeD` is true; `margin` and `alignTo` apply
+  only when `alignX` or `alignY` is set; the `opacity` of a material is visible only for the `mask` and `blend` alpha modes.
+
+### Statements in SREPs that are stale
+
+- SREP 12 says text-animator rotation moves in 3D (see above).
+- SREP 16 gives the number of samples of a connector curve as 32; the implementation uses 16.
+- SREP 17 names the PDF rasteriser the implementation used when it was written; the implementation has changed it.
+
+## Open issues
+
+1. Whether the differences above are resolved in the schema, in the implementation, or by a sentence in the documentation, one
+   SREP each.
+2. The attributes in the allow-list: each needs a source that establishes its meaning.
+3. Whether the Python SDK of the draft SREP "Generate a Python scene SDK from the schema" copies these sentences into its
+   generated classes; this SREP does not require it.
+
+## References
+
+- `schema/scene-render.xsd`, `schema/CHANGELOG.md`; SREP 4 (versioning classes), SREP 5 (engine-neutral wording).
+- `tests/test_schema_attribute_docs.py` and `tests/undocumented-attributes.txt`.
+
+## History
+
+- 2026-10-12: first draft.

@@ -18,17 +18,17 @@
 <p>Empty: attributes only.</p>
 <h2>Attributes</h2>
 <div class="wrap"><table><thead><tr><th>Attribute</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr class="from"><td colspan="4">declared here</td></tr>
-<tr id="a-id"><td class="n"><code>id</code> <span class="req">required</span></td><td><code>xs:ID</code></td><td></td><td></td></tr>
-<tr id="a-src"><td class="n"><code>src</code></td><td><code>xs:anyURI</code></td><td></td><td></td></tr>
-<tr id="a-format"><td class="n"><code>format</code></td><td>one of <span class="chip"><code>vox</code></span> <span class="chip"><code>srvol</code></span></td><td></td><td></td></tr>
-<tr id="a-model"><td class="n"><code>model</code></td><td><code>xs:nonNegativeInteger</code></td><td></td><td></td></tr>
-<tr id="a-fromMesh"><td class="n"><code>fromMesh</code></td><td><code>xs:IDREF</code></td><td></td><td></td></tr>
-<tr id="a-cellSize"><td class="n"><code>cellSize</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td></td><td></td></tr>
-<tr id="a-voxelGrid"><td class="n"><code>voxelGrid</code></td><td><a href="../simple-types.html#volumeChannelType"><code>volumeChannelType</code></a></td><td></td><td></td></tr>
-<tr id="a-maxCells"><td class="n"><code>maxCells</code></td><td><code>xs:positiveInteger</code> ≤ 67108864</td><td></td><td></td></tr>
-<tr id="a-maxMemoryMiB"><td class="n"><code>maxMemoryMiB</code></td><td><code>xs:positiveInteger</code> ≤ 4096</td><td></td><td></td></tr>
+<tr id="a-id"><td class="n"><code>id</code> <span class="req">required</span></td><td><code>xs:ID</code></td><td></td><td><div class="doc"><p>Name by which an object3D&#x27;s voxels attribute refers to this model.</p></div></td></tr>
+<tr id="a-src"><td class="n"><code>src</code></td><td><code>xs:anyURI</code></td><td></td><td><div class="doc"><p>Path of a local .vox or .srvol file holding the cells; give exactly one of src and fromMesh.</p></div></td></tr>
+<tr id="a-format"><td class="n"><code>format</code></td><td>one of <span class="chip"><code>vox</code></span> <span class="chip"><code>srvol</code></span></td><td></td><td><div class="doc"><p>File format of src: vox (MagicaVoxel) or srvol (a volume cache); taken from the file extension when absent. Only allowed with src.</p></div></td></tr>
+<tr id="a-model"><td class="n"><code>model</code></td><td><code>xs:nonNegativeInteger</code></td><td></td><td><div class="doc"><p>Number (from 0) of the one model of a .vox file to use, unplaced; without it a file with a scene graph is used as the whole placed scene, and a file with several models and no graph needs it.</p></div></td></tr>
+<tr id="a-fromMesh"><td class="n"><code>fromMesh</code></td><td><code>xs:IDREF</code></td><td></td><td><div class="doc"><p>Id of a closed mesh asset to cut into cells: the cells whose centres lie inside the mesh, on a lattice of multiples of cellSize.</p></div></td></tr>
+<tr id="a-cellSize"><td class="n"><code>cellSize</code></td><td><a href="../simple-types.html#positiveDecimal"><code>positiveDecimal</code></a></td><td></td><td><div class="doc"><p>Edge length of a cell in scene units, on the mesh as drawn (an imported mesh in metres is 100 per metre); required with fromMesh, not allowed with src. Also the default cell size of an object using the asset.</p></div></td></tr>
+<tr id="a-voxelGrid"><td class="n"><code>voxelGrid</code></td><td><a href="../simple-types.html#volumeChannelType"><code>volumeChannelType</code></a></td><td></td><td><div class="doc"><p>Name of the channel of an srvol cache read as the palette indices; voxels when absent. Only for an srvol src.</p></div></td></tr>
+<tr id="a-maxCells"><td class="n"><code>maxCells</code></td><td><code>xs:positiveInteger</code> ≤ 67108864</td><td></td><td><div class="doc"><p>Most cells the model may have; a larger one is an error. 4,194,304 when absent.</p></div></td></tr>
+<tr id="a-maxMemoryMiB"><td class="n"><code>maxMemoryMiB</code></td><td><code>xs:positiveInteger</code> ≤ 4096</td><td></td><td><div class="doc"><p>Limit in MiB on the size of the source file and on the cells built from it; exceeding either is an error. 128 when absent.</p></div></td></tr>
 <tr class="from"><td colspan="4">from attribute group <a href="../groups.html#assetProvenance"><code>assetProvenance</code></a></td></tr>
-<tr id="a-sha256"><td class="n"><code>sha256</code></td><td><a href="../simple-types.html#sha256Type"><code>sha256Type</code></a></td><td></td><td></td></tr>
+<tr id="a-sha256"><td class="n"><code>sha256</code></td><td><a href="../simple-types.html#sha256Type"><code>sha256Type</code></a></td><td></td><td><div class="doc"><p>SHA-256 digest of the source file, in hex. A local file is hashed when the scene is validated and a different digest is an error; a remote URL is not checked.</p></div></td></tr>
 <tr id="a-license"><td class="n"><code>license</code></td><td><code>xs:string</code></td><td></td><td></td></tr>
 <tr id="a-credit"><td class="n"><code>credit</code></td><td><code>xs:string</code></td><td></td><td></td></tr>
 <tr id="a-proxy"><td class="n"><code>proxy</code></td><td><code>xs:anyURI</code></td><td></td><td></td></tr></tbody></table></div>
@@ -36,7 +36,7 @@
 <div class="rule"><div class="ctx"><span class="lbl">context</span> <code>*[@parent][@id]</code> <a class="lbl" href="../rules.html#p30">p30</a></div><div class="assert"><span class="id">R10</span>a node cannot parent itself.<code class="test">test: @parent != @id</code></div></div>
 <div class="rule"><div class="ctx"><span class="lbl">context</span> <code>assets/voxelAsset</code> <a class="lbl" href="../rules.html#cinematic-voxel-assets">cinematic-voxel-assets</a></div><div class="assert"><span class="id">VOX2</span>a voxelAsset has exactly one of src and fromMesh; format, model and voxelGrid belong to src (model to a vox file, voxelGrid to an srvol file), and cellSize is required with fromMesh and not given with src.<code class="test">test: count(@src|@fromMesh)=1 and (not(@format|@model) or @src) and (not(@model) or @format=&#x27;vox&#x27; or (not(@format) and substring(@src,string-length(@src) - 3)=&#x27;.vox&#x27;)) and (not(@voxelGrid) or @format=&#x27;srvol&#x27; or (not(@format) and substring(@src,string-length(@src) - 5)=&#x27;.srvol&#x27;)) and ((@fromMesh and @cellSize) or not(@fromMesh|@cellSize))</code></div><div class="assert"><span class="id">VOX3</span>voxelAsset/@fromMesh must name a mesh asset.<code class="test">test: not(@fromMesh) or /scene/assets/mesh[@id=current()/@fromMesh]</code></div></div>
 </main>
-<footer>Generated by sr-schemadoc from <a href="../scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>5ef91e6ca9a6d860047f2a5347c59fa17423cb99ef7535b7ceaca16619f8ce2c</code>) and <a href="../scene-render.sch">scene-render.sch</a> (SHA-256 <code>868863e9ea4caf04e7f0bd9873c23ce5f723205714178349a4f385c4778fd368</code>).</footer>
+<footer>Generated by sr-schemadoc from <a href="../scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>d1dfd98b2256be103f25f7bbe09c2eb9ae7f3280ba71c385ab736aa8b481dde7</code>) and <a href="../scene-render.sch">scene-render.sch</a> (SHA-256 <code>868863e9ea4caf04e7f0bd9873c23ce5f723205714178349a4f385c4778fd368</code>).</footer>
 <script src="../search-index.js"></script>
 <script src="../search.js"></script>
 </body>

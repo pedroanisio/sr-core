@@ -39,7 +39,7 @@ import datetime as _dt
 import functools
 import re
 import unicodedata
-from collections.abc import Mapping, Sequence
+from collections.abc import Iterable, Mapping, Sequence
 from decimal import Decimal
 from typing import Any
 
@@ -435,8 +435,9 @@ class Codec:
         raise NotImplementedError
 
     # -- helpers
-    def _fail(self, message: str) -> SchemaValueError:
-        return SchemaValueError(message, xsd_type=self.xsd_type)
+    def _fail(self, message: str, *, suggestions: Iterable[str] | None = None,
+              suggest_from: tuple[str, Iterable[str]] | None = None) -> SchemaValueError:
+        return SchemaValueError(message, xsd_type=self.xsd_type, suggestions=suggestions, suggest_from=suggest_from)
 
     def _wrong_type(self, value: Any, expected: str) -> SchemaValueError:
         return self._fail(f"expected {expected}, got {type(value).__name__} {value!r}")
@@ -717,7 +718,7 @@ class _List(Codec):
             try:
                 token = self._item.validate(item)
             except SchemaValueError as e:
-                raise self._fail(f"item {index}: {e.message}") from None
+                raise self._fail(f"item {index}: {e.message}", suggestions=e.suggestions) from None
             if _WS_RUN.search(token) or token == "":
                 raise self._fail(f"item {index}: {token!r} cannot be written as a list item")
             tokens.append(token)
@@ -729,7 +730,7 @@ class _List(Codec):
         except _Unrepresentable:
             return None
         except SchemaValueError as e:
-            raise self._fail(f"item {index}: {e.message}") from None
+            raise self._fail(f"item {index}: {e.message}", suggestions=e.suggestions) from None
 
     def _value(self, s: str) -> list[Any]:
         return [self._check_item(i, t) for i, t in enumerate(_split(s))]
@@ -741,24 +742,32 @@ class _Union(Codec):
         self._members = tuple(members)
 
     def _lexical(self, value: Any) -> str:
-        reasons: list[str] = []
+        errors: list[SchemaValueError] = []
         for member in self._members:
             try:
                 return member.validate(value)
             except SchemaValueError as e:
-                reasons.append(f"{member.xsd_type}: {e.message}")
-        raise self._fail(f"{value!r} fits no member type ({'; '.join(reasons)})")
+                errors.append(e)
+        raise self._no_member(repr(value), errors)
 
     def _value(self, s: str) -> Any:
-        reasons: list[str] = []
+        errors: list[SchemaValueError] = []
         for member in self._members:
             try:
                 return member._value(s)
             except _Unrepresentable:
                 raise
             except SchemaValueError as e:
-                reasons.append(f"{member.xsd_type}: {e.message}")
-        raise self._fail(f"{s!r} fits no member type ({'; '.join(reasons)})")
+                errors.append(e)
+        raise self._no_member(repr(s), errors)
+
+    def _no_member(self, shown: str, errors: list[SchemaValueError]) -> SchemaValueError:
+        """The error for a value that fits no member; the members' suggestions are read only now, when it is refused."""
+        reasons = [f"{m.xsd_type}: {e.message}" for m, e in zip(self._members, errors)]
+        found: list[str] = []
+        for e in errors:
+            found.extend(x for x in e.suggestions if x not in found)
+        return self._fail(f"{shown} fits no member type ({'; '.join(reasons)})", suggestions=found[:3])
 
 
 _LENGTH_FACETS = ("length", "minLength", "maxLength")
@@ -828,7 +837,9 @@ class _Restriction(Codec):
         v = self._base._value(s)
         n = self._base._normalize(s)
         if self._enum_values is not None and not any(v == e for e in self._enum_values):
-            raise self._fail(f"{n!r} is not one of {', '.join(repr(x) for x in (self.literals or ()))}")
+            literals = self.literals or ()
+            raise self._fail(f"{n!r} is not one of {', '.join(repr(x) for x in literals)}",
+                             suggest_from=(n, literals))
         if self._patterns and not any(p.fullmatch(n) for p in self._patterns):
             raise self._fail(f"{n!r} does not match the pattern of {self.xsd_type}")
         if self._lengths:

@@ -95,7 +95,12 @@ def test_the_canonical_schema_carries_every_line_the_sreps_add():
     (SREP 83 and SREPs 66 to 75 change other lines; tests/test_srep_0083.py and the kit cases cover those)."""
     base = {p: set(b.decode().split("\n")) for p, b in gap.baseline().items()}
     for p, b in gap.proposed_schema().items():
-        have = set(open(os.path.join(ROOT, p), encoding="utf-8").read().split("\n"))
+        text = open(os.path.join(ROOT, p), encoding="utf-8").read()
+        # an attribute the SREP declares without documentation is documented since srep-0000-schema-attribute-docs.md:
+        # its line is also present with the annotation taken out
+        bare = re.sub(r"(<xs:attribute [^<>\n]*?)>\n\s*<xs:annotation>[^\n]*</xs:annotation>\n\s*</xs:attribute>", r"\1/>", text)
+        bare = re.sub(r"(<xs:attribute [^<>\n]*>)\n\s*<xs:annotation>[^\n]*</xs:annotation>\n\s*(<xs:simpleType)", r"\1\2", bare)
+        have = set(text.split("\n")) | set(bare.split("\n"))
         gone = {EDITED.get(line, line) for line in b.decode().split("\n") if line not in base[p]} - have
         assert not gone, (p, sorted(gone)[:5])
 

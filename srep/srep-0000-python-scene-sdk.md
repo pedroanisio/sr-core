@@ -114,12 +114,16 @@ what it offers. Section 9 of the Specification answers it.
    the reference, the engine's diagnostic paths and the SDK use the same strings.
    - A name that is a Python keyword takes a trailing underscore. At 1.7.0 the only one is `from`, which becomes
      `from_`.
-   - Classes MUST use `__slots__`, so that assigning an undeclared attribute raises `AttributeError`.
+   - Classes MUST use `__slots__`, so that assigning an undeclared attribute raises `AttributeError`; the error is the
+     `UnknownNameError` of 3.12.
 4. **Attribute data.** Each generated attribute MUST carry:
    - its XSD type;
    - `use`;
    - `default` and `fixed`;
-   - its `xs:documentation`, as a docstring.
+   - its documentation: the `xs:documentation` of the attribute declaration, else that of its simple type (the named
+     type, or the inline one), dedented. It is `Attr.doc` and the descriptor's `__doc__` (so `help()` and
+     `inspect.getdoc` show it), a docstring after the declaration in the generated class body (editors show it on
+     hover), and a line in the docstring of the `__init__` and `add_<name>` stubs that type checkers read.
 5. **Values.** Assignment MUST check a value at once, and refuse it with `SchemaValueError`. The error names the
    element path, the attribute and the XSD type.
 
@@ -183,6 +187,60 @@ what it offers. Section 9 of the Specification answers it.
 
     Every other runtime member starts with `_`. The generator MUST fail when a schema attribute takes a reserved name,
     starts with `add_`, or starts with `_` (D3).
+12. **Unknown names.** A name the element does not have MUST raise `UnknownNameError`, defined in `sr_core.scene.errors`
+    and exported, a subclass of both `SchemaValueError` and `AttributeError`. Then `except AttributeError`, `hasattr`
+    and `getattr(obj, name, default)` behave as for any missing attribute: `hasattr(layer, "nope")` is `False`.
+    - It is raised for: setting an attribute the element does not declare; a constructor or factory keyword that is
+      not an attribute; reading a name that is not an attribute or a member; an `add_<name>` method that does not
+      exist; a child that the content model does not allow (`add`, `kind="child"`); a `xml_name` that the class does not
+      cover; `default_of` with an unknown attribute. A read-only member (`xml_name`, `owner`) keeps its own
+      `AttributeError`. `find` and `find_all` still return `None` and `[]` for a name that matches nothing.
+    - Fields: `name` (what was asked for), `element` (the XML name of the element, or the class for `xml_name`),
+      `kind` (`attribute`, `method`, `child` or `element`), `suggestions` (up to three close names, best first) and
+      `allowed` (every valid name, in schema order; the sorted child names for a child).
+    - Suggestions come from, in order: the same letters in another case, the XML spelling of a Python name (`from`
+      for `from_`), a name that contains the other (`blendMode` for `blend`; both at least four letters), and
+      `difflib.get_close_matches` at a cutoff of 0.6.
+    - The message is `<layer> has no attribute 'blendMode'; did you mean 'blend'? (allowed: id, name, ...)`, with
+      `has no method 'add_layr'` for a factory, and `<scene> is not allowed in <composition>; ...` (after the element
+      path) for a child.
+    - The same suggestions reach two more places. (a) A value refused by an enumeration (`SchemaValueError`): its
+      `suggestions` field holds the close literals, computed by the same rules on first use so that a valid value costs
+      nothing extra, and `str(error)` ends the message with `; did you mean 'multiply'?` before the XSD type. It holds for
+      a list type (the item error carries the suggestions of its item type) and for a union (those of its member types,
+      read only when no member accepts the value). Messages of other failures are unchanged. (b) A name the package does
+      not export: `sr_core.scene.__getattr__` raises `UnknownNameError` with `kind="class"` (still an `AttributeError`, so
+      `from sr_core.scene import Layr` stays an `ImportError`), whose suggestions are class names, with an XML element
+      name mapped to its class or classes (`textanimator` and `TextAnimator`; `image` gives `ImageAsset`). A dunder name
+      raises a plain `AttributeError`. Type checkers do not see this hook, so they still flag the name.
+    - The name check MUST cost nothing on a valid assignment: `__setattr__` tries `object.__setattr__` first and builds
+      the error only when that fails, and the constructors set the attributes through their descriptors. The two
+      hooks are hidden from type checkers (`if not TYPE_CHECKING`), which keep reporting an unknown attribute.
+13. **Introspection.** `sr_core.scene.introspect`, re-exported from `sr_core.scene`, answers what the schema says, from
+    the generated tables (`_content`, the `Attr` descriptors, `SIMPLE_TYPES`, `SIMPLE_DOCS`, `GATES`) and nothing else.
+    - `describe(target) -> Description` takes an element class, an instance, an XML element name (`"layer"`) or a class
+      name (`"Layer"`). An unknown name raises `UnknownNameError` with suggestions; a name that several classes share
+      (the six of 3.2) raises `AmbiguousNameError` with `candidates`. The result is cached, frozen and has `to_dict()`
+      and `to_json()`.
+    - `describe_all() -> dict` is the whole schema in compact form; `element_names() -> tuple[str, ...]` is every XML
+      element name, sorted (162 at 1.7.0).
+    - `SIMPLE_DOCS`, a table of the documentation of the simple types that have some, is the only addition to the
+      generated module.
+    - The JSON form is versioned: `"format": "sr-scene-describe/1"`. An element has `xml_names`, `class_name`,
+      `xsd_type`, `doc`, `min_version`, `content_model` (`sequence`, `choice`, `all`, `simple`, `empty` or `mixed`; the
+      generator produces the first four and `empty`), `simple_content`, `children` (`name`, `class_name`, `min_occurs`,
+      `max_occurs` with null for unbounded, `position`, `min_version`) and `attributes` (`xml_name`, `python_name`,
+      `required`, `use`, `default`, `fixed`, `min_version`, `value_min_versions`, `doc`, `type`). A type has `name`,
+      `kind` (`atomic`, `list` or `union`), `base` (the XSD builtin), `enum`, `facets`, `patterns`, `item`, `members` and
+      `doc`. `describe_all()` adds `versions` and a `types` table, writes an attribute type as its name where the table
+      or the builtins hold it, and leaves out empty members. The format string changes only when a reader of the old
+      shape would break.
+    - Minimum versions come from the version gates (5): a gate whose trigger is an element path names that element in
+      that parent (`assets/pdf`, `.//repeat/points`) and a gate on `element[@attr]` or `element[@attr='v']` names the
+      attribute or the value. The minimum is the lowest version of `VERSIONS` that no such gate refuses; it is
+      `VERSIONS[0]` for an element no gate names, and null for an attribute no gate names. A gate whose test also depends
+      on other attributes (`GEO1`) is not used. The minimum of an element that has several parents is the lowest over its
+      parents.
 
 ### 4. Reading and writing
 
@@ -307,13 +365,20 @@ what it offers. Section 9 of the Specification answers it.
 
 ### 8. Command
 
-The console script `sr-scene` provides three commands:
+The console script `sr-scene` provides six commands:
 
 | Command | What it does | Exit codes |
 |---|---|---|
 | `sr-scene check FILE... [--schema] [--engine PATH] [--data DIR] [--format human\|json] [--deny-warnings]` | runs level 1, and level 2 or 3 when asked; `--data` is the folder the engine resolves assets from. A document without findings is reported with the levels that ran, `ok (level 1)` or `ok (levels 1, 2)`, and the JSON output carries them as `levels`: level 1 runs only the Schematron's version gates, so a bare `ok` would overstate it | 0 valid (warnings alone do not fail unless `--deny-warnings`), 1 errors, 2 read error |
 | `sr-scene min-version FILE...` | prints each file's lowest valid version | |
+| `sr-scene describe NAME... [--format human\|json]`, `sr-scene describe --all [--format human\|json]` | prints the account of 3.13 for each element or class name; a shared name prints every class; `--all --format json` is `describe_all()` on one line | 0, or 2 for an unknown name (stderr names the closest) or a usage error |
+| `sr-scene list [--format human\|json]` | every element name with the first sentence of its documentation (`sr-scene-list/1` in JSON) | 0 |
+| `sr-scene new [--version V] [--layout pretty\|indent\|preserve] [-o FILE]` | prints (or writes atomically) a minimal scene, a project and an empty composition, that is clean at levels 1 and 2; `V` is `auto` (the default) or a schema version | 0, 2 for a usage error |
 | `sr-scene format FILE... [--check]` | rewrites with `layout="pretty"` and the content-model order, atomically; says when it reordered elements; refuses a file with a DOCTYPE, whose entities a rewrite would inline | with `--check`, rewrites nothing and exits 1 when a file would change |
+
+`check --format json` prints `{"format": "sr-scene-findings/1", "valid": bool, "files": [...]}`; a file entry has `file`,
+`valid`, `findings` (each the dict of `Finding.to_dict()`, with `code`) and, for an unreadable file, `error`. The
+envelope key was added to the existing output, which keeps `valid` and `files` unchanged.
 
 ### 9. Drift controls
 
@@ -461,3 +526,9 @@ None. The SREP changes no rendering. Its checks are sr-core tests: D1, D4, D5, D
   and stored verbatim for every non-string type (3.5), and `layout="indent"` was added (4.1).
 - 2026-10-12: a class that covers several element names takes the constructor keyword `xml_name` (3.2), so that
   `<thumbnail>` can be built through the public API.
+- 2026-10-12: an AI-facing surface. `UnknownNameError` with suggestions replaces the bare `AttributeError` (3.12);
+  attribute documentation is read from the attribute or its type into the descriptors, docstrings and stubs (3.4);
+  `describe`, `describe_all` and `element_names` with the format `sr-scene-describe/1` (3.13); the commands `describe`,
+  `list` and `new`, and the `sr-scene-findings/1` envelope (8); `docs/scene-sdk-guide.md`.
+- 2026-10-12: suggestions for a near-miss enumeration value (also inside lists and unions) and for a mistyped class
+  name of the package (3.12); `mypy sr_core/scene` reports no errors, and a test keeps it so.

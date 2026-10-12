@@ -18,21 +18,21 @@
 <p>Empty: attributes only.</p>
 <h2>Attributes</h2>
 <div class="wrap"><table><thead><tr><th>Attribute</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr class="from"><td colspan="4">declared here</td></tr>
-<tr id="a-id"><td class="n"><code>id</code> <span class="req">required</span></td><td><code>xs:ID</code></td><td></td><td></td></tr>
-<tr id="a-src"><td class="n"><code>src</code></td><td><code>xs:anyURI</code></td><td></td><td></td></tr>
-<tr id="a-sha256"><td class="n"><code>sha256</code></td><td><a href="../simple-types.html#sha256Type"><code>sha256Type</code></a></td><td></td><td></td></tr>
-<tr id="a-url"><td class="n"><code>url</code></td><td><code>xs:string</code></td><td></td><td></td></tr>
-<tr id="a-cache"><td class="n"><code>cache</code></td><td><code>xs:anyURI</code></td><td></td><td></td></tr>
-<tr id="a-cacheSha256"><td class="n"><code>cacheSha256</code></td><td><a href="../simple-types.html#sha256Type"><code>sha256Type</code></a></td><td></td><td></td></tr>
-<tr id="a-tileSize"><td class="n"><code>tileSize</code></td><td><code>xs:positiveInteger</code></td><td></td><td></td></tr>
-<tr id="a-minZoom"><td class="n"><code>minZoom</code></td><td><a href="../simple-types.html#tileZoomType"><code>tileZoomType</code></a></td><td><code>0</code></td><td></td></tr>
-<tr id="a-maxZoom"><td class="n"><code>maxZoom</code></td><td><a href="../simple-types.html#tileZoomType"><code>tileZoomType</code></a></td><td><code>19</code></td><td></td></tr>
-<tr id="a-attribution"><td class="n"><code>attribution</code></td><td><code>xs:string</code></td><td></td><td></td></tr></tbody></table></div>
+<tr id="a-id"><td class="n"><code>id</code> <span class="req">required</span></td><td><code>xs:ID</code></td><td></td><td><div class="doc"><p>Identifier by which basemaps, and the terrain of a 3D map object, name this tile source.</p></div></td></tr>
+<tr id="a-src"><td class="n"><code>src</code></td><td><code>xs:anyURI</code></td><td></td><td><div class="doc"><p>Path or URI of a local PMTiles archive of vector or raster tiles that is read when rendering; used in preference to the cache.</p></div></td></tr>
+<tr id="a-sha256"><td class="n"><code>sha256</code></td><td><a href="../simple-types.html#sha256Type"><code>sha256Type</code></a></td><td></td><td><div class="doc"><p>SHA-256 digest that the file named by src must match; a mismatch is reported as an error when the document is checked.</p></div></td></tr>
+<tr id="a-url"><td class="n"><code>url</code></td><td><code>xs:string</code></td><td></td><td><div class="doc"><p>Template of an online tile service with {z}, {x} and {y} (and {s}, which takes a, b or c); the resolve step downloads the needed tiles into cache, and rendering never does. Without src it needs cache and cacheSha256.</p></div></td></tr>
+<tr id="a-cache"><td class="n"><code>cache</code></td><td><code>xs:anyURI</code></td><td></td><td><div class="doc"><p>Path of the PMTiles archive the resolve step writes from url; it is read for rendering when src is absent. Required with url unless src is given.</p></div></td></tr>
+<tr id="a-cacheSha256"><td class="n"><code>cacheSha256</code></td><td><a href="../simple-types.html#sha256Type"><code>sha256Type</code></a></td><td></td><td><div class="doc"><p>SHA-256 digest that pins the cache archive; a mismatch is reported as an error when assets are verified, and the resolve step writes it. Required with url unless src is given.</p></div></td></tr>
+<tr id="a-tileSize"><td class="n"><code>tileSize</code></td><td><code>xs:positiveInteger</code></td><td></td><td><div class="doc"><p>Pixel size at which a basemap draws these tiles and at which zooms to fetch are chosen; 512 for vector tiles and 256 for raster when absent. Not used for 3D terrain or buildings.</p></div></td></tr>
+<tr id="a-minZoom"><td class="n"><code>minZoom</code></td><td><a href="../simple-types.html#tileZoomType"><code>tileZoomType</code></a></td><td><code>0</code></td><td><div class="doc"><p>Lowest zoom level (0 to 24) fetched from the online service; 0 when absent. It does not limit tiles read from src.</p></div></td></tr>
+<tr id="a-maxZoom"><td class="n"><code>maxZoom</code></td><td><a href="../simple-types.html#tileZoomType"><code>tileZoomType</code></a></td><td><code>19</code></td><td><div class="doc"><p>Highest zoom level (0 to 24) fetched from the online service; 19 when absent, and not below minZoom. It does not limit tiles read from src.</p></div></td></tr>
+<tr id="a-attribution"><td class="n"><code>attribution</code></td><td><code>xs:string</code></td><td></td><td><div class="doc"><p>Credit line for the tiles, drawn in the map&#x27;s corner by a basemap that shows its attribution; the archive&#x27;s own credit is used when absent.</p></div></td></tr></tbody></table></div>
 <h2>Schematron rules</h2>
 <div class="rule"><div class="ctx"><span class="lbl">context</span> <code>*[@parent][@id]</code> <a class="lbl" href="../rules.html#p30">p30</a></div><div class="assert"><span class="id">R10</span>a node cannot parent itself.<code class="test">test: @parent != @id</code></div></div>
 <div class="rule"><div class="ctx"><span class="lbl">context</span> <code>tiles</code> <a class="lbl" href="../rules.html#p42">p42</a></div><div class="assert"><span class="id">C46</span>tiles need @src, or @url with @cache and @cacheSha256.<code class="test">test: @src or (@url and @cache and @cacheSha256)</code></div></div>
 </main>
-<footer>Generated by sr-schemadoc from <a href="../scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>5ef91e6ca9a6d860047f2a5347c59fa17423cb99ef7535b7ceaca16619f8ce2c</code>) and <a href="../scene-render.sch">scene-render.sch</a> (SHA-256 <code>868863e9ea4caf04e7f0bd9873c23ce5f723205714178349a4f385c4778fd368</code>).</footer>
+<footer>Generated by sr-schemadoc from <a href="../scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>d1dfd98b2256be103f25f7bbe09c2eb9ae7f3280ba71c385ab736aa8b481dde7</code>) and <a href="../scene-render.sch">scene-render.sch</a> (SHA-256 <code>868863e9ea4caf04e7f0bd9873c23ce5f723205714178349a4f385c4778fd368</code>).</footer>
 <script src="../search-index.js"></script>
 <script src="../search.js"></script>
 </body>

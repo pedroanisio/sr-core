@@ -12,9 +12,9 @@ from __future__ import annotations
 import importlib
 import sys
 from dataclasses import dataclass
-from typing import Any, ClassVar, Generic, Iterator, Optional, TypeVar, overload
+from typing import TYPE_CHECKING, Any, ClassVar, Generic, Iterator, Optional, TypeVar, overload
 
-from sr_core.scene.errors import SchemaValueError
+from sr_core.scene.errors import SchemaValueError, UnknownNameError
 
 _XML_SPACE = " \t\r\n"  # XML white space (production S): NBSP, U+2003, VT, FF, NEL are character data
 
@@ -502,6 +502,18 @@ class Element:
     __slots__ = ("_attrs", "_owner", "_nodes", "_name", "_pre", "_post", "_api_auto", "_index", "source_line",
                  "source_column")
 
+    # Annotations only (no value, so they do not clash with the slots): they tell a type checker what ``_reset`` stores.
+    _attrs: dict[str, str]
+    _owner: Optional["Element"]
+    _nodes: list[Any]
+    _index: Any
+    _name: str
+    _pre: list[Any]
+    _post: list[Any]
+    _api_auto: bool
+    source_line: Optional[int]
+    source_column: Optional[int]
+
     _xsd_type: ClassVar[str] = ""
     _element_names: ClassVar[tuple[str, ...]] = ()
     _content: ClassVar[Optional[tuple[Any, ...]]] = None
@@ -519,25 +531,26 @@ class Element:
         if xml_name is None:
             xml_name = self._element_names[0]
         elif not isinstance(xml_name, str) or xml_name not in self._element_names:
-            raise SchemaValueError(f"{xml_name!r} is not an element name of {type(self).__name__} "
-                                   f"(allowed: {', '.join(self._element_names)})")
+            raise UnknownNameError(str(xml_name), type(self).__name__, self._element_names, kind="element")
         self._reset(xml_name)
         self._set_all(attrs)
 
     # -- construction helpers
 
     def _reset(self, name: str) -> None:
-        self._attrs: dict[str, str] = {}
-        self._owner: Optional[Element] = None
-        self._nodes = nodes = _Nodes()
+        put = object.__setattr__  # the slots are known: skip the name check of __setattr__
+        nodes = _Nodes()
         nodes._el = self
-        self._index: Any = None  # on a document's root: its _IdIndex, built by new_id
-        self._name = name
-        self._pre: list[Any] = []
-        self._post: list[Any] = []
-        self._api_auto = False  # version="auto" was set through the API (only then is it honoured)
-        self.source_line: Optional[int] = None
-        self.source_column: Optional[int] = None
+        put(self, "_attrs", {})
+        put(self, "_owner", None)
+        put(self, "_nodes", nodes)
+        put(self, "_index", None)  # on a document's root: its _IdIndex, built by new_id
+        put(self, "_name", name)
+        put(self, "_pre", [])
+        put(self, "_post", [])
+        put(self, "_api_auto", False)  # version="auto" was set through the API (only then is it honoured)
+        put(self, "source_line", None)
+        put(self, "source_column", None)
 
     @classmethod
     def _blank(cls, name: str) -> "Element":
@@ -549,8 +562,38 @@ class Element:
         for key, value in attrs.items():
             desc = getattr(type(self), key, None)
             if not isinstance(desc, Attr):
-                raise AttributeError(f"<{self.xml_name}> has no attribute {key!r}")
-            setattr(self, key, value)
+                raise self._unknown(key)
+            if key == "version" and isinstance(self, SceneBase):
+                setattr(self, key, value)  # the root accepts "auto" (SceneBase.__setattr__)
+            else:
+                desc.__set__(self, value)
+
+    def _unknown(self, name: str) -> UnknownNameError:
+        """The error for a name this element does not have: an ``add_<child>`` method, or else an attribute."""
+        try:
+            element = self._name
+        except AttributeError:  # not initialised yet
+            element = type(self).__name__
+        if name.startswith("add_"):
+            return UnknownNameError(name, element, ["add_" + n for n in sorted(_model_of(type(self)).slots)],
+                                    kind="method")
+        return UnknownNameError(name, element, [a.name for a in _attr_specs(type(self)).values()])
+
+    if not TYPE_CHECKING:  # a type checker must keep flagging an unknown attribute, so it never sees these two
+
+        def __setattr__(self, name: str, value: Any) -> None:
+            try:
+                object.__setattr__(self, name, value)
+            except AttributeError:
+                if getattr(type(self), name, None) is not None:  # a read-only member: its own error says why
+                    raise
+                raise self._unknown(name) from None
+
+        def __getattr__(self, name: str) -> Any:
+            # only reached when the normal lookup failed
+            if name.startswith("_"):
+                raise AttributeError(f"{type(self).__name__!r} object has no attribute {name!r}", name=name)
+            raise self._unknown(name)
 
     # -- read-only structure
 
@@ -626,8 +669,7 @@ class Element:
         """The content-model slot for a child of this name; refuses what the model does not allow."""
         slot = _model_of(type(self)).slots.get(name)
         if slot is None:
-            allowed = ", ".join(sorted(_model_of(type(self)).slots)) or "none"
-            raise SchemaValueError(f"<{name}> is not allowed in <{self.xml_name}> (allowed: {allowed})",
+            raise UnknownNameError(name, self.xml_name, sorted(_model_of(type(self)).slots), kind="child",
                                    path=self.xml_path)
         if child is not None and child._xsd_type != slot.type_key:
             raise SchemaValueError(f"<{name}> here must be of type {slot.type_key}, not {child._xsd_type or '?'}",
@@ -845,7 +887,7 @@ def default_of(element: Element, name: str) -> Any:
     if not isinstance(desc, Attr):
         desc = _attr_specs(type(element)).get(name)
     if desc is None:
-        raise AttributeError(f"<{element.xml_name}> has no attribute {name!r}")
+        raise element._unknown(name)
     if desc.default is None:
         return None
     try:
