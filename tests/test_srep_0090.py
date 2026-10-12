@@ -68,7 +68,7 @@ def test_the_exception_is_a_closed_list_of_two_kinds():
 def test_srep_87_and_the_changelog_point_to_srep_90():
     srep87 = read("srep", "srep-0087.md")
     assert "SREP 90" in header(srep87, "Resolution")
-    log = read("schema", "CHANGELOG.md").split("## Unreleased", 1)[1].split("\n## ", 1)[0]
+    log = read("schema", "CHANGELOG.md").split("\n## 1.7.0 ", 1)[1].split("\n## ", 1)[0]
     assert "by the exception to SREP 0 (Versioning) that SREP 90 (Process) records" in log
 
 

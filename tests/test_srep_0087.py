@@ -1,6 +1,6 @@
 """SREP 87 (amends SREP 66) is Accepted: a program's emitted ids are scoped by the program's id.
 
-The record: SREP 87's header, the index row, SREP 66's History and Open issues, the Unreleased entry of the schema
+The record: SREP 87's header, the index row, SREP 66's History and Open issues, the 1.7.0 entry of the schema
 changelog and the version it calls for. SREP 87 changes neither the XSD nor the Schematron. Its class is Added by the
 exception SREP 90 records (Open issues 7, decided), and its erratum of 2026-10-11 adds link/@source, the overrides of
 an instance or an include and the bone names of skin weights to the positions of rules 3 and 4 (Open issues 6).
@@ -64,8 +64,8 @@ def test_index_and_srep_66_record_the_amendment():
 
 
 LOG = open(os.path.join(ROOT, "schema", "CHANGELOG.md"), encoding="utf-8").read()
-UNRELEASED = LOG.split("## Unreleased", 1)[1].split("\n## ", 1)[0]
-ENTRY = UNRELEASED.split("### Added", 1)[1].split("### ", 1)[0]
+RELEASED = LOG.split("\n## 1.7.0 ", 1)[1].split("\n## ", 1)[0]     # SREP 87 is released in schema 1.7.0
+ENTRY = RELEASED.split("### Added", 1)[1].split("### ", 1)[0]
 
 
 def section(title):
@@ -74,17 +74,17 @@ def section(title):
 
 def test_no_schema_change_and_the_class_added_by_srep_90_calls_for_1_7_0():
     """The schema editor decided the class on 2026-10-11 (Open issues 7): Added, by the exception to SREP 0 that SREP
-    90 records. The changelog and Backwards compatibility say so, no longer provisionally, and `release.py next
-    schema` gives 1.7.0."""
+    90 records. The changelog and Backwards compatibility say so, no longer provisionally, and the release that
+    carries it is 1.7.0 (a MINOR, nothing under Breaking)."""
     assert "(SREP 87, amends SREP 66)" in ENTRY
-    assert "### Breaking\n\n### Added" in UNRELEASED                  # nothing under Breaking
+    assert "### Breaking" not in RELEASED                               # nothing under Breaking
     assert "provisional" not in ENTRY and "SREP 90" in ENTRY
     assert section("Backwards compatibility").lstrip().startswith(
         "**Class: Added (SREP 4), by the exception that SREP 90 records (Process).**")
     assert "class Added by the exception that SREP 90 records" in header("Resolution")
-    nxt = subprocess.run([sys.executable, os.path.join(ROOT, "tools", "release.py"), "next", "schema"],
+    chk = subprocess.run([sys.executable, os.path.join(ROOT, "tools", "release.py"), "check"],
                          check=True, capture_output=True, text=True).stdout.strip()
-    assert nxt.endswith("1.7.0"), nxt
+    assert "schema 1.7.0" in chk, chk
     for f in ("scene-render.xsd", "scene-render.sch"):
         assert "SREP 87" not in open(os.path.join(ROOT, "schema", f), encoding="utf-8").read()
 
