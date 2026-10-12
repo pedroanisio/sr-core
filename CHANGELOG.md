@@ -54,6 +54,10 @@ version:
 - `sr_core.scene`: the documentation of an attribute is its `xs:documentation`, or else that of its simple type; it
   reaches `Attr.doc`, the descriptor's `__doc__`, a docstring after each declaration and the docstrings of the checker
   stubs (before, the descriptors carried only the declaration's own text, and the stubs none).
+- `sr_core.scene`: a refused enumeration value carries `suggestions` and says `did you mean 'multiply'?` for
+  `layer.blend = "mutliply"` (also inside list types and unions); a mistyped class name, `sr_core.scene.Layr` or
+  `sr_core.scene.textanimator`, raises `UnknownNameError` with `kind="class"` and `did you mean 'Layer'?` (still an
+  `AttributeError`; `from sr_core.scene import Layr` is still an `ImportError`). `SchemaValueError` now pickles.
 - `sr_core.scene`: an unknown attribute, factory or child now raises `UnknownNameError` (still an `AttributeError`, or a
   `SchemaValueError` for a child) instead of a bare `AttributeError`.
 

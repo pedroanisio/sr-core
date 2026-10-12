@@ -163,8 +163,8 @@ Layer(id="title").opacity = 2
 ```
 
 (The path starts at the root of the tree the element is in: `/layer/@opacity` for a layer that is not in a document yet,
-`/scene/composition/layer/@opacity` once it is.) Enumerations list every allowed value, so `layer.blend = "mutliply"` shows the
-whole `blendType` list; compare it with `describe("layer")`.
+`/scene/composition/layer/@opacity` once it is.) Enumerations list every allowed value and, when a value is close, name it: `layer.blend = "mutliply"` ends with
+`; did you mean 'multiply'?` (the error's `suggestions` holds it); compare with `describe("layer")`.
 
 ## 5. Values are lexical strings; layouts
 
@@ -278,7 +278,8 @@ assert json.loads(text) == everything
 | `layer.blendMode`, `Layer(colour=...)` | `UnknownNameError`: `did you mean 'blend'?` | take the name from `describe("layer")` or `sr-scene describe layer` |
 | `add_layr`, `add_clip` | `has no method 'add_layr'`; the allowed list | pick from the list, or `describe(parent).children` |
 | a number where a string is declared (`fps=30`) | `expected str, got int 30 (xs:string)` | pass `"30"` |
-| an enumeration value spelled differently | `'mutliply' is not one of 'normal', ...` | copy one of the listed values |
+| an enumeration value spelled differently | `'mutliply' is not one of 'normal', ...; did you mean 'multiply'?` | use the suggestion, or copy one of the listed values |
+| a class name spelled differently (`sr_core.scene.Layr`, `S.textanimator`) | `UnknownNameError`: `has no class 'Layr'; did you mean 'Layer'?` (an `ImportError` in a `from` import) | take the name from `sr_core.scene.__all__`, or `describe("layer")` |
 | a value out of its bounds | `2 violates maxInclusive 1.0 (unitDecimal)` | read the facets in `describe` |
 | `from=` in a call | a syntax error | write `from_` |
 | a newer element in an older document | `V9`, `xsd:version` | `Scene(version="auto")`, or raise the version |

@@ -198,6 +198,15 @@ what it offers. Section 9 of the Specification answers it.
     - The message is `<layer> has no attribute 'blendMode'; did you mean 'blend'? (allowed: id, name, ...)`, with
       `has no method 'add_layr'` for a factory, and `<scene> is not allowed in <composition>; ...` (after the element
       path) for a child.
+    - The same suggestions reach two more places. (a) A value refused by an enumeration (`SchemaValueError`): its
+      `suggestions` field holds the close literals, computed by the same rules on first use so that a valid value costs
+      nothing extra, and `str(error)` ends the message with `; did you mean 'multiply'?` before the XSD type. It holds for
+      a list type (the item error carries the suggestions of its item type) and for a union (those of its member types,
+      read only when no member accepts the value). Messages of other failures are unchanged. (b) A name the package does
+      not export: `sr_core.scene.__getattr__` raises `UnknownNameError` with `kind="class"` (still an `AttributeError`, so
+      `from sr_core.scene import Layr` stays an `ImportError`), whose suggestions are class names, with an XML element
+      name mapped to its class or classes (`textanimator` and `TextAnimator`; `image` gives `ImageAsset`). A dunder name
+      raises a plain `AttributeError`. Type checkers do not see this hook, so they still flag the name.
     - The name check MUST cost nothing on a valid assignment: `__setattr__` tries `object.__setattr__` first and builds
       the error only when that fails, and the constructors set the attributes through their descriptors. The two
       hooks are hidden from type checkers (`if not TYPE_CHECKING`), which keep reporting an unknown attribute.
@@ -504,3 +513,5 @@ None. The SREP changes no rendering. Its checks are sr-core tests: D1, D4, D5, D
   attribute documentation is read from the attribute or its type into the descriptors, docstrings and stubs (3.4);
   `describe`, `describe_all` and `element_names` with the format `sr-scene-describe/1` (3.13); the commands `describe`,
   `list` and `new`, and the `sr-scene-findings/1` envelope (8); `docs/scene-sdk-guide.md`.
+- 2026-10-12: suggestions for a near-miss enumeration value (also inside lists and unions) and for a mistyped class
+  name of the package (3.12); `mypy sr_core/scene` reports no errors, and a test keeps it so.
