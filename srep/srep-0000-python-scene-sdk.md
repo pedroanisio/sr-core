@@ -145,11 +145,22 @@ what it offers. Section 9 of the Specification answers it.
    - Adding a child MUST check that the parent allows the name and that `maxOccurs` is not exceeded.
    - `minOccurs`, and attributes with `use="required"`, are checked by `check` (section 6). A document is built in
      steps, so they cannot be checked earlier.
-9. **Factories.** For each child a parent allows, the class MUST have a method that creates, adds and returns the
-   child. For example, `composition.layer(id="l-title", asset=title, x=120)` returns a `Layer`.
+9. **Factories.** For each child a parent allows, the class MUST have a method `add_<elementName>` that creates,
+   adds and returns the child. For example, `composition.add_layer(id="l-title", asset=title, x=120)` returns a
+   `Layer`. The prefix keeps factories apart from attributes: `sequenceType` has both an attribute and a child named
+   `transition`, and `viewport3DType` has both named `camera`.
 10. **Text, comments and processing instructions.**
-    - Simple and mixed content is held in `.text`, or in a list of strings and elements.
-    - Comments and processing instructions are nodes, and survive reading and writing.
+    - Simple content (three types at 1.7.0, and no mixed types) is held in `.content`.
+    - Comments, processing instructions and whitespace text are nodes in `.nodes`, and survive reading and writing.
+11. **Runtime names.** The schema already uses `parent`, `path`, `text` and `version` as attribute names, so the
+    runtime cannot use them. The element API uses these names:
+    - `xml_name`, `owner`, `nodes`, `elements()`, `content`;
+    - `add`, `add_<name>`, `remove`, `find`, `find_all`, `iter`, `copy`;
+    - `attributes()`, `xml_path`, `source_line`, `source_column`;
+    - `new_id`, `min_version`, `check`, `to_bytes`.
+
+    Every other runtime member starts with `_`. The generator MUST fail when a schema attribute takes a reserved name,
+    starts with `add_`, or starts with `_` (D3).
 
 ### 4. Reading and writing
 
@@ -214,8 +225,16 @@ what it offers. Section 9 of the Specification answers it.
    - `line` and `column`, when the document was read from a file.
 2. **Level 1 codes.**
    - Gate findings use the gate's assert id.
-   - Structural findings use `xsd:<kind>`, one of: `xsd:required`, `xsd:occurs`, `xsd:id-unique`, `xsd:idref`,
-     `xsd:version`.
+   - Structural findings use `xsd:<kind>`, one of:
+     - `xsd:element`: a name the parent does not allow, or an unknown element;
+     - `xsd:occurs`: children that do not match the content model, `minOccurs` included;
+     - `xsd:attribute`: an undeclared attribute;
+     - `xsd:required`: a missing required attribute;
+     - `xsd:value`: a value outside its type's lexical or value space;
+     - `xsd:id-unique`, `xsd:idref`, `xsd:version`.
+
+     A document that was read can carry all of these. A document built through the SDK can carry only `xsd:occurs`,
+     `xsd:required` and the reference and version codes.
    - Engine code catalogues are not copied into sr-core.
 3. **Agreement.** Level 1 is a subset of level 2. It MUST NOT report a document valid that level 2 refuses for a
    check level 1 performs, nor the reverse (section 9, D5).
@@ -344,9 +363,9 @@ None. The SREP changes no rendering. Its checks are sr-core tests: D1, D4, D5, D
 4. **lxml and long decimals.** Under libxml2 before 2.13, level 2 refuses `xs:decimal` values of more than
    24 digits, which SREP 75 allows. D5 and D6 skip these exactly as `test_schema_rules.py` does, and level 2
    reports the libxml2 version in its findings.
-5. **Structural codes.** The engine's structural codes (S01 to S12) are defined by the engine. Level 1 uses
-   `xsd:<kind>`. Whether sr-core should define engine-neutral structural codes for every validator to share is a
-   separate question.
+5. **Structural codes.** Settled for the SDK: level 1 uses the `xsd:<kind>` codes of section 6.2. The engine's
+   structural codes (S01 to S12) are defined by the engine and are not mapped. Whether every validator should share
+   the `xsd:<kind>` codes is a separate question.
 6. **Delivery, size L, in three parts, each usable alone:**
    1. The generator, the generated model, reading and writing, levels 0 and 1, and D1 to D8. Accepted when D5 passes
       on every case and fixture in the repository.

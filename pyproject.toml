@@ -16,6 +16,8 @@ classifiers = [
 
 [project.optional-dependencies]
 test = ["pytest"]
+# Level 2 checks of sr_core.scene: the whole XSD and Schematron through lxml.
+validate = ["lxml"]
 
 [project.scripts]
 # Scene video packages (.vpkg.zip, SREP 1); standard library only, no engine import.
@@ -36,4 +38,4 @@ version = {attr = "sr_core.__version__"}
 include = ["sr_core*"]
 
 [tool.setuptools.package-data]
-sr_core = ["vpkg/schema/*.json"]
+sr_core = ["vpkg/schema/*.json", "scene/schema/*"]
