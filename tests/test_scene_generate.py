@@ -92,7 +92,7 @@ class TestSyntheticPositive:
     def test_keyword_attribute_becomes_trailing_underscore_with_xml_name_kept(self):
         t = '<xs:complexType name="aType"><xs:attribute name="from" type="xs:double"/></xs:complexType>'
         src = render_syn(xsd(types=t, root_children=el("a", "aType")))[GEN].decode()
-        assert 'from_: Attr[float] = Attr("from", "xs:double"' in src
+        assert 'from_: Attr[float, float] = Attr("from", "xs:double"' in src
 
     def test_name_with_two_types_under_different_parents_picks_the_parents_type(self):
         t = ('<xs:complexType name="pType"><xs:sequence>' + el("point", "aType") + "</xs:sequence></xs:complexType>"
@@ -125,8 +125,24 @@ class TestSyntheticPositive:
              '<xs:enumeration value="x"/><xs:enumeration value="y"/></xs:restriction></xs:simpleType></xs:attribute>')
         src = render_syn(xsd(types=f'<xs:complexType name="aType">{a}</xs:complexType>',
                              root_children=el("a", "aType")))[GEN].decode()
-        assert 'Attr[_t.Literal["x", "y"]]' in src
+        assert 'Attr[_t.Literal["x", "y"], _t.Literal["x", "y"]]' in src
         assert '"enums": ("x", "y")' in src
+
+    def test_signatures_are_keyword_only_typed_and_checked_by_type_checkers_only(self):
+        t = ('<xs:complexType name="aType"><xs:attribute name="from" type="xs:double"/>'
+             '<xs:attribute name="r" type="xs:IDREF"/><xs:attribute name="d" type="xs:decimal"/></xs:complexType>')
+        src = render_syn(xsd(types=t, root_children=el("a", "aType")))[GEN].decode()
+        assert "    if _t.TYPE_CHECKING:\n" in src and "\n    else:\n" in src
+        assert "            from_: float | None = None,\n" in src
+        assert "            r: _t.Union[str, Element] | None = None,\n" in src
+        assert "Attr[str, _t.Union[str, Element]]" in src and "Attr[_Decimal, _t.Union[_Decimal, float, int, str]]" in src
+        assert "        def add_a(self, **attrs: _t.Any) -> A:" in src
+        assert render_syn(xsd(types=t, root_children=el("a", "aType"))) == render_syn(xsd(types=t, root_children=el("a", "aType")))
+
+    def test_an_attribute_called_self_is_refused(self):
+        t = '<xs:complexType name="aType"><xs:attribute name="self" type="xs:int"/></xs:complexType>'
+        with pytest.raises(SchemaError, match="self"):
+            render_syn(xsd(types=t, root_children=el("a", "aType")))
 
     def test_gates_are_emitted_as_literal_calls(self, fake_deps):
         fake_deps.gates = (SimpleNamespace(id="V9-x", versions=frozenset({"1.10", "1.2"}), context="a",
@@ -510,7 +526,8 @@ class TestRealSchema:
         classes = _classes(real.tree)
         for key in real.schema.complex:
             cls = classes[generate.class_name(key)]
-            factories = {n.name: ast.unparse(n.returns) for n in cls.body
+            runtime = [m for n in cls.body for m in (n.orelse if isinstance(n, ast.If) else [n])]
+            factories = {n.name: ast.unparse(n.returns) for n in runtime
                          if isinstance(n, ast.FunctionDef) and n.name.startswith("add_")}
             want = {f"add_{p.name}": generate.class_name(p.type) for p in real.schema.children(key)}
             assert factories == want, key

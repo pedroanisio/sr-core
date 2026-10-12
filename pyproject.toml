@@ -40,4 +40,4 @@ version = {attr = "sr_core.__version__"}
 include = ["sr_core*"]
 
 [tool.setuptools.package-data]
-sr_core = ["vpkg/schema/*.json", "scene/schema/*"]
+sr_core = ["vpkg/schema/*.json", "scene/schema/*", "scene/py.typed"]

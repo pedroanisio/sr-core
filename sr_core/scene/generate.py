@@ -69,6 +69,15 @@ _BUILTIN_HINTS = {
     "xs:boolean": "bool",
     "xs:dateTime": "_t.Union[_dt.datetime, str]",
 }
+# What reading an attribute gives (the codec's parsed value); the other builtins read as they are set.
+_BUILTIN_GET_HINTS = {
+    **_BUILTIN_HINTS,
+    "xs:IDREF": "str",
+    "xs:IDREFS": "_t.List[str]",
+    "xs:NMTOKENS": "_t.List[str]",
+    "xs:decimal": "_Decimal",
+    "xs:dateTime": "_dt.datetime",
+}
 
 LINE_WIDTH = 110
 
@@ -196,6 +205,7 @@ class Generator:
         self.names = {key: class_name(key) for key in schema.complex}
         self._check_class_names()
         self.alias_order: list[str] = []
+        self.params: dict[str, list[tuple[str, str]]] = {}
         self._alias_open: set[str] = set()
         self._check_simple_types()
 
@@ -262,22 +272,24 @@ class Generator:
         return {"kind": "union", "base": None, "enums": (), "facets": tuple((f, v) for f, v in st.facets),
                 "members": tuple(st.members) + tuple(inner), "item": None}
 
-    def ref_hint(self, ref: str) -> str:
+    def ref_hint(self, ref: str, get: bool = False) -> str:
         if ref.startswith("xs:"):
-            return _BUILTIN_HINTS[ref]
+            return (_BUILTIN_GET_HINTS if get else _BUILTIN_HINTS)[ref]
         self.alias(ref)
-        return f"T_{ref}"
+        return f"{'G' if get else 'T'}_{ref}"
 
-    def type_hint(self, st: model.SimpleType) -> str:
-        inner = [self.type_hint(x) for x in st.inline]
+    def type_hint(self, st: model.SimpleType, get: bool = False) -> str:
+        """The Python type of a simple type: what it accepts when set (``T_``), or what it reads as (``get``, ``G_``)."""
+        inner = [self.type_hint(x, get) for x in st.inline]
         if st.kind == "restriction":
             if st.enums:
                 return "_t.Literal[" + ", ".join(quote(v) for v, _ in st.enums) + "]"
-            return self.ref_hint(st.base) if st.base is not None else inner[0]
+            return self.ref_hint(st.base, get) if st.base is not None else inner[0]
         if st.kind == "list":
-            return "_t.Sequence[" + (self.ref_hint(st.base) if st.base is not None else inner[0]) + "]"
+            item = self.ref_hint(st.base, get) if st.base is not None else inner[0]
+            return ("_t.List[" if get else "_t.Sequence[") + item + "]"
         members: list[str] = []
-        for h in [self.ref_hint(m) for m in st.members] + inner:
+        for h in [self.ref_hint(m, get) for m in st.members] + inner:
             if h not in members:
                 members.append(h)
         return members[0] if len(members) == 1 else "_t.Union[" + ", ".join(members) + "]"
@@ -289,6 +301,7 @@ class Generator:
             raise SchemaError(f"simple type {name!r} refers to itself")
         self._alias_open.add(name)
         self.type_hint(self.s.simple[name])          # registers dependencies first
+        self.type_hint(self.s.simple[name], True)
         self._alias_open.discard(name)
         self.alias_order.append(name)
 
@@ -340,12 +353,15 @@ class Generator:
     # ------------------------------------------------------------ attributes
     def attr_lines(self, key: str) -> list[str]:
         out = []
+        params: list[tuple[str, str]] = []
         seen: dict[str, str] = {}
         for a in self.s.all_attributes(key):
             py = python_name(a.name, key)
             if py in seen:
                 raise SchemaError(f"{key}: attribute {a.name!r} declared twice")
             seen[py] = a.name
+            if py == "self":
+                raise SchemaError(f"{key}: attribute {a.name!r} cannot be a keyword parameter named 'self'")
             if a.use not in USES:
                 raise SchemaError(f"{key}: attribute {a.name!r} has unsupported use {a.use!r}")
             if (a.type is None) == (a.inline is None):
@@ -353,15 +369,29 @@ class Generator:
             if a.type is not None:
                 self.check_ref(a.type, f"{key}/@{a.name}")
                 spec: Any = a.type
-                hint = self.ref_hint(a.type)
+                hint, got = self.ref_hint(a.type), self.ref_hint(a.type, True)
             else:
                 self._validate_simple(a.inline, f"{key}/@{a.name}")
                 spec = self.spec(a.inline)
-                hint = self.type_hint(a.inline)
+                hint, got = self.type_hint(a.inline), self.type_hint(a.inline, True)
             self._check_lexical(key, a, spec)
-            head = f"{py}: Attr[{hint}] = "
+            if key == model.ROOT_TYPE and a.name == "version":
+                # SceneBase accepts "auto" through the API, and a document that was read may carry it (SREP 4.5)
+                hint, got = (f'_t.Union[{h}, _t.Literal["auto"]]' for h in (hint, got))
+            head = f"{py}: Attr[{got}, {hint}] = "
             out.append(self.attr_source(head, a, spec))
+            params.append((py, hint))
+        self.params[key] = params
         return out
+
+    def signature(self, name: str, key: str, returns: str, indent: str) -> list[str]:
+        """A keyword-only signature over the attributes of type ``key`` (all optional), for type checkers."""
+        lines = [f"{indent}def {name}(", f"{indent}    self,"]
+        if self.params[key]:
+            lines.append(f"{indent}    *,")
+        lines += [f"{indent}    {py}: {hint} | None = None," for py, hint in self.params[key]]
+        lines.append(f"{indent}) -> {returns}: ...")
+        return lines
 
     def _check_lexical(self, key: str, a: model.Attribute, spec: Any) -> None:
         """Every default and fixed value must be valid for the attribute's own type (SchemaError otherwise)."""
@@ -445,11 +475,23 @@ class Generator:
         attrs = self.attr_lines(key)
         if attrs:
             lines += [""] + attrs
-        for name, tkey in types.items():
+        for name in types:
             if not name.isidentifier():
                 raise SchemaError(f"{key}: element name {name!r} is not a Python identifier")
-            lines += ["", f"    def add_{name}(self, **attrs: _t.Any) -> {self.names[tkey]}:",
-                      f"        return self._add({quote(name)}, attrs)"]
+        for tkey in types.values():
+            if tkey not in self.params:
+                self.attr_lines(tkey)
+        # Type checkers see keyword-only signatures; at run time the same methods take **attrs, so that an attribute
+        # the element does not declare raises AttributeError (SREP 3.3), not TypeError.
+        lines += ["", "    if _t.TYPE_CHECKING:", ""]
+        lines += self.signature("__init__", key, "None", "        ")
+        for name, tkey in types.items():
+            lines += [""] + self.signature(f"add_{name}", tkey, self.names[tkey], "        ")
+        if types:
+            lines += ["", "    else:"]
+            for name, tkey in types.items():
+                lines += ["", f"        def add_{name}(self, **attrs: _t.Any) -> {self.names[tkey]}:",
+                          f"            return self._add({quote(name)}, attrs)"]
         return "\n".join(lines)
 
     def compute_parent_names(self) -> None:
@@ -496,9 +538,11 @@ class Generator:
                "COUNTS = " + fmt(counts, 0, len("COUNTS = ")), "",
                "# Simple types by name, in schema order (CONTRACT C5).",
                "SIMPLE_TYPES = " + fmt(simple_specs, 0, len("SIMPLE_TYPES = ")), "",
-               "# Python types of the simple types, for the attribute hints."]
+               "# Python types of the simple types, for the attribute hints:",
+               "# T_ is what an attribute accepts when set, G_ what it reads as."]
         for name in self.alias_order:
             out.append(f"T_{name} = " + self.type_hint(s.simple[name]))
+            out.append(f"G_{name} = " + self.type_hint(s.simple[name], True))
         out.append("")
         for block in class_blocks:
             out += ["", block, ""]

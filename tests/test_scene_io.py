@@ -359,6 +359,7 @@ def test_version_auto_writes_min_version(monkeypatch: pytest.MonkeyPatch) -> Non
     fake.min_version = lambda scene: "1.4"  # type: ignore[attr-defined]
     monkeypatch.setitem(sys.modules, "sr_core.scene.checks", fake)
     scene = Scene(version="auto")
+    scene._api_auto = True  # what SceneBase does when "auto" is set through the API
     scene.add_a(id="a1")
     out = io.to_bytes(scene)
     assert b'<scene version="1.4">' in out
@@ -375,8 +376,10 @@ def test_version_explicit_is_not_replaced(monkeypatch: pytest.MonkeyPatch) -> No
 
 def test_version_auto_without_checks_module_fails_loudly(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setitem(sys.modules, "sr_core.scene.checks", None)  # makes the import fail
+    scene = Scene(version="auto")
+    scene._api_auto = True
     with pytest.raises(SchemaValueError):
-        io.to_bytes(Scene(version="auto"))
+        io.to_bytes(scene)
 
 
 # ------------------------------------------------------------------------------------------ corpus

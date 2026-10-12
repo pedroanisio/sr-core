@@ -123,7 +123,7 @@ what it offers. Section 9 of the Specification answers it.
    | `xs:decimal` and its restrictions, with facets | `int`, `float`, `decimal.Decimal`, or a lexically valid `str` | section 4.3 |
    | `xs:double` | `float`, `int` | shortest round-trip form |
    | `xs:boolean` | `bool` | `true` / `false` |
-   | `xs:ID` | an NCName `str` | itself |
+   | `xs:ID` | an NCName `str` (the name characters of XML 1.0 Second Edition, which XSD 1.0 references: productions 84 to 89) | itself |
    | `xs:IDREF` | an NCName `str`, or an element that has an `id` | the id |
    | `xs:IDREFS` | a sequence of the above | ids separated by spaces |
    | list types | a sequence of the item type | items separated by spaces |
@@ -235,11 +235,22 @@ what it offers. Section 9 of the Specification answers it.
 
      A document that was read can carry all of these. A document built through the SDK can carry only `xsd:occurs`,
      `xsd:required` and the reference and version codes.
+   - **Character data.** Character data other than whitespace, in element-only or empty content, is `xsd:occurs`.
+   - **Version below the minimum.** An explicit version below `min_version()` gives the gate findings and one
+     `xsd:version` finding that names the gates.
+   - **References into programs.** A document with a program that emits nodes (SREP 87) may hold references that only
+     the build resolves, including bare references to an emitted id. Level 1 does not report unresolved `xs:IDREF` or
+     `xs:IDREFS` tokens in such a document, and leaves them to the engine.
    - Engine code catalogues are not copied into sr-core.
 3. **Agreement.** Level 1 is a subset of level 2. It MUST NOT report a document valid that level 2 refuses for a
    check level 1 performs, nor the reverse (section 9, D5).
 4. **Level 3 as authority.** Level 3 is the authority for what only an engine knows: compile-for-render findings,
    engine-only warnings, and evaluation errors.
+   - When the engine reports a finding with the same code at the same path as level 1 or level 2, only the engine's
+     is kept.
+   - Level 2 drops a finding that level 1 already reports, with the same code at the same path.
+5. **Limits.** A document nested deeper than lxml can parse gives level 2 one `error` with code `sdk:too-deep`. It
+   does not crash. Levels 0, 1 and writing have no depth limit.
 
 ### 7. Engine schema check
 
@@ -247,7 +258,8 @@ what it offers. Section 9 of the Specification answers it.
    (SREP 22).
 2. A level 3 check MUST add a `warning` with code `sdk:schema-skew` when the engine's schema release differs from
    the SDK's.
-3. It MUST add an `error` when the engine's MAJOR.MINOR is below the document's `scene/@version`.
+3. It MUST add an `error` when the MAJOR.MINOR of the engine's schema release is below the document's
+   `scene/@version`. Document versions follow the schema release, not the engine's own version.
 
 ### 8. Command
 
@@ -255,9 +267,9 @@ The console script `sr-scene` provides three commands:
 
 | Command | What it does | Exit codes |
 |---|---|---|
-| `sr-scene check FILE... [--schema] [--engine PATH] [--format human\|json]` | runs level 1, and level 2 or 3 when asked | 0 valid, 1 findings, 2 read error |
+| `sr-scene check FILE... [--schema] [--engine PATH] [--data DIR] [--format human\|json] [--deny-warnings]` | runs level 1, and level 2 or 3 when asked; `--data` is the folder the engine resolves assets from | 0 valid (warnings alone do not fail unless `--deny-warnings`), 1 errors, 2 read error |
 | `sr-scene min-version FILE...` | prints each file's lowest valid version | |
-| `sr-scene format FILE... [--check]` | rewrites with `layout="pretty"` and the content-model order | with `--check`, rewrites nothing and exits 1 when a file would change |
+| `sr-scene format FILE... [--check]` | rewrites with `layout="pretty"` and the content-model order, atomically; says when it reordered elements; refuses a file with a DOCTYPE, whose entities a rewrite would inline | with `--check`, rewrites nothing and exits 1 when a file would change |
 
 ### 9. Drift controls
 
@@ -275,7 +287,7 @@ commit" a tested property, rather than a convention.
 | D7 | the shipped schema copy differs from the canonical files | `sr_core/scene/schema/` MUST be byte-equal to `schema/`, and its hashes equal to `schema/SHA256SUMS` and to the generated header | the test suite, and `release.py check` |
 | D8 | a broken or mixed installation | on its first check in a process, the SDK MUST compare the hashes in its generated header with its bundled schema files, and refuse to run on a difference | runtime |
 | D9 | the engine runs a different schema release than the SDK | section 7 | runtime, at level 3 |
-| D10 | libraries built on the SDK drift by writing XML themselves | libraries SHOULD build documents only through `sr_core.scene` and type-check against its hints, so that a schema rename breaks their build, not a render. sr-core does not enforce this | downstream |
+| D10 | libraries built on the SDK drift by writing XML themselves | libraries SHOULD build documents only through `sr_core.scene` and type-check against its hints, so that a schema rename breaks their build, not a render. To make this possible, the SDK ships `py.typed`, and every attribute is an `Attr[Get, Set]` descriptor: it reads as the parsed type and accepts the input types of 3.5. The constructors and `add_<name>` factories have keyword-only, typed signatures for type checkers. At run time an undeclared keyword still raises `AttributeError` (3.3). sr-core does not enforce D10 | downstream |
 
 ### 10. Amendment of SREP 4
 
@@ -356,13 +368,20 @@ None. The SREP changes no rendering. Its checks are sr-core tests: D1, D4, D5, D
    0 errors. The SDK cannot check what the schema does not state. Two options:
    - a Standards SREP that types animatable properties in the schema (recommended);
    - the SDK's level 3 also evaluating frame 0.
-2. **Licence.** sr-core is MIT, so the SDK would be MIT; the engine is under its own licence. The owner decides
-   whether the SDK stays MIT.
-3. **Package data.** Today the wheel ships no schema files. Section 2 adds them under `sr_core/scene/schema/`, and
-   hygiene R5's statement of wheel contents must allow them.
-4. **lxml and long decimals.** Under libxml2 before 2.13, level 2 refuses `xs:decimal` values of more than
-   24 digits, which SREP 75 allows. D5 and D6 skip these exactly as `test_schema_rules.py` does, and level 2
-   reports the libxml2 version in its findings.
+2. **Licence.** Settled 2026-10-12: the SDK is MIT, as the rest of sr-core is. The engine stays under its own
+   licence.
+3. **Package data.** Settled: the wheel ships `sr_core/scene/schema/` as package data. Hygiene R5 already accepts
+   every entry under `sr_core/`.
+4. **Where lxml departs from XSD 1.0.** Level 2 and the D5 and D6 controls run on libxml2. Where it departs from
+   XSD 1.0, level 1 follows XSD 1.0, and D6 lists each case by exact form. A test fails when libxml2 changes. The
+   departures:
+   - Before libxml2 2.13, `xs:decimal` values of more than 24 digits are refused, though SREP 75 allows them.
+     D5 and D6 skip these, as `test_schema_rules.py` does.
+   - `1e` is accepted as an `xs:double`. XSD 1.0 §3.2.5.1 requires digits after the exponent mark.
+   - `NaN` passes range facets. NaN is incomparable, so it fails them.
+   - Some malformed IP-literal hosts in `xs:anyURI` values are accepted: `[:::1]`, `[1:2]` and `[v.x]`. Level 1
+     reads `xs:anyURI` as XSD 1.0 §3.2.17 defines it: the XLink §5.4 escaping, then an RFC 3986 §4.1 URI reference.
+   - Dangling `xs:IDREF` values are not reported. Level 1 reports them (SREP 59).
 5. **Structural codes.** Settled for the SDK: level 1 uses the `xsd:<kind>` codes of section 6.2. The engine's
    structural codes (S01 to S12) are defined by the engine and are not mapped. Whether every validator should share
    the `xsd:<kind>` codes is a separate question.
@@ -385,8 +404,12 @@ None. The SREP changes no rendering. Its checks are sr-core tests: D1, D4, D5, D
   `xml.etree.ElementTree.canonicalize` and `TreeBuilder(insert_comments=True)`, both added in Python 3.8:
   <https://docs.python.org/3/library/xml.etree.elementtree.html>
 - RFC 2119, key words for requirement levels: <https://www.rfc-editor.org/rfc/rfc2119>
+- RFC 3986, URI generic syntax, §4.1 and Appendix A: <https://www.rfc-editor.org/rfc/rfc3986>; W3C, XLink 1.0, §5.4
+  (locator attribute escaping): <https://www.w3.org/TR/xlink/>
 - xsdata: <https://xsdata.readthedocs.io/>; generateDS: <https://www.davekuhlman.org/generateDS.html>
 
 ## History
 
 - 2026-10-12: drafted, at the owner's request, with a proposal for keeping the SDK equal to the schema (section 9).
+- 2026-10-12: parts 1 and 2 implemented on the branch `feat/scene-sdk`. The factories became `add_<name>`, simple
+  content `.content` (3.11), the level 1 codes were completed (6.2), and open issues 3 to 5 were settled.

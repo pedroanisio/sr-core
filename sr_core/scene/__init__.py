@@ -16,6 +16,8 @@ Building, reading, writing and level 1 use the standard library only; level 2 ne
 
 from __future__ import annotations
 
+import typing as _t
+
 from sr_core.scene import _generated
 from sr_core.scene._generated import CLASSES, ELEMENT_CLASSES, GATES, SCHEMA_RELEASE, VERSIONS
 from sr_core.scene._runtime import PI, Comment, Element, Text, Unknown, default_of
@@ -27,6 +29,8 @@ from sr_core.scene.gates import Gate
 from sr_core.scene.io import read, to_bytes, write
 
 globals().update({cls.__name__: cls for cls in CLASSES.values()})
+if _t.TYPE_CHECKING:  # the classes are bound by the line above; type checkers need to see their names
+    from sr_core.scene._generated import *  # noqa: F401,F403
 
 __all__ = sorted(
     ["CLASSES", "ELEMENT_CLASSES", "GATES", "SCHEMA_RELEASE", "VERSIONS", "PI", "Comment", "Element", "Text",

@@ -343,8 +343,14 @@ def test_unknown_version_is_xsd_version_only() -> None:
     assert codes(out) == ["xsd:version"] and "9.9" in out[0].message
 
 
-def test_version_auto_is_clean_and_fires_no_gate() -> None:
-    assert checks.check(read(doc(version="auto", head="<metadata/>"))) == []
+def test_version_auto_is_clean_and_fires_no_gate_when_set_through_the_api() -> None:
+    scene = read(doc(version="1.7", head="<metadata/>"))
+    scene.version = "auto"
+    assert checks.check(scene) == []
+
+
+def test_version_auto_in_a_read_document_is_xsd_version() -> None:
+    assert codes(checks.check(read(doc(version="auto", head="<metadata/>")))) == ["xsd:version"]
 
 
 def test_gate_findings_one_per_firing_element() -> None:
@@ -761,7 +767,8 @@ def test_level3_is_not_called_without_an_engine(monkeypatch: pytest.MonkeyPatch)
 
 def test_level3_document_version_for_auto_is_the_min_version(monkeypatch: pytest.MonkeyPatch) -> None:
     calls = install_engine(monkeypatch, [])
-    scene = read(doc(version="auto", head="<metadata/>"))
+    scene = read(doc(version="1.7", head="<metadata/>"))
+    scene.version = "auto"
     checks.check(scene, engine="/e")
     assert calls[0][3] == "1.1" and b'version="1.1"' in calls[0][0]
 

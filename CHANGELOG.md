@@ -2,7 +2,8 @@
 
 The version is `sr_core.__version__`; each release is tagged `vX.Y.Z`. It covers the commands, their options,
 exit codes and outputs, and the URL layout of the generated schema reference. It does not cover Python
-modules, which are internal. The package format has its own version, `formatVersion`, which changes only
+modules, which are internal; `sr_core.scene` is provisional until its SREP is accepted, and then becomes part of
+this contract (that SREP amends SREP 4). The package format has its own version, `formatVersion`, which changes only
 through an SREP and is listed here when it does. The schema has its own changelog, [schema/CHANGELOG.md](schema/CHANGELOG.md).
 
 Record every change under **Unreleased** when it lands. `python3 tools/release.py next tools` computes the next

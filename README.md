@@ -41,7 +41,8 @@ doc = read("in.scene.xml")                        # comments, attribute order an
 
 - XML names are kept as they are: `layer.safeAreaForce`, `layer.rotationX`; the only change is `from`, which is written `from_`.
 - Each allowed child has a factory named `add_<name>`, and simple content is held in `.content`.
-- An attribute or child that the schema refuses raises `SchemaValueError` as soon as it is set.
+- A value or a child that the schema refuses raises `SchemaValueError` as soon as it is set. An attribute that the
+  element does not declare raises `AttributeError`.
 - `check(scene)` adds the checks that need the whole document: required attributes, occurrences, ids and
   references, and the version gates.
   - `schema=True` also runs the XSD and the Schematron through lxml: `pip install sr-core[validate]`.
@@ -57,7 +58,8 @@ Three Semantic Versioning lines, each moving only when its own contract changes 
 | scene schema (documents declare MAJOR.MINOR, as in `version="1.1"`) | `xs:schema/@version` in `schema/scene-render.xsd` | [schema/CHANGELOG.md](schema/CHANGELOG.md) | `schema-X.Y.Z` |
 | package format (`formatVersion`) | `FORMAT_VERSION` (`scenerender-vpkg --version`) | [SREP 1](srep/srep-0001.md), [SREP 6](srep/srep-0006.md) | |
 
-The Python modules are internal. Nobody picks version numbers by hand. Record each change under **Unreleased**
+The Python modules are internal; `sr_core.scene` is provisional until [its SREP](srep/srep-0000-python-scene-sdk.md)
+is accepted, and then becomes part of the contract. Nobody picks version numbers by hand. Record each change under **Unreleased**
 in its changelog, as Breaking, Added or Fixed, and let the release tool compute the bump:
 
 ```bash

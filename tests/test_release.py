@@ -178,8 +178,8 @@ TOOLS_LOG = "# Changelog\n\n## Unreleased\n\n### Breaking\n\n### Added\n\n### Fi
     ({"removed": ["r"]}, "Added", False),
 ])
 def test_sdk_entry_class_follows_the_schema_change(schema_classes, section, expected_ok):
-    text = TOOLS_LOG.replace(f"### {section}\n\n", f"### {section}\n\n- Regenerates `sr_core.scene`.\n\n", 1)
-    problem = release.sdk_entry_problem(schema_classes, text)
+    text = TOOLS_LOG.replace(f"### {section}\n\n", f"### {section}\n\n- Regenerates `sr_core.scene` for 1.7.1.\n\n", 1)
+    problem = release.sdk_entry_problem(schema_classes, text, "1.7.1")
     assert (problem is None) is expected_ok
     if not expected_ok:
         assert "sr_core.scene" in problem
@@ -187,7 +187,29 @@ def test_sdk_entry_class_follows_the_schema_change(schema_classes, section, expe
 
 def test_sdk_entry_must_mention_the_sdk():
     text = TOOLS_LOG.replace("### Added\n\n", "### Added\n\n- something else\n\n", 1)
-    assert "no Unreleased entry that mentions sr_core.scene under Added" in release.sdk_entry_problem({"fixed": ["f"]}, text)
+    assert "no Unreleased entry that mentions sr_core.scene and 1.7.1 under Added" in release.sdk_entry_problem({"fixed": ["f"]}, text, "1.7.1")
+
+
+@pytest.mark.parametrize("entry,ok", [
+    ("Regenerates `sr_core.scene` for schema 1.7.1.", True),
+    ("Introduces `sr_core.scene`, generated from schema 1.7.0.", False),   # an older entry: the introduction
+    ("Regenerates `sr_core.scene`.", False),                              # no version at all
+    ("Regenerates `sr_core.scene` for 1.7.10.", False),                   # a longer version is not this one
+    ("Regenerates `sr_core.scene` for 21.7.1.", False),
+    ("Schema 1.7.1 changes.", False),                                     # does not mention the SDK
+])
+def test_sdk_entry_must_name_the_version_being_released(entry, ok):
+    text = TOOLS_LOG.replace("### Added\n\n", f"### Added\n\n- {entry}\n\n", 1)
+    problem = release.sdk_entry_problem({"fixed": ["f"]}, text, "1.7.1")
+    assert (problem is None) is ok
+    if not ok:
+        assert "sr_core.scene and 1.7.1" in problem
+
+
+def test_sdk_entry_for_an_older_release_does_not_satisfy_a_newer_one():
+    text = TOOLS_LOG.replace("### Added\n\n", "### Added\n\n- Regenerates `sr_core.scene` for 1.7.1.\n\n", 1)
+    assert release.sdk_entry_problem({"fixed": ["f"]}, text, "1.7.1") is None
+    assert release.sdk_entry_problem({"added": ["a"]}, text, "1.8.0") is not None
 
 
 @pytest.fixture
@@ -217,7 +239,7 @@ def test_release_schema_refused_without_an_sdk_entry(release_root, capsys):
 
 def test_release_schema_refused_with_the_wrong_class(release_root, capsys):
     root, calls = release_root
-    (root / "CHANGELOG.md").write_text(TOOLS_LOG.replace("### Fixed\n\n", "### Fixed\n\n- `sr_core.scene` regenerated\n\n", 1))
+    (root / "CHANGELOG.md").write_text(TOOLS_LOG.replace("### Fixed\n\n", "### Fixed\n\n- `sr_core.scene` regenerated for 1.7.1\n\n", 1))
     rc, err = run_release(capsys)
     assert rc == 2 and "under Added" in err and "found under fixed" in err
     assert "1.7.1" not in (root / "schema/CHANGELOG.md").read_text()
@@ -225,7 +247,7 @@ def test_release_schema_refused_with_the_wrong_class(release_root, capsys):
 
 def test_release_schema_allowed_with_the_right_class(release_root, capsys):
     root, calls = release_root
-    (root / "CHANGELOG.md").write_text(TOOLS_LOG.replace("### Added\n\n", "### Added\n\n- `sr_core.scene` regenerated\n\n", 1))
+    (root / "CHANGELOG.md").write_text(TOOLS_LOG.replace("### Added\n\n", "### Added\n\n- `sr_core.scene` regenerated for 1.7.1\n\n", 1))
     rc, err = run_release(capsys)
     assert rc == 0 and err == ""
     assert "## 1.7.1 — 2026-10-13" in (root / "schema/CHANGELOG.md").read_text()

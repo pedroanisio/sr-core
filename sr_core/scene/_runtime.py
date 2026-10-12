@@ -19,7 +19,8 @@ from sr_core.scene.errors import SchemaValueError
 __all__ = ["Attr", "Element", "SceneBase", "Unknown", "Comment", "PI", "Text", "set_simple_types", "default_of",
            "new_id"]
 
-T = TypeVar("T")
+G = TypeVar("G")  # what an attribute reads as
+S = TypeVar("S")  # what an attribute accepts
 
 _SIMPLE_TYPES: dict[str, Any] = {}
 
@@ -35,6 +36,34 @@ def _codec_for(spec: Any) -> Any:
     return values.codec_for(spec, _SIMPLE_TYPES)
 
 
+def _check_chars(text: str, what: str, path: Optional[str] = None) -> None:
+    """Refuse a character that XML 1.0 does not allow (``Char``) in ``text``."""
+    bad = importlib.import_module("sr_core.scene.values")._BAD_XML_CHAR.search(text)
+    if bad is not None:
+        raise SchemaValueError(f"{what} holds U+{ord(bad.group()):04X}, which XML does not allow", path=path)
+
+
+def _check_name(name: str, what: str, path: Optional[str] = None) -> None:
+    """Refuse a name that is not an XML ``Name``."""
+    if importlib.import_module("sr_core.scene.values")._NAME.fullmatch(name) is None:
+        raise SchemaValueError(f"{what} {name!r} is not an XML name", path=path)
+
+
+def _check_comment(text: str) -> None:
+    _check_chars(text, "comment")
+    if "--" in text or text.endswith("-"):
+        raise SchemaValueError("a comment cannot contain '--' or end with '-'")
+
+
+def _check_pi(target: str, data: str) -> None:
+    _check_name(target, "processing instruction target")
+    if ":" in target or target.lower() == "xml":
+        raise SchemaValueError(f"{target!r} is not allowed as a processing instruction target")
+    _check_chars(data, "processing instruction")
+    if "?>" in data:
+        raise SchemaValueError("processing instruction data cannot contain '?>'")
+
+
 # ------------------------------------------------------------------------------------------ child nodes
 
 class Comment:
@@ -43,6 +72,7 @@ class Comment:
     __slots__ = ("text",)
 
     def __init__(self, text: str) -> None:
+        _check_comment(text)
         self.text = text
 
     def __repr__(self) -> str:
@@ -55,6 +85,7 @@ class PI:
     __slots__ = ("target", "data")
 
     def __init__(self, target: str, data: str = "") -> None:
+        _check_pi(target, data)
         self.target = target
         self.data = data
 
@@ -65,10 +96,11 @@ class PI:
 class Text:
     """Character data: whitespace between elements, or the simple content of an element."""
 
-    __slots__ = ("text",)
+    __slots__ = ("text", "lead")
 
     def __init__(self, text: str) -> None:
         self.text = text
+        self.lead: Optional[str] = None  # on closing white space: the indentation of the child removed before it
 
     def __repr__(self) -> str:
         return f"Text({self.text!r})"
@@ -80,12 +112,17 @@ class Text:
 
 # ------------------------------------------------------------------------------------------ attributes
 
-class Attr(Generic[T]):
+class Attr(Generic[G, S]):
     """A data descriptor for one XML attribute.
 
     ``xml_name`` is the name in the document (``from``), ``name`` the Python attribute (``from_``, set by
     ``__set_name__``). The stored form is the lexical string in ``obj._attrs``; reading parses it and returns ``None``
     when the attribute is unset, or the raw string when a document that was read holds an invalid lexical form.
+
+    ``Attr[G, S]``: ``G`` is the type the attribute reads as (``str`` for an IDREF, ``list[str]`` for an IDREFS,
+    ``Decimal`` for a decimal), ``S`` the union it accepts when set. For ``xs:double`` the setter refuses NaN and
+    infinity (SREP 4.3), although a document that was read may hold ``NaN`` or ``INF``, which then read back as
+    ``float('nan')`` and ``float('inf')``.
     """
 
     def __init__(self, xml_name: str, spec: Any, *, use: str = "optional", default: Optional[str] = None,
@@ -115,9 +152,9 @@ class Attr(Generic[T]):
         return codec
 
     @overload
-    def __get__(self, obj: None, owner: Optional[type] = None) -> "Attr[T]": ...
+    def __get__(self, obj: None, owner: Optional[type] = None) -> "Attr[G, S]": ...
     @overload
-    def __get__(self, obj: "Element", owner: Optional[type] = None) -> Optional[T]: ...
+    def __get__(self, obj: "Element", owner: Optional[type] = None) -> Optional[G]: ...
 
     def __get__(self, obj: Optional["Element"], owner: Optional[type] = None) -> Any:
         if obj is None:
@@ -130,7 +167,7 @@ class Attr(Generic[T]):
         except SchemaValueError:
             return lexical
 
-    def __set__(self, obj: "Element", value: Any) -> None:
+    def __set__(self, obj: "Element", value: Optional[S]) -> None:
         if value is None:
             obj._attrs.pop(self.xml_name, None)
             return
@@ -166,10 +203,10 @@ class Attr(Generic[T]):
         return ident
 
 
-_ATTR_SPECS: dict[type, dict[str, Attr[Any]]] = {}
+_ATTR_SPECS: dict[type, dict[str, Attr[Any, Any]]] = {}
 
 
-def _attr_specs(cls: type) -> dict[str, Attr[Any]]:
+def _attr_specs(cls: type) -> dict[str, Attr[Any, Any]]:
     """xml name -> Attr for a class, in declaration order (base classes first)."""
     found = _ATTR_SPECS.get(cls)
     if found is None:
@@ -274,7 +311,8 @@ def _class_for(cls: type, type_key: str) -> type["Element"]:
 class Element:
     """Base of every element class. Subclasses MUST declare ``__slots__`` (``()`` when they add none)."""
 
-    __slots__ = ("_attrs", "_owner", "_nodes", "_name", "_pre", "_post", "source_line", "source_column")
+    __slots__ = ("_attrs", "_owner", "_nodes", "_name", "_pre", "_post", "_api_auto", "source_line",
+                 "source_column")
 
     _xsd_type: ClassVar[str] = ""
     _element_names: ClassVar[tuple[str, ...]] = ()
@@ -302,6 +340,7 @@ class Element:
         self._name = name
         self._pre: list[Any] = []
         self._post: list[Any] = []
+        self._api_auto = False  # version="auto" was set through the API (only then is it honoured)
         self.source_line: Optional[int] = None
         self.source_column: Optional[int] = None
 
@@ -428,15 +467,29 @@ class Element:
 
     def _insert(self, child: "Element", slot: Optional[_Slot]) -> None:
         nodes = self._nodes
-        index: int
-        copy_after = False
         if slot is None:
-            index = len(nodes)
-        else:
-            slots = _model_of(type(self)).slots
+            nodes.append(child)
+            child._owner = self
+            return
+        slots = _model_of(type(self)).slots
+        last_le: Optional[int] = None
+        first_gt: Optional[int] = None
+        # fast path: the last element child decides when it already ranks at or below the new one
+        j = len(nodes) - 1
+        while j >= 0 and not isinstance(nodes[j], Element):
+            j -= 1
+        if j >= 0:
+            rank = -1
+            for k in range(j, -1, -1):
+                node = nodes[k]
+                known = slots.get(node._name) if isinstance(node, Element) else None
+                if known is not None:
+                    rank = known.rank
+                    break
+            if rank <= slot.rank:
+                last_le = j
+        if j >= 0 and last_le is None:
             current = -1
-            last_le: Optional[int] = None
-            first_gt: Optional[int] = None
             for i, node in enumerate(nodes):
                 if not isinstance(node, Element):
                     continue
@@ -447,21 +500,33 @@ class Element:
                     last_le = i
                 elif first_gt is None:
                     first_gt = i
-            if last_le is not None:
-                index, copy_after = last_le + 1, True
-            elif first_gt is not None:
-                index = first_gt
+        if last_le is not None:
+            index, copy_after = last_le + 1, True
+        elif first_gt is not None:
+            index, copy_after = first_gt, False
+        else:
+            self._append_first(child)
+            return
+        space = self._space_before(index - 1 if copy_after else index)
+        if space is not None and (copy_after or first_gt is not None):
+            if copy_after:
+                nodes[index:index] = [Text(space), child]
             else:
-                index = len(nodes)
-            space = self._space_before(index - 1 if copy_after else index)
-            if space is not None and (copy_after or first_gt is not None):
-                if copy_after:
-                    nodes[index:index] = [Text(space), child]
-                else:
-                    nodes[index:index] = [child, Text(space)]
-                child._owner = self
-                return
-        nodes.insert(index, child)
+                nodes[index:index] = [child, Text(space)]
+        else:
+            nodes.insert(index, child)
+        child._owner = self
+
+    def _append_first(self, child: "Element") -> None:
+        """Add the first element child. After ``remove`` took the last one, the closing white space remembers the
+        child's indentation, and the new child takes it."""
+        nodes = self._nodes
+        last = nodes[-1] if nodes else None
+        if isinstance(last, Text) and last.lead is not None:
+            nodes[-1:-1] = [Text(last.lead), child]
+            last.lead = None
+        else:
+            nodes.append(child)
         child._owner = self
 
     def _space_before(self, element_index: int) -> Optional[str]:
@@ -485,6 +550,8 @@ class Element:
         nxt = nodes[index] if index < len(nodes) else None
         if isinstance(prev, Text) and prev.is_space and (nxt is None or (isinstance(nxt, Text) and nxt.is_space)):
             del nodes[index - 1]
+            if isinstance(nxt, Text) and not any(isinstance(n, Element) for n in nodes):
+                nxt.lead = prev.text
 
     def find(self, name: str) -> Optional["Element"]:
         return next((n for n in self._nodes if isinstance(n, Element) and n._name == name), None)
@@ -503,18 +570,23 @@ class Element:
 
     def copy(self) -> "Element":
         """A deep copy, detached: lexical forms, comments, text and unknown content are kept."""
-        new = type(self)._blank(self._name)
-        new._attrs = dict(self._attrs)
-        for node in self._nodes:
-            if isinstance(node, Element):
-                child = node.copy()
-                child._owner = new
-                new._nodes.append(child)
-            else:
-                new._nodes.append(_copy_node(node))
-        new._pre = [_copy_node(n) for n in self._pre]
-        new._post = [_copy_node(n) for n in self._post]
-        return new
+        top = type(self)._blank(self._name)
+        top._pre = [_copy_node(n) for n in self._pre]
+        top._post = [_copy_node(n) for n in self._post]
+        stack: list[tuple[Element, Element]] = [(self, top)]
+        while stack:
+            src, dst = stack.pop()
+            dst._attrs = dict(src._attrs)
+            dst._api_auto = src._api_auto
+            for node in src._nodes:
+                if isinstance(node, Element):
+                    child = type(node)._blank(node._name)
+                    child._owner = dst
+                    dst._nodes.append(child)
+                    stack.append((node, child))
+                else:
+                    dst._nodes.append(_copy_node(node))
+        return top
 
     def __repr__(self) -> str:
         attrs = ", ".join(f"{k}={v!r}" for k, v in self._attrs.items())
@@ -536,6 +608,10 @@ class Unknown(Element):
     _xsd_type = "#unknown"
 
     def __init__(self, name: str, attrs: Optional[dict[str, str]] = None) -> None:
+        _check_name(name, "element name")
+        for key, value in (attrs or {}).items():
+            _check_name(key, "attribute name")
+            _check_chars(value, f"attribute {key}")
         self._reset(name)
         if attrs:
             self._attrs.update(attrs)
@@ -605,8 +681,11 @@ class SceneBase(Element):
     def __setattr__(self, name: str, value: Any) -> None:
         if name == "version" and value == "auto":
             self._attrs["version"] = "auto"
+            object.__setattr__(self, "_api_auto", True)
         else:
             super().__setattr__(name, value)
+            if name == "version":
+                object.__setattr__(self, "_api_auto", False)
 
     def new_id(self, prefix: str) -> str:
         return new_id(self, prefix)

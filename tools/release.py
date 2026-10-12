@@ -15,7 +15,7 @@ on it (schema hashes and the generated reference), and prints the tag to create.
 `sr_core.scene` (SREP 0, sections 9 and 10) is generated from the schema, so the schema release carries it:
 `check` fails when the SDK is stale or its schema copy differs from `schema/` (D1, D7), and `release schema`
 regenerates it (D2) and refuses to start unless the tools CHANGELOG.md has an Unreleased entry that mentions
-`sr_core.scene`, under the class of the schema change (SREP 10.2): Breaking when the schema's Unreleased has
+`sr_core.scene` and the schema version being released, under the class of the schema change (SREP 10.2): Breaking when the schema's Unreleased has
 Breaking or Removed entries, Added when it has only Added, Deprecated, Changed or Fixed entries.
 
 `archive schema` builds the schema's release artifact from a tag's committed tree (never the working copy):
@@ -200,17 +200,20 @@ def sdk_problems() -> list[str]:
     return problems
 
 
-def sdk_entry_problem(schema_classes: dict[str, list[str]], tools_text: str) -> str | None:
-    """D2: why `release schema` must not start, or None. The SDK entry takes the schema change's class (SREP 10.2)."""
+def sdk_entry_problem(schema_classes: dict[str, list[str]], tools_text: str, new_version: str) -> str | None:
+    """D2: why `release schema` must not start, or None. The SDK entry takes the schema change's class (SREP 10.2)
+    and names this regeneration: it mentions `sr_core.scene` and the schema version about to be cut, so that an older
+    entry (the SDK's own introduction, say) cannot stand in for it."""
     need = "breaking" if MAJOR & set(schema_classes) else "added"
     tools_classes, _, _ = parse(tools_text)
-    mentions = {k: [e for e in v if "sr_core.scene" in e] for k, v in tools_classes.items()}
+    named = re.compile(rf"(?<![\d.]){re.escape(new_version)}(?![\d]|\.\d)")
+    mentions = {k: [e for e in v if "sr_core.scene" in e and named.search(e)] for k, v in tools_classes.items()}
     if any(mentions.get(need, [])):
         return None
     elsewhere = sorted(k for k, v in mentions.items() if v)
     where = f" (found under {', '.join(elsewhere)})" if elsewhere else ""
-    return (f"CHANGELOG.md has no Unreleased entry that mentions sr_core.scene under {need.capitalize()}, the class "
-            f"of this schema release{where}; record the SDK regeneration there first")
+    return (f"CHANGELOG.md has no Unreleased entry that mentions sr_core.scene and {new_version} under "
+            f"{need.capitalize()}, the class of this schema release{where}; record the SDK regeneration there first")
 
 
 COMPONENTS = {
@@ -336,7 +339,7 @@ def main(argv=None) -> int:
             print(f"{a.component}: nothing under Unreleased; {cur} stays", file=sys.stderr)
             return 1
         if a.component == "schema":
-            problem = sdk_entry_problem(classes, _read(COMPONENTS["tools"]["changelog"]))
+            problem = sdk_entry_problem(classes, _read(COMPONENTS["tools"]["changelog"]), new)
             if problem:
                 raise ReleaseError(problem)
         if a.component == "schema" and new.split(".")[2] == "0":

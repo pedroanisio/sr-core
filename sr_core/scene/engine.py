@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 import os
+import shutil
 import subprocess
 import tempfile
 from dataclasses import dataclass
@@ -65,13 +66,24 @@ def _run(argv: list[str], timeout: float) -> "subprocess.CompletedProcess[str]":
         raise EngineError(f"cannot run engine {argv[0]!r}: {exc}") from exc
 
 
+def _executable(path: PathLike) -> Path:
+    """The engine path as given, or, when it has no path separator, the executable of that name on ``PATH``."""
+    text = os.fspath(path)
+    if os.sep not in text and (os.altsep is None or os.altsep not in text):
+        found = shutil.which(text)
+        if found is None:
+            raise EngineError(f"engine not found: {text!r} (not on PATH)")
+        return Path(found)
+    return Path(text)
+
+
 def engine_info(path: PathLike, *, timeout: float = 30.0) -> EngineInfo:
-    """Run ``<engine> capabilities`` and read ``engine.name``, ``engine.version`` and ``schema`` (SREP 22).
+    """Run ``<engine> capabilities`` (``path`` with no path separator is looked up on ``PATH``) and read ``engine.name``, ``engine.version`` and ``schema`` (SREP 22).
 
     The result is cached per resolved path and modification time, so replacing the executable invalidates it.
     Raises ``EngineError`` when the engine cannot be run, exits non-zero, or prints a manifest of another format.
     """
-    resolved = Path(path).resolve()
+    resolved = _executable(path).resolve()
     try:
         key = (str(resolved), resolved.stat().st_mtime_ns)
     except OSError as exc:

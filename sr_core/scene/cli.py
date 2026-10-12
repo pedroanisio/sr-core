@@ -8,13 +8,17 @@ from __future__ import annotations
 import argparse
 import importlib
 import json
+import os
 import sys
+import tempfile
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Any, Optional, Sequence
 
 import sr_core
 from sr_core.scene import _generated, io
+from sr_core.scene._runtime import Unknown
+from sr_core.scene.errors import SchemaValueError
 from sr_core.scene.findings import Finding
 
 __all__ = ["main"]
@@ -56,7 +60,13 @@ def _cmd_check(args: argparse.Namespace) -> int:
             records.append({"file": path, "valid": False, "error": error, "findings": []})
             status = 2
             continue
-        findings = checks.check(scene, schema=args.schema, engine=args.engine, data=args.data)
+        try:
+            findings = checks.check(scene, schema=args.schema, engine=args.engine, data=args.data)
+        except ImportError:
+            if not args.schema:
+                raise
+            print("check --schema needs lxml: pip install sr-core[validate]", file=sys.stderr)
+            return 2
         failed = _fails(findings, args.deny_warnings)
         records.append({"file": path, "valid": not failed, "findings": [f.to_dict() for f in findings]})
         if args.format == "human":
@@ -80,8 +90,38 @@ def _cmd_min_version(args: argparse.Namespace) -> int:
             print(f"{path}: cannot read: {error}", file=sys.stderr)
             status = 2
             continue
-        print(f"{path}: {checks.min_version(scene)}")
+        if isinstance(scene, Unknown) or scene.xml_name != "scene":
+            print(f"{path}: error: the root element must be <scene>, not <{scene.xml_name}>", file=sys.stderr)
+            status = max(status, 1)
+            continue
+        try:
+            print(f"{path}: {checks.min_version(scene)}")
+        except SchemaValueError as exc:
+            print(f"{path}: error: {exc}", file=sys.stderr)
+            status = max(status, 1)
     return status
+
+
+def _write_atomically(path: str, data: bytes) -> None:
+    """Write ``data`` to a temporary file next to ``path`` and rename it over ``path``."""
+    directory = os.path.dirname(os.path.abspath(path))
+    handle = tempfile.NamedTemporaryFile(dir=directory, prefix=".sr-scene-", suffix=".tmp", delete=False)
+    try:
+        with handle:
+            handle.write(data)
+            handle.flush()
+            os.fsync(handle.fileno())
+        try:
+            os.chmod(handle.name, os.stat(path).st_mode & 0o7777)
+        except OSError:
+            pass
+        os.replace(handle.name, path)
+    except BaseException:
+        try:
+            os.unlink(handle.name)
+        except OSError:
+            pass
+        raise
 
 
 def _cmd_format(args: argparse.Namespace) -> int:
@@ -92,16 +132,24 @@ def _cmd_format(args: argparse.Namespace) -> int:
             print(f"{path}: cannot read: {error}", file=sys.stderr)
             status = 2
             continue
+        if io.has_doctype(path):
+            print(f"{path}: refused: the file declares a DOCTYPE, and rewriting it would drop the declaration and "
+                  f"inline its entities", file=sys.stderr)
+            status = max(status, 1) if status != 2 else status
+            continue
         current = Path(path).read_bytes()
+        moved = io.reorder_count(scene)
         pretty = io.to_bytes(scene, layout="pretty")
         if pretty == current:
             continue
+        if moved:
+            print(f"{path}: reordered {moved} elements into content-model order", file=sys.stderr)
         if args.check:
             print(f"{path}: would be reformatted")
             if status == 0:
                 status = 1
         else:
-            Path(path).write_bytes(pretty)
+            _write_atomically(path, pretty)
             print(f"{path}: formatted")
     return status
 

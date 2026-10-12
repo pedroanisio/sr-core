@@ -13,7 +13,12 @@ Notes on level 1:
 * A reference to an id that a program emits (``P.E``, or a bare ``E``; SREP 87) cannot be resolved without running the
   program, so the SDK leaves it to the engine, as the schema does: when the document holds a build-mode program,
   unresolved ``IDREF`` tokens are not reported. Data programs emit rows and step programs pixels, never ids.
-* ``version="auto"`` is valid; it is written as ``min_version()``.
+* ``version="auto"`` is valid only when it was set through the API on a built document (it is written as
+  ``min_version()``). In a document that was read it is outside the ``scene/@version`` enumeration (``xsd:version``).
+* ``scene/@version`` is compared as written, with no whitespace normalisation: the enumeration is on ``xs:string``.
+* Elements in a namespace are not schema elements (``xsd:element``); ``xsi:type`` and ``xsi:nil`` are reported
+  (``xsd:attribute``) and only ``xsi:schemaLocation`` and ``xsi:noNamespaceSchemaLocation`` are tolerated, as XSD
+  validators tolerate them.
 """
 from __future__ import annotations
 
@@ -34,7 +39,9 @@ from sr_core.scene.gates import refused_versions
 __all__ = ["check", "min_version", "new_id", "match_content", "Mismatch", "verify_integrity"]
 
 _LEXICAL_LIMIT = 80
-_XSI_ATTRIBUTES = {"xsi:type", "xsi:nil", "xsi:schemaLocation", "xsi:noNamespaceSchemaLocation"}
+XSI_NS = "http://www.w3.org/2001/XMLSchema-instance"
+XML_NS = "http://www.w3.org/XML/1998/namespace"
+_XSI_TOLERATED = ("schemaLocation", "noNamespaceSchemaLocation")
 _SVRL = {"svrl": "http://purl.oclc.org/dsdl/svrl"}
 
 
@@ -183,8 +190,77 @@ def _shown(s: str) -> str:
     return repr(s if len(s) <= _LEXICAL_LIMIT else s[:_LEXICAL_LIMIT] + "...")
 
 
-def _finding(el: Element, code: str, message: str) -> Finding:
-    return Finding("error", code, message, el.xml_path, el.source_line, el.source_column)
+class _Paths:
+    """``xml_path`` of many elements of one document, each sibling list scanned once (not once per element)."""
+
+    def __init__(self) -> None:
+        self._done: dict[int, str] = {}
+        self._segments: dict[int, dict[int, str]] = {}
+
+    def _segment(self, el: Element) -> str:
+        owner = el._owner
+        if owner is None:
+            return "/" + el._name
+        table = self._segments.get(id(owner))
+        if table is None:
+            nodes = [n for n in owner._nodes if isinstance(n, Element)]
+            total: dict[str, int] = {}
+            for n in nodes:
+                total[n._name] = total.get(n._name, 0) + 1
+            seen: dict[str, int] = {}
+            table = {}
+            for n in nodes:
+                seen[n._name] = seen.get(n._name, 0) + 1
+                table[id(n)] = f"/{n._name}[{seen[n._name]}]" if total[n._name] > 1 else "/" + n._name
+            self._segments[id(owner)] = table
+        return table.get(id(el)) or "/" + el._name
+
+    def path(self, el: Element) -> str:
+        chain: list[Element] = []
+        cur: Optional[Element] = el
+        while cur is not None and id(cur) not in self._done:
+            chain.append(cur)
+            cur = cur._owner
+        base = self._done[id(cur)] if cur is not None else ""
+        for node in reversed(chain):
+            base += self._segment(node)
+            self._done[id(node)] = base
+        return base
+
+
+def _finding(el: Element, code: str, message: str, paths: _Paths) -> Finding:
+    return Finding("error", code, message, paths.path(el), el.source_line, el.source_column)
+
+
+def _namespace(el: Element, prefix: str) -> str:
+    """The namespace a prefix (``""`` for the default one) is bound to at ``el``; ``""`` when it is bound to none."""
+    if prefix == "xml":
+        return XML_NS
+    key = "xmlns:" + prefix if prefix else "xmlns"
+    cur: Optional[Element] = el
+    while cur is not None:
+        value = cur._attrs.get(key)
+        if value is not None:
+            return value
+        cur = cur._owner
+    return ""
+
+
+def _element_namespace(el: Element) -> str:
+    return _namespace(el, el.xml_name.partition(":")[0] if ":" in el.xml_name else "")
+
+
+def _unknown_why(el: Element) -> str:
+    ns = _element_namespace(el)
+    return (f"<{el.xml_name}> is in the namespace {ns!r}, but the schema's elements are in no namespace"
+            if ns else f"<{el.xml_name}> is not a schema element here")
+
+
+def _tolerated_attribute(el: Element, name: str) -> bool:
+    if name == "xmlns" or name.startswith("xmlns:"):
+        return True
+    prefix, _, local = name.partition(":")
+    return local in _XSI_TOLERATED and _namespace(el, prefix) == XSI_NS
 
 
 _ID_KINDS = {"xs:ID": "ID", "xs:IDREF": "IDREF", "xs:IDREFS": "IDREFS"}
@@ -245,10 +321,12 @@ def min_version(scene: Element) -> str:
 def _level1(scene: Element) -> list[Finding]:
     root = _root_of(scene)
     out: list[Finding] = []
+    paths = _Paths()
     if isinstance(root, Unknown):
-        return [_finding(root, "xsd:element", f"the root element must be <scene>, not <{root.xml_name}>")]
+        why = _unknown_why(root) if _element_namespace(root) else f"the root element must be <scene>, not <{root.xml_name}>"
+        return [_finding(root, "xsd:element", why, paths)]
     is_scene = root.xml_name == "scene"
-    ids: dict[str, str] = {}
+    ids: dict[str, Element] = {}
     refs: list[tuple[Element, str, str]] = []
     build_program = False
 
@@ -257,59 +335,61 @@ def _level1(scene: Element) -> list[Finding]:
         el = stack.pop()
         if el._xsd_type == "programNodeType" and el._attrs.get("mode", "build").strip() != "step":
             build_program = True
-        _attributes(el, el is root and is_scene, out, ids, refs)
-        _children(el, out)
+        _attributes(el, el is root and is_scene, out, ids, refs, paths)
+        _children(el, out, paths)
         stack.extend(reversed([c for c in el.elements() if not isinstance(c, Unknown)]))
 
     if build_program is False:
         for el, attr, token in refs:
             if token not in ids:
-                out.append(_finding(el, "xsd:idref", f"{attr}={token!r} names no element: no element has that id"))
+                out.append(_finding(el, "xsd:idref", f"{attr}={token!r} names no element: no element has that id",
+                                    paths))
     if is_scene:
-        _versions(root, out)
+        _versions(root, out, paths)
     return out
 
 
-def _attributes(el: Element, is_root_scene: bool, out: list[Finding], ids: dict[str, str],
-                refs: list[tuple[Element, str, str]]) -> None:
+def _attributes(el: Element, is_root_scene: bool, out: list[Finding], ids: dict[str, Element],
+                refs: list[tuple[Element, str, str]], paths: _Paths) -> None:
     specs = _attr_specs(type(el))
     for name, lexical in el._attrs.items():
         attr = specs.get(name)
         if attr is None:
-            if name == "xmlns" or name.startswith("xmlns:") or name in _XSI_ATTRIBUTES:
+            if _tolerated_attribute(el, name):
                 continue
-            out.append(_finding(el, "xsd:attribute", f"<{el.xml_name}> has no attribute {name!r}"))
+            out.append(_finding(el, "xsd:attribute", f"<{el.xml_name}> has no attribute {name!r}", paths))
             continue
         if attr.use == "prohibited":
-            out.append(_finding(el, "xsd:attribute", f"attribute {name!r} is prohibited on <{el.xml_name}>"))
+            out.append(_finding(el, "xsd:attribute", f"attribute {name!r} is prohibited on <{el.xml_name}>", paths))
             continue
         if is_root_scene and name == "version":
             continue  # judged by _versions
         codec = attr.codec()
         if not codec.is_valid_lexical(lexical):
             out.append(_finding(el, "xsd:value", f"attribute {name}={_shown(lexical)} is not a valid "
-                                                 f"{getattr(codec, 'xsd_type', 'value')}"))
+                                                 f"{getattr(codec, 'xsd_type', 'value')}", paths))
             continue
         if attr.fixed is not None and not _same_value(codec, lexical, attr.fixed):
             out.append(_finding(el, "xsd:value", f"attribute {name}={_shown(lexical)} must be the fixed value "
-                                                 f"{_shown(attr.fixed)}"))
+                                                 f"{_shown(attr.fixed)}", paths))
         kind = _id_kind(attr)
         if kind == "ID":
             ident = _norm(lexical)
             if ident in ids:
-                out.append(_finding(el, "xsd:id-unique", f"id {ident!r} is already used by {ids[ident]}"))
+                out.append(_finding(el, "xsd:id-unique",
+                                    f"id {ident!r} is already used by {paths.path(ids[ident])}", paths))
             else:
-                ids[ident] = el.xml_path
+                ids[ident] = el
         elif kind == "IDREF":
             refs.append((el, name, _norm(lexical)))
         elif kind == "IDREFS":
             refs.extend((el, name, token) for token in lexical.split())
     for name, attr in specs.items():
         if attr.use == "required" and name not in el._attrs:
-            out.append(_finding(el, "xsd:required", f"<{el.xml_name}> needs the attribute {name!r}"))
+            out.append(_finding(el, "xsd:required", f"<{el.xml_name}> needs the attribute {name!r}", paths))
 
 
-def _children(el: Element, out: list[Finding]) -> None:
+def _children(el: Element, out: list[Finding], paths: _Paths) -> None:
     from sr_core.scene._runtime import _model_of
 
     simple = el._simple_content
@@ -317,14 +397,17 @@ def _children(el: Element, out: list[Finding]) -> None:
         codec = _runtime._codec_for(simple)
         if not codec.is_valid_lexical(el.content):
             out.append(_finding(el, "xsd:value", f"content {_shown(el.content)} is not a valid "
-                                                 f"{getattr(codec, 'xsd_type', 'value')}"))
-    elif any(isinstance(n, Text) and not n.is_space for n in el.nodes):
-        out.append(_finding(el, "xsd:occurs", f"<{el.xml_name}> does not take character data"))
+                                                 f"{getattr(codec, 'xsd_type', 'value')}", paths))
+    elif any(isinstance(n, Text) and (not n.is_space or el._content is None) for n in el.nodes):
+        # empty content allows no character data at all, white space included; element-only content allows white space
+        out.append(_finding(el, "xsd:occurs", f"<{el.xml_name}> does not take character data", paths))
     allowed = set(_model_of(type(el)).slots) if simple is None else set()
     valid: list[Element] = []
     for child in el.elements():
         if isinstance(child, Unknown) or child.xml_name not in allowed:
-            out.append(_finding(child, "xsd:element", f"<{child.xml_name}> is not allowed in <{el.xml_name}>"))
+            why = f"; {_unknown_why(child)}" if isinstance(child, Unknown) and _element_namespace(child) else ""
+            out.append(_finding(child, "xsd:element", f"<{child.xml_name}> is not allowed in <{el.xml_name}>{why}",
+                                paths))
         else:
             valid.append(child)
     if simple is not None:
@@ -336,31 +419,31 @@ def _children(el: Element, out: list[Finding]) -> None:
     if miss.index < len(valid):
         child = valid[miss.index]
         out.append(_finding(child, "xsd:occurs", f"<{child.xml_name}> cannot come here in <{el.xml_name}> "
-                                                 f"(expected: {want})"))
+                                                 f"(expected: {want})", paths))
     else:
-        out.append(_finding(el, "xsd:occurs", f"<{el.xml_name}> is incomplete (expected: {want})"))
+        out.append(_finding(el, "xsd:occurs", f"<{el.xml_name}> is incomplete (expected: {want})", paths))
 
 
-def _versions(root: Element, out: list[Finding]) -> None:
-    raw = root._attrs.get("version")
-    if raw is None:
+def _versions(root: Element, out: list[Finding], paths: _Paths) -> None:
+    ver = root._attrs.get("version")
+    if ver is None:
         return  # xsd:required has said it
-    ver = _norm(raw)
-    if ver == "auto":
+    if ver == "auto" and root._api_auto:
         return
-    if ver not in _gen.VERSIONS:
+    if ver not in _gen.VERSIONS:  # compared as written: the enumeration is on xs:string, which keeps white space
+        hint = ' (version="auto" is accepted only when set through the API)' if ver == "auto" else ""
         out.append(_finding(root, "xsd:version",
-                            f"version {ver!r} is not one of {', '.join(_gen.VERSIONS)}"))
+                            f"version {ver!r} is not one of {', '.join(_gen.VERSIONS)}{hint}", paths))
         return
     refused = _refused(root)
     hits = refused.get(ver, [])
     for gate, element in hits:
-        out.append(_finding(element, gate.id, gate.message))
+        out.append(_finding(element, gate.id, gate.message, paths))
     lowest = _lowest_clean(refused)
     if lowest is not None and _gen.VERSIONS.index(ver) < _gen.VERSIONS.index(lowest):
         ids = ", ".join(dict.fromkeys(g.id for g, _ in hits))
         out.append(_finding(root, "xsd:version", f"version {ver} is below the lowest version this document can "
-                                                 f"carry, {lowest} (refused by {ids})"))
+                                                 f"carry, {lowest} (refused by {ids})", paths))
 
 
 # ------------------------------------------------------------------------------------------ level 2
@@ -392,35 +475,95 @@ def _locate(root: Element, path: Optional[str]) -> Optional[Element]:
     return el
 
 
+_ATTRIBUTE_STEP = re.compile(r"@([A-Za-z_][\w.\-]*)")
+
+
+def _attribute_rules(sch: Any) -> dict[str, tuple[frozenset[str], str]]:
+    """Assert id -> (attribute names, test) for the Schematron rules whose context is a union of attributes. The
+    location lxml reports for such a rule names only the attribute (``/@effects``), not its owner."""
+    out: dict[str, tuple[frozenset[str], str]] = {}
+    ns = {"sch": "http://purl.oclc.org/dsdl/schematron"}
+    for rule in sch.xpath("//sch:rule", namespaces=ns):
+        parts = [p.strip() for p in rule.get("context", "").split("|")]
+        names = [_ATTRIBUTE_STEP.fullmatch(p) for p in parts]
+        if not parts or any(m is None for m in names):
+            continue
+        attrs = frozenset(m.group(1) for m in names if m is not None)
+        for assertion in rule.xpath("sch:assert", namespaces=ns):
+            if assertion.get("id") and assertion.get("test"):
+                out[assertion.get("id")] = (attrs, assertion.get("test"))
+    return out
+
+
 def _level2(scene: Element) -> list[Finding]:
     etree, isoschematron = _lxml()
     root = _root_of(scene)
     from sr_core.scene import io
 
     if not _L2:
+        sch_doc = etree.fromstring(_bundled_bytes("scene-render.sch"))
         _L2["xsd"] = etree.XMLSchema(etree.fromstring(_bundled_bytes("scene-render.xsd")))
-        _L2["sch"] = isoschematron.Schematron(etree.fromstring(_bundled_bytes("scene-render.sch")),
-                                              store_report=True)
-    tree = etree.fromstring(io.to_bytes(root))
+        _L2["sch"] = isoschematron.Schematron(sch_doc, store_report=True)
+        _L2["attr_rules"] = _attribute_rules(sch_doc)
+    paths = _Paths()
+    try:
+        tree = etree.fromstring(io.to_bytes(root))
+    except RecursionError:
+        return [_too_deep(root, paths, "the interpreter's recursion limit")]
+    except etree.XMLSyntaxError as exc:
+        if "depth" in str(exc).lower():
+            return [_too_deep(root, paths, "lxml's nesting limit")]
+        raise
     out: list[Finding] = []
 
     def add(code: str, message: str, raw_path: Optional[str]) -> None:
         el = _locate(root, raw_path)
         if el is not None:
-            out.append(Finding("error", code, message, el.xml_path, el.source_line, el.source_column))
+            out.append(Finding("error", code, message, paths.path(el), el.source_line, el.source_column))
         else:
             out.append(Finding("error", code, message, raw_path or None))
 
     xsd = _L2["xsd"]
-    if not xsd.validate(tree):
-        for entry in xsd.error_log:
-            add("xsd:schema", _norm(entry.message), entry.path)
     sch = _L2["sch"]
-    if not sch.validate(tree):
-        for failed in sch.validation_report.xpath("//svrl:failed-assert", namespaces=_SVRL):
-            text = _norm("".join(failed.xpath("svrl:text//text()", namespaces=_SVRL)))
-            add(failed.get("id") or "schematron", text, failed.get("location"))
+    try:
+        if not xsd.validate(tree):
+            for entry in xsd.error_log:
+                add("xsd:schema", _norm(entry.message), entry.path)
+        if not sch.validate(tree):
+            _schematron_findings(sch, tree, add)
+    except RecursionError:
+        return [_too_deep(root, paths, "the interpreter's recursion limit")]
     return out
+
+
+def _too_deep(root: Element, paths: _Paths, why: str) -> Finding:
+    return Finding("error", "sdk:too-deep",
+                   f"the document is nested too deeply for level 2 (it exceeds {why}); level 1 still checked it",
+                   paths.path(root), root.source_line, root.source_column)
+
+
+def _schematron_findings(sch: Any, tree: Any, add: Any) -> None:
+    rules = _L2["attr_rules"]
+    done: set[tuple[str, str]] = set()
+    for failed in sch.validation_report.xpath("//svrl:failed-assert", namespaces=_SVRL):
+        text = _norm("".join(failed.xpath("svrl:text//text()", namespaces=_SVRL)))
+        code, location = failed.get("id") or "schematron", failed.get("location") or ""
+        match = re.fullmatch(r"/@([\w.\-]+)", location)
+        if match is not None and code in rules and match.group(1) in rules[code][0]:
+            name = match.group(1)
+            if (code, name) in done:
+                continue
+            done.add((code, name))
+            for owner in _attribute_owners(tree, name, rules[code][1]):
+                add(code, text, tree.getroottree().getpath(owner))
+            continue
+        add(code, text, location)
+
+
+def _attribute_owners(tree: Any, name: str, test: str) -> list[Any]:
+    """The elements whose attribute ``name`` fails the rule's ``test`` (evaluated with the attribute as context)."""
+    return [el for el in tree.iter() if isinstance(el.tag, str) and name in el.attrib
+            and not el.xpath(f"boolean(@{name}[{test}])")]
 
 
 def _merge(level1: list[Finding], level2: Iterable[Finding]) -> list[Finding]:
@@ -442,11 +585,10 @@ def _merge(level1: list[Finding], level2: Iterable[Finding]) -> list[Finding]:
 # ------------------------------------------------------------------------------------------ check
 
 def _document_version(root: Element) -> Optional[str]:
-    raw = root._attrs.get("version")
-    if raw is None:
+    ver = root._attrs.get("version")
+    if ver is None:
         return None
-    ver = _norm(raw)
-    return min_version(root) if ver == "auto" else ver
+    return min_version(root) if ver == "auto" and root._api_auto else ver
 
 
 def check(scene: Element, *, schema: bool = False, engine: Any = None, data: Optional[str] = None) -> list[Finding]:
@@ -465,6 +607,9 @@ def check(scene: Element, *, schema: bool = False, engine: Any = None, data: Opt
         from sr_core.scene import io
 
         runner = importlib.import_module("sr_core.scene.engine").level3
-        findings = findings + list(runner(io.to_bytes(root), engine, data=data,
-                                          document_version=_document_version(root)))
+        theirs = list(runner(io.to_bytes(root), engine, data=data, document_version=_document_version(root)))
+        # level 3 is the authority (SREP 0, 6.4): when it reports a code at a path that a lower level reported, keep
+        # the engine's finding and drop the other
+        known = {(f.code, f.path) for f in theirs if f.path}
+        findings = [f for f in findings if (f.code, f.path) not in known] + theirs
     return findings

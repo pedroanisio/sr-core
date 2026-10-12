@@ -7,7 +7,12 @@ whitespace, attribute order and child order) or ``layout="pretty"`` (2-space ind
 declaration order, sequence children in content-model order).
 
 Reading never judges the content against the schema: ``check`` does that. It raises only on XML that is not
-well-formed, as ``xml.etree.ElementTree.ParseError``.
+well-formed, as ``xml.etree.ElementTree.ParseError``. That includes a namespace prefix that no ``xmlns:prefix``
+declares (the document is not namespace-well-formed).
+
+The schema's elements are in no namespace, so an element in a namespace (through ``xmlns="..."`` or a prefix) is read
+as ``Unknown``, and namespace declarations stay among the attributes, so that the round trip keeps them. A root that
+is not ``<scene>`` is read as ``Unknown`` too; ``check`` reports it (``xsd:element``).
 
 Standard library only.
 """
@@ -17,12 +22,14 @@ import importlib
 import os
 import xml.etree.ElementTree as ET
 import xml.parsers.expat
+from pathlib import Path
 from typing import Any, BinaryIO, Literal, Mapping, Optional, Union
 
-from sr_core.scene._runtime import (PI, Comment, Element, Text, Unknown, _attr_specs, _model_of)
+from sr_core.scene._runtime import (PI, Comment, Element, Text, Unknown, _attr_specs, _check_chars, _check_comment,
+                                    _check_name, _check_pi, _model_of)
 from sr_core.scene.errors import SchemaValueError
 
-__all__ = ["read", "to_bytes", "write"]
+__all__ = ["read", "to_bytes", "write", "reorder_count", "has_doctype"]
 
 Layout = Literal["preserve", "pretty"]
 ClassTable = Mapping[tuple[Optional[str], str], type]
@@ -30,6 +37,7 @@ Source = Union[str, "os.PathLike[str]", bytes]
 
 _DECL = '<?xml version="1.0" encoding="UTF-8"?>'
 _INDENT = "  "
+XML_NS = "http://www.w3.org/XML/1998/namespace"
 
 
 # ------------------------------------------------------------------------------------------ read
@@ -70,11 +78,33 @@ def read(source: Source, *, classes: Optional[ClassTable] = None) -> Element:
     def outside(node: Any) -> None:
         (post if state["root"] is not None else pre).append(node)
 
+    scopes: list[dict[str, str]] = [{"xml": XML_NS, "": ""}]
+
+    def unbound(prefix: str, name: str) -> ET.ParseError:
+        error = ET.ParseError(f"unbound prefix {prefix!r} in {name!r}: line {parser.CurrentLineNumber}, "
+                              f"column {parser.CurrentColumnNumber}")
+        error.position = (parser.CurrentLineNumber, parser.CurrentColumnNumber)
+        return error
+
     def start(name: str, attrs: list[str]) -> None:
         flush()
+        scope = scopes[-1]
+        declared = {(k[6:] if k != "xmlns" else ""): v for k, v in zip(attrs[0::2], attrs[1::2])
+                    if k == "xmlns" or k.startswith("xmlns:")}
+        if declared:
+            scope = {**scope, **declared}
+        scopes.append(scope)
+        prefix = name.partition(":")[0] if ":" in name else ""
+        if prefix not in scope:
+            raise unbound(prefix, name)
+        for key in attrs[0::2]:
+            if ":" in key and not key.startswith("xmlns:") and key.partition(":")[0] not in scope:
+                raise unbound(key.partition(":")[0], key)
         parent = stack[-1] if stack else None
         cls: Optional[type] = None
-        if parent is None:
+        if scope[prefix]:
+            cls = None  # the schema's elements are in no namespace
+        elif parent is None:
             cls = table.get((None, name))
         elif not isinstance(parent, Unknown):
             cls = table.get((parent._xsd_type, name))
@@ -92,6 +122,7 @@ def read(source: Source, *, classes: Optional[ClassTable] = None) -> Element:
     def end(name: str) -> None:
         flush()
         stack.pop()
+        scopes.pop()
 
     def comment(text: str) -> None:
         flush()
@@ -137,7 +168,7 @@ class _Writer:
         self.pretty = pretty
         self.out: list[str] = []
         self.version: Optional[str] = None
-        if root._attrs.get("version") == "auto":
+        if root._attrs.get("version") == "auto" and root._api_auto:
             self.version = _auto_version(root)
 
     def document(self) -> bytes:
@@ -155,9 +186,12 @@ class _Writer:
     @staticmethod
     def leaf(node: Any) -> str:
         if isinstance(node, Comment):
+            _check_comment(node.text)
             return f"<!--{node.text}-->"
         if isinstance(node, PI):
+            _check_pi(node.target, node.data)
             return f"<?{node.target} {node.data}?>" if node.data else f"<?{node.target}?>"
+        _check_chars(node.text, "text")
         return _esc_text(node.text)
 
     def tag(self, el: Element) -> str:
@@ -165,6 +199,11 @@ class _Writer:
         if self.pretty and items:
             order = {name: i for i, name in enumerate(_attr_specs(type(el)))}
             items.sort(key=lambda kv: order.get(kv[0], len(order)))  # stable: undeclared ones keep their order
+        if isinstance(el, Unknown):
+            _check_name(el._name, "element name", el.xml_path)
+            for key, value in items:
+                _check_name(key, "attribute name", el.xml_path)
+                _check_chars(value, f"attribute {key}", el.xml_path)
         parts = [el._name]
         for key, value in items:
             if el is self.root and key == "version" and self.version is not None:
@@ -172,13 +211,21 @@ class _Writer:
             parts.append(f'{key}="{_esc_attr(value)}"')
         return " ".join(parts)
 
-    # -- elements
+    # -- elements (iterative: the document may be nested deeper than the interpreter's recursion limit)
 
-    def element(self, el: Element, depth: int) -> None:
-        if self.pretty and not self.inline(el):
-            self.block(el, depth)
-        else:
-            self.verbatim(el)
+    def element(self, root: Element, depth: int) -> None:
+        stack: list[Any] = [(root, depth, False)]
+        out = self.out
+        while stack:
+            item = stack.pop()
+            if isinstance(item, str):
+                out.append(item)
+                continue
+            el, level, forced = item
+            if self.pretty and not forced and not self.inline(el):
+                self.block(el, level, stack)
+            else:
+                self.verbatim(el, stack)
 
     @staticmethod
     def inline(el: Element) -> bool:
@@ -186,34 +233,32 @@ class _Writer:
             return True
         return any(isinstance(n, Text) and not n.is_space for n in el._nodes)
 
-    def verbatim(self, el: Element) -> None:
+    def verbatim(self, el: Element, stack: list[Any]) -> None:
         if not el._nodes:
             self.out.append(f"<{self.tag(el)}/>")
             return
         self.out.append(f"<{self.tag(el)}>")
+        items: list[Any] = []
         for node in el._nodes:
-            if isinstance(node, Element):
-                self.verbatim(node)
-            else:
-                self.out.append(self.leaf(node))
-        self.out.append(f"</{el._name}>")
+            items.append((node, 0, True) if isinstance(node, Element) else self.leaf(node))
+        items.append(f"</{el._name}>")
+        stack.extend(reversed(items))
 
-    def block(self, el: Element, depth: int) -> None:
+    def block(self, el: Element, depth: int, stack: list[Any]) -> None:
         groups = _groups(el)
         if not groups:
             self.out.append(f"<{self.tag(el)}/>")
             return
         pad = _INDENT * (depth + 1)
         self.out.append(f"<{self.tag(el)}>\n")
+        items: list[Any] = []
         for group in groups:
             for node in group:
-                self.out.append(pad)
-                if isinstance(node, Element):
-                    self.element(node, depth + 1)
-                else:
-                    self.out.append(self.leaf(node))
-                self.out.append("\n")
-        self.out.append(f"{_INDENT * depth}</{el._name}>")
+                items.append(pad)
+                items.append((node, depth + 1, False) if isinstance(node, Element) else self.leaf(node))
+                items.append("\n")
+        items.append(f"{_INDENT * depth}</{el._name}>")
+        stack.extend(reversed(items))
 
 
 def _groups(el: Element) -> list[list[Any]]:
@@ -245,6 +290,30 @@ def _groups(el: Element) -> list[list[Any]]:
     if pending:
         groups.append(pending)
     return groups
+
+
+def reorder_count(scene: Element) -> int:
+    """How many elements ``layout="pretty"`` would move to put sequence content into content-model order."""
+    moved = 0
+    for el in scene.iter():
+        if not _model_of(type(el)).ordered or _Writer.inline(el):
+            continue
+        after = [n for group in _groups(el) for n in group if isinstance(n, Element)]
+        moved += sum(1 for a, b in zip(el.elements(), after) if a is not b)
+    return moved
+
+
+def has_doctype(source: Source) -> bool:
+    """Whether the document declares a DOCTYPE, which ``read`` does not keep (its entities are expanded)."""
+    raw = bytes(source) if isinstance(source, (bytes, bytearray)) else Path(source).read_bytes()
+    found: list[bool] = []
+    parser = xml.parsers.expat.ParserCreate()
+    parser.StartDoctypeDeclHandler = lambda *args: found.append(True)
+    try:
+        parser.Parse(raw, True)
+    except xml.parsers.expat.ExpatError:
+        pass
+    return bool(found)
 
 
 def _auto_version(root: Element) -> str:
