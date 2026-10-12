@@ -17,6 +17,7 @@ import hashlib
 import importlib
 import keyword
 import sys
+import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -40,6 +41,35 @@ BUILTINS = {
 FACETS = {"length", "minLength", "maxLength", "pattern", "minInclusive", "maxInclusive", "minExclusive",
           "maxExclusive"}
 USES = {"required", "optional", "prohibited"}
+
+# D3: the XML Schema vocabulary the generator implements, as {element: its attributes}. Any other element or attribute
+# in the XML Schema namespace fails the generation: an identity constraint (xs:unique, xs:key, xs:keyref), nillable, a
+# target namespace ... would otherwise be dropped, and the SDK would accept documents lxml refuses. The contents of
+# xs:annotation, `id`, and attributes in other namespaces carry no validation rule and pass. Facets are judged by
+# name later (FACETS), so that an unsupported one is reported as a facet.
+_XS_NS = "{http://www.w3.org/2001/XMLSchema}"
+_PARTICLE = {"minOccurs", "maxOccurs"}
+VOCABULARY: dict[str, set[str]] = {
+    "schema": {"version", "elementFormDefault"},
+    "annotation": set(),
+    "element": {"name", "type"} | _PARTICLE,
+    "attribute": {"name", "type", "use", "default", "fixed"},
+    "attributeGroup": {"name", "ref"},
+    "group": {"name", "ref"} | _PARTICLE,
+    "complexType": {"name", "mixed"},
+    "complexContent": set(),
+    "simpleContent": set(),
+    "extension": {"base"},
+    "restriction": {"base"},
+    "sequence": _PARTICLE,
+    "choice": _PARTICLE,
+    "simpleType": {"name"},
+    "list": {"itemType"},
+    "union": {"memberTypes"},
+    **{f: {"value"} for f in ("length", "minLength", "maxLength", "pattern", "enumeration", "whiteSpace",
+                              "maxInclusive", "maxExclusive", "minInclusive", "minExclusive", "totalDigits",
+                              "fractionDigits")},
+}
 
 # CONTRACT C3: runtime member names no schema attribute may use, plus the names the generated class body relies on.
 RESERVED_ATTRIBUTE_NAMES = {
@@ -580,8 +610,34 @@ def sha256sums(xsd: bytes, sch: bytes) -> bytes:
             f"{hashlib.sha256(sch).hexdigest()}  {SCH_NAME}\n").encode()
 
 
+def check_vocabulary(xsd_bytes: bytes) -> None:
+    """D3: raise ``SchemaError`` for the first element or attribute of XML Schema outside ``VOCABULARY``."""
+    try:
+        root = ET.fromstring(xsd_bytes)
+    except ET.ParseError as exc:
+        raise SchemaError(f"the XSD is not well-formed: {exc}") from None
+    stack: list[tuple[ET.Element, str]] = [(root, "")]
+    while stack:
+        el, where = stack.pop()
+        if not el.tag.startswith(_XS_NS):
+            raise SchemaError(f"{where}: element {el.tag!r} outside xs:annotation is not supported by the SDK "
+                              f"generator (D3)")
+        tag = el.tag[len(_XS_NS):]
+        here = f"{where}/xs:{tag}" + (f"[@name={el.get('name')!r}]" if el.get("name") else "")
+        allowed = VOCABULARY.get(tag)
+        if allowed is None:
+            raise SchemaError(f"{here}: <xs:{tag}> is not supported by the SDK generator (D3)")
+        for name in el.attrib:
+            if name not in allowed and name != "id" and not name.startswith("{"):
+                raise SchemaError(f"{here}: attribute {name!r} of <xs:{tag}> is not supported by the SDK generator "
+                                  f"(D3)")
+        if tag != "annotation":
+            stack.extend((c, here) for c in reversed(el))
+
+
 def render(xsd_bytes: bytes, sch_bytes: bytes) -> dict[str, bytes]:
     """The generated files as ``{relative path: bytes}``; a pure function of the two inputs."""
+    check_vocabulary(xsd_bytes)
     try:
         schema = model.read(xsd_bytes, sch_bytes, XSD_NAME, SCH_NAME)
     except model.SchemaError as exc:

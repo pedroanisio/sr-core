@@ -55,6 +55,9 @@ version:
     program `mode` test and the gate compiler no longer trim Unicode spaces;
   - `new_id` keeps an index of the document's ids, so building a document with one `new_id` per element is linear
     (8,000 ids: quadratic before);
+  - the generator checks the XSD against the XML Schema vocabulary it implements (D3): `xs:unique`, `xs:key`,
+    `xs:keyref`, `xs:any`, `xs:import`, `nillable`, `targetNamespace` and the like fail the generation instead of
+    being ignored, which made the SDK pass documents lxml refuses;
 - `conformance/run.py` no longer reports `pass` for a case that checks nothing: an `expected.json` entry with an
   unknown key, an empty check or no check at all is an `error`, and so is a form whose checks did not run.
 - `conformance/make_cases.py` reads the implicit camera's field of view and the default sensor width from the

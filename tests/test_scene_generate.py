@@ -270,7 +270,7 @@ class TestLoudFailures:
     def test_unknown_particle_kind(self):
         t = ('<xs:complexType name="aType"><xs:all>' + el("b", "bType") + "</xs:all></xs:complexType>"
              '<xs:complexType name="bType"/>')
-        with pytest.raises(SchemaError, match="particle"):
+        with pytest.raises(SchemaError, match="xs:all.*not supported"):
             render_syn(xsd(types=t, root_children=el("a", "aType")))
 
     def test_unsupported_xsd_construct_surfaces_as_schema_error(self):
@@ -314,6 +314,65 @@ class TestLoudFailures:
         assert generate.main(["--root", str(tmp_path)]) == 2
         assert "invalid class name" in capsys.readouterr().err
         assert not (tmp_path / "sr_core").exists()
+
+
+_A = ('<xs:complexType name="aType"><xs:sequence>{}</xs:sequence>{}</xs:complexType>'
+      '<xs:complexType name="bType"><xs:attribute name="x" type="xs:string"/></xs:complexType>')
+_B = '<xs:element name="b" type="bType" minOccurs="0" maxOccurs="unbounded"/>'
+
+
+def _idc(kind: str, extra: str = "") -> bytes:
+    """An identity constraint on a nested element: lxml enforces it, the SDK's checks do not."""
+    inner = f'<xs:{kind} name="u"{extra}><xs:selector xpath="b"/><xs:field xpath="@x"/></xs:{kind}>'
+    return xsd(types=_A.format(_B, ""), root_children=f'<xs:element name="a" type="aType" minOccurs="0">{inner}'
+                                                      f'</xs:element>')
+
+
+def _root_idc(kind: str) -> bytes:
+    data = xsd(types=_A.format(_B, ""), root_children=el("a", "aType"))
+    inner = f'<xs:{kind} name="u"><xs:selector xpath="a/b"/><xs:field xpath="@x"/></xs:{kind}>'
+    return data.replace(b"    </xs:complexType>\n  </xs:element>", f"    </xs:complexType>{inner}\n  </xs:element>".encode())
+
+
+class TestVocabulary:
+    """D3: a construct of XML Schema the generator does not implement fails, instead of being dropped (review R4)."""
+
+    @pytest.mark.parametrize("data, construct", [
+        (_root_idc("unique"), "xs:unique"),
+        (_root_idc("key"), "xs:key"),
+        (_idc("unique"), "xs:unique"),
+        (_idc("key"), "xs:key"),
+        (_idc("keyref", ' refer="k"'), "xs:keyref"),
+        (xsd(types=_A.format("", ""), root_children=el("a", "aType", ' minOccurs="0" nillable="true"')), "nillable"),
+        (xsd(types=_A.format("", ""), root_children=el("a", "aType", ' minOccurs="0" fixed="z"')), "fixed"),
+        (xsd(types=_A.format("", ""), root_children=el("a", "aType", ' minOccurs="0" block="#all"')), "block"),
+        (xsd(types=_A.format("", '<xs:attribute name="k" type="xs:string" form="qualified"/>'),
+             root_children=el("a", "aType")), "form"),
+        (xsd(types=_A.format("", "").replace('name="aType"', 'name="aType" abstract="true"'),
+             root_children=el("a", "aType")), "abstract"),
+        (xsd(types=_A.format("", "").replace("<xs:sequence>", "<xs:openContent/><xs:sequence>"),
+             root_children=el("a", "aType")), "xs:openContent"),
+        (xsd(simple='<xs:notation name="n" public="x"/>'), "xs:notation"),
+        (xsd(simple='<xs:import namespace="urn:x"/>'), "xs:import"),
+        (xsd().replace(b'version="9.9.9"', b'version="9.9.9" targetNamespace="urn:x"'), "targetNamespace"),
+        (xsd().replace(b'version="9.9.9"', b'version="9.9.9" attributeFormDefault="qualified"'),
+         "attributeFormDefault"),
+        (xsd().replace(b'version="9.9.9"', b'version="9.9.9" blockDefault="#all"'), "blockDefault"),
+        (xsd(types=_A.format('<xs:any minOccurs="0"/>', ""), root_children=el("a", "aType")), "xs:any"),
+        (xsd(types=_A.format("", '<o:rule xmlns:o="urn:o"/>'), root_children=el("a", "aType")), "urn:o"),
+    ], ids=lambda v: v if isinstance(v, str) else "")
+    def test_an_unimplemented_construct_fails(self, data: bytes, construct: str) -> None:
+        with pytest.raises(SchemaError, match=f"{construct}.*not supported"):
+            render_syn(data)
+
+    def test_annotations_and_foreign_attributes_pass(self) -> None:
+        data = xsd(types=_A.format("", '<xs:attribute name="k" type="xs:string" xmlns:o="urn:o" o:since="1.1"/>'),
+                   root_children=el("a", "aType"))
+        data = data.replace(b"<xs:complexType name=\"bType\">",
+                            b'<xs:complexType name="bType"><xs:annotation><xs:appinfo><o:x xmlns:o="urn:o"/>'
+                            b'</xs:appinfo><xs:documentation source="s" xml:lang="en">d</xs:documentation>'
+                            b"</xs:annotation>")
+        render_syn(data)
 
 
 class TestDefaultsAreValidated:
