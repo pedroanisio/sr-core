@@ -472,6 +472,35 @@ def _schema_enums(st: model.SimpleType) -> list[str]:
     return [v for v, _ in st.enums] + [x for i in st.inline for x in _schema_enums(i)]
 
 
+def _gates_from_sch(sch: bytes) -> list[dict]:
+    """Each Schematron assert that mentions ``@version``, as the gate record SREP 0 section 5 defines: form A when
+    the rule context is ``/scene[@version=...]`` (the versions it lists are refused), form B when the test starts
+    with ``not(/scene/@version=...)`` (the versions in that ``not`` are refused)."""
+    import re
+    import xml.etree.ElementTree as ET
+    ns = "{http://purl.oclc.org/dsdl/schematron}"
+    space = re.compile(r"[ \t\r\n]+")
+    form_a = re.compile(r"/scene\[@version='[\d.]+'( or @version='[\d.]+')*\]")
+    form_b = re.compile(r"not\((/scene/@version='[\d.]+'( or /scene/@version='[\d.]+')*)\)( or .+)?", re.S)
+    out = []
+    for rule in ET.fromstring(sch).iter(ns + "rule"):
+        context = space.sub(" ", rule.get("context", "")).strip(" ")
+        for a in rule.findall(ns + "assert"):
+            test = space.sub(" ", a.get("test", "")).strip(" ")
+            if "@version" not in context and "@version" not in test:
+                continue
+            assert len(a) == 0, f"{a.get('id')}: a gate message with markup needs a richer oracle"
+            if form_a.fullmatch(context):
+                form, versions = "A", set(re.findall(r"'([\d.]+)'", context))
+            else:
+                m = form_b.fullmatch(test)
+                assert m, f"{a.get('id')}: neither form A nor form B"
+                form, versions = "B", set(re.findall(r"'([\d.]+)'", m.group(1)))
+            out.append({"id": a.get("id"), "versions": versions, "context": context, "trigger": test,
+                        "message": space.sub(" ", a.text or "").strip(" "), "form": form})
+    return out
+
+
 class TestRealSchema:
     def test_counts(self, real):
         counts = ast.literal_eval(_module_assign(real.tree, "COUNTS"))
@@ -553,17 +582,17 @@ class TestRealSchema:
         assert total == ast.literal_eval(_module_assign(real.tree, "COUNTS"))["enum_values"] > 100
 
     def test_d4_gate_asserts(self, real):
-        from sr_core.scene import gates
-        want = gates.compile_gates(real.schema)
+        # the expectation comes from the .sch through ElementTree and two regular expressions, not from
+        # compile_gates or schemadoc.model, so that a bug shared by the generator's inputs cannot hide (review R8)
+        want = _gates_from_sch((REPO / "schema" / "scene-render.sch").read_bytes())
         got = _module_assign(real.tree, "GATES").elts
         assert len(got) == len(want) == 24
         for call, g in zip(got, want):
             kw = {k.arg: k.value for k in call.keywords}
             assert call.func.id == "Gate"
-            assert ast.literal_eval(kw["id"]) == g.id and ast.literal_eval(kw["context"]) == g.context
-            assert ast.literal_eval(kw["trigger"]) == g.trigger and ast.literal_eval(kw["message"]) == g.message
-            assert ast.literal_eval(kw["form"]) == g.form
-            assert {e.value for e in kw["versions"].args[0].elts} == set(g.versions)
+            assert {k: ast.literal_eval(v) for k, v in kw.items() if k != "versions"} == {
+                k: v for k, v in g.items() if k != "versions"}, g["id"]
+            assert {e.value for e in kw["versions"].args[0].elts} == g["versions"], g["id"]
         asserts = {a.id for r in real.schema.rules for a in r.asserts}
         assert {ast.literal_eval(dict((k.arg, k.value) for k in c.keywords)["id"]) for c in got} <= asserts
 
