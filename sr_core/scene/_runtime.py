@@ -505,7 +505,7 @@ class Element:
     # Annotations only (no value, so they do not clash with the slots): they tell a type checker what ``_reset`` stores.
     _attrs: dict[str, str]
     _owner: Optional["Element"]
-    _nodes: list[Any]
+    _nodes: "_Nodes"
     _index: Any
     _name: str
     _pre: list[Any]

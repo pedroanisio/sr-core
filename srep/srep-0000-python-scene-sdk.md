@@ -376,7 +376,8 @@ The console script `sr-scene` provides six commands:
 | `sr-scene new [--version V] [--layout pretty\|indent\|preserve] [-o FILE]` | prints (or writes atomically) a minimal scene, a project and an empty composition, that is clean at levels 1 and 2; `V` is `auto` (the default) or a schema version | 0, 2 for a usage error |
 | `sr-scene format FILE... [--check]` | rewrites with `layout="pretty"` and the content-model order, atomically; says when it reordered elements; refuses a file with a DOCTYPE, whose entities a rewrite would inline | with `--check`, rewrites nothing and exits 1 when a file would change |
 
-`check --format json` prints `{"format": "sr-scene-findings/1", "valid": bool, "files": [...]}`; a file entry has `file`,
+`check --format json` prints `{"format": "sr-scene-findings/1", "valid": bool, "levels": [1, ...], "files": [...]}`, where
+`levels` lists the check levels that ran; a file entry has `file`,
 `valid`, `findings` (each the dict of `Finding.to_dict()`, with `code`) and, for an unreadable file, `error`. The
 envelope key was added to the existing output, which keeps `valid` and `files` unchanged.
 

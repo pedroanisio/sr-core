@@ -220,7 +220,8 @@ are written as `min_version()`.
 
 `Finding` has `severity` (`error`, `warning`, `info`), `code`, `message`, `path`, and `line` and `column` (set when the
 document was read from a file). `sr-scene check FILE --format json` prints
-`{"format": "sr-scene-findings/1", "valid": ..., "files": [{"file": ..., "valid": ..., "findings": [...]}]}`; a finding
+`{"format": "sr-scene-findings/1", "valid": ..., "levels": [1], "files": [{"file": ..., "valid": ..., "findings": [...]}]}`
+(`levels`: the check levels that ran; a clean file is reported as `ok (level 1)`, `ok (levels 1, 2)` ...); a finding
 is the dict `{"severity", "code", "message", "path", "line", "column"}`.
 
 | Code | Level | Meaning |
