@@ -46,12 +46,19 @@ doc = read("in.scene.xml")                        # comments, attribute order an
 - Each allowed child has a factory named `add_<name>`, and simple content is held in `.content`.
 - A class that covers several element names takes `xml_name` at construction: `Still(xml_name="thumbnail", path="a.png")`
   (the default is the first name, `poster`); `.xml_name` returns the chosen one.
-- A value or a child that the schema refuses raises `SchemaValueError` as soon as it is set. An attribute that the
-  element does not declare raises `AttributeError`.
+- A value or a child that the schema refuses raises `SchemaValueError` as soon as it is set. A name the element does not
+  have (an attribute, an `add_<name>` factory, a child) raises `UnknownNameError`, a `SchemaValueError` and an
+  `AttributeError` at once, with `suggestions` and the `allowed` names: `<layer> has no attribute 'blendMode'; did you mean 'blend'?`.
+- `describe("layer")` (also a class or an instance) returns the schema's own account of an element: documentation, minimum
+  version, children with occurrences, attributes with type, facets, default and documentation; `describe_all()` is the
+  whole schema as JSON. `sr-scene describe NAME...`, `sr-scene list` and `sr-scene new` do the same from the shell.
 - `check(scene)` adds the checks that need the whole document: required attributes, occurrences, ids and
   references, and the version gates.
   - `schema=True` also runs the XSD and the Schematron through lxml: `pip install sr-core[validate]`.
   - `engine=PATH` also runs an engine's `validate`.
+
+The guide for people and AI agents, with the build, check and fix loop, the finding codes and the exact errors, is
+[docs/scene-sdk-guide.md](docs/scene-sdk-guide.md).
 
 ## Versions
 
