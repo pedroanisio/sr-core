@@ -341,11 +341,17 @@ def _describe_class(cls: Any) -> Description:
     return found
 
 
+def _class_doc(cls: Any) -> str:
+    """The schema's documentation of the type; the generator's placeholder ``Complex type X.`` counts as none."""
+    doc = inspect.cleandoc(cls.__doc__ or "")
+    return "" if doc == f"Complex type {cls._xsd_type}." else doc
+
+
 def _build(cls: Any) -> Description:
     simple = _resolve(cls._simple_content) if cls._simple_content is not None else None
     return Description(
         format=FORMAT, schema_release=_gen.SCHEMA_RELEASE, xml_names=tuple(cls._element_names),
-        class_name=cls.__name__, xsd_type=cls._xsd_type, doc=inspect.cleandoc(cls.__doc__ or ""),
+        class_name=cls.__name__, xsd_type=cls._xsd_type, doc=_class_doc(cls),
         min_version=_class_min(cls), content_model=_content_model(cls), simple_content=simple,
         children=_children(cls), attributes=tuple(_attribute(cls, a) for a in _attr_specs(cls).values()))
 

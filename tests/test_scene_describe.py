@@ -217,3 +217,8 @@ def test_element_classes_cover_every_named_class() -> None:
     seen = {c.__name__ for c in ELEMENT_CLASSES.values()}
     assert seen <= names
     assert describe(Scene).xml_names == ("scene",)
+
+
+def test_a_type_without_documentation_has_an_empty_doc() -> None:
+    assert describe("animate").doc == ""
+    assert not any(describe(c).doc.startswith("Complex type ") for c in CLASSES.values())
