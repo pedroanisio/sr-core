@@ -74,7 +74,7 @@ def read(source: Source, *, classes: Optional[ClassTable] = None) -> Element:
     def flush() -> None:
         if buf:
             if stack:
-                stack[-1]._nodes.append(Text("".join(buf)))
+                stack[-1]._nodes._push(Text("".join(buf)))
             buf.clear()
 
     def outside(node: Any) -> None:
@@ -118,7 +118,7 @@ def read(source: Source, *, classes: Optional[ClassTable] = None) -> Element:
             state["root"] = element
         else:
             element._owner = parent
-            parent._nodes.append(element)
+            parent._nodes._push(element)  # a tree being read: no cycle, no id index yet
         stack.append(element)
 
     def end(name: str) -> None:
@@ -128,11 +128,11 @@ def read(source: Source, *, classes: Optional[ClassTable] = None) -> Element:
 
     def comment(text: str) -> None:
         flush()
-        (stack[-1]._nodes.append(Comment(text)) if stack else outside(Comment(text)))
+        (stack[-1]._nodes._push(Comment(text)) if stack else outside(Comment(text)))
 
     def pi(target: str, data: str) -> None:
         flush()
-        (stack[-1]._nodes.append(PI(target, data)) if stack else outside(PI(target, data)))
+        (stack[-1]._nodes._push(PI(target, data)) if stack else outside(PI(target, data)))
 
     parser.StartElementHandler = start
     parser.EndElementHandler = end

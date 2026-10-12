@@ -159,6 +159,8 @@ what it offers. Section 9 of the Specification answers it.
      order of the content model, whatever order they were added in.
    - Children of unordered content (`xs:choice`, any number) keep the order in which they were added.
    - Adding a child MUST check that the parent allows the name and that `maxOccurs` is not exceeded.
+   - Adding an element to itself or to one of its descendants MUST be refused: the tree would become a cycle, and
+     walking it would never end. This holds for `add` and for a direct change of `.nodes`.
    - `minOccurs`, and attributes with `use="required"`, are checked by `check` (section 6). A document is built in
      steps, so they cannot be checked earlier.
 9. **Factories.** For each child a parent allows, the class MUST have a method `add_<elementName>` that creates,
@@ -168,6 +170,10 @@ what it offers. Section 9 of the Specification answers it.
 10. **Text, comments and processing instructions.**
     - Simple content (three types at 1.7.0, and no mixed types) is held in `.content`.
     - Comments, processing instructions and whitespace text are nodes in `.nodes`, and survive reading and writing.
+    - Whitespace is XML white space (XML 1.0 production `S`): space, tab, carriage return and line feed. A no-break
+      space, U+2003 or any other Unicode space is character data, here and in every check of section 6.
+    - `.nodes` may be changed directly. An element it gains MUST have no owner, or that parent, and gets that
+      parent as owner; an element it loses has none.
 11. **Runtime names.** The schema already uses `parent`, `path`, `text` and `version` as attribute names, so the
     runtime cannot use them. The element API uses these names:
     - `xml_name` (a read-only property, and the constructor keyword that chooses it, see 3.2), `owner`, `nodes`, `elements()`, `content`;
@@ -209,7 +215,9 @@ what it offers. Section 9 of the Specification answers it.
 4. **Ids.**
    - Ids are unique across the whole document.
    - `scene.new_id(prefix)` returns `prefix`, then `prefix-2`, `prefix-3`, and so on: deterministic, and never a
-     taken id.
+     taken id. It does not reserve the id it returns.
+   - A loop that calls `new_id` and adds one element per call MUST take time linear in the number of elements, not
+     quadratic: the document's ids are indexed, and the index follows every change.
    - A reference to an id that a program emits (`P.E`, SREP 87) is not resolved by the SDK. It is left to the engine,
      as the schema leaves it.
 5. **Version.**
@@ -262,7 +270,8 @@ what it offers. Section 9 of the Specification answers it.
 
      A document that was read can carry all of these. A document built through the SDK can carry only `xsd:occurs`,
      `xsd:required` and the reference and version codes.
-   - **Character data.** Character data other than whitespace, in element-only or empty content, is `xsd:occurs`.
+   - **Character data.** Character data other than XML white space (space, tab, CR, LF), in element-only content,
+     and any character data in empty content, is `xsd:occurs`.
    - **Version below the minimum.** An explicit version below `min_version()` gives the gate findings and one
      `xsd:version` finding that names the gates.
    - **References into programs.** A document with a program that emits nodes (SREP 87) may hold references that only

@@ -16,6 +16,8 @@ from typing import Any, ClassVar, Generic, Iterator, Optional, TypeVar, overload
 
 from sr_core.scene.errors import SchemaValueError
 
+_XML_SPACE = " \t\r\n"  # XML white space (production S): NBSP, U+2003, VT, FF, NEL are character data
+
 __all__ = ["Attr", "Element", "SceneBase", "Unknown", "Comment", "PI", "Text", "set_simple_types", "default_of",
            "new_id"]
 
@@ -107,7 +109,7 @@ class Text:
 
     @property
     def is_space(self) -> bool:
-        return not self.text.strip()
+        return not self.text.strip(_XML_SPACE)
 
 
 # ------------------------------------------------------------------------------------------ attributes
@@ -169,7 +171,7 @@ class Attr(Generic[G, S]):
 
     def __set__(self, obj: "Element", value: Optional[S]) -> None:
         if value is None:
-            obj._attrs.pop(self.xml_name, None)
+            self.__delete__(obj)
             return
         codec = self.codec()
         try:
@@ -182,10 +184,15 @@ class Attr(Generic[G, S]):
             if err.xsd_type is None:
                 err.xsd_type = getattr(codec, "xsd_type", None)
             raise
+        old = obj._attrs.get(self.xml_name)
         obj._attrs[self.xml_name] = lexical
+        if self.xml_name == "id":
+            _id_moved(obj, old, lexical)
 
     def __delete__(self, obj: "Element") -> None:
-        obj._attrs.pop(self.xml_name, None)
+        old = obj._attrs.pop(self.xml_name, None)
+        if self.xml_name == "id":
+            _id_moved(obj, old, None)
 
     def _lower(self, value: Any) -> Any:
         """An element stands for its id (xs:IDREF); a sequence of elements for their ids (xs:IDREFS)."""
@@ -306,12 +313,193 @@ def _class_for(cls: type, type_key: str) -> type["Element"]:
     return table[type_key]  # type: ignore[no-any-return]
 
 
+# ------------------------------------------------------------------------------------------ child nodes
+
+class _Nodes(list):  # type: ignore[type-arg]
+    """An element's child nodes, as ``.nodes`` hands them out. The list may be changed directly: an element it gains
+    must not be its owner or one of the owner's ancestors, and becomes the owner's child when it has no owner; an
+    element it loses stops being one. Either way the document's id index is dropped (``new_id`` rebuilds it)."""
+
+    __slots__ = ("_el",)
+    _el: "Element"
+
+    # -- the runtime's own changes: the caller keeps owners and the id index
+
+    def _put(self, index: int, items: list[Any]) -> None:
+        list.__setitem__(self, slice(index, index), items)
+
+    def _cut(self, index: int) -> None:
+        list.__delitem__(self, index)
+
+    def _push(self, node: Any) -> None:
+        list.append(self, node)
+
+    # -- direct changes
+
+    def _admit(self, items: Any) -> list[Any]:
+        admitted: list[Any] = list(items)
+        el = self._el
+        for x in admitted:
+            if isinstance(x, Element):
+                if x._owner is not None and x._owner is not el:
+                    raise SchemaValueError(f"<{x.xml_name}> already belongs to <{x._owner.xml_name}>",
+                                           path=el.xml_path)
+                _refuse_cycle(el, x)
+        return admitted
+
+    def _changed(self, gained: list[Any], lost: list[Any]) -> None:
+        el = self._el
+        if lost:
+            present = {id(n) for n in self}
+            for x in lost:
+                if isinstance(x, Element) and x._owner is el and id(x) not in present:
+                    x._owner = None
+        for x in gained:
+            if isinstance(x, Element) and x._owner is None:
+                x._owner = el
+                x._index = None
+        _root(el)._index = None
+
+    def append(self, x: Any) -> None:
+        self._admit((x,))
+        super().append(x)
+        self._changed([x], [])
+
+    def extend(self, xs: Any) -> None:
+        items = self._admit(xs)
+        super().extend(items)
+        self._changed(items, [])
+
+    def __iadd__(self, xs: Any) -> "_Nodes":  # type: ignore[misc]
+        self.extend(xs)
+        return self
+
+    def insert(self, index: Any, x: Any) -> None:
+        self._admit((x,))
+        super().insert(index, x)
+        self._changed([x], [])
+
+    def __setitem__(self, key: Any, value: Any) -> None:
+        if isinstance(key, slice):
+            old, new = self[key], self._admit(value)
+            super().__setitem__(key, new)
+        else:
+            old, new = [self[key]], self._admit((value,))
+            super().__setitem__(key, value)
+        self._changed(new, old)
+
+    def __delitem__(self, key: Any) -> None:
+        old = self[key] if isinstance(key, slice) else [self[key]]
+        super().__delitem__(key)
+        self._changed([], old)
+
+    def pop(self, index: Any = -1) -> Any:
+        x = super().pop(index)
+        self._changed([], [x])
+        return x
+
+    def remove(self, x: Any) -> None:
+        super().remove(x)
+        self._changed([], [x])
+
+    def clear(self) -> None:
+        old = list(self)
+        super().clear()
+        self._changed([], old)
+
+    def __imul__(self, n: Any) -> "_Nodes":  # type: ignore[misc]
+        old = list(self)
+        super().__imul__(n)
+        self._changed([], old)
+        return self
+
+
+_ADDING = object()  # the _index of an element that add_<name> is still filling: its id is not the document's yet
+
+
+def _root(el: "Element") -> "Element":
+    while el._owner is not None:
+        el = el._owner
+    return el
+
+
+def _refuse_cycle(parent: "Element", child: "Element") -> None:
+    el: Optional[Element] = parent
+    while el is not None:
+        if el is child:
+            raise SchemaValueError(f"<{child.xml_name}> cannot be added to itself or an ancestor",
+                                   path=parent.xml_path)
+        el = el._owner
+
+
+class _IdIndex:
+    """A document's ids (by value: XML white space trimmed), and per prefix the number from which ``new_id`` counts
+    on: every ``prefix-2`` .. ``prefix-(n-1)`` below it is taken. Losing an id forgets those numbers."""
+
+    __slots__ = ("counts", "floors")
+
+    def __init__(self, root: "Element") -> None:
+        self.counts: dict[str, int] = {}
+        self.floors: dict[str, int] = {}
+        self.gain(root)
+
+    def add(self, lexical: str) -> None:
+        key = lexical.strip(_XML_SPACE)
+        self.counts[key] = self.counts.get(key, 0) + 1
+
+    def drop(self, lexical: str) -> None:
+        key = lexical.strip(_XML_SPACE)
+        left = self.counts.get(key, 0) - 1
+        if left > 0:
+            self.counts[key] = left
+        else:
+            self.counts.pop(key, None)
+        self.floors.clear()
+
+    def gain(self, top: "Element") -> None:
+        for el in top.iter():
+            lexical = el._attrs.get("id")
+            if lexical is not None:
+                self.add(lexical)
+
+    def lose(self, top: "Element") -> None:
+        for el in top.iter():
+            lexical = el._attrs.get("id")
+            if lexical is not None:
+                self.drop(lexical)
+
+
+def _gained(parent: "Element", child: "Element") -> None:
+    child._index = None
+    index = _root(parent)._index
+    if index is not None:
+        index.gain(child)
+
+
+def _lost(parent: "Element", child: "Element") -> None:
+    index = _root(parent)._index
+    if index is not None:
+        index.lose(child)
+
+
+def _id_moved(el: "Element", old: Optional[str], new: Optional[str]) -> None:
+    if el._index is _ADDING:
+        return
+    index = _root(el)._index
+    if index is None:
+        return
+    if old is not None:
+        index.drop(old)
+    if new is not None:
+        index.add(new)
+
+
 # ------------------------------------------------------------------------------------------ Element
 
 class Element:
     """Base of every element class. Subclasses MUST declare ``__slots__`` (``()`` when they add none)."""
 
-    __slots__ = ("_attrs", "_owner", "_nodes", "_name", "_pre", "_post", "_api_auto", "source_line",
+    __slots__ = ("_attrs", "_owner", "_nodes", "_name", "_pre", "_post", "_api_auto", "_index", "source_line",
                  "source_column")
 
     _xsd_type: ClassVar[str] = ""
@@ -341,7 +529,9 @@ class Element:
     def _reset(self, name: str) -> None:
         self._attrs: dict[str, str] = {}
         self._owner: Optional[Element] = None
-        self._nodes: list[Any] = []
+        self._nodes = nodes = _Nodes()
+        nodes._el = self
+        self._index: Any = None  # on a document's root: its _IdIndex, built by new_id
         self._name = name
         self._pre: list[Any] = []
         self._post: list[Any] = []
@@ -408,10 +598,13 @@ class Element:
     @content.setter
     def content(self, value: Optional[str]) -> None:
         text = "" if value is None else self._validate_content(value)
-        at = next((i for i, n in enumerate(self._nodes) if isinstance(n, Text)), len(self._nodes))
-        self._nodes[:] = [n for n in self._nodes if not isinstance(n, Text)]
+        nodes = self._nodes
+        at = next((i for i, n in enumerate(nodes) if isinstance(n, Text)), len(nodes))
+        for i in range(len(nodes) - 1, -1, -1):
+            if isinstance(nodes[i], Text):
+                nodes._cut(i)
         if text:
-            self._nodes.insert(min(at, len(self._nodes)), Text(text))
+            nodes._put(min(at, len(nodes)), [Text(text)])
 
     def _validate_content(self, value: str) -> str:
         spec = self._simple_content
@@ -453,6 +646,7 @@ class Element:
         if child._owner is not None:
             raise SchemaValueError(f"<{child.xml_name}> already belongs to <{child._owner.xml_name}>",
                                    path=self.xml_path)
+        _refuse_cycle(self, child)
         slot = self._slot_for(child._name, child)
         self._insert(child, slot)
         return child
@@ -463,18 +657,21 @@ class Element:
         assert slot is not None
         child = _class_for(type(self), slot.type_key)._blank(name)
         child._owner = self  # the path in an error message names the future parent
+        child._index = _ADDING  # ... but its id is not the document's until it is inserted
         try:
             child._set_all(attrs)
         finally:
             child._owner = None
+            child._index = None
         self._insert(child, slot)
         return child
 
     def _insert(self, child: "Element", slot: Optional[_Slot]) -> None:
         nodes = self._nodes
         if slot is None:
-            nodes.append(child)
+            nodes._put(len(nodes), [child])
             child._owner = self
+            _gained(self, child)
             return
         slots = _model_of(type(self)).slots
         last_le: Optional[int] = None
@@ -515,12 +712,13 @@ class Element:
         space = self._space_before(index - 1 if copy_after else index)
         if space is not None and (copy_after or first_gt is not None):
             if copy_after:
-                nodes[index:index] = [Text(space), child]
+                nodes._put(index, [Text(space), child])
             else:
-                nodes[index:index] = [child, Text(space)]
+                nodes._put(index, [child, Text(space)])
         else:
-            nodes.insert(index, child)
+            nodes._put(index, [child])
         child._owner = self
+        _gained(self, child)
 
     def _append_first(self, child: "Element") -> None:
         """Add the first element child. After ``remove`` took the last one, the closing white space remembers the
@@ -528,11 +726,12 @@ class Element:
         nodes = self._nodes
         last = nodes[-1] if nodes else None
         if isinstance(last, Text) and last.lead is not None:
-            nodes[-1:-1] = [Text(last.lead), child]
+            nodes._put(len(nodes) - 1, [Text(last.lead), child])
             last.lead = None
         else:
-            nodes.append(child)
+            nodes._put(len(nodes), [child])
         child._owner = self
+        _gained(self, child)
 
     def _space_before(self, element_index: int) -> Optional[str]:
         """The whitespace text that stands right before the node at this index, if any."""
@@ -549,12 +748,13 @@ class Element:
         if index is None:
             raise SchemaValueError(f"<{getattr(child, 'xml_name', child)}> is not a child of <{self.xml_name}>",
                                    path=self.xml_path)
-        del nodes[index]
+        nodes._cut(index)
         child._owner = None
+        _lost(self, child)
         prev = nodes[index - 1] if index > 0 else None
         nxt = nodes[index] if index < len(nodes) else None
         if isinstance(prev, Text) and prev.is_space and (nxt is None or (isinstance(nxt, Text) and nxt.is_space)):
-            del nodes[index - 1]
+            nodes._cut(index - 1)
             if isinstance(nxt, Text) and not any(isinstance(n, Element) for n in nodes):
                 nxt.lead = prev.text
 
@@ -587,10 +787,10 @@ class Element:
                 if isinstance(node, Element):
                     child = type(node)._blank(node._name)
                     child._owner = dst
-                    dst._nodes.append(child)
+                    dst._nodes._push(child)
                     stack.append((node, child))
                 else:
-                    dst._nodes.append(_copy_node(node))
+                    dst._nodes._push(_copy_node(node))
         return top
 
     def __repr__(self) -> str:
@@ -658,19 +858,23 @@ def new_id(scene: Element, prefix: str) -> str:
     """``prefix``, then ``prefix-2``, ``prefix-3`` ...: the first one no element of the document holds.
 
     ``scene`` may be any element: the whole document it belongs to is searched, unknown elements included. The
-    prefix must be an ``xs:NCName``, so that every result is a valid ``xs:ID``.
+    prefix must be an ``xs:NCName``, so that every result is a valid ``xs:ID``. The document's ids are indexed on
+    the first call and kept up to date as it changes, so a loop that adds an element per call stays linear.
     """
-    if not isinstance(prefix, str) or prefix != prefix.strip() or not _codec_for("xs:NCName").is_valid_lexical(prefix):
+    if not isinstance(prefix, str) or not _codec_for("xs:NCName").is_valid_lexical(prefix) \
+            or prefix != prefix.strip(_XML_SPACE):
         raise SchemaValueError(f"id prefix {prefix!r} is not a valid xs:NCName", attribute="id", xsd_type="xs:NCName")
-    root = scene
-    while root._owner is not None:
-        root = root._owner
-    taken = {el._attrs["id"].strip() for el in root.iter() if "id" in el._attrs}
+    root = _root(scene)
+    index = root._index
+    if index is None:
+        index = root._index = _IdIndex(root)
+    taken = index.counts
     if prefix not in taken:
         return prefix
-    n = 2
+    n = index.floors.get(prefix, 2)
     while f"{prefix}-{n}" in taken:
         n += 1
+    index.floors[prefix] = n
     return f"{prefix}-{n}"
 
 

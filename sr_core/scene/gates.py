@@ -39,7 +39,9 @@ class _ElementLike(Protocol):
 
 # ---------------------------------------------------------------- tokenizer and parser of the XPath subset
 
-_TOK = re.compile(r"\s*(//|/|\||\(|\)|\[|\]|<=|=|@|\*|'[^']*'|\d+(?:\.\d+)?|\.|[A-Za-z_][\w.\-]*)")
+_XML_SPACE = " \t\r\n"  # XPath white space is XML's (production S), not NBSP or another Unicode space
+_XML_SPACE_RUN = re.compile("[ \t\r\n]+")
+_TOK = re.compile(r"[ \t\r\n]*(//|/|\||\(|\)|\[|\]|<=|=|@|\*|'[^']*'|\d+(?:\.\d+)?|\.|[A-Za-z_][\w.\-]*)")
 _NAME = re.compile(r"[A-Za-z_][\w\-]*$")
 
 # Parsed forms (nested tuples):
@@ -56,7 +58,7 @@ def _tokens(s: str) -> list[str]:
     while i < len(s):
         m = _TOK.match(s, i)
         if not m or m.end() == i:
-            if s[i:].strip() == "":
+            if s[i:].strip(_XML_SPACE) == "":
                 break
             raise SchemaError(f"unsupported syntax near {s[i:i + 20]!r} in {s!r}")
         out.append(m.group(1))
@@ -299,7 +301,7 @@ _VERS_TEST = re.compile(r"^not\((/scene/@version='[\d.]+'(?: or /scene/@version=
 
 
 def _norm(s: str) -> str:
-    return " ".join(s.split())
+    return _XML_SPACE_RUN.sub(" ", s).strip(" ")
 
 
 @dataclass(frozen=True)

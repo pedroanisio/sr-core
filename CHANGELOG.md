@@ -47,6 +47,14 @@ version:
 
 ### Fixed
 
+- `sr_core.scene` (second review, 2026-10-12):
+  - `add` and direct changes of `.nodes` refuse the element itself or one of its ancestors; before, the tree became
+    a cycle and `iter`, `check`, `xml_path` and writing never returned;
+  - white space is XML white space only (space, tab, CR, LF): a no-break space or U+2003 in element-only content is
+    `xsd:occurs` at level 1 as it is for lxml, `layout="pretty"` keeps it instead of deleting it, and `new_id`, the
+    program `mode` test and the gate compiler no longer trim Unicode spaces;
+  - `new_id` keeps an index of the document's ids, so building a document with one `new_id` per element is linear
+    (8,000 ids: quadratic before);
 - `conformance/run.py` no longer reports `pass` for a case that checks nothing: an `expected.json` entry with an
   unknown key, an empty check or no check at all is an `error`, and so is a form whose checks did not run.
 - `conformance/make_cases.py` reads the implicit camera's field of view and the default sensor width from the

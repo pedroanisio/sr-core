@@ -35,6 +35,7 @@ from sr_core.scene._runtime import Element, Text, Unknown, _attr_specs, new_id
 from sr_core.scene.errors import IntegrityError, SchemaValueError
 from sr_core.scene.findings import Finding
 from sr_core.scene.gates import refused_versions
+from sr_core.scene.values import _collapse, _split
 
 __all__ = ["check", "min_version", "new_id", "match_content", "Mismatch", "verify_integrity"]
 
@@ -183,7 +184,8 @@ def _root_of(element: Element) -> Element:
 
 
 def _norm(s: str) -> str:
-    return " ".join(s.split())
+    """xs:ID / xs:IDREF white space collapse: XML white space only, never NBSP or another Unicode space."""
+    return _collapse(s)
 
 
 def _shown(s: str) -> str:
@@ -333,7 +335,7 @@ def _level1(scene: Element) -> list[Finding]:
     stack: list[Element] = [root]
     while stack:
         el = stack.pop()
-        if el._xsd_type == "programNodeType" and el._attrs.get("mode", "build").strip() != "step":
+        if el._xsd_type == "programNodeType" and _norm(el._attrs.get("mode", "build")) != "step":
             build_program = True
         _attributes(el, el is root and is_scene, out, ids, refs, paths)
         _children(el, out, paths)
@@ -383,7 +385,7 @@ def _attributes(el: Element, is_root_scene: bool, out: list[Finding], ids: dict[
         elif kind == "IDREF":
             refs.append((el, name, _norm(lexical)))
         elif kind == "IDREFS":
-            refs.extend((el, name, token) for token in lexical.split())
+            refs.extend((el, name, token) for token in _split(lexical))
     for name, attr in specs.items():
         if attr.use == "required" and name not in el._attrs:
             out.append(_finding(el, "xsd:required", f"<{el.xml_name}> needs the attribute {name!r}", paths))
