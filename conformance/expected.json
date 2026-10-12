@@ -13266,6 +13266,401 @@
         }
       ]
     },
+    "srep-0032-resample-antiring": {
+      "rule": "SREP 32",
+      "regions": [
+        {
+          "box": [
+            24,
+            24,
+            25,
+            48
+          ],
+          "rgb": [
+            62.8,
+            62.8,
+            62.8
+          ]
+        },
+        {
+          "box": [
+            28,
+            24,
+            29,
+            48
+          ],
+          "rgb": [
+            178.0,
+            178.0,
+            178.0
+          ]
+        },
+        {
+          "box": [
+            32,
+            24,
+            33,
+            48
+          ],
+          "rgb": [
+            230.0,
+            230.0,
+            230.0
+          ]
+        },
+        {
+          "box": [
+            34,
+            24,
+            35,
+            48
+          ],
+          "rgb": [
+            230.0,
+            230.0,
+            230.0
+          ]
+        },
+        {
+          "box": [
+            35,
+            24,
+            36,
+            48
+          ],
+          "rgb": [
+            230.0,
+            230.0,
+            230.0
+          ]
+        },
+        {
+          "box": [
+            36,
+            24,
+            37,
+            48
+          ],
+          "rgb": [
+            230.0,
+            230.0,
+            230.0
+          ]
+        },
+        {
+          "box": [
+            37,
+            24,
+            38,
+            48
+          ],
+          "rgb": [
+            230.0,
+            230.0,
+            230.0
+          ]
+        },
+        {
+          "box": [
+            38,
+            24,
+            39,
+            48
+          ],
+          "rgb": [
+            230.0,
+            230.0,
+            230.0
+          ]
+        },
+        {
+          "box": [
+            40,
+            24,
+            41,
+            48
+          ],
+          "rgb": [
+            223.5,
+            223.5,
+            223.5
+          ]
+        },
+        {
+          "box": [
+            44,
+            24,
+            45,
+            48
+          ],
+          "rgb": [
+            158.9,
+            158.9,
+            158.9
+          ]
+        },
+        {
+          "box": [
+            124,
+            24,
+            125,
+            48
+          ],
+          "rgb": [
+            47.7,
+            47.7,
+            47.7
+          ]
+        },
+        {
+          "box": [
+            128,
+            24,
+            129,
+            48
+          ],
+          "rgb": [
+            180.2,
+            180.2,
+            180.2
+          ]
+        },
+        {
+          "box": [
+            132,
+            24,
+            133,
+            48
+          ],
+          "rgb": [
+            230.0,
+            230.0,
+            230.0
+          ]
+        },
+        {
+          "box": [
+            134,
+            24,
+            135,
+            48
+          ],
+          "rgb": [
+            230.0,
+            230.0,
+            230.0
+          ]
+        },
+        {
+          "box": [
+            135,
+            24,
+            136,
+            48
+          ],
+          "rgb": [
+            230.0,
+            230.0,
+            230.0
+          ]
+        },
+        {
+          "box": [
+            136,
+            24,
+            137,
+            48
+          ],
+          "rgb": [
+            230.0,
+            230.0,
+            230.0
+          ]
+        },
+        {
+          "box": [
+            137,
+            24,
+            138,
+            48
+          ],
+          "rgb": [
+            230.0,
+            230.0,
+            230.0
+          ]
+        },
+        {
+          "box": [
+            138,
+            24,
+            139,
+            48
+          ],
+          "rgb": [
+            230.0,
+            230.0,
+            230.0
+          ]
+        },
+        {
+          "box": [
+            140,
+            24,
+            141,
+            48
+          ],
+          "rgb": [
+            226.2,
+            226.2,
+            226.2
+          ]
+        },
+        {
+          "box": [
+            144,
+            24,
+            145,
+            48
+          ],
+          "rgb": [
+            156.3,
+            156.3,
+            156.3
+          ]
+        },
+        {
+          "box": [
+            224,
+            24,
+            225,
+            48
+          ],
+          "rgb": [
+            75.9,
+            75.9,
+            75.9
+          ]
+        },
+        {
+          "box": [
+            228,
+            24,
+            229,
+            48
+          ],
+          "rgb": [
+            178.7,
+            178.7,
+            178.7
+          ]
+        },
+        {
+          "box": [
+            232,
+            24,
+            233,
+            48
+          ],
+          "rgb": [
+            230.0,
+            230.0,
+            230.0
+          ]
+        },
+        {
+          "box": [
+            234,
+            24,
+            235,
+            48
+          ],
+          "rgb": [
+            230.0,
+            230.0,
+            230.0
+          ]
+        },
+        {
+          "box": [
+            235,
+            24,
+            236,
+            48
+          ],
+          "rgb": [
+            230.0,
+            230.0,
+            230.0
+          ]
+        },
+        {
+          "box": [
+            236,
+            24,
+            237,
+            48
+          ],
+          "rgb": [
+            230.0,
+            230.0,
+            230.0
+          ]
+        },
+        {
+          "box": [
+            237,
+            24,
+            238,
+            48
+          ],
+          "rgb": [
+            230.0,
+            230.0,
+            230.0
+          ]
+        },
+        {
+          "box": [
+            238,
+            24,
+            239,
+            48
+          ],
+          "rgb": [
+            230.0,
+            230.0,
+            230.0
+          ]
+        },
+        {
+          "box": [
+            240,
+            24,
+            241,
+            48
+          ],
+          "rgb": [
+            220.5,
+            220.5,
+            220.5
+          ]
+        },
+        {
+          "box": [
+            244,
+            24,
+            245,
+            48
+          ],
+          "rgb": [
+            158.1,
+            158.1,
+            158.1
+          ]
+        }
+      ]
+    },
     "srep-0033-safe-warn": {
       "rule": "SREP 33",
       "findings": {
@@ -14166,6 +14561,26 @@
           ]
         }
       ]
+    },
+    "srep-0036-geo-outline-p125": {
+      "rule": "SREP 36",
+      "green": {
+        "cx": 186.67,
+        "cy": 221.67,
+        "w": 504,
+        "h": 100
+      },
+      "pending": "the specification states no stroke cap for geoLayer (geoLayerType has no strokeCap; SREP 36 says only that each ring is traced through the same trim as shapes), and these values assume butt ends. Measured on scene-render 0.5.0 (commit 12ede1e, binary sha256 prefix 6998aafaa03f738e, prod VM, 2026-10-12): green cx 190.89, cy 221.46, w 504, h 104. Derivation: at progress 0.125 square a traces 100 px of its first edge and square b 50 px, 500 px apart; with butt ends cx = 20 + 500*50/150 = 186.67 (the value here), with square ends of half the 4 px stroke the lengths are 104 and 54, cx = 20 + 500*54/158 = 190.89 and h = 104, which is what the engine draws. Left pending until the schema states the cap of a traced geo outline"
+    },
+    "srep-0036-geo-outline-p875": {
+      "rule": "SREP 36",
+      "green": {
+        "cx": 275.96,
+        "cy": 167.99,
+        "w": 604,
+        "h": 207
+      },
+      "pending": "same open point as srep-0036-geo-outline-p125: no stroke cap (or join) is specified for a traced geoLayer outline and these values assume butt ends. Measured on scene-render 0.5.0 (commit 12ede1e, binary sha256 prefix 6998aafaa03f738e, prod VM, 2026-10-12): green cx 270.65, cy 167.8, w 604, h 208. Left pending until the schema states the cap of a traced geo outline"
     },
     "srep-0037-text3d-tracking": {
       "rule": "SREP 37: font assets/srep37-block.ttf (upem 2048, advance 1229, glyph I box x 205..1024, y 0..1434), size 100, scale 100/2048; glyph i moves i*t*s/1000 = i*20.0 px; block centred on its bbox, ortho camera 1 px/unit: stems x 260.00..299.99 and 340.01..380.00 (gap 40.02 px; baseline gap 20.0, growth 20.0 px), rows 145..215",
@@ -39330,6 +39745,14 @@
           ]
         }
       ]
+    },
+    "srep-0055-node-shutter-frame0": {
+      "rule": "SREP 55",
+      "output": {
+        "id": "still",
+        "time": 0
+      },
+      "pending": "engine discrepancy (32c8ac1, 755beb7): at output time 0 with the default shutterPhase (-90) the first sample times are negative and the engine draws NO blur at all (the project 180 degree square stays 20 px wide with a hard edge), although the SREP formula t + (phi/360 + (a/360)(k+1/2)/N)/fps defines them and the keys are defined there; the same scene at t = 0.3 blurs as the formula says (case srep-0055-node-shutter). Expected per the formula: blue cx 317.5..322.5 smear of 2.4 px each side. Left pending until the engine blurs frame 0. Re-measured on scene-render 0.5.0 (commit 12ede1e, binary sha256 prefix 6998aafaa03f738e, prod VM, 2026-10-12): red, green and blue all 20 px wide with hard edges at output time 0 (no partially lit pixels), so the discrepancy remains"
     },
     "srep-0056-stroke-text-layout": {
       "rule": "SREP 56",

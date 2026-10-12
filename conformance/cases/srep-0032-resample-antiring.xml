@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.2">
+<project width="640" height="360" fps="24" duration="1" background="#000000FF"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<assets><image id="g4" src="../assets/srep32-ring-4.png" width="4" height="4" sha256="eeef3afa7515569a61e29c8d9d3f040246dbf30a095a9daf9da9641fe172f35d"/></assets>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<layer id="l-linear" asset="g4" fit="fill" boxWidth="32" boxHeight="32" x="20" y="20" resample="linear"/>
+<layer id="l-bicubic" asset="g4" fit="fill" boxWidth="32" boxHeight="32" x="120" y="20" resample="bicubic"/>
+<layer id="l-mitchell" asset="g4" fit="fill" boxWidth="32" boxHeight="32" x="220" y="20" resample="mitchell"/>
+</composition>
+</scene>

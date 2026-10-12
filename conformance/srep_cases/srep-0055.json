@@ -2146,5 +2146,16 @@
     }
    ]
   }
+ },
+ "srep-0055-node-shutter-frame0": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"10\" duration=\"1\" background=\"#000000FF\" motionBlur=\"true\" shutterAngle=\"180\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"project\" shape=\"rect\" width=\"20\" height=\"20\" anchorX=\"10\" anchorY=\"10\" x=\"320\" y=\"90\" fill=\"#0000FFFF\"><animate property=\"x\"><key time=\"0\" value=\"320\"/><key time=\"1\" value=\"420\"/></animate></shape><shape id=\"wide\" shape=\"rect\" width=\"20\" height=\"20\" anchorX=\"10\" anchorY=\"10\" x=\"320\" y=\"180\" fill=\"#FF0000FF\" shutterAngle=\"360\"><animate property=\"x\"><key time=\"0\" value=\"320\"/><key time=\"1\" value=\"420\"/></animate></shape><shape id=\"sharp\" shape=\"rect\" width=\"20\" height=\"20\" anchorX=\"10\" anchorY=\"10\" x=\"320\" y=\"270\" fill=\"#00FF00FF\" shutterAngle=\"0\"><animate property=\"x\"><key time=\"0\" value=\"320\"/><key time=\"1\" value=\"420\"/></animate></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 55",
+   "output": {
+    "id": "still",
+    "time": 0
+   },
+   "pending": "engine discrepancy (32c8ac1, 755beb7): at output time 0 with the default shutterPhase (-90) the first sample times are negative and the engine draws NO blur at all (the project 180 degree square stays 20 px wide with a hard edge), although the SREP formula t + (phi/360 + (a/360)(k+1/2)/N)/fps defines them and the keys are defined there; the same scene at t = 0.3 blurs as the formula says (case srep-0055-node-shutter). Expected per the formula: blue cx 317.5..322.5 smear of 2.4 px each side. Left pending until the engine blurs frame 0. Re-measured on scene-render 0.5.0 (commit 12ede1e, binary sha256 prefix 6998aafaa03f738e, prod VM, 2026-10-12): red, green and blue all 20 px wide with hard edges at output time 0 (no partially lit pixels), so the discrepancy remains"
+  }
  }
 }
