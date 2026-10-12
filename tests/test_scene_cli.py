@@ -67,6 +67,21 @@ def test_check_valid_exit_0(stub_checks, doc, capsys):
     assert "a.xml: ok" in capsys.readouterr().out
 
 
+@pytest.mark.parametrize("flags, said", [([], "ok (level 1)"), (["--schema"], "ok (levels 1, 2)"),
+                                         (["--engine", "e"], "ok (levels 1, 3)"),
+                                         (["--schema", "--engine", "e"], "ok (levels 1, 2, 3)")])
+def test_check_ok_names_the_levels_that_ran(stub_checks, doc, capsys, flags, said):
+    # review R6: level 1 alone runs the gate asserts, not the whole Schematron; a bare "ok" overstated it
+    f = doc()
+    assert cli.main(["check", f, *flags]) == 0
+    assert capsys.readouterr().out.splitlines() == [f"{f}: {said}"]
+
+
+def test_check_json_names_the_levels_that_ran(stub_checks, doc, capsys):
+    assert cli.main(["check", doc(), "--schema", "--format", "json"]) == 0
+    assert json.loads(capsys.readouterr().out)["levels"] == [1, 2]
+
+
 def test_check_errors_exit_1_human(stub_checks, doc, capsys):
     stub_checks.results["1.7"] = [ERR]
     f = doc()

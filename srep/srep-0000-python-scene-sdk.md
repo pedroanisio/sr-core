@@ -305,7 +305,7 @@ The console script `sr-scene` provides three commands:
 
 | Command | What it does | Exit codes |
 |---|---|---|
-| `sr-scene check FILE... [--schema] [--engine PATH] [--data DIR] [--format human\|json] [--deny-warnings]` | runs level 1, and level 2 or 3 when asked; `--data` is the folder the engine resolves assets from | 0 valid (warnings alone do not fail unless `--deny-warnings`), 1 errors, 2 read error |
+| `sr-scene check FILE... [--schema] [--engine PATH] [--data DIR] [--format human\|json] [--deny-warnings]` | runs level 1, and level 2 or 3 when asked; `--data` is the folder the engine resolves assets from. A document without findings is reported with the levels that ran, `ok (level 1)` or `ok (levels 1, 2)`, and the JSON output carries them as `levels`: level 1 runs only the Schematron's version gates, so a bare `ok` would overstate it | 0 valid (warnings alone do not fail unless `--deny-warnings`), 1 errors, 2 read error |
 | `sr-scene min-version FILE...` | prints each file's lowest valid version | |
 | `sr-scene format FILE... [--check]` | rewrites with `layout="pretty"` and the content-model order, atomically; says when it reordered elements; refuses a file with a DOCTYPE, whose entities a rewrite would inline | with `--check`, rewrites nothing and exits 1 when a file would change |
 

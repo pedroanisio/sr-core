@@ -52,6 +52,9 @@ def _fails(findings: Sequence[Finding], deny_warnings: bool) -> bool:
 def _cmd_check(args: argparse.Namespace) -> int:
     checks = _checks()
     status = 0
+    # level 1 runs only the Schematron's version gates; "ok" says how far the document was checked
+    levels = [1] + ([2] if args.schema else []) + ([3] if args.engine else [])
+    ok = "ok (level 1)" if len(levels) == 1 else f"ok (levels {', '.join(map(str, levels))})"
     records: list[dict[str, Any]] = []
     for path in args.files:
         scene, error = _read(path)
@@ -73,11 +76,11 @@ def _cmd_check(args: argparse.Namespace) -> int:
             for finding in findings:
                 print(_human(path, finding))
             if not findings:
-                print(f"{path}: ok")
+                print(f"{path}: {ok}")
         if failed and status == 0:
             status = 1
     if args.format == "json":
-        print(json.dumps({"valid": all(r["valid"] for r in records), "files": records}, indent=2))
+        print(json.dumps({"valid": all(r["valid"] for r in records), "levels": levels, "files": records}, indent=2))
     return status
 
 
