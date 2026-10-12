@@ -67,7 +67,7 @@ def read(source: Source, *, classes: Optional[ClassTable] = None) -> Element:
     pre: list[Any] = []
     post: list[Any] = []
     buf: list[str] = []
-    state: dict[str, Any] = {"root": None}
+    state: dict[str, Any] = {"root": None, "dtd": False}
     parser = xml.parsers.expat.ParserCreate()
     parser.ordered_attributes = True
 
@@ -127,10 +127,14 @@ def read(source: Source, *, classes: Optional[ClassTable] = None) -> Element:
         scopes.pop()
 
     def comment(text: str) -> None:
+        if state["dtd"]:
+            return  # in the DOCTYPE's internal subset: part of the declaration, which is not kept (C14N drops it)
         flush()
         (stack[-1]._nodes._push(Comment(text)) if stack else outside(Comment(text)))
 
     def pi(target: str, data: str) -> None:
+        if state["dtd"]:
+            return
         flush()
         (stack[-1]._nodes._push(PI(target, data)) if stack else outside(PI(target, data)))
 
@@ -139,6 +143,8 @@ def read(source: Source, *, classes: Optional[ClassTable] = None) -> Element:
     parser.CharacterDataHandler = buf.append
     parser.CommentHandler = comment
     parser.ProcessingInstructionHandler = pi
+    parser.StartDoctypeDeclHandler = lambda *args: state.__setitem__("dtd", True)
+    parser.EndDoctypeDeclHandler = lambda: state.__setitem__("dtd", False)
     try:
         parser.Parse(raw, True)
     except xml.parsers.expat.ExpatError as err:

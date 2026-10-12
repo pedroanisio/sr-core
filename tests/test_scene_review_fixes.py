@@ -196,3 +196,21 @@ def test_new_id_follows_a_change_in_a_copy_and_in_a_read_document() -> None:
     twin = scene.copy()
     twin.find("composition").find_all("group")[1].id = "x"  # type: ignore[union-attr]
     assert checks.new_id(twin, "g") == "g-2" and scene.new_id("g") == "g-3"  # type: ignore[attr-defined]
+
+
+# ------------------------------------------------------------------------------------------------- R5
+
+def _c14n(data: bytes) -> bytes:
+    etree = pytest.importorskip("lxml.etree")
+    parser = etree.XMLParser(resolve_entities=True)
+    return etree.tostring(etree.fromstring(data, parser).getroottree(), method="c14n2", with_comments=True)
+
+
+@pytest.mark.parametrize("subset", ["<!--inside dtd-->", "<?pi inside?>",
+                                    '<!ELEMENT scene ANY><!--a--><!ATTLIST scene version CDATA #IMPLIED><?b c?>'])
+def test_comments_and_pis_of_the_doctype_internal_subset_are_not_moved_into_the_prolog(subset: str) -> None:
+    body = doc('<group id="g"/>').decode()
+    original = f'<!--before--><!DOCTYPE scene [{subset}]><?after x?>{body}<!--end-->'.encode()
+    written = to_bytes(read(original))
+    assert _c14n(written) == _c14n(original)
+    assert b"inside" not in written and b"<!--a-->" not in written

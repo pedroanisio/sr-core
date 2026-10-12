@@ -206,6 +206,8 @@ what it offers. Section 9 of the Specification answers it.
 2. **Round trip.** For every document the SDK reads, writing it back unchanged with `layout="preserve"` MUST give a
    document whose C14N 2.0 form, with comments, equals that of the original.
    - An attribute value that was not changed keeps its lexical form: `1.50` stays `1.50`.
+   - A DOCTYPE is not kept, and neither is what its internal subset holds, comments and processing instructions
+     included: C14N drops them too. Entities it declares are expanded on reading.
 3. **Numbers.**
    - A `float` is written in the shortest form that reads back as the same float, in positional notation. It never
      uses an exponent, because the lexical space of `xs:decimal` has none.
