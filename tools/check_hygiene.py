@@ -261,7 +261,8 @@ def r5(root, run_tests: bool = True) -> list[Finding]:
                     for f in r2_text("METADATA", w.read(meta).decode("utf-8"))]
         with tarfile.open(os.path.join(dist, sdist_name)) as s:
             names = {n.split("/", 1)[1] for n in s.getnames() if "/" in n}
-            for need in ("schema/scene-render.xsd", "schema/scene-render.sch", "tools/release.py", "tests"):
+            for need in ("schema/scene-render.xsd", "schema/scene-render.sch", "tools/release.py", "tests",
+                         ".github/workflows/ci.yml"):
                 if need not in names and not any(n.startswith(need + "/") for n in names):
                     out.append(Finding("R5", sdist_name, f"lacks {need}"))
             if run_tests and not out:
