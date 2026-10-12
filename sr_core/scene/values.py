@@ -419,6 +419,7 @@ class Codec:
     literals: tuple[str, ...] | None = None
     _lengthy = False      # length facets apply (strings and lists)
     _ordered = False      # range facets apply (doubles, decimals, integers)
+    _lexical_str = False  # a str is a lexical form, stored verbatim when valid (numbers, booleans, dateTime)
 
     def __init__(self, xsd_type: str) -> None:
         self.xsd_type = xsd_type
@@ -442,8 +443,12 @@ class Codec:
 
     # -- public API
     def validate(self, value: Any) -> str:
-        """Return the lexical form to store for ``value``; raise ``SchemaValueError`` if it is refused."""
-        lexical = self._lexical(value)
+        """Return the lexical form to store for ``value``; raise ``SchemaValueError`` if it is refused.
+
+        For a type that is not string-valued, a ``str`` is a lexical form: when it is valid (every facet checked) it
+        is returned unchanged, as ``read`` keeps a lexical form it finds in a file (SREP 0 section 3.5).
+        """
+        lexical = value if self._lexical_str and isinstance(value, str) else self._lexical(value)
         try:
             self._value(lexical)
         except _Unrepresentable:
@@ -520,6 +525,7 @@ class _IdRef(_String):
 
 
 class _Double(Codec):
+    _lexical_str = True
     _ordered = True
 
     def _normalize(self, s: str) -> str:
@@ -538,6 +544,7 @@ class _Double(Codec):
 
 
 class _Decimal(Codec):
+    _lexical_str = True
     _ordered = True
 
     def _normalize(self, s: str) -> str:
@@ -561,6 +568,7 @@ class _Decimal(Codec):
 
 
 class _Integer(Codec):
+    _lexical_str = True
     _ordered = True
 
     def __init__(self, xsd_type: str, lo: int | None = None, hi: int | None = None) -> None:
@@ -592,6 +600,7 @@ class _Integer(Codec):
 
 
 class _Boolean(Codec):
+    _lexical_str = True
     def _normalize(self, s: str) -> str:
         return _collapse(s)
 
@@ -618,6 +627,7 @@ _DAYS = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 
 
 class _DateTime(Codec):
+    _lexical_str = True
     def _normalize(self, s: str) -> str:
         return _collapse(s)
 
@@ -764,6 +774,7 @@ class _Restriction(Codec):
         self._base = base
         self._lengthy = base._lengthy
         self._ordered = base._ordered
+        self._lexical_str = base._lexical_str
         self.literals = tuple(enums) if enums else base.literals
         self._enum_values: list[Any] | None = None
         if enums:

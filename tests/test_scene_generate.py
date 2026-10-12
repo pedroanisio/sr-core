@@ -92,7 +92,7 @@ class TestSyntheticPositive:
     def test_keyword_attribute_becomes_trailing_underscore_with_xml_name_kept(self):
         t = '<xs:complexType name="aType"><xs:attribute name="from" type="xs:double"/></xs:complexType>'
         src = render_syn(xsd(types=t, root_children=el("a", "aType")))[GEN].decode()
-        assert 'from_: Attr[float, float] = Attr("from", "xs:double"' in src
+        assert 'from_: Attr[float, _t.Union[float, int, str]] = Attr(' in src
 
     def test_name_with_two_types_under_different_parents_picks_the_parents_type(self):
         t = ('<xs:complexType name="pType"><xs:sequence>' + el("point", "aType") + "</xs:sequence></xs:complexType>"
@@ -133,7 +133,7 @@ class TestSyntheticPositive:
              '<xs:attribute name="r" type="xs:IDREF"/><xs:attribute name="d" type="xs:decimal"/></xs:complexType>')
         src = render_syn(xsd(types=t, root_children=el("a", "aType")))[GEN].decode()
         assert "    if _t.TYPE_CHECKING:\n" in src and "\n    else:\n" in src
-        assert "            from_: float | None = None,\n" in src
+        assert "            from_: _t.Union[float, int, str] | None = None,\n" in src
         assert "            r: _t.Union[str, Element] | None = None,\n" in src
         assert "Attr[str, _t.Union[str, Element]]" in src and "Attr[_Decimal, _t.Union[_Decimal, float, int, str]]" in src
         assert "        def add_a(self, **attrs: _t.Any) -> A:" in src

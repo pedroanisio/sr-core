@@ -53,9 +53,13 @@ def test_getter_types_are_the_parsed_types() -> None:
     layer = {name: hint(ann) for name, ann in attrs_of(CLASSES["Layer"])}  # type: ignore[attr-defined]
     assert layer["id"] == "str, str"
     assert layer["tags"] == "_t.List[str], _t.Sequence[str]"
-    assert layer["visible"] == "bool, bool"
+    assert layer["visible"] == "bool, _t.Union[bool, str]"
     text = {name: hint(ann) for name, ann in attrs_of(CLASSES["FractalAsset"])}  # type: ignore[attr-defined]
     assert text["centerX"] == "_Decimal, _t.Union[_Decimal, float, int, str]"
+    project = {name: hint(ann) for name, ann in attrs_of(CLASSES["Project"])}  # type: ignore[attr-defined]
+    assert project["width"] == "int, _t.Union[int, str]"
+    assert project["shutterPhase"] == "float, _t.Union[float, int, str]"
+    assert project["motionBlur"] == "bool, _t.Union[bool, str]"
     refs = [hint(ann) for c in CLASSES.values() for _, ann in attrs_of(c)  # type: ignore[attr-defined]
             if hint(ann).startswith("str, _t.Union[str, Element]")]
     assert refs, "an xs:IDREF attribute reads as str and takes a str or an Element"

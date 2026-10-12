@@ -91,7 +91,7 @@ class TestDouble:
     def test_validate(self, value: Any, expected: str) -> None:
         assert self.c.validate(value) == expected
 
-    @pytest.mark.parametrize("bad", [True, False, "1", Decimal("1"), None, math.nan, math.inf, -math.inf, [1], 10 ** 400])
+    @pytest.mark.parametrize("bad", [True, False, "x", Decimal("1"), None, math.nan, math.inf, -math.inf, [1], 10 ** 400])
     def test_refuses(self, bad: Any) -> None:
         refused(self.c, bad)
 
@@ -118,7 +118,7 @@ class TestDecimal:
     c = codec_for("xs:decimal", {})
 
     @pytest.mark.parametrize("value,expected", [
-        (1, "1"), (0.5, "0.5"), (Decimal("1.250"), "1.25"), ("1.50", "1.50"), (" 7 ", "7"), ("-.5", "-.5"), ("+2.", "+2."),
+        (1, "1"), (0.5, "0.5"), (Decimal("1.250"), "1.25"), ("1.50", "1.50"), (" 7 ", " 7 "), ("-.5", "-.5"), ("+2.", "+2."),
         (-0.0, "0"),
     ])
     def test_validate(self, value: Any, expected: str) -> None:
@@ -143,8 +143,8 @@ class TestDecimal:
 
 class TestIntegerFamily:
     @pytest.mark.parametrize("name,good,bad", [
-        ("xs:integer", [0, -5, 10 ** 30], ["1", 1.0, True]),
-        ("xs:positiveInteger", [1, 10 ** 30], [0, -1, "1", True]),
+        ("xs:integer", [0, -5, 10 ** 30], ["1.0", 1.0, True]),
+        ("xs:positiveInteger", [1, 10 ** 30], [0, -1, "0", True]),
         ("xs:nonNegativeInteger", [0, 7], [-1, 1.5, False]),
         ("xs:int", [-2 ** 31, 2 ** 31 - 1], [-2 ** 31 - 1, 2 ** 31]),
         ("xs:unsignedLong", [0, 2 ** 64 - 1], [-1, 2 ** 64]),
@@ -184,7 +184,7 @@ class TestBoolean:
         assert self.c.validate(True) == "true"
         assert self.c.validate(False) == "false"
 
-    @pytest.mark.parametrize("bad", [1, 0, "true", "false", None, 1.0])
+    @pytest.mark.parametrize("bad", [1, 0, "yes", "True", None, 1.0])
     def test_refuses(self, bad: Any) -> None:
         refused(self.c, bad)
 
@@ -342,7 +342,7 @@ class TestDateTime:
         assert self.c.validate(dt.datetime(2024, 2, 29, 1, tzinfo=tz)) == "2024-02-29T01:00:00-03:30"
         assert self.c.validate(dt.datetime(5, 1, 1)) == "0005-01-01T00:00:00"
         assert self.c.validate("2024-01-01T00:00:00Z") == "2024-01-01T00:00:00Z"
-        assert self.c.validate(" 2024-01-01T00:00:00 ") == "2024-01-01T00:00:00"
+        assert self.c.validate(" 2024-01-01T00:00:00 ") == " 2024-01-01T00:00:00 "
         refused(self.c, dt.date(2024, 1, 1))
         refused(self.c, "2024-01-01")
         refused(self.c, 5)
