@@ -719,6 +719,25 @@ SIMPLE_TYPES = {
     },
 }
 
+# Documentation of the simple types that have some (read by sr_core.scene.introspect).
+SIMPLE_DOCS = {
+    "unitTripleType": "Three numbers in [0, 1] (SREP 71).",
+    "pointType": '"x,y" pair, e.g. a bezier handle or tangent.',
+    "colorType": '#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
+    "colorListType": "Whitespace-separated colours, as a palette.",
+    "latitudeType": "Degrees north, in [-90, 90].",
+    "longitudeType": "Degrees east, in [-180, 180].",
+    "geoPointsType": '"lon,lat lon,lat ..." in degrees: at least two points.',
+    "paintType": "A colour or url(#id) of a paints/* gradient, pattern or noise.",
+    "colorProfileType": "Which colour description of a still image file applies. embedded: an ICC profile\n(matrix/TRC) or H.273 code points (HEIF nclx, ICC cicp) in the file take precedence over\ncolorSpace and transfer, which apply to files without one. declared: colorSpace and\ntransfer always apply (data textures, mis-tagged files).",
+    "blendType": "The 1.0 modes plus the full separable/non-separable set used by After\nEffects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette\nmodes cut through every layer below within the isolated parent buffer.",
+    "curveType": '1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom,\ntcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping,\n@mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2"\nor key/@easeOut + next key/@easeIn handles.',
+    "expressionString": "A deterministic expression in the scene-render expression language (see\nexpressionType). Used by @condition attributes and expression elements.",
+    "projectionType": "Map projections (d3-geo formulas). Cylindrical, pseudo-cylindrical and conic projections\ncut the globe along the antimeridian opposite the centre; orthographic and the azimuthal\nprojections clip to the visible cap (the near hemisphere for orthographic).\nweb-mercator is spherical Mercator with MapLibre zoom levels (a 512-pixel world at zoom 0).",
+    "audioRoleType": "What an audio track carries.",
+    "volumeInterpolationType": "Version 1.3. Hold freezes a frame; linear blends scalar fields in asset-world coordinates. Advect requires all three velocityGrid components (VOL9): signed asset-world vectors in scene units/second, with matching component transforms per frame. Frozen endpoint midpoint traces precede density/kelvin blending. Numbered caches use object-local seconds; SRVSEQ uses composition seconds. Clamped or identical held endpoints freeze. Grid transforms locate samples without transforming velocity vectors. Assets and their channel references are immutable during rendering; channel names identify owned cache fields, not paths.",
+}
+
 # Python types of the simple types, for the attribute hints:
 # T_ is what an attribute accepts when set, G_ what it reads as.
 T_positiveDecimal = _t.Union[float, int, str]

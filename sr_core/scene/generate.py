@@ -53,6 +53,7 @@ RESERVED_PREFIXES = ("add_", "_")
 RESERVED_MODULE_NAMES = {
     "Element", "Attr", "SceneBase", "Gate", "set_simple_types", "SCHEMA_RELEASE", "XSD_SHA256", "SCH_SHA256",
     "GENERATOR_VERSION", "COUNTS", "SIMPLE_TYPES", "ELEMENT_CLASSES", "CLASSES", "VERSIONS", "GATES",
+    "SIMPLE_DOCS",
     # sr_core.scene re-exports the generated classes beside these names (sr_core/scene/__init__.py)
     "PI", "Comment", "Text", "Unknown", "Finding", "EngineError", "EngineInfo", "IntegrityError", "SchemaError",
     "SchemaValueError", "UnknownNameError",
@@ -565,6 +566,7 @@ class Generator:
         counts = self.counts()
         versions = self.versions()
         simple_specs = {name: self.spec(st) for name, st in s.simple.items()}
+        simple_docs = {name: inspect.cleandoc(st.doc) for name, st in s.simple.items() if st.doc}
         for name in s.simple:
             self.alias(name)
         class_blocks = [self.class_source(k) for k in s.complex]       # also fills alias_order for attributes
@@ -587,6 +589,8 @@ class Generator:
                "COUNTS = " + fmt(counts, 0, len("COUNTS = ")), "",
                "# Simple types by name, in schema order (CONTRACT C5).",
                "SIMPLE_TYPES = " + fmt(simple_specs, 0, len("SIMPLE_TYPES = ")), "",
+               "# Documentation of the simple types that have some (read by sr_core.scene.introspect).",
+               "SIMPLE_DOCS = " + fmt(simple_docs, 0, len("SIMPLE_DOCS = ")), "",
                "# Python types of the simple types, for the attribute hints:",
                "# T_ is what an attribute accepts when set, G_ what it reads as."]
         for name in self.alias_order:
