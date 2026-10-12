@@ -73,6 +73,11 @@ version:
   quoted in SREP 0000 and here to the schema, the engine-gap inventory to the SREP diff blocks, and the packages
   `ci.yml` installs to the extras and to what the tests import (including what they skip when absent).
 
+### Docs
+
+- The schema documents its attributes (schema CHANGELOG, SREP draft `srep-0000-schema-attribute-docs.md`): `tests/test_schema_attribute_docs.py` fails for an attribute with neither documentation nor an entry in `tests/undocumented-attributes.txt`. The bundled schema copy and generated reference carry the sentences.
+- 746 attribute docs corrected after an adversarial review against the engine code.
+
 ## 1.7.0 — 2026-10-12
 
 ### Added

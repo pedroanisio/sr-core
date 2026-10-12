@@ -18,24 +18,24 @@
 <ul class="model"><li><span class="lbl">in this order</span><ol class="model"><li><a href="../type/representationType.html"><code>&lt;representation&gt;</code></a><span class="occ">any number</span></li></ol></li></ul>
 <h2>Attributes</h2>
 <div class="wrap"><table><thead><tr><th>Attribute</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr class="from"><td colspan="4">declared here</td></tr>
-<tr id="a-id"><td class="n"><code>id</code> <span class="req">required</span></td><td><code>xs:ID</code></td><td></td><td></td></tr>
-<tr id="a-src"><td class="n"><code>src</code> <span class="req">required</span></td><td><code>xs:anyURI</code></td><td></td><td></td></tr>
-<tr id="a-width"><td class="n"><code>width</code> <span class="req">required</span></td><td><code>xs:positiveInteger</code></td><td></td><td></td></tr>
-<tr id="a-height"><td class="n"><code>height</code> <span class="req">required</span></td><td><code>xs:positiveInteger</code></td><td></td><td></td></tr>
-<tr id="a-colorSpace"><td class="n"><code>colorSpace</code></td><td><a href="../simple-types.html#colorSpaceType"><code>colorSpaceType</code></a></td><td><code>srgb</code></td><td></td></tr>
-<tr id="a-transfer"><td class="n"><code>transfer</code></td><td><a href="../simple-types.html#transferType"><code>transferType</code></a></td><td><code>auto</code></td><td></td></tr>
-<tr id="a-colorProfile"><td class="n"><code>colorProfile</code></td><td><a href="../simple-types.html#colorProfileType"><code>colorProfileType</code></a></td><td><code>embedded</code></td><td></td></tr>
-<tr id="a-alpha"><td class="n"><code>alpha</code></td><td><a href="../simple-types.html#alphaModeType"><code>alphaModeType</code></a></td><td><code>auto</code></td><td></td></tr>
+<tr id="a-id"><td class="n"><code>id</code> <span class="req">required</span></td><td><code>xs:ID</code></td><td></td><td><div class="doc"><p>Name by which layers and other elements (pattern paints, materials, particles, heightmaps) refer to this image.</p></div></td></tr>
+<tr id="a-src"><td class="n"><code>src</code> <span class="req">required</span></td><td><code>xs:anyURI</code></td><td></td><td><div class="doc"><p>Path of the image file; a remote URL is not fetched when rendering and is reported as an error.</p></div></td></tr>
+<tr id="a-width"><td class="n"><code>width</code> <span class="req">required</span></td><td><code>xs:positiveInteger</code></td><td></td><td><div class="doc"><p>Width in pixels that layout uses for the image. If the declared width and height differ from a local file&#x27;s, validation warns, and a different aspect ratio distorts the picture.</p></div></td></tr>
+<tr id="a-height"><td class="n"><code>height</code> <span class="req">required</span></td><td><code>xs:positiveInteger</code></td><td></td><td><div class="doc"><p>Height in pixels that layout uses for the image. If the declared width and height differ from a local file&#x27;s, validation warns, and a different aspect ratio distorts the picture.</p></div></td></tr>
+<tr id="a-colorSpace"><td class="n"><code>colorSpace</code></td><td><a href="../simple-types.html#colorSpaceType"><code>colorSpaceType</code></a></td><td><code>srgb</code></td><td><div class="doc"><p>Colour primaries of the image&#x27;s pixels, used to convert them to the working space; a usable embedded profile overrides it unless colorProfile is declared. Default srgb.</p></div></td></tr>
+<tr id="a-transfer"><td class="n"><code>transfer</code></td><td><a href="../simple-types.html#transferType"><code>transferType</code></a></td><td><code>auto</code></td><td><div class="doc"><p>Transfer curve that decodes the image&#x27;s pixel values; auto picks the usual curve for the colour space (linear for linear files). A usable embedded profile overrides it unless colorProfile is declared.</p></div></td></tr>
+<tr id="a-colorProfile"><td class="n"><code>colorProfile</code></td><td><a href="../simple-types.html#colorProfileType"><code>colorProfileType</code></a></td><td><code>embedded</code></td><td><div class="doc"><p>Whether a colour profile embedded in the file (embedded, default) overrides colorSpace and transfer, or the declared values always apply (declared); a missing, unusable or raw-space case uses the declared values.</p></div></td></tr>
+<tr id="a-alpha"><td class="n"><code>alpha</code></td><td><a href="../simple-types.html#alphaModeType"><code>alphaModeType</code></a></td><td><code>auto</code></td><td><div class="doc"><p>How the file&#x27;s alpha channel is read: straight or premultiplied, none to ignore it and treat the image as opaque; auto (default) treats it as straight.</p></div></td></tr>
 <tr id="a-layer"><td class="n"><code>layer</code></td><td><code>xs:string</code></td><td></td><td><div class="doc"><p>Layer or channel set inside multi-layer files (PSD layer, EXR part).</p></div></td></tr>
 <tr class="from"><td colspan="4">from attribute group <a href="../groups.html#assetProvenance"><code>assetProvenance</code></a></td></tr>
-<tr id="a-sha256"><td class="n"><code>sha256</code></td><td><a href="../simple-types.html#sha256Type"><code>sha256Type</code></a></td><td></td><td></td></tr>
+<tr id="a-sha256"><td class="n"><code>sha256</code></td><td><a href="../simple-types.html#sha256Type"><code>sha256Type</code></a></td><td></td><td><div class="doc"><p>SHA-256 digest of the source file, in hex. A local file is hashed when the scene is validated and a different digest is an error; a remote URL is not checked.</p></div></td></tr>
 <tr id="a-license"><td class="n"><code>license</code></td><td><code>xs:string</code></td><td></td><td></td></tr>
 <tr id="a-credit"><td class="n"><code>credit</code></td><td><code>xs:string</code></td><td></td><td></td></tr>
 <tr id="a-proxy"><td class="n"><code>proxy</code></td><td><code>xs:anyURI</code></td><td></td><td></td></tr></tbody></table></div>
 <h2>Schematron rules</h2>
 <div class="rule"><div class="ctx"><span class="lbl">context</span> <code>*[@parent][@id]</code> <a class="lbl" href="../rules.html#p30">p30</a></div><div class="assert"><span class="id">R10</span>a node cannot parent itself.<code class="test">test: @parent != @id</code></div></div>
 </main>
-<footer>Generated by sr-schemadoc from <a href="../scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>5ef91e6ca9a6d860047f2a5347c59fa17423cb99ef7535b7ceaca16619f8ce2c</code>) and <a href="../scene-render.sch">scene-render.sch</a> (SHA-256 <code>868863e9ea4caf04e7f0bd9873c23ce5f723205714178349a4f385c4778fd368</code>).</footer>
+<footer>Generated by sr-schemadoc from <a href="../scene-render.xsd">scene-render.xsd</a> (SHA-256 <code>d1dfd98b2256be103f25f7bbe09c2eb9ae7f3280ba71c385ab736aa8b481dde7</code>) and <a href="../scene-render.sch">scene-render.sch</a> (SHA-256 <code>868863e9ea4caf04e7f0bd9873c23ce5f723205714178349a4f385c4778fd368</code>).</footer>
 <script src="../search-index.js"></script>
 <script src="../search.js"></script>
 </body>
