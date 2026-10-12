@@ -4,9 +4,12 @@ Each test pins one reproduced defect (F1, F3, F6, F7, M2, M3, m2, m3, m10, K2 in
 """
 from __future__ import annotations
 
+import contextlib
+import gc
 import os
 import time
 import xml.etree.ElementTree as ET
+from typing import Iterator
 
 import pytest
 
@@ -198,19 +201,35 @@ def _check_with_findings(n: int) -> float:
     return elapsed
 
 
+@contextlib.contextmanager
+def _no_cyclic_gc() -> Iterator[None]:
+    # The cyclic collector's full passes grow with the whole heap, which in a full test run is large: they would
+    # measure the suite, not this code.
+    gc.collect()
+    was = gc.isenabled()
+    gc.disable()
+    try:
+        yield
+    finally:
+        if was:
+            gc.enable()
+
+
 # Growth, not wall-clock time: 4x the siblings must cost far less than the 16x a quadratic algorithm takes, on any
 # machine and under any load. The best of three runs damps scheduler noise.
 def test_add_and_check_grow_linearly_with_siblings() -> None:
-    _build_and_check(500)                                   # warm the codec caches
-    small = [min(t) for t in zip(*(_build_and_check(5000) for _ in range(3)))]
-    large = [min(t) for t in zip(*(_build_and_check(20000) for _ in range(3)))]
+    with _no_cyclic_gc():
+        _build_and_check(500)                               # warm the codec caches
+        small = [min(t) for t in zip(*(_build_and_check(5000) for _ in range(3)))]
+        large = [min(t) for t in zip(*(_build_and_check(20000) for _ in range(3)))]
     assert large[0] < 8 * small[0] and large[1] < 8 * small[1], (small, large)
 
 
 def test_findings_among_many_siblings_grow_linearly() -> None:
-    _check_with_findings(300)
-    small = min(_check_with_findings(1000) for _ in range(3))
-    large = min(_check_with_findings(4000) for _ in range(3))
+    with _no_cyclic_gc():
+        _check_with_findings(300)
+        small = min(_check_with_findings(1000) for _ in range(3))
+        large = min(_check_with_findings(4000) for _ in range(3))
     assert large < 8 * small, (small, large)
 
 
