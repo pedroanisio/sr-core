@@ -211,7 +211,13 @@ what it offers. Section 9 of the Specification answers it.
 3. **Numbers.**
    - A `float` is written in the shortest form that reads back as the same float, in positional notation. It never
      uses an exponent, because the lexical space of `xs:decimal` has none.
-   - `-0` is written `0`. NaN and the infinities are refused.
+   - `-0` is written `0`.
+   - A `float` (or `Decimal`) that is NaN or infinite is refused for every numeric type: the SDK never turns a Python
+     number into `NaN` or `INF`.
+   - The lexical forms `NaN`, `INF` and `-INF` are `xs:double` values (XSD 1.0 §3.2.5), so a `str` holding one is
+     accepted for an `xs:double` attribute by the rule of 3.5, as `read` accepts it, unless a facet refuses it: a
+     range facet refuses `NaN` always, and an infinity on the side it bounds. `xs:decimal` and the integer types
+     have no such forms. `+INF` is XSD 1.1 and is refused.
    - A `decimal.Decimal` is written exactly, with all of its digits. SREP 75 allows `xs:decimal` values of any
      length.
 4. **Ids.**

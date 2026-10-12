@@ -428,6 +428,21 @@ class TestRangeFacets:
         assert not c.is_valid_lexical("NaN")
         assert not c.is_valid_lexical("INF")
 
+    def test_nan_and_infinities_as_lexical_forms_and_as_floats(self) -> None:
+        # SREP 0, 4.3 (review R7): a float NaN or infinity is always refused; the lexical forms are xs:double values,
+        # so a str holding one passes where no facet bounds it, and a range facet refuses NaN always and an
+        # infinity only on the side it bounds
+        plain = codec_for("xs:double", {})
+        for lex in ["NaN", "INF", "-INF"]:
+            assert plain.validate(lex) == lex
+        for f in [math.nan, math.inf, -math.inf]:
+            refused(plain, f)
+        lower = codec_for(restrict("xs:double", ("minInclusive", "0")), {})
+        assert lower.validate("INF") == "INF"
+        refused(lower, "-INF")
+        refused(lower, "NaN")
+        refused(lower, math.inf)
+
     def test_double_exclusive(self) -> None:
         c = codec_for(restrict("xs:double", ("minExclusive", "0"), ("maxExclusive", "10")), {})
         c.validate(1e-300)

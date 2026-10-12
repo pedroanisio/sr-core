@@ -62,6 +62,8 @@ version:
     prolog, and the written document's C14N 2.0 form differed from the original's;
   - `sr-scene check` reports a clean document as `ok (level 1)`, `ok (levels 1, 2)` ..., and its JSON output has
     `levels`: a bare `ok` after level 1, which runs only the Schematron's version gates, overstated the check;
+  - the SREP draft (4.3) no longer says NaN and the infinities are refused outright: a Python NaN or infinity is,
+    while the `xs:double` lexical forms `NaN`, `INF`, `-INF` are accepted as a `str` unless a facet refuses them;
 - `conformance/run.py` no longer reports `pass` for a case that checks nothing: an `expected.json` entry with an
   unknown key, an empty check or no check at all is an `error`, and so is a form whose checks did not run.
 - `conformance/make_cases.py` reads the implicit camera's field of view and the default sensor width from the
