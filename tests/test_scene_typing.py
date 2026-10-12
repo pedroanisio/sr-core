@@ -74,7 +74,11 @@ def test_every_class_has_a_keyword_only_init_over_its_attributes() -> None:
         assert len(init) == 1, cls.name
         fn = init[0]
         assert [a.arg for a in fn.args.args] == ["self"] and fn.args.kwarg is None and fn.args.vararg is None
-        assert [a.arg for a in fn.args.kwonlyargs] == [n for n, _ in attrs_of(cls)], cls.name
+        names = [n for n, _ in attrs_of(cls)]
+        if len(ast.literal_eval(next(n.value for n in cls.body if isinstance(n, ast.Assign)
+                                     and n.targets[0].id == "_element_names"))) > 1:  # type: ignore[attr-defined]
+            names = ["xml_name"] + names  # a class that covers several element names takes the choice among them
+        assert [a.arg for a in fn.args.kwonlyargs] == names, cls.name
         assert all(isinstance(d, ast.Constant) and d.value is None for d in fn.args.kw_defaults)
         assert all(ast.unparse(a.annotation).endswith("| None") for a in fn.args.kwonlyargs)
 
@@ -150,4 +154,4 @@ def test_a_type_checker_accepts_the_good_file_and_flags_every_marked_line_of_the
     assert [ln for ln in run("smoke_ok.py") if ": error:" in ln] == []
     flagged = {int(m.group(1)) for ln in run("smoke_bad.py") if (m := re.match(r".*smoke_bad.py:(\d+): error:", ln))}
     marked = {i for i, ln in enumerate((here / "smoke_bad.py").read_text().splitlines(), 1) if "# E" in ln}
-    assert flagged == marked and len(marked) == 6
+    assert flagged == marked and len(marked) == 7

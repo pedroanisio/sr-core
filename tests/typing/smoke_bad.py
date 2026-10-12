@@ -1,7 +1,7 @@
 """Must NOT type-check: each marked line is an error a checker has to report."""
 from __future__ import annotations
 
-from sr_core.scene import Scene
+from sr_core.scene import Scene, Still
 
 scene = Scene(version="1.0")
 composition = scene.add_composition()
@@ -12,3 +12,4 @@ composition.add_layer(id=3)                      # E3: wrong value type in a fac
 layer.visible = "yes"                            # E4: wrong value type in a setter
 layer.id = ["a"]                                 # E5: wrong value type in a setter
 n: int | None = layer.tags                       # E6: a getter reads as list[str]
+Still(xml_name="cover", path="a.png")          # E7: a name the class does not cover

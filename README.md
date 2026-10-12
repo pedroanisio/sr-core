@@ -44,6 +44,8 @@ doc = read("in.scene.xml")                        # comments, attribute order an
   lexical `str` (`shutterPhase="0.3000"`), written as given.
 - XML names are kept as they are: `layer.safeAreaForce`, `layer.rotationX`; the only change is `from`, which is written `from_`.
 - Each allowed child has a factory named `add_<name>`, and simple content is held in `.content`.
+- A class that covers several element names takes `xml_name` at construction: `Still(xml_name="thumbnail", path="a.png")`
+  (the default is the first name, `poster`); `.xml_name` returns the chosen one.
 - A value or a child that the schema refuses raises `SchemaValueError` as soon as it is set. An attribute that the
   element does not declare raises `AttributeError`.
 - `check(scene)` adds the checks that need the whole document: required attributes, occurrences, ids and

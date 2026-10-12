@@ -31,7 +31,10 @@ version:
   - a valid lexical `str` is accepted for every attribute whose type is not string-valued (numbers, booleans,
     `xs:dateTime`) and written as given, so a ported builder can write the exact text of the one it replaces;
   - `layout="indent"` for `to_bytes` and `write`: libxml2's pretty-print rule (indentation only inside elements that
-    have no text child), equal to `lxml.etree.tostring(..., pretty_print=True)`.
+    have no text child), equal to `lxml.etree.tostring(..., pretty_print=True)`;
+  - a class that covers several element names takes the constructor keyword `xml_name`, typed as a `Literal` of
+    those names and refused with `SchemaValueError` otherwise: `Still(xml_name="thumbnail", path=...)` builds a
+    `<thumbnail>` (before, `to_bytes(Still())` could only write `<poster/>`).
 - Drift controls:
   - `python3 -m sr_core.scene.generate --check`, run by `tools/release.py check`;
   - `release schema` regenerates the SDK and needs an Unreleased entry for it.

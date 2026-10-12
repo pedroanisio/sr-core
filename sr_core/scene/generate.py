@@ -388,11 +388,17 @@ class Generator:
         self.params[key] = params
         return out
 
-    def signature(self, name: str, key: str, returns: str, indent: str) -> list[str]:
-        """A keyword-only signature over the attributes of type ``key`` (all optional), for type checkers."""
+    def signature(self, name: str, key: str, returns: str, indent: str,
+                  element_names: tuple[str, ...] = ()) -> list[str]:
+        """A keyword-only signature over the attributes of type ``key`` (all optional), for type checkers.
+
+        ``element_names`` (the constructor of a class that covers several element names) adds ``xml_name``, the
+        choice among them; a runtime-reserved name, so that no attribute can collide with it."""
         lines = [f"{indent}def {name}(", f"{indent}    self,"]
-        if self.params[key]:
+        if self.params[key] or len(element_names) > 1:
             lines.append(f"{indent}    *,")
+        if len(element_names) > 1:
+            lines.append(f"{indent}    xml_name: _t.Literal[{', '.join(quote(n) for n in element_names)}] | None = None,")
         lines += [f"{indent}    {py}: {hint} | None = None," for py, hint in self.params[key]]
         lines.append(f"{indent}) -> {returns}: ...")
         return lines
@@ -488,7 +494,7 @@ class Generator:
         # Type checkers see keyword-only signatures; at run time the same methods take **attrs, so that an attribute
         # the element does not declare raises AttributeError (SREP 3.3), not TypeError.
         lines += ["", "    if _t.TYPE_CHECKING:", ""]
-        lines += self.signature("__init__", key, "None", "        ")
+        lines += self.signature("__init__", key, "None", "        ", element_names=element_names)
         for name, tkey in types.items():
             lines += [""] + self.signature(f"add_{name}", tkey, self.names[tkey], "        ")
         if types:

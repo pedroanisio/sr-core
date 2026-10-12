@@ -32549,6 +32549,7 @@ class Still(Element):
         def __init__(
             self,
             *,
+            xml_name: _t.Literal["poster", "thumbnail"] | None = None,
             time: _t.Union[float, int, str] | None = None,
             marker: str | None = None,
             path: str | None = None,

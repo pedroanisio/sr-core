@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from decimal import Decimal
 
-from sr_core.scene import Scene
+from sr_core.scene import Scene, Still
 
 scene = Scene(version="auto")
 scene.add_project(width=1280, height=720, fps="30", duration=4)
@@ -16,3 +16,5 @@ layer.opacity = 0.5
 layer.opacity = None
 fractal = scene.add_assets().add_fractal(id="f", centerX=Decimal("1.5"))
 centre: Decimal | None = fractal.centerX
+thumb = Still(xml_name="thumbnail", path="a.png")
+name: str = thumb.xml_name

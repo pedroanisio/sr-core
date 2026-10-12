@@ -103,6 +103,13 @@ what it offers. Section 9 of the Specification answers it.
      `param`.
    - Reading MUST pick the class from the element name and its parent, as `Schema.types_of_element` does.
    - If one parent allows one name with two types, generation MUST fail.
+   - A class can cover several element names: `Still` covers `poster` and `thumbnail`. The constructor of such a
+     class takes the keyword `xml_name`, one of the names of `_element_names` (typed as a `typing.Literal` in the
+     hints); without it the first name is used. Any other value, in any class, raises `SchemaValueError`. `xml_name`
+     is a reserved runtime name (3.11), so no attribute can collide with it, and the chosen name is what `xml_name`
+     returns afterwards. `add`, `find`, `iter`, the occurrence limit of a parent, the diagnostic paths, `copy`, writing
+     and the level 1 checks all use that name, and `read` keeps the name found in the document. The factories
+     `add_poster` and `add_thumbnail` already fix the name.
 3. **Attribute names.** Each attribute MUST be a Python attribute with the XML name unchanged (camelCase), so that
    the reference, the engine's diagnostic paths and the SDK use the same strings.
    - A name that is a Python keyword takes a trailing underscore. At 1.7.0 the only one is `from`, which becomes
@@ -163,7 +170,7 @@ what it offers. Section 9 of the Specification answers it.
     - Comments, processing instructions and whitespace text are nodes in `.nodes`, and survive reading and writing.
 11. **Runtime names.** The schema already uses `parent`, `path`, `text` and `version` as attribute names, so the
     runtime cannot use them. The element API uses these names:
-    - `xml_name`, `owner`, `nodes`, `elements()`, `content`;
+    - `xml_name` (a read-only property, and the constructor keyword that chooses it, see 3.2), `owner`, `nodes`, `elements()`, `content`;
     - `add`, `add_<name>`, `remove`, `find`, `find_all`, `iter`, `copy`;
     - `attributes()`, `xml_path`, `source_line`, `source_column`;
     - `new_id`, `min_version`, `check`, `to_bytes`.
@@ -435,3 +442,5 @@ None. The SREP changes no rendering. Its checks are sr-core tests: D1, D4, D5, D
   content `.content` (3.11), the level 1 codes were completed (6.2), and open issues 3 to 5 were settled.
 - 2026-10-12: for the part 3 acceptance (raw C14N equality with a ported builder): a valid lexical `str` is accepted
   and stored verbatim for every non-string type (3.5), and `layout="indent"` was added (4.1).
+- 2026-10-12: a class that covers several element names takes the constructor keyword `xml_name` (3.2), so that
+  `<thumbnail>` can be built through the public API.

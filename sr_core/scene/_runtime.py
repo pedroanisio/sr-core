@@ -325,10 +325,15 @@ class Element:
             raise TypeError(f"{cls.__name__} must declare __slots__ (use __slots__ = ()) so that undeclared "
                             f"attributes raise AttributeError")
 
-    def __init__(self, **attrs: Any) -> None:
+    def __init__(self, *, xml_name: Optional[str] = None, **attrs: Any) -> None:
         if not self._element_names:
             raise TypeError(f"{type(self).__name__} has no element name")
-        self._reset(self._element_names[0])
+        if xml_name is None:
+            xml_name = self._element_names[0]
+        elif not isinstance(xml_name, str) or xml_name not in self._element_names:
+            raise SchemaValueError(f"{xml_name!r} is not an element name of {type(self).__name__} "
+                                   f"(allowed: {', '.join(self._element_names)})")
+        self._reset(xml_name)
         self._set_all(attrs)
 
     # -- construction helpers
