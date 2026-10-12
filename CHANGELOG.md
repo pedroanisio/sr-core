@@ -35,15 +35,36 @@ version:
   - a class that covers several element names takes the constructor keyword `xml_name`, typed as a `Literal` of
     those names and refused with `SchemaValueError` otherwise: `Still(xml_name="thumbnail", path=...)` builds a
     `<thumbnail>` (before, `to_bytes(Still())` could only write `<poster/>`).
+- `sr_core.scene` for AI agents and their users (section 3.12, 3.13 and 8 of the SDK SREP draft):
+  - `UnknownNameError`, a `SchemaValueError` and an `AttributeError`, for a wrong attribute, constructor keyword,
+    `add_<name>` factory, child or `xml_name`, with `suggestions` (another case, `from` for `from_`, close spellings) and
+    the `allowed` names: `<layer> has no attribute 'blendMode'; did you mean 'blend'?`;
+  - `describe(target)`, `describe_all()` and `element_names()`: documentation, minimum version, content model,
+    children with occurrences, and attributes with type, enumeration, facets, default, required, minimum version and
+    documentation, as a frozen record or JSON of the versioned format `sr-scene-describe/1`;
+  - `sr-scene describe NAME...`, `sr-scene describe --all --format json`, `sr-scene list` and `sr-scene new`;
+  - `sr-scene check --format json` carries `"format": "sr-scene-findings/1"`;
+  - `docs/scene-sdk-guide.md`, whose Python blocks the test suite runs.
 - Drift controls:
   - `python3 -m sr_core.scene.generate --check`, run by `tools/release.py check`;
   - `release schema` regenerates the SDK and needs an Unreleased entry for it.
-
 - `conformance/run.py` gains `--run-pending` (runs the pending cases that have a check: one that now passes is
   reported as `retire` and fails the run, one that still fails stays pending) and the check form `failure`
   (`{"code": "PRG12"}`: a non-zero exit, the code in the output, no picture). It prints how many cases were pending.
 - `tools/check_hygiene.py` rule R4 also compares `srep/index.md` with the SREP headers (Title, Type, Status, Version,
   a row for every SREP, ascending order); an intended difference is an `srep/srep-NNNN.md:R4:reason` entry.
+
+### Changed
+
+- `sr_core.scene`: the documentation of an attribute is its `xs:documentation`, or else that of its simple type; it
+  reaches `Attr.doc`, the descriptor's `__doc__`, a docstring after each declaration and the docstrings of the checker
+  stubs (before, the descriptors carried only the declaration's own text, and the stubs none).
+- `sr_core.scene`: a refused enumeration value carries `suggestions` and says `did you mean 'multiply'?` for
+  `layer.blend = "mutliply"` (also inside list types and unions); a mistyped class name, `sr_core.scene.Layr` or
+  `sr_core.scene.textanimator`, raises `UnknownNameError` with `kind="class"` and `did you mean 'Layer'?` (still an
+  `AttributeError`; `from sr_core.scene import Layr` is still an `ImportError`). `SchemaValueError` now pickles.
+- `sr_core.scene`: an unknown attribute, factory or child now raises `UnknownNameError` (still an `AttributeError`, or a
+  `SchemaValueError` for a child) instead of a bare `AttributeError`.
 
 ### Fixed
 

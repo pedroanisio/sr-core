@@ -469,7 +469,8 @@ class TestRealSchema:
             assert targets == [x + "_" if keyword.iskeyword(x) else x for x in expected], key
             for d, a in zip(decls, real.schema.all_attributes(key)):
                 kw = {k.arg: ast.literal_eval(k.value) for k in d.keywords}
-                assert (kw["use"], kw["default"], kw["fixed"], kw["doc"]) == (a.use, a.default, a.fixed, a.doc)
+                assert (kw["use"], kw["default"], kw["fixed"], kw["doc"]) == (
+                    a.use, a.default, a.fixed, generate.attribute_doc(real.schema, a))
                 spec = ast.literal_eval(d.args[1])
                 assert (spec == a.type) if a.type else isinstance(spec, dict)
             total += len(decls)

@@ -122,7 +122,8 @@ _SEVERITIES = ("error", "warning", "info")
 def _to_finding(diag: Any) -> Finding:
     if not isinstance(diag, dict) or "code" not in diag or "message" not in diag:
         raise EngineError(f"diagnostic without code and message: {diag!r}")
-    loc = diag.get("loc") if isinstance(diag.get("loc"), dict) else {}
+    raw_loc = diag.get("loc")
+    loc: dict[str, Any] = raw_loc if isinstance(raw_loc, dict) else {}
     severity = diag.get("severity")
     return Finding(severity if severity in _SEVERITIES else "info", str(diag["code"]), str(diag["message"]),
                    diag.get("path"), loc.get("line"), loc.get("column"))

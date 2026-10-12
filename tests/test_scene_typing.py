@@ -155,3 +155,17 @@ def test_a_type_checker_accepts_the_good_file_and_flags_every_marked_line_of_the
     flagged = {int(m.group(1)) for ln in run("smoke_bad.py") if (m := re.match(r".*smoke_bad.py:(\d+): error:", ln))}
     marked = {i for i, ln in enumerate((here / "smoke_bad.py").read_text().splitlines(), 1) if "# E" in ln}
     assert flagged == marked and len(marked) == 7
+
+
+@pytest.mark.skipif(__import__("os").environ.get("SR_SCENE_TYPING") != "1",
+                    reason="set SR_SCENE_TYPING=1 (and install mypy, which is not a test dependency)")
+def test_the_sdk_package_itself_type_checks_with_no_errors() -> None:
+    import subprocess
+    import sys
+
+    pytest.importorskip("mypy")
+    package = Path(__file__).parent.parent / "sr_core" / "scene"
+    done = subprocess.run([sys.executable, "-m", "mypy", "--follow-imports=silent", "--ignore-missing-imports",
+                           str(package)], capture_output=True, text=True, check=False)
+    errors = [ln for ln in done.stdout.splitlines() if ": error:" in ln]
+    assert errors == [], "\n".join(errors[:20])

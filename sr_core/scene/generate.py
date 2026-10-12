@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import importlib
+import inspect
 import keyword
 import sys
 from dataclasses import dataclass, field
@@ -52,9 +53,10 @@ RESERVED_PREFIXES = ("add_", "_")
 RESERVED_MODULE_NAMES = {
     "Element", "Attr", "SceneBase", "Gate", "set_simple_types", "SCHEMA_RELEASE", "XSD_SHA256", "SCH_SHA256",
     "GENERATOR_VERSION", "COUNTS", "SIMPLE_TYPES", "ELEMENT_CLASSES", "CLASSES", "VERSIONS", "GATES",
+    "SIMPLE_DOCS",
     # sr_core.scene re-exports the generated classes beside these names (sr_core/scene/__init__.py)
     "PI", "Comment", "Text", "Unknown", "Finding", "EngineError", "EngineInfo", "IntegrityError", "SchemaError",
-    "SchemaValueError",
+    "SchemaValueError", "UnknownNameError",
 }
 
 _BUILTIN_HINTS = {
@@ -198,6 +200,20 @@ def python_name(xml_name: str, owner: str) -> str:
     return xml_name + "_" if keyword.iskeyword(xml_name) else xml_name
 
 
+def attribute_doc(schema: model.Schema, a: model.Attribute) -> str:
+    """The documentation of an attribute: its own, else the one of its simple type (named or inline), dedented."""
+    text = a.doc
+    if not text:
+        st = schema.simple.get(a.type) if a.type is not None else a.inline
+        text = st.doc if st is not None else ""
+    return inspect.cleandoc(text) if text else ""
+
+
+def first_paragraph(text: str) -> str:
+    """The first paragraph of ``text`` on one line."""
+    return " ".join(text.strip().split("\n\n", 1)[0].split())
+
+
 def natural_key(version: str) -> tuple:
     return tuple((0, int(p), "") if p.isdigit() else (1, 0, p) for p in version.replace("-", ".").split("."))
 
@@ -210,6 +226,7 @@ class Generator:
         self._check_class_names()
         self.alias_order: list[str] = []
         self.params: dict[str, list[tuple[str, str]]] = {}
+        self.param_docs: dict[str, dict[str, str]] = {}
         self._alias_open: set[str] = set()
         self._check_simple_types()
 
@@ -319,6 +336,8 @@ class Generator:
         if p.kind in ("sequence", "choice"):
             return (p.kind, lo, hi, tuple(self.particle(c, owner, stack) for c in p.children))
         if p.kind == "group":
+            if p.name is None:
+                raise SchemaError(f"{owner}: a group reference without a name")
             if p.name in stack:
                 raise SchemaError(f"{owner}: group cycle through {p.name!r}")
             inner = self.particle(self.s.groups[p.name].content, owner, stack + (p.name,))
@@ -350,6 +369,8 @@ class Generator:
         for p in self.s.children(key):
             if p.type is None or p.type not in self.s.complex:
                 raise SchemaError(f"{key}: element {p.name!r} has no complex type ({p.type!r})")
+            if p.name is None:
+                raise SchemaError(f"{key}: an element particle without a name")
             if out.setdefault(p.name, p.type) != p.type:
                 raise SchemaError(f"{key}: element {p.name!r} has two types ({out[p.name]!r} and {p.type!r})")
         return out
@@ -358,6 +379,7 @@ class Generator:
     def attr_lines(self, key: str) -> list[str]:
         out = []
         params: list[tuple[str, str]] = []
+        docs: dict[str, str] = self.param_docs.setdefault(key, {})
         seen: dict[str, str] = {}
         for a in self.s.all_attributes(key):
             py = python_name(a.name, key)
@@ -375,6 +397,7 @@ class Generator:
                 spec: Any = a.type
                 hint, got = self.ref_hint(a.type), self.ref_hint(a.type, True)
             else:
+                assert a.inline is not None  # the check above: exactly one of type and inline type
                 self._validate_simple(a.inline, f"{key}/@{a.name}")
                 spec = self.spec(a.inline)
                 hint, got = self.type_hint(a.inline), self.type_hint(a.inline, True)
@@ -383,13 +406,18 @@ class Generator:
                 # SceneBase accepts "auto" through the API, and a document that was read may carry it (SREP 4.5)
                 hint, got = (f'_t.Union[{h}, _t.Literal["auto"]]' for h in (hint, got))
             head = f"{py}: Attr[{got}, {hint}] = "
-            out.append(self.attr_source(head, a, spec))
+            doc = attribute_doc(self.s, a)
+            source = self.attr_source(head, a, spec, doc)
+            if doc:  # an attribute docstring, which editors show on hover
+                source += "\n    " + docstring(doc, "    ")
+            out.append(source)
             params.append((py, hint))
+            docs[py] = doc
         self.params[key] = params
         return out
 
     def signature(self, name: str, key: str, returns: str, indent: str,
-                  element_names: tuple[str, ...] = ()) -> list[str]:
+                  element_names: tuple[str, ...] = (), doc: str = "") -> list[str]:
         """A keyword-only signature over the attributes of type ``key`` (all optional), for type checkers.
 
         ``element_names`` (the constructor of a class that covers several element names) adds ``xml_name``, the
@@ -400,8 +428,23 @@ class Generator:
         if len(element_names) > 1:
             lines.append(f"{indent}    xml_name: _t.Literal[{', '.join(quote(n) for n in element_names)}] | None = None,")
         lines += [f"{indent}    {py}: {hint} | None = None," for py, hint in self.params[key]]
-        lines.append(f"{indent}) -> {returns}: ...")
+        if doc:
+            lines += [f"{indent}) -> {returns}:", f"{indent}    " + docstring(doc, indent + "    "),
+                      f"{indent}    ..."]
+        else:
+            lines.append(f"{indent}) -> {returns}: ...")
         return lines
+
+    def init_doc(self, key: str) -> str:
+        """The docstring of a stub constructor: the type summary, then one line per documented attribute."""
+        summary = first_paragraph(self.s.complex[key].doc)
+        rows = [f"{py}: {first_paragraph(text)}" for py, text in self.param_docs.get(key, {}).items() if text]
+        return "\n\n".join(p for p in (summary, "Args:\n" + "\n".join("    " + r for r in rows) if rows else "") if p)
+
+    def add_doc(self, name: str, tkey: str) -> str:
+        summary = first_paragraph(self.s.complex[tkey].doc)
+        head = f"Add a <{name}> child; the keywords are the attributes of {self.names[tkey]}."
+        return head + (f"\n\n{summary}" if summary else "")
 
     def _check_lexical(self, key: str, a: model.Attribute, spec: Any) -> None:
         """Every default and fixed value must be valid for the attribute's own type (SchemaError otherwise)."""
@@ -415,10 +458,10 @@ class Generator:
                 raise SchemaError(f"{key}/@{a.name}: {what} value {lex!r} is not valid for its type")
 
     @staticmethod
-    def attr_source(head: str, a: model.Attribute, spec: Any) -> str:
+    def attr_source(head: str, a: model.Attribute, spec: Any, doc_text: str) -> str:
         """One attribute declaration: a single line when it fits, else name/type, flags and doc on their own lines."""
         flags = f"use={quote(a.use)}, default={flat(a.default)}, fixed={flat(a.fixed)}"
-        doc = f"doc={quote(a.doc)}"
+        doc = f"doc={quote(doc_text)}"
         one = f"    {head}Attr({quote(a.name)}, {flat(spec)}, {flags}, {doc})"
         if len(one) <= LINE_WIDTH:
             return one
@@ -442,7 +485,7 @@ class Generator:
     def versions(self) -> tuple[str, ...]:
         for a in self.s.complex[model.ROOT_TYPE].attributes:
             if a.name == "version":
-                st = a.inline if a.inline is not None else self.s.simple.get(a.type)
+                st = a.inline if a.inline is not None else self.s.simple.get(a.type or "")
                 while st is not None and not st.enums and st.base in self.s.simple:
                     st = self.s.simple[st.base]
                 if st is not None and st.enums:
@@ -494,9 +537,11 @@ class Generator:
         # Type checkers see keyword-only signatures; at run time the same methods take **attrs, so that an attribute
         # the element does not declare raises AttributeError (SREP 3.3), not TypeError.
         lines += ["", "    if _t.TYPE_CHECKING:", ""]
-        lines += self.signature("__init__", key, "None", "        ", element_names=element_names)
+        lines += self.signature("__init__", key, "None", "        ", element_names=element_names,
+                                doc=self.init_doc(key))
         for name, tkey in types.items():
-            lines += [""] + self.signature(f"add_{name}", tkey, self.names[tkey], "        ")
+            lines += [""] + self.signature(f"add_{name}", tkey, self.names[tkey], "        ",
+                                           doc=self.add_doc(name, tkey))
         if types:
             lines += ["", "    else:"]
             for name, tkey in types.items():
@@ -526,6 +571,7 @@ class Generator:
         counts = self.counts()
         versions = self.versions()
         simple_specs = {name: self.spec(st) for name, st in s.simple.items()}
+        simple_docs = {name: inspect.cleandoc(st.doc) for name, st in s.simple.items() if st.doc}
         for name in s.simple:
             self.alias(name)
         class_blocks = [self.class_source(k) for k in s.complex]       # also fills alias_order for attributes
@@ -543,11 +589,13 @@ class Generator:
                "import datetime as _dt", "import typing as _t", "from decimal import Decimal as _Decimal", "",
                "from sr_core.scene._runtime import Attr, Element, SceneBase, set_simple_types",
                "from sr_core.scene.gates import Gate", "",
-               f"SCHEMA_RELEASE = {quote(s.version)}", f"XSD_SHA256 = {quote(s.xsd_sha256)}",
-               f"SCH_SHA256 = {quote(s.sch_sha256)}", f"GENERATOR_VERSION = {quote(GENERATOR_VERSION)}",
+               f"SCHEMA_RELEASE = {quote(s.version or '')}", f"XSD_SHA256 = {quote(s.xsd_sha256 or "")}",
+               f"SCH_SHA256 = {quote(s.sch_sha256 or "")}", f"GENERATOR_VERSION = {quote(GENERATOR_VERSION)}",
                "COUNTS = " + fmt(counts, 0, len("COUNTS = ")), "",
                "# Simple types by name, in schema order (CONTRACT C5).",
                "SIMPLE_TYPES = " + fmt(simple_specs, 0, len("SIMPLE_TYPES = ")), "",
+               "# Documentation of the simple types that have some (read by sr_core.scene.introspect).",
+               "SIMPLE_DOCS = " + fmt(simple_docs, 0, len("SIMPLE_DOCS = ")), "",
                "# Python types of the simple types, for the attribute hints:",
                "# T_ is what an attribute accepts when set, G_ what it reads as."]
         for name in self.alias_order:
