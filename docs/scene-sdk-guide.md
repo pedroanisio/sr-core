@@ -43,7 +43,7 @@ from sr_core.scene import Scene
 
 scene = Scene(version="auto")
 scene.add_project(width=1280, height=720, fps="30", duration=4)
-scene.add_assets().add_image(id="logo", src="logo.png")
+scene.add_assets().add_image(id="logo", src="logo.png", width=256, height=64)
 layer = scene.add_composition().add_layer(id="title", asset="logo")
 assert [f.code for f in scene.check()] == []   # nothing left to fix
 data = scene.to_bytes(layout="pretty")         # UTF-8 bytes with the XML declaration
