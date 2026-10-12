@@ -74,7 +74,7 @@
 | [69](srep-0069.md) | Add stepping programs: `<program mode="step">` | Standards | Accepted | 1.6 |
 | [70](srep-0070.md) | Add parametric paths, parametric surfaces and heightfields | Standards | Final | 1.6 |
 | [71](srep-0071.md) | Add subsurface, a procedural sky and generator-fed maps | Standards | Accepted | 1.6 |
-| [72](srep-0072.md) | Add pixel-exact options: precision, content rect, edges, supersampling | Standards | Accepted | 1.6 |
+| [72](srep-0072.md) | Add pixel-exact options: precision, content rect, edges, supersampling | Standards | Final | 1.6 |
 | [73](srep-0073.md) | Let flock agents keep their sprites upright | Standards | Final | 1.6 |
 | [74](srep-0074.md) | Add viewport3D: a 3D scene with its own camera as a node | Standards | Final | 1.6 |
 | [75](srep-0075.md) | Add fractal assets with deep-zoom precision | Standards | Final | 1.6 |
@@ -91,3 +91,4 @@
 | [86](srep-0086.md) | Keep the 1.3 gates of the upstreamed engine extensions | Process | Active | n/a |
 | [87](srep-0087.md) | Amend SREP 66: scope emitted ids by their program | Semantics | Accepted | 1.7 |
 | [89](srep-0089.md) | Amend SREP 72: the supersample clamp keeps values above 1 | Semantics | Final | 1.6 |
+| [90](srep-0090.md) | Let SREP 87 refuse two kinds of 1.6 documents in 1.7.0 | Process | Active | n/a |

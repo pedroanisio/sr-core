@@ -39776,7 +39776,7 @@
       "failure": {
         "code": "PRG14"
       },
-      "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet"
+      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG14 and draws no picture (SREP 87 on rs-scene-render main 6602b81d, checked by hand on 2026-10-11)"
     },
     "srep-0066-program-sha256-mismatch": {
       "rule": "SREP 66",
@@ -41025,8 +41025,7 @@
         "codes": [
           "PREC1"
         ]
-      },
-      "pending": "the Rust reference (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71) reports E23 for this document, not the information finding PREC1 that SREP 72 requires; it has no PREC1 code"
+      }
     },
     "srep-0072-content-rect-stripe": {
       "rule": "SREP 72",
@@ -44541,8 +44540,7 @@
         "cy": 120,
         "w": 280,
         "h": 20
-      },
-      "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main"
+      }
     },
     "srep-0087-program-ids-local-ref": {
       "rule": "SREP 87 (each output's matte=\"m\" names its own m, Semantics 3.1)",
@@ -44554,8 +44552,7 @@
       },
       "absent": [
         "green"
-      ],
-      "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main"
+      ]
     },
     "srep-0087-program-ids-local-wins": {
       "rule": "SREP 87 (the output's matte=\"m\" names p.m, not the document's m, Semantics 3.1)",
@@ -44573,8 +44570,7 @@
       },
       "absent": [
         "green"
-      ],
-      "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main"
+      ]
     },
     "srep-0087-program-ids-qualified-prop": {
       "rule": "SREP 87 (prop(\"a.g1.x\") from outside follows a.g1 with no warning, Semantics 4)",
@@ -44589,8 +44585,7 @@
         "cy": 240,
         "w": 40,
         "h": 20
-      },
-      "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main"
+      }
     },
     "srep-0087-program-ids-bare-prop": {
       "rule": "SREP 87 (prop(\"g1.x\") from outside with one emitter follows a.g1, Semantics 4)",
@@ -44605,8 +44600,7 @@
         "cy": 240,
         "w": 40,
         "h": 20
-      },
-      "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main"
+      }
     },
     "srep-0087-program-ids-bare-prop-warning": {
       "rule": "SREP 87 (the same bare reference warns W13, Semantics 4)",
@@ -44615,8 +44609,7 @@
         "messages": [
           "W13"
         ]
-      },
-      "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main"
+      }
     },
     "srep-0087-program-ids-bare-override": {
       "rule": "SREP 87 (a variant's override target=\"g1\" with one emitter applies to a.g1, Semantics 4)",
@@ -44629,29 +44622,28 @@
         "cy": 120,
         "w": 40,
         "h": 20
-      },
-      "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main"
+      }
     },
     "srep-0087-program-ids-ambiguous": {
       "rule": "SREP 87 (prop(\"g1.x\") from outside with emitters a and b fails PRG17, Semantics 4)",
       "failure": {
         "code": "PRG17"
       },
-      "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet"
+      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG17 and draws no picture (SREP 87 on rs-scene-render main 6602b81d, checked by hand on 2026-10-11)"
     },
     "srep-0087-program-ids-composed-collision": {
       "rule": "SREP 87 (a emitting b.c beside a.b emitting c: both a.b.c, PRG14, Semantics 2)",
       "failure": {
         "code": "PRG14"
       },
-      "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet"
+      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG14 and draws no picture (SREP 87 on rs-scene-render main 6602b81d, checked by hand on 2026-10-11)"
     },
     "srep-0087-program-ids-duplicate-local": {
       "rule": "SREP 87 (an output with two elements g1 fails PRG14, Semantics 1)",
       "failure": {
         "code": "PRG14"
       },
-      "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet"
+      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG14 and draws no picture (SREP 87 on rs-scene-render main 6602b81d, checked by hand on 2026-10-11)"
     },
     "srep-0087-program-ids-seed-local": {
       "rule": "SREP 87 (an emitted emitter without a seed draws as srep-0087-program-ids-seed-local-by-hand, its id written by hand as g1: seeds use the local id, Semantics 7)",
@@ -44659,7 +44651,7 @@
         "id": "still",
         "time": 0.5
       },
-      "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main; the check is a comparison with another render, which run.py cannot express yet: the picture at 0.5 s equals that of srep-0087-program-ids-seed-local-by-hand"
+      "pending": "the check is a comparison with another render, which run.py cannot express yet; checked by hand on the Rust reference (SREP 87 on rs-scene-render main 6602b81d, 2026-10-11): the picture at 0.5 s equals that of srep-0087-program-ids-seed-local-by-hand, pixel for pixel"
     },
     "srep-0087-program-ids-seed-local-by-hand": {
       "rule": "SREP 87 (the reference picture of srep-0087-program-ids-seed-local: the same emitter written by hand in a group a, with the id g1)",
@@ -44667,7 +44659,7 @@
         "id": "still",
         "time": 0.5
       },
-      "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main; the check is a comparison with another render, which run.py cannot express yet: the reference picture of srep-0087-program-ids-seed-local"
+      "pending": "the check is a comparison with another render, which run.py cannot express yet; checked by hand on the Rust reference (SREP 87 on rs-scene-render main 6602b81d, 2026-10-11): the reference picture of srep-0087-program-ids-seed-local, which equals it pixel for pixel at 0.5 s"
     },
     "srep-0087-program-ids-beat-program": {
       "rule": "SREP 87 (a program with the id beat beside a beatGrid: beat.1 is still the grid's beat at 0.5 s, and prop(\"beat.g1.x\") names the emitted node, Hazards)",
@@ -44686,8 +44678,7 @@
         "cy": 240,
         "w": 40,
         "h": 20
-      },
-      "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main"
+      }
     },
     "srep-0087-program-ids-beat-program-before": {
       "rule": "SREP 87 (the same document before beat.1, Hazards)",
@@ -44703,8 +44694,7 @@
       },
       "absent": [
         "blue"
-      ],
-      "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main"
+      ]
     },
     "srep-0087-program-ids-output-sha256": {
       "rule": "SREP 87 (outputSha256 of srep66-rect.wasm's output holds for programs a and b, Semantics 6)",
@@ -44713,8 +44703,7 @@
         "cy": 120,
         "w": 280,
         "h": 20
-      },
-      "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main"
+      }
     },
     "srep-0089-supersample-hdr-n1": {
       "rule": "SREP 89",

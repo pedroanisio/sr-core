@@ -1,10 +1,13 @@
 """SREP 87 (amends SREP 66) is Accepted: a program's emitted ids are scoped by the program's id.
 
 The record: SREP 87's header, the index row, SREP 66's History and Open issues, the Unreleased entry of the schema
-changelog and the version it calls for. SREP 87 changes neither the XSD nor the Schematron.
+changelog and the version it calls for. SREP 87 changes neither the XSD nor the Schematron. Its class is Added by the
+exception SREP 90 records (Open issues 7, decided), and its erratum of 2026-10-11 adds link/@source, the overrides of
+an instance or an include and the bone names of skin weights to the positions of rules 3 and 4 (Open issues 6).
 
 The kit: the cases of srep_cases/srep-0087.json are those conformance/tools/srep87_cases.py writes, in expected.json and
-cases/ as generated, each pending with the reason kit_pending.py gives (the reference implementation is not on main).
+cases/ as generated. The reference implementation is on main and passes them; only the cases whose check run.py cannot
+express (failed renders, a render comparison) stay pending, with the hand check in the reason kit_pending.py gives.
 Their expected values follow from the SREP's rules and the modules' constant output, recomputed here from the
 fragments: the namespaced ids are NCNames (Semantics 2), none has the form of a generated marker id (Hazards), and the
 amended SREP 66 collision case writes the namespaced id `p.g1` (Backwards compatibility).
@@ -69,12 +72,16 @@ def section(title):
     return SREP.split(f"\n## {title}\n", 1)[1].split("\n## ", 1)[0]
 
 
-def test_no_schema_change_and_the_provisional_class_calls_for_1_7_0():
-    """The class is open for the schema editor (Open issues 7). The changelog carries it provisionally as Added, as
-    Backwards compatibility does, so `release.py next schema` gives 1.7.0 until the editor decides."""
+def test_no_schema_change_and_the_class_added_by_srep_90_calls_for_1_7_0():
+    """The schema editor decided the class on 2026-10-11 (Open issues 7): Added, by the exception to SREP 0 that SREP
+    90 records. The changelog and Backwards compatibility say so, no longer provisionally, and `release.py next
+    schema` gives 1.7.0."""
     assert "(SREP 87, amends SREP 66)" in ENTRY
-    assert "### Breaking\n\n### Added" in UNRELEASED                  # the provisional class, not a settled one
-    assert "provisional" in ENTRY and "**Class: Added (SREP 4), provisional" in section("Backwards compatibility")
+    assert "### Breaking\n\n### Added" in UNRELEASED                  # nothing under Breaking
+    assert "provisional" not in ENTRY and "SREP 90" in ENTRY
+    assert section("Backwards compatibility").lstrip().startswith(
+        "**Class: Added (SREP 4), by the exception that SREP 90 records (Process).**")
+    assert "class Added by the exception that SREP 90 records" in header("Resolution")
     nxt = subprocess.run([sys.executable, os.path.join(ROOT, "tools", "release.py"), "next", "schema"],
                          check=True, capture_output=True, text=True).stdout.strip()
     assert nxt.endswith("1.7.0"), nxt
@@ -92,11 +99,13 @@ def test_the_class_is_not_derived_from_the_srep_85_decision():
         assert "which kept narrow refusals of that kind out of a MAJOR release" not in text
     issue = section("Open issues").split("\n7. ", 1)[1]
     assert "SREP 0" in issue and "version gate" in issue and "Breaking" in issue and "2.0.0" in issue
+    assert "**Decided 2026-10-11:** Added by an exception." in issue and "SREP 90" in issue
     assert "version gate" in ENTRY and "SREP 0" in ENTRY
 
 
-def test_the_three_kinds_of_newly_refused_or_changed_documents_are_recorded():
-    """Writing p.g1, a composed collision, and a link whose source names an emitted node (Open issues 6) are each
+def test_the_two_refused_kinds_and_the_link_kind_the_erratum_keeps_are_recorded():
+    """Writing p.g1 and a composed collision are refused (the exception of SREP 90); a link whose source names an
+    emitted node, the third kind recorded at acceptance, keeps its element since the erratum (Open issues 6). Each is
     named in the changelog entry, the Abstract, the neutral case and Backwards compatibility."""
     for text in (ENTRY, section("Abstract"), section("Specification").split("### Defaults and the neutral case", 1)[1],
                  section("Backwards compatibility")):
@@ -104,7 +113,28 @@ def test_the_three_kinds_of_newly_refused_or_changed_documents_are_recorded():
         assert "p.g1" in squashed or "namespaced" in squashed, text[:80]
         assert "compose" in squashed, text[:80]
         assert "link/@source" in squashed, text[:80]
+        assert "Two kinds" in squashed or "two kinds" in squashed, text[:80]
+        assert "three kinds" not in squashed.lower(), text[:80]
     assert "Two narrow kinds" not in ENTRY
+
+
+def test_the_erratum_adds_the_positions_the_reference_resolves():
+    """Rule 3 lists the node id of link/@source (split on its last `.`, special forms excluded); rule 4 adds the
+    overrides of an instance or an include, in the owner's scope, and the bone names of skin weights; PRG17 lists every
+    position; Open issues 6 is resolved."""
+    spec = " ".join(section("Specification").split())
+    rule3 = spec.split("**3. References inside the output resolve locally first.**", 1)[1].split("**4.", 1)[0]
+    assert "the node id of `link/@source`" in rule3 and "`param:`, `audio:` or `marker:`" in rule3
+    assert "everything before the **last** `.` of the value" in rule3
+    rule4 = spec.split("**4. Bare references from outside.**", 1)[1].split("**5. Order.**", 1)[0]
+    assert "**The override of an `instance` or an `include`.**" in rule4 and "`owner/Q.R`" in rule4
+    assert "**The bone names of skin weights.**" in rule4 and "`skeleton/@weights`" in rule4
+    prg17 = next(line for line in SREP.splitlines() if line.startswith("| PRG17 |"))
+    for position in ("`link/@source`", "`layout`", "`variant`", "`instance`", "`include`", "`prop`"):
+        assert position in prg17, position
+    issue6 = section("Open issues").split("\n6. ", 1)[1].split("\n7. ", 1)[0]
+    assert "**Resolved 2026-10-11**" in issue6
+    assert re.search(r"^- 2026-10-11: erratum, decided by the schema editor", SREP, re.M)
 
 
 def test_rejected_alternatives_no_longer_say_nothing_breaks():
@@ -113,9 +143,11 @@ def test_rejected_alternatives_no_longer_say_nothing_breaks():
     assert "version gate" in rejected
 
 
-def test_engine_impact_records_the_reference_branch_and_its_link_source_reading():
+def test_engine_impact_records_the_reference_on_main_and_its_kit_run():
     impact = " ".join(section("Engine impact").split())
-    assert "d1a45c8b" in impact and "link/@source" in impact and "Open issues, item 6" in impact
+    assert "implemented on main since 2026-10-11 (6602b81d" in impact and "d1a45c8b" in impact
+    assert "link/@source" in impact and "SREP 90" in impact
+    assert re.search(r"^- 2026-10-11: stays Accepted \(SREP 0, Lifecycle 5\)", SREP, re.M)
 
 
 def test_srep_66_records_that_its_collision_case_now_waits_for_srep_87():
@@ -123,6 +155,7 @@ def test_srep_66_records_that_its_collision_case_now_waits_for_srep_87():
     impact = " ".join(srep66.split("\n## Engine impact\n", 1)[1].split("\n## ", 1)[0].split())
     assert "amended by SREP 87" in impact and "p.g1" in impact
     assert "becomes Final only when the reference implementation of SREP 87 is on main" in impact
+    assert "6602b81d" in impact
     conformance = srep66.split("\n## Conformance\n", 1)[1].split("\n## ", 1)[0]
     assert "`-id-collision` (amended by SREP 87: `p.g1`)" in conformance
 
@@ -145,12 +178,20 @@ def test_beat_program_cases_need_the_namespaced_id():
     assert CASES["srep-0087-program-ids-beat-program"]["expected"]["blue"] == {"cx": 200, "cy": 240, "w": 40, "h": 20}
 
 
-def test_cases_are_in_the_kit_as_generated_and_pending():
+HAND_CHECKED = {f"srep-0087-program-ids-{s}" for s in (
+    "ambiguous", "composed-collision", "duplicate-local", "seed-local", "seed-local-by-hand")}
+
+
+def test_cases_are_in_the_kit_as_generated_and_pending_only_where_run_py_cannot_check():
     assert set(CASES) == {f"srep-0087-program-ids-{s}" for s in srep87_cases.SLUGS}
+    assert HAND_CHECKED <= set(CASES)
     for name, case in CASES.items():
         assert KIT[name] == case["expected"], name
-        assert case["expected"]["pending"] == kit_pending.PENDING[name], name
-        assert case["expected"]["pending"].startswith(kit_pending.SREP87), name
+        if name in HAND_CHECKED:
+            assert case["expected"]["pending"] == kit_pending.PENDING[name], name
+            assert kit_pending.SREP87 in case["expected"]["pending"] and "checked by hand" in case["expected"]["pending"]
+        else:
+            assert "pending" not in case["expected"] and name not in kit_pending.PENDING, name
         with open(os.path.join(ROOT, "conformance", "cases", name + ".xml"), encoding="utf-8") as f:
             assert f.read() == case["xml"], name
 
@@ -227,7 +268,7 @@ def test_amended_srep_66_collision_case():
     assert [p.get("id") for p in t.iter("program")] == ["p"]
     assert case["expected"]["failure"] == {"code": "PRG14"}
     assert case["expected"]["pending"] == kit_pending.PENDING["srep-0066-program-id-collision"]
-    assert case["expected"]["pending"].startswith(kit_pending.SREP87)
+    assert kit_pending.SREP87 in case["expected"]["pending"] and "PRG14" in case["expected"]["pending"]
 
 
 def test_generator_is_reproducible(tmp_path):

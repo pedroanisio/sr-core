@@ -197,7 +197,7 @@
    "failure": {
     "code": "PRG14"
    },
-   "pending": "reference implementation on rs-scene-render feat/srep-87-program-id-scope, not yet on main; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet"
+   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG14 and draws no picture (SREP 87 on rs-scene-render main 6602b81d, checked by hand on 2026-10-11)"
   }
  },
  "srep-0066-program-sha256-mismatch": {
