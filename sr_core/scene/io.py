@@ -3,8 +3,9 @@
 ``read`` parses with expat, so that comments and processing instructions outside the root element are kept (the
 standard ``ElementTree`` parser drops them), and builds the tree of ``_runtime`` elements. Attribute values stay in
 the lexical form they had. ``to_bytes`` and ``write`` serialise it again, with ``layout="preserve"`` (the stored
-whitespace, attribute order and child order) or ``layout="pretty"`` (2-space indentation, attributes in the schema's
-declaration order, sequence children in content-model order).
+whitespace, attribute order and child order), ``layout="pretty"`` (2-space indentation, attributes in the schema's
+declaration order, sequence children in content-model order) or ``layout="indent"`` (the stored order, and
+indentation added only where libxml2's ``pretty_print`` adds it: see ``_Writer.indent_block``).
 
 Reading never judges the content against the schema: ``check`` does that. It raises only on XML that is not
 well-formed, as ``xml.etree.ElementTree.ParseError``. That includes a namespace prefix that no ``xmlns:prefix``
@@ -31,7 +32,8 @@ from sr_core.scene.errors import SchemaValueError
 
 __all__ = ["read", "to_bytes", "write", "reorder_count", "has_doctype"]
 
-Layout = Literal["preserve", "pretty"]
+Layout = Literal["preserve", "pretty", "indent"]
+LAYOUTS = ("preserve", "pretty", "indent")
 ClassTable = Mapping[tuple[Optional[str], str], type]
 Source = Union[str, "os.PathLike[str]", bytes]
 
@@ -163,9 +165,10 @@ def _esc_attr(text: str) -> str:
 
 
 class _Writer:
-    def __init__(self, root: Element, pretty: bool) -> None:
+    def __init__(self, root: Element, layout: str) -> None:
         self.root = root
-        self.pretty = pretty
+        self.pretty = layout == "pretty"
+        self.indent = layout == "indent"
         self.out: list[str] = []
         self.version: Optional[str] = None
         if root._attrs.get("version") == "auto" and root._api_auto:
@@ -222,7 +225,9 @@ class _Writer:
                 out.append(item)
                 continue
             el, level, forced = item
-            if self.pretty and not forced and not self.inline(el):
+            if self.indent and not forced and not any(isinstance(n, Text) for n in el._nodes):
+                self.indent_block(el, level, stack)
+            elif self.pretty and not forced and not self.inline(el):
                 self.block(el, level, stack)
             else:
                 self.verbatim(el, stack)
@@ -242,6 +247,25 @@ class _Writer:
         for node in el._nodes:
             items.append((node, 0, True) if isinstance(node, Element) else self.leaf(node))
         items.append(f"</{el._name}>")
+        stack.extend(reversed(items))
+
+    def indent_block(self, el: Element, depth: int, stack: list[Any]) -> None:
+        """The rule of libxml2's ``xmlsave`` format mode, which is what ``lxml.etree.tostring(pretty_print=True)``
+        applies: an element none of whose children is character data (an element with any text node, even
+        white space, counts) is written with each child on its own line, indented 2 spaces per level, and its end
+        tag on a line of its own. An element that has a text node is written exactly as stored, and so is
+        everything below it. An element without children is ``<x/>``. Order and content are never changed."""
+        if not el._nodes:
+            self.out.append(f"<{self.tag(el)}/>")
+            return
+        pad = _INDENT * (depth + 1)
+        self.out.append(f"<{self.tag(el)}>\n")
+        items: list[Any] = []
+        for node in el._nodes:
+            items.append(pad)
+            items.append((node, depth + 1, False) if isinstance(node, Element) else self.leaf(node))
+            items.append("\n")
+        items.append(f"{_INDENT * depth}</{el._name}>")
         stack.extend(reversed(items))
 
     def block(self, el: Element, depth: int, stack: list[Any]) -> None:
@@ -327,9 +351,9 @@ def _auto_version(root: Element) -> str:
 
 def to_bytes(scene: Element, *, layout: Layout = "preserve") -> bytes:
     """Serialise a document as UTF-8 with an XML declaration. ``version="auto"`` is written as ``min_version()``."""
-    if layout not in ("preserve", "pretty"):
-        raise ValueError(f"layout must be 'preserve' or 'pretty', not {layout!r}")
-    return _Writer(scene, layout == "pretty").document()
+    if layout not in LAYOUTS:
+        raise ValueError(f"layout must be 'preserve', 'pretty' or 'indent', not {layout!r}")
+    return _Writer(scene, layout).document()
 
 
 def write(scene: Element, target: Union[str, "os.PathLike[str]", BinaryIO], *, layout: Layout = "preserve") -> None:
