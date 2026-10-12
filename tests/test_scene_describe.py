@@ -189,7 +189,8 @@ def test_describe_all() -> None:
     assert "min_version" not in layer and layer["children"][0]["name"]
     text = json.dumps(allofit, separators=(",", ":"))
     assert json.loads(text) == allofit
-    assert len(text) < 450_000
+    # about 280 kB without the attribute docs (srep-0000-schema-attribute-docs.md) and about 720 kB with them
+    assert len(text) < 800_000
 
 
 def test_every_attribute_of_the_schema_is_described() -> None:
