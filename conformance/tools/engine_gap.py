@@ -693,20 +693,27 @@ def apply_patch(files: dict[str, list[str]], patch: str) -> None:
         offset += len(new) - len(old)
 
 
+BASELINE_DIR = os.path.join(HERE, "baseline-1.5.0")      # the 1.5.0 files, committed so no test needs the git tag
+
+
 def baseline(ref: str = "schema-1.5.0") -> dict[str, bytes] | None:
-    """The 1.5.0 schema files: from the tag when git has it, else from schema/ while it is still 1.5.0."""
+    """The 1.5.0 schema files: from the git tag when it exists, else the copies committed in baseline-1.5.0/ (they
+    must hash to the inventory's base_sha256, so a wrong copy is None, never a silent mismatch)."""
     want = {}
     if os.path.exists(DEFAULT_OUT):
         want = {p: v["base_sha256"] for p, v in json.load(open(DEFAULT_OUT))["files"].items()}
     out = {}
     for path in FILES:
         try:
-            out[path] = git_bytes(ROOT, ref, path)
+            data = git_bytes(ROOT, ref, path)
         except (subprocess.CalledProcessError, FileNotFoundError):
-            data = open(os.path.join(ROOT, path), "rb").read()
-            if want and sha256(data) != want.get(path):
+            try:
+                data = open(os.path.join(BASELINE_DIR, os.path.basename(path)), "rb").read()
+            except FileNotFoundError:
                 return None
-            out[path] = data
+        if want and sha256(data) != want.get(path):
+            return None
+        out[path] = data
     return out
 
 

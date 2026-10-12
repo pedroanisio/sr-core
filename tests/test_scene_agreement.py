@@ -1,7 +1,7 @@
 """Default-run checks (F12): the README example, the version gates against the Schematron, and a fixed sample of the
 conformance corpus for level 1 against level 2 and the C14N round trip.
 
-The corpus-wide versions of the sample tests are ``test_scene_drift_d5.py`` (``SR_SCENE_CORPUS=1``).
+The corpus-wide versions of the sample tests are ``test_scene_drift_d5.py`` (run by default too; ``SR_SCENE_CORPUS=0`` skips them).
 """
 from __future__ import annotations
 

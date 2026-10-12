@@ -10,7 +10,7 @@ model, with the required attributes filled in) and judged by lxml's XSD validati
 Every disagreement is a bug in `sr_core.scene.values` (or the generated specs). Hosts that cannot be built generically
 are logged, and the count of them is asserted against `HAND_TEMPLATES`, so nothing is skipped silently.
 
-Run: `SR_SCENE_CORPUS=1 python -m pytest tests/test_scene_drift_d6.py` (needs lxml). `SR_SCENE_CORPUS_STRIDE=N` runs
+Runs by default (needs lxml; `SR_SCENE_CORPUS=0` skips it). `SR_SCENE_CORPUS_STRIDE=N` runs
 every N-th probe.
 """
 from __future__ import annotations
@@ -31,7 +31,7 @@ import pytest
 
 pytestmark = [
     pytest.mark.corpus,
-    pytest.mark.skipif(os.environ.get("SR_SCENE_CORPUS") != "1", reason="corpus test: set SR_SCENE_CORPUS=1"),
+    pytest.mark.skipif(os.environ.get("SR_SCENE_CORPUS") == "0", reason="corpus test switched off with SR_SCENE_CORPUS=0"),
 ]
 etree = pytest.importorskip("lxml.etree")
 

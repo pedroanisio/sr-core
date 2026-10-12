@@ -389,8 +389,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 @pytest.mark.corpus
 def test_corpus_roundtrip_is_c14n_equal() -> None:
-    if os.environ.get("SR_SCENE_CORPUS") != "1":
-        pytest.skip("set SR_SCENE_CORPUS=1 to run the corpus tests")
+    if os.environ.get("SR_SCENE_CORPUS") == "0":
+        pytest.skip("corpus tests switched off with SR_SCENE_CORPUS=0")
     try:
         __import__("sr_core.scene._generated")
     except ImportError:

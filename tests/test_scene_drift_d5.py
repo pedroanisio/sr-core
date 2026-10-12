@@ -7,7 +7,8 @@ For every XML under ``conformance/cases`` and ``tests/fixtures``:
 (c) relabelled at every ``VERSIONS`` value, ``min_version()`` is the lowest version at which lxml raises none of the
     gate asserts.
 
-Skipped unless ``SR_SCENE_CORPUS=1`` and lxml is importable. ``SR_SCENE_CORPUS_STRIDE=N`` takes every Nth file.
+Runs by default (about 5 s) and is skipped only when lxml is missing or ``SR_SCENE_CORPUS=0``;
+``SR_SCENE_CORPUS_STRIDE=N`` takes every Nth file.
 
 What (b) compares, and what it leaves out, explicitly:
 
@@ -40,8 +41,8 @@ from sr_core.scene import io as sio
 
 pytestmark = pytest.mark.corpus
 
-if os.environ.get("SR_SCENE_CORPUS") != "1":
-    pytest.skip("corpus tests run only with SR_SCENE_CORPUS=1", allow_module_level=True)
+if os.environ.get("SR_SCENE_CORPUS") == "0":
+    pytest.skip("corpus tests switched off with SR_SCENE_CORPUS=0", allow_module_level=True)
 etree = pytest.importorskip("lxml.etree")
 from lxml import isoschematron  # noqa: E402
 

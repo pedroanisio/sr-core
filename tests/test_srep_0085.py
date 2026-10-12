@@ -37,9 +37,9 @@ AMENDED = {"ITR1", "SRT1"}
 RULES = {"C13", "C14", "C15", "C37", "C38", "C44", "C52", "C53", "C54", "C56", "PYRO1", "PYRO2", "PYRO4", "VOL4", "P3D3",
          "P3D10", "OCN3", "OCN5", "PYRO11", "PYC6", "FRX11", "ITR1", "SRT1"}
 
-if gap.baseline() is None:
-    pytest.skip("the schema 1.5.0 files are not available (no git tag, and schema/ has moved on)",
-                allow_module_level=True)
+assert gap.baseline() is not None, (
+    "the schema 1.5.0 files are neither the git tag nor conformance/tools/baseline-1.5.0/ "
+    "with the inventory's hashes")
 
 
 def blocks(path, fence):

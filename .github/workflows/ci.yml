@@ -22,9 +22,7 @@ jobs:
       - name: test dependencies (the package itself needs none)
         run: python -m pip install pytest setuptools wheel lxml numpy pillow
       - name: tests (vpkg, schema rules, reference, conformance runner, release tooling, hygiene, how-to)
-        run: python -m pytest -q tests
-        env:
-          SR_SCENE_CORPUS: "1"    # the scene SDK's corpus and lxml differentials (D5, D6), skipped by default
+        run: python -m pytest -q tests    # includes the SDK's corpus and lxml differentials (D5, D6)
       - name: versions, schema hashes and generated reference agree
         run: python tools/release.py check
       - name: release hygiene, including the sdist and wheel

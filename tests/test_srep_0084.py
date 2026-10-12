@@ -28,9 +28,9 @@ SREP84 = os.path.join(ROOT, "srep", "srep-0084.md")
 ACCEPTED = ("C15", "C43", "R15", "R48-from", "R48-to", "VOL5", "C80", "GEO2")
 DRAFTED = ("PYRO9", "PYRO10", "PYRO11")
 
-if gap.baseline() is None:
-    pytest.skip("the schema 1.5.0 files are not available (no git tag, and schema/ has moved on)",
-                allow_module_level=True)
+assert gap.baseline() is not None, (
+    "the schema 1.5.0 files are neither the git tag nor conformance/tools/baseline-1.5.0/ "
+    "with the inventory's hashes")
 
 
 def blocks(path, fence):

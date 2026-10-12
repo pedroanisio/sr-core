@@ -11,14 +11,44 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONF = os.path.join(ROOT, "conformance")
 
 
+def _stale_outputs(copy, tree=CONF):
+    """Regenerate cases/, assets/ and expected.json into `copy` from nothing and list what differs from the tree.
+    The two output directories are removed first: copying them in would hand the generator its own orphans."""
+    shutil.rmtree(copy / "cases", ignore_errors=True)
+    shutil.rmtree(copy / "assets", ignore_errors=True)
+    subprocess.run([sys.executable, str(copy / "make_cases.py")], check=True, capture_output=True)
+    bad = []
+    for sub in ("cases", "assets"):
+        cmp = filecmp.dircmp(os.path.join(tree, sub), copy / sub)
+        bad += [f"{sub}/{n}" for n in cmp.diff_files + cmp.left_only + cmp.right_only]
+    if not filecmp.cmp(os.path.join(tree, "expected.json"), copy / "expected.json", shallow=False):
+        bad.append("expected.json")
+    return bad
+
+
 def test_cases_regenerate_exactly(tmp_path):
     copy = tmp_path / "conformance"
     shutil.copytree(CONF, copy, ignore=shutil.ignore_patterns("out", "__pycache__"))
-    subprocess.run([sys.executable, str(copy / "make_cases.py")], check=True, capture_output=True)
-    for sub in ("cases", "assets"):
-        cmp = filecmp.dircmp(os.path.join(CONF, sub), copy / sub)
-        assert not (cmp.diff_files or cmp.left_only or cmp.right_only), (sub, cmp.diff_files)
-    assert filecmp.cmp(os.path.join(CONF, "expected.json"), copy / "expected.json", shallow=False)
+    assert _stale_outputs(copy) == []
+
+
+def test_a_hand_written_file_in_cases_is_not_a_regeneration(tmp_path):
+    """Drift-risk map finding 9: three hand-kept XMLs sat in cases/ and were invisible to this test, because the
+    directory was copied in before the generator ran."""
+    tree = tmp_path / "tree"
+    shutil.copytree(CONF, tree, ignore=shutil.ignore_patterns("out", "__pycache__"))
+    (tree / "cases" / "zz-hand-written.xml").write_text("<scene/>")
+    copy = tmp_path / "copy"
+    shutil.copytree(tree, copy)
+    assert _stale_outputs(copy, tree) == ["cases/zz-hand-written.xml"]
+
+
+def test_the_kit_fixtures_kept_by_hand_are_outside_the_generated_directory():
+    kit = os.path.join(ROOT, "tests", "fixtures", "kit")
+    assert sorted(os.listdir(kit)) == ["srep-0028-asset-kinds.xml", "srep-0033-safe-area-force.xml",
+                                       "srep-0034-inert-and-mask-miss.xml"]
+    assert not [n for n in os.listdir(os.path.join(CONF, "cases")) if n.startswith(("srep-0028-asset-kinds",
+                "srep-0033-safe-area-force.", "srep-0034-inert-and-mask-miss"))]
 
 
 def _run(tmp_path, engine_script: str | None, cases="a1"):

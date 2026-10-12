@@ -9,7 +9,7 @@ from test_schema_rules import ROOT, verdict  # noqa: E402
 
 def case(name):
     """A conformance case; the 1.2 version gate is applied centrally later, so the case is validated as 1.1."""
-    with open(os.path.join(ROOT, "conformance", "cases", name), "rb") as f:
+    with open(os.path.join(ROOT, "tests", "fixtures", "kit", name), "rb") as f:
         return f.read().replace(b'<scene version="1.2">', b'<scene version="1.1">')
 
 

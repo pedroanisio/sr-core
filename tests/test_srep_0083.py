@@ -22,9 +22,9 @@ SVRL = {"svrl": "http://purl.oclc.org/dsdl/svrl"}
 SREP = os.path.join(ROOT, "srep", "srep-0083.md")
 GATES = ("V8", "MSQ1", "P3D1", "OCN1", "CRT1", "FRX1", "GEO1")
 
-if gap.baseline() is None:
-    pytest.skip("the schema 1.5.0 files are not available (no git tag, and schema/ has moved on)",
-                allow_module_level=True)
+assert gap.baseline() is not None, (
+    "the schema 1.5.0 files are neither the git tag nor conformance/tools/baseline-1.5.0/ "
+    "with the inventory's hashes")
 
 
 def diff_block():

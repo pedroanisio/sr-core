@@ -23,9 +23,9 @@ GAP = json.load(open(gap.DEFAULT_OUT))
 SREPS = range(76, 82)
 CASE_FILES = {n: os.path.join(ROOT, "conformance", "srep_cases", f"srep-{n:04d}.json") for n in range(76, 81)}
 
-if gap.baseline() is None:
-    pytest.skip("the schema 1.5.0 files are not available (no git tag, and schema/ has moved on)",
-                allow_module_level=True)
+assert gap.baseline() is not None, (
+    "the schema 1.5.0 files are neither the git tag nor conformance/tools/baseline-1.5.0/ "
+    "with the inventory's hashes")
 
 
 def validators(files):

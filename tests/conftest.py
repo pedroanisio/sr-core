@@ -6,4 +6,4 @@ import pytest
 
 
 def pytest_configure(config: pytest.Config) -> None:
-    config.addinivalue_line("markers", "corpus: corpus-wide test, run only with SR_SCENE_CORPUS=1 (needs lxml)")
+    config.addinivalue_line("markers", "corpus: corpus-wide test (needs lxml), run by default; SR_SCENE_CORPUS=0 skips it")

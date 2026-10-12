@@ -87,7 +87,7 @@ def _lxml_verdicts(strings: list[str]) -> list[tuple[bool, bool, bool]]:
 
 
 @pytest.mark.corpus
-@pytest.mark.skipif(os.environ.get("SR_SCENE_CORPUS") != "1", reason="corpus test: set SR_SCENE_CORPUS=1")
+@pytest.mark.skipif(os.environ.get("SR_SCENE_CORPUS") == "0", reason="corpus test switched off with SR_SCENE_CORPUS=0")
 def test_sweep_agrees_with_lxml_on_every_code_point() -> None:
     pytest.importorskip("lxml")
     points = [c for c in range(0x2FFFF + 1)

@@ -55,6 +55,15 @@ version:
 - The case generators of `conformance/tools/` are re-run by `tests/test_conformance_generators.py`, which fails when
   the committed `srep_cases/` differ from what they write; the README's SDK example is executed from the README.
 - `srep/index.md` row 83 carries the header's title.
+- The corpus differentials of the SDK (D5, D6, the gates and the name tests) run by default; `SR_SCENE_CORPUS=0`
+  switches them off. CI no longer sets a variable to enable them.
+- The tests of SREPs 76 to 85 no longer skip when the `schema-1.5.0` tag is missing: the two 1.5.0 files are kept,
+  with their hashes checked against the inventory, in `conformance/tools/baseline-1.5.0/`.
+- `tests/test_conformance.py` regenerates `conformance/cases/` and `assets/` from nothing, so a file nobody generates
+  fails it; the three hand-kept case files moved to `tests/fixtures/kit/`.
+- `tests/test_drift_p2.py` pins the capability-manifest schema to the code and the validator that read it, the counts
+  quoted in SREP 0000 and here to the schema, the engine-gap inventory to the SREP diff blocks, and the packages
+  `ci.yml` installs to the extras and to what the tests import (including what they skip when absent).
 
 ## 1.7.0 — 2026-10-12
 

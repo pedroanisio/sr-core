@@ -22,7 +22,7 @@ python3 -m sr_core.review SCENE.xml --engine rs   # review sheet SCENE.review.pd
 python3 -m sr_core.scene.generate    # regenerate sr_core/scene after changing schema/ (--check: is it current?)
 python3 -m sr_core.scene check SCENE.xml [--schema] [--engine PATH]   # the sr-scene command, without installing
 python3 -m pytest tests               # all tests; fails if docs/schema or sr_core/scene is stale
-SR_SCENE_CORPUS=1 python3 -m pytest tests/test_scene_drift_d5.py tests/test_scene_drift_d6.py   # SDK against lxml
+python3 -m pytest tests/test_scene_drift_d5.py tests/test_scene_drift_d6.py   # SDK against lxml (part of `tests`; SR_SCENE_CORPUS=0 skips)
 ```
 
 ## The scene SDK

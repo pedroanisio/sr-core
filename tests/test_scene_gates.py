@@ -495,7 +495,7 @@ CORPUS_FILES = sorted((ROOT / "conformance/cases").glob("*.xml")) + sorted((ROOT
 
 
 @pytest.mark.corpus
-@pytest.mark.skipif(os.environ.get("SR_SCENE_CORPUS") != "1", reason="set SR_SCENE_CORPUS=1 to run the corpus differential")
+@pytest.mark.skipif(os.environ.get("SR_SCENE_CORPUS") == "0", reason="corpus differential switched off with SR_SCENE_CORPUS=0")
 def test_corpus_gates_agree_with_lxml_schematron(gates: tuple[Gate, ...]) -> None:
     etree = pytest.importorskip("lxml.etree")
     isoschematron = pytest.importorskip("lxml.isoschematron")
