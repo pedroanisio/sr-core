@@ -1,4 +1,4 @@
-"""Public introspection of the scene model: what an element, its children and its attributes are (SREP 0, section 3.6).
+"""Public introspection of the scene model: what an element, its children and its attributes are (SREP 91, section 3.6).
 
 :func:`describe` takes an element class, an element instance, an XML element name or a class name, and returns a frozen
 :class:`Description`; :func:`describe_all` returns the whole schema as one JSON-ready dict; :func:`element_names` lists

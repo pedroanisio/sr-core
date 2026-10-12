@@ -21,7 +21,7 @@ version:
 
 ### Added
 
-- `sr_core.scene`, a Python scene SDK generated from the schema (SREP draft `srep-0000-python-scene-sdk.md`):
+- `sr_core.scene`, a Python scene SDK generated from the schema (SREP 91, `srep-0091.md`):
   - classes for all 169 complex types, with values checked on assignment;
   - reading and writing that keeps comments and lexical forms;
   - version gates compiled from the Schematron, with `min_version()` and `version="auto"`;
@@ -115,7 +115,7 @@ version:
 
 ### Docs
 
-- The schema documents its attributes (schema CHANGELOG, SREP draft `srep-0000-schema-attribute-docs.md`): `tests/test_schema_attribute_docs.py` fails for an attribute with neither documentation nor an entry in `tests/undocumented-attributes.txt`. The bundled schema copy and generated reference carry the sentences.
+- The schema documents its attributes (schema CHANGELOG, SREP 92, `srep-0092.md`): `tests/test_schema_attribute_docs.py` fails for an attribute with neither documentation nor an entry in `tests/undocumented-attributes.txt`. The bundled schema copy and generated reference carry the sentences.
 - 746 attribute docs corrected after an adversarial review against the engine code.
 
 ## 1.7.0 — 2026-10-12

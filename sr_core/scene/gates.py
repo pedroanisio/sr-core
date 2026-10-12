@@ -1,4 +1,4 @@
-"""Version gates of the scene schema: extraction from the Schematron and native evaluation (SREP 0, section 5).
+"""Version gates of the scene schema: extraction from the Schematron and native evaluation (SREP 91, section 5).
 
 A *gate* is a Schematron assert that refuses constructs by ``scene/@version``. Two source forms are accepted:
 

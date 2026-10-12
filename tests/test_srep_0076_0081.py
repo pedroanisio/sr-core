@@ -96,7 +96,7 @@ def test_the_canonical_schema_carries_every_line_the_sreps_add():
     base = {p: set(b.decode().split("\n")) for p, b in gap.baseline().items()}
     for p, b in gap.proposed_schema().items():
         text = open(os.path.join(ROOT, p), encoding="utf-8").read()
-        # an attribute the SREP declares without documentation is documented since srep-0000-schema-attribute-docs.md:
+        # an attribute the SREP declares without documentation is documented since srep-0092.md:
         # its line is also present with the annotation taken out
         bare = re.sub(r"(<xs:attribute [^<>\n]*?)>\n\s*<xs:annotation>[^\n]*</xs:annotation>\n\s*</xs:attribute>", r"\1/>", text)
         bare = re.sub(r"(<xs:attribute [^<>\n]*>)\n\s*<xs:annotation>[^\n]*</xs:annotation>\n\s*(<xs:simpleType)", r"\1\2", bare)

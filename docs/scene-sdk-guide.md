@@ -4,7 +4,7 @@ How to build, check and fix scene documents with `sr_core.scene` (Python) and `s
 for people and for AI agents that write scenes: every rule below comes with the exact output the SDK gives, and every
 Python block is executed by the test suite (`tests/test_scene_guide.py`).
 
-The reference is [the SDK SREP](../srep/srep-0000-python-scene-sdk.md); the schema is in [schema/](../schema/).
+The reference is [the SDK SREP](../srep/srep-0091.md); the schema is in [schema/](../schema/).
 
 ## 1. Install
 

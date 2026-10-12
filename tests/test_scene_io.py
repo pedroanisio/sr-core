@@ -1,4 +1,4 @@
-"""Tests of sr_core.scene.io: read, to_bytes, write (CONTRACT C7, SREP 0 section 4).
+"""Tests of sr_core.scene.io: read, to_bytes, write (CONTRACT C7, SREP 91 section 4).
 
 The small scene classes come from test_scene_runtime and are injected through ``classes=``.
 """

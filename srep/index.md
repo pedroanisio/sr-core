@@ -92,6 +92,8 @@
 | [87](srep-0087.md) | Amend SREP 66: scope emitted ids by their program | Semantics | Accepted | 1.7 |
 | [89](srep-0089.md) | Amend SREP 72: the supersample clamp keeps values above 1 | Semantics | Final | 1.6 |
 | [90](srep-0090.md) | Let SREP 87 refuse two kinds of 1.6 documents in 1.7.0 | Process | Active | n/a |
+| [91](srep-0091.md) | Generate a Python scene SDK from the schema | Process | Draft | n/a |
+| [92](srep-0092.md) | Document every schema attribute | Standards | Draft | 1.7 |
 
 Paths in an SREP such as `tests/corpus/...`, `tools/build_corpus.py`, `tools/evidence/...` or
 `srep-0000-cinematic-impact.md` belong to the engine repository (`rs-scene-render`), at the commit the SREP names;

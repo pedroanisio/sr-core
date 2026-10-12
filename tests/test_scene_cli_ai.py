@@ -1,4 +1,4 @@
-"""``sr-scene describe``, ``list`` and ``new``, and the findings envelope (SREP 0 section 8)."""
+"""``sr-scene describe``, ``list`` and ``new``, and the findings envelope (SREP 91 section 8)."""
 from __future__ import annotations
 
 import json

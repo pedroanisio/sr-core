@@ -1,6 +1,6 @@
 """Tests of sr_core.scene.checks: levels 1-3, min_version, new_id, the integrity check and the Scene API.
 
-SREP 0 sections 4.4, 4.5, 6 and 9 (D8); CONTRACT C0, C3, C9.
+SREP 91 sections 4.4, 4.5, 6 and 9 (D8); CONTRACT C0, C3, C9.
 """
 from __future__ import annotations
 

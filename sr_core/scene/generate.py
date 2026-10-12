@@ -4,7 +4,7 @@ Command::
 
     python3 -m sr_core.scene.generate [--check] [--root DIR]
 
-The generator reads ``DIR/schema/scene-render.xsd`` and ``DIR/schema/scene-render.sch`` (SREP 0, section 2) with
+The generator reads ``DIR/schema/scene-render.xsd`` and ``DIR/schema/scene-render.sch`` (SREP 91, section 2) with
 ``sr_core.schemadoc.model.read`` and writes the generated model plus byte copies of the two inputs. ``render`` is a
 pure function of the two byte strings: no timestamps, members in schema order. Anything the generator does not handle
 raises ``SchemaError`` (drift control D3); nothing is dropped silently.

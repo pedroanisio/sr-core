@@ -204,7 +204,7 @@ def annotation_differences():
 
 def test_the_documentation_is_the_srep_text_except_where_listed():
     found = annotation_differences()
-    # an attribute's documentation where the SREP gives none is the schema's own (srep-0000-schema-attribute-docs.md)
+    # an attribute's documentation where the SREP gives none is the schema's own (srep-0092.md)
     own = {k for k, (want, have) in found.items() if want is None and k not in ANNOTATIONS
            and ("/" in k[1] or k[1].startswith("@"))}
     found = {k: v for k, v in found.items() if k not in own}

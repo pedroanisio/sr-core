@@ -10,7 +10,7 @@ The parts of scene-render that belong to no single engine:
 | [srep/](srep/) | Scene Render Enhancement Proposals: [SREP 0](srep/srep-0000.md) (the process), the [template](srep/srep-template.md) and the [index](srep/index.md) |
 | [sr_core/vpkg/](sr_core/vpkg/) | `scenerender-vpkg`, the reference implementation of [SREP 1](srep/srep-0001.md), scene video packages (`.vpkg.zip`) |
 | [sr_core/schemadoc/](sr_core/schemadoc/) | `sr-schemadoc`, which generates `docs/schema/` from `schema/` |
-| [sr_core/scene/](sr_core/scene/) | `sr_core.scene` and `sr-scene`: a Python SDK generated from `schema/` (one class per complex type, version gates compiled from the Schematron), with checks from construction up to an engine; see [the SDK draft SREP](srep/srep-0000-python-scene-sdk.md) |
+| [sr_core/scene/](sr_core/scene/) | `sr_core.scene` and `sr-scene`: a Python SDK generated from `schema/` (one class per complex type, version gates compiled from the Schematron), with checks from construction up to an engine; see [the SDK draft SREP](srep/srep-0091.md) |
 | [sr_core/review/](sr_core/review/) | `sr-review`, a PDF review sheet of a scene: a frame, the captions and the markers of each section, open to-dos, sources and credits |
 | [docs/vpkg-howto.md](docs/vpkg-howto.md) | How to package a video and rebuild one from a package |
 
@@ -70,7 +70,7 @@ Three Semantic Versioning lines, each moving only when its own contract changes 
 | scene schema (documents declare MAJOR.MINOR, as in `version="1.1"`) | `xs:schema/@version` in `schema/scene-render.xsd` | [schema/CHANGELOG.md](schema/CHANGELOG.md) | `schema-X.Y.Z` |
 | package format (`formatVersion`) | `FORMAT_VERSION` (`scenerender-vpkg --version`) | [SREP 1](srep/srep-0001.md), [SREP 6](srep/srep-0006.md) | |
 
-The Python modules are internal; `sr_core.scene` is provisional until [its SREP](srep/srep-0000-python-scene-sdk.md)
+The Python modules are internal; `sr_core.scene` is provisional until [its SREP](srep/srep-0091.md)
 is accepted, and then becomes part of the contract. Nobody picks version numbers by hand. Record each change under **Unreleased**
 in its changelog, as Breaking, Added or Fixed, and let the release tool compute the bump:
 

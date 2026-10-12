@@ -1,4 +1,4 @@
-"""The ``sr-scene`` command (SREP 0 section 8): ``check``, ``min-version``, ``format``, ``describe``, ``list`` and ``new``.
+"""The ``sr-scene`` command (SREP 91 section 8): ``check``, ``min-version``, ``format``, ``describe``, ``list`` and ``new``.
 
 Exit codes: 0 valid (or nothing to change), 1 findings (errors; warnings count only with ``--deny-warnings``;
 ``format --check``: a file would change), 2 a file cannot be read or is not well-formed XML, or a usage error.

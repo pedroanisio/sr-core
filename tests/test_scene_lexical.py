@@ -1,4 +1,4 @@
-"""Lexical forms set as str (SREP 0 section 3.5): a valid lexical form of a non-string type is stored verbatim."""
+"""Lexical forms set as str (SREP 91 section 3.5): a valid lexical form of a non-string type is stored verbatim."""
 from __future__ import annotations
 
 from decimal import Decimal

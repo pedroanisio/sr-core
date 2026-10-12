@@ -1,4 +1,4 @@
-"""Python scene SDK generated from the scene-render schema (SREP draft ``srep-0000-python-scene-sdk.md``).
+"""Python scene SDK generated from the scene-render schema (SREP 91, ``srep-0091.md``).
 
 Build, read, write and check scene documents with the classes generated from ``schema/scene-render.xsd`` and the
 version gates compiled from ``schema/scene-render.sch``::

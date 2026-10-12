@@ -1,4 +1,4 @@
-"""D5 (SREP 0, section 9): the SDK's checks do not drift from the schema's.
+"""D5 (SREP 91, section 9): the SDK's checks do not drift from the schema's.
 
 For every XML under ``conformance/cases`` and ``tests/fixtures``:
 

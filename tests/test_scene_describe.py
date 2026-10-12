@@ -1,4 +1,4 @@
-"""Public introspection: ``describe``, ``describe_all`` and ``element_names`` (SREP 0, section 3.6)."""
+"""Public introspection: ``describe``, ``describe_all`` and ``element_names`` (SREP 91, section 3.6)."""
 from __future__ import annotations
 
 import dataclasses
@@ -189,7 +189,7 @@ def test_describe_all() -> None:
     assert "min_version" not in layer and layer["children"][0]["name"]
     text = json.dumps(allofit, separators=(",", ":"))
     assert json.loads(text) == allofit
-    # about 280 kB without the attribute docs (srep-0000-schema-attribute-docs.md) and about 720 kB with them
+    # about 280 kB without the attribute docs (srep-0092.md) and about 720 kB with them
     assert len(text) < 800_000
 
 

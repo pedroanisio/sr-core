@@ -1,4 +1,4 @@
-"""The ``sr-scene`` command (SREP 0 section 8)."""
+"""The ``sr-scene`` command (SREP 91 section 8)."""
 from __future__ import annotations
 
 import json

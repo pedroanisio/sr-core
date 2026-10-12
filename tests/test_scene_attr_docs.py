@@ -1,4 +1,4 @@
-"""Attribute documentation reaches the descriptors, ``help()`` and the type-checker stubs (SREP 0, section 3)."""
+"""Attribute documentation reaches the descriptors, ``help()`` and the type-checker stubs (SREP 91, section 3)."""
 from __future__ import annotations
 
 import ast

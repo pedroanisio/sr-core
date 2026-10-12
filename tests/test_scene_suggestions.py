@@ -1,4 +1,4 @@
-"""Suggestions for a near-miss enumeration value and for a mistyped class name (SREP 0, section 3.12)."""
+"""Suggestions for a near-miss enumeration value and for a mistyped class name (SREP 91, section 3.12)."""
 from __future__ import annotations
 
 import pickle

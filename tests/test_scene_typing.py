@@ -1,4 +1,4 @@
-"""Typing of the generated module (SREP 0, D10): explicit keyword-only signatures, two-parameter ``Attr``, py.typed.
+"""Typing of the generated module (SREP 91, D10): explicit keyword-only signatures, two-parameter ``Attr``, py.typed.
 
 The signatures live in an ``if TYPE_CHECKING:`` block of each class, so that the runtime keeps raising
 ``AttributeError`` for an attribute the element does not declare (SREP 3.3), while a type checker sees keyword-only

@@ -1,4 +1,4 @@
-"""Checks on a scene document, levels 1 to 3 (SREP 0 sections 4.4, 4.5, 6 and 9; CONTRACT C9).
+"""Checks on a scene document, levels 1 to 3 (SREP 91 sections 4.4, 4.5, 6 and 9; CONTRACT C9).
 
 * Level 1 always runs and needs only the standard library: content models (with ``minOccurs``), attributes,
   value spaces, ids and references, the version, and the version gates.
@@ -598,7 +598,7 @@ def check(scene: Element, *, schema: bool = False, engine: Any = None, data: Opt
 
     Level 1 always runs. ``schema=True`` adds level 2 (lxml; ``ImportError`` with an install hint when it is
     missing). ``engine=PATH`` adds level 3 (``sr_core.scene.engine.level3``), with ``data`` as its data file.
-    Raises ``IntegrityError`` when the bundled schema files do not match the generated module (SREP 0, D8).
+    Raises ``IntegrityError`` when the bundled schema files do not match the generated module (SREP 91, D8).
     """
     verify_integrity()
     root = _root_of(scene)
@@ -610,7 +610,7 @@ def check(scene: Element, *, schema: bool = False, engine: Any = None, data: Opt
 
         runner = importlib.import_module("sr_core.scene.engine").level3
         theirs = list(runner(io.to_bytes(root), engine, data=data, document_version=_document_version(root)))
-        # level 3 is the authority (SREP 0, 6.4): when it reports a code at a path that a lower level reported, keep
+        # level 3 is the authority (SREP 91, 6.4): when it reports a code at a path that a lower level reported, keep
         # the engine's finding and drop the other
         known = {(f.code, f.path) for f in theirs if f.path}
         findings = [f for f in findings if (f.code, f.path) not in known] + theirs

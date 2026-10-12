@@ -1,4 +1,4 @@
-"""One class, several element names (SREP 0 runtime API): the name is chosen at construction with ``xml_name=``."""
+"""One class, several element names (SREP 91 runtime API): the name is chosen at construction with ``xml_name=``."""
 from __future__ import annotations
 
 import ast

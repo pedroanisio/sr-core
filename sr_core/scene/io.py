@@ -1,4 +1,4 @@
-"""Reading and writing scene documents (CONTRACT C7, SREP 0 section 4).
+"""Reading and writing scene documents (CONTRACT C7, SREP 91 section 4).
 
 ``read`` parses with expat, so that comments and processing instructions outside the root element are kept (the
 standard ``ElementTree`` parser drops them), and builds the tree of ``_runtime`` elements. Attribute values stay in

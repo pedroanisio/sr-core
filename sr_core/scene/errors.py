@@ -1,4 +1,4 @@
-"""Exceptions of the scene SDK (SREP 0, sections 3.5 and 9)."""
+"""Exceptions of the scene SDK (SREP 91, sections 3.5 and 9)."""
 
 from __future__ import annotations
 

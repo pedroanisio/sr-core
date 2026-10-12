@@ -1,4 +1,4 @@
-"""Tests for ``sr_core.scene.generate`` (CONTRACT C8; SREP 0 sections 2, 3 and 9: D1, D3, D4, D7).
+"""Tests for ``sr_core.scene.generate`` (CONTRACT C8; SREP 91 sections 2, 3 and 9: D1, D3, D4, D7).
 
 The failure-mode tests use tiny synthetic schemas and stand-ins for ``values`` and ``gates``, so they do not depend
 on the other modules. The real-schema tests use the real ones and are skipped when they are not importable.
@@ -473,7 +473,7 @@ def _schema_enums(st: model.SimpleType) -> list[str]:
 
 
 def _gates_from_sch(sch: bytes) -> list[dict]:
-    """Each Schematron assert that mentions ``@version``, as the gate record SREP 0 section 5 defines: form A when
+    """Each Schematron assert that mentions ``@version``, as the gate record SREP 91 section 5 defines: form A when
     the rule context is ``/scene[@version=...]`` (the versions it lists are refused), form B when the test starts
     with ``not(/scene/@version=...)`` (the versions in that ``not`` are refused)."""
     import re

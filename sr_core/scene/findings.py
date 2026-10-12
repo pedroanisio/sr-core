@@ -1,4 +1,4 @@
-"""The result record of every check level (SREP 0, section 6.1)."""
+"""The result record of every check level (SREP 91, section 6.1)."""
 
 from __future__ import annotations
 

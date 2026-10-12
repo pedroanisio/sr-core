@@ -1,4 +1,4 @@
-"""D6 (SREP 0, section 9): the SDK's value-space checks agree with the XSD, as lxml decides them.
+"""D6 (SREP 91, section 9): the SDK's value-space checks agree with the XSD, as lxml decides them.
 
 For every attribute whose simple type has facets or enumerations (named, inline, or reached through a list or a union),
 probes are generated from the type: each enumeration value and a non-member; each numeric bound, inclusive and

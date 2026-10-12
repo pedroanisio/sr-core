@@ -1,4 +1,4 @@
-"""One typed error for a name the schema does not have, with suggestions (SREP 0, section 9)."""
+"""One typed error for a name the schema does not have, with suggestions (SREP 91, section 9)."""
 from __future__ import annotations
 
 import copy

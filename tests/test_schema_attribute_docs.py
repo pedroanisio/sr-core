@@ -1,7 +1,7 @@
 """Every attribute declared in the schema is documented, or listed with a reason in an allow-list that can only shrink.
 
-The documentation is annotation-only: the same documents are accepted and rejected as before (SREP draft
-`srep-0000-schema-attribute-docs.md`).
+The documentation is annotation-only: the same documents are accepted and rejected as before (SREP 92,
+`srep-0092.md`).
 """
 from __future__ import annotations
 

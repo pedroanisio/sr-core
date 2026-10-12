@@ -1,4 +1,4 @@
-"""Level 3: ask an engine (SREP 0 sections 6 and 7).
+"""Level 3: ask an engine (SREP 91 sections 6 and 7).
 
 The engine is any executable that implements two commands:
 
@@ -186,7 +186,7 @@ def level3(xml_bytes: bytes, engine_path: PathLike, *, data: Optional[PathLike] 
             "warning", "sdk:schema-skew",
             f"engine {info.name} {info.version} implements schema {info.schema}; "
             f"this SDK was generated from schema {_generated.SCHEMA_RELEASE}"))
-    # SREP 0 section 7.3 says "the engine's MAJOR.MINOR". Document versions track the schema's MAJOR.MINOR
+    # SREP 91 section 7.3 says "the engine's MAJOR.MINOR". Document versions track the schema's MAJOR.MINOR
     # (scene/@version), so the comparable quantity is the engine's schema release, not its own product version.
     engine_mm, doc_mm = _major_minor(info.schema), _major_minor(document_version)
     if engine_mm is not None and doc_mm is not None and engine_mm < doc_mm:

@@ -1,4 +1,4 @@
-"""Value codecs, number formatting and XSD pattern translation for the scene SDK (SREP 0, sections 3.5, 3.6, 4.3).
+"""Value codecs, number formatting and XSD pattern translation for the scene SDK (SREP 91, sections 3.5, 3.6, 4.3).
 
 A :class:`Codec` knows one XSD simple type. It turns a Python value into the lexical form that is stored
 (``validate``), reads a lexical form into a Python value (``parse``) and answers whether a lexical form is valid
@@ -447,7 +447,7 @@ class Codec:
         """Return the lexical form to store for ``value``; raise ``SchemaValueError`` if it is refused.
 
         For a type that is not string-valued, a ``str`` is a lexical form: when it is valid (every facet checked) it
-        is returned unchanged, as ``read`` keeps a lexical form it finds in a file (SREP 0 section 3.5).
+        is returned unchanged, as ``read`` keeps a lexical form it finds in a file (SREP 91 section 3.5).
         """
         lexical = value if self._lexical_str and isinstance(value, str) else self._lexical(value)
         try:

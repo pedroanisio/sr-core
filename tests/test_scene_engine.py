@@ -1,4 +1,4 @@
-"""Level 3 runner and engine_info (SREP 0 sections 6 and 7), tested against a fake engine script."""
+"""Level 3 runner and engine_info (SREP 91 sections 6 and 7), tested against a fake engine script."""
 from __future__ import annotations
 
 import json

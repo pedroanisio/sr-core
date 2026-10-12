@@ -97,7 +97,7 @@ def test_the_generated_counts_are_the_schemas():
 
 def test_counts_quoted_in_prose_are_the_schemas():
     c = _xsd_counts()
-    srep = read("srep", "srep-0000-python-scene-sdk.md")
+    srep = read("srep", "srep-0091.md")
     quoted = re.search(r"has (\d+) complex types, (\d+) simple types, (\d+) distinct attribute names and (\d+) "
                        r"Schematron asserts", srep)
     assert quoted, "the sentence of SREP 0000 that quotes the schema's size was reworded: update this test"

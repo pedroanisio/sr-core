@@ -924,7 +924,7 @@ class SceneBase(Element):
     """Base of the generated root class: the document-level API, delegating to ``checks`` and ``io`` (lazily).
 
     ``version="auto"`` is accepted here, although it is not in the schema's enumeration: it is written as
-    ``min_version()`` (SREP 0, section 4.5).
+    ``min_version()`` (SREP 91, section 4.5).
     """
 
     __slots__ = ()
