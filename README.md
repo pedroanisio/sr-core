@@ -10,6 +10,7 @@ The parts of scene-render that belong to no single engine:
 | [srep/](srep/) | Scene Render Enhancement Proposals: [SREP 0](srep/srep-0000.md) (the process), the [template](srep/srep-template.md) and the [index](srep/index.md) |
 | [sr_core/vpkg/](sr_core/vpkg/) | `scenerender-vpkg`, the reference implementation of [SREP 1](srep/srep-0001.md), scene video packages (`.vpkg.zip`) |
 | [sr_core/schemadoc/](sr_core/schemadoc/) | `sr-schemadoc`, which generates `docs/schema/` from `schema/` |
+| [sr_core/scene/](sr_core/scene/) | `sr_core.scene` and `sr-scene`: a Python SDK generated from `schema/` (one class per complex type, version gates compiled from the Schematron), with checks from construction up to an engine; see [the SDK draft SREP](srep/srep-0000-python-scene-sdk.md) |
 | [sr_core/review/](sr_core/review/) | `sr-review`, a PDF review sheet of a scene: a frame, the captions and the markers of each section, open to-dos, sources and credits |
 | [docs/vpkg-howto.md](docs/vpkg-howto.md) | How to package a video and rebuild one from a package |
 
@@ -18,8 +19,33 @@ pip install .                         # from this checkout (or the release wheel
 python3 -m sr_core.vpkg --help        # or without installing, from this folder
 python3 -m sr_core.schemadoc         # regenerate docs/schema after changing schema/ (--check: is it current?)
 python3 -m sr_core.review SCENE.xml --engine rs   # review sheet SCENE.review.pdf, frames rendered by the engine
-python3 -m pytest tests               # vpkg (SREP 1) and schemadoc tests; fails if docs/schema is stale
+python3 -m sr_core.scene.generate    # regenerate sr_core/scene after changing schema/ (--check: is it current?)
+python3 -m sr_core.scene check SCENE.xml [--schema] [--engine PATH]   # the sr-scene command, without installing
+python3 -m pytest tests               # all tests; fails if docs/schema or sr_core/scene is stale
+SR_SCENE_CORPUS=1 python3 -m pytest tests/test_scene_drift_d5.py tests/test_scene_drift_d6.py   # SDK against lxml
 ```
+
+## The scene SDK
+
+```python
+from sr_core.scene import Scene, read
+
+scene = Scene(version="auto")                     # written as the lowest version the content allows
+scene.add_project(width=1280, height=720, fps="30", duration=4)
+composition = scene.add_composition()
+scene.check()                                     # [] or a list of Finding(severity, code, message, path, ...)
+open("out.scene.xml", "wb").write(scene.to_bytes(layout="pretty"))
+
+doc = read("in.scene.xml")                        # comments, attribute order and lexical forms survive a rewrite
+```
+
+- XML names are kept as they are: `layer.safeAreaForce`, `layer.rotationX`; the only change is `from`, which is written `from_`.
+- Each allowed child has a factory named `add_<name>`, and simple content is held in `.content`.
+- An attribute or child that the schema refuses raises `SchemaValueError` as soon as it is set.
+- `check(scene)` adds the checks that need the whole document: required attributes, occurrences, ids and
+  references, and the version gates.
+  - `schema=True` also runs the XSD and the Schematron through lxml: `pip install sr-core[validate]`.
+  - `engine=PATH` also runs an engine's `validate`.
 
 ## Versions
 

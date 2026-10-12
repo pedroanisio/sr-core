@@ -20,6 +20,17 @@ version:
 
 ### Added
 
+- `sr_core.scene`, a Python scene SDK generated from the schema (SREP draft `srep-0000-python-scene-sdk.md`):
+  - classes for all 169 complex types, with values checked on assignment;
+  - reading and writing that keeps comments and lexical forms;
+  - version gates compiled from the Schematron, with `min_version()` and `version="auto"`;
+  - checks at four levels (construction, standard library, lxml, engine);
+  - the `sr-scene` command (`check`, `min-version`, `format`);
+  - the optional extra `sr-core[validate]` (lxml).
+- Drift controls:
+  - `python3 -m sr_core.scene.generate --check`, run by `tools/release.py check`;
+  - `release schema` regenerates the SDK and needs an Unreleased entry for it.
+
 ### Fixed
 
 ## 1.7.0 — 2026-10-12

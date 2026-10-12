@@ -744,6 +744,66 @@ class _Restriction(Codec):
 _BUILTINS: dict[str, Codec] = {}
 
 
+# ------------------------------------------------------------------------------------------------ xs:anyURI
+
+def _uri_regex() -> re.Pattern[str]:
+    """RFC 3986 section 4.1 URI-reference, compiled from the ABNF of its Appendix A."""
+    pct = "%[0-9A-Fa-f]{2}"                                     # pct-encoded (2.1)
+    unreserved = "[A-Za-z0-9._~-]"                              # unreserved (2.3)
+    sub = "[!$&'()*+,;=]"                                       # sub-delims (2.2)
+    pchar = f"(?:{unreserved}|{pct}|{sub}|[:@])"                # pchar (3.3)
+    segment, segment_nz = f"{pchar}*", f"{pchar}+"
+    segment_nz_nc = f"(?:{unreserved}|{pct}|{sub}|@)+"          # segment-nz-nc (3.3)
+    scheme = "[A-Za-z][A-Za-z0-9+.-]*"                          # scheme (3.1)
+    userinfo = f"(?:{unreserved}|{pct}|{sub}|:)*"               # userinfo (3.2.1)
+    octet = r"(?:25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])"   # dec-octet (3.2.2)
+    ipv4 = rf"{octet}(?:\.{octet}){{3}}"                        # IPv4address
+    h16 = "[0-9A-Fa-f]{1,4}"
+    ls32 = f"(?:{h16}:{h16}|{ipv4})"
+    ipv6 = "|".join([                                           # IPv6address (3.2.2), nine alternatives
+        f"(?:{h16}:){{6}}{ls32}",
+        f"::(?:{h16}:){{5}}{ls32}",
+        f"(?:{h16})?::(?:{h16}:){{4}}{ls32}",
+        f"(?:(?:{h16}:){{0,1}}{h16})?::(?:{h16}:){{3}}{ls32}",
+        f"(?:(?:{h16}:){{0,2}}{h16})?::(?:{h16}:){{2}}{ls32}",
+        f"(?:(?:{h16}:){{0,3}}{h16})?::{h16}:{ls32}",
+        f"(?:(?:{h16}:){{0,4}}{h16})?::{ls32}",
+        f"(?:(?:{h16}:){{0,5}}{h16})?::{h16}",
+        f"(?:(?:{h16}:){{0,6}}{h16})?::",
+    ])
+    ipvfuture = rf"v[0-9A-Fa-f]+\.(?:{unreserved}|{sub}|:)+"      # IPvFuture
+    ip_literal = rf"\[(?:{ipv6}|{ipvfuture})\]"                 # IP-literal: the only place [ ] may occur
+    host = f"(?:{ip_literal}|{ipv4}|(?:{unreserved}|{pct}|{sub})*)"   # host, reg-name
+    authority = f"(?:{userinfo}@)?{host}(?::[0-9]*)?"           # authority (3.2)
+    abempty = f"(?:/{segment})*"                                # path-abempty (3.3)
+    absolute = f"/(?:{segment_nz}(?:/{segment})*)?"             # path-absolute
+    rootless = f"{segment_nz}(?:/{segment})*"                   # path-rootless
+    noscheme = f"{segment_nz_nc}(?:/{segment})*"                # path-noscheme
+    tail = rf"(?:\?(?:{pchar}|[/?])*)?(?:#(?:{pchar}|[/?])*)?"    # query, fragment (3.4, 3.5): no second "#"
+    hier = f"(?://{authority}{abempty}|{absolute}|{rootless}|)"      # hier-part (3.0), path-empty
+    rel = f"(?://{authority}{abempty}|{absolute}|{noscheme}|)"       # relative-part (4.2)
+    return re.compile(f"(?:{scheme}:{hier}|{rel}){tail}")       # URI | relative-ref (4.1)
+
+
+_URI = _uri_regex()
+# XLink 5.4 (used by XSD 1.0 Part 2, 3.2.17): these are percent-escaped, as UTF-8, before the URI check.
+_XLINK_ESCAPE = re.compile(r"[^\x21-\x7e]|[\"<>\\^`{|}]")
+
+
+def _xlink_escape(s: str) -> str:
+    return _XLINK_ESCAPE.sub(lambda m: "".join(f"%{b:02X}" for b in m.group().encode("utf-8", "surrogatepass")), s)
+
+
+class _AnyURI(_String):
+    """xs:anyURI: after the XLink escaping, a URI reference of RFC 3986 section 4.1."""
+
+    def _value(self, s: str) -> str:
+        n = super()._value(s)
+        if _URI.fullmatch(_xlink_escape(n)) is None:
+            raise self._fail(f"{n!r} is not a URI reference (RFC 3986)")
+        return n
+
+
 def _make_builtin(name: str) -> Codec:
     def string(**kw: Any) -> Codec:
         return _String(name, **kw)
@@ -751,7 +811,7 @@ def _make_builtin(name: str) -> Codec:
     if name == "xs:string":
         return string()
     if name == "xs:anyURI":
-        return string(collapse=True)
+        return _AnyURI(name, collapse=True, what="a URI reference")
     if name in ("xs:NCName", "xs:ID"):
         return string(collapse=True, lexical_re=_NCNAME, what="a valid NCName")
     if name == "xs:IDREF":

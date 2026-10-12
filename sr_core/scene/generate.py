@@ -45,13 +45,16 @@ USES = {"required", "optional", "prohibited"}
 RESERVED_ATTRIBUTE_NAMES = {
     "add", "remove", "nodes", "elements", "owner", "xml_name", "xml_path", "content", "find", "find_all", "iter",
     "copy", "attributes", "source_line", "source_column", "new_id", "min_version", "check", "to_bytes",
-    "Attr", "Element",
+    "Attr", "Element", "SceneBase",
 }
 RESERVED_PREFIXES = ("add_", "_")
 # Names bound at module level of the generated file; a class may not take one of them.
 RESERVED_MODULE_NAMES = {
-    "Element", "Attr", "Gate", "set_simple_types", "SCHEMA_RELEASE", "XSD_SHA256", "SCH_SHA256",
+    "Element", "Attr", "SceneBase", "Gate", "set_simple_types", "SCHEMA_RELEASE", "XSD_SHA256", "SCH_SHA256",
     "GENERATOR_VERSION", "COUNTS", "SIMPLE_TYPES", "ELEMENT_CLASSES", "CLASSES", "VERSIONS", "GATES",
+    # sr_core.scene re-exports the generated classes beside these names (sr_core/scene/__init__.py)
+    "PI", "Comment", "Text", "Unknown", "Finding", "EngineError", "EngineInfo", "IntegrityError", "SchemaError",
+    "SchemaValueError",
 }
 
 _BUILTIN_HINTS = {
@@ -432,7 +435,8 @@ class Generator:
         if t.simple_base is not None:
             self.check_ref(t.simple_base, key)
             simple = t.simple_base
-        lines = [f"class {cname}(Element):", "    " + docstring(t.doc or f"Complex type {key}.", "    "), "",
+        base = "SceneBase" if key == "#root" else "Element"
+        lines = [f"class {cname}({base}):", "    " + docstring(t.doc or f"Complex type {key}.", "    "), "",
                  "    __slots__ = ()", f"    _xsd_type = {quote(key)}"]
         lines.append("    _element_names = " + fmt(element_names, 4, len("_element_names = ")))
         head = "_content = "
@@ -485,7 +489,7 @@ class Generator:
         ])
         out = [f'"""{header}\n"""', "", "from __future__ import annotations", "",
                "import datetime as _dt", "import typing as _t", "from decimal import Decimal as _Decimal", "",
-               "from sr_core.scene._runtime import Attr, Element, set_simple_types",
+               "from sr_core.scene._runtime import Attr, Element, SceneBase, set_simple_types",
                "from sr_core.scene.gates import Gate", "",
                f"SCHEMA_RELEASE = {quote(s.version)}", f"XSD_SHA256 = {quote(s.xsd_sha256)}",
                f"SCH_SHA256 = {quote(s.sch_sha256)}", f"GENERATOR_VERSION = {quote(GENERATOR_VERSION)}",

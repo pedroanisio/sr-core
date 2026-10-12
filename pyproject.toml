@@ -26,6 +26,8 @@ scenerender-vpkg = "sr_core.vpkg.cli:main"
 sr-schemadoc = "sr_core.schemadoc.cli:main"
 # PDF review sheet of a scene: frames, captions, markers, to-dos, credits; standard library only.
 sr-review = "sr_core.review.cli:main"
+# Python scene SDK (SREP draft): check a scene, its lowest valid version, or reformat it; standard library only.
+sr-scene = "sr_core.scene.cli:main"
 
 [build-system]
 requires = ["setuptools>=61"]

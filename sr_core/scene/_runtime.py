@@ -16,7 +16,7 @@ from typing import Any, ClassVar, Generic, Iterator, Optional, TypeVar, overload
 
 from sr_core.scene.errors import SchemaValueError
 
-__all__ = ["Attr", "Element", "Unknown", "Comment", "PI", "Text", "set_simple_types", "default_of",
+__all__ = ["Attr", "Element", "SceneBase", "Unknown", "Comment", "PI", "Text", "set_simple_types", "default_of",
            "new_id"]
 
 T = TypeVar("T")
@@ -574,11 +574,48 @@ def default_of(element: Element, name: str) -> Any:
 
 
 def new_id(scene: Element, prefix: str) -> str:
-    """``prefix``, then ``prefix-2``, ``prefix-3`` ...: the first one no element of the document holds."""
-    taken = {el._attrs["id"] for el in scene.iter() if "id" in el._attrs}
+    """``prefix``, then ``prefix-2``, ``prefix-3`` ...: the first one no element of the document holds.
+
+    ``scene`` may be any element: the whole document it belongs to is searched, unknown elements included. The
+    prefix must be an ``xs:NCName``, so that every result is a valid ``xs:ID``.
+    """
+    if not isinstance(prefix, str) or prefix != prefix.strip() or not _codec_for("xs:NCName").is_valid_lexical(prefix):
+        raise SchemaValueError(f"id prefix {prefix!r} is not a valid xs:NCName", attribute="id", xsd_type="xs:NCName")
+    root = scene
+    while root._owner is not None:
+        root = root._owner
+    taken = {el._attrs["id"].strip() for el in root.iter() if "id" in el._attrs}
     if prefix not in taken:
         return prefix
     n = 2
     while f"{prefix}-{n}" in taken:
         n += 1
     return f"{prefix}-{n}"
+
+
+class SceneBase(Element):
+    """Base of the generated root class: the document-level API, delegating to ``checks`` and ``io`` (lazily).
+
+    ``version="auto"`` is accepted here, although it is not in the schema's enumeration: it is written as
+    ``min_version()`` (SREP 0, section 4.5).
+    """
+
+    __slots__ = ()
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        if name == "version" and value == "auto":
+            self._attrs["version"] = "auto"
+        else:
+            super().__setattr__(name, value)
+
+    def new_id(self, prefix: str) -> str:
+        return new_id(self, prefix)
+
+    def min_version(self) -> str:
+        return str(importlib.import_module("sr_core.scene.checks").min_version(self))
+
+    def check(self, **kw: Any) -> Any:
+        return importlib.import_module("sr_core.scene.checks").check(self, **kw)
+
+    def to_bytes(self, **kw: Any) -> bytes:
+        return importlib.import_module("sr_core.scene.io").to_bytes(self, **kw)  # type: ignore[no-any-return]

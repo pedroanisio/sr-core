@@ -240,6 +240,25 @@ class TestStringsAndNames:
         refused(c, 3)
         refused(c, "a\x00b")
 
+    @pytest.mark.parametrize("uri", [
+        "", "#", "?", "a%41", "http://[::1]/p", "http://[v1.x]/", "http://u:p@h:80/p?q=1/2?#f", "mailto:x@y",
+        "http://127.0.0.1:8080", "a b", "é.png", "日本/x", "a<b>{c}|d\\e^f`g\"h", "a:b:c", "//h/p", "/a//b", "~u/x",
+        "http://[2001:db8::7]/", "http://[::ffff:1.2.3.4]/", "a\tb",
+    ])
+    def test_anyuri_accepts_references(self, uri: str) -> None:
+        assert codec_for("xs:anyURI", {}).is_valid_lexical(uri)
+
+    @pytest.mark.parametrize("uri", [
+        "%", "a%", "%zz", "%4", "a%2", "%%", "a%d", "#a#b", "a#b#", "[", "]", "[a]", "a[b]", "http://x/[1]",
+        "http://[::1/", "http://[:::1]/", "http://[1:2]/", ":::", "1:2", ":a", "http://h:p/", "a?b#c#d", "x]",
+        "http://[v.x]/",
+    ])
+    def test_anyuri_refuses_malformed(self, uri: str) -> None:
+        # RFC 3986: pct-encoded needs two hex digits; one "#"; "[" and "]" only in an IP-literal; scheme is ALPHA first.
+        assert not codec_for("xs:anyURI", {}).is_valid_lexical(uri)
+        with pytest.raises(SchemaValueError):
+            codec_for("xs:anyURI", {}).validate(uri)
+
     def test_idref_accepts_objects_with_id(self) -> None:
         c = codec_for("xs:IDREF", {})
 

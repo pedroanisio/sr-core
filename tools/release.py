@@ -12,6 +12,12 @@ MINOR, anything else -> PATCH. Many changes share one bump, and an empty Unrelea
 `release` moves the entries under a dated heading, writes the new version where it lives, refreshes what depends
 on it (schema hashes and the generated reference), and prints the tag to create. It never tags or commits.
 
+`sr_core.scene` (SREP 0, sections 9 and 10) is generated from the schema, so the schema release carries it:
+`check` fails when the SDK is stale or its schema copy differs from `schema/` (D1, D7), and `release schema`
+regenerates it (D2) and refuses to start unless the tools CHANGELOG.md has an Unreleased entry that mentions
+`sr_core.scene`, under the class of the schema change (SREP 10.2): Breaking when the schema's Unreleased has
+Breaking or Removed entries, Added when it has only Added, Deprecated, Changed or Fixed entries.
+
 `archive schema` builds the schema's release artifact from a tag's committed tree (never the working copy):
 scene-render-schema-X.Y.Z.tar.gz with the XSD, the Schematron, their hashes, README, CHANGELOG, LICENSE and the
 generated HTML reference, plus a .sha256 file. The tarball is reproducible: the same tag gives the same bytes.
@@ -135,6 +141,76 @@ def refresh_schema() -> None:
     from sr_core.schemadoc import cli
     if cli.main([]) != 0:
         raise ReleaseError("sr-schemadoc failed")
+    regenerate_sdk()
+
+
+# ------------------------------------------------------------------- scene SDK
+SDK_GENERATED = "sr_core/scene/_generated.py"
+SDK_SCHEMA_DIR = "sr_core/scene/schema"
+SDK_STALE = "sr_core/scene is stale; run python3 -m sr_core.scene.generate"
+
+
+def _sdk_files() -> dict[str, bytes]:
+    from sr_core.scene import generate
+    from sr_core.scene.errors import SchemaError
+    try:
+        with open(os.path.join(ROOT, XSD), "rb") as x, open(os.path.join(ROOT, SCH), "rb") as s:
+            return generate.render(x.read(), s.read())
+    except SchemaError as e:
+        raise ReleaseError(f"sr_core.scene cannot be generated: {e}")
+
+
+def regenerate_sdk() -> None:
+    """Write the generated model and the bundled schema copy for the current schema files (D2)."""
+    for rel, data in _sdk_files().items():
+        path = os.path.join(ROOT, rel)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "wb") as f:
+            f.write(data)
+
+
+def _bytes(rel: str) -> bytes | None:
+    try:
+        with open(os.path.join(ROOT, rel), "rb") as f:
+            return f.read()
+    except FileNotFoundError:
+        return None
+
+
+def sdk_problems() -> list[str]:
+    """D1 (the SDK equals a fresh generation) and D7 (the bundled schema copy and header hashes equal `schema/`)."""
+    problems = []
+    try:
+        files = _sdk_files()
+    except ReleaseError as e:
+        return [str(e)]
+    if _bytes(SDK_GENERATED) != files[SDK_GENERATED]:
+        problems.append(SDK_STALE)
+    for src in (XSD, SCH, SUMS):
+        copy = f"{SDK_SCHEMA_DIR}/{os.path.basename(src)}"
+        if _bytes(copy) != _bytes(src):
+            problems.append(f"{copy} is not byte-equal to {src}; run python3 -m sr_core.scene.generate")
+    header = (_bytes(SDK_GENERATED) or b"").decode("utf-8", "replace")
+    for const, src in (("XSD_SHA256", XSD), ("SCH_SHA256", SCH)):
+        m = re.search(rf'^{const} = "([0-9a-f]+)"', header, re.M)
+        actual = hashlib.sha256(_bytes(src) or b"").hexdigest()
+        if not m or m.group(1) != actual:
+            problems.append(f"{SDK_GENERATED} {const} {m.group(1) if m else 'is missing'} differs from "
+                            f"the hash of {src}; run python3 -m sr_core.scene.generate")
+    return problems
+
+
+def sdk_entry_problem(schema_classes: dict[str, list[str]], tools_text: str) -> str | None:
+    """D2: why `release schema` must not start, or None. The SDK entry takes the schema change's class (SREP 10.2)."""
+    need = "breaking" if MAJOR & set(schema_classes) else "added"
+    tools_classes, _, _ = parse(tools_text)
+    mentions = {k: [e for e in v if "sr_core.scene" in e] for k, v in tools_classes.items()}
+    if any(mentions.get(need, [])):
+        return None
+    elsewhere = sorted(k for k, v in mentions.items() if v)
+    where = f" (found under {', '.join(elsewhere)})" if elsewhere else ""
+    return (f"CHANGELOG.md has no Unreleased entry that mentions sr_core.scene under {need.capitalize()}, the class "
+            f"of this schema release{where}; record the SDK regeneration there first")
 
 
 COMPONENTS = {
@@ -165,6 +241,7 @@ def check() -> list[str]:
             problems.append(f"schema: {schema_version()} but scene/@version does not accept {mm}")
     if _read(SUMS) != sums_text():
         problems.append(f"{SUMS} does not match the schema files")
+    problems.extend(sdk_problems())
     from sr_core.schemadoc import cli
     if cli.canonical_schema()[0] and cli.render(*cli.canonical_schema()) != cli.existing(os.path.join(ROOT, "docs", "schema")):
         problems.append("docs/schema is stale; run python3 -m sr_core.schemadoc")
@@ -258,6 +335,10 @@ def main(argv=None) -> int:
         if new is None:
             print(f"{a.component}: nothing under Unreleased; {cur} stays", file=sys.stderr)
             return 1
+        if a.component == "schema":
+            problem = sdk_entry_problem(classes, _read(COMPONENTS["tools"]["changelog"]))
+            if problem:
+                raise ReleaseError(problem)
         if a.component == "schema" and new.split(".")[2] == "0":
             mm = ".".join(new.split(".")[:2])
             if mm not in document_versions():

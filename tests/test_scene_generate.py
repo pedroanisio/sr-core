@@ -83,7 +83,7 @@ class TestSyntheticPositive:
         files = render_syn(xsd(types='<xs:complexType name="aType"/>', root_children=el("a", "aType")))
         src = files[GEN].decode()
         compile(src, "_generated.py", "exec")
-        assert "class Scene(Element):" in src and "class A(Element):" in src
+        assert "class Scene(SceneBase):" in src and "class A(Element):" in src
         assert "def add_a(self, **attrs: _t.Any) -> A:" in src
         assert "VERSIONS = (\"1.0\", \"1.1\")" in src
         assert "SCHEMA_RELEASE = \"9.9.9\"" in src
@@ -184,6 +184,13 @@ class TestLoudFailures:
     def test_class_name_taking_a_module_name(self):
         with pytest.raises(SchemaError, match="reserved class name"):
             render_syn(xsd(types='<xs:complexType name="elementType"/>'))
+
+    @pytest.mark.parametrize("type_name", ["textType", "commentType", "pIType", "unknownType", "findingType",
+                                           "schemaErrorType", "engineInfoType"])
+    def test_class_name_taking_a_package_export(self, type_name):
+        # sr_core.scene re-exports every generated class next to its own names; a clash would shadow one of them.
+        with pytest.raises(SchemaError, match="reserved class name"):
+            render_syn(xsd(types=f'<xs:complexType name="{type_name}"/>'))
 
     def test_one_parent_giving_one_name_two_types(self):
         t = '<xs:complexType name="aType"/><xs:complexType name="bType"/>'

@@ -13,7 +13,7 @@ import datetime as _dt
 import typing as _t
 from decimal import Decimal as _Decimal
 
-from sr_core.scene._runtime import Attr, Element, set_simple_types
+from sr_core.scene._runtime import Attr, Element, SceneBase, set_simple_types
 from sr_core.scene.gates import Gate
 
 SCHEMA_RELEASE = "1.7.0"
@@ -789,7 +789,7 @@ T_volumeInterpolationType = _t.Literal["hold", "linear", "advect"]
 T_meshSequenceInterpolationType = _t.Literal["hold", "linear"]
 
 
-class Scene(Element):
+class Scene(SceneBase):
     """Complex type #root."""
 
     __slots__ = ()
