@@ -175,26 +175,43 @@ def test_whitespace_in_empty_content_is_reported_and_element_only_content_allows
 
 # ------------------------------------------------------------------------------------------------- M2
 
-def test_twenty_thousand_siblings_build_and_check_quickly() -> None:
+def _build_and_check(n: int) -> tuple[float, float]:
     scene = gen.Scene(version="1.0")
     scene.add_project(width=1, height=1, fps="30", duration=1)
     comp = scene.add_composition()
     start = time.perf_counter()
-    for i in range(20000):
+    for i in range(n):
         comp.add_group(id=f"g{i}")
     built = time.perf_counter() - start
     start = time.perf_counter()
     assert scene.check() == []
-    checked = time.perf_counter() - start
-    assert built < 2.0 and checked < 2.0, (built, checked)
+    return built, time.perf_counter() - start
 
 
-def test_many_findings_among_many_siblings_stay_fast() -> None:
-    body = "<composition>" + "".join(f'<group id="g{i}" bogus="1"/>' for i in range(3000)) + "</composition>"
+def _check_with_findings(n: int) -> float:
+    body = "<composition>" + "".join(f'<group id="g{i}" bogus="1"/>' for i in range(n)) + "</composition>"
+    scene = read(doc(body=body))
     start = time.perf_counter()
-    out = checks.check(read(doc(body=body)))
-    assert len(out) == 3000 and time.perf_counter() - start < 2.0
-    assert out[2999].path == "/scene/composition/group[3000]"
+    out = checks.check(scene)
+    elapsed = time.perf_counter() - start
+    assert len(out) == n and out[-1].path == f"/scene/composition/group[{n}]"
+    return elapsed
+
+
+# Growth, not wall-clock time: 4x the siblings must cost far less than the 16x a quadratic algorithm takes, on any
+# machine and under any load. The best of three runs damps scheduler noise.
+def test_add_and_check_grow_linearly_with_siblings() -> None:
+    _build_and_check(500)                                   # warm the codec caches
+    small = [min(t) for t in zip(*(_build_and_check(5000) for _ in range(3)))]
+    large = [min(t) for t in zip(*(_build_and_check(20000) for _ in range(3)))]
+    assert large[0] < 8 * small[0] and large[1] < 8 * small[1], (small, large)
+
+
+def test_findings_among_many_siblings_grow_linearly() -> None:
+    _check_with_findings(300)
+    small = min(_check_with_findings(1000) for _ in range(3))
+    large = min(_check_with_findings(4000) for _ in range(3))
+    assert large < 8 * small, (small, large)
 
 
 # ------------------------------------------------------------------------------------------------- m2
