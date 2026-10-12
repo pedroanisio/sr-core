@@ -208,3 +208,179 @@ def test_an_audio_case_fails_when_the_transition_does_not_mix_the_sound(tmp_path
 def test_an_audio_case_errors_when_the_engine_fails(tmp_path):
     r = _run(tmp_path, _audio_engine(CROSSFADE, status=1), cases="srep-0082-crossfade-default")
     assert r.returncode == 1 and "error" in r.stdout, r.stdout + r.stderr
+
+
+# ---- regressions for the drift-risk map's two CRITICAL findings (conformance oracle vs prose; vacuous passes)
+import json  # noqa: E402
+import re  # noqa: E402
+
+
+def test_the_constants_block_agrees_with_the_prose_and_the_kit():
+    """CONVENTIONS.md 2.8 is the one place make_cases.py reads the camera constants from; the prose of 2.1-2.6 must
+    state the same numbers, and the generated oracle must be computed from them."""
+    text = open(os.path.join(CONF, "CONVENTIONS.md"), encoding="utf-8").read()
+    blocks = re.findall(r"```json conventions-constants\n(.*?)\n```", text, re.S)
+    assert len(blocks) == 1
+    c = json.loads(blocks[0])
+    assert set(c) == {"implicit_camera_hfov_degrees", "default_sensor_width", "default_pixels_per_meter"}
+    assert [int(x) for x in re.findall(r"horizontal\*\* fov of \*\*(\d+)°", text)] == [c["implicit_camera_hfov_degrees"]]
+    assert [int(x) for x in re.findall(r"sensorWidth default (\d+)", text)] == [c["default_sensor_width"]]
+    ppm = [int(x) for x in re.findall(r"pixelsPerMeter`\s*\(default (\d+)\)", text)]
+    assert ppm and set(ppm) == {c["default_pixels_per_meter"]}, ppm
+    import math
+    exp = json.load(open(os.path.join(CONF, "expected.json")))
+    w = exp["frame"][0]
+    d = (w / 2) / math.tan(math.radians(c["implicit_camera_hfov_degrees"]) / 2)
+    assert exp["implicit_camera_distance"] == round(d, 3)
+    src = open(os.path.join(CONF, "make_cases.py"), encoding="utf-8").read()
+    assert not re.search(r"^HFOV = [\d.]+\s*$", src, re.M), "make_cases.py restates the fov; read it from CONVENTIONS.md"
+    assert 'fov="60"' not in src
+
+
+def test_changing_the_constants_block_changes_the_oracle(tmp_path):
+    """The kit follows the block: with 90 degrees the implicit camera distance is W/2."""
+    copy = tmp_path / "conformance"
+    shutil.copytree(CONF, copy, ignore=shutil.ignore_patterns("out", "__pycache__"))
+    p = copy / "CONVENTIONS.md"
+    p.write_text(p.read_text(encoding="utf-8").replace('"implicit_camera_hfov_degrees": 60', '"implicit_camera_hfov_degrees": 90'),
+                 encoding="utf-8")
+    subprocess.run([sys.executable, str(copy / "make_cases.py")], check=True, capture_output=True)
+    assert json.load(open(copy / "expected.json"))["implicit_camera_distance"] == 320.0
+
+
+def _findings_engine():
+    """Reports the document invalid with no diagnostics at all."""
+    return "import json\nprint(json.dumps({'files': [{'valid': False, 'diagnostics': []}]}))\n"
+
+
+def _with_entry(tmp_path, entry):
+    """A kit copy whose expected.json holds only case a1-anchor-translate, with `entry`."""
+    copy = tmp_path / "conformance"
+    shutil.copytree(CONF, copy, ignore=shutil.ignore_patterns("out", "__pycache__"))
+    spec = json.load(open(copy / "expected.json"))
+    spec["cases"] = {"a1-anchor-translate": entry}
+    json.dump(spec, open(copy / "expected.json", "w"))
+    return copy
+
+
+def _run_copy(tmp_path, copy, engine_script, *extra):
+    eng = tmp_path / "engine"
+    eng.write_text(f"#!{sys.executable}\n{engine_script}")
+    eng.chmod(0o755)
+    env = {k: v for k, v in os.environ.items() if k != "RS_RENDER_BIN"}
+    env["RS_RENDER_BIN"] = str(eng)
+    return subprocess.run([sys.executable, str(copy / "run.py"), "--renderers", "rs", "--cases", "a1", *extra],
+                          capture_output=True, text=True, env=env)
+
+
+@pytest.mark.parametrize("entry,why", [
+    ({"rule": "x", "findings": {"cods": ["NOPE"], "valdi": True}}, "unknown key"),   # the verified vacuous pass
+    ({"rule": "x", "findings": {}}, "no check"),
+    ({"rule": "x", "findings": {"via": "render"}}, "via render"),
+    ({"rule": "x"}, "no check"),
+    ({"rule": "x", "reed": {"cx": 1}}, "unknown key"),
+    ({"rule": "x", "red": {}}, "non-empty object"),
+    ({"rule": "x", "red": {"cz": 1}}, "non-empty object"),
+    ({"rule": "x", "captions": {"track": "cap"}}, "no check beyond"),
+    ({"rule": "x", "captions": {"track": "cap", "page": ["a"]}}, "unknown key"),
+    ({"rule": "x", "audio": {"output": "o", "tones": {}, "level": 1, "window": 1, "tolerance": 1, "gains": []}}, "empty"),
+    ({"rule": "x", "absent": ["purple"]}, "'absent'"),
+])
+def test_an_entry_that_checks_nothing_is_an_error_not_a_pass(tmp_path, entry, why):
+    r = _run_copy(tmp_path, _with_entry(tmp_path, entry), _findings_engine())
+    report = json.loads((tmp_path / "conformance" / "out" / "report.json").read_text())["results"]["rs"]
+    got = report["a1-anchor-translate"]
+    assert r.returncode == 1 and got["status"] == "error", r.stdout
+    assert why in " ".join(got["notes"]), got
+
+
+def test_a_misspelt_findings_key_no_longer_passes_an_engine_that_reports_invalid(tmp_path):
+    r = _run_copy(tmp_path, _with_entry(tmp_path, {"rule": "x", "findings": {"cods": ["NOPE"], "valdi": True}}),
+                  _findings_engine())
+    assert r.returncode == 1 and " pass " not in r.stdout, r.stdout
+
+
+def test_a_well_formed_findings_entry_still_runs_and_can_fail(tmp_path):
+    ok = _run_copy(tmp_path, _with_entry(tmp_path, {"rule": "x", "findings": {"valid": False}}), _findings_engine())
+    assert ok.returncode == 0 and " pass " in ok.stdout, ok.stdout
+    other = tmp_path / "other"
+    other.mkdir()
+    bad = _run_copy(other, _with_entry(other, {"rule": "x", "findings": {"valid": True}}), _findings_engine())
+    assert bad.returncode == 1 and " fail " in bad.stdout, bad.stdout
+
+
+def test_every_entry_of_the_committed_kit_is_well_formed():
+    """The closed vocabulary holds for all of expected.json, so the runner's rejection never hits a real case."""
+    spec = importlib_run().__dict__
+    exp = json.load(open(os.path.join(CONF, "expected.json")))["cases"]
+    bad = {n: spec["entry_problems"](e) for n, e in exp.items() if spec["entry_problems"](e)}
+    assert not bad, bad
+
+
+def importlib_run():
+    import importlib.util
+    s = importlib.util.spec_from_file_location("kit_run", os.path.join(CONF, "run.py"))
+    m = importlib.util.module_from_spec(s)
+    s.loader.exec_module(m)
+    return m
+
+
+# ---- pending cases are visible, and can be run (drift-risk map finding 4)
+def _result(tmp_path):
+    return json.loads((tmp_path / "conformance" / "out" / "report.json").read_text())["results"]["rs"]["a1-anchor-translate"]
+
+
+def test_a_pending_case_is_counted_in_the_summary(tmp_path):
+    r = _run_copy(tmp_path, _with_entry(tmp_path, {"rule": "x", "pending": "why", "findings": {"valid": False}}),
+                  _findings_engine())
+    assert r.returncode == 0 and "1 case runs pending" in r.stdout and _result(tmp_path)["status"] == "pending", r.stdout
+
+
+def test_run_pending_retires_a_pending_case_that_now_passes(tmp_path):
+    entry = {"rule": "x", "pending": "engine did not pass it", "findings": {"valid": False}}
+    r = _run_copy(tmp_path, _with_entry(tmp_path, entry), _findings_engine(), "--run-pending")
+    assert r.returncode == 1 and "retire" in r.stdout and "kit_pending.py" in r.stdout, r.stdout
+    assert _result(tmp_path)["status"] == "retire"
+
+
+def test_run_pending_leaves_a_still_failing_case_pending(tmp_path):
+    entry = {"rule": "x", "pending": "engine does not pass it", "findings": {"valid": True}}
+    r = _run_copy(tmp_path, _with_entry(tmp_path, entry), _findings_engine(), "--run-pending")
+    assert r.returncode == 0 and _result(tmp_path)["status"] == "pending", r.stdout
+    assert "still not passing" in " ".join(_result(tmp_path)["notes"])
+
+
+def test_run_pending_says_when_no_check_form_can_run_a_case(tmp_path):
+    r = _run_copy(tmp_path, _with_entry(tmp_path, {"rule": "x", "pending": "a render comparison"}),
+                  _findings_engine(), "--run-pending")
+    assert r.returncode == 0 and "no check form can run it yet" in r.stdout, r.stdout
+
+
+FAILING = "import sys\nsys.stderr.write('error PRG12: fuel exhausted\\n')\nsys.exit(3)\n"
+
+
+def test_the_failure_form_passes_when_the_render_fails_with_the_code(tmp_path):
+    r = _run_copy(tmp_path, _with_entry(tmp_path, {"rule": "x", "failure": {"code": "PRG12"}}), FAILING)
+    assert r.returncode == 0 and " pass " in r.stdout, r.stdout + r.stderr
+
+
+@pytest.mark.parametrize("engine,why", [
+    ("import sys\nsys.exit(0)\n", "exits 0"),
+    ("import sys\nsys.stderr.write('error PRG11\\n')\nsys.exit(3)\n", "another code"),
+    ("import sys\nfrom PIL import Image\nImage.new('RGB',(4,4)).save(sys.argv[sys.argv.index('-o') + 1])\n"
+     "sys.stderr.write('PRG12\\n')\nsys.exit(3)\n", "draws a picture"),
+])
+def test_the_failure_form_fails_otherwise(tmp_path, engine, why):
+    r = _run_copy(tmp_path, _with_entry(tmp_path, {"rule": "x", "failure": {"code": "PRG12"}}), engine)
+    assert r.returncode == 1 and " fail " in r.stdout, (why, r.stdout)
+
+
+def test_a_malformed_failure_entry_is_an_error(tmp_path):
+    r = _run_copy(tmp_path, _with_entry(tmp_path, {"rule": "x", "failure": "PRG12"}), FAILING)
+    assert r.returncode == 1 and _result(tmp_path)["status"] == "error"
+
+
+def test_run_pending_retires_a_failed_render_case_the_engine_now_passes(tmp_path):
+    entry = {"rule": "x", "pending": "cannot check failed renders", "failure": {"code": "PRG12"}}
+    r = _run_copy(tmp_path, _with_entry(tmp_path, entry), FAILING, "--run-pending")
+    assert r.returncode == 1 and _result(tmp_path)["status"] == "retire", r.stdout

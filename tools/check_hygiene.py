@@ -10,7 +10,8 @@ Rules:
       that are not published, e-mail addresses outside LICENSE and pyproject; in the schema, no engine
       repository or command names
   R3  every relative Markdown link resolves to a tracked file
-  R4  SREP headers are complete, statuses valid, decisions recorded as a date and a plain statement
+  R4  SREP headers are complete, statuses valid, decisions recorded as a date and a plain statement, and
+      srep/index.md agrees with them (one row per SREP, in order; Title, Type, Status and Version columns)
   R5  release artifacts: the wheel holds only the package, the sdist holds what its tests need and they pass
       from it, and the package metadata passes R2
   R6  versions, schema hashes and the generated reference agree (tools/release.py check)
@@ -180,6 +181,45 @@ def r4(root, files):
     return out
 
 
+INDEX_ROW = re.compile(r"^\| \[(\d+)\]\(([^)]+)\) \| (.*?) \| (.*?) \| (.*?) \| (.*?) \|$", re.M)
+
+
+def _plain(text: str) -> str:
+    """A title or version without Markdown code marks and without a trailing parenthetical note."""
+    return re.sub(r"\s*\([^)]*\)\s*$", "", text.replace("`", "")).strip()
+
+
+def r4_index(root, files):
+    """srep/index.md is a table of the SREP headers. Findings are reported at the SREP's own file, so that an
+    intended difference is an entry `srep/srep-NNNN.md:R4:reason` in tools/hygiene-allow.txt."""
+    text = read(root, "srep/index.md")
+    if text is None:
+        return []
+    out, rows = [], INDEX_ROW.findall(text)
+    seen = []
+    for n, target, title, typ, status, ver in rows:
+        path = "srep/" + target
+        seen.append(int(n))
+        if path not in files:
+            out.append(Finding("R4", "srep/index.md", f"row {n} links {target}, which is not a tracked file"))
+            continue
+        if not re.fullmatch(r"srep-0*%s\.md" % n, target):
+            out.append(Finding("R4", path, f"index row {n} links {target}"))
+        h = srep_header(read(root, path) or "")
+        for col, got, key in (("Title", title, "Title"), ("Type", typ, "Type"), ("Status", status, "Status"),
+                              ("Version", ver, "Schema-Version")):
+            want = h.get(key, (0, ""))[1]
+            if _plain(got) != _plain(want):
+                out.append(Finding("R4", path, f"srep/index.md {col} is {got!r} but the header's {key} is {want!r}"))
+    if seen != sorted(set(seen)):
+        out.append(Finding("R4", "srep/index.md", "rows are not in ascending order, or repeat a number"))
+    for p in files:
+        m = re.fullmatch(r"srep/srep-(\d{4})\.md", p)
+        if m and int(m.group(1)) not in seen:
+            out.append(Finding("R4", p, "has no row in srep/index.md"))
+    return out
+
+
 def r6(root):
     if root != ROOT:
         return []
@@ -238,7 +278,7 @@ def _extract(t: tarfile.TarFile, dest: str) -> None:
 # ---------------------------------------------------------------- driver
 def check(root: str = ROOT, artifacts: bool = False, run_tests: bool = True) -> list[Finding]:
     files = tracked(root)
-    findings = r1(files) + r2(root, files) + r3(root, files) + r4(root, files) + r6(root)
+    findings = r1(files) + r2(root, files) + r3(root, files) + r4(root, files) + r4_index(root, files) + r6(root)
     if artifacts:
         findings += r5(root, run_tests)
     allow = load_allow(root)

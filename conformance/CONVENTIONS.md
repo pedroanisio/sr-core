@@ -81,6 +81,14 @@ tests until cases are added. Changes to these conventions, and to `DEFINITIONS.m
 
 2.7 **Lights** use the same space: point, spot and area positions are scene coordinates; orientation follows 2.4.
 
+2.8 **Constants the kit computes from.** The numbers of 2.2, 2.3 and 2.1/2.6 as a machine-readable block.
+    `make_cases.py` reads its camera constants from it, and `tests/test_conformance.py` fails when the block and the
+    prose above disagree, so a change to one of these numbers is made here, once, and the kit follows.
+
+```json conventions-constants
+{"implicit_camera_hfov_degrees": 60, "default_sensor_width": 36, "default_pixels_per_meter": 100}
+```
+
 ## 3. Open questions (not normative yet)
 
 - **Default position of an explicit camera** (2.3). Defaulting an omitted `z` to the implicit camera's distance

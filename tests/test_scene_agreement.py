@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import io as _io
 import json
+import re
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -19,18 +20,17 @@ from sr_core.scene import io as sio
 ROOT = Path(__file__).resolve().parents[1]
 SCH_FILE = ROOT / "schema" / "scene-render.sch"
 
-# The README example, copied; the README is kept in step with it.
-README_EXAMPLE = '''
-from sr_core.scene import Scene, read
+README = ROOT / "README.md"
 
-scene = Scene(version="auto")                     # written as the lowest version the content allows
-scene.add_project(width=1280, height=720, fps="30", duration=4)
-composition = scene.add_composition()
-scene.check()                                     # [] or a list of Finding(severity, code, message, path, ...)
-open("out.scene.xml", "wb").write(scene.to_bytes(layout="pretty"))
 
-doc = read("in.scene.xml")                        # comments, attribute order and lexical forms survive a rewrite
-'''
+def _readme_example() -> str:
+    """The first python block of the README's "The scene SDK" section, as the reader copies it."""
+    text = README.read_text(encoding="utf-8")
+    section = text.split("## The scene SDK", 1)[1]
+    return re.search(r"```python\n(.*?)```", section, re.S).group(1)
+
+
+README_EXAMPLE = _readme_example()
 
 
 def test_the_readme_example_runs(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -123,3 +123,23 @@ def test_the_sample_mixes_clean_and_refused_documents(lx) -> None:
 def test_expected_json_lists_the_sample() -> None:
     cases = json.loads((ROOT / "conformance" / "expected.json").read_text())["cases"]
     assert all(n in cases for n in SAMPLE)
+
+
+def test_the_readme_example_is_read_from_the_readme_not_copied() -> None:
+    """Drift-risk map finding 6: the test used to execute its own copy, so the README could change unnoticed."""
+    assert "from sr_core.scene import Scene, read" in README_EXAMPLE and "add_project(" in README_EXAMPLE
+    assert "README_EXAMPLE = " + "'" * 3 not in Path(__file__).read_text(encoding="utf-8")
+
+
+def test_the_readme_names_exactly_the_layouts_to_bytes_accepts() -> None:
+    from sr_core.scene.io import LAYOUTS
+    text = README.read_text(encoding="utf-8").split("## The scene SDK", 1)[1].split("## Versions", 1)[0]
+    bullet = re.search(r"`to_bytes\(layout=\.\.\.\)` takes (.*?)\n- ", text, re.S).group(1)
+    assert set(re.findall(r'`"(\w+)"`', bullet)) == set(LAYOUTS)
+
+
+def test_a_readme_example_that_no_longer_runs_is_noticed(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.chdir(tmp_path)
+    broken = README_EXAMPLE.replace("add_project(", "add_projekt(")
+    with pytest.raises(AttributeError):
+        exec(compile(broken, "README.md", "exec"), {})  # noqa: S102

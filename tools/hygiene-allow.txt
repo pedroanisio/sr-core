@@ -1,3 +1,11 @@
 # path:rule:reason — exceptions to tools/check_hygiene.py. Each needs a reason; an entry that matches
 # nothing fails the check, so remove entries when they are no longer needed.
 tools/check_hygiene.py:R2:the rule's own patterns for private working directories
+# The index's Version column is the schema line a change shipped in; the header's Schema-Version of these
+# SREPs is the line they were drafted for (their Resolution says they were released with schema 1.5.0).
+srep/srep-0058.md:R4:drafted for 1.3, shipped in 1.5 (index records the release line)
+srep/srep-0060.md:R4:drafted for 1.3, shipped in 1.5 (index records the release line)
+srep/srep-0061.md:R4:drafted for 1.3, shipped in 1.5 (index records the release line)
+srep/srep-0062.md:R4:drafted for 1.3, shipped in 1.5 (index records the release line)
+srep/srep-0064.md:R4:drafted for 1.3, shipped in 1.5 (index records the release line)
+srep/srep-0065.md:R4:drafted for 1.3, shipped in 1.5 (index records the release line)

@@ -85,7 +85,7 @@
 | [80](srep-0080.md) | Add voxel assets and breakable objects of cells | Standards | Final | 1.6 |
 | [81](srep-0081.md) | Clarify SREP 40 annotations (documentation only) | Standards | Final | 1.6 |
 | [82](srep-0082.md) | Mix the sound of video layers across a transition | Semantics | Final | 1.6 |
-| [83](srep-0083.md) | Amend SREP 40: version gates of the 1.3 extensions admit later versions | Standards | Final | 1.6 |
+| [83](srep-0083.md) | Version gates of the 1.3 extensions admit later versions | Standards | Final | 1.6 |
 | [84](srep-0084.md) | Boolean and integer attributes are tested by value, not by spelling | Standards | Final | 1.6 |
 | [85](srep-0085.md) | Decimal and double attributes are tested by value (amends SREP 67) | Standards | Final | 1.6 |
 | [86](srep-0086.md) | Keep the 1.3 gates of the upstreamed engine extensions | Process | Active | n/a |

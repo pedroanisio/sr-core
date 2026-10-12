@@ -39,7 +39,22 @@ version:
   - `python3 -m sr_core.scene.generate --check`, run by `tools/release.py check`;
   - `release schema` regenerates the SDK and needs an Unreleased entry for it.
 
+- `conformance/run.py` gains `--run-pending` (runs the pending cases that have a check: one that now passes is
+  reported as `retire` and fails the run, one that still fails stays pending) and the check form `failure`
+  (`{"code": "PRG12"}`: a non-zero exit, the code in the output, no picture). It prints how many cases were pending.
+- `tools/check_hygiene.py` rule R4 also compares `srep/index.md` with the SREP headers (Title, Type, Status, Version,
+  a row for every SREP, ascending order); an intended difference is an `srep/srep-NNNN.md:R4:reason` entry.
+
 ### Fixed
+
+- `conformance/run.py` no longer reports `pass` for a case that checks nothing: an `expected.json` entry with an
+  unknown key, an empty check or no check at all is an `error`, and so is a form whose checks did not run.
+- `conformance/make_cases.py` reads the implicit camera's field of view and the default sensor width from the
+  constants block in `conformance/CONVENTIONS.md` (2.8) instead of restating them; a test fails when the block and
+  the prose disagree. The generated cases are unchanged.
+- The case generators of `conformance/tools/` are re-run by `tests/test_conformance_generators.py`, which fails when
+  the committed `srep_cases/` differ from what they write; the README's SDK example is executed from the README.
+- `srep/index.md` row 83 carries the header's title.
 
 ## 1.7.0 — 2026-10-12
 

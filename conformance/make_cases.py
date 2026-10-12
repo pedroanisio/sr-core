@@ -7,14 +7,20 @@ so the cases and their answers cannot drift apart.
 """
 import glob
 import json
+import json
 import math
 import os
+import re
 import struct
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 W, H = 640, 360
 COL = {"red": "#FF0000FF", "green": "#00FF00FF", "blue": "#0000FFFF", "yellow": "#FFFF00FF"}
-HFOV = 60.0
+# the numbers that CONVENTIONS.md states (2.2, 2.3, 2.1/2.6) are read from its constants block (2.8), not restated
+with open(os.path.join(HERE, "CONVENTIONS.md"), encoding="utf-8") as _f:
+    CONV = json.loads(re.search(r"```json conventions-constants\n(.*?)\n```", _f.read(), re.S).group(1))
+HFOV = float(CONV["implicit_camera_hfov_degrees"])
+SENSOR_WIDTH = CONV["default_sensor_width"]
 D = (W / 2) / math.tan(math.radians(HFOV) / 2)        # implicit camera distance, 554.256
 F = D                                                   # focal length in pixels for hfov 60 at this width
 
@@ -90,21 +96,21 @@ cx, cy, k = project(220, 260, z)
 cases["b2-depth"] = doc(plane("p1", "blue", 220, 260, z, 40) + "\n" + plane("p2", "red", 420, 180, 0, 40))
 expected["b2-depth"] = {"rule": "2.1 2.2", "blue": box(cx, cy, 40 * k, 40 * k), "red": box(420, 180, 40, 40)}
 
-cam = f'<camera id="cam" fov="60" x="420" y="180" z="{-z}"/>'
+cam = f'<camera id="cam" fov="{HFOV:g}" x="420" y="180" z="{-z}"/>'
 cases["b3-explicit-camera"] = doc(cam + "\n" + plane("p1", "red", 420, 180, 0, 40) + "\n" + plane("p2", "green", 320, 180, 0, 40))
 expected["b3-explicit-camera"] = {"rule": "2.3", "red": box(320, 180, 40, 40), "green": box(220, 180, 40, 40)}
 
-cam = f'<camera id="cam" fov="60" x="320" y="180" z="{-z}" yaw="10"/>'
+cam = f'<camera id="cam" fov="{HFOV:g}" x="320" y="180" z="{-z}" yaw="10"/>'
 rx, ry, rk = project(320, 180, 0, yaw=10)
 cases["b4-yaw-pitch"] = doc(cam + "\n" + plane("p1", "red", 320, 180, 0, 40))
 expected["b4-yaw-pitch"] = {"rule": "2.4", "red": {"cx": round(rx, 2), "cy": round(ry, 2)}}
-cam = f'<camera id="cam" fov="60" x="320" y="180" z="{-z}" pitch="10"/>'
+cam = f'<camera id="cam" fov="{HFOV:g}" x="320" y="180" z="{-z}" pitch="10"/>'
 gx, gy, gk = project(320, 180, 0, pitch=10)
 cases["b4b-pitch"] = doc(cam + "\n" + plane("p1", "green", 320, 180, 0, 40))
 expected["b4b-pitch"] = {"rule": "2.4", "green": {"cx": round(gx, 2), "cy": round(gy, 2)}}
 
 # roll +30: the camera's right edge dips toward +y, so a point right of centre appears up and to the right
-cam = f'<camera id="cam" fov="60" x="320" y="180" z="{-z}" roll="30"/>'
+cam = f'<camera id="cam" fov="{HFOV:g}" x="320" y="180" z="{-z}" roll="30"/>'
 a = math.radians(30)
 cases["b6-roll"] = doc(cam + "\n" + plane("p1", "red", 420, 180, 0, 30))
 expected["b6-roll"] = {"rule": "2.4", "red": {"cx": round(W / 2 + 100 * math.cos(a), 2), "cy": round(H / 2 - 100 * math.sin(a), 2)}}
@@ -156,12 +162,12 @@ expected["b5-gltf"] = {"rule": "2.6", "red": box(320, 200, 40, 40), "green": box
 
 
 # ---------------------------------------------------------------- camera: combined yaw and pitch, focal length
-cam = f'<camera id="cam" fov="60" x="320" y="180" z="{-z}" yaw="20" pitch="10"/>'
+cam = f'<camera id="cam" fov="{HFOV:g}" x="320" y="180" z="{-z}" yaw="20" pitch="10"/>'
 rx, ry, _ = project(420, 230, 0, yaw=20, pitch=10)
 cases["b7-yaw-pitch-combined"] = doc(cam + "\n" + plane("p1", "red", 420, 230, 0, 30))
 expected["b7-yaw-pitch-combined"] = {"rule": "2.4", "red": {"cx": round(rx, 2), "cy": round(ry, 2)}}
 
-fl = (W / 2) / (36 / (2 * 50))                        # focalLength 50 on the default 36 mm sensor: hfov 2*atan(36/100)
+fl = (W / 2) / (SENSOR_WIDTH / (2 * 50))                        # focalLength 50 on the default 36 mm sensor: hfov 2*atan(36/100)
 cam = f'<camera id="cam" focalLength="50" x="320" y="180" z="{-z}"/>'
 fx, fy, fk = project(400, 180, 0, f=fl)
 cases["b8-focal-length"] = doc(cam + "\n" + plane("p1", "red", 400, 180, 0, 40))

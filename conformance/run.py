@@ -161,6 +161,8 @@ def findings(renderer, case, want):
             return "error", time.time() - t0, [f"render failed: {type(e).__name__}: {e}"], {}
         said = p.stdout + p.stderr
         checks = {"messages": [(m, m in said) for m in want.get("messages", [])]}
+        if not checks["messages"]:
+            return "error", time.time() - t0, ["no check ran"], {}
         ok = all(v for rows in checks.values() for _, v in rows)
         return ("pass" if ok else "fail"), time.time() - t0, [], {"reported": [l.strip()[:120] for l in said.splitlines() if l.strip()][:6], "valid": None, "checks": checks}
     try:
@@ -184,6 +186,8 @@ def findings(renderer, case, want):
               "messages": [(m, any(m in x.get("message", "") for x in diags)) for m in want.get("messages", [])]}
     if "valid" in want:
         checks["valid"] = [(str(want["valid"]), out.get("valid") == want["valid"])]
+    if not any(checks.values()):
+        return "error", time.time() - t0, ["no check ran"], {}
     ok = all(v for rows in checks.values() for _, v in rows)
     return ("pass" if ok else "fail"), time.time() - t0, [], {"reported": got, "valid": out.get("valid"), "checks": checks}
 
@@ -247,6 +251,8 @@ def captions(renderer, case, want):
             other = spec["wordsAndTimesEqualTo"]
             o = others[other].get(tid)
             checks["wordsAndTimes"].append((f"{tid} equal to {other}", o is not None and words(o) == words(t)))
+    if not any(checks[k] for k in checks if k != "tracks"):
+        return "error", time.time() - t0, ["no check ran"], {}
     ok = all(v for rows in checks.values() for _, v in rows)
     return ("pass" if ok else "fail"), time.time() - t0, [], {"form": "captions", "reported": reported, "checks": checks}
 
@@ -331,9 +337,36 @@ def audio(renderer, case, want):
         measured.append([t, got])
         for k, g in gains.items():
             rows.append((f"{k} at {t}: {g} (got {got[k]})", abs(got[k] - g) <= tol))
+    if not rows:
+        return "error", time.time() - t0, ["no check ran"], {}
     ok = all(v for _, v in rows)
     return ("pass" if ok else "fail"), time.time() - t0, [], {"form": "audio", "measured": measured,
                                                               "checks": {"gains": rows}}
+
+
+def failure(renderer, case, want):
+    """A case whose expected entry has "failure": {"code": "PRG12"}: the engine must refuse to render frame 0 (a
+    non-zero exit status), say the code, and draw no picture. Only the Rust engine is asked."""
+    label, _, env = RENDERERS[renderer]
+    if renderer != "rs":
+        return "error", 0.0, [f"{label} cannot check a failed render from this kit yet"], {}
+    d, s_ = prepare(case, renderer)
+    png = os.path.join(d, "frame.png")
+    exe = os.environ.get("RS_RENDER_BIN", "scene-render-rs")
+    t0 = time.time()
+    try:
+        p = subprocess.run([exe, "render", s_, "-f", "0", "-o", png], cwd=d, capture_output=True, text=True,
+                           timeout=600, env={**os.environ, **env})
+    except (FileNotFoundError, subprocess.TimeoutExpired) as e:
+        return "error", time.time() - t0, [f"render failed: {type(e).__name__}: {e}"], {}
+    said = p.stdout + p.stderr
+    checks = {"exit": [("a non-zero exit status", p.returncode != 0)],
+              "code": [(want["code"], want["code"] in said)],
+              "picture": [("no picture", not os.path.exists(png))]}
+    ok = all(v for rows in checks.values() for _, v in rows)
+    return ("pass" if ok else "fail"), time.time() - t0, [], {"form": "failure", "exit": p.returncode,
+                                                              "reported": [l.strip()[:120] for l in said.splitlines() if l.strip()][:4],
+                                                              "checks": checks}
 
 
 COLOUR_TOL = 3  # 8-bit code values
@@ -366,10 +399,108 @@ def check(meas, exp, tol, png=None):
     return rows
 
 
+# The closed vocabulary of an expected.json entry. A key the runner does not read would otherwise be a check that
+# silently does not run, and an entry with no check at all would "pass": `all([])` is True.
+META_KEYS = {"rule", "source", "requires", "native_only", "pending"}
+FORM_KEYS = {"findings", "captions", "audio", "failure", "output", "regions", "absent"}
+CHECKING_FORMS = {"findings", "captions", "audio", "failure", "regions", "absent"}
+FINDINGS_CHECKS = {"codes", "absent", "counts", "messages", "valid"}
+CAPTIONS_CHECKS = {"pages", "preset", "wordCount", "activeWord", "wordsAndTimesEqualTo"}
+AUDIO_KEYS = {"output", "tones", "level", "window", "tolerance", "gains", "note"}
+COLOUR_FIELDS = {"cx", "cy", "w", "h", "px"}
+
+
+def entry_problems(entry: dict) -> list[str]:
+    """Why an expected.json entry would check nothing, or not what it says; [] when every key is read and at
+    least one check runs. A pending entry is only checked for keys it cannot spell wrongly."""
+    out = []
+    unknown = set(entry) - META_KEYS - FORM_KEYS - set(CLASSES)
+    out += [f"unknown key {k!r}" for k in sorted(unknown)]
+    colours = [k for k in entry if k in CLASSES]
+    for k in colours:
+        v = entry[k]
+        if not isinstance(v, dict) or not v or set(v) - COLOUR_FIELDS:
+            out.append(f"{k!r}: want a non-empty object of {sorted(COLOUR_FIELDS)}")
+    if "findings" in entry:
+        f = entry["findings"]
+        if not isinstance(f, dict):
+            out.append("'findings': want an object")
+        else:
+            out += [f"findings: unknown key {k!r}" for k in sorted(set(f) - FINDINGS_CHECKS - {"via"})]
+            if f.get("via") == "render":
+                if not f.get("messages"):
+                    out.append("findings: via render checks only 'messages', and none is given")
+            elif not set(f) & FINDINGS_CHECKS:
+                out.append("findings: no check (codes, absent, counts, messages or valid)")
+    if "captions" in entry:
+        specs = entry["captions"] if isinstance(entry["captions"], list) else [entry["captions"]]
+        for i, sp in enumerate(specs):
+            if not isinstance(sp, dict) or "track" not in sp:
+                out.append(f"captions[{i}]: want an object with 'track'")
+                continue
+            out += [f"captions[{i}]: unknown key {k!r}" for k in sorted(set(sp) - CAPTIONS_CHECKS - {"track"})]
+            if not set(sp) & CAPTIONS_CHECKS:
+                out.append(f"captions[{i}]: no check beyond the track's existence")
+    if "audio" in entry:
+        a = entry["audio"]
+        if not isinstance(a, dict):
+            out.append("'audio': want an object")
+        else:
+            out += [f"audio: unknown key {k!r}" for k in sorted(set(a) - AUDIO_KEYS)]
+            out += [f"audio: lacks {k!r}" for k in sorted(AUDIO_KEYS - {"note"} - set(a))]
+            if "gains" in a and not a["gains"]:
+                out.append("audio: 'gains' is empty")
+    if "failure" in entry:
+        f = entry["failure"]
+        if not (isinstance(f, dict) and set(f) == {"code"} and isinstance(f["code"], str) and f["code"]):
+            out.append("'failure': want {\"code\": \"<finding code>\"}")
+    for i, r in enumerate(entry.get("regions", [])):
+        if set(r) != {"box", "rgb"}:
+            out.append(f"regions[{i}]: want exactly 'box' and 'rgb'")
+    if "absent" in entry and not (isinstance(entry["absent"], list) and set(entry["absent"]) <= set(CLASSES)):
+        out.append(f"'absent': want a list of {sorted(CLASSES)}")
+    if not entry.get("pending") and not (set(entry) & CHECKING_FORMS or colours):
+        out.append("no check: the entry names no colour, regions, absent, findings, captions or audio")
+    return out
+
+
+def run_case(r, c, ent, tol):
+    """Run one case with its entry; (result dict, label of the form for the progress line)."""
+    if "captions" in ent:
+        st, dt, notes, detail = captions(r, c, ent["captions"])
+        return {"status": st, "seconds": round(dt, 2), "notes": notes, **detail}, "captions"
+    if "audio" in ent:
+        st, dt, notes, detail = audio(r, c, ent["audio"])
+        return {"status": st, "seconds": round(dt, 2), "notes": notes, **detail}, "audio"
+    if "failure" in ent:
+        st, dt, notes, detail = failure(r, c, ent["failure"])
+        return {"status": st, "seconds": round(dt, 2), "notes": notes, **detail}, "failure"
+    if "findings" in ent:
+        st, dt, notes, detail = findings(r, c, ent["findings"])
+        return {"status": st, "seconds": round(dt, 2), "notes": notes, **detail}, "findings"
+    png, code, dt, notes = render(r, c, ent.get("output"))
+    entry = {"exit": code, "seconds": round(dt, 2), "notes": notes}
+    if png:
+        meas = measure(png)
+        entry["measured"] = meas
+        entry["checks"] = [{"colour": col, "status": st, "expected": e, "measured": m} for col, st, e, m in check(meas, ent, tol, png)]
+        entry["status"] = ("pass" if all(x["status"] == "pass" for x in entry["checks"]) else "fail") \
+            if entry["checks"] else "error"
+        if not entry["checks"]:
+            entry["notes"] = ["no check ran"]
+    else:
+        entry["status"] = "error"
+    return entry, ""
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--renderers", default="rs")
     ap.add_argument("--cases", default="")
+    ap.add_argument("--run-pending", action="store_true",
+                    help="also run the pending cases that have a check: one that now passes is reported as 'retire' "
+                         "and fails the run (delete its entry from tools/kit_pending.py), one that still fails stays "
+                         "pending")
     a = ap.parse_args()
     spec = json.load(open(os.path.join(HERE, "expected.json")))
     tol = spec["tolerance_px"]
@@ -378,40 +509,36 @@ def main() -> int:
     for r in a.renderers.split(","):
         report["results"][r] = {}
         for c in cases:
-            pending = spec["cases"][c].get("pending")
-            if pending:
+            ent = spec["cases"][c]
+            problems = entry_problems(ent)
+            if problems:
+                report["results"][r][c] = {"status": "error", "notes": ["expected.json: " + p for p in problems]}
+                print(f"{r:3s} {c:22s} error expected.json: {'; '.join(problems)[:110]}", flush=True)
+                continue
+            pending = ent.get("pending")
+            runnable = bool(set(ent) & CHECKING_FORMS or set(ent) & set(CLASSES))
+            if pending and not (a.run_pending and runnable):
+                why = "" if runnable or not a.run_pending else "; no check form can run it yet"
                 report["results"][r][c] = {"status": "pending", "reason": pending, "notes": []}
-                print(f"{r:3s} {c:22s} pending ({pending[:90]})", flush=True)
+                print(f"{r:3s} {c:22s} pending ({pending[:90]}{why})", flush=True)
                 continue
-            if "captions" in spec["cases"][c]:
-                st, dt, notes, detail = captions(r, c, spec["cases"][c]["captions"])
-                report["results"][r][c] = {"status": st, "seconds": round(dt, 2), "notes": notes, **detail}
-                print(f"{r:3s} {c:22s} {st:5s} {dt:6.1f}s captions " + ("; ".join(notes)[:110] if st == "error" else ""), flush=True)
-                continue
-            if "audio" in spec["cases"][c]:
-                st, dt, notes, detail = audio(r, c, spec["cases"][c]["audio"])
-                report["results"][r][c] = {"status": st, "seconds": round(dt, 2), "notes": notes, **detail}
-                print(f"{r:3s} {c:22s} {st:5s} {dt:6.1f}s audio " + ("; ".join(notes)[:110] if st == "error" else ""), flush=True)
-                continue
-            if "findings" in spec["cases"][c]:
-                st, dt, notes, detail = findings(r, c, spec["cases"][c]["findings"])
-                report["results"][r][c] = {"status": st, "seconds": round(dt, 2), "notes": notes, **detail}
-                print(f"{r:3s} {c:22s} {st:5s} {dt:6.1f}s findings " + ("; ".join(notes)[:110] if st == "error" else ""), flush=True)
-                continue
-            png, code, dt, notes = render(r, c, spec["cases"][c].get("output"))
-            entry = {"exit": code, "seconds": round(dt, 2), "notes": notes}
-            if png:
-                meas = measure(png)
-                entry["measured"] = meas
-                entry["checks"] = [{"colour": col, "status": st, "expected": e, "measured": m} for col, st, e, m in check(meas, spec["cases"][c], tol, png)]
-                entry["status"] = "pass" if all(x["status"] == "pass" for x in entry["checks"]) else "fail"
-            else:
-                entry["status"] = "error"
+            entry, label = run_case(r, c, ent, tol)
+            if pending:                     # --run-pending: a pending case that passes is to be retired
+                if entry["status"] == "pass":
+                    entry["status"], entry["reason"] = "retire", pending
+                else:
+                    entry = {"status": "pending", "reason": pending, "notes": ["still not passing: " + entry["status"]]}
             report["results"][r][c] = entry
-            print(f"{r:3s} {c:22s} {entry['status']:5s} {dt:6.1f}s " + ("; ".join(notes)[:110] if entry["status"] == "error" else ""), flush=True)
+            note = "; ".join(entry.get("notes", []))[:110] if entry["status"] == "error" else ""
+            if entry["status"] == "retire":
+                note = "passes now: delete its entry from tools/kit_pending.py"
+            print(f"{r:3s} {c:22s} {entry['status']:5s} {entry.get('seconds', 0):6.1f}s {label} {note}".rstrip(), flush=True)
     os.makedirs(OUT, exist_ok=True)
     json.dump(report, open(os.path.join(OUT, "report.json"), "w"), indent=2)
     write_md(report, spec, cases)
+    n_pending = sum(1 for res in report["results"].values() for e in res.values() if e["status"] == "pending")
+    if n_pending:
+        print(f"{n_pending} case runs pending (not run; --run-pending runs those with a check)", flush=True)
     bad = [(r, c) for r, res in report["results"].items() for c, e in res.items() if e["status"] not in ("pass", "pending")]
     if not cases:
         print("no cases selected", flush=True)
@@ -430,7 +557,9 @@ def write_md(report, spec, cases):
         cells = []
         for r in rs:
             e = report["results"][r][c]
-            if e["status"] == "pending":
+            if e["status"] == "retire":
+                cells.append("🟢 passes now: retire its pending entry")
+            elif e["status"] == "pending":
                 cells.append("⏳ pending: " + e["reason"][:80])
             elif e["status"] == "pass":
                 cells.append("✅")
