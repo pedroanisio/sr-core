@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import importlib
+import inspect
 import keyword
 import sys
 from dataclasses import dataclass, field
@@ -198,6 +199,20 @@ def python_name(xml_name: str, owner: str) -> str:
     return xml_name + "_" if keyword.iskeyword(xml_name) else xml_name
 
 
+def attribute_doc(schema: model.Schema, a: model.Attribute) -> str:
+    """The documentation of an attribute: its own, else the one of its simple type (named or inline), dedented."""
+    text = a.doc
+    if not text:
+        st = schema.simple.get(a.type) if a.type is not None else a.inline
+        text = st.doc if st is not None else ""
+    return inspect.cleandoc(text) if text else ""
+
+
+def first_paragraph(text: str) -> str:
+    """The first paragraph of ``text`` on one line."""
+    return " ".join(text.strip().split("\n\n", 1)[0].split())
+
+
 def natural_key(version: str) -> tuple:
     return tuple((0, int(p), "") if p.isdigit() else (1, 0, p) for p in version.replace("-", ".").split("."))
 
@@ -210,6 +225,7 @@ class Generator:
         self._check_class_names()
         self.alias_order: list[str] = []
         self.params: dict[str, list[tuple[str, str]]] = {}
+        self.param_docs: dict[str, dict[str, str]] = {}
         self._alias_open: set[str] = set()
         self._check_simple_types()
 
@@ -358,6 +374,7 @@ class Generator:
     def attr_lines(self, key: str) -> list[str]:
         out = []
         params: list[tuple[str, str]] = []
+        docs: dict[str, str] = self.param_docs.setdefault(key, {})
         seen: dict[str, str] = {}
         for a in self.s.all_attributes(key):
             py = python_name(a.name, key)
@@ -383,13 +400,18 @@ class Generator:
                 # SceneBase accepts "auto" through the API, and a document that was read may carry it (SREP 4.5)
                 hint, got = (f'_t.Union[{h}, _t.Literal["auto"]]' for h in (hint, got))
             head = f"{py}: Attr[{got}, {hint}] = "
-            out.append(self.attr_source(head, a, spec))
+            doc = attribute_doc(self.s, a)
+            source = self.attr_source(head, a, spec, doc)
+            if doc:  # an attribute docstring, which editors show on hover
+                source += "\n    " + docstring(doc, "    ")
+            out.append(source)
             params.append((py, hint))
+            docs[py] = doc
         self.params[key] = params
         return out
 
     def signature(self, name: str, key: str, returns: str, indent: str,
-                  element_names: tuple[str, ...] = ()) -> list[str]:
+                  element_names: tuple[str, ...] = (), doc: str = "") -> list[str]:
         """A keyword-only signature over the attributes of type ``key`` (all optional), for type checkers.
 
         ``element_names`` (the constructor of a class that covers several element names) adds ``xml_name``, the
@@ -400,8 +422,23 @@ class Generator:
         if len(element_names) > 1:
             lines.append(f"{indent}    xml_name: _t.Literal[{', '.join(quote(n) for n in element_names)}] | None = None,")
         lines += [f"{indent}    {py}: {hint} | None = None," for py, hint in self.params[key]]
-        lines.append(f"{indent}) -> {returns}: ...")
+        if doc:
+            lines += [f"{indent}) -> {returns}:", f"{indent}    " + docstring(doc, indent + "    "),
+                      f"{indent}    ..."]
+        else:
+            lines.append(f"{indent}) -> {returns}: ...")
         return lines
+
+    def init_doc(self, key: str) -> str:
+        """The docstring of a stub constructor: the type summary, then one line per documented attribute."""
+        summary = first_paragraph(self.s.complex[key].doc)
+        rows = [f"{py}: {first_paragraph(text)}" for py, text in self.param_docs.get(key, {}).items() if text]
+        return "\n\n".join(p for p in (summary, "Args:\n" + "\n".join("    " + r for r in rows) if rows else "") if p)
+
+    def add_doc(self, name: str, tkey: str) -> str:
+        summary = first_paragraph(self.s.complex[tkey].doc)
+        head = f"Add a <{name}> child; the keywords are the attributes of {self.names[tkey]}."
+        return head + (f"\n\n{summary}" if summary else "")
 
     def _check_lexical(self, key: str, a: model.Attribute, spec: Any) -> None:
         """Every default and fixed value must be valid for the attribute's own type (SchemaError otherwise)."""
@@ -415,10 +452,10 @@ class Generator:
                 raise SchemaError(f"{key}/@{a.name}: {what} value {lex!r} is not valid for its type")
 
     @staticmethod
-    def attr_source(head: str, a: model.Attribute, spec: Any) -> str:
+    def attr_source(head: str, a: model.Attribute, spec: Any, doc_text: str) -> str:
         """One attribute declaration: a single line when it fits, else name/type, flags and doc on their own lines."""
         flags = f"use={quote(a.use)}, default={flat(a.default)}, fixed={flat(a.fixed)}"
-        doc = f"doc={quote(a.doc)}"
+        doc = f"doc={quote(doc_text)}"
         one = f"    {head}Attr({quote(a.name)}, {flat(spec)}, {flags}, {doc})"
         if len(one) <= LINE_WIDTH:
             return one
@@ -494,9 +531,11 @@ class Generator:
         # Type checkers see keyword-only signatures; at run time the same methods take **attrs, so that an attribute
         # the element does not declare raises AttributeError (SREP 3.3), not TypeError.
         lines += ["", "    if _t.TYPE_CHECKING:", ""]
-        lines += self.signature("__init__", key, "None", "        ", element_names=element_names)
+        lines += self.signature("__init__", key, "None", "        ", element_names=element_names,
+                                doc=self.init_doc(key))
         for name, tkey in types.items():
-            lines += [""] + self.signature(f"add_{name}", tkey, self.names[tkey], "        ")
+            lines += [""] + self.signature(f"add_{name}", tkey, self.names[tkey], "        ",
+                                           doc=self.add_doc(name, tkey))
         if types:
             lines += ["", "    else:"]
             for name, tkey in types.items():

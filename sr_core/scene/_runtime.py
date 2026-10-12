@@ -12,7 +12,7 @@ from __future__ import annotations
 import importlib
 import sys
 from dataclasses import dataclass
-from typing import Any, ClassVar, Generic, Iterator, Optional, TypeVar, overload
+from typing import TYPE_CHECKING, Any, ClassVar, Generic, Iterator, Optional, TypeVar, overload
 
 from sr_core.scene.errors import SchemaValueError, UnknownNameError
 
@@ -376,19 +376,21 @@ class Element:
                                     kind="method")
         return UnknownNameError(name, element, [a.name for a in _attr_specs(type(self)).values()])
 
-    def __setattr__(self, name: str, value: Any) -> None:
-        try:
-            object.__setattr__(self, name, value)
-        except AttributeError:
-            if getattr(type(self), name, None) is not None:  # a read-only member: its own error says why
-                raise
-            raise self._unknown(name) from None
+    if not TYPE_CHECKING:  # a type checker must keep flagging an unknown attribute, so it never sees these two
 
-    def __getattr__(self, name: str) -> Any:
-        # only reached when the normal lookup failed
-        if name.startswith("_"):
-            raise AttributeError(f"{type(self).__name__!r} object has no attribute {name!r}", name=name)
-        raise self._unknown(name)
+        def __setattr__(self, name: str, value: Any) -> None:
+            try:
+                object.__setattr__(self, name, value)
+            except AttributeError:
+                if getattr(type(self), name, None) is not None:  # a read-only member: its own error says why
+                    raise
+                raise self._unknown(name) from None
+
+        def __getattr__(self, name: str) -> Any:
+            # only reached when the normal lookup failed
+            if name.startswith("_"):
+                raise AttributeError(f"{type(self).__name__!r} object has no attribute {name!r}", name=name)
+            raise self._unknown(name)
 
     # -- read-only structure
 

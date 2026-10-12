@@ -936,7 +936,9 @@ class Scene(SceneBase):
             safeArea: _t.Union[str, Element] | None = None,
             quality: _t.Literal["draft", "preview", "final"] | None = None,
             fontPolicy: _t.Literal["system", "pinned"] | None = None,
-        ) -> Project: ...
+        ) -> Project:
+            """Add a <project> child; the keywords are the attributes of Project."""
+            ...
 
         def add_metadata(
             self,
@@ -951,15 +953,24 @@ class Scene(SceneBase):
             modified: _t.Union[_dt.datetime, str] | None = None,
             generator: str | None = None,
             language: T_languageTagType | None = None,
-        ) -> Metadata: ...
+        ) -> Metadata:
+            """Add a <metadata> child; the keywords are the attributes of Metadata."""
+            ...
 
         def add_parameters(
             self,
-        ) -> Parameters: ...
+        ) -> Parameters:
+            """Add a <parameters> child; the keywords are the attributes of Parameters."""
+            ...
 
         def add_styles(
             self,
-        ) -> Styles: ...
+        ) -> Styles:
+            """Add a <styles> child; the keywords are the attributes of Styles.
+
+            Brand kit: colour/number tokens referenced as var(--name), and reusable text styles.
+            """
+            ...
 
         def add_colorManagement(
             self,
@@ -972,7 +983,12 @@ class Scene(SceneBase):
             toneMapping: _t.Literal["none", "aces", "aces2", "agx", "filmic", "reinhard"] | None = None,
             exposure: _t.Union[float, int, str] | None = None,
             bitDepth: _t.Literal["8", "16", "16f", "32f"] | None = None,
-        ) -> ColorManagement: ...
+        ) -> ColorManagement:
+            """Add a <colorManagement> child; the keywords are the attributes of ColorManagement.
+
+            Scene-referred pipeline: inputs decode by asset colorSpace+transfer into @workingSpace, @looks (LUTs or ASC CDL) apply in order, then the display/view transform and tone mapping produce each output's colorSpace and transfer. @ocioConfig delegates all of this to an OpenColorIO v2 config, where @workingSpace, @display, @view and look ids name OCIO objects.
+            """
+            ...
 
         def add_output(
             self,
@@ -1024,31 +1040,48 @@ class Scene(SceneBase):
             embedMetadata: _t.Union[bool, str] | None = None,
             representation: str | None = None,
             report: str | None = None,
-        ) -> Output: ...
+        ) -> Output:
+            """Add a <output> child; the keywords are the attributes of Output.
+
+            Several outputs render one scene into different placements. layout picks a layoutVariant frame; variant picks a parameter set; start/end render a range. Width/height default to the layout's, else the project's. Sequence codecs write numbered files at @path (printf pattern).
+            """
+            ...
 
         def add_layouts(
             self,
-        ) -> Layouts: ...
+        ) -> Layouts:
+            """Add a <layouts> child; the keywords are the attributes of Layouts."""
+            ...
 
         def add_safeAreas(
             self,
-        ) -> SafeAreas: ...
+        ) -> SafeAreas:
+            """Add a <safeAreas> child; the keywords are the attributes of SafeAreas."""
+            ...
 
         def add_assets(
             self,
-        ) -> Assets: ...
+        ) -> Assets:
+            """Add a <assets> child; the keywords are the attributes of Assets."""
+            ...
 
         def add_paints(
             self,
-        ) -> Paints: ...
+        ) -> Paints:
+            """Add a <paints> child; the keywords are the attributes of Paints."""
+            ...
 
         def add_materials(
             self,
-        ) -> Materials: ...
+        ) -> Materials:
+            """Add a <materials> child; the keywords are the attributes of Materials."""
+            ...
 
         def add_symbols(
             self,
-        ) -> Symbols: ...
+        ) -> Symbols:
+            """Add a <symbols> child; the keywords are the attributes of Symbols."""
+            ...
 
         def add_scene360(
             self,
@@ -1059,27 +1092,39 @@ class Scene(SceneBase):
             viewportCamera: _t.Union[str, Element] | None = None,
             stereo: _t.Literal["mono", "top-bottom", "left-right"] | None = None,
             interpupillary: T_positiveDecimal | None = None,
-        ) -> Scene360: ...
+        ) -> Scene360:
+            """Add a <scene360> child; the keywords are the attributes of Scene360."""
+            ...
 
         def add_markers(
             self,
-        ) -> Markers: ...
+        ) -> Markers:
+            """Add a <markers> child; the keywords are the attributes of Markers."""
+            ...
 
         def add_tracking(
             self,
-        ) -> Tracking: ...
+        ) -> Tracking:
+            """Add a <tracking> child; the keywords are the attributes of Tracking."""
+            ...
 
         def add_composition(
             self,
-        ) -> Composition: ...
+        ) -> Composition:
+            """Add a <composition> child; the keywords are the attributes of Composition."""
+            ...
 
         def add_lights(
             self,
-        ) -> Lights: ...
+        ) -> Lights:
+            """Add a <lights> child; the keywords are the attributes of Lights."""
+            ...
 
         def add_effects(
             self,
-        ) -> Effects: ...
+        ) -> Effects:
+            """Add a <effects> child; the keywords are the attributes of Effects."""
+            ...
 
         def add_physics(
             self,
@@ -1095,7 +1140,12 @@ class Scene(SceneBase):
             cache: str | None = None,
             cacheSha256: T_sha256Type | None = None,
             fixInternalEdges: _t.Union[bool, str] | None = None,
-        ) -> Physics: ...
+        ) -> Physics:
+            """Add a <physics> child; the keywords are the attributes of Physics.
+
+            softBody: validation also rejects a body whose stable integration needs more than 4096 substeps per fixedStep. The physics world is metres, +y up; pixelsPerMeter maps it to screen pixels (+y down).
+            """
+            ...
 
         def add_audioMix(
             self,
@@ -1104,11 +1154,15 @@ class Scene(SceneBase):
             channels: _t.Union[int, str] | None = None,
             channelLayout: _t.Literal["auto", "mono", "stereo", "5.1", "7.1", "7.1.4", "ambisonic-1", "ambisonic-3"] | None = None,
             bitDepth: _t.Literal["16", "24", "32"] | None = None,
-        ) -> AudioMix: ...
+        ) -> AudioMix:
+            """Add a <audioMix> child; the keywords are the attributes of AudioMix."""
+            ...
 
         def add_captions(
             self,
-        ) -> Captions: ...
+        ) -> Captions:
+            """Add a <captions> child; the keywords are the attributes of Captions."""
+            ...
 
     else:
 
@@ -1195,7 +1249,9 @@ class ParamValue(Element):
             *,
             name: str | None = None,
             value: str | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Generic named value (shader uniforms, plugin params)."""
+            ...
 
 
 class Override(Element):
@@ -1223,7 +1279,9 @@ class Override(Element):
             target: str | None = None,
             property: str | None = None,
             value: str | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Sets attribute @property of the element whose id is @target (resolved in the scope of the enclosing instance, layout or variant) to @value."""
+            ...
 
 
 class Key(Element):
@@ -1244,28 +1302,46 @@ class Key(Element):
     )
     value: Attr[str, str] = Attr("value", "xs:string", use="required", default=None, fixed=None, doc="")
     interpolation: Attr[G_curveType, T_curveType] = Attr(
-        "interpolation", "curveType", use="optional", default=None, fixed=None, doc="",
+        "interpolation", "curveType", use="optional", default=None, fixed=None,
+        doc='1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom,\ntcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping,\n@mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2"\nor key/@easeOut + next key/@easeIn handles.',
     )
+    """1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom,
+    tcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping,
+    @mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2"
+    or key/@easeOut + next key/@easeIn handles.
+    """
     bezier: Attr[str, str] = Attr("bezier", "xs:string", use="optional", default=None, fixed=None, doc="")
     easeIn: Attr[G_pointType, T_pointType] = Attr(
-        "easeIn", "pointType", use="optional", default=None, fixed=None, doc="",
+        "easeIn", "pointType", use="optional", default=None, fixed=None,
+        doc='"x,y" pair, e.g. a bezier handle or tangent.',
     )
+    """"x,y" pair, e.g. a bezier handle or tangent."""
     easeOut: Attr[G_pointType, T_pointType] = Attr(
-        "easeOut", "pointType", use="optional", default=None, fixed=None, doc="",
+        "easeOut", "pointType", use="optional", default=None, fixed=None,
+        doc='"x,y" pair, e.g. a bezier handle or tangent.',
     )
+    """"x,y" pair, e.g. a bezier handle or tangent."""
     spatialIn: Attr[G_pointType, T_pointType] = Attr(
-        "spatialIn", "pointType", use="optional", default=None, fixed=None, doc="",
+        "spatialIn", "pointType", use="optional", default=None, fixed=None,
+        doc='"x,y" pair, e.g. a bezier handle or tangent.',
     )
+    """"x,y" pair, e.g. a bezier handle or tangent."""
     spatialOut: Attr[G_pointType, T_pointType] = Attr(
-        "spatialOut", "pointType", use="optional", default=None, fixed=None, doc="",
+        "spatialOut", "pointType", use="optional", default=None, fixed=None,
+        doc='"x,y" pair, e.g. a bezier handle or tangent.',
     )
+    """"x,y" pair, e.g. a bezier handle or tangent."""
     roving: Attr[bool, _t.Union[bool, str]] = Attr(
         "roving", "xs:boolean", use="optional", default="false", fixed=None, doc="",
     )
     carry: Attr[bool, _t.Union[bool, str]] = Attr(
         "carry", "xs:boolean", use="optional", default="false", fixed=None,
-        doc="On a key whose segment is a spring: start the spring with the velocity the previous\n      segment arrives at this key with (its rate of change at the end), instead of from rest, so a hit that follows another\n      keeps its momentum. Needs a previous key and a following key.",
+        doc="On a key whose segment is a spring: start the spring with the velocity the previous\nsegment arrives at this key with (its rate of change at the end), instead of from rest, so a hit that follows another\nkeeps its momentum. Needs a previous key and a following key.",
     )
+    """On a key whose segment is a spring: start the spring with the velocity the previous
+    segment arrives at this key with (its rate of change at the end), instead of from rest, so a hit that follows another
+    keeps its momentum. Needs a previous key and a following key.
+    """
     steps: Attr[int, _t.Union[int, str]] = Attr(
         "steps", "xs:positiveInteger", use="optional", default=None, fixed=None, doc="",
     )
@@ -1304,14 +1380,17 @@ class Key(Element):
         "overshoot", "nonNegativeDecimal", use="optional", default=None, fixed=None,
         doc="The constant of a back-in, back-out or back-in-out segment (default 1.70158, about 10 % overshoot; 0 is the plain cubic). Read from the key the segment leaves.",
     )
+    """The constant of a back-in, back-out or back-in-out segment (default 1.70158, about 10 % overshoot; 0 is the plain cubic). Read from the key the segment leaves."""
     period: Attr[G_positiveDecimal, T_positiveDecimal] = Attr(
         "period", "positiveDecimal", use="optional", default=None, fixed=None,
         doc="The ringing period of an elastic-in, elastic-out or elastic-in-out segment as a fraction of the segment (default 0.3; 0.45 for elastic-in-out). Read from the key the segment leaves.",
     )
+    """The ringing period of an elastic-in, elastic-out or elastic-in-out segment as a fraction of the segment (default 0.3; 0.45 for elastic-in-out). Read from the key the segment leaves."""
     marker: Attr[str, str] = Attr(
         "marker", "xs:NCName", use="optional", default=None, fixed=None,
         doc="Snap the key time to a marker; @time becomes an offset from it. A marker of the scene, or a beat.N or bar.N id generated by its beatGrid.",
     )
+    """Snap the key time to a marker; @time becomes an offset from it. A marker of the scene, or a beat.N or bar.N id generated by its beatGrid."""
 
     if _t.TYPE_CHECKING:
 
@@ -1339,7 +1418,21 @@ class Key(Element):
             overshoot: T_nonNegativeDecimal | None = None,
             period: T_positiveDecimal | None = None,
             marker: str | None = None,
-        ) -> None: ...
+        ) -> None:
+            """value is parsed with the type of the animated property (number, "x,y", colour, paint, path data, string). easeIn/easeOut are After Effects-style temporal handles "influence,speed" normalised to [0,1]; spatialIn/Out are motion-path tangents in pixels relative to the key value.
+
+            Args:
+                interpolation: 1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom, tcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping, @mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2" or key/@easeOut + next key/@easeIn handles.
+                easeIn: "x,y" pair, e.g. a bezier handle or tangent.
+                easeOut: "x,y" pair, e.g. a bezier handle or tangent.
+                spatialIn: "x,y" pair, e.g. a bezier handle or tangent.
+                spatialOut: "x,y" pair, e.g. a bezier handle or tangent.
+                carry: On a key whose segment is a spring: start the spring with the velocity the previous segment arrives at this key with (its rate of change at the end), instead of from rest, so a hit that follows another keeps its momentum. Needs a previous key and a following key.
+                overshoot: The constant of a back-in, back-out or back-in-out segment (default 1.70158, about 10 % overshoot; 0 is the plain cubic). Read from the key the segment leaves.
+                period: The ringing period of an elastic-in, elastic-out or elastic-in-out segment as a fraction of the segment (default 0.3; 0.45 for elastic-in-out). Read from the key the segment leaves.
+                marker: Snap the key time to a marker; @time becomes an offset from it. A marker of the scene, or a beat.N or bar.N id generated by its beatGrid.
+            """
+            ...
 
 
 class Animate(Element):
@@ -1353,8 +1446,14 @@ class Animate(Element):
 
     property: Attr[str, str] = Attr("property", "xs:string", use="required", default=None, fixed=None, doc="")
     defaultInterpolation: Attr[G_curveType, T_curveType] = Attr(
-        "defaultInterpolation", "curveType", use="optional", default="linear", fixed=None, doc="",
+        "defaultInterpolation", "curveType", use="optional", default="linear", fixed=None,
+        doc='1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom,\ntcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping,\n@mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2"\nor key/@easeOut + next key/@easeIn handles.',
     )
+    """1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom,
+    tcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping,
+    @mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2"
+    or key/@easeOut + next key/@easeIn handles.
+    """
     extrapolateBefore: Attr[G_extrapolationType, T_extrapolationType] = Attr(
         "extrapolateBefore", "extrapolationType", use="optional", default="hold", fixed=None, doc="",
     )
@@ -1389,7 +1488,11 @@ class Animate(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                defaultInterpolation: 1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom, tcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping, @mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2" or key/@easeOut + next key/@easeIn handles.
+            """
+            ...
 
         def add_key(
             self,
@@ -1415,7 +1518,12 @@ class Animate(Element):
             overshoot: T_nonNegativeDecimal | None = None,
             period: T_positiveDecimal | None = None,
             marker: str | None = None,
-        ) -> Key: ...
+        ) -> Key:
+            """Add a <key> child; the keywords are the attributes of Key.
+
+            value is parsed with the type of the animated property (number, "x,y", colour, paint, path data, string). easeIn/easeOut are After Effects-style temporal handles "influence,speed" normalised to [0,1]; spatialIn/Out are motion-path tangents in pixels relative to the key value.
+            """
+            ...
 
     else:
 
@@ -1460,7 +1568,9 @@ class Expression(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists."""
+            ...
 
 
 class MotionPath(Element):
@@ -1482,8 +1592,14 @@ class MotionPath(Element):
         "end", "xs:double", use="optional", default=None, fixed=None, doc="",
     )
     interpolation: Attr[G_curveType, T_curveType] = Attr(
-        "interpolation", "curveType", use="optional", default="linear", fixed=None, doc="",
+        "interpolation", "curveType", use="optional", default="linear", fixed=None,
+        doc='1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom,\ntcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping,\n@mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2"\nor key/@easeOut + next key/@easeIn handles.',
     )
+    """1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom,
+    tcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping,
+    @mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2"
+    or key/@easeOut + next key/@easeIn handles.
+    """
     autoOrient: Attr[bool, _t.Union[bool, str]] = Attr(
         "autoOrient", "xs:boolean", use="optional", default="false", fixed=None, doc="",
     )
@@ -1495,8 +1611,12 @@ class MotionPath(Element):
     )
     additive: Attr[bool, _t.Union[bool, str]] = Attr(
         "additive", "xs:boolean", use="optional", default="false", fixed=None,
-        doc="true: the path is an offset. The node's position is its own x and y (keys, link,\n      expression) plus the path's point at the progress minus the path's first point, so the node starts where it would\n      without the path. false: the path's point is the position.",
+        doc="true: the path is an offset. The node's position is its own x and y (keys, link,\nexpression) plus the path's point at the progress minus the path's first point, so the node starts where it would\nwithout the path. false: the path's point is the position.",
     )
+    """true: the path is an offset. The node's position is its own x and y (keys, link,
+    expression) plus the path's point at the progress minus the path's first point, so the node starts where it would
+    without the path. false: the path's point is the position.
+    """
 
     if _t.TYPE_CHECKING:
 
@@ -1511,7 +1631,14 @@ class MotionPath(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+
+            Args:
+                interpolation: 1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom, tcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping, @mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2" or key/@easeOut + next key/@easeIn handles.
+                additive: true: the path is an offset. The node's position is its own x and y (keys, link, expression) plus the path's point at the progress minus the path's first point, so the node starts where it would without the path. false: the path's point is the position.
+            """
+            ...
 
         def add_animate(
             self,
@@ -1522,7 +1649,9 @@ class MotionPath(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
     else:
 
@@ -1607,7 +1736,9 @@ class Link(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds."""
+            ...
 
 
 class Animated(Element):
@@ -1628,7 +1759,9 @@ class Animated(Element):
 
         def __init__(
             self,
-        ) -> None: ...
+        ) -> None:
+            """Base for elements whose only children are animation elements."""
+            ...
 
         def add_animate(
             self,
@@ -1639,7 +1772,9 @@ class Animated(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -1647,7 +1782,12 @@ class Animated(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -1660,7 +1800,12 @@ class Animated(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -1678,7 +1823,12 @@ class Animated(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -1708,8 +1858,14 @@ class TimeRemap(Element):
     _simple_content = None
 
     defaultInterpolation: Attr[G_curveType, T_curveType] = Attr(
-        "defaultInterpolation", "curveType", use="optional", default="linear", fixed=None, doc="",
+        "defaultInterpolation", "curveType", use="optional", default="linear", fixed=None,
+        doc='1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom,\ntcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping,\n@mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2"\nor key/@easeOut + next key/@easeIn handles.',
     )
+    """1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom,
+    tcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping,
+    @mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2"
+    or key/@easeOut + next key/@easeIn handles.
+    """
     frameBlend: Attr[_t.Literal["none", "frame-mix", "optical-flow"], _t.Literal["none", "frame-mix", "optical-flow"]] = Attr(
         "frameBlend",
         {
@@ -1731,7 +1887,13 @@ class TimeRemap(Element):
             *,
             defaultInterpolation: T_curveType | None = None,
             frameBlend: _t.Literal["none", "frame-mix", "optical-flow"] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Maps layer-local time (key/@time) to source time (key/@value, seconds). Replaces speed/reverse/loop when present; speed ramps, freezes and reversals are expressed as keys.
+
+            Args:
+                defaultInterpolation: 1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom, tcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping, @mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2" or key/@easeOut + next key/@easeIn handles.
+            """
+            ...
 
         def add_key(
             self,
@@ -1757,7 +1919,12 @@ class TimeRemap(Element):
             overshoot: T_nonNegativeDecimal | None = None,
             period: T_positiveDecimal | None = None,
             marker: str | None = None,
-        ) -> Key: ...
+        ) -> Key:
+            """Add a <key> child; the keywords are the attributes of Key.
+
+            value is parsed with the type of the animated property (number, "x,y", colour, paint, path data, string). easeIn/easeOut are After Effects-style temporal handles "influence,speed" normalised to [0,1]; spatialIn/Out are motion-path tangents in pixels relative to the key value.
+            """
+            ...
 
     else:
 
@@ -1866,7 +2033,9 @@ class Mask(Element):
             expansion: _t.Union[float, int, str] | None = None,
             opacity: T_unitDecimal | None = None,
             mode: _t.Literal["intersect", "add", "subtract", "lighten", "darken", "difference", "none"] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Masks combine in document order using @mode; the 1.0 behaviour (product of coverages) is mode="intersect", the default. Coverage is anti-aliased, then expanded/contracted by @expansion and blurred by @feather pixels."""
+            ...
 
         def add_animate(
             self,
@@ -1877,7 +2046,9 @@ class Mask(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -1885,7 +2056,12 @@ class Mask(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -1898,7 +2074,12 @@ class Mask(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -1916,7 +2097,12 @@ class Mask(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -1983,8 +2169,12 @@ class TransformConstraint(Element):
     )
     targetJoint: Attr[str, str] = Attr(
         "targetJoint", "xs:string", use="optional", default=None, fixed=None,
-        doc="With a @target that is an object3D drawing an imported model: the name of a node of\n      that model whose pose is the target's transform (parent, copy-position, copy-rotation, copy-scale, copy-transform,\n      look-at and distance).",
+        doc="With a @target that is an object3D drawing an imported model: the name of a node of\nthat model whose pose is the target's transform (parent, copy-position, copy-rotation, copy-scale, copy-transform,\nlook-at and distance).",
     )
+    """With a @target that is an object3D drawing an imported model: the name of a node of
+    that model whose pose is the target's transform (parent, copy-position, copy-rotation, copy-scale, copy-transform,
+    look-at and distance).
+    """
     path: Attr[str, str] = Attr("path", "xs:string", use="optional", default=None, fixed=None, doc="")
     point: Attr[str, str] = Attr("point", "xs:string", use="optional", default=None, fixed=None, doc="")
     influence: Attr[G_unitDecimal, T_unitDecimal] = Attr(
@@ -2023,12 +2213,19 @@ class TransformConstraint(Element):
     )
     pole: Attr[str, _t.Union[str, Element]] = Attr(
         "pole", "xs:IDREF", use="optional", default=None, fixed=None,
-        doc='type="ik" on a chain of two bones or joints: a node or bone whose position the middle joint\n      bends toward; it replaces @bendPositive (which stays the choice when the pole lies on the line to the target).',
+        doc='type="ik" on a chain of two bones or joints: a node or bone whose position the middle joint\nbends toward; it replaces @bendPositive (which stays the choice when the pole lies on the line to the target).',
     )
+    """type="ik" on a chain of two bones or joints: a node or bone whose position the middle joint
+    bends toward; it replaces @bendPositive (which stays the choice when the pole lies on the line to the target).
+    """
     softness: Attr[G_unitDecimal, T_unitDecimal] = Attr(
         "softness", "unitDecimal", use="optional", default="0", fixed=None,
-        doc='type="ik" on a chain of two bones or joints: the fraction of the chain\'s full reach, counted\n      from its end, over which the reach eases toward full extension, so the chain does not snap straight as the target\n      leaves its reach.',
+        doc='type="ik" on a chain of two bones or joints: the fraction of the chain\'s full reach, counted\nfrom its end, over which the reach eases toward full extension, so the chain does not snap straight as the target\nleaves its reach.',
     )
+    """type="ik" on a chain of two bones or joints: the fraction of the chain's full reach, counted
+    from its end, over which the reach eases toward full extension, so the chain does not snap straight as the target
+    leaves its reach.
+    """
     progress: Attr[G_unitDecimal, T_unitDecimal] = Attr(
         "progress", "unitDecimal", use="optional", default="0", fixed=None, doc="",
     )
@@ -2058,7 +2255,15 @@ class TransformConstraint(Element):
             softness: T_unitDecimal | None = None,
             progress: T_unitDecimal | None = None,
             autoOrient: _t.Union[bool, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target's transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target's world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.
+
+            Args:
+                targetJoint: With a @target that is an object3D drawing an imported model: the name of a node of that model whose pose is the target's transform (parent, copy-position, copy-rotation, copy-scale, copy-transform, look-at and distance).
+                pole: type="ik" on a chain of two bones or joints: a node or bone whose position the middle joint bends toward; it replaces @bendPositive (which stays the choice when the pole lies on the line to the target).
+                softness: type="ik" on a chain of two bones or joints: the fraction of the chain's full reach, counted from its end, over which the reach eases toward full extension, so the chain does not snap straight as the target leaves its reach.
+            """
+            ...
 
         def add_animate(
             self,
@@ -2069,7 +2274,9 @@ class TransformConstraint(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -2077,7 +2284,12 @@ class TransformConstraint(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -2090,7 +2302,12 @@ class TransformConstraint(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -2108,7 +2325,12 @@ class TransformConstraint(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -2143,8 +2365,12 @@ class Stop(Element):
         "offset", "unitDecimal", use="required", default=None, fixed=None, doc="",
     )
     color: Attr[G_colorType, T_colorType] = Attr(
-        "color", "colorType", use="required", default=None, fixed=None, doc="",
+        "color", "colorType", use="required", default=None, fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     opacity: Attr[G_unitDecimal, T_unitDecimal] = Attr(
         "opacity", "unitDecimal", use="optional", default="1", fixed=None, doc="",
     )
@@ -2161,7 +2387,11 @@ class Stop(Element):
             color: T_colorType | None = None,
             opacity: T_unitDecimal | None = None,
             midpoint: T_unitDecimal | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                color: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+            """
+            ...
 
         def add_animate(
             self,
@@ -2172,7 +2402,9 @@ class Stop(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -2180,7 +2412,12 @@ class Stop(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -2193,7 +2430,12 @@ class Stop(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -2211,7 +2453,12 @@ class Stop(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -2272,6 +2519,7 @@ class GradientBase(Element):
         use="optional", default="object", fixed=None,
         doc="object: coordinates are fractions of the painted box; user: pixels in the painted node's space.",
     )
+    """object: coordinates are fractions of the painted box; user: pixels in the painted node's space."""
     interpolationSpace: Attr[_t.Literal["linear", "srgb", "oklab", "oklch"], _t.Literal["linear", "srgb", "oklab", "oklch"]] = Attr(
         "interpolationSpace",
         {
@@ -2303,7 +2551,11 @@ class GradientBase(Element):
             interpolationSpace: _t.Literal["linear", "srgb", "oklab", "oklch"] | None = None,
             dither: _t.Union[bool, str] | None = None,
             rotation: _t.Union[float, int, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                units: object: coordinates are fractions of the painted box; user: pixels in the painted node's space.
+            """
+            ...
 
         def add_stop(
             self,
@@ -2312,7 +2564,9 @@ class GradientBase(Element):
             color: T_colorType | None = None,
             opacity: T_unitDecimal | None = None,
             midpoint: T_unitDecimal | None = None,
-        ) -> Stop: ...
+        ) -> Stop:
+            """Add a <stop> child; the keywords are the attributes of Stop."""
+            ...
 
         def add_animate(
             self,
@@ -2323,7 +2577,9 @@ class GradientBase(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -2331,7 +2587,12 @@ class GradientBase(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -2344,7 +2605,12 @@ class GradientBase(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -2362,7 +2628,12 @@ class GradientBase(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -2426,6 +2697,7 @@ class LinearGradient(Element):
         use="optional", default="object", fixed=None,
         doc="object: coordinates are fractions of the painted box; user: pixels in the painted node's space.",
     )
+    """object: coordinates are fractions of the painted box; user: pixels in the painted node's space."""
     interpolationSpace: Attr[_t.Literal["linear", "srgb", "oklab", "oklch"], _t.Literal["linear", "srgb", "oklab", "oklch"]] = Attr(
         "interpolationSpace",
         {
@@ -2473,7 +2745,11 @@ class LinearGradient(Element):
             y1: _t.Union[float, int, str] | None = None,
             x2: _t.Union[float, int, str] | None = None,
             y2: _t.Union[float, int, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                units: object: coordinates are fractions of the painted box; user: pixels in the painted node's space.
+            """
+            ...
 
         def add_stop(
             self,
@@ -2482,7 +2758,9 @@ class LinearGradient(Element):
             color: T_colorType | None = None,
             opacity: T_unitDecimal | None = None,
             midpoint: T_unitDecimal | None = None,
-        ) -> Stop: ...
+        ) -> Stop:
+            """Add a <stop> child; the keywords are the attributes of Stop."""
+            ...
 
         def add_animate(
             self,
@@ -2493,7 +2771,9 @@ class LinearGradient(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -2501,7 +2781,12 @@ class LinearGradient(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -2514,7 +2799,12 @@ class LinearGradient(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -2532,7 +2822,12 @@ class LinearGradient(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -2596,6 +2891,7 @@ class RadialGradient(Element):
         use="optional", default="object", fixed=None,
         doc="object: coordinates are fractions of the painted box; user: pixels in the painted node's space.",
     )
+    """object: coordinates are fractions of the painted box; user: pixels in the painted node's space."""
     interpolationSpace: Attr[_t.Literal["linear", "srgb", "oklab", "oklch"], _t.Literal["linear", "srgb", "oklab", "oklch"]] = Attr(
         "interpolationSpace",
         {
@@ -2637,6 +2933,7 @@ class RadialGradient(Element):
         "aspect", "positiveDecimal", use="optional", default="1", fixed=None,
         doc='Multiplier on the gradient\'s x extent about its centre, applied after the units are mapped. 1 is no stretch. With units="object" the gradient already follows the painted box, so a radial gradient on a wide shape is an ellipse without any aspect; > 1 widens it further, < 1 narrows it.',
     )
+    """Multiplier on the gradient's x extent about its centre, applied after the units are mapped. 1 is no stretch. With units="object" the gradient already follows the painted box, so a radial gradient on a wide shape is an ellipse without any aspect; > 1 widens it further, < 1 narrows it."""
 
     if _t.TYPE_CHECKING:
 
@@ -2656,7 +2953,12 @@ class RadialGradient(Element):
             fy: _t.Union[float, int, str] | None = None,
             fr: T_nonNegativeDecimal | None = None,
             aspect: T_positiveDecimal | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                units: object: coordinates are fractions of the painted box; user: pixels in the painted node's space.
+                aspect: Multiplier on the gradient's x extent about its centre, applied after the units are mapped. 1 is no stretch. With units="object" the gradient already follows the painted box, so a radial gradient on a wide shape is an ellipse without any aspect; > 1 widens it further, < 1 narrows it.
+            """
+            ...
 
         def add_stop(
             self,
@@ -2665,7 +2967,9 @@ class RadialGradient(Element):
             color: T_colorType | None = None,
             opacity: T_unitDecimal | None = None,
             midpoint: T_unitDecimal | None = None,
-        ) -> Stop: ...
+        ) -> Stop:
+            """Add a <stop> child; the keywords are the attributes of Stop."""
+            ...
 
         def add_animate(
             self,
@@ -2676,7 +2980,9 @@ class RadialGradient(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -2684,7 +2990,12 @@ class RadialGradient(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -2697,7 +3008,12 @@ class RadialGradient(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -2715,7 +3031,12 @@ class RadialGradient(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -2779,6 +3100,7 @@ class ConicGradient(Element):
         use="optional", default="object", fixed=None,
         doc="object: coordinates are fractions of the painted box; user: pixels in the painted node's space.",
     )
+    """object: coordinates are fractions of the painted box; user: pixels in the painted node's space."""
     interpolationSpace: Attr[_t.Literal["linear", "srgb", "oklab", "oklch"], _t.Literal["linear", "srgb", "oklab", "oklch"]] = Attr(
         "interpolationSpace",
         {
@@ -2822,7 +3144,11 @@ class ConicGradient(Element):
             cx: _t.Union[float, int, str] | None = None,
             cy: _t.Union[float, int, str] | None = None,
             angle: _t.Union[float, int, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                units: object: coordinates are fractions of the painted box; user: pixels in the painted node's space.
+            """
+            ...
 
         def add_stop(
             self,
@@ -2831,7 +3157,9 @@ class ConicGradient(Element):
             color: T_colorType | None = None,
             opacity: T_unitDecimal | None = None,
             midpoint: T_unitDecimal | None = None,
-        ) -> Stop: ...
+        ) -> Stop:
+            """Add a <stop> child; the keywords are the attributes of Stop."""
+            ...
 
         def add_animate(
             self,
@@ -2842,7 +3170,9 @@ class ConicGradient(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -2850,7 +3180,12 @@ class ConicGradient(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -2863,7 +3198,12 @@ class ConicGradient(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -2881,7 +3221,12 @@ class ConicGradient(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -2922,8 +3267,12 @@ class MeshPoint(Element):
         "col", "xs:nonNegativeInteger", use="required", default=None, fixed=None, doc="",
     )
     color: Attr[G_colorType, T_colorType] = Attr(
-        "color", "colorType", use="required", default=None, fixed=None, doc="",
+        "color", "colorType", use="required", default=None, fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     x: Attr[float, _t.Union[float, int, str]] = Attr(
         "x", "xs:double", use="optional", default=None, fixed=None, doc="",
     )
@@ -2941,7 +3290,11 @@ class MeshPoint(Element):
             color: T_colorType | None = None,
             x: _t.Union[float, int, str] | None = None,
             y: _t.Union[float, int, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                color: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+            """
+            ...
 
         def add_animate(
             self,
@@ -2952,7 +3305,9 @@ class MeshPoint(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -2960,7 +3315,12 @@ class MeshPoint(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -2973,7 +3333,12 @@ class MeshPoint(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -2991,7 +3356,12 @@ class MeshPoint(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -3055,7 +3425,9 @@ class MeshGradient(Element):
             rows: T_gridSizeType | None = None,
             cols: T_gridSizeType | None = None,
             interpolationSpace: _t.Literal["linear", "srgb", "oklab"] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Freeform / mesh gradient: bicubic colour patch grid."""
+            ...
 
         def add_point(
             self,
@@ -3065,7 +3437,9 @@ class MeshGradient(Element):
             color: T_colorType | None = None,
             x: _t.Union[float, int, str] | None = None,
             y: _t.Union[float, int, str] | None = None,
-        ) -> MeshPoint: ...
+        ) -> MeshPoint:
+            """Add a <point> child; the keywords are the attributes of MeshPoint."""
+            ...
 
         def add_animate(
             self,
@@ -3076,7 +3450,9 @@ class MeshGradient(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -3084,7 +3460,12 @@ class MeshGradient(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -3097,7 +3478,12 @@ class MeshGradient(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -3115,7 +3501,12 @@ class MeshGradient(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -3196,7 +3587,9 @@ class PatternPaint(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -3204,7 +3597,12 @@ class PatternPaint(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -3217,7 +3615,12 @@ class PatternPaint(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -3235,7 +3638,12 @@ class PatternPaint(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -3286,7 +3694,9 @@ class Paints(Element):
             y1: _t.Union[float, int, str] | None = None,
             x2: _t.Union[float, int, str] | None = None,
             y2: _t.Union[float, int, str] | None = None,
-        ) -> LinearGradient: ...
+        ) -> LinearGradient:
+            """Add a <linearGradient> child; the keywords are the attributes of LinearGradient."""
+            ...
 
         def add_radialGradient(
             self,
@@ -3304,7 +3714,9 @@ class Paints(Element):
             fy: _t.Union[float, int, str] | None = None,
             fr: T_nonNegativeDecimal | None = None,
             aspect: T_positiveDecimal | None = None,
-        ) -> RadialGradient: ...
+        ) -> RadialGradient:
+            """Add a <radialGradient> child; the keywords are the attributes of RadialGradient."""
+            ...
 
         def add_conicGradient(
             self,
@@ -3318,7 +3730,9 @@ class Paints(Element):
             cx: _t.Union[float, int, str] | None = None,
             cy: _t.Union[float, int, str] | None = None,
             angle: _t.Union[float, int, str] | None = None,
-        ) -> ConicGradient: ...
+        ) -> ConicGradient:
+            """Add a <conicGradient> child; the keywords are the attributes of ConicGradient."""
+            ...
 
         def add_meshGradient(
             self,
@@ -3327,7 +3741,12 @@ class Paints(Element):
             rows: T_gridSizeType | None = None,
             cols: T_gridSizeType | None = None,
             interpolationSpace: _t.Literal["linear", "srgb", "oklab"] | None = None,
-        ) -> MeshGradient: ...
+        ) -> MeshGradient:
+            """Add a <meshGradient> child; the keywords are the attributes of MeshGradient.
+
+            Freeform / mesh gradient: bicubic colour patch grid.
+            """
+            ...
 
         def add_pattern(
             self,
@@ -3340,7 +3759,9 @@ class Paints(Element):
             offsetY: _t.Union[float, int, str] | None = None,
             rotation: _t.Union[float, int, str] | None = None,
             scale: T_positiveDecimal | None = None,
-        ) -> PatternPaint: ...
+        ) -> PatternPaint:
+            """Add a <pattern> child; the keywords are the attributes of PatternPaint."""
+            ...
 
     else:
 
@@ -3411,8 +3832,10 @@ class TextStyle(Element):
         "size", "positiveDecimal", use="optional", default=None, fixed=None, doc="",
     )
     color: Attr[G_paintType, T_paintType] = Attr(
-        "color", "paintType", use="optional", default=None, fixed=None, doc="",
+        "color", "paintType", use="optional", default=None, fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     lineHeight: Attr[G_positiveDecimal, T_positiveDecimal] = Attr(
         "lineHeight", "positiveDecimal", use="optional", default=None, fixed=None, doc="",
     )
@@ -3436,8 +3859,10 @@ class TextStyle(Element):
     )
     features: Attr[str, str] = Attr("features", "xs:string", use="optional", default=None, fixed=None, doc="")
     strokeColor: Attr[G_paintType, T_paintType] = Attr(
-        "strokeColor", "paintType", use="optional", default=None, fixed=None, doc="",
+        "strokeColor", "paintType", use="optional", default=None, fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     strokeWidth: Attr[G_nonNegativeDecimal, T_nonNegativeDecimal] = Attr(
         "strokeWidth", "nonNegativeDecimal", use="optional", default=None, fixed=None, doc="",
     )
@@ -3445,8 +3870,12 @@ class TextStyle(Element):
         "strokePosition", "strokePositionType", use="optional", default=None, fixed=None, doc="",
     )
     shadowColor: Attr[G_colorType, T_colorType] = Attr(
-        "shadowColor", "colorType", use="optional", default=None, fixed=None, doc="",
+        "shadowColor", "colorType", use="optional", default=None, fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     shadowOffsetX: Attr[float, _t.Union[float, int, str]] = Attr(
         "shadowOffsetX", "xs:double", use="optional", default=None, fixed=None, doc="",
     )
@@ -3489,8 +3918,10 @@ class TextStyle(Element):
         doc="",
     )
     highlight: Attr[G_paintType, T_paintType] = Attr(
-        "highlight", "paintType", use="optional", default=None, fixed=None, doc="",
+        "highlight", "paintType", use="optional", default=None, fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
 
     if _t.TYPE_CHECKING:
 
@@ -3523,7 +3954,14 @@ class TextStyle(Element):
             textTransform: _t.Literal["none", "uppercase", "lowercase", "capitalize", "small-caps"] | None = None,
             decoration: _t.Literal["none", "underline", "line-through", "overline"] | None = None,
             highlight: T_paintType | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                color: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                strokeColor: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                shadowColor: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+                highlight: A colour or url(#id) of a paints/* gradient, pattern or noise.
+            """
+            ...
 
 
 class Styles(Element):
@@ -3542,14 +3980,18 @@ class Styles(Element):
 
         def __init__(
             self,
-        ) -> None: ...
+        ) -> None:
+            """Brand kit: colour/number tokens referenced as var(--name), and reusable text styles."""
+            ...
 
         def add_token(
             self,
             *,
             name: str | None = None,
             value: str | None = None,
-        ) -> Token: ...
+        ) -> Token:
+            """Add a <token> child; the keywords are the attributes of Token."""
+            ...
 
         def add_textStyle(
             self,
@@ -3580,7 +4022,9 @@ class Styles(Element):
             textTransform: _t.Literal["none", "uppercase", "lowercase", "capitalize", "small-caps"] | None = None,
             decoration: _t.Literal["none", "underline", "line-through", "overline"] | None = None,
             highlight: T_paintType | None = None,
-        ) -> TextStyle: ...
+        ) -> TextStyle:
+            """Add a <textStyle> child; the keywords are the attributes of TextStyle."""
+            ...
 
     else:
 
@@ -3638,7 +4082,9 @@ class Representation(Element):
             transfer: T_transferType | None = None,
             language: T_languageTagType | None = None,
             sha256: T_sha256Type | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Alternate encodings of the same media (proxy, high-res, per-language audio, HDR/SDR grade). The renderer picks the representation named by the output's or command line's representation preference, else the asset's own src (OTIO media_references, FCPXML media-rep, AAF EssenceGroup)."""
+            ...
 
 
 class ImageAsset(Element):
@@ -3665,8 +4111,14 @@ class ImageAsset(Element):
         "transfer", "transferType", use="optional", default="auto", fixed=None, doc="",
     )
     colorProfile: Attr[G_colorProfileType, T_colorProfileType] = Attr(
-        "colorProfile", "colorProfileType", use="optional", default="embedded", fixed=None, doc="",
+        "colorProfile", "colorProfileType", use="optional", default="embedded", fixed=None,
+        doc="Which colour description of a still image file applies. embedded: an ICC profile\n(matrix/TRC) or H.273 code points (HEIF nclx, ICC cicp) in the file take precedence over\ncolorSpace and transfer, which apply to files without one. declared: colorSpace and\ntransfer always apply (data textures, mis-tagged files).",
     )
+    """Which colour description of a still image file applies. embedded: an ICC profile
+    (matrix/TRC) or H.273 code points (HEIF nclx, ICC cicp) in the file take precedence over
+    colorSpace and transfer, which apply to files without one. declared: colorSpace and
+    transfer always apply (data textures, mis-tagged files).
+    """
     alpha: Attr[G_alphaModeType, T_alphaModeType] = Attr(
         "alpha", "alphaModeType", use="optional", default="auto", fixed=None, doc="",
     )
@@ -3674,6 +4126,7 @@ class ImageAsset(Element):
         "layer", "xs:string", use="optional", default=None, fixed=None,
         doc="Layer or channel set inside multi-layer files (PSD layer, EXR part).",
     )
+    """Layer or channel set inside multi-layer files (PSD layer, EXR part)."""
     sha256: Attr[G_sha256Type, T_sha256Type] = Attr(
         "sha256", "sha256Type", use="optional", default=None, fixed=None, doc="",
     )
@@ -3699,7 +4152,12 @@ class ImageAsset(Element):
             license: str | None = None,
             credit: str | None = None,
             proxy: str | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                colorProfile: Which colour description of a still image file applies. embedded: an ICC profile (matrix/TRC) or H.273 code points (HEIF nclx, ICC cicp) in the file take precedence over colorSpace and transfer, which apply to files without one. declared: colorSpace and transfer always apply (data textures, mis-tagged files).
+                layer: Layer or channel set inside multi-layer files (PSD layer, EXR part).
+            """
+            ...
 
         def add_representation(
             self,
@@ -3712,7 +4170,12 @@ class ImageAsset(Element):
             transfer: T_transferType | None = None,
             language: T_languageTagType | None = None,
             sha256: T_sha256Type | None = None,
-        ) -> Representation: ...
+        ) -> Representation:
+            """Add a <representation> child; the keywords are the attributes of Representation.
+
+            Alternate encodings of the same media (proxy, high-res, per-language audio, HDR/SDR grade). The renderer picks the representation named by the output's or command line's representation preference, else the asset's own src (OTIO media_references, FCPXML media-rep, AAF EssenceGroup).
+            """
+            ...
 
     else:
 
@@ -3818,7 +4281,12 @@ class VideoAsset(Element):
             transfer: T_transferType | None = None,
             language: T_languageTagType | None = None,
             sha256: T_sha256Type | None = None,
-        ) -> Representation: ...
+        ) -> Representation:
+            """Add a <representation> child; the keywords are the attributes of Representation.
+
+            Alternate encodings of the same media (proxy, high-res, per-language audio, HDR/SDR grade). The renderer picks the representation named by the output's or command line's representation preference, else the asset's own src (OTIO media_references, FCPXML media-rep, AAF EssenceGroup).
+            """
+            ...
 
     else:
 
@@ -3860,8 +4328,14 @@ class ImageSequenceAsset(Element):
         "transfer", "transferType", use="optional", default="auto", fixed=None, doc="",
     )
     colorProfile: Attr[G_colorProfileType, T_colorProfileType] = Attr(
-        "colorProfile", "colorProfileType", use="optional", default="embedded", fixed=None, doc="",
+        "colorProfile", "colorProfileType", use="optional", default="embedded", fixed=None,
+        doc="Which colour description of a still image file applies. embedded: an ICC profile\n(matrix/TRC) or H.273 code points (HEIF nclx, ICC cicp) in the file take precedence over\ncolorSpace and transfer, which apply to files without one. declared: colorSpace and\ntransfer always apply (data textures, mis-tagged files).",
     )
+    """Which colour description of a still image file applies. embedded: an ICC profile
+    (matrix/TRC) or H.273 code points (HEIF nclx, ICC cicp) in the file take precedence over
+    colorSpace and transfer, which apply to files without one. declared: colorSpace and
+    transfer always apply (data textures, mis-tagged files).
+    """
     alpha: Attr[G_alphaModeType, T_alphaModeType] = Attr(
         "alpha", "alphaModeType", use="optional", default="auto", fixed=None, doc="",
     )
@@ -3907,7 +4381,13 @@ class ImageSequenceAsset(Element):
             license: str | None = None,
             credit: str | None = None,
             proxy: str | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Numbered frames, src uses printf padding ("logo_%04d.png") or ####.
+
+            Args:
+                colorProfile: Which colour description of a still image file applies. embedded: an ICC profile (matrix/TRC) or H.273 code points (HEIF nclx, ICC cicp) in the file take precedence over colorSpace and transfer, which apply to files without one. declared: colorSpace and transfer always apply (data textures, mis-tagged files).
+            """
+            ...
 
 
 class AudioAsset(Element):
@@ -3972,7 +4452,12 @@ class AudioAsset(Element):
             transfer: T_transferType | None = None,
             language: T_languageTagType | None = None,
             sha256: T_sha256Type | None = None,
-        ) -> Representation: ...
+        ) -> Representation:
+            """Add a <representation> child; the keywords are the attributes of Representation.
+
+            Alternate encodings of the same media (proxy, high-res, per-language audio, HDR/SDR grade). The renderer picks the representation named by the output's or command line's representation preference, else the asset's own src (OTIO media_references, FCPXML media-rep, AAF EssenceGroup).
+            """
+            ...
 
     else:
 
@@ -3996,12 +4481,15 @@ class Span(Element):
         "size", "positiveDecimal", use="optional", default=None, fixed=None, doc="",
     )
     color: Attr[G_paintType, T_paintType] = Attr(
-        "color", "paintType", use="optional", default=None, fixed=None, doc="",
+        "color", "paintType", use="optional", default=None, fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     role: Attr[str, str] = Attr(
         "role", "xs:NMTOKEN", use="optional", default=None, fixed=None,
         doc='Addressable name for text animators and overrides (e.g. "price").',
     )
+    """Addressable name for text animators and overrides (e.g. "price")."""
     font: Attr[str, str] = Attr("font", "xs:string", use="optional", default=None, fixed=None, doc="")
     fontFile: Attr[str, str] = Attr("fontFile", "xs:anyURI", use="optional", default=None, fixed=None, doc="")
     fontAsset: Attr[str, _t.Union[str, Element]] = Attr(
@@ -4022,8 +4510,10 @@ class Span(Element):
     )
     features: Attr[str, str] = Attr("features", "xs:string", use="optional", default=None, fixed=None, doc="")
     strokeColor: Attr[G_paintType, T_paintType] = Attr(
-        "strokeColor", "paintType", use="optional", default=None, fixed=None, doc="",
+        "strokeColor", "paintType", use="optional", default=None, fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     strokeWidth: Attr[G_nonNegativeDecimal, T_nonNegativeDecimal] = Attr(
         "strokeWidth", "nonNegativeDecimal", use="optional", default=None, fixed=None, doc="",
     )
@@ -4031,8 +4521,12 @@ class Span(Element):
         "strokePosition", "strokePositionType", use="optional", default=None, fixed=None, doc="",
     )
     shadowColor: Attr[G_colorType, T_colorType] = Attr(
-        "shadowColor", "colorType", use="optional", default=None, fixed=None, doc="",
+        "shadowColor", "colorType", use="optional", default=None, fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     shadowOffsetX: Attr[float, _t.Union[float, int, str]] = Attr(
         "shadowOffsetX", "xs:double", use="optional", default=None, fixed=None, doc="",
     )
@@ -4075,8 +4569,10 @@ class Span(Element):
         doc="",
     )
     highlight: Attr[G_paintType, T_paintType] = Attr(
-        "highlight", "paintType", use="optional", default=None, fixed=None, doc="",
+        "highlight", "paintType", use="optional", default=None, fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
 
     if _t.TYPE_CHECKING:
 
@@ -4108,7 +4604,17 @@ class Span(Element):
             textTransform: _t.Literal["none", "uppercase", "lowercase", "capitalize", "small-caps"] | None = None,
             decoration: _t.Literal["none", "underline", "line-through", "overline"] | None = None,
             highlight: T_paintType | None = None,
-        ) -> None: ...
+        ) -> None:
+            """A styled run of text; unset attributes inherit from the text asset.
+
+            Args:
+                color: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                role: Addressable name for text animators and overrides (e.g. "price").
+                strokeColor: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                shadowColor: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+                highlight: A colour or url(#id) of a paints/* gradient, pattern or noise.
+            """
+            ...
 
 
 class TextAsset(Element):
@@ -4161,8 +4667,10 @@ class TextAsset(Element):
         "style", "xs:IDREF", use="optional", default=None, fixed=None, doc="",
     )
     color: Attr[G_paintType, T_paintType] = Attr(
-        "color", "paintType", use="optional", default="#FFFFFFFF", fixed=None, doc="",
+        "color", "paintType", use="optional", default="#FFFFFFFF", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     align: Attr[_t.Literal["start", "center", "end", "justify"], _t.Literal["start", "center", "end", "justify"]] = Attr(
         "align",
         {
@@ -4296,8 +4804,10 @@ class TextAsset(Element):
         doc="",
     )
     background: Attr[G_paintType, T_paintType] = Attr(
-        "background", "paintType", use="optional", default=None, fixed=None, doc="",
+        "background", "paintType", use="optional", default=None, fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     backgroundMode: Attr[_t.Literal["block", "line", "word"], _t.Literal["block", "line", "word"]] = Attr(
         "backgroundMode",
         {
@@ -4350,8 +4860,10 @@ class TextAsset(Element):
     )
     features: Attr[str, str] = Attr("features", "xs:string", use="optional", default=None, fixed=None, doc="")
     strokeColor: Attr[G_paintType, T_paintType] = Attr(
-        "strokeColor", "paintType", use="optional", default=None, fixed=None, doc="",
+        "strokeColor", "paintType", use="optional", default=None, fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     strokeWidth: Attr[G_nonNegativeDecimal, T_nonNegativeDecimal] = Attr(
         "strokeWidth", "nonNegativeDecimal", use="optional", default=None, fixed=None, doc="",
     )
@@ -4359,8 +4871,12 @@ class TextAsset(Element):
         "strokePosition", "strokePositionType", use="optional", default=None, fixed=None, doc="",
     )
     shadowColor: Attr[G_colorType, T_colorType] = Attr(
-        "shadowColor", "colorType", use="optional", default=None, fixed=None, doc="",
+        "shadowColor", "colorType", use="optional", default=None, fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     shadowOffsetX: Attr[float, _t.Union[float, int, str]] = Attr(
         "shadowOffsetX", "xs:double", use="optional", default=None, fixed=None, doc="",
     )
@@ -4403,8 +4919,10 @@ class TextAsset(Element):
         doc="",
     )
     highlight: Attr[G_paintType, T_paintType] = Attr(
-        "highlight", "paintType", use="optional", default=None, fixed=None, doc="",
+        "highlight", "paintType", use="optional", default=None, fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
 
     if _t.TYPE_CHECKING:
 
@@ -4458,7 +4976,17 @@ class TextAsset(Element):
             textTransform: _t.Literal["none", "uppercase", "lowercase", "capitalize", "small-caps"] | None = None,
             decoration: _t.Literal["none", "underline", "line-through", "overline"] | None = None,
             highlight: T_paintType | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Text content comes from @text or from span children (exactly one). {{name}} inside text is replaced by the value of parameter "name". autoFit shrinks and/or grows size within [minSize, maxSize] so the text fits width x height. background draws a box behind each block, line or word.
+
+            Args:
+                color: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                background: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                strokeColor: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                shadowColor: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+                highlight: A colour or url(#id) of a paints/* gradient, pattern or noise.
+            """
+            ...
 
         def add_span(
             self,
@@ -4488,7 +5016,12 @@ class TextAsset(Element):
             textTransform: _t.Literal["none", "uppercase", "lowercase", "capitalize", "small-caps"] | None = None,
             decoration: _t.Literal["none", "underline", "line-through", "overline"] | None = None,
             highlight: T_paintType | None = None,
-        ) -> Span: ...
+        ) -> Span:
+            """Add a <span> child; the keywords are the attributes of Span.
+
+            A styled run of text; unset attributes inherit from the text asset.
+            """
+            ...
 
     else:
 
@@ -4527,15 +5060,19 @@ class VectorAsset(Element):
         "height", "xs:positiveInteger", use="required", default=None, fixed=None, doc="",
     )
     fill: Attr[G_paintType, T_paintType] = Attr(
-        "fill", "paintType", use="optional", default="#FFFFFFFF", fixed=None, doc="",
+        "fill", "paintType", use="optional", default="#FFFFFFFF", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     path: Attr[str, str] = Attr("path", "xs:string", use="optional", default=None, fixed=None, doc="")
     fillRule: Attr[G_fillRuleType, T_fillRuleType] = Attr(
         "fillRule", "fillRuleType", use="optional", default="evenodd", fixed=None, doc="",
     )
     stroke: Attr[G_paintType, T_paintType] = Attr(
-        "stroke", "paintType", use="optional", default="#00000000", fixed=None, doc="",
+        "stroke", "paintType", use="optional", default="#00000000", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     strokeWidth: Attr[G_nonNegativeDecimal, T_nonNegativeDecimal] = Attr(
         "strokeWidth", "nonNegativeDecimal", use="optional", default="0", fixed=None, doc="",
     )
@@ -4615,7 +5152,14 @@ class VectorAsset(Element):
             license: str | None = None,
             credit: str | None = None,
             proxy: str | None = None,
-        ) -> None: ...
+        ) -> None:
+            """shape="svg" renders the SVG file at @src (static SVG 2 subset, no script).
+
+            Args:
+                fill: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                stroke: A colour or url(#id) of a paints/* gradient, pattern or noise.
+            """
+            ...
 
 
 class MeshAsset(Element):
@@ -4683,7 +5227,9 @@ class Slot(Element):
             *,
             id: str | None = None,
             value: str | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Overrides a Lottie slot (sid) or a named text/colour layer inside the animation."""
+            ...
 
 
 class LottieAsset(Element):
@@ -4707,10 +5253,12 @@ class LottieAsset(Element):
         "animation", "xs:string", use="optional", default=None, fixed=None,
         doc="Animation id inside a .lottie container.",
     )
+    """Animation id inside a .lottie container."""
     segment: Attr[str, str] = Attr(
         "segment", "xs:string", use="optional", default=None, fixed=None,
         doc='Marker name to play, or "startFrame,endFrame".',
     )
+    """Marker name to play, or "startFrame,endFrame"."""
     sha256: Attr[G_sha256Type, T_sha256Type] = Attr(
         "sha256", "sha256Type", use="optional", default=None, fixed=None, doc="",
     )
@@ -4733,14 +5281,24 @@ class LottieAsset(Element):
             license: str | None = None,
             credit: str | None = None,
             proxy: str | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                animation: Animation id inside a .lottie container.
+                segment: Marker name to play, or "startFrame,endFrame".
+            """
+            ...
 
         def add_slot(
             self,
             *,
             id: str | None = None,
             value: str | None = None,
-        ) -> Slot: ...
+        ) -> Slot:
+            """Add a <slot> child; the keywords are the attributes of Slot.
+
+            Overrides a Lottie slot (sid) or a named text/colour layer inside the animation.
+            """
+            ...
 
     else:
 
@@ -4793,7 +5351,9 @@ class StrokeFontAsset(Element):
             license: str | None = None,
             credit: str | None = None,
             proxy: str | None = None,
-        ) -> None: ...
+        ) -> None:
+            """A single-line font: glyphs as pen strokes. format="jhf" is the Hershey font file format; the n-th glyph of the file (counting from 0) is the character U+0020 + n. Version 1.2."""
+            ...
 
 
 class FontAsset(Element):
@@ -4941,8 +5501,12 @@ class FractalAsset(Element):
         "paletteOffset", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
     insideColor: Attr[G_colorType, T_colorType] = Attr(
-        "insideColor", "colorType", use="optional", default="#000000FF", fixed=None, doc="",
+        "insideColor", "colorType", use="optional", default="#000000FF", fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
 
     if _t.TYPE_CHECKING:
 
@@ -4967,7 +5531,13 @@ class FractalAsset(Element):
             paletteScale: T_positiveDecimal | None = None,
             paletteOffset: _t.Union[float, int, str] | None = None,
             insideColor: T_colorType | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Escape-time fractal image of width x height pixels. Each pixel shows the escape count of its centre in exact arithmetic (up to 2^-20 of a pixel; SREP 75), whatever the zoom.
+
+            Args:
+                insideColor: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+            """
+            ...
 
         def add_animate(
             self,
@@ -4978,7 +5548,9 @@ class FractalAsset(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -4986,7 +5558,12 @@ class FractalAsset(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -4999,7 +5576,12 @@ class FractalAsset(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -5017,7 +5599,12 @@ class FractalAsset(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -5080,11 +5667,15 @@ class GeneratorAsset(Element):
         "height", "xs:positiveInteger", use="required", default=None, fixed=None, doc="",
     )
     paint: Attr[G_paintType, T_paintType] = Attr(
-        "paint", "paintType", use="optional", default="#FFFFFFFF", fixed=None, doc="",
+        "paint", "paintType", use="optional", default="#FFFFFFFF", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     paint2: Attr[G_paintType, T_paintType] = Attr(
-        "paint2", "paintType", use="optional", default="#000000FF", fixed=None, doc="",
+        "paint2", "paintType", use="optional", default="#000000FF", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     scale: Attr[G_positiveDecimal, T_positiveDecimal] = Attr(
         "scale", "positiveDecimal", use="optional", default="100", fixed=None, doc="",
     )
@@ -5107,6 +5698,7 @@ class GeneratorAsset(Element):
         "lineWidth", "nonNegativeDecimal", use="optional", default=None, fixed=None,
         doc="Grid only: the line width in asset pixels, whatever @scale says; the pitch stays @scale. Absent, the lines are about 4 % of @scale wide (at least 1 px). Animates like @scale.",
     )
+    """Grid only: the line width in asset pixels, whatever @scale says; the pitch stays @scale. Absent, the lines are about 4 % of @scale wide (at least 1 px). Animates like @scale."""
 
     if _t.TYPE_CHECKING:
 
@@ -5126,7 +5718,15 @@ class GeneratorAsset(Element):
             angle: _t.Union[float, int, str] | None = None,
             seed: _t.Union[int, str] | None = None,
             lineWidth: T_nonNegativeDecimal | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Procedural image source; all parameters animate; noise kinds are seeded.
+
+            Args:
+                paint: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                paint2: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                lineWidth: Grid only: the line width in asset pixels, whatever @scale says; the pitch stays @scale. Absent, the lines are about 4 % of @scale wide (at least 1 px). Animates like @scale.
+            """
+            ...
 
         def add_animate(
             self,
@@ -5137,7 +5737,9 @@ class GeneratorAsset(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -5145,7 +5747,12 @@ class GeneratorAsset(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -5158,7 +5765,12 @@ class GeneratorAsset(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -5176,7 +5788,12 @@ class GeneratorAsset(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -5207,8 +5824,10 @@ class ChartSeries(Element):
         "values", "numberListType", use="required", default=None, fixed=None, doc="",
     )
     color: Attr[G_paintType, T_paintType] = Attr(
-        "color", "paintType", use="optional", default=None, fixed=None, doc="",
+        "color", "paintType", use="optional", default=None, fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
 
     if _t.TYPE_CHECKING:
 
@@ -5218,7 +5837,11 @@ class ChartSeries(Element):
             name: str | None = None,
             values: T_numberListType | None = None,
             color: T_paintType | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                color: A colour or url(#id) of a paints/* gradient, pattern or noise.
+            """
+            ...
 
 
 class ChartAsset(Element):
@@ -5290,7 +5913,9 @@ class ChartAsset(Element):
             showAxes: _t.Union[bool, str] | None = None,
             showValues: _t.Union[bool, str] | None = None,
             format: str | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Data-driven chart; @progress (animatable 0..1) draws it on."""
+            ...
 
         def add_series(
             self,
@@ -5298,7 +5923,9 @@ class ChartAsset(Element):
             name: str | None = None,
             values: T_numberListType | None = None,
             color: T_paintType | None = None,
-        ) -> ChartSeries: ...
+        ) -> ChartSeries:
+            """Add a <series> child; the keywords are the attributes of ChartSeries."""
+            ...
 
         def add_animate(
             self,
@@ -5309,7 +5936,9 @@ class ChartAsset(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -5317,7 +5946,12 @@ class ChartAsset(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -5330,7 +5964,12 @@ class ChartAsset(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -5348,7 +5987,12 @@ class ChartAsset(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -5404,8 +6048,10 @@ class AudiogramAsset(Element):
         "bars", "xs:positiveInteger", use="optional", default="48", fixed=None, doc="",
     )
     color: Attr[G_paintType, T_paintType] = Attr(
-        "color", "paintType", use="optional", default="#FFFFFFFF", fixed=None, doc="",
+        "color", "paintType", use="optional", default="#FFFFFFFF", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     smoothing: Attr[G_unitDecimal, T_unitDecimal] = Attr(
         "smoothing", "unitDecimal", use="optional", default="0.5", fixed=None, doc="",
     )
@@ -5423,7 +6069,11 @@ class AudiogramAsset(Element):
             bars: _t.Union[int, str] | None = None,
             color: T_paintType | None = None,
             smoothing: T_unitDecimal | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                color: A colour or url(#id) of a paints/* gradient, pattern or noise.
+            """
+            ...
 
 
 class CodeAsset(Element):
@@ -5457,11 +6107,19 @@ class CodeAsset(Element):
         "height", "xs:positiveInteger", use="required", default=None, fixed=None, doc="",
     )
     foreground: Attr[G_colorType, T_colorType] = Attr(
-        "foreground", "colorType", use="optional", default="#000000FF", fixed=None, doc="",
+        "foreground", "colorType", use="optional", default="#000000FF", fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     background: Attr[G_colorType, T_colorType] = Attr(
-        "background", "colorType", use="optional", default="#FFFFFFFF", fixed=None, doc="",
+        "background", "colorType", use="optional", default="#FFFFFFFF", fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     errorCorrection: Attr[_t.Literal["L", "M", "Q", "H"], _t.Literal["L", "M", "Q", "H"]] = Attr(
         "errorCorrection",
         {
@@ -5493,7 +6151,14 @@ class CodeAsset(Element):
             background: T_colorType | None = None,
             errorCorrection: _t.Literal["L", "M", "Q", "H"] | None = None,
             quietZone: _t.Union[int, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Machine-readable code (QR for CTA landing pages, retail barcodes).
+
+            Args:
+                foreground: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+                background: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+            """
+            ...
 
 
 class FormulaAsset(Element):
@@ -5517,8 +6182,10 @@ class FormulaAsset(Element):
         "size", "positiveDecimal", use="optional", default="48", fixed=None, doc="",
     )
     color: Attr[G_paintType, T_paintType] = Attr(
-        "color", "paintType", use="optional", default="#FFFFFFFF", fixed=None, doc="",
+        "color", "paintType", use="optional", default="#FFFFFFFF", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
 
     if _t.TYPE_CHECKING:
 
@@ -5531,7 +6198,11 @@ class FormulaAsset(Element):
             height: _t.Union[int, str] | None = None,
             size: T_positiveDecimal | None = None,
             color: T_paintType | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                color: A colour or url(#id) of a paints/* gradient, pattern or noise.
+            """
+            ...
 
 
 class GeneratedAsset(Element):
@@ -5609,7 +6280,9 @@ class GeneratedAsset(Element):
             fps: T_fpsType | None = None,
             duration: T_positiveDecimal | None = None,
             license: str | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Media produced by an external generator (text-to-speech, image, video or music model, transcription). The renderer never calls the provider while rendering: it reads @cache and fails unless the file's SHA-256 equals @cacheSha256. A resolve step, run before rendering, fills the cache from @provider/@model/@prompt/@voice/@seed and pins @cacheSha256. This keeps renders deterministic."""
+            ...
 
 
 class GeoAsset(Element):
@@ -5661,7 +6334,9 @@ class GeoAsset(Element):
             license: str | None = None,
             credit: str | None = None,
             proxy: str | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Geographic data: GeoJSON, TopoJSON, KML or GPX (format from the extension, then the content). @object picks one TopoJSON object (all objects by default). Polygon edges are great-circle arcs; rings wound either way are accepted (a polygon larger than a hemisphere is turned round)."""
+            ...
 
 
 class FeatureStyle(Element):
@@ -5683,11 +6358,15 @@ class FeatureStyle(Element):
     id: Attr[str, str] = Attr("id", "xs:ID", use="optional", default=None, fixed=None, doc="")
     key: Attr[str, str] = Attr("key", "xs:string", use="required", default=None, fixed=None, doc="")
     fill: Attr[G_paintType, T_paintType] = Attr(
-        "fill", "paintType", use="optional", default=None, fixed=None, doc="",
+        "fill", "paintType", use="optional", default=None, fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     stroke: Attr[G_paintType, T_paintType] = Attr(
-        "stroke", "paintType", use="optional", default=None, fixed=None, doc="",
+        "stroke", "paintType", use="optional", default=None, fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     strokeWidth: Attr[G_nonNegativeDecimal, T_nonNegativeDecimal] = Attr(
         "strokeWidth", "nonNegativeDecimal", use="optional", default=None, fixed=None, doc="",
     )
@@ -5706,7 +6385,14 @@ class FeatureStyle(Element):
             stroke: T_paintType | None = None,
             strokeWidth: T_nonNegativeDecimal | None = None,
             opacity: T_unitDecimal | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Overrides the style of the features of a geoLayer whose key (the layer's @keyBy property) equals @key; animatable, so single countries can light up.
+
+            Args:
+                fill: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                stroke: A colour or url(#id) of a paints/* gradient, pattern or noise.
+            """
+            ...
 
         def add_animate(
             self,
@@ -5717,7 +6403,9 @@ class FeatureStyle(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -5725,7 +6413,12 @@ class FeatureStyle(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -5738,7 +6431,12 @@ class FeatureStyle(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -5756,7 +6454,12 @@ class FeatureStyle(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -5802,11 +6505,15 @@ class GeoLayer(Element):
     )
     filter: Attr[str, str] = Attr("filter", "xs:string", use="optional", default=None, fixed=None, doc="")
     fill: Attr[G_paintType, T_paintType] = Attr(
-        "fill", "paintType", use="optional", default="#D9D9D9", fixed=None, doc="",
+        "fill", "paintType", use="optional", default="#D9D9D9", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     stroke: Attr[G_paintType, T_paintType] = Attr(
-        "stroke", "paintType", use="optional", default=None, fixed=None, doc="",
+        "stroke", "paintType", use="optional", default=None, fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     strokeWidth: Attr[G_nonNegativeDecimal, T_nonNegativeDecimal] = Attr(
         "strokeWidth", "nonNegativeDecimal", use="optional", default="0.5", fixed=None, doc="",
     )
@@ -5815,8 +6522,10 @@ class GeoLayer(Element):
     )
     fillBy: Attr[str, str] = Attr("fillBy", "xs:string", use="optional", default=None, fixed=None, doc="")
     palette: Attr[G_colorListType, T_colorListType] = Attr(
-        "palette", "colorListType", use="optional", default=None, fixed=None, doc="",
+        "palette", "colorListType", use="optional", default=None, fixed=None,
+        doc="Whitespace-separated colours, as a palette.",
     )
+    """Whitespace-separated colours, as a palette."""
     domain: Attr[G_numberListType, T_numberListType] = Attr(
         "domain", "numberListType", use="optional", default=None, fixed=None, doc="",
     )
@@ -5834,8 +6543,10 @@ class GeoLayer(Element):
         doc="",
     )
     noData: Attr[G_paintType, T_paintType] = Attr(
-        "noData", "paintType", use="optional", default=None, fixed=None, doc="",
+        "noData", "paintType", use="optional", default=None, fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     keyBy: Attr[str, str] = Attr("keyBy", "xs:string", use="optional", default="id", fixed=None, doc="")
     label: Attr[str, str] = Attr("label", "xs:string", use="optional", default=None, fixed=None, doc="")
     textStyle: Attr[str, _t.Union[str, Element]] = Attr(
@@ -5870,7 +6581,16 @@ class GeoLayer(Element):
             textStyle: _t.Union[str, Element] | None = None,
             pointRadius: T_nonNegativeDecimal | None = None,
             progress: T_unitDecimal | None = None,
-        ) -> None: ...
+        ) -> None:
+            """The features of a geo asset: polygons filled and stroked, lines and outlines stroked (drawn on by @progress: each line or ring from its first vertex; the fill stays whole), points as dots. @filter keeps features whose property equals (prop=value) or differs from (prop!=value) a value. Choropleth: @fillBy names a numeric property mapped through @domain (data range by default) and @scale onto @palette (colours interpolated in sRGB; quantize picks one colour per equal step); features without a value use @noData. @label names a property drawn at each feature's centre.
+
+            Args:
+                fill: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                stroke: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                palette: Whitespace-separated colours, as a palette.
+                noData: A colour or url(#id) of a paints/* gradient, pattern or noise.
+            """
+            ...
 
         def add_featureStyle(
             self,
@@ -5881,7 +6601,12 @@ class GeoLayer(Element):
             stroke: T_paintType | None = None,
             strokeWidth: T_nonNegativeDecimal | None = None,
             opacity: T_unitDecimal | None = None,
-        ) -> FeatureStyle: ...
+        ) -> FeatureStyle:
+            """Add a <featureStyle> child; the keywords are the attributes of FeatureStyle.
+
+            Overrides the style of the features of a geoLayer whose key (the layer's @keyBy property) equals @key; animatable, so single countries can light up.
+            """
+            ...
 
         def add_animate(
             self,
@@ -5892,7 +6617,9 @@ class GeoLayer(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -5900,7 +6627,12 @@ class GeoLayer(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -5913,7 +6645,12 @@ class GeoLayer(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -5931,7 +6668,12 @@ class GeoLayer(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -5970,8 +6712,10 @@ class Graticule(Element):
         "step", "positiveDecimal", use="optional", default="10", fixed=None, doc="",
     )
     stroke: Attr[G_paintType, T_paintType] = Attr(
-        "stroke", "paintType", use="optional", default="#FFFFFF40", fixed=None, doc="",
+        "stroke", "paintType", use="optional", default="#FFFFFF40", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     strokeWidth: Attr[G_nonNegativeDecimal, T_nonNegativeDecimal] = Attr(
         "strokeWidth", "nonNegativeDecimal", use="optional", default="0.5", fixed=None, doc="",
     )
@@ -5989,7 +6733,13 @@ class Graticule(Element):
             stroke: T_paintType | None = None,
             strokeWidth: T_nonNegativeDecimal | None = None,
             opacity: T_unitDecimal | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Meridians and parallels every @step degrees.
+
+            Args:
+                stroke: A colour or url(#id) of a paints/* gradient, pattern or noise.
+            """
+            ...
 
         def add_animate(
             self,
@@ -6000,7 +6750,9 @@ class Graticule(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -6008,7 +6760,12 @@ class Graticule(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -6021,7 +6778,12 @@ class Graticule(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -6039,7 +6801,12 @@ class Graticule(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -6074,20 +6841,26 @@ class Pin(Element):
 
     id: Attr[str, str] = Attr("id", "xs:ID", use="optional", default=None, fixed=None, doc="")
     lon: Attr[G_longitudeType, T_longitudeType] = Attr(
-        "lon", "longitudeType", use="required", default=None, fixed=None, doc="",
+        "lon", "longitudeType", use="required", default=None, fixed=None, doc="Degrees east, in [-180, 180].",
     )
+    """Degrees east, in [-180, 180]."""
     lat: Attr[G_latitudeType, T_latitudeType] = Attr(
-        "lat", "latitudeType", use="required", default=None, fixed=None, doc="",
+        "lat", "latitudeType", use="required", default=None, fixed=None, doc="Degrees north, in [-90, 90].",
     )
+    """Degrees north, in [-90, 90]."""
     radius: Attr[G_nonNegativeDecimal, T_nonNegativeDecimal] = Attr(
         "radius", "nonNegativeDecimal", use="optional", default="6", fixed=None, doc="",
     )
     fill: Attr[G_paintType, T_paintType] = Attr(
-        "fill", "paintType", use="optional", default="#FF3B30", fixed=None, doc="",
+        "fill", "paintType", use="optional", default="#FF3B30", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     stroke: Attr[G_paintType, T_paintType] = Attr(
-        "stroke", "paintType", use="optional", default="#FFFFFF", fixed=None, doc="",
+        "stroke", "paintType", use="optional", default="#FFFFFF", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     strokeWidth: Attr[G_nonNegativeDecimal, T_nonNegativeDecimal] = Attr(
         "strokeWidth", "nonNegativeDecimal", use="optional", default="2", fixed=None, doc="",
     )
@@ -6122,7 +6895,16 @@ class Pin(Element):
             textStyle: _t.Union[str, Element] | None = None,
             labelDx: _t.Union[float, int, str] | None = None,
             labelDy: _t.Union[float, int, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """A marker at a longitude and latitude, with an optional label beside it; hidden on the far side of a globe or outside the frame.
+
+            Args:
+                lon: Degrees east, in [-180, 180].
+                lat: Degrees north, in [-90, 90].
+                fill: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                stroke: A colour or url(#id) of a paints/* gradient, pattern or noise.
+            """
+            ...
 
         def add_animate(
             self,
@@ -6133,7 +6915,9 @@ class Pin(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -6141,7 +6925,12 @@ class Pin(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -6154,7 +6943,12 @@ class Pin(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -6172,7 +6966,12 @@ class Pin(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -6208,8 +7007,10 @@ class Route(Element):
 
     id: Attr[str, str] = Attr("id", "xs:ID", use="optional", default=None, fixed=None, doc="")
     points: Attr[G_geoPointsType, T_geoPointsType] = Attr(
-        "points", "geoPointsType", use="optional", default=None, fixed=None, doc="",
+        "points", "geoPointsType", use="optional", default=None, fixed=None,
+        doc='"lon,lat lon,lat ..." in degrees: at least two points.',
     )
+    """"lon,lat lon,lat ..." in degrees: at least two points."""
     geo: Attr[str, _t.Union[str, Element]] = Attr(
         "geo", "xs:IDREF", use="optional", default=None, fixed=None, doc="",
     )
@@ -6218,8 +7019,10 @@ class Route(Element):
         "progress", "unitDecimal", use="optional", default="1", fixed=None, doc="",
     )
     stroke: Attr[G_paintType, T_paintType] = Attr(
-        "stroke", "paintType", use="optional", default="#FFFFFF", fixed=None, doc="",
+        "stroke", "paintType", use="optional", default="#FFFFFF", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     strokeWidth: Attr[G_nonNegativeDecimal, T_nonNegativeDecimal] = Attr(
         "strokeWidth", "nonNegativeDecimal", use="optional", default="3", fixed=None, doc="",
     )
@@ -6233,8 +7036,10 @@ class Route(Element):
         "headRadius", "nonNegativeDecimal", use="optional", default="0", fixed=None, doc="",
     )
     headFill: Attr[G_paintType, T_paintType] = Attr(
-        "headFill", "paintType", use="optional", default=None, fixed=None, doc="",
+        "headFill", "paintType", use="optional", default=None, fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
 
     if _t.TYPE_CHECKING:
 
@@ -6252,7 +7057,15 @@ class Route(Element):
             opacity: T_unitDecimal | None = None,
             headRadius: T_nonNegativeDecimal | None = None,
             headFill: T_paintType | None = None,
-        ) -> None: ...
+        ) -> None:
+            """A path along great circles through @points ("lon,lat lon,lat …") or the lines of @geo, drawn on by @progress measured along the ground, so it advances at constant ground speed whatever the projection; @headRadius puts a dot at its tip.
+
+            Args:
+                points: "lon,lat lon,lat ..." in degrees: at least two points.
+                stroke: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                headFill: A colour or url(#id) of a paints/* gradient, pattern or noise.
+            """
+            ...
 
         def add_animate(
             self,
@@ -6263,7 +7076,9 @@ class Route(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -6271,7 +7086,12 @@ class Route(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -6284,7 +7104,12 @@ class Route(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -6302,7 +7127,12 @@ class Route(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -6340,11 +7170,13 @@ class FlyTo(Element):
         "duration", "durationType", use="optional", default=None, fixed=None, doc="",
     )
     lon: Attr[G_longitudeType, T_longitudeType] = Attr(
-        "lon", "longitudeType", use="required", default=None, fixed=None, doc="",
+        "lon", "longitudeType", use="required", default=None, fixed=None, doc="Degrees east, in [-180, 180].",
     )
+    """Degrees east, in [-180, 180]."""
     lat: Attr[G_latitudeType, T_latitudeType] = Attr(
-        "lat", "latitudeType", use="required", default=None, fixed=None, doc="",
+        "lat", "latitudeType", use="required", default=None, fixed=None, doc="Degrees north, in [-90, 90].",
     )
+    """Degrees north, in [-90, 90]."""
     zoom: Attr[float, _t.Union[float, int, str]] = Attr(
         "zoom", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -6352,8 +7184,14 @@ class FlyTo(Element):
         "rho", "positiveDecimal", use="optional", default="1.4142135623730951", fixed=None, doc="",
     )
     easing: Attr[G_curveType, T_curveType] = Attr(
-        "easing", "curveType", use="optional", default="ease-in-out", fixed=None, doc="",
+        "easing", "curveType", use="optional", default="ease-in-out", fixed=None,
+        doc='1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom,\ntcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping,\n@mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2"\nor key/@easeOut + next key/@easeIn handles.',
     )
+    """1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom,
+    tcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping,
+    @mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2"
+    or key/@easeOut + next key/@easeIn handles.
+    """
 
     if _t.TYPE_CHECKING:
 
@@ -6367,7 +7205,15 @@ class FlyTo(Element):
             zoom: _t.Union[float, int, str] | None = None,
             rho: T_positiveDecimal | None = None,
             easing: T_curveType | None = None,
-        ) -> None: ...
+        ) -> None:
+            """A camera move to a centre and zoom beginning at @begin (composition seconds), along van Wijk and Nuij's smooth zoom-and-pan path; @rho is its curvature (how far out it zooms) and @duration defaults to the path's natural length. The first move starts from the map's own centerLon/centerLat/zoom; each later one from the previous target. Once a move has begun it decides centre and zoom (animate rotation freely).
+
+            Args:
+                lon: Degrees east, in [-180, 180].
+                lat: Degrees north, in [-90, 90].
+                easing: 1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom, tcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping, @mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2" or key/@easeOut + next key/@easeIn handles.
+            """
+            ...
 
 
 class TilesAsset(Element):
@@ -6424,7 +7270,9 @@ class TilesAsset(Element):
             minZoom: T_tileZoomType | None = None,
             maxZoom: T_tileZoomType | None = None,
             attribution: str | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Map tiles: a PMTiles archive (@src) of vector (MVT) or raster (PNG, JPEG, WebP) tiles; or an online tile service (@url, a template with {z}, {x} and {y}, or {s} for a subdomain), whose tiles a resolve step, run before rendering, downloads for the views the document's maps show into @cache (a PMTiles archive pinned by @cacheSha256). Rendering never fetches tiles. @sha256 pins @src. @tileSize is the pixel size tiles are drawn at (default 512 for vector tiles, 256 for raster); @minZoom and @maxZoom (minZoom <= maxZoom) bound the zooms fetched from a service. @attribution is the tiles' credit line."""
+            ...
 
 
 class Basemap(Element):
@@ -6464,6 +7312,7 @@ class Basemap(Element):
         "attribution", "xs:boolean", use="optional", default="true", fixed=None,
         doc="Draws the tiles' credit (their @attribution, or the archive's) in the map's corner.",
     )
+    """Draws the tiles' credit (their @attribution, or the archive's) in the map's corner."""
 
     if _t.TYPE_CHECKING:
 
@@ -6477,7 +7326,13 @@ class Basemap(Element):
             detail: _t.Union[float, int, str] | None = None,
             labels: _t.Union[bool, str] | None = None,
             attribution: _t.Union[bool, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """A basemap from a tiles asset. Vector tiles are drawn with a MapLibre style (@mapStyle: a style JSON file, or protomaps-light / protomaps-dark, the Protomaps basemap styles, the default); raster tiles are drawn as images, warped into the map's projection. Raster basemaps paint beneath all of the map's other content, its background included. @detail shifts the tile zoom (positive: finer tiles); @labels="false" leaves out the style's text.
+
+            Args:
+                attribution: Draws the tiles' credit (their @attribution, or the archive's) in the map's corner.
+            """
+            ...
 
         def add_animate(
             self,
@@ -6488,7 +7343,9 @@ class Basemap(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -6496,7 +7353,12 @@ class Basemap(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -6509,7 +7371,12 @@ class Basemap(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -6527,7 +7394,12 @@ class Basemap(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -6581,17 +7453,27 @@ class MapAsset(Element):
         "height", "xs:positiveInteger", use="required", default=None, fixed=None, doc="",
     )
     projection: Attr[G_projectionType, T_projectionType] = Attr(
-        "projection", "projectionType", use="optional", default="equal-earth", fixed=None, doc="",
+        "projection", "projectionType", use="optional", default="equal-earth", fixed=None,
+        doc="Map projections (d3-geo formulas). Cylindrical, pseudo-cylindrical and conic projections\ncut the globe along the antimeridian opposite the centre; orthographic and the azimuthal\nprojections clip to the visible cap (the near hemisphere for orthographic).\nweb-mercator is spherical Mercator with MapLibre zoom levels (a 512-pixel world at zoom 0).",
     )
+    """Map projections (d3-geo formulas). Cylindrical, pseudo-cylindrical and conic projections
+    cut the globe along the antimeridian opposite the centre; orthographic and the azimuthal
+    projections clip to the visible cap (the near hemisphere for orthographic).
+    web-mercator is spherical Mercator with MapLibre zoom levels (a 512-pixel world at zoom 0).
+    """
     parallels: Attr[G_numberListType, T_numberListType] = Attr(
         "parallels", "numberListType", use="optional", default=None, fixed=None, doc="",
     )
     centerLon: Attr[G_longitudeType, T_longitudeType] = Attr(
-        "centerLon", "longitudeType", use="optional", default=None, fixed=None, doc="",
+        "centerLon", "longitudeType", use="optional", default=None, fixed=None,
+        doc="Degrees east, in [-180, 180].",
     )
+    """Degrees east, in [-180, 180]."""
     centerLat: Attr[G_latitudeType, T_latitudeType] = Attr(
-        "centerLat", "latitudeType", use="optional", default=None, fixed=None, doc="",
+        "centerLat", "latitudeType", use="optional", default=None, fixed=None,
+        doc="Degrees north, in [-90, 90].",
     )
+    """Degrees north, in [-90, 90]."""
     zoom: Attr[float, _t.Union[float, int, str]] = Attr(
         "zoom", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -6605,11 +7487,15 @@ class MapAsset(Element):
         "fitPadding", "nonNegativeDecimal", use="optional", default="0", fixed=None, doc="",
     )
     background: Attr[G_paintType, T_paintType] = Attr(
-        "background", "paintType", use="optional", default=None, fixed=None, doc="",
+        "background", "paintType", use="optional", default=None, fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     outline: Attr[G_paintType, T_paintType] = Attr(
-        "outline", "paintType", use="optional", default=None, fixed=None, doc="",
+        "outline", "paintType", use="optional", default=None, fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     outlineWidth: Attr[G_nonNegativeDecimal, T_nonNegativeDecimal] = Attr(
         "outlineWidth", "nonNegativeDecimal", use="optional", default="1", fixed=None, doc="",
     )
@@ -6637,7 +7523,17 @@ class MapAsset(Element):
             outline: T_paintType | None = None,
             outlineWidth: T_nonNegativeDecimal | None = None,
             precision: T_positiveDecimal | None = None,
-        ) -> None: ...
+        ) -> None:
+            """A projected map drawn as vectors: geoLayer, graticule, route and pin children paint in document order over @background (the globe or world outline filled), with @outline stroking that outline. zoom counts doublings from the fitted view: zoom 0 shows @fit (the whole sphere when absent) inside the frame less @fitPadding, centred on centerLon/centerLat (default: the middle of the fit target). centerLon, centerLat, zoom and rotation (degrees, clockwise on screen) are animatable; flyTo children make smooth camera moves. Tilt a map in perspective with its layer's 3D rotation.
+
+            Args:
+                projection: Map projections (d3-geo formulas). Cylindrical, pseudo-cylindrical and conic projections cut the globe along the antimeridian opposite the centre; orthographic and the azimuthal projections clip to the visible cap (the near hemisphere for orthographic). web-mercator is spherical Mercator with MapLibre zoom levels (a 512-pixel world at zoom 0).
+                centerLon: Degrees east, in [-180, 180].
+                centerLat: Degrees north, in [-90, 90].
+                background: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                outline: A colour or url(#id) of a paints/* gradient, pattern or noise.
+            """
+            ...
 
         def add_basemap(
             self,
@@ -6649,7 +7545,12 @@ class MapAsset(Element):
             detail: _t.Union[float, int, str] | None = None,
             labels: _t.Union[bool, str] | None = None,
             attribution: _t.Union[bool, str] | None = None,
-        ) -> Basemap: ...
+        ) -> Basemap:
+            """Add a <basemap> child; the keywords are the attributes of Basemap.
+
+            A basemap from a tiles asset. Vector tiles are drawn with a MapLibre style (@mapStyle: a style JSON file, or protomaps-light / protomaps-dark, the Protomaps basemap styles, the default); raster tiles are drawn as images, warped into the map's projection. Raster basemaps paint beneath all of the map's other content, its background included. @detail shifts the tile zoom (positive: finer tiles); @labels="false" leaves out the style's text.
+            """
+            ...
 
         def add_geoLayer(
             self,
@@ -6671,7 +7572,12 @@ class MapAsset(Element):
             textStyle: _t.Union[str, Element] | None = None,
             pointRadius: T_nonNegativeDecimal | None = None,
             progress: T_unitDecimal | None = None,
-        ) -> GeoLayer: ...
+        ) -> GeoLayer:
+            """Add a <geoLayer> child; the keywords are the attributes of GeoLayer.
+
+            The features of a geo asset: polygons filled and stroked, lines and outlines stroked (drawn on by @progress: each line or ring from its first vertex; the fill stays whole), points as dots. @filter keeps features whose property equals (prop=value) or differs from (prop!=value) a value. Choropleth: @fillBy names a numeric property mapped through @domain (data range by default) and @scale onto @palette (colours interpolated in sRGB; quantize picks one colour per equal step); features without a value use @noData. @label names a property drawn at each feature's centre.
+            """
+            ...
 
         def add_graticule(
             self,
@@ -6681,7 +7587,12 @@ class MapAsset(Element):
             stroke: T_paintType | None = None,
             strokeWidth: T_nonNegativeDecimal | None = None,
             opacity: T_unitDecimal | None = None,
-        ) -> Graticule: ...
+        ) -> Graticule:
+            """Add a <graticule> child; the keywords are the attributes of Graticule.
+
+            Meridians and parallels every @step degrees.
+            """
+            ...
 
         def add_route(
             self,
@@ -6697,7 +7608,12 @@ class MapAsset(Element):
             opacity: T_unitDecimal | None = None,
             headRadius: T_nonNegativeDecimal | None = None,
             headFill: T_paintType | None = None,
-        ) -> Route: ...
+        ) -> Route:
+            """Add a <route> child; the keywords are the attributes of Route.
+
+            A path along great circles through @points ("lon,lat lon,lat …") or the lines of @geo, drawn on by @progress measured along the ground, so it advances at constant ground speed whatever the projection; @headRadius puts a dot at its tip.
+            """
+            ...
 
         def add_pin(
             self,
@@ -6714,7 +7630,12 @@ class MapAsset(Element):
             textStyle: _t.Union[str, Element] | None = None,
             labelDx: _t.Union[float, int, str] | None = None,
             labelDy: _t.Union[float, int, str] | None = None,
-        ) -> Pin: ...
+        ) -> Pin:
+            """Add a <pin> child; the keywords are the attributes of Pin.
+
+            A marker at a longitude and latitude, with an optional label beside it; hidden on the far side of a globe or outside the frame.
+            """
+            ...
 
         def add_flyTo(
             self,
@@ -6726,7 +7647,12 @@ class MapAsset(Element):
             zoom: _t.Union[float, int, str] | None = None,
             rho: T_positiveDecimal | None = None,
             easing: T_curveType | None = None,
-        ) -> FlyTo: ...
+        ) -> FlyTo:
+            """Add a <flyTo> child; the keywords are the attributes of FlyTo.
+
+            A camera move to a centre and zoom beginning at @begin (composition seconds), along van Wijk and Nuij's smooth zoom-and-pan path; @rho is its curvature (how far out it zooms) and @duration defaults to the path's natural length. The first move starts from the map's own centerLon/centerLat/zoom; each later one from the previous target. Once a move has begun it decides centre and zoom (animate rotation freely).
+            """
+            ...
 
         def add_animate(
             self,
@@ -6737,7 +7663,9 @@ class MapAsset(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -6745,7 +7673,12 @@ class MapAsset(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -6758,7 +7691,12 @@ class MapAsset(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -6776,7 +7714,12 @@ class MapAsset(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -6853,7 +7796,9 @@ class PdfRegion(Element):
             y: _t.Union[float, int, str] | None = None,
             width: T_nonNegativeDecimal | None = None,
             height: T_nonNegativeDecimal | None = None,
-        ) -> None: ...
+        ) -> None:
+            """A box on the page, in the cache image's pixels (origin top-left, +y down). With @text, the resolve step finds the occurrence-th match of the phrase in the page's text and writes x, y, width and height; without it, the box is given by hand."""
+            ...
 
 
 class PdfAsset(Element):
@@ -6888,8 +7833,12 @@ class PdfAsset(Element):
         doc="",
     )
     background: Attr[G_colorType, T_colorType] = Attr(
-        "background", "colorType", use="optional", default="#FFFFFFFF", fixed=None, doc="",
+        "background", "colorType", use="optional", default="#FFFFFFFF", fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     annotations: Attr[bool, _t.Union[bool, str]] = Attr(
         "annotations", "xs:boolean", use="optional", default="false", fixed=None, doc="",
     )
@@ -6929,7 +7878,13 @@ class PdfAsset(Element):
             license: str | None = None,
             credit: str | None = None,
             proxy: str | None = None,
-        ) -> None: ...
+        ) -> None:
+            """One page of a PDF, drawn as an image. The renderer never reads the PDF: it reads @cache and fails unless its SHA-256 equals @cacheSha256. A resolve step, run before rendering, renders page @page at @dpi over @background into the cache, writes width, height and cacheSha256, and resolves the regions' text. @sha256 pins the source file.
+
+            Args:
+                background: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+            """
+            ...
 
         def add_region(
             self,
@@ -6941,7 +7896,12 @@ class PdfAsset(Element):
             y: _t.Union[float, int, str] | None = None,
             width: T_nonNegativeDecimal | None = None,
             height: T_nonNegativeDecimal | None = None,
-        ) -> PdfRegion: ...
+        ) -> PdfRegion:
+            """Add a <region> child; the keywords are the attributes of PdfRegion.
+
+            A box on the page, in the cache image's pixels (origin top-left, +y down). With @text, the resolve step finds the occurrence-th match of the phrase in the page's text and writes x, y, width and height; without it, the box is given by hand.
+            """
+            ...
 
     else:
 
@@ -7005,7 +7965,9 @@ class Assets(Element):
             license: str | None = None,
             credit: str | None = None,
             proxy: str | None = None,
-        ) -> ImageAsset: ...
+        ) -> ImageAsset:
+            """Add a <image> child; the keywords are the attributes of ImageAsset."""
+            ...
 
         def add_video(
             self,
@@ -7028,7 +7990,9 @@ class Assets(Element):
             license: str | None = None,
             credit: str | None = None,
             proxy: str | None = None,
-        ) -> VideoAsset: ...
+        ) -> VideoAsset:
+            """Add a <video> child; the keywords are the attributes of VideoAsset."""
+            ...
 
         def add_imageSequence(
             self,
@@ -7050,7 +8014,12 @@ class Assets(Element):
             license: str | None = None,
             credit: str | None = None,
             proxy: str | None = None,
-        ) -> ImageSequenceAsset: ...
+        ) -> ImageSequenceAsset:
+            """Add a <imageSequence> child; the keywords are the attributes of ImageSequenceAsset.
+
+            Numbered frames, src uses printf padding ("logo_%04d.png") or ####.
+            """
+            ...
 
         def add_audio(
             self,
@@ -7066,7 +8035,9 @@ class Assets(Element):
             license: str | None = None,
             credit: str | None = None,
             proxy: str | None = None,
-        ) -> AudioAsset: ...
+        ) -> AudioAsset:
+            """Add a <audio> child; the keywords are the attributes of AudioAsset."""
+            ...
 
         def add_text(
             self,
@@ -7118,7 +8089,12 @@ class Assets(Element):
             textTransform: _t.Literal["none", "uppercase", "lowercase", "capitalize", "small-caps"] | None = None,
             decoration: _t.Literal["none", "underline", "line-through", "overline"] | None = None,
             highlight: T_paintType | None = None,
-        ) -> TextAsset: ...
+        ) -> TextAsset:
+            """Add a <text> child; the keywords are the attributes of TextAsset.
+
+            Text content comes from @text or from span children (exactly one). {{name}} inside text is replaced by the value of parameter "name". autoFit shrinks and/or grows size within [minSize, maxSize] so the text fits width x height. background draws a box behind each block, line or word.
+            """
+            ...
 
         def add_vector(
             self,
@@ -7147,7 +8123,12 @@ class Assets(Element):
             license: str | None = None,
             credit: str | None = None,
             proxy: str | None = None,
-        ) -> VectorAsset: ...
+        ) -> VectorAsset:
+            """Add a <vector> child; the keywords are the attributes of VectorAsset.
+
+            shape="svg" renders the SVG file at @src (static SVG 2 subset, no script).
+            """
+            ...
 
         def add_mesh(
             self,
@@ -7159,7 +8140,9 @@ class Assets(Element):
             license: str | None = None,
             credit: str | None = None,
             proxy: str | None = None,
-        ) -> MeshAsset: ...
+        ) -> MeshAsset:
+            """Add a <mesh> child; the keywords are the attributes of MeshAsset."""
+            ...
 
         def add_lottie(
             self,
@@ -7174,7 +8157,9 @@ class Assets(Element):
             license: str | None = None,
             credit: str | None = None,
             proxy: str | None = None,
-        ) -> LottieAsset: ...
+        ) -> LottieAsset:
+            """Add a <lottie> child; the keywords are the attributes of LottieAsset."""
+            ...
 
         def add_font(
             self,
@@ -7189,7 +8174,9 @@ class Assets(Element):
             license: str | None = None,
             credit: str | None = None,
             proxy: str | None = None,
-        ) -> FontAsset: ...
+        ) -> FontAsset:
+            """Add a <font> child; the keywords are the attributes of FontAsset."""
+            ...
 
         def add_strokeFont(
             self,
@@ -7201,7 +8188,12 @@ class Assets(Element):
             license: str | None = None,
             credit: str | None = None,
             proxy: str | None = None,
-        ) -> StrokeFontAsset: ...
+        ) -> StrokeFontAsset:
+            """Add a <strokeFont> child; the keywords are the attributes of StrokeFontAsset.
+
+            A single-line font: glyphs as pen strokes. format="jhf" is the Hershey font file format; the n-th glyph of the file (counting from 0) is the character U+0020 + n. Version 1.2.
+            """
+            ...
 
         def add_generator(
             self,
@@ -7219,7 +8211,12 @@ class Assets(Element):
             angle: _t.Union[float, int, str] | None = None,
             seed: _t.Union[int, str] | None = None,
             lineWidth: T_nonNegativeDecimal | None = None,
-        ) -> GeneratorAsset: ...
+        ) -> GeneratorAsset:
+            """Add a <generator> child; the keywords are the attributes of GeneratorAsset.
+
+            Procedural image source; all parameters animate; noise kinds are seeded.
+            """
+            ...
 
         def add_chart(
             self,
@@ -7235,7 +8232,12 @@ class Assets(Element):
             showAxes: _t.Union[bool, str] | None = None,
             showValues: _t.Union[bool, str] | None = None,
             format: str | None = None,
-        ) -> ChartAsset: ...
+        ) -> ChartAsset:
+            """Add a <chart> child; the keywords are the attributes of ChartAsset.
+
+            Data-driven chart; @progress (animatable 0..1) draws it on.
+            """
+            ...
 
         def add_audiogram(
             self,
@@ -7248,7 +8250,9 @@ class Assets(Element):
             bars: _t.Union[int, str] | None = None,
             color: T_paintType | None = None,
             smoothing: T_unitDecimal | None = None,
-        ) -> AudiogramAsset: ...
+        ) -> AudiogramAsset:
+            """Add a <audiogram> child; the keywords are the attributes of AudiogramAsset."""
+            ...
 
         def add_code(
             self,
@@ -7262,7 +8266,12 @@ class Assets(Element):
             background: T_colorType | None = None,
             errorCorrection: _t.Literal["L", "M", "Q", "H"] | None = None,
             quietZone: _t.Union[int, str] | None = None,
-        ) -> CodeAsset: ...
+        ) -> CodeAsset:
+            """Add a <code> child; the keywords are the attributes of CodeAsset.
+
+            Machine-readable code (QR for CTA landing pages, retail barcodes).
+            """
+            ...
 
         def add_formula(
             self,
@@ -7273,7 +8282,9 @@ class Assets(Element):
             height: _t.Union[int, str] | None = None,
             size: T_positiveDecimal | None = None,
             color: T_paintType | None = None,
-        ) -> FormulaAsset: ...
+        ) -> FormulaAsset:
+            """Add a <formula> child; the keywords are the attributes of FormulaAsset."""
+            ...
 
         def add_generated(
             self,
@@ -7293,7 +8304,12 @@ class Assets(Element):
             fps: T_fpsType | None = None,
             duration: T_positiveDecimal | None = None,
             license: str | None = None,
-        ) -> GeneratedAsset: ...
+        ) -> GeneratedAsset:
+            """Add a <generated> child; the keywords are the attributes of GeneratedAsset.
+
+            Media produced by an external generator (text-to-speech, image, video or music model, transcription). The renderer never calls the provider while rendering: it reads @cache and fails unless the file's SHA-256 equals @cacheSha256. A resolve step, run before rendering, fills the cache from @provider/@model/@prompt/@voice/@seed and pins @cacheSha256. This keeps renders deterministic.
+            """
+            ...
 
         def add_geo(
             self,
@@ -7306,7 +8322,12 @@ class Assets(Element):
             license: str | None = None,
             credit: str | None = None,
             proxy: str | None = None,
-        ) -> GeoAsset: ...
+        ) -> GeoAsset:
+            """Add a <geo> child; the keywords are the attributes of GeoAsset.
+
+            Geographic data: GeoJSON, TopoJSON, KML or GPX (format from the extension, then the content). @object picks one TopoJSON object (all objects by default). Polygon edges are great-circle arcs; rings wound either way are accepted (a polygon larger than a hemisphere is turned round).
+            """
+            ...
 
         def add_tiles(
             self,
@@ -7321,7 +8342,12 @@ class Assets(Element):
             minZoom: T_tileZoomType | None = None,
             maxZoom: T_tileZoomType | None = None,
             attribution: str | None = None,
-        ) -> TilesAsset: ...
+        ) -> TilesAsset:
+            """Add a <tiles> child; the keywords are the attributes of TilesAsset.
+
+            Map tiles: a PMTiles archive (@src) of vector (MVT) or raster (PNG, JPEG, WebP) tiles; or an online tile service (@url, a template with {z}, {x} and {y}, or {s} for a subdomain), whose tiles a resolve step, run before rendering, downloads for the views the document's maps show into @cache (a PMTiles archive pinned by @cacheSha256). Rendering never fetches tiles. @sha256 pins @src. @tileSize is the pixel size tiles are drawn at (default 512 for vector tiles, 256 for raster); @minZoom and @maxZoom (minZoom <= maxZoom) bound the zooms fetched from a service. @attribution is the tiles' credit line.
+            """
+            ...
 
         def add_map(
             self,
@@ -7341,7 +8367,12 @@ class Assets(Element):
             outline: T_paintType | None = None,
             outlineWidth: T_nonNegativeDecimal | None = None,
             precision: T_positiveDecimal | None = None,
-        ) -> MapAsset: ...
+        ) -> MapAsset:
+            """Add a <map> child; the keywords are the attributes of MapAsset.
+
+            A projected map drawn as vectors: geoLayer, graticule, route and pin children paint in document order over @background (the globe or world outline filled), with @outline stroking that outline. zoom counts doublings from the fitted view: zoom 0 shows @fit (the whole sphere when absent) inside the frame less @fitPadding, centred on centerLon/centerLat (default: the middle of the fit target). centerLon, centerLat, zoom and rotation (degrees, clockwise on screen) are animatable; flyTo children make smooth camera moves. Tilt a map in perspective with its layer's 3D rotation.
+            """
+            ...
 
         def add_pdf(
             self,
@@ -7360,7 +8391,12 @@ class Assets(Element):
             license: str | None = None,
             credit: str | None = None,
             proxy: str | None = None,
-        ) -> PdfAsset: ...
+        ) -> PdfAsset:
+            """Add a <pdf> child; the keywords are the attributes of PdfAsset.
+
+            One page of a PDF, drawn as an image. The renderer never reads the PDF: it reads @cache and fails unless its SHA-256 equals @cacheSha256. A resolve step, run before rendering, renders page @page at @dpi over @background into the cache, writes width, height and cacheSha256, and resolves the regions' text. @sha256 pins the source file.
+            """
+            ...
 
         def add_meshSequence(
             self,
@@ -7378,7 +8414,9 @@ class Assets(Element):
             license: str | None = None,
             credit: str | None = None,
             proxy: str | None = None,
-        ) -> MeshSequenceAsset: ...
+        ) -> MeshSequenceAsset:
+            """Add a <meshSequence> child; the keywords are the attributes of MeshSequenceAsset."""
+            ...
 
         def add_volume(
             self,
@@ -7403,7 +8441,9 @@ class Assets(Element):
             boundsMaxX: _t.Union[float, int, str] | None = None,
             boundsMaxY: _t.Union[float, int, str] | None = None,
             boundsMaxZ: _t.Union[float, int, str] | None = None,
-        ) -> VolumeAsset: ...
+        ) -> VolumeAsset:
+            """Add a <volume> child; the keywords are the attributes of VolumeAsset."""
+            ...
 
         def add_voxelAsset(
             self,
@@ -7421,7 +8461,12 @@ class Assets(Element):
             license: str | None = None,
             credit: str | None = None,
             proxy: str | None = None,
-        ) -> VoxelAsset: ...
+        ) -> VoxelAsset:
+            """Add a <voxelAsset> child; the keywords are the attributes of VoxelAsset.
+
+            Version 1.3 or later (VOX1). A model of cells, each with a palette index 1 to 255: either a file (`src`, `format` vox, MagicaVoxel, or srvol, the engine's volume cache with the indices as exact values of the grid `voxelGrid`) or a closed mesh asset cut into cells (`fromMesh` and `cellSize`, the cells whose centres are inside the mesh, on a lattice of multiples of the cell size, by the test that the smoke's colliders use, with the mesh in the frame it is drawn in: scene units, an imported asset in metres being 100 to the metre, and scene axes, so `cellSize` is in scene units), exactly one of the two (VOX2, VOX3). A `vox` file with a scene graph is the whole scene, the models placed as the graph says, unless `model` names one (its number from 0), which is then unplaced. MagicaVoxel's axes (z up) are turned into the scene's (y down, z forward) by a proper rotation. `maxCells` and `maxMemoryMiB` bound what is built, before it is allocated, and over either is an error that names the number, never a model cut short. The engine's defaults are 4194304 cells, 128 MiB and the grid `voxels`; they are not XSD defaults so that the attributes that belong to one source can be refused on the other (VOX2).
+            """
+            ...
 
         def add_fractal(
             self,
@@ -7444,7 +8489,12 @@ class Assets(Element):
             paletteScale: T_positiveDecimal | None = None,
             paletteOffset: _t.Union[float, int, str] | None = None,
             insideColor: T_colorType | None = None,
-        ) -> FractalAsset: ...
+        ) -> FractalAsset:
+            """Add a <fractal> child; the keywords are the attributes of FractalAsset.
+
+            Escape-time fractal image of width x height pixels. Each pixel shows the escape count of its centre in exact arithmetic (up to 2^-20 of a pixel; SREP 75), whatever the zoom.
+            """
+            ...
 
     else:
 
@@ -7541,8 +8591,12 @@ class Material(Element):
 
     id: Attr[str, str] = Attr("id", "xs:ID", use="required", default=None, fixed=None, doc="")
     baseColor: Attr[G_colorType, T_colorType] = Attr(
-        "baseColor", "colorType", use="optional", default="#FFFFFFFF", fixed=None, doc="",
+        "baseColor", "colorType", use="optional", default="#FFFFFFFF", fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     metallic: Attr[G_unitDecimal, T_unitDecimal] = Attr(
         "metallic", "unitDecimal", use="optional", default="0", fixed=None, doc="",
     )
@@ -7550,8 +8604,12 @@ class Material(Element):
         "roughness", "unitDecimal", use="optional", default="0.5", fixed=None, doc="",
     )
     emissive: Attr[G_colorType, T_colorType] = Attr(
-        "emissive", "colorType", use="optional", default="#000000FF", fixed=None, doc="",
+        "emissive", "colorType", use="optional", default="#000000FF", fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     emissiveStrength: Attr[G_nonNegativeDecimal, T_nonNegativeDecimal] = Attr(
         "emissiveStrength", "nonNegativeDecimal", use="optional", default="1", fixed=None, doc="",
     )
@@ -7596,14 +8654,22 @@ class Material(Element):
         "thickness", "nonNegativeDecimal", use="optional", default="0", fixed=None, doc="",
     )
     attenuationColor: Attr[G_colorType, T_colorType] = Attr(
-        "attenuationColor", "colorType", use="optional", default="#FFFFFFFF", fixed=None, doc="",
+        "attenuationColor", "colorType", use="optional", default="#FFFFFFFF", fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     attenuationDistance: Attr[G_positiveDecimal, T_positiveDecimal] = Attr(
         "attenuationDistance", "positiveDecimal", use="optional", default=None, fixed=None, doc="",
     )
     sheenColor: Attr[G_colorType, T_colorType] = Attr(
-        "sheenColor", "colorType", use="optional", default="#000000FF", fixed=None, doc="",
+        "sheenColor", "colorType", use="optional", default="#000000FF", fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     sheenRoughness: Attr[G_unitDecimal, T_unitDecimal] = Attr(
         "sheenRoughness", "unitDecimal", use="optional", default="0", fixed=None, doc="",
     )
@@ -7611,8 +8677,12 @@ class Material(Element):
         "specular", "unitDecimal", use="optional", default="1", fixed=None, doc="",
     )
     specularColor: Attr[G_colorType, T_colorType] = Attr(
-        "specularColor", "colorType", use="optional", default="#FFFFFFFF", fixed=None, doc="",
+        "specularColor", "colorType", use="optional", default="#FFFFFFFF", fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     iridescence: Attr[G_unitDecimal, T_unitDecimal] = Attr(
         "iridescence", "unitDecimal", use="optional", default="0", fixed=None, doc="",
     )
@@ -7660,12 +8730,18 @@ class Material(Element):
     )
     unevenness: Attr[G_unitDecimal, T_unitDecimal] = Attr(
         "unevenness", "unitDecimal", use="optional", default="0", fixed=None,
-        doc="Amount of procedural surface unevenness: a smooth noise fixed to the object that tilts the\n      shading normal and varies the roughness, for a hand-made (clay) look. 0 is off.",
+        doc="Amount of procedural surface unevenness: a smooth noise fixed to the object that tilts the\nshading normal and varies the roughness, for a hand-made (clay) look. 0 is off.",
     )
+    """Amount of procedural surface unevenness: a smooth noise fixed to the object that tilts the
+    shading normal and varies the roughness, for a hand-made (clay) look. 0 is off.
+    """
     unevennessScale: Attr[G_positiveDecimal, T_positiveDecimal] = Attr(
         "unevennessScale", "positiveDecimal", use="optional", default="8", fixed=None,
-        doc="Size of the largest features of the unevenness, in scene units (pixels at the object's\n      scale).",
+        doc="Size of the largest features of the unevenness, in scene units (pixels at the object's\nscale).",
     )
+    """Size of the largest features of the unevenness, in scene units (pixels at the object's
+    scale).
+    """
     unevennessSeed: Attr[int, _t.Union[int, str]] = Attr(
         "unevennessSeed", "xs:nonNegativeInteger", use="optional", default="0", fixed=None, doc="",
     )
@@ -7673,15 +8749,22 @@ class Material(Element):
         "subsurface", "unitDecimal", use="optional", default="0", fixed=None, doc="",
     )
     subsurfaceColor: Attr[G_colorType, T_colorType] = Attr(
-        "subsurfaceColor", "colorType", use="optional", default="#CCCCCCFF", fixed=None, doc="",
+        "subsurfaceColor", "colorType", use="optional", default="#CCCCCCFF", fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     subsurfaceRadius: Attr[G_nonNegativeDecimal, T_nonNegativeDecimal] = Attr(
         "subsurfaceRadius", "nonNegativeDecimal", use="optional", default="10", fixed=None,
         doc="Mean free path in scene units (pixels), multiplied per channel by subsurfaceRadiusScale.",
     )
+    """Mean free path in scene units (pixels), multiplied per channel by subsurfaceRadiusScale."""
     subsurfaceRadiusScale: Attr[G_unitTripleType, T_unitTripleType] = Attr(
-        "subsurfaceRadiusScale", "unitTripleType", use="optional", default="1 0.5 0.25", fixed=None, doc="",
+        "subsurfaceRadiusScale", "unitTripleType", use="optional", default="1 0.5 0.25", fixed=None,
+        doc="Three numbers in [0, 1] (SREP 71).",
     )
+    """Three numbers in [0, 1] (SREP 71)."""
     materialX: Attr[str, str] = Attr(
         "materialX", "xs:anyURI", use="optional", default=None, fixed=None, doc="",
     )
@@ -7736,7 +8819,22 @@ class Material(Element):
             subsurfaceRadius: T_nonNegativeDecimal | None = None,
             subsurfaceRadiusScale: T_unitTripleType | None = None,
             materialX: str | None = None,
-        ) -> None: ...
+        ) -> None:
+            """glTF 2.0 metallic-roughness plus the ratified KHR_materials_* extensions (clearcoat, transmission, ior, sheen, volume, specular, iridescence, anisotropy, dispersion, emissive_strength, unlit). @materialX points to a MaterialX/OpenPBR document that replaces these parameters when present.
+
+            Args:
+                baseColor: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+                emissive: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+                attenuationColor: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+                sheenColor: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+                specularColor: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+                unevenness: Amount of procedural surface unevenness: a smooth noise fixed to the object that tilts the shading normal and varies the roughness, for a hand-made (clay) look. 0 is off.
+                unevennessScale: Size of the largest features of the unevenness, in scene units (pixels at the object's scale).
+                subsurfaceColor: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+                subsurfaceRadius: Mean free path in scene units (pixels), multiplied per channel by subsurfaceRadiusScale.
+                subsurfaceRadiusScale: Three numbers in [0, 1] (SREP 71).
+            """
+            ...
 
         def add_animate(
             self,
@@ -7747,7 +8845,9 @@ class Material(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -7755,7 +8855,12 @@ class Material(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -7768,7 +8873,12 @@ class Material(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -7786,7 +8896,12 @@ class Material(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -7866,7 +8981,12 @@ class Materials(Element):
             subsurfaceRadius: T_nonNegativeDecimal | None = None,
             subsurfaceRadiusScale: T_unitTripleType | None = None,
             materialX: str | None = None,
-        ) -> Material: ...
+        ) -> Material:
+            """Add a <material> child; the keywords are the attributes of Material.
+
+            glTF 2.0 metallic-roughness plus the ratified KHR_materials_* extensions (clearcoat, transmission, ior, sheen, volume, specular, iridescence, anisotropy, dispersion, emissive_strength, unlit). @materialX points to a MaterialX/OpenPBR document that replaces these parameters when present.
+            """
+            ...
 
     else:
 
@@ -7921,7 +9041,9 @@ class WarpPoint(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -7929,7 +9051,12 @@ class WarpPoint(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -7942,7 +9069,12 @@ class WarpPoint(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -7960,7 +9092,12 @@ class WarpPoint(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -8037,7 +9174,9 @@ class PuppetPin(Element):
             y: _t.Union[float, int, str] | None = None,
             rotation: _t.Union[float, int, str] | None = None,
             amount: T_nonNegativeDecimal | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Puppet pin at rest position restX/restY; x/y animate its displacement."""
+            ...
 
         def add_animate(
             self,
@@ -8048,7 +9187,9 @@ class PuppetPin(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -8056,7 +9197,12 @@ class PuppetPin(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -8069,7 +9215,12 @@ class PuppetPin(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -8087,7 +9238,12 @@ class PuppetPin(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -8185,6 +9341,7 @@ class Modifier(Element):
         "corners", "numberListType", use="optional", default=None, fixed=None,
         doc="corner-pin: 8 numbers x0 y0 x1 y1 x2 y2 x3 y3 (TL, TR, BR, BL).",
     )
+    """corner-pin: 8 numbers x0 y0 x1 y1 x2 y2 x3 y3 (TL, TR, BR, BL)."""
 
     if _t.TYPE_CHECKING:
 
@@ -8204,7 +9361,11 @@ class Modifier(Element):
             seed: _t.Union[int, str] | None = None,
             skeleton: _t.Union[str, Element] | None = None,
             corners: T_numberListType | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                corners: corner-pin: 8 numbers x0 y0 x1 y1 x2 y2 x3 y3 (TL, TR, BR, BL).
+            """
+            ...
 
         def add_animate(
             self,
@@ -8215,7 +9376,9 @@ class Modifier(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -8223,7 +9386,12 @@ class Modifier(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -8236,7 +9404,12 @@ class Modifier(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -8254,7 +9427,12 @@ class Modifier(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_point(
             self,
@@ -8263,7 +9441,9 @@ class Modifier(Element):
             col: _t.Union[int, str] | None = None,
             x: _t.Union[float, int, str] | None = None,
             y: _t.Union[float, int, str] | None = None,
-        ) -> WarpPoint: ...
+        ) -> WarpPoint:
+            """Add a <point> child; the keywords are the attributes of WarpPoint."""
+            ...
 
         def add_pin(
             self,
@@ -8276,7 +9456,12 @@ class Modifier(Element):
             y: _t.Union[float, int, str] | None = None,
             rotation: _t.Union[float, int, str] | None = None,
             amount: T_nonNegativeDecimal | None = None,
-        ) -> PuppetPin: ...
+        ) -> PuppetPin:
+            """Add a <pin> child; the keywords are the attributes of PuppetPin.
+
+            Puppet pin at rest position restX/restY; x/y animate its displacement.
+            """
+            ...
 
     else:
 
@@ -8330,7 +9515,9 @@ class Deform(Element):
             seed: _t.Union[int, str] | None = None,
             skeleton: _t.Union[str, Element] | None = None,
             corners: T_numberListType | None = None,
-        ) -> Modifier: ...
+        ) -> Modifier:
+            """Add a <modifier> child; the keywords are the attributes of Modifier."""
+            ...
 
     else:
 
@@ -8399,7 +9586,9 @@ class Bone(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -8407,7 +9596,12 @@ class Bone(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -8420,7 +9614,12 @@ class Bone(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -8438,7 +9637,12 @@ class Bone(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -8477,7 +9681,9 @@ class Skeleton(Element):
             *,
             id: str | None = None,
             weights: str | None = None,
-        ) -> None: ...
+        ) -> None:
+            """2D bone hierarchy; bind to a node with a deform modifier type="skin" skeleton="id". Bones accept transformConstraint type="ik"."""
+            ...
 
         def add_bone(
             self,
@@ -8490,7 +9696,9 @@ class Skeleton(Element):
             length: T_nonNegativeDecimal | None = None,
             scaleX: _t.Union[float, int, str] | None = None,
             scaleY: _t.Union[float, int, str] | None = None,
-        ) -> Bone: ...
+        ) -> Bone:
+            """Add a <bone> child; the keywords are the attributes of Bone."""
+            ...
 
         def add_transformConstraint(
             self,
@@ -8512,7 +9720,12 @@ class Skeleton(Element):
             softness: T_unitDecimal | None = None,
             progress: T_unitDecimal | None = None,
             autoOrient: _t.Union[bool, str] | None = None,
-        ) -> TransformConstraint: ...
+        ) -> TransformConstraint:
+            """Add a <transformConstraint> child; the keywords are the attributes of TransformConstraint.
+
+            Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target's transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target's world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.
+            """
+            ...
 
     else:
 
@@ -8549,6 +9762,7 @@ class RigidBody(Element):
         "shape", "xs:string", use="optional", default="box", fixed=None,
         doc="box, circle, capsule, polygon, convex-hull (from alpha) or path.",
     )
+    """box, circle, capsule, polygon, convex-hull (from alpha) or path."""
     path: Attr[str, str] = Attr("path", "xs:string", use="optional", default=None, fixed=None, doc="")
     mass: Attr[float, _t.Union[float, int, str]] = Attr(
         "mass", "xs:double", use="optional", default="1", fixed=None, doc="",
@@ -8619,7 +9833,11 @@ class RigidBody(Element):
             fixedRotation: _t.Union[bool, str] | None = None,
             bullet: _t.Union[bool, str] | None = None,
             activateAt: _t.Union[float, int, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                shape: box, circle, capsule, polygon, convex-hull (from alpha) or path.
+            """
+            ...
 
 
 class RigidBody3D(Element):
@@ -8684,6 +9902,9 @@ class RigidBody3D(Element):
         "density", "positiveDecimal", use="optional", default=None, fixed=None,
         doc="Kilograms per cubic metre, for a body of cells (VOX9, VOX10): its mass is the number of cells times the volume of one (cellSize times the object's\nscale, over the scene's pixelsPerMeter, cubed) times this. Required with cells as the collider, and `mass` is then not given.",
     )
+    """Kilograms per cubic metre, for a body of cells (VOX9, VOX10): its mass is the number of cells times the volume of one (cellSize times the object's
+    scale, over the scene's pixelsPerMeter, cubed) times this. Required with cells as the collider, and `mass` is then not given.
+    """
     maxFragments: Attr[int, _t.Union[int, str]] = Attr(
         "maxFragments",
         {
@@ -8697,10 +9918,15 @@ class RigidBody3D(Element):
         use="optional", default=None, fixed=None,
         doc="A body of cells that a crater or a fracture can break gets this many slots (bodies that wait, one cell each, until a cut frees a part of it): 1 to 4096; the\nengine's value is 64, and it is not an XSD default so that it can be refused where there is nothing to cut (VOX11). The world refuses more fragments\nthan slots (see fragmentOverflow).",
     )
+    """A body of cells that a crater or a fracture can break gets this many slots (bodies that wait, one cell each, until a cut frees a part of it): 1 to 4096; the
+    engine's value is 64, and it is not an XSD default so that it can be refused where there is nothing to cut (VOX11). The world refuses more fragments
+    than slots (see fragmentOverflow).
+    """
     fragmentMinCells: Attr[int, _t.Union[int, str]] = Attr(
         "fragmentMinCells", "xs:positiveInteger", use="optional", default=None, fixed=None,
         doc="Loose parts of a cut with fewer cells than this are dust: they leave the body and become particles (VOX11). The engine's value is 1.",
     )
+    """Loose parts of a cut with fewer cells than this are dust: they leave the body and become particles (VOX11). The engine's value is 1."""
     fragmentOverflow: Attr[_t.Literal["error", "dust"], _t.Literal["error", "dust"]] = Attr(
         "fragmentOverflow",
         {
@@ -8714,6 +9940,7 @@ class RigidBody3D(Element):
         use="optional", default=None, fixed=None,
         doc="What a cut does when it frees more parts than there are slots (VOX11): `error` names both numbers, `dust` makes the smallest parts dust. The engine's value is error.",
     )
+    """What a cut does when it frees more parts than there are slots (VOX11): `error` names both numbers, `dust` makes the smallest parts dust. The engine's value is error."""
     anchor: Attr[_t.Literal["largest", "base"], _t.Literal["largest", "base"]] = Attr(
         "anchor",
         {
@@ -8727,6 +9954,11 @@ class RigidBody3D(Element):
         use="optional", default=None, fixed=None,
         doc="Which part of what a crater's cut leaves stays the body (VOX12): `base`, every part that touches the base layer (the cells of the greatest y key, the lowest\nlayer in the scene's axes, y down), the way ground is held by what is under it, or `largest`, the largest connected part. Only an owner with a crater has it, and\nthat owner is static or kinematic (CRT5), so the engine's value when it is not given is `base`: a dynamic body, whose cut would leave its largest part, has no\nanchor to give.",
     )
+    """Which part of what a crater's cut leaves stays the body (VOX12): `base`, every part that touches the base layer (the cells of the greatest y key, the lowest
+    layer in the scene's axes, y down), the way ground is held by what is under it, or `largest`, the largest connected part. Only an owner with a crater has it, and
+    that owner is static or kinematic (CRT5), so the engine's value when it is not given is `base`: a dynamic body, whose cut would leave its largest part, has no
+    anchor to give.
+    """
     friction: Attr[G_unitDecimal, T_unitDecimal] = Attr(
         "friction", "unitDecimal", use="optional", default="0.5", fixed=None, doc="",
     )
@@ -8805,7 +10037,17 @@ class RigidBody3D(Element):
             fixedRotation: _t.Union[bool, str] | None = None,
             bullet: _t.Union[bool, str] | None = None,
             activateAt: _t.Union[float, int, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """A rigid body in 3D on an object3D: the simulation moves the object from its pose at physics@start (its position and rotations, in its parent's frame); from then on the simulation, not its own attributes, places it (a kinematic body follows its animation). shape="auto" takes the primitive's own form (box, sphere, cylinder, cone, capsule; a plane is a box one unit deep; text is a box) and the convex hull of the triangles of any other primitive; convex-hull, trimesh (exact triangles, for static and kinematic scenery) and decomposition (convex parts of a closed mesh) use the object's triangles. Sizes follow the object's scale at the start. Velocities are pixels per second in scene axes (y down, z away from the camera), angular velocities degrees per second about the scene axes.
+
+            Args:
+                density: Kilograms per cubic metre, for a body of cells (VOX9, VOX10): its mass is the number of cells times the volume of one (cellSize times the object's scale, over the scene's pixelsPerMeter, cubed) times this. Required with cells as the collider, and `mass` is then not given.
+                maxFragments: A body of cells that a crater or a fracture can break gets this many slots (bodies that wait, one cell each, until a cut frees a part of it): 1 to 4096; the engine's value is 64, and it is not an XSD default so that it can be refused where there is nothing to cut (VOX11). The world refuses more fragments than slots (see fragmentOverflow).
+                fragmentMinCells: Loose parts of a cut with fewer cells than this are dust: they leave the body and become particles (VOX11). The engine's value is 1.
+                fragmentOverflow: What a cut does when it frees more parts than there are slots (VOX11): `error` names both numbers, `dust` makes the smallest parts dust. The engine's value is error.
+                anchor: Which part of what a crater's cut leaves stays the body (VOX12): `base`, every part that touches the base layer (the cells of the greatest y key, the lowest layer in the scene's axes, y down), the way ground is held by what is under it, or `largest`, the largest connected part. Only an owner with a crater has it, and that owner is static or kinematic (CRT5), so the engine's value when it is not given is `base`: a dynamic body, whose cut would leave its largest part, has no anchor to give.
+            """
+            ...
 
 
 class SoftBody(Element):
@@ -8946,6 +10188,7 @@ class TextAnimator(Element):
         "presetStart", "xs:double", use="optional", default=None, fixed=None,
         doc="Time on the layer's parent timeline (composition time for a top-level layer), not an offset from the layer's start; when absent the preset starts at the layer's own start.",
     )
+    """Time on the layer's parent timeline (composition time for a top-level layer), not an offset from the layer's start; when absent the preset starts at the layer's own start."""
     presetDuration: Attr[G_positiveDecimal, T_positiveDecimal] = Attr(
         "presetDuration", "positiveDecimal", use="optional", default=None, fixed=None, doc="",
     )
@@ -8962,6 +10205,9 @@ class TextAnimator(Element):
         use="optional", default=None, fixed=None,
         doc="The curve of a preset, in place of the preset's own (most use cubic-out, which is front-loaded: at 40 % of the\nduration it is 78 % done). Without @preset it has no effect.",
     )
+    """The curve of a preset, in place of the preset's own (most use cubic-out, which is front-loaded: at 40 % of the
+    duration it is 78 % done). Without @preset it has no effect.
+    """
     unit: Attr[_t.Literal["character", "character-no-space", "word", "line", "span"], _t.Literal["character", "character-no-space", "word", "line", "span"]] = Attr(
         "unit",
         {
@@ -8979,6 +10225,7 @@ class TextAnimator(Element):
         "span", "xs:NMTOKEN", use="optional", default=None, fixed=None,
         doc="Restrict to the span whose @role matches.",
     )
+    """Restrict to the span whose @role matches."""
     selector: Attr[_t.Literal["range", "wiggly", "expression"], _t.Literal["range", "wiggly", "expression"]] = Attr(
         "selector",
         {
@@ -9111,11 +10358,15 @@ class TextAnimator(Element):
         "opacity", "unitDecimal", use="optional", default=None, fixed=None, doc="",
     )
     fill: Attr[G_paintType, T_paintType] = Attr(
-        "fill", "paintType", use="optional", default=None, fixed=None, doc="",
+        "fill", "paintType", use="optional", default=None, fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     stroke: Attr[G_paintType, T_paintType] = Attr(
-        "stroke", "paintType", use="optional", default=None, fixed=None, doc="",
+        "stroke", "paintType", use="optional", default=None, fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     strokeWidth: Attr[G_nonNegativeDecimal, T_nonNegativeDecimal] = Attr(
         "strokeWidth", "nonNegativeDecimal", use="optional", default=None, fixed=None, doc="",
     )
@@ -9194,7 +10445,17 @@ class TextAnimator(Element):
             variation: str | None = None,
             anchorX: _t.Union[float, int, str] | None = None,
             anchorY: _t.Union[float, int, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Per-character/word/line animation of a text layer (After Effects text animators, Lottie t.a, Rive text modifiers). A range selector picks the units in [start, end] + offset (percent or index) with a falloff @shape; each selected unit receives the property offsets below scaled by the selection amount. @stagger/@overlap give preset-style sequential timing. @preset expands to a documented animator (typewriter, word-by-word, ...). A nested expression with property="selector" makes an expression selector.
+
+            Args:
+                presetStart: Time on the layer's parent timeline (composition time for a top-level layer), not an offset from the layer's start; when absent the preset starts at the layer's own start.
+                presetEase: The curve of a preset, in place of the preset's own (most use cubic-out, which is front-loaded: at 40 % of the duration it is 78 % done). Without @preset it has no effect.
+                span: Restrict to the span whose @role matches.
+                fill: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                stroke: A colour or url(#id) of a paints/* gradient, pattern or noise.
+            """
+            ...
 
         def add_animate(
             self,
@@ -9205,7 +10466,9 @@ class TextAnimator(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -9213,7 +10476,12 @@ class TextAnimator(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -9226,7 +10494,12 @@ class TextAnimator(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -9244,7 +10517,12 @@ class TextAnimator(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -9318,7 +10596,9 @@ class TextPath(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -9326,7 +10606,12 @@ class TextPath(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -9339,7 +10624,12 @@ class TextPath(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -9357,7 +10647,12 @@ class TextPath(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -9440,8 +10735,12 @@ class ShapeModifier(Element):
     )
     mode: Attr[str, str] = Attr(
         "mode", "xs:NMTOKEN", use="optional", default=None, fixed=None,
-        doc="merge: add|subtract|intersect|exclude; zig-zag and wiggle-path: corner|smooth\n      (wiggle-path smooth joins the wiggled points with a Catmull-Rom spline through them instead of straight lines);\n      offset-path join: miter|round|bevel.",
+        doc="merge: add|subtract|intersect|exclude; zig-zag and wiggle-path: corner|smooth\n(wiggle-path smooth joins the wiggled points with a Catmull-Rom spline through them instead of straight lines);\noffset-path join: miter|round|bevel.",
     )
+    """merge: add|subtract|intersect|exclude; zig-zag and wiggle-path: corner|smooth
+    (wiggle-path smooth joins the wiggled points with a Catmull-Rom spline through them instead of straight lines);
+    offset-path join: miter|round|bevel.
+    """
     offsetX: Attr[float, _t.Union[float, int, str]] = Attr(
         "offsetX", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -9496,7 +10795,13 @@ class ShapeModifier(Element):
             startOpacity: T_unitDecimal | None = None,
             endOpacity: T_unitDecimal | None = None,
             composite: _t.Literal["above", "below"] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Procedural path operators applied in document order (Lottie/After Effects shape modifiers): repeater, offset-path, pucker-bloat, zig-zag, twist, round-corners, wiggle-path, merge (mode), trim (sequential across paths).
+
+            Args:
+                mode: merge: add|subtract|intersect|exclude; zig-zag and wiggle-path: corner|smooth (wiggle-path smooth joins the wiggled points with a Catmull-Rom spline through them instead of straight lines); offset-path join: miter|round|bevel.
+            """
+            ...
 
         def add_animate(
             self,
@@ -9507,7 +10812,9 @@ class ShapeModifier(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -9515,7 +10822,12 @@ class ShapeModifier(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -9528,7 +10840,12 @@ class ShapeModifier(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -9546,7 +10863,12 @@ class ShapeModifier(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -9605,6 +10927,10 @@ class Layer(Element):
         "safeAreaForce", "xs:boolean", use="optional", default="false", fixed=None,
         doc="true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)\nfrom the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate\nplacement outside the safe region is never silent.",
     )
+    """true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)
+    from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate
+    placement outside the safe region is never silent.
+    """
     z: Attr[int, _t.Union[int, str]] = Attr("z", "xs:int", use="optional", default="0", fixed=None, doc="")
     visible: Attr[bool, _t.Union[bool, str]] = Attr(
         "visible", "xs:boolean", use="optional", default="true", fixed=None, doc="",
@@ -9629,8 +10955,12 @@ class Layer(Element):
             "item": None,
         },
         use="optional", default=None, fixed=None,
-        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\n      nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\n      whole frame interval. Only where motion blur is on for the node.",
+        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\nnearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\nwhole frame interval. Only where motion blur is on for the node.",
     )
+    """The shutter angle, in degrees, of this node's motion blur, instead of the project's: the
+    nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the
+    whole frame interval. Only where motion blur is on for the node.
+    """
     startMarker: Attr[str, str] = Attr(
         "startMarker", "xs:NCName", use="optional", default=None, fixed=None, doc="",
     )
@@ -9641,6 +10971,7 @@ class Layer(Element):
         "condition", "expressionString", use="optional", default=None, fixed=None,
         doc='Node is rendered only when the expression is truthy (e.g. "param(\'showPrice\')").',
     )
+    """Node is rendered only when the expression is truthy (e.g. "param('showPrice')")."""
     motionBlur: Attr[G_triStateType, T_triStateType] = Attr(
         "motionBlur", "triStateType", use="optional", default="inherit", fixed=None, doc="",
     )
@@ -9648,6 +10979,7 @@ class Layer(Element):
         "matte", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".',
     )
+    """Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true"."""
     matteMode: Attr[G_matteModeType, T_matteModeType] = Attr(
         "matteMode", "matteModeType", use="optional", default="alpha", fixed=None, doc="",
     )
@@ -9665,16 +10997,24 @@ class Layer(Element):
             "item": None,
         },
         use="optional", default="inherit", fixed=None,
-        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\n      composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\n      on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\n      true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\n      it. SREP 72.",
+        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\ncomposite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\non display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\ntrue and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\nit. SREP 72.",
     )
+    """The space in which this node's own pixels (their colour C and coverage x opacity a)
+    composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same
+    on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is
+    true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit
+    it. SREP 72.
+    """
     parent: Attr[str, _t.Union[str, Element]] = Attr(
         "parent", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".',
     )
+    """Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent"."""
     threeD: Attr[bool, _t.Union[bool, str]] = Attr(
         "threeD", "xs:boolean", use="optional", default="false", fixed=None,
         doc="2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.",
     )
+    """2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY."""
     zDepth: Attr[float, _t.Union[float, int, str]] = Attr(
         "zDepth", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -9697,6 +11037,7 @@ class Layer(Element):
         use="optional", default=None, fixed=None,
         doc="Responsive anchoring: overrides x so the node's box aligns within alignTo.",
     )
+    """Responsive anchoring: overrides x so the node's box aligns within alignTo."""
     alignY: Attr[_t.Literal["top", "middle", "bottom", "stretch"], _t.Literal["top", "middle", "bottom", "stretch"]] = Attr(
         "alignY",
         {
@@ -9757,8 +11098,13 @@ class Layer(Element):
         "asset", "xs:IDREF", use="required", default=None, fixed=None, doc="",
     )
     blend: Attr[G_blendType, T_blendType] = Attr(
-        "blend", "blendType", use="optional", default="normal", fixed=None, doc="",
+        "blend", "blendType", use="optional", default="normal", fixed=None,
+        doc="The 1.0 modes plus the full separable/non-separable set used by After\nEffects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette\nmodes cut through every layer below within the isolated parent buffer.",
     )
+    """The 1.0 modes plus the full separable/non-separable set used by After
+    Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette
+    modes cut through every layer below within the isolated parent buffer.
+    """
     effects: Attr[_t.List[str], _t.Sequence[_t.Union[str, Element]]] = Attr(
         "effects", "xs:IDREFS", use="optional", default=None, fixed=None, doc="",
     )
@@ -9809,6 +11155,7 @@ class Layer(Element):
         use="optional", default="linear", fixed=None,
         doc="The filter used where the layer is drawn larger than its source. linear: bilinear (the default). bicubic: Catmull-Rom, with a clamp to the range of the four nearest texels. mitchell: Mitchell-Netravali with B = C = 1/3, with the same clamp. Where the layer is drawn at or below its source size every layer uses trilinear mip filtering whatever @resample says.",
     )
+    """The filter used where the layer is drawn larger than its source. linear: bilinear (the default). bicubic: Catmull-Rom, with a clamp to the range of the four nearest texels. mitchell: Mitchell-Netravali with B = C = 1/3, with the same clamp. Where the layer is drawn at or below its source size every layer uses trilinear mip filtering whatever @resample says."""
     fit: Attr[G_fitType, T_fitType] = Attr(
         "fit", "fitType", use="optional", default="none", fixed=None, doc="",
     )
@@ -9927,7 +11274,22 @@ class Layer(Element):
             volume: T_unitDecimal | None = None,
             mute: _t.Union[bool, str] | None = None,
             audioBus: _t.Union[str, Element] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Places an asset. timeRemap, when present, replaces speed/reverse/loop. fit/boxWidth/boxHeight scale the asset into a box (responsive media); crop* trim fractions of the source. textAnimator and textPath apply when the asset is text. volume/mute control a video asset's own audio, which is mixed into audioMix bus @audioBus (default: master).
+
+            Args:
+                safeAreaForce: true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws) from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate placement outside the safe region is never silent.
+                shutterAngle: The shutter angle, in degrees, of this node's motion blur, instead of the project's: the nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the whole frame interval. Only where motion blur is on for the node.
+                condition: Node is rendered only when the expression is truthy (e.g. "param('showPrice')").
+                matte: Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".
+                edgeBlend: The space in which this node's own pixels (their colour C and coverage x opacity a) composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit it. SREP 72.
+                parent: Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".
+                threeD: 2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.
+                alignX: Responsive anchoring: overrides x so the node's box aligns within alignTo.
+                blend: The 1.0 modes plus the full separable/non-separable set used by After Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette modes cut through every layer below within the isolated parent buffer.
+                resample: The filter used where the layer is drawn larger than its source. linear: bilinear (the default). bicubic: Catmull-Rom, with a clamp to the range of the four nearest texels. mitchell: Mitchell-Netravali with B = C = 1/3, with the same clamp. Where the layer is drawn at or below its source size every layer uses trilinear mip filtering whatever @resample says.
+            """
+            ...
 
         def add_animate(
             self,
@@ -9938,7 +11300,9 @@ class Layer(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -9946,7 +11310,12 @@ class Layer(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -9959,7 +11328,12 @@ class Layer(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -9977,7 +11351,12 @@ class Layer(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_mask(
             self,
@@ -9997,7 +11376,12 @@ class Layer(Element):
             expansion: _t.Union[float, int, str] | None = None,
             opacity: T_unitDecimal | None = None,
             mode: _t.Literal["intersect", "add", "subtract", "lighten", "darken", "difference", "none"] | None = None,
-        ) -> Mask: ...
+        ) -> Mask:
+            """Add a <mask> child; the keywords are the attributes of Mask.
+
+            Masks combine in document order using @mode; the 1.0 behaviour (product of coverages) is mode="intersect", the default. Coverage is anti-aliased, then expanded/contracted by @expansion and blurred by @feather pixels.
+            """
+            ...
 
         def add_transformConstraint(
             self,
@@ -10019,7 +11403,12 @@ class Layer(Element):
             softness: T_unitDecimal | None = None,
             progress: T_unitDecimal | None = None,
             autoOrient: _t.Union[bool, str] | None = None,
-        ) -> TransformConstraint: ...
+        ) -> TransformConstraint:
+            """Add a <transformConstraint> child; the keywords are the attributes of TransformConstraint.
+
+            Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target's transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target's world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.
+            """
+            ...
 
         def add_rigidBody(
             self,
@@ -10042,7 +11431,9 @@ class Layer(Element):
             fixedRotation: _t.Union[bool, str] | None = None,
             bullet: _t.Union[bool, str] | None = None,
             activateAt: _t.Union[float, int, str] | None = None,
-        ) -> RigidBody: ...
+        ) -> RigidBody:
+            """Add a <rigidBody> child; the keywords are the attributes of RigidBody."""
+            ...
 
         def add_softBody(
             self,
@@ -10056,18 +11447,27 @@ class Layer(Element):
             pin: _t.Literal["none", "top", "bottom", "left", "right", "corners"] | None = None,
             kind: _t.Literal["jelly", "cloth", "rope"] | None = None,
             selfCollision: _t.Union[bool, str] | None = None,
-        ) -> SoftBody: ...
+        ) -> SoftBody:
+            """Add a <softBody> child; the keywords are the attributes of SoftBody."""
+            ...
 
         def add_deform(
             self,
-        ) -> Deform: ...
+        ) -> Deform:
+            """Add a <deform> child; the keywords are the attributes of Deform."""
+            ...
 
         def add_timeRemap(
             self,
             *,
             defaultInterpolation: T_curveType | None = None,
             frameBlend: _t.Literal["none", "frame-mix", "optical-flow"] | None = None,
-        ) -> TimeRemap: ...
+        ) -> TimeRemap:
+            """Add a <timeRemap> child; the keywords are the attributes of TimeRemap.
+
+            Maps layer-local time (key/@time) to source time (key/@value, seconds). Replaces speed/reverse/loop when present; speed ramps, freezes and reversals are expressed as keys.
+            """
+            ...
 
         def add_textAnimator(
             self,
@@ -10117,7 +11517,12 @@ class Layer(Element):
             variation: str | None = None,
             anchorX: _t.Union[float, int, str] | None = None,
             anchorY: _t.Union[float, int, str] | None = None,
-        ) -> TextAnimator: ...
+        ) -> TextAnimator:
+            """Add a <textAnimator> child; the keywords are the attributes of TextAnimator.
+
+            Per-character/word/line animation of a text layer (After Effects text animators, Lottie t.a, Rive text modifiers). A range selector picks the units in [start, end] + offset (percent or index) with a falloff @shape; each selected unit receives the property offsets below scaled by the selection amount. @stagger/@overlap give preset-style sequential timing. @preset expands to a documented animator (typewriter, word-by-word, ...). A nested expression with property="selector" makes an expression selector.
+            """
+            ...
 
         def add_textPath(
             self,
@@ -10129,7 +11534,9 @@ class Layer(Element):
             reverse: _t.Union[bool, str] | None = None,
             perpendicular: _t.Union[bool, str] | None = None,
             forceAlignment: _t.Union[bool, str] | None = None,
-        ) -> TextPath: ...
+        ) -> TextPath:
+            """Add a <textPath> child; the keywords are the attributes of TextPath."""
+            ...
 
     else:
 
@@ -10184,11 +11591,19 @@ class ParametricPath(Element):
     _simple_content = None
 
     x: Attr[G_expressionString, T_expressionString] = Attr(
-        "x", "expressionString", use="required", default=None, fixed=None, doc="",
+        "x", "expressionString", use="required", default=None, fixed=None,
+        doc="A deterministic expression in the scene-render expression language (see\nexpressionType). Used by @condition attributes and expression elements.",
     )
+    """A deterministic expression in the scene-render expression language (see
+    expressionType). Used by @condition attributes and expression elements.
+    """
     y: Attr[G_expressionString, T_expressionString] = Attr(
-        "y", "expressionString", use="required", default=None, fixed=None, doc="",
+        "y", "expressionString", use="required", default=None, fixed=None,
+        doc="A deterministic expression in the scene-render expression language (see\nexpressionType). Used by @condition attributes and expression elements.",
     )
+    """A deterministic expression in the scene-render expression language (see
+    expressionType). Used by @condition attributes and expression elements.
+    """
     t0: Attr[float, _t.Union[float, int, str]] = Attr(
         "t0", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -10223,7 +11638,14 @@ class ParametricPath(Element):
             t1: _t.Union[float, int, str] | None = None,
             samples: _t.Union[int, str] | None = None,
             closed: _t.Union[bool, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """The outline of a shape="parametric": the points (x(t), y(t)) at N = samples values of t from t0 to t1 (to t1 minus one step with closed="true"), in the shape's local pixel space, joined by lines and closed when closed is true. x and y are expressions of the expression language (expressionType) with the variable t, evaluated in 64-bit floats at each frame. A non-finite point is dropped and breaks the path. SREP 70.
+
+            Args:
+                x: A deterministic expression in the scene-render expression language (see expressionType). Used by @condition attributes and expression elements.
+                y: A deterministic expression in the scene-render expression language (see expressionType). Used by @condition attributes and expression elements.
+            """
+            ...
 
 
 class ParametricSurface(Element):
@@ -10241,14 +11663,26 @@ class ParametricSurface(Element):
     _simple_content = None
 
     x: Attr[G_expressionString, T_expressionString] = Attr(
-        "x", "expressionString", use="required", default=None, fixed=None, doc="",
+        "x", "expressionString", use="required", default=None, fixed=None,
+        doc="A deterministic expression in the scene-render expression language (see\nexpressionType). Used by @condition attributes and expression elements.",
     )
+    """A deterministic expression in the scene-render expression language (see
+    expressionType). Used by @condition attributes and expression elements.
+    """
     y: Attr[G_expressionString, T_expressionString] = Attr(
-        "y", "expressionString", use="required", default=None, fixed=None, doc="",
+        "y", "expressionString", use="required", default=None, fixed=None,
+        doc="A deterministic expression in the scene-render expression language (see\nexpressionType). Used by @condition attributes and expression elements.",
     )
+    """A deterministic expression in the scene-render expression language (see
+    expressionType). Used by @condition attributes and expression elements.
+    """
     z: Attr[G_expressionString, T_expressionString] = Attr(
-        "z", "expressionString", use="required", default=None, fixed=None, doc="",
+        "z", "expressionString", use="required", default=None, fixed=None,
+        doc="A deterministic expression in the scene-render expression language (see\nexpressionType). Used by @condition attributes and expression elements.",
     )
+    """A deterministic expression in the scene-render expression language (see
+    expressionType). Used by @condition attributes and expression elements.
+    """
     u0: Attr[float, _t.Union[float, int, str]] = Attr(
         "u0", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -10290,7 +11724,15 @@ class ParametricSurface(Element):
             vSamples: T_surfaceSamplesType | None = None,
             closedU: _t.Union[bool, str] | None = None,
             closedV: _t.Union[bool, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """The mesh of an object3D with primitive="parametric": the vertices (x, y, z)(u, v) on a uSamples x vSamples grid over [u0, u1] x [v0, v1], in the object's local space before its transform, two triangles per grid cell (the last row or column joins the first in a closed direction). The vertex normal is the unit vector of D_v x D_u (central differences); a triangle faces the camera when its vertex normals do. x, y and z are expressions with the variables u and v. SREP 70.
+
+            Args:
+                x: A deterministic expression in the scene-render expression language (see expressionType). Used by @condition attributes and expression elements.
+                y: A deterministic expression in the scene-render expression language (see expressionType). Used by @condition attributes and expression elements.
+                z: A deterministic expression in the scene-render expression language (see expressionType). Used by @condition attributes and expression elements.
+            """
+            ...
 
 
 class Heightfield(Element):
@@ -10307,8 +11749,12 @@ class Heightfield(Element):
     _simple_content = None
 
     height: Attr[G_expressionString, T_expressionString] = Attr(
-        "height", "expressionString", use="required", default=None, fixed=None, doc="",
+        "height", "expressionString", use="required", default=None, fixed=None,
+        doc="A deterministic expression in the scene-render expression language (see\nexpressionType). Used by @condition attributes and expression elements.",
     )
+    """A deterministic expression in the scene-render expression language (see
+    expressionType). Used by @condition attributes and expression elements.
+    """
     width: Attr[G_positiveDecimal, T_positiveDecimal] = Attr(
         "width", "positiveDecimal", use="required", default=None, fixed=None, doc="",
     )
@@ -10332,7 +11778,13 @@ class Heightfield(Element):
             depth: T_positiveDecimal | None = None,
             xSamples: T_surfaceSamplesType | None = None,
             zSamples: T_surfaceSamplesType | None = None,
-        ) -> None: ...
+        ) -> None:
+            """The mesh of an object3D with primitive="heightfield": the parametricSurface with u = z over [-depth/2, depth/2] (zSamples), v = x over [-width/2, width/2] (xSamples) and vertices (x, -height(x, z), z), so that a flat heightfield's top face (normal -y, up) is its front face. height is an expression with the variables x and z. SREP 70.
+
+            Args:
+                height: A deterministic expression in the scene-render expression language (see expressionType). Used by @condition attributes and expression elements.
+            """
+            ...
 
 
 class Shape(Element):
@@ -10371,6 +11823,10 @@ class Shape(Element):
         "safeAreaForce", "xs:boolean", use="optional", default="false", fixed=None,
         doc="true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)\nfrom the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate\nplacement outside the safe region is never silent.",
     )
+    """true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)
+    from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate
+    placement outside the safe region is never silent.
+    """
     z: Attr[int, _t.Union[int, str]] = Attr("z", "xs:int", use="optional", default="0", fixed=None, doc="")
     visible: Attr[bool, _t.Union[bool, str]] = Attr(
         "visible", "xs:boolean", use="optional", default="true", fixed=None, doc="",
@@ -10395,8 +11851,12 @@ class Shape(Element):
             "item": None,
         },
         use="optional", default=None, fixed=None,
-        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\n      nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\n      whole frame interval. Only where motion blur is on for the node.",
+        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\nnearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\nwhole frame interval. Only where motion blur is on for the node.",
     )
+    """The shutter angle, in degrees, of this node's motion blur, instead of the project's: the
+    nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the
+    whole frame interval. Only where motion blur is on for the node.
+    """
     startMarker: Attr[str, str] = Attr(
         "startMarker", "xs:NCName", use="optional", default=None, fixed=None, doc="",
     )
@@ -10407,6 +11867,7 @@ class Shape(Element):
         "condition", "expressionString", use="optional", default=None, fixed=None,
         doc='Node is rendered only when the expression is truthy (e.g. "param(\'showPrice\')").',
     )
+    """Node is rendered only when the expression is truthy (e.g. "param('showPrice')")."""
     motionBlur: Attr[G_triStateType, T_triStateType] = Attr(
         "motionBlur", "triStateType", use="optional", default="inherit", fixed=None, doc="",
     )
@@ -10414,6 +11875,7 @@ class Shape(Element):
         "matte", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".',
     )
+    """Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true"."""
     matteMode: Attr[G_matteModeType, T_matteModeType] = Attr(
         "matteMode", "matteModeType", use="optional", default="alpha", fixed=None, doc="",
     )
@@ -10431,16 +11893,24 @@ class Shape(Element):
             "item": None,
         },
         use="optional", default="inherit", fixed=None,
-        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\n      composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\n      on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\n      true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\n      it. SREP 72.",
+        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\ncomposite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\non display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\ntrue and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\nit. SREP 72.",
     )
+    """The space in which this node's own pixels (their colour C and coverage x opacity a)
+    composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same
+    on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is
+    true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit
+    it. SREP 72.
+    """
     parent: Attr[str, _t.Union[str, Element]] = Attr(
         "parent", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".',
     )
+    """Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent"."""
     threeD: Attr[bool, _t.Union[bool, str]] = Attr(
         "threeD", "xs:boolean", use="optional", default="false", fixed=None,
         doc="2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.",
     )
+    """2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY."""
     zDepth: Attr[float, _t.Union[float, int, str]] = Attr(
         "zDepth", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -10463,6 +11933,7 @@ class Shape(Element):
         use="optional", default=None, fixed=None,
         doc="Responsive anchoring: overrides x so the node's box aligns within alignTo.",
     )
+    """Responsive anchoring: overrides x so the node's box aligns within alignTo."""
     alignY: Attr[_t.Literal["top", "middle", "bottom", "stretch"], _t.Literal["top", "middle", "bottom", "stretch"]] = Attr(
         "alignY",
         {
@@ -10566,6 +12037,7 @@ class Shape(Element):
         "cornerRadii", "numberListType", use="optional", default=None, fixed=None,
         doc="Per-corner radii TL TR BR BL; overrides radius.",
     )
+    """Per-corner radii TL TR BR BL; overrides radius."""
     points: Attr[int, _t.Union[int, str]] = Attr(
         "points", "xs:positiveInteger", use="optional", default="5", fixed=None, doc="",
     )
@@ -10582,17 +12054,26 @@ class Shape(Element):
         "outerRoundness", "unitDecimal", use="optional", default="0", fixed=None, doc="",
     )
     fill: Attr[G_paintType, T_paintType] = Attr(
-        "fill", "paintType", use="optional", default="#FFFFFFFF", fixed=None, doc="",
+        "fill", "paintType", use="optional", default="#FFFFFFFF", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     stroke: Attr[G_paintType, T_paintType] = Attr(
-        "stroke", "paintType", use="optional", default="#00000000", fixed=None, doc="",
+        "stroke", "paintType", use="optional", default="#00000000", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     strokeWidth: Attr[G_nonNegativeDecimal, T_nonNegativeDecimal] = Attr(
         "strokeWidth", "nonNegativeDecimal", use="optional", default="0", fixed=None, doc="",
     )
     blend: Attr[G_blendType, T_blendType] = Attr(
-        "blend", "blendType", use="optional", default="normal", fixed=None, doc="",
+        "blend", "blendType", use="optional", default="normal", fixed=None,
+        doc="The 1.0 modes plus the full separable/non-separable set used by After\nEffects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette\nmodes cut through every layer below within the isolated parent buffer.",
     )
+    """The 1.0 modes plus the full separable/non-separable set used by After
+    Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette
+    modes cut through every layer below within the isolated parent buffer.
+    """
     effects: Attr[_t.List[str], _t.Sequence[_t.Union[str, Element]]] = Attr(
         "effects", "xs:IDREFS", use="optional", default=None, fixed=None, doc="",
     )
@@ -10746,7 +12227,22 @@ class Shape(Element):
             region: _t.Union[str, Element] | None = None,
             regionLayer: _t.Union[str, Element] | None = None,
             regionPadding: _t.Union[float, int, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                safeAreaForce: true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws) from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate placement outside the safe region is never silent.
+                shutterAngle: The shutter angle, in degrees, of this node's motion blur, instead of the project's: the nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the whole frame interval. Only where motion blur is on for the node.
+                condition: Node is rendered only when the expression is truthy (e.g. "param('showPrice')").
+                matte: Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".
+                edgeBlend: The space in which this node's own pixels (their colour C and coverage x opacity a) composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit it. SREP 72.
+                parent: Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".
+                threeD: 2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.
+                alignX: Responsive anchoring: overrides x so the node's box aligns within alignTo.
+                cornerRadii: Per-corner radii TL TR BR BL; overrides radius.
+                fill: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                stroke: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                blend: The 1.0 modes plus the full separable/non-separable set used by After Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette modes cut through every layer below within the isolated parent buffer.
+            """
+            ...
 
         def add_animate(
             self,
@@ -10757,7 +12253,9 @@ class Shape(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -10765,7 +12263,12 @@ class Shape(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -10778,7 +12281,12 @@ class Shape(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -10796,7 +12304,12 @@ class Shape(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_mask(
             self,
@@ -10816,7 +12329,12 @@ class Shape(Element):
             expansion: _t.Union[float, int, str] | None = None,
             opacity: T_unitDecimal | None = None,
             mode: _t.Literal["intersect", "add", "subtract", "lighten", "darken", "difference", "none"] | None = None,
-        ) -> Mask: ...
+        ) -> Mask:
+            """Add a <mask> child; the keywords are the attributes of Mask.
+
+            Masks combine in document order using @mode; the 1.0 behaviour (product of coverages) is mode="intersect", the default. Coverage is anti-aliased, then expanded/contracted by @expansion and blurred by @feather pixels.
+            """
+            ...
 
         def add_transformConstraint(
             self,
@@ -10838,7 +12356,12 @@ class Shape(Element):
             softness: T_unitDecimal | None = None,
             progress: T_unitDecimal | None = None,
             autoOrient: _t.Union[bool, str] | None = None,
-        ) -> TransformConstraint: ...
+        ) -> TransformConstraint:
+            """Add a <transformConstraint> child; the keywords are the attributes of TransformConstraint.
+
+            Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target's transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target's world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.
+            """
+            ...
 
         def add_rigidBody(
             self,
@@ -10861,7 +12384,9 @@ class Shape(Element):
             fixedRotation: _t.Union[bool, str] | None = None,
             bullet: _t.Union[bool, str] | None = None,
             activateAt: _t.Union[float, int, str] | None = None,
-        ) -> RigidBody: ...
+        ) -> RigidBody:
+            """Add a <rigidBody> child; the keywords are the attributes of RigidBody."""
+            ...
 
         def add_softBody(
             self,
@@ -10875,11 +12400,15 @@ class Shape(Element):
             pin: _t.Literal["none", "top", "bottom", "left", "right", "corners"] | None = None,
             kind: _t.Literal["jelly", "cloth", "rope"] | None = None,
             selfCollision: _t.Union[bool, str] | None = None,
-        ) -> SoftBody: ...
+        ) -> SoftBody:
+            """Add a <softBody> child; the keywords are the attributes of SoftBody."""
+            ...
 
         def add_deform(
             self,
-        ) -> Deform: ...
+        ) -> Deform:
+            """Add a <deform> child; the keywords are the attributes of Deform."""
+            ...
 
         def add_shapeModifier(
             self,
@@ -10901,7 +12430,12 @@ class Shape(Element):
             startOpacity: T_unitDecimal | None = None,
             endOpacity: T_unitDecimal | None = None,
             composite: _t.Literal["above", "below"] | None = None,
-        ) -> ShapeModifier: ...
+        ) -> ShapeModifier:
+            """Add a <shapeModifier> child; the keywords are the attributes of ShapeModifier.
+
+            Procedural path operators applied in document order (Lottie/After Effects shape modifiers): repeater, offset-path, pucker-bloat, zig-zag, twist, round-corners, wiggle-path, merge (mode), trim (sequential across paths).
+            """
+            ...
 
         def add_parametricPath(
             self,
@@ -10912,7 +12446,12 @@ class Shape(Element):
             t1: _t.Union[float, int, str] | None = None,
             samples: _t.Union[int, str] | None = None,
             closed: _t.Union[bool, str] | None = None,
-        ) -> ParametricPath: ...
+        ) -> ParametricPath:
+            """Add a <parametricPath> child; the keywords are the attributes of ParametricPath.
+
+            The outline of a shape="parametric": the points (x(t), y(t)) at N = samples values of t from t0 to t1 (to t1 minus one step with closed="true"), in the shape's local pixel space, joined by lines and closed when closed is true. x and y are expressions of the expression language (expressionType) with the variable t, evaluated in 64-bit floats at each frame. A non-finite point is dropped and breaks the path. SREP 70.
+            """
+            ...
 
     else:
 
@@ -10977,6 +12516,10 @@ class Connector(Element):
         "safeAreaForce", "xs:boolean", use="optional", default="false", fixed=None,
         doc="true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)\nfrom the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate\nplacement outside the safe region is never silent.",
     )
+    """true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)
+    from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate
+    placement outside the safe region is never silent.
+    """
     z: Attr[int, _t.Union[int, str]] = Attr("z", "xs:int", use="optional", default="0", fixed=None, doc="")
     visible: Attr[bool, _t.Union[bool, str]] = Attr(
         "visible", "xs:boolean", use="optional", default="true", fixed=None, doc="",
@@ -11001,8 +12544,12 @@ class Connector(Element):
             "item": None,
         },
         use="optional", default=None, fixed=None,
-        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\n      nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\n      whole frame interval. Only where motion blur is on for the node.",
+        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\nnearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\nwhole frame interval. Only where motion blur is on for the node.",
     )
+    """The shutter angle, in degrees, of this node's motion blur, instead of the project's: the
+    nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the
+    whole frame interval. Only where motion blur is on for the node.
+    """
     startMarker: Attr[str, str] = Attr(
         "startMarker", "xs:NCName", use="optional", default=None, fixed=None, doc="",
     )
@@ -11013,6 +12560,7 @@ class Connector(Element):
         "condition", "expressionString", use="optional", default=None, fixed=None,
         doc='Node is rendered only when the expression is truthy (e.g. "param(\'showPrice\')").',
     )
+    """Node is rendered only when the expression is truthy (e.g. "param('showPrice')")."""
     motionBlur: Attr[G_triStateType, T_triStateType] = Attr(
         "motionBlur", "triStateType", use="optional", default="inherit", fixed=None, doc="",
     )
@@ -11020,6 +12568,7 @@ class Connector(Element):
         "matte", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".',
     )
+    """Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true"."""
     matteMode: Attr[G_matteModeType, T_matteModeType] = Attr(
         "matteMode", "matteModeType", use="optional", default="alpha", fixed=None, doc="",
     )
@@ -11037,8 +12586,14 @@ class Connector(Element):
             "item": None,
         },
         use="optional", default="inherit", fixed=None,
-        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\n      composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\n      on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\n      true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\n      it. SREP 72.",
+        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\ncomposite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\non display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\ntrue and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\nit. SREP 72.",
     )
+    """The space in which this node's own pixels (their colour C and coverage x opacity a)
+    composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same
+    on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is
+    true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit
+    it. SREP 72.
+    """
     from_: Attr[str, _t.Union[str, Element]] = Attr(
         "from", "xs:IDREF", use="optional", default=None, fixed=None, doc="",
     )
@@ -11099,8 +12654,10 @@ class Connector(Element):
         doc="",
     )
     stroke: Attr[G_paintType, T_paintType] = Attr(
-        "stroke", "paintType", use="optional", default="#FFFFFFFF", fixed=None, doc="",
+        "stroke", "paintType", use="optional", default="#FFFFFFFF", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     strokeWidth: Attr[G_nonNegativeDecimal, T_nonNegativeDecimal] = Attr(
         "strokeWidth", "nonNegativeDecimal", use="optional", default="4", fixed=None, doc="",
     )
@@ -11120,8 +12677,13 @@ class Connector(Element):
         "dashOffset", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
     blend: Attr[G_blendType, T_blendType] = Attr(
-        "blend", "blendType", use="optional", default="normal", fixed=None, doc="",
+        "blend", "blendType", use="optional", default="normal", fixed=None,
+        doc="The 1.0 modes plus the full separable/non-separable set used by After\nEffects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette\nmodes cut through every layer below within the isolated parent buffer.",
     )
+    """The 1.0 modes plus the full separable/non-separable set used by After
+    Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette
+    modes cut through every layer below within the isolated parent buffer.
+    """
     effects: Attr[_t.List[str], _t.Sequence[_t.Union[str, Element]]] = Attr(
         "effects", "xs:IDREFS", use="optional", default=None, fixed=None, doc="",
     )
@@ -11235,7 +12797,19 @@ class Connector(Element):
             labelAt: T_unitDecimal | None = None,
             labelOffset: _t.Union[float, int, str] | None = None,
             labelOrient: _t.Literal["horizontal", "along"] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """A line between two nodes (or fixed points) that is recomputed every frame, so it stays attached while they move. @from and @to name a group, layer, shape or instance; with anchor auto the line is cut where it leaves the start node's box and enters the end node's box, less fromGap and toGap. route straight, orthogonal (axis-aligned elbows) or curved (bend in degrees); @points are waypoints. A connector has no box and no transform of its own.
+
+            Args:
+                safeAreaForce: true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws) from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate placement outside the safe region is never silent.
+                shutterAngle: The shutter angle, in degrees, of this node's motion blur, instead of the project's: the nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the whole frame interval. Only where motion blur is on for the node.
+                condition: Node is rendered only when the expression is truthy (e.g. "param('showPrice')").
+                matte: Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".
+                edgeBlend: The space in which this node's own pixels (their colour C and coverage x opacity a) composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit it. SREP 72.
+                stroke: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                blend: The 1.0 modes plus the full separable/non-separable set used by After Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette modes cut through every layer below within the isolated parent buffer.
+            """
+            ...
 
         def add_animate(
             self,
@@ -11246,7 +12820,9 @@ class Connector(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -11254,7 +12830,12 @@ class Connector(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_mask(
             self,
@@ -11274,7 +12855,12 @@ class Connector(Element):
             expansion: _t.Union[float, int, str] | None = None,
             opacity: T_unitDecimal | None = None,
             mode: _t.Literal["intersect", "add", "subtract", "lighten", "darken", "difference", "none"] | None = None,
-        ) -> Mask: ...
+        ) -> Mask:
+            """Add a <mask> child; the keywords are the attributes of Mask.
+
+            Masks combine in document order using @mode; the 1.0 behaviour (product of coverages) is mode="intersect", the default. Coverage is anti-aliased, then expanded/contracted by @expansion and blurred by @feather pixels.
+            """
+            ...
 
     else:
 
@@ -11352,6 +12938,10 @@ class ParticleEmitter(Element):
         "safeAreaForce", "xs:boolean", use="optional", default="false", fixed=None,
         doc="true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)\nfrom the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate\nplacement outside the safe region is never silent.",
     )
+    """true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)
+    from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate
+    placement outside the safe region is never silent.
+    """
     z: Attr[int, _t.Union[int, str]] = Attr("z", "xs:int", use="optional", default="0", fixed=None, doc="")
     visible: Attr[bool, _t.Union[bool, str]] = Attr(
         "visible", "xs:boolean", use="optional", default="true", fixed=None, doc="",
@@ -11376,8 +12966,12 @@ class ParticleEmitter(Element):
             "item": None,
         },
         use="optional", default=None, fixed=None,
-        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\n      nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\n      whole frame interval. Only where motion blur is on for the node.",
+        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\nnearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\nwhole frame interval. Only where motion blur is on for the node.",
     )
+    """The shutter angle, in degrees, of this node's motion blur, instead of the project's: the
+    nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the
+    whole frame interval. Only where motion blur is on for the node.
+    """
     startMarker: Attr[str, str] = Attr(
         "startMarker", "xs:NCName", use="optional", default=None, fixed=None, doc="",
     )
@@ -11388,6 +12982,7 @@ class ParticleEmitter(Element):
         "condition", "expressionString", use="optional", default=None, fixed=None,
         doc='Node is rendered only when the expression is truthy (e.g. "param(\'showPrice\')").',
     )
+    """Node is rendered only when the expression is truthy (e.g. "param('showPrice')")."""
     motionBlur: Attr[G_triStateType, T_triStateType] = Attr(
         "motionBlur", "triStateType", use="optional", default="inherit", fixed=None, doc="",
     )
@@ -11395,6 +12990,7 @@ class ParticleEmitter(Element):
         "matte", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".',
     )
+    """Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true"."""
     matteMode: Attr[G_matteModeType, T_matteModeType] = Attr(
         "matteMode", "matteModeType", use="optional", default="alpha", fixed=None, doc="",
     )
@@ -11412,16 +13008,24 @@ class ParticleEmitter(Element):
             "item": None,
         },
         use="optional", default="inherit", fixed=None,
-        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\n      composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\n      on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\n      true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\n      it. SREP 72.",
+        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\ncomposite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\non display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\ntrue and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\nit. SREP 72.",
     )
+    """The space in which this node's own pixels (their colour C and coverage x opacity a)
+    composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same
+    on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is
+    true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit
+    it. SREP 72.
+    """
     parent: Attr[str, _t.Union[str, Element]] = Attr(
         "parent", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".',
     )
+    """Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent"."""
     threeD: Attr[bool, _t.Union[bool, str]] = Attr(
         "threeD", "xs:boolean", use="optional", default="false", fixed=None,
         doc="2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.",
     )
+    """2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY."""
     zDepth: Attr[float, _t.Union[float, int, str]] = Attr(
         "zDepth", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -11444,6 +13048,7 @@ class ParticleEmitter(Element):
         use="optional", default=None, fixed=None,
         doc="Responsive anchoring: overrides x so the node's box aligns within alignTo.",
     )
+    """Responsive anchoring: overrides x so the node's box aligns within alignTo."""
     alignY: Attr[_t.Literal["top", "middle", "bottom", "stretch"], _t.Literal["top", "middle", "bottom", "stretch"]] = Attr(
         "alignY",
         {
@@ -11570,17 +13175,33 @@ class ParticleEmitter(Element):
         "sizeVariance", "nonNegativeDecimal", use="optional", default="0", fixed=None, doc="",
     )
     sizeCurve: Attr[G_curveType, T_curveType] = Attr(
-        "sizeCurve", "curveType", use="optional", default="linear", fixed=None, doc="",
+        "sizeCurve", "curveType", use="optional", default="linear", fixed=None,
+        doc='1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom,\ntcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping,\n@mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2"\nor key/@easeOut + next key/@easeIn handles.',
     )
+    """1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom,
+    tcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping,
+    @mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2"
+    or key/@easeOut + next key/@easeIn handles.
+    """
     color: Attr[G_paintType, T_paintType] = Attr(
-        "color", "paintType", use="optional", default="#FFFFFFFF", fixed=None, doc="",
+        "color", "paintType", use="optional", default="#FFFFFFFF", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     colorEnd: Attr[G_paintType, T_paintType] = Attr(
-        "colorEnd", "paintType", use="optional", default=None, fixed=None, doc="",
+        "colorEnd", "paintType", use="optional", default=None, fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     colorCurve: Attr[G_curveType, T_curveType] = Attr(
-        "colorCurve", "curveType", use="optional", default="linear", fixed=None, doc="",
+        "colorCurve", "curveType", use="optional", default="linear", fixed=None,
+        doc='1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom,\ntcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping,\n@mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2"\nor key/@easeOut + next key/@easeIn handles.',
     )
+    """1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom,
+    tcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping,
+    @mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2"
+    or key/@easeOut + next key/@easeIn handles.
+    """
     opacityEnd: Attr[G_unitDecimal, T_unitDecimal] = Attr(
         "opacityEnd", "unitDecimal", use="optional", default=None, fixed=None, doc="",
     )
@@ -11672,10 +13293,14 @@ class ParticleEmitter(Element):
         "forceFields", "xs:IDREFS", use="optional", default=None, fixed=None,
         doc="The force fields that act on this simulation. Absent: every forceField of the scene. Present: only\nthose listed.",
     )
+    """The force fields that act on this simulation. Absent: every forceField of the scene. Present: only
+    those listed.
+    """
     useForceFields: Attr[bool, _t.Union[bool, str]] = Attr(
         "useForceFields", "xs:boolean", use="optional", default="true", fixed=None,
         doc="false: no force field acts on this simulation, whatever forceFields lists.",
     )
+    """false: no force field acts on this simulation, whatever forceFields lists."""
     collide: Attr[bool, _t.Union[bool, str]] = Attr(
         "collide", "xs:boolean", use="optional", default="false", fixed=None, doc="",
     )
@@ -11686,8 +13311,13 @@ class ParticleEmitter(Element):
         "preroll", "nonNegativeDecimal", use="optional", default="0", fixed=None, doc="",
     )
     blend: Attr[G_blendType, T_blendType] = Attr(
-        "blend", "blendType", use="optional", default="normal", fixed=None, doc="",
+        "blend", "blendType", use="optional", default="normal", fixed=None,
+        doc="The 1.0 modes plus the full separable/non-separable set used by After\nEffects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette\nmodes cut through every layer below within the isolated parent buffer.",
     )
+    """The 1.0 modes plus the full separable/non-separable set used by After
+    Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette
+    modes cut through every layer below within the isolated parent buffer.
+    """
     effects: Attr[_t.List[str], _t.Sequence[_t.Union[str, Element]]] = Attr(
         "effects", "xs:IDREFS", use="optional", default=None, fixed=None, doc="",
     )
@@ -11779,7 +13409,25 @@ class ParticleEmitter(Element):
             preroll: T_nonNegativeDecimal | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                safeAreaForce: true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws) from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate placement outside the safe region is never silent.
+                shutterAngle: The shutter angle, in degrees, of this node's motion blur, instead of the project's: the nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the whole frame interval. Only where motion blur is on for the node.
+                condition: Node is rendered only when the expression is truthy (e.g. "param('showPrice')").
+                matte: Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".
+                edgeBlend: The space in which this node's own pixels (their colour C and coverage x opacity a) composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit it. SREP 72.
+                parent: Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".
+                threeD: 2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.
+                alignX: Responsive anchoring: overrides x so the node's box aligns within alignTo.
+                sizeCurve: 1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom, tcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping, @mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2" or key/@easeOut + next key/@easeIn handles.
+                color: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                colorEnd: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                colorCurve: 1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom, tcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping, @mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2" or key/@easeOut + next key/@easeIn handles.
+                forceFields: The force fields that act on this simulation. Absent: every forceField of the scene. Present: only those listed.
+                useForceFields: false: no force field acts on this simulation, whatever forceFields lists.
+                blend: The 1.0 modes plus the full separable/non-separable set used by After Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette modes cut through every layer below within the isolated parent buffer.
+            """
+            ...
 
         def add_animate(
             self,
@@ -11790,7 +13438,9 @@ class ParticleEmitter(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -11798,7 +13448,12 @@ class ParticleEmitter(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -11811,7 +13466,12 @@ class ParticleEmitter(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -11829,7 +13489,12 @@ class ParticleEmitter(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_mask(
             self,
@@ -11849,7 +13514,12 @@ class ParticleEmitter(Element):
             expansion: _t.Union[float, int, str] | None = None,
             opacity: T_unitDecimal | None = None,
             mode: _t.Literal["intersect", "add", "subtract", "lighten", "darken", "difference", "none"] | None = None,
-        ) -> Mask: ...
+        ) -> Mask:
+            """Add a <mask> child; the keywords are the attributes of Mask.
+
+            Masks combine in document order using @mode; the 1.0 behaviour (product of coverages) is mode="intersect", the default. Coverage is anti-aliased, then expanded/contracted by @expansion and blurred by @feather pixels.
+            """
+            ...
 
         def add_transformConstraint(
             self,
@@ -11871,7 +13541,12 @@ class ParticleEmitter(Element):
             softness: T_unitDecimal | None = None,
             progress: T_unitDecimal | None = None,
             autoOrient: _t.Union[bool, str] | None = None,
-        ) -> TransformConstraint: ...
+        ) -> TransformConstraint:
+            """Add a <transformConstraint> child; the keywords are the attributes of TransformConstraint.
+
+            Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target's transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target's world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.
+            """
+            ...
 
         def add_burst(
             self,
@@ -11880,7 +13555,9 @@ class ParticleEmitter(Element):
             count: _t.Union[int, str] | None = None,
             repeat: _t.Union[int, str] | None = None,
             interval: T_positiveDecimal | None = None,
-        ) -> Burst: ...
+        ) -> Burst:
+            """Add a <burst> child; the keywords are the attributes of Burst."""
+            ...
 
     else:
 
@@ -11945,7 +13622,9 @@ class BlackHole(Element):
             x: _t.Union[float, int, str] | None = None,
             y: _t.Union[float, int, str] | None = None,
             z: _t.Union[float, int, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Version 1.3 or later (BH1). A non-rotating, uncharged black hole in vacuum: the Schwarzschild solution, in units with G = c = 1, so that the mass is a length of scene units and the horizon is at r_s = 2 `mass` (BH1). One per scene (BH2). It is drawn by a camera with `geodesics="true"`; without it nothing is drawn (W11). Its place is the origin of the Schwarzschild coordinates; nothing else about it is authored."""
+            ...
 
 
 class AccretionDisk(Element):
@@ -12038,7 +13717,9 @@ class AccretionDisk(Element):
             rotationX: _t.Union[float, int, str] | None = None,
             rotationY: _t.Union[float, int, str] | None = None,
             rotation: _t.Union[float, int, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Version 1.3. A geometrically thin, optically thick disk of gas on circular orbits in the equatorial plane of the `blackHole` it names (BH3), from `innerRadius` to `outerRadius` in the Schwarzschild radial coordinate, scene units. `innerRadius` is at least the innermost stable circular orbit, 6 `mass` (BH4), and is that when absent; `outerRadius` is beyond it (BH4). Its temperature is the thin-disk profile with a zero-torque inner edge, T(r) = `temperatureScale` f(r) / f(49/36 r_in), f(r) = (r_in / r)^(3/4) (1 - (r_in / r)^(1/2))^(1/4): `temperatureScale`, in kelvin, is the local temperature at the peak, r = 49/36 r_in, before the shift of light. The gas orbits with the angular velocity sqrt(`mass` / r^3) times `timeScale`, in radians per scene second, about the axis of the disk, which is the scene's up, (0, -1, 0), turned by `rotationX`, `rotationY` and `rotation` (about z) degrees composed as an object3D composes them, Rz Ry Rx; seen from above it turns counter-clockwise. The disk is centred on its `blackHole` and has no place of its own. `angularPattern` is the azimuthal structure the gas carries and `seed` fixes it: `none` is a smooth disk, `clumps` (the default) seeded azimuthal noise that rotates differentially, `spiral` seeded logarithmic spiral arms; `contrast` is its amplitude, 0 to 1, and `intensity` scales the brightness. The disk is analytic, a surface the rays meet, and is not made of particles."""
+            ...
 
 
 class Morph(Element):
@@ -12070,7 +13751,9 @@ class Morph(Element):
             *,
             name: str | None = None,
             weight: _t.Union[float, int, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """With an object3D of primitive="mesh" and an imported model: the weight of one morph target of the model, by the target's name. It replaces that target's weight from the clip or the rest pose, and wins over the same target in the object's @morphWeights. The weight animates. Version 1.2."""
+            ...
 
         def add_animate(
             self,
@@ -12081,7 +13764,9 @@ class Morph(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -12089,7 +13774,12 @@ class Morph(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -12102,7 +13792,12 @@ class Morph(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -12120,7 +13815,12 @@ class Morph(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -12202,7 +13902,9 @@ class Joint(Element):
             lookAxis: _t.Literal["x", "minus-x", "y", "minus-y", "z", "minus-z"] | None = None,
             influence: T_unitDecimal | None = None,
             maxAngle: T_nonNegativeDecimal | None = None,
-        ) -> None: ...
+        ) -> None:
+            """With an object3D of primitive="mesh" and an imported model: poses one joint (a node by name) of the model. rotationX, rotationY and rotation (about z), in degrees and in that order, turn the joint in its own axes on top of the clip's pose; they animate. lookAt then turns the joint so that its lookAxis points at the target node, light or camera (the shortest turn, scaled by influence and limited to maxAngle degrees), without moving the joint's parents. The first joint of that name in the model's node order is used. Version 1.2."""
+            ...
 
         def add_animate(
             self,
@@ -12213,7 +13915,9 @@ class Joint(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -12221,7 +13925,12 @@ class Joint(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -12234,7 +13943,12 @@ class Joint(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -12252,7 +13966,12 @@ class Joint(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -12361,16 +14080,28 @@ class Object3D(Element):
     font: Attr[str, str] = Attr("font", "xs:string", use="optional", default=None, fixed=None, doc="")
     node: Attr[str, str] = Attr(
         "node", "xs:string", use="optional", default=None, fixed=None,
-        doc='With primitive="mesh" and an imported model: draw only the node of that name and its\n      descendants, placed so that the node\'s own origin is the object\'s origin (the node\'s transform within the model is\n      dropped, the transforms below it are kept). The first node of that name in the model\'s node order is used.',
+        doc='With primitive="mesh" and an imported model: draw only the node of that name and its\ndescendants, placed so that the node\'s own origin is the object\'s origin (the node\'s transform within the model is\ndropped, the transforms below it are kept). The first node of that name in the model\'s node order is used.',
     )
+    """With primitive="mesh" and an imported model: draw only the node of that name and its
+    descendants, placed so that the node's own origin is the object's origin (the node's transform within the model is
+    dropped, the transforms below it are kept). The first node of that name in the model's node order is used.
+    """
     materialOverride: Attr[str, str] = Attr(
         "materialOverride", "xs:string", use="optional", default=None, fixed=None,
-        doc='With primitive="mesh" and an imported model: a space-separated list of\n      imported-material-name:document-material-id pairs. Each primitive of the model whose material has that name is drawn with\n      the document material instead. A material with no pair keeps its imported look. @material, when present, replaces every\n      material and takes precedence.',
+        doc='With primitive="mesh" and an imported model: a space-separated list of\nimported-material-name:document-material-id pairs. Each primitive of the model whose material has that name is drawn with\nthe document material instead. A material with no pair keeps its imported look. @material, when present, replaces every\nmaterial and takes precedence.',
     )
+    """With primitive="mesh" and an imported model: a space-separated list of
+    imported-material-name:document-material-id pairs. Each primitive of the model whose material has that name is drawn with
+    the document material instead. A material with no pair keeps its imported look. @material, when present, replaces every
+    material and takes precedence.
+    """
     tracking: Attr[float, _t.Union[float, int, str]] = Attr(
         "tracking", "xs:double", use="optional", default=None, fixed=None,
-        doc='Extra space after every character of primitive="text", in thousandths of an em of the\n      text size (the object\'s height). Negative values tighten. Valid only with primitive="text".',
+        doc='Extra space after every character of primitive="text", in thousandths of an em of the\ntext size (the object\'s height). Negative values tighten. Valid only with primitive="text".',
     )
+    """Extra space after every character of primitive="text", in thousandths of an em of the
+    text size (the object's height). Negative values tighten. Valid only with primitive="text".
+    """
     path: Attr[str, str] = Attr("path", "xs:string", use="optional", default=None, fixed=None, doc="")
     depth: Attr[G_nonNegativeDecimal, T_nonNegativeDecimal] = Attr(
         "depth", "nonNegativeDecimal", use="optional", default="10", fixed=None, doc="",
@@ -12425,8 +14156,13 @@ class Object3D(Element):
     )
     shadowCatcher: Attr[bool, _t.Union[bool, str]] = Attr(
         "shadowCatcher", "xs:boolean", use="optional", default="false", fixed=None,
-        doc="The surface draws no colour of its own. It is transparent where no light is\n      blocked and black, with alpha up to @opacity, where the shadow casters block the light that would reach it, so\n      that it darkens what is behind the 3D layer by the share of light that is taken away (ambient light counted). It\n      does not cast shadows.",
+        doc="The surface draws no colour of its own. It is transparent where no light is\nblocked and black, with alpha up to @opacity, where the shadow casters block the light that would reach it, so\nthat it darkens what is behind the 3D layer by the share of light that is taken away (ambient light counted). It\ndoes not cast shadows.",
     )
+    """The surface draws no colour of its own. It is transparent where no light is
+    blocked and black, with alpha up to @opacity, where the shadow casters block the light that would reach it, so
+    that it darkens what is behind the 3D layer by the share of light that is taken away (ambient light counted). It
+    does not cast shadows.
+    """
     visible: Attr[bool, _t.Union[bool, str]] = Attr(
         "visible", "xs:boolean", use="optional", default="true", fixed=None, doc="",
     )
@@ -12440,15 +14176,24 @@ class Object3D(Element):
         "end", "xs:double", use="optional", default=None, fixed=None, doc="",
     )
     condition: Attr[G_expressionString, T_expressionString] = Attr(
-        "condition", "expressionString", use="optional", default=None, fixed=None, doc="",
+        "condition", "expressionString", use="optional", default=None, fixed=None,
+        doc="A deterministic expression in the scene-render expression language (see\nexpressionType). Used by @condition attributes and expression elements.",
     )
+    """A deterministic expression in the scene-render expression language (see
+    expressionType). Used by @condition attributes and expression elements.
+    """
     parent: Attr[str, _t.Union[str, Element]] = Attr(
         "parent", "xs:IDREF", use="optional", default=None, fixed=None, doc="",
     )
     parentJoint: Attr[str, str] = Attr(
         "parentJoint", "xs:string", use="optional", default=None, fixed=None,
-        doc='With a @parent (or a transformConstraint of type="parent") that is an object3D\n      drawing an imported model: the name of a node of that model. The element is placed in that node\'s frame as the\n      model\'s clips pose it, instead of in the object\'s own frame. The first node of that name in the model\'s node order\n      is used.',
+        doc='With a @parent (or a transformConstraint of type="parent") that is an object3D\ndrawing an imported model: the name of a node of that model. The element is placed in that node\'s frame as the\nmodel\'s clips pose it, instead of in the object\'s own frame. The first node of that name in the model\'s node order\nis used.',
     )
+    """With a @parent (or a transformConstraint of type="parent") that is an object3D
+    drawing an imported model: the name of a node of that model. The element is placed in that node's frame as the
+    model's clips pose it, instead of in the object's own frame. The first node of that name in the model's node order
+    is used.
+    """
     motionBlur: Attr[G_triStateType, T_triStateType] = Attr(
         "motionBlur", "triStateType", use="optional", default="inherit", fixed=None, doc="",
     )
@@ -12463,12 +14208,21 @@ class Object3D(Element):
     )
     animationClipTo: Attr[str, str] = Attr(
         "animationClipTo", "xs:string", use="optional", default=None, fixed=None,
-        doc='With primitive="mesh" and an imported model: a second clip (by name or index, as\n      @animationClip) the model is blended toward by @animationBlend. It plays at the object\'s time scaled by\n      @animationSpeed plus @animationOffsetTo.',
+        doc='With primitive="mesh" and an imported model: a second clip (by name or index, as\n@animationClip) the model is blended toward by @animationBlend. It plays at the object\'s time scaled by\n@animationSpeed plus @animationOffsetTo.',
     )
+    """With primitive="mesh" and an imported model: a second clip (by name or index, as
+    @animationClip) the model is blended toward by @animationBlend. It plays at the object's time scaled by
+    @animationSpeed plus @animationOffsetTo.
+    """
     animationBlend: Attr[G_unitDecimal, T_unitDecimal] = Attr(
         "animationBlend", "unitDecimal", use="optional", default="0", fixed=None,
-        doc="Weight of @animationClipTo, 0 to 1 (animatable): 0 is @animationClip alone, 1 is\n      @animationClipTo alone, between them translation, scale and morph weights blend linearly and rotation along the\n      shortest arc. A node a clip does not animate keeps its rest pose in that clip. Without @animationClipTo the weight\n      blends toward the rest pose.",
+        doc="Weight of @animationClipTo, 0 to 1 (animatable): 0 is @animationClip alone, 1 is\n@animationClipTo alone, between them translation, scale and morph weights blend linearly and rotation along the\nshortest arc. A node a clip does not animate keeps its rest pose in that clip. Without @animationClipTo the weight\nblends toward the rest pose.",
     )
+    """Weight of @animationClipTo, 0 to 1 (animatable): 0 is @animationClip alone, 1 is
+    @animationClipTo alone, between them translation, scale and morph weights blend linearly and rotation along the
+    shortest arc. A node a clip does not animate keeps its rest pose in that clip. Without @animationClipTo the weight
+    blends toward the rest pose.
+    """
     animationOffsetTo: Attr[float, _t.Union[float, int, str]] = Attr(
         "animationOffsetTo", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -12485,6 +14239,17 @@ class Object3D(Element):
         "map", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='primitive="map": the map asset as ground in the object\'s xy plane, one map pixel per scene\nunit, draped with the map as drawn; @terrain (tiles of elevation, Terrarium or Mapbox\nTerrain-RGB per @terrainEncoding) raises it toward the camera (−z) by true height times\n@exaggeration on a grid of @resolution cells, and @buildings extrudes the footprints of its\nfirst basemap\'s vector tiles to their heights. Terrain and buildings need a Web Mercator\nmap. primitive="globe": a sphere of @radius and @segments (poles on the y axis, 0° longitude\nfacing the camera) draped with the map\'s content drawn over the whole world. @material\ndresses the ground, the globe and the buildings. @textureSize is the drape\'s resolution in\npixels along a map\'s longer side, and a globe drape\'s height (its width is twice that); it\ndoes not change what the drape shows.',
     )
+    """primitive="map": the map asset as ground in the object's xy plane, one map pixel per scene
+    unit, draped with the map as drawn; @terrain (tiles of elevation, Terrarium or Mapbox
+    Terrain-RGB per @terrainEncoding) raises it toward the camera (−z) by true height times
+    @exaggeration on a grid of @resolution cells, and @buildings extrudes the footprints of its
+    first basemap's vector tiles to their heights. Terrain and buildings need a Web Mercator
+    map. primitive="globe": a sphere of @radius and @segments (poles on the y axis, 0° longitude
+    facing the camera) draped with the map's content drawn over the whole world. @material
+    dresses the ground, the globe and the buildings. @textureSize is the drape's resolution in
+    pixels along a map's longer side, and a globe drape's height (its width is twice that); it
+    does not change what the drape shows.
+    """
     terrain: Attr[str, _t.Union[str, Element]] = Attr(
         "terrain", "xs:IDREF", use="optional", default=None, fixed=None, doc="",
     )
@@ -12524,6 +14289,7 @@ class Object3D(Element):
         "planetRadius", "positiveDecimal", use="optional", default="6378137", fixed=None,
         doc="Version 1.3 globe relief: physical datum radius in metres. Radial scene displacement is elevationMetres * radius / planetRadius * exaggeration. Flat map terrain keeps its existing scale.",
     )
+    """Version 1.3 globe relief: physical datum radius in metres. Radial scene displacement is elevationMetres * radius / planetRadius * exaggeration. Flat map terrain keeps its existing scale."""
     terrainTileSize: Attr[int, _t.Union[int, str]] = Attr(
         "terrainTileSize",
         {
@@ -12580,14 +14346,25 @@ class Object3D(Element):
         "voxels", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Version 1.3. With primitive="voxels" (VOX4): the voxelAsset whose cells this object is made of. Position, scale and the other\ntransform attributes are those of every object3D; the origin of the cells is the corner of the bounding box of the occupied cells.',
     )
+    """Version 1.3. With primitive="voxels" (VOX4): the voxelAsset whose cells this object is made of. Position, scale and the other
+    transform attributes are those of every object3D; the origin of the cells is the corner of the bounding box of the occupied cells.
+    """
     cellSize: Attr[G_positiveDecimal, T_positiveDecimal] = Attr(
         "cellSize", "positiveDecimal", use="optional", default=None, fixed=None,
         doc='Only with primitive="voxels" (VOX5): scene units a cell. Absent, the voxelAsset\'s own cellSize if it has one, else the cell size that\nan srvol asset\'s grid says, else 1.',
     )
+    """Only with primitive="voxels" (VOX5): scene units a cell. Absent, the voxelAsset's own cellSize if it has one, else the cell size that
+    an srvol asset's grid says, else 1.
+    """
     palette: Attr[str, str] = Attr(
         "palette", "xs:string", use="optional", default=None, fixed=None,
         doc='Only with primitive="voxels" (VOX5): the token `file` (the colours of the file, which needs a file that has them) or the materials,\nas IDs separated by spaces, of the palette indices 1, 2, ... in order, at most 255 (VOX6). The material of a cell is the one of its\nindex, else the object\'s own `material`, else the colour of the file; an index with none of the three is an error that names it.\nAbsent, `file` if the file has colours and otherwise the object\'s `material`.',
     )
+    """Only with primitive="voxels" (VOX5): the token `file` (the colours of the file, which needs a file that has them) or the materials,
+    as IDs separated by spaces, of the palette indices 1, 2, ... in order, at most 255 (VOX6). The material of a cell is the one of its
+    index, else the object's own `material`, else the colour of the file; an index with none of the three is an error that names it.
+    Absent, `file` if the file has colours and otherwise the object's `material`.
+    """
     surface: Attr[_t.Literal["blocks"], _t.Literal["blocks"]] = Attr(
         "surface",
         {
@@ -12601,6 +14378,9 @@ class Object3D(Element):
         use="optional", default=None, fixed=None,
         doc='Only with primitive="voxels" (VOX5): `blocks`, the only value so far, draws every exposed face of a cell as a quad. The engine\'s default\nis `blocks`; it is not an XSD default so that it can be refused on any other primitive.',
     )
+    """Only with primitive="voxels" (VOX5): `blocks`, the only value so far, draws every exposed face of a cell as a quad. The engine's default
+    is `blocks`; it is not an XSD default so that it can be refused on any other primitive.
+    """
     surfaceMemoryMiB: Attr[int, _t.Union[int, str]] = Attr(
         "surfaceMemoryMiB",
         {
@@ -12614,6 +14394,11 @@ class Object3D(Element):
         use="optional", default=None, fixed=None,
         doc='Only with primitive="voxels" (VOX5): the most memory, in MiB, that the surface of the cells may take while it is made and drawn (1,240 bytes\nfor each quad at the peak: its compact form, the builder\'s vertices and indices, the copy a mesh upload keeps and the buffers on the\ndevice). The engine\'s default is 128; it is not an XSD default so that it can be refused on any other primitive. A surface over it is an\nerror that names the cause, never a surface cut short.',
     )
+    """Only with primitive="voxels" (VOX5): the most memory, in MiB, that the surface of the cells may take while it is made and drawn (1,240 bytes
+    for each quad at the peak: its compact form, the builder's vertices and indices, the copy a mesh upload keeps and the buffers on the
+    device). The engine's default is 128; it is not an XSD default so that it can be refused on any other primitive. A surface over it is an
+    error that names the cause, never a surface cut short.
+    """
     volume: Attr[str, _t.Union[str, Element]] = Attr(
         "volume", "xs:IDREF", use="optional", default=None, fixed=None, doc="",
     )
@@ -12690,7 +14475,25 @@ class Object3D(Element):
             surface: _t.Literal["blocks"] | None = None,
             surfaceMemoryMiB: _t.Union[int, str] | None = None,
             volume: _t.Union[str, Element] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                node: With primitive="mesh" and an imported model: draw only the node of that name and its descendants, placed so that the node's own origin is the object's origin (the node's transform within the model is dropped, the transforms below it are kept). The first node of that name in the model's node order is used.
+                materialOverride: With primitive="mesh" and an imported model: a space-separated list of imported-material-name:document-material-id pairs. Each primitive of the model whose material has that name is drawn with the document material instead. A material with no pair keeps its imported look. @material, when present, replaces every material and takes precedence.
+                tracking: Extra space after every character of primitive="text", in thousandths of an em of the text size (the object's height). Negative values tighten. Valid only with primitive="text".
+                shadowCatcher: The surface draws no colour of its own. It is transparent where no light is blocked and black, with alpha up to @opacity, where the shadow casters block the light that would reach it, so that it darkens what is behind the 3D layer by the share of light that is taken away (ambient light counted). It does not cast shadows.
+                condition: A deterministic expression in the scene-render expression language (see expressionType). Used by @condition attributes and expression elements.
+                parentJoint: With a @parent (or a transformConstraint of type="parent") that is an object3D drawing an imported model: the name of a node of that model. The element is placed in that node's frame as the model's clips pose it, instead of in the object's own frame. The first node of that name in the model's node order is used.
+                animationClipTo: With primitive="mesh" and an imported model: a second clip (by name or index, as @animationClip) the model is blended toward by @animationBlend. It plays at the object's time scaled by @animationSpeed plus @animationOffsetTo.
+                animationBlend: Weight of @animationClipTo, 0 to 1 (animatable): 0 is @animationClip alone, 1 is @animationClipTo alone, between them translation, scale and morph weights blend linearly and rotation along the shortest arc. A node a clip does not animate keeps its rest pose in that clip. Without @animationClipTo the weight blends toward the rest pose.
+                map: primitive="map": the map asset as ground in the object's xy plane, one map pixel per scene unit, draped with the map as drawn; @terrain (tiles of elevation, Terrarium or Mapbox Terrain-RGB per @terrainEncoding) raises it toward the camera (−z) by true height times @exaggeration on a grid of @resolution cells, and @buildings extrudes the footprints of its first basemap's vector tiles to their heights. Terrain and buildings need a Web Mercator map. primitive="globe": a sphere of @radius and @segments (poles on the y axis, 0° longitude facing the camera) draped with the map's content drawn over the whole world. @material dresses the ground, the globe and the buildings. @textureSize is the drape's resolution in pixels along a map's longer side, and a globe drape's height (its width is twice that); it does not change what the drape shows.
+                planetRadius: Version 1.3 globe relief: physical datum radius in metres. Radial scene displacement is elevationMetres * radius / planetRadius * exaggeration. Flat map terrain keeps its existing scale.
+                voxels: Version 1.3. With primitive="voxels" (VOX4): the voxelAsset whose cells this object is made of. Position, scale and the other transform attributes are those of every object3D; the origin of the cells is the corner of the bounding box of the occupied cells.
+                cellSize: Only with primitive="voxels" (VOX5): scene units a cell. Absent, the voxelAsset's own cellSize if it has one, else the cell size that an srvol asset's grid says, else 1.
+                palette: Only with primitive="voxels" (VOX5): the token `file` (the colours of the file, which needs a file that has them) or the materials, as IDs separated by spaces, of the palette indices 1, 2, ... in order, at most 255 (VOX6). The material of a cell is the one of its index, else the object's own `material`, else the colour of the file; an index with none of the three is an error that names it. Absent, `file` if the file has colours and otherwise the object's `material`.
+                surface: Only with primitive="voxels" (VOX5): `blocks`, the only value so far, draws every exposed face of a cell as a quad. The engine's default is `blocks`; it is not an XSD default so that it can be refused on any other primitive.
+                surfaceMemoryMiB: Only with primitive="voxels" (VOX5): the most memory, in MiB, that the surface of the cells may take while it is made and drawn (1,240 bytes for each quad at the peak: its compact form, the builder's vertices and indices, the copy a mesh upload keeps and the buffers on the device). The engine's default is 128; it is not an XSD default so that it can be refused on any other primitive. A surface over it is an error that names the cause, never a surface cut short.
+            """
+            ...
 
         def add_animate(
             self,
@@ -12701,7 +14504,9 @@ class Object3D(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -12709,7 +14514,12 @@ class Object3D(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -12722,7 +14532,12 @@ class Object3D(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -12740,7 +14555,12 @@ class Object3D(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_transformConstraint(
             self,
@@ -12762,14 +14582,24 @@ class Object3D(Element):
             softness: T_unitDecimal | None = None,
             progress: T_unitDecimal | None = None,
             autoOrient: _t.Union[bool, str] | None = None,
-        ) -> TransformConstraint: ...
+        ) -> TransformConstraint:
+            """Add a <transformConstraint> child; the keywords are the attributes of TransformConstraint.
+
+            Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target's transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target's world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.
+            """
+            ...
 
         def add_morph(
             self,
             *,
             name: str | None = None,
             weight: _t.Union[float, int, str] | None = None,
-        ) -> Morph: ...
+        ) -> Morph:
+            """Add a <morph> child; the keywords are the attributes of Morph.
+
+            With an object3D of primitive="mesh" and an imported model: the weight of one morph target of the model, by the target's name. It replaces that target's weight from the clip or the rest pose, and wins over the same target in the object's @morphWeights. The weight animates. Version 1.2.
+            """
+            ...
 
         def add_joint(
             self,
@@ -12782,7 +14612,12 @@ class Object3D(Element):
             lookAxis: _t.Literal["x", "minus-x", "y", "minus-y", "z", "minus-z"] | None = None,
             influence: T_unitDecimal | None = None,
             maxAngle: T_nonNegativeDecimal | None = None,
-        ) -> Joint: ...
+        ) -> Joint:
+            """Add a <joint> child; the keywords are the attributes of Joint.
+
+            With an object3D of primitive="mesh" and an imported model: poses one joint (a node by name) of the model. rotationX, rotationY and rotation (about z), in degrees and in that order, turn the joint in its own axes on top of the clip's pose; they animate. lookAt then turns the joint so that its lookAxis points at the target node, light or camera (the shortest turn, scaled by influence and limited to maxAngle degrees), without moving the joint's parents. The first joint of that name in the model's node order is used. Version 1.2.
+            """
+            ...
 
         def add_medium(
             self,
@@ -12802,7 +14637,9 @@ class Object3D(Element):
             lightGridDomeDirections: _t.Union[int, str] | None = None,
             lightGridMemoryMiB: _t.Union[int, str] | None = None,
             scatterBounces: _t.Union[int, str] | None = None,
-        ) -> Medium: ...
+        ) -> Medium:
+            """Add a <medium> child; the keywords are the attributes of Medium."""
+            ...
 
         def add_pyro(
             self,
@@ -12834,7 +14671,9 @@ class Object3D(Element):
             maxMemoryMiB: _t.Union[int, str] | None = None,
             checkpointMemoryMiB: _t.Union[int, str] | None = None,
             meshMemoryMiB: _t.Union[int, str] | None = None,
-        ) -> Pyro: ...
+        ) -> Pyro:
+            """Add a <pyro> child; the keywords are the attributes of Pyro."""
+            ...
 
         def add_crater(
             self,
@@ -12864,7 +14703,12 @@ class Object3D(Element):
             end: T_nonNegativeDecimal | None = None,
             curve: _t.Literal["linear", "ease-in", "ease-out", "ease-in-out", "step"] | None = None,
             maxMemoryMiB: _t.Union[int, str] | None = None,
-        ) -> Crater: ...
+        ) -> Crater:
+            """Add a <crater> child; the keywords are the attributes of Crater.
+
+            Owned cinematic deformation in object-space scene units, after imported basis/node transforms. Let p be the clamped eased fraction of local time from start to end; dimensions grow with p. With outward unit n, h=dot(vertex-center,n), r=length(vertex-center-n*h), and B(x)=max(0,1-x*x)^2 for abs(x)<1 (zero otherwise), displace along n by p*(-depth*B(r/(radius*p))+rimHeight*B((r-radius*p)/(rimWidth*p)))*B(h/influenceDepth). At p=0 the map is identity. Normals use the inverse-transpose differential; tangents use the differential. influenceDepth defaults to twice max(radius,depth,rimHeight); it must be at least twice max(depth,rimHeight) (CRT4, for a crater without a `source`; the size of a crater from an impact is not in the document, so its envelope is checked when the crater is made). This compact axial envelope preserves orientation and leaves distant back surfaces unchanged. maxMemoryMiB bounds additional deformation vertex buffers and admits each rigid collision replacement by a conservative geometry-storage estimate; it does not bound source decoding, checkpoint retention or the entire scene. Static and kinematic rigid surfaces are rebuilt at fixed physics substeps. Dynamic rigid bodies are rejected. Particle collider references interpolate deformed world-space vertices over canonical particle dt intervals, with continuous sphere/triangle contacts and barycentric boundary velocities. Particle geometry admission also uses this memory allowance. Pyro collider references sample closed midpoint surfaces with barycentric material velocities evaluated at MAC faces, reserving retained and step-local geometry under both this allowance and the domain meshMemoryMiB. Crater planes retain a centred colliderThickness slab.
+            """
+            ...
 
         def add_fracture(
             self,
@@ -12887,7 +14731,12 @@ class Object3D(Element):
             impulseZ: _t.Union[float, int, str] | None = None,
             radialImpulse: T_nonNegativeDecimal | None = None,
             maxMemoryMiB: _t.Union[int, str] | None = None,
-        ) -> Fracture: ...
+        ) -> Fracture:
+            """Add a <fracture> child; the keywords are the attributes of Fracture.
+
+            Owned seeded closed-solid fracture. at is composition time, quantized to the first physics boundary at or after that time when the source object participates. Exactly one rigidBody supplies total mass, collision properties and inherited motion. Exterior materials and attributes come from the frozen source surface; cut faces use interiorMaterial, with planar UV repeats per scene unit given by interiorUvScale. impulseX/Y/Z are the total directed world-scene impulse in kg*scene-unit/second, distributed in proportion to piece mass. radialImpulse is a nonnegative total scalar impulse, distributed by piece mass along the source-centroid-to-piece directions. maxMemoryMiB bounds component geometry/reconstruction admission, not whole-process RSS. Fracture is cinematic partitioning, not a material stress/failure calculation. `source` names the dynamic rigid body that breaks it (FRX5): the fracture fires on the step after the first impact of that body on this one is noticed, above `minImpulse`, the total normal impulse of the pair in one step in kg*scene-unit/second (absent: twice the weight of the source in one step, as for a crater from an impact). Its time and its push are then derived, so `at`, `radialImpulse` and `impulseX`/`Y`/`Z` are not given (FRX6), and `minImpulse` and `energyFraction` belong to a fracture with `source` (FRX7). The pieces keep the velocity the body had after the contact, and a part of the kinetic energy of the impact relative to the pair, 1/2 mu v_n^2 (mu the reduced mass of the two bodies, v_n the closing speed), `energyFraction` of it (0 to 1; the engine's default is 0.3, with no published value, and not an XSD default so that it can be refused without `source`), becomes the pieces' push on each other, with no momentum added. The partition is the seeded one of the document and does not depend on where the impact was.
+            """
+            ...
 
         def add_blob(
             self,
@@ -12907,7 +14756,12 @@ class Object3D(Element):
             rotation: _t.Union[float, int, str] | None = None,
             blend: T_nonNegativeDecimal | None = None,
             subtract: _t.Union[bool, str] | None = None,
-        ) -> ClayBlob: ...
+        ) -> ClayBlob:
+            """Add a <blob> child; the keywords are the attributes of ClayBlob.
+
+            One solid of a clay object (primitive="clay"), in the object's local scene units: its signed distance field joins the others with a smooth union of width `blend` (or is carved out with `subtract`). Blobs animate like any element, so topology can change over time.
+            """
+            ...
 
         def add_rigidBody(
             self,
@@ -12936,7 +14790,12 @@ class Object3D(Element):
             fixedRotation: _t.Union[bool, str] | None = None,
             bullet: _t.Union[bool, str] | None = None,
             activateAt: _t.Union[float, int, str] | None = None,
-        ) -> RigidBody3D: ...
+        ) -> RigidBody3D:
+            """Add a <rigidBody> child; the keywords are the attributes of RigidBody3D.
+
+            A rigid body in 3D on an object3D: the simulation moves the object from its pose at physics@start (its position and rotations, in its parent's frame); from then on the simulation, not its own attributes, places it (a kinematic body follows its animation). shape="auto" takes the primitive's own form (box, sphere, cylinder, cone, capsule; a plane is a box one unit deep; text is a box) and the convex hull of the triangles of any other primitive; convex-hull, trimesh (exact triangles, for static and kinematic scenery) and decomposition (convex parts of a closed mesh) use the object's triangles. Sizes follow the object's scale at the start. Velocities are pixels per second in scene axes (y down, z away from the camera), angular velocities degrees per second about the scene axes.
+            """
+            ...
 
         def add_parametricSurface(
             self,
@@ -12952,7 +14811,12 @@ class Object3D(Element):
             vSamples: T_surfaceSamplesType | None = None,
             closedU: _t.Union[bool, str] | None = None,
             closedV: _t.Union[bool, str] | None = None,
-        ) -> ParametricSurface: ...
+        ) -> ParametricSurface:
+            """Add a <parametricSurface> child; the keywords are the attributes of ParametricSurface.
+
+            The mesh of an object3D with primitive="parametric": the vertices (x, y, z)(u, v) on a uSamples x vSamples grid over [u0, u1] x [v0, v1], in the object's local space before its transform, two triangles per grid cell (the last row or column joins the first in a closed direction). The vertex normal is the unit vector of D_v x D_u (central differences); a triangle faces the camera when its vertex normals do. x, y and z are expressions with the variables u and v. SREP 70.
+            """
+            ...
 
         def add_heightfield(
             self,
@@ -12962,7 +14826,12 @@ class Object3D(Element):
             depth: T_positiveDecimal | None = None,
             xSamples: T_surfaceSamplesType | None = None,
             zSamples: T_surfaceSamplesType | None = None,
-        ) -> Heightfield: ...
+        ) -> Heightfield:
+            """Add a <heightfield> child; the keywords are the attributes of Heightfield.
+
+            The mesh of an object3D with primitive="heightfield": the parametricSurface with u = z over [-depth/2, depth/2] (zSamples), v = x over [-width/2, width/2] (xSamples) and vertices (x, -height(x, z), z), so that a flat heightfield's top face (normal -y, up) is its front face. height is an expression with the variables x and z. SREP 70.
+            """
+            ...
 
     else:
 
@@ -13121,6 +14990,7 @@ class Camera(Element):
         "fov", "positiveDecimal", use="optional", default="60", fixed=None,
         doc="Horizontal field of view in degrees, across the frame width: the focal distance in pixels is (frame width / 2) / tan(fov / 2), whatever the frame's height, so a portrait frame sees a narrower vertical angle than a landscape one.",
     )
+    """Horizontal field of view in degrees, across the frame width: the focal distance in pixels is (frame width / 2) / tan(fov / 2), whatever the frame's height, so a portrait frame sees a narrower vertical angle than a landscape one."""
     near: Attr[G_positiveDecimal, T_positiveDecimal] = Attr(
         "near", "positiveDecimal", use="optional", default="0.1", fixed=None, doc="",
     )
@@ -13214,6 +15084,17 @@ class Camera(Element):
         "geodesics", "xs:boolean", use="optional", default="false", fixed=None,
         doc='Version 1.3. true renders the scene by tracing each camera ray along a null geodesic of the Schwarzschild\nspacetime of the scene\'s `blackHole` (BH5): the shadow, the lensed image of the background and of the\n`accretionDisk`. This version renders only the black hole, its disk and the 2D background: any `object3D`,\n`particles3D`, `particleEmitter`, `ocean`, `fluid`, `flock`, `slime`, `erosion`, `pyro` or `medium` in the scene is an\nerror (BH6), the camera is farther than 3 `mass` from the hole (BH7) and is the only one with geodesics (BH8); 2D\nlayers, text, shapes, effects and adjustments are allowed, and the image goes through the 2D chain. The camera\'s\ndistance to the hole is the radius of the static observer. `fov`, `roll`, `target`, `yaw` and `pitch` are those of any\ncamera and `pathSamples` is the number of antialiasing samples of a pixel; `denoise="true"` and lights are not\nused (W12, W05). false (the default) is the camera there always was, and a `blackHole` or an `accretionDisk` with\nit is not rendered (W11).',
     )
+    """Version 1.3. true renders the scene by tracing each camera ray along a null geodesic of the Schwarzschild
+    spacetime of the scene's `blackHole` (BH5): the shadow, the lensed image of the background and of the
+    `accretionDisk`. This version renders only the black hole, its disk and the 2D background: any `object3D`,
+    `particles3D`, `particleEmitter`, `ocean`, `fluid`, `flock`, `slime`, `erosion`, `pyro` or `medium` in the scene is an
+    error (BH6), the camera is farther than 3 `mass` from the hole (BH7) and is the only one with geodesics (BH8); 2D
+    layers, text, shapes, effects and adjustments are allowed, and the image goes through the 2D chain. The camera's
+    distance to the hole is the radius of the static observer. `fov`, `roll`, `target`, `yaw` and `pitch` are those of any
+    camera and `pathSamples` is the number of antialiasing samples of a pixel; `denoise="true"` and lights are not
+    used (W12, W05). false (the default) is the camera there always was, and a `blackHole` or an `accretionDisk` with
+    it is not rendered (W11).
+    """
     pathSamples: Attr[int, _t.Union[int, str]] = Attr(
         "pathSamples",
         {
@@ -13286,7 +15167,14 @@ class Camera(Element):
             pathSamples: _t.Union[int, str] | None = None,
             maxBounces: _t.Union[int, str] | None = None,
             denoise: _t.Union[bool, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Physical camera: when focalLength is set, fov derives from focalLength and sensorWidth (mm). depthOfField uses fStop, focusDistance (scene units) and apertureBlades. Several cameras may exist; the active one at time t is the last active camera whose [start, end) contains t (camera switching).
+
+            Args:
+                fov: Horizontal field of view in degrees, across the frame width: the focal distance in pixels is (frame width / 2) / tan(fov / 2), whatever the frame's height, so a portrait frame sees a narrower vertical angle than a landscape one.
+                geodesics: Version 1.3. true renders the scene by tracing each camera ray along a null geodesic of the Schwarzschild spacetime of the scene's `blackHole` (BH5): the shadow, the lensed image of the background and of the `accretionDisk`. This version renders only the black hole, its disk and the 2D background: any `object3D`, `particles3D`, `particleEmitter`, `ocean`, `fluid`, `flock`, `slime`, `erosion`, `pyro` or `medium` in the scene is an error (BH6), the camera is farther than 3 `mass` from the hole (BH7) and is the only one with geodesics (BH8); 2D layers, text, shapes, effects and adjustments are allowed, and the image goes through the 2D chain. The camera's distance to the hole is the radius of the static observer. `fov`, `roll`, `target`, `yaw` and `pitch` are those of any camera and `pathSamples` is the number of antialiasing samples of a pixel; `denoise="true"` and lights are not used (W12, W05). false (the default) is the camera there always was, and a `blackHole` or an `accretionDisk` with it is not rendered (W11).
+            """
+            ...
 
         def add_animate(
             self,
@@ -13297,7 +15185,9 @@ class Camera(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -13305,7 +15195,12 @@ class Camera(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -13318,7 +15213,12 @@ class Camera(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -13336,7 +15236,12 @@ class Camera(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_shake(
             self,
@@ -13349,7 +15254,9 @@ class Camera(Element):
             seed: _t.Union[int, str] | None = None,
             start: _t.Union[float, int, str] | None = None,
             end: _t.Union[float, int, str] | None = None,
-        ) -> Shake: ...
+        ) -> Shake:
+            """Add a <shake> child; the keywords are the attributes of Shake."""
+            ...
 
         def add_transformConstraint(
             self,
@@ -13371,7 +15278,12 @@ class Camera(Element):
             softness: T_unitDecimal | None = None,
             progress: T_unitDecimal | None = None,
             autoOrient: _t.Union[bool, str] | None = None,
-        ) -> TransformConstraint: ...
+        ) -> TransformConstraint:
+            """Add a <transformConstraint> child; the keywords are the attributes of TransformConstraint.
+
+            Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target's transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target's world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.
+            """
+            ...
 
     else:
 
@@ -13451,6 +15363,10 @@ class Group(Element):
         "safeAreaForce", "xs:boolean", use="optional", default="false", fixed=None,
         doc="true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)\nfrom the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate\nplacement outside the safe region is never silent.",
     )
+    """true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)
+    from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate
+    placement outside the safe region is never silent.
+    """
     z: Attr[int, _t.Union[int, str]] = Attr("z", "xs:int", use="optional", default="0", fixed=None, doc="")
     visible: Attr[bool, _t.Union[bool, str]] = Attr(
         "visible", "xs:boolean", use="optional", default="true", fixed=None, doc="",
@@ -13475,8 +15391,12 @@ class Group(Element):
             "item": None,
         },
         use="optional", default=None, fixed=None,
-        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\n      nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\n      whole frame interval. Only where motion blur is on for the node.",
+        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\nnearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\nwhole frame interval. Only where motion blur is on for the node.",
     )
+    """The shutter angle, in degrees, of this node's motion blur, instead of the project's: the
+    nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the
+    whole frame interval. Only where motion blur is on for the node.
+    """
     startMarker: Attr[str, str] = Attr(
         "startMarker", "xs:NCName", use="optional", default=None, fixed=None, doc="",
     )
@@ -13487,6 +15407,7 @@ class Group(Element):
         "condition", "expressionString", use="optional", default=None, fixed=None,
         doc='Node is rendered only when the expression is truthy (e.g. "param(\'showPrice\')").',
     )
+    """Node is rendered only when the expression is truthy (e.g. "param('showPrice')")."""
     motionBlur: Attr[G_triStateType, T_triStateType] = Attr(
         "motionBlur", "triStateType", use="optional", default="inherit", fixed=None, doc="",
     )
@@ -13494,6 +15415,7 @@ class Group(Element):
         "matte", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".',
     )
+    """Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true"."""
     matteMode: Attr[G_matteModeType, T_matteModeType] = Attr(
         "matteMode", "matteModeType", use="optional", default="alpha", fixed=None, doc="",
     )
@@ -13511,16 +15433,24 @@ class Group(Element):
             "item": None,
         },
         use="optional", default="inherit", fixed=None,
-        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\n      composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\n      on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\n      true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\n      it. SREP 72.",
+        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\ncomposite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\non display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\ntrue and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\nit. SREP 72.",
     )
+    """The space in which this node's own pixels (their colour C and coverage x opacity a)
+    composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same
+    on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is
+    true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit
+    it. SREP 72.
+    """
     parent: Attr[str, _t.Union[str, Element]] = Attr(
         "parent", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".',
     )
+    """Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent"."""
     threeD: Attr[bool, _t.Union[bool, str]] = Attr(
         "threeD", "xs:boolean", use="optional", default="false", fixed=None,
         doc="2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.",
     )
+    """2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY."""
     zDepth: Attr[float, _t.Union[float, int, str]] = Attr(
         "zDepth", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -13543,6 +15473,7 @@ class Group(Element):
         use="optional", default=None, fixed=None,
         doc="Responsive anchoring: overrides x so the node's box aligns within alignTo.",
     )
+    """Responsive anchoring: overrides x so the node's box aligns within alignTo."""
     alignY: Attr[_t.Literal["top", "middle", "bottom", "stretch"], _t.Literal["top", "middle", "bottom", "stretch"]] = Attr(
         "alignY",
         {
@@ -13600,12 +15531,20 @@ class Group(Element):
         "skewY", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
     blend: Attr[G_blendType, T_blendType] = Attr(
-        "blend", "blendType", use="optional", default="normal", fixed=None, doc="",
+        "blend", "blendType", use="optional", default="normal", fixed=None,
+        doc="The 1.0 modes plus the full separable/non-separable set used by After\nEffects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette\nmodes cut through every layer below within the isolated parent buffer.",
     )
+    """The 1.0 modes plus the full separable/non-separable set used by After
+    Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette
+    modes cut through every layer below within the isolated parent buffer.
+    """
     effects: Attr[_t.List[str], _t.Sequence[_t.Union[str, Element]]] = Attr(
         "effects", "xs:IDREFS", use="optional", default=None, fixed=None,
         doc="Effect ids applied in order to this group's isolated buffer (a group\nwith effects is always isolated) instead of the final frame.",
     )
+    """Effect ids applied in order to this group's isolated buffer (a group
+    with effects is always isolated) instead of the final frame.
+    """
     isolate: Attr[bool, _t.Union[bool, str]] = Attr(
         "isolate", "xs:boolean", use="optional", default="false", fixed=None, doc="",
     )
@@ -13613,6 +15552,7 @@ class Group(Element):
         "collapse", "xs:boolean", use="optional", default="false", fixed=None,
         doc="Accepted, with no effect (an inert attribute, reported as such: SREP 18, rule I9). A group that is not isolated passes its 2.5D children through, so they share the frame's camera space; an isolated group (clip, mask, matte, effects or blend) draws its children in its own offscreen.",
     )
+    """Accepted, with no effect (an inert attribute, reported as such: SREP 18, rule I9). A group that is not isolated passes its 2.5D children through, so they share the frame's camera space; an isolated group (clip, mask, matte, effects or blend) draws its children in its own offscreen."""
     width: Attr[G_positiveLengthType, T_positiveLengthType] = Attr(
         "width", "positiveLengthType", use="optional", default=None, fixed=None, doc="",
     )
@@ -13635,6 +15575,7 @@ class Group(Element):
         use="optional", default="none", fixed=None,
         doc="Automatic layout of children (flexbox subset): row, column, stack or grid with gap/padding/justify/alignItems.",
     )
+    """Automatic layout of children (flexbox subset): row, column, stack or grid with gap/padding/justify/alignItems."""
     gap: Attr[G_lengthType, T_lengthType] = Attr(
         "gap", "lengthType", use="optional", default="0", fixed=None, doc="",
     )
@@ -13733,7 +15674,22 @@ class Group(Element):
             gridColumns: _t.Union[int, str] | None = None,
             timeOffset: _t.Union[float, int, str] | None = None,
             timeScale: T_positiveDecimal | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                safeAreaForce: true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws) from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate placement outside the safe region is never silent.
+                shutterAngle: The shutter angle, in degrees, of this node's motion blur, instead of the project's: the nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the whole frame interval. Only where motion blur is on for the node.
+                condition: Node is rendered only when the expression is truthy (e.g. "param('showPrice')").
+                matte: Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".
+                edgeBlend: The space in which this node's own pixels (their colour C and coverage x opacity a) composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit it. SREP 72.
+                parent: Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".
+                threeD: 2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.
+                alignX: Responsive anchoring: overrides x so the node's box aligns within alignTo.
+                blend: The 1.0 modes plus the full separable/non-separable set used by After Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette modes cut through every layer below within the isolated parent buffer.
+                effects: Effect ids applied in order to this group's isolated buffer (a group with effects is always isolated) instead of the final frame.
+                collapse: Accepted, with no effect (an inert attribute, reported as such: SREP 18, rule I9). A group that is not isolated passes its 2.5D children through, so they share the frame's camera space; an isolated group (clip, mask, matte, effects or blend) draws its children in its own offscreen.
+                layout: Automatic layout of children (flexbox subset): row, column, stack or grid with gap/padding/justify/alignItems.
+            """
+            ...
 
         def add_animate(
             self,
@@ -13744,7 +15700,9 @@ class Group(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -13752,7 +15710,12 @@ class Group(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -13765,7 +15728,12 @@ class Group(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -13783,7 +15751,12 @@ class Group(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_mask(
             self,
@@ -13803,7 +15776,12 @@ class Group(Element):
             expansion: _t.Union[float, int, str] | None = None,
             opacity: T_unitDecimal | None = None,
             mode: _t.Literal["intersect", "add", "subtract", "lighten", "darken", "difference", "none"] | None = None,
-        ) -> Mask: ...
+        ) -> Mask:
+            """Add a <mask> child; the keywords are the attributes of Mask.
+
+            Masks combine in document order using @mode; the 1.0 behaviour (product of coverages) is mode="intersect", the default. Coverage is anti-aliased, then expanded/contracted by @expansion and blurred by @feather pixels.
+            """
+            ...
 
         def add_transformConstraint(
             self,
@@ -13825,7 +15803,12 @@ class Group(Element):
             softness: T_unitDecimal | None = None,
             progress: T_unitDecimal | None = None,
             autoOrient: _t.Union[bool, str] | None = None,
-        ) -> TransformConstraint: ...
+        ) -> TransformConstraint:
+            """Add a <transformConstraint> child; the keywords are the attributes of TransformConstraint.
+
+            Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target's transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target's world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.
+            """
+            ...
 
         def add_group(
             self,
@@ -13881,7 +15864,9 @@ class Group(Element):
             gridColumns: _t.Union[int, str] | None = None,
             timeOffset: _t.Union[float, int, str] | None = None,
             timeScale: T_positiveDecimal | None = None,
-        ) -> Group: ...
+        ) -> Group:
+            """Add a <group> child; the keywords are the attributes of Group."""
+            ...
 
         def add_sequence(
             self,
@@ -13940,7 +15925,12 @@ class Group(Element):
             timeGap: _t.Union[float, int, str] | None = None,
             transition: str | None = None,
             transitionDuration: T_positiveDecimal | None = None,
-        ) -> Sequence: ...
+        ) -> Sequence:
+            """Add a <sequence> child; the keywords are the attributes of Sequence.
+
+            Children play one after another: each child's start is the previous child's end plus @timeGap seconds (negative values overlap). A child's own start is an additional offset. If @transition is set, every junction gets that transition with @transitionDuration unless an explicit transition exists.
+            """
+            ...
 
         def add_layer(
             self,
@@ -14009,7 +15999,12 @@ class Group(Element):
             volume: T_unitDecimal | None = None,
             mute: _t.Union[bool, str] | None = None,
             audioBus: _t.Union[str, Element] | None = None,
-        ) -> Layer: ...
+        ) -> Layer:
+            """Add a <layer> child; the keywords are the attributes of Layer.
+
+            Places an asset. timeRemap, when present, replaces speed/reverse/loop. fit/boxWidth/boxHeight scale the asset into a box (responsive media); crop* trim fractions of the source. textAnimator and textPath apply when the asset is text. volume/mute control a video asset's own audio, which is mixed into audioMix bus @audioBus (default: master).
+            """
+            ...
 
         def add_shape(
             self,
@@ -14087,7 +16082,9 @@ class Group(Element):
             region: _t.Union[str, Element] | None = None,
             regionLayer: _t.Union[str, Element] | None = None,
             regionPadding: _t.Union[float, int, str] | None = None,
-        ) -> Shape: ...
+        ) -> Shape:
+            """Add a <shape> child; the keywords are the attributes of Shape."""
+            ...
 
         def add_connector(
             self,
@@ -14143,7 +16140,12 @@ class Group(Element):
             labelAt: T_unitDecimal | None = None,
             labelOffset: _t.Union[float, int, str] | None = None,
             labelOrient: _t.Literal["horizontal", "along"] | None = None,
-        ) -> Connector: ...
+        ) -> Connector:
+            """Add a <connector> child; the keywords are the attributes of Connector.
+
+            A line between two nodes (or fixed points) that is recomputed every frame, so it stays attached while they move. @from and @to name a group, layer, shape or instance; with anchor auto the line is cut where it leaves the start node's box and enters the end node's box, less fromGap and toGap. route straight, orthogonal (axis-aligned elbows) or curved (bend in degrees); @points are waypoints. A connector has no box and no transform of its own.
+            """
+            ...
 
         def add_object3D(
             self,
@@ -14215,7 +16217,9 @@ class Group(Element):
             surface: _t.Literal["blocks"] | None = None,
             surfaceMemoryMiB: _t.Union[int, str] | None = None,
             volume: _t.Union[str, Element] | None = None,
-        ) -> Object3D: ...
+        ) -> Object3D:
+            """Add a <object3D> child; the keywords are the attributes of Object3D."""
+            ...
 
         def add_camera(
             self,
@@ -14257,7 +16261,12 @@ class Group(Element):
             pathSamples: _t.Union[int, str] | None = None,
             maxBounces: _t.Union[int, str] | None = None,
             denoise: _t.Union[bool, str] | None = None,
-        ) -> Camera: ...
+        ) -> Camera:
+            """Add a <camera> child; the keywords are the attributes of Camera.
+
+            Physical camera: when focalLength is set, fov derives from focalLength and sensorWidth (mm). depthOfField uses fStop, focusDistance (scene units) and apertureBlades. Several cameras may exist; the active one at time t is the last active camera whose [start, end) contains t (camera switching).
+            """
+            ...
 
         def add_particleEmitter(
             self,
@@ -14344,7 +16353,9 @@ class Group(Element):
             preroll: T_nonNegativeDecimal | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> ParticleEmitter: ...
+        ) -> ParticleEmitter:
+            """Add a <particleEmitter> child; the keywords are the attributes of ParticleEmitter."""
+            ...
 
         def add_particles3D(
             self,
@@ -14439,7 +16450,9 @@ class Group(Element):
             opacityEnd: T_unitDecimal | None = None,
             sizeCurve: T_curveType | None = None,
             colorCurve: T_curveType | None = None,
-        ) -> Particles3D: ...
+        ) -> Particles3D:
+            """Add a <particles3D> child; the keywords are the attributes of Particles3D."""
+            ...
 
         def add_ocean(
             self,
@@ -14494,7 +16507,9 @@ class Group(Element):
             bedResponse: _t.Literal["depthFiltered", "hydrostatic"] | None = None,
             density: T_positiveDecimal | None = None,
             bodyDrag: T_nonNegativeDecimal | None = None,
-        ) -> Ocean: ...
+        ) -> Ocean:
+            """Add a <ocean> child; the keywords are the attributes of Ocean."""
+            ...
 
         def add_blackHole(
             self,
@@ -14505,7 +16520,12 @@ class Group(Element):
             x: _t.Union[float, int, str] | None = None,
             y: _t.Union[float, int, str] | None = None,
             z: _t.Union[float, int, str] | None = None,
-        ) -> BlackHole: ...
+        ) -> BlackHole:
+            """Add a <blackHole> child; the keywords are the attributes of BlackHole.
+
+            Version 1.3 or later (BH1). A non-rotating, uncharged black hole in vacuum: the Schwarzschild solution, in units with G = c = 1, so that the mass is a length of scene units and the horizon is at r_s = 2 `mass` (BH1). One per scene (BH2). It is drawn by a camera with `geodesics="true"`; without it nothing is drawn (W11). Its place is the origin of the Schwarzschild coordinates; nothing else about it is authored.
+            """
+            ...
 
         def add_accretionDisk(
             self,
@@ -14524,7 +16544,12 @@ class Group(Element):
             rotationX: _t.Union[float, int, str] | None = None,
             rotationY: _t.Union[float, int, str] | None = None,
             rotation: _t.Union[float, int, str] | None = None,
-        ) -> AccretionDisk: ...
+        ) -> AccretionDisk:
+            """Add a <accretionDisk> child; the keywords are the attributes of AccretionDisk.
+
+            Version 1.3. A geometrically thin, optically thick disk of gas on circular orbits in the equatorial plane of the `blackHole` it names (BH3), from `innerRadius` to `outerRadius` in the Schwarzschild radial coordinate, scene units. `innerRadius` is at least the innermost stable circular orbit, 6 `mass` (BH4), and is that when absent; `outerRadius` is beyond it (BH4). Its temperature is the thin-disk profile with a zero-torque inner edge, T(r) = `temperatureScale` f(r) / f(49/36 r_in), f(r) = (r_in / r)^(3/4) (1 - (r_in / r)^(1/2))^(1/4): `temperatureScale`, in kelvin, is the local temperature at the peak, r = 49/36 r_in, before the shift of light. The gas orbits with the angular velocity sqrt(`mass` / r^3) times `timeScale`, in radians per scene second, about the axis of the disk, which is the scene's up, (0, -1, 0), turned by `rotationX`, `rotationY` and `rotation` (about z) degrees composed as an object3D composes them, Rz Ry Rx; seen from above it turns counter-clockwise. The disk is centred on its `blackHole` and has no place of its own. `angularPattern` is the azimuthal structure the gas carries and `seed` fixes it: `none` is a smooth disk, `clumps` (the default) seeded azimuthal noise that rotates differentially, `spiral` seeded logarithmic spiral arms; `contrast` is its amplitude, 0 to 1, and `intensity` scales the brightness. The disk is analytic, a surface the rays meet, and is not made of particles.
+            """
+            ...
 
         def add_flock(
             self,
@@ -14589,7 +16614,12 @@ class Group(Element):
             trail: T_nonNegativeDecimal | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Flock: ...
+        ) -> Flock:
+            """Add a <flock> child; the keywords are the attributes of Flock.
+
+            Boids (Reynolds 1987): `count` agents in the width x height box steer by separation, alignment and cohesion with neighbours within `perception`, capped at `maxSpeed` and `maxForce`, kept in the box by `bounds`, and pushed by the named force fields. Drawn like particles (disc, streak or sprite), oriented to their velocity unless `orientToVelocity` is false.
+            """
+            ...
 
         def add_fluid(
             self,
@@ -14645,7 +16675,12 @@ class Group(Element):
             useForceFields: _t.Union[bool, str] | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Fluid: ...
+        ) -> Fluid:
+            """Add a <fluid> child; the keywords are the attributes of Fluid.
+
+            Incompressible 2D fluid on a grid (Stam 1999, stable fluids): semi-Lagrangian advection of velocity and coloured dye, viscous diffusion, vorticity confinement and a pressure projection. Sources inject dye (per second) and velocity (px/s) inside their radius. Positions are in the fluid's box.
+            """
+            ...
 
         def add_slime(
             self,
@@ -14704,7 +16739,12 @@ class Group(Element):
             colorLow: T_paintType | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Slime: ...
+        ) -> Slime:
+            """Add a <slime> child; the keywords are the attributes of Slime.
+
+            Physarum transport network (Jones 2010): agents sense a trail map ahead and to either side, turn toward the strongest trail, move and deposit; the map diffuses and decays each step. Drawn as the trail map through a two-colour ramp (colorLow at 0, color at `saturation`).
+            """
+            ...
 
         def add_erosion(
             self,
@@ -14767,7 +16807,12 @@ class Group(Element):
             colorHigh: T_paintType | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Erosion: ...
+        ) -> Erosion:
+            """Add a <erosion> child; the keywords are the attributes of Erosion.
+
+            Hydraulic erosion of a heightmap by water droplets (Beyer 2015): each droplet runs downhill with inertia, carries sediment up to a capacity that grows with speed, water and slope, erodes within a radius and deposits where it slows or climbs, and evaporates. The terrain starts as fractal noise (or the `heightmap` image's luminance) and is drawn hill-shaded through colorLow to colorHigh.
+            """
+            ...
 
         def add_instance(
             self,
@@ -14819,7 +16864,12 @@ class Group(Element):
             fit: T_fitType | None = None,
             boxWidth: T_positiveLengthType | None = None,
             boxHeight: T_positiveLengthType | None = None,
-        ) -> Instance: ...
+        ) -> Instance:
+            """Add a <instance> child; the keywords are the attributes of Instance.
+
+            Instantiates a symbol (precomposition / component). The symbol runs on its own clock: local time = (t - start) * speed + clipIn, looped/reversed as for layers, or mapped by timeRemap. override children change attributes of elements inside this instance only; ids inside a symbol are scoped to the instance (effective id = instanceId/innerId).
+            """
+            ...
 
         def add_include(
             self,
@@ -14863,7 +16913,12 @@ class Group(Element):
             src: str | None = None,
             symbol: str | None = None,
             sha256: T_sha256Type | None = None,
-        ) -> Include: ...
+        ) -> Include:
+            """Add a <include> child; the keywords are the attributes of Include.
+
+            Pulls a symbol from another scene-render document (@src#@symbol) or that document's whole composition when @symbol is absent. The included file's assets, paints, styles and effects are merged under the namespace @id/.
+            """
+            ...
 
         def add_repeat(
             self,
@@ -14916,7 +16971,12 @@ class Group(Element):
             opacityStep: T_unitDecimal | None = None,
             timeStep: _t.Union[float, int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> Repeat: ...
+        ) -> Repeat:
+            """Add a <repeat> child; the keywords are the attributes of Repeat.
+
+            Generates copies of its children: @count copies, or one per item of the list parameter / data rows named by @over. Inside, expressions read index, count and param(@var) (the current item). Copy i receives the cumulative offsets i*offsetX, i*offsetY, i*rotationStep, scaleStep^i, opacity - i*opacityStep and a start delay of i*timeStep (stagger).
+            """
+            ...
 
         def add_adjustment(
             self,
@@ -14959,7 +17019,12 @@ class Group(Element):
             skewY: _t.Union[float, int, str] | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
             blend: T_blendType | None = None,
-        ) -> Adjustment: ...
+        ) -> Adjustment:
+            """Add a <adjustment> child; the keywords are the attributes of Adjustment.
+
+            Adjustment layer: applies @effects to the composite of every sibling below it (lower z / earlier in document order), limited by its masks, matte and opacity, during [start, end).
+            """
+            ...
 
         def add_transition(
             self,
@@ -14979,14 +17044,24 @@ class Group(Element):
             shader: str | None = None,
             motionBlur: _t.Union[bool, str] | None = None,
             audio: _t.Literal["crossfade", "equal-power", "cut", "none"] | None = None,
-        ) -> Transition: ...
+        ) -> Transition:
+            """Add a <transition> child; the keywords are the attributes of Transition.
+
+            Transition between sibling nodes @from (outgoing) and @to (incoming), or an in/out transition of a single node when only one is given. The transition window has length @duration, centred on the cut (alignment center), ending at it (end) or starting at it (start). The renderer extends the handles of both nodes by the needed amount.
+            """
+            ...
 
         def add_skeleton(
             self,
             *,
             id: str | None = None,
             weights: str | None = None,
-        ) -> Skeleton: ...
+        ) -> Skeleton:
+            """Add a <skeleton> child; the keywords are the attributes of Skeleton.
+
+            2D bone hierarchy; bind to a node with a deform modifier type="skin" skeleton="id". Bones accept transformConstraint type="ik".
+            """
+            ...
 
         def add_compute(
             self,
@@ -15036,7 +17111,12 @@ class Group(Element):
             fractionBits: _t.Union[int, str] | None = None,
             seed: _t.Union[int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> Compute: ...
+        ) -> Compute:
+            """Add a <compute> child; the keywords are the attributes of Compute.
+
+            Runs the WGSL compute shader @src for @invocations invocations; sr_accumulate adds integer amounts into a width x height histogram, which tonemap turns into this node's picture. SREP 67.
+            """
+            ...
 
         def add_iterate(
             self,
@@ -15082,7 +17162,12 @@ class Group(Element):
             tolerance: T_positiveDecimal | None = None,
             checkEvery: _t.Union[int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> Iterate: ...
+        ) -> Iterate:
+            """Add a <iterate> child; the keywords are the attributes of Iterate.
+
+            Each frame, the stateful nodes inside start from their zero state and advance @steps steps (fewer with until="converged") before the frame is drawn. For stills; SREP 68 is the animated form.
+            """
+            ...
 
         def add_program(
             self,
@@ -15135,7 +17220,12 @@ class Group(Element):
             stepsPerFrame: _t.Union[int, str] | None = None,
             prewarm: _t.Union[int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> ProgramNode: ...
+        ) -> ProgramNode:
+            """Add a <program> child; the keywords are the attributes of ProgramNode.
+
+            Runs the WebAssembly module @src (SHA-256 @sha256) under the determinism rules of SREP 66. In build mode it runs once when the document is built and the scene-render nodes it returns are this node's children, drawn as a group. With mode="step" (SREP 69) it keeps state, advances stepsPerFrame steps per frame after prewarm steps, and draws the width x height RGBA picture its frame export returns.
+            """
+            ...
 
         def add_viewport3D(
             self,
@@ -15183,7 +17273,12 @@ class Group(Element):
             background: T_paintType | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Viewport3D: ...
+        ) -> Viewport3D:
+            """Add a <viewport3D> child; the keywords are the attributes of Viewport3D.
+
+            Renders its own 3D scene (its object3D and camera children, and the lights named by @lights) into a width x height picture drawn at its origin. Isolated from the document's 3D scene. SREP 74.
+            """
+            ...
 
     else:
 
@@ -15345,6 +17440,10 @@ class Sequence(Element):
         "safeAreaForce", "xs:boolean", use="optional", default="false", fixed=None,
         doc="true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)\nfrom the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate\nplacement outside the safe region is never silent.",
     )
+    """true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)
+    from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate
+    placement outside the safe region is never silent.
+    """
     z: Attr[int, _t.Union[int, str]] = Attr("z", "xs:int", use="optional", default="0", fixed=None, doc="")
     visible: Attr[bool, _t.Union[bool, str]] = Attr(
         "visible", "xs:boolean", use="optional", default="true", fixed=None, doc="",
@@ -15369,8 +17468,12 @@ class Sequence(Element):
             "item": None,
         },
         use="optional", default=None, fixed=None,
-        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\n      nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\n      whole frame interval. Only where motion blur is on for the node.",
+        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\nnearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\nwhole frame interval. Only where motion blur is on for the node.",
     )
+    """The shutter angle, in degrees, of this node's motion blur, instead of the project's: the
+    nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the
+    whole frame interval. Only where motion blur is on for the node.
+    """
     startMarker: Attr[str, str] = Attr(
         "startMarker", "xs:NCName", use="optional", default=None, fixed=None, doc="",
     )
@@ -15381,6 +17484,7 @@ class Sequence(Element):
         "condition", "expressionString", use="optional", default=None, fixed=None,
         doc='Node is rendered only when the expression is truthy (e.g. "param(\'showPrice\')").',
     )
+    """Node is rendered only when the expression is truthy (e.g. "param('showPrice')")."""
     motionBlur: Attr[G_triStateType, T_triStateType] = Attr(
         "motionBlur", "triStateType", use="optional", default="inherit", fixed=None, doc="",
     )
@@ -15388,6 +17492,7 @@ class Sequence(Element):
         "matte", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".',
     )
+    """Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true"."""
     matteMode: Attr[G_matteModeType, T_matteModeType] = Attr(
         "matteMode", "matteModeType", use="optional", default="alpha", fixed=None, doc="",
     )
@@ -15405,16 +17510,24 @@ class Sequence(Element):
             "item": None,
         },
         use="optional", default="inherit", fixed=None,
-        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\n      composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\n      on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\n      true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\n      it. SREP 72.",
+        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\ncomposite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\non display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\ntrue and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\nit. SREP 72.",
     )
+    """The space in which this node's own pixels (their colour C and coverage x opacity a)
+    composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same
+    on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is
+    true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit
+    it. SREP 72.
+    """
     parent: Attr[str, _t.Union[str, Element]] = Attr(
         "parent", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".',
     )
+    """Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent"."""
     threeD: Attr[bool, _t.Union[bool, str]] = Attr(
         "threeD", "xs:boolean", use="optional", default="false", fixed=None,
         doc="2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.",
     )
+    """2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY."""
     zDepth: Attr[float, _t.Union[float, int, str]] = Attr(
         "zDepth", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -15437,6 +17550,7 @@ class Sequence(Element):
         use="optional", default=None, fixed=None,
         doc="Responsive anchoring: overrides x so the node's box aligns within alignTo.",
     )
+    """Responsive anchoring: overrides x so the node's box aligns within alignTo."""
     alignY: Attr[_t.Literal["top", "middle", "bottom", "stretch"], _t.Literal["top", "middle", "bottom", "stretch"]] = Attr(
         "alignY",
         {
@@ -15494,12 +17608,20 @@ class Sequence(Element):
         "skewY", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
     blend: Attr[G_blendType, T_blendType] = Attr(
-        "blend", "blendType", use="optional", default="normal", fixed=None, doc="",
+        "blend", "blendType", use="optional", default="normal", fixed=None,
+        doc="The 1.0 modes plus the full separable/non-separable set used by After\nEffects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette\nmodes cut through every layer below within the isolated parent buffer.",
     )
+    """The 1.0 modes plus the full separable/non-separable set used by After
+    Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette
+    modes cut through every layer below within the isolated parent buffer.
+    """
     effects: Attr[_t.List[str], _t.Sequence[_t.Union[str, Element]]] = Attr(
         "effects", "xs:IDREFS", use="optional", default=None, fixed=None,
         doc="Effect ids applied in order to this group's isolated buffer (a group\nwith effects is always isolated) instead of the final frame.",
     )
+    """Effect ids applied in order to this group's isolated buffer (a group
+    with effects is always isolated) instead of the final frame.
+    """
     isolate: Attr[bool, _t.Union[bool, str]] = Attr(
         "isolate", "xs:boolean", use="optional", default="false", fixed=None, doc="",
     )
@@ -15507,6 +17629,7 @@ class Sequence(Element):
         "collapse", "xs:boolean", use="optional", default="false", fixed=None,
         doc="Accepted, with no effect (an inert attribute, reported as such: SREP 18, rule I9). A group that is not isolated passes its 2.5D children through, so they share the frame's camera space; an isolated group (clip, mask, matte, effects or blend) draws its children in its own offscreen.",
     )
+    """Accepted, with no effect (an inert attribute, reported as such: SREP 18, rule I9). A group that is not isolated passes its 2.5D children through, so they share the frame's camera space; an isolated group (clip, mask, matte, effects or blend) draws its children in its own offscreen."""
     width: Attr[G_positiveLengthType, T_positiveLengthType] = Attr(
         "width", "positiveLengthType", use="optional", default=None, fixed=None, doc="",
     )
@@ -15529,6 +17652,7 @@ class Sequence(Element):
         use="optional", default="none", fixed=None,
         doc="Automatic layout of children (flexbox subset): row, column, stack or grid with gap/padding/justify/alignItems.",
     )
+    """Automatic layout of children (flexbox subset): row, column, stack or grid with gap/padding/justify/alignItems."""
     gap: Attr[G_lengthType, T_lengthType] = Attr(
         "gap", "lengthType", use="optional", default="0", fixed=None, doc="",
     )
@@ -15639,7 +17763,24 @@ class Sequence(Element):
             timeGap: _t.Union[float, int, str] | None = None,
             transition: str | None = None,
             transitionDuration: T_positiveDecimal | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Children play one after another: each child's start is the previous child's end plus @timeGap seconds (negative values overlap). A child's own start is an additional offset. If @transition is set, every junction gets that transition with @transitionDuration unless an explicit transition exists.
+
+            Args:
+                safeAreaForce: true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws) from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate placement outside the safe region is never silent.
+                shutterAngle: The shutter angle, in degrees, of this node's motion blur, instead of the project's: the nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the whole frame interval. Only where motion blur is on for the node.
+                condition: Node is rendered only when the expression is truthy (e.g. "param('showPrice')").
+                matte: Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".
+                edgeBlend: The space in which this node's own pixels (their colour C and coverage x opacity a) composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit it. SREP 72.
+                parent: Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".
+                threeD: 2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.
+                alignX: Responsive anchoring: overrides x so the node's box aligns within alignTo.
+                blend: The 1.0 modes plus the full separable/non-separable set used by After Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette modes cut through every layer below within the isolated parent buffer.
+                effects: Effect ids applied in order to this group's isolated buffer (a group with effects is always isolated) instead of the final frame.
+                collapse: Accepted, with no effect (an inert attribute, reported as such: SREP 18, rule I9). A group that is not isolated passes its 2.5D children through, so they share the frame's camera space; an isolated group (clip, mask, matte, effects or blend) draws its children in its own offscreen.
+                layout: Automatic layout of children (flexbox subset): row, column, stack or grid with gap/padding/justify/alignItems.
+            """
+            ...
 
         def add_animate(
             self,
@@ -15650,7 +17791,9 @@ class Sequence(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -15658,7 +17801,12 @@ class Sequence(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -15671,7 +17819,12 @@ class Sequence(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -15689,7 +17842,12 @@ class Sequence(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_mask(
             self,
@@ -15709,7 +17867,12 @@ class Sequence(Element):
             expansion: _t.Union[float, int, str] | None = None,
             opacity: T_unitDecimal | None = None,
             mode: _t.Literal["intersect", "add", "subtract", "lighten", "darken", "difference", "none"] | None = None,
-        ) -> Mask: ...
+        ) -> Mask:
+            """Add a <mask> child; the keywords are the attributes of Mask.
+
+            Masks combine in document order using @mode; the 1.0 behaviour (product of coverages) is mode="intersect", the default. Coverage is anti-aliased, then expanded/contracted by @expansion and blurred by @feather pixels.
+            """
+            ...
 
         def add_transformConstraint(
             self,
@@ -15731,7 +17894,12 @@ class Sequence(Element):
             softness: T_unitDecimal | None = None,
             progress: T_unitDecimal | None = None,
             autoOrient: _t.Union[bool, str] | None = None,
-        ) -> TransformConstraint: ...
+        ) -> TransformConstraint:
+            """Add a <transformConstraint> child; the keywords are the attributes of TransformConstraint.
+
+            Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target's transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target's world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.
+            """
+            ...
 
         def add_group(
             self,
@@ -15787,7 +17955,9 @@ class Sequence(Element):
             gridColumns: _t.Union[int, str] | None = None,
             timeOffset: _t.Union[float, int, str] | None = None,
             timeScale: T_positiveDecimal | None = None,
-        ) -> Group: ...
+        ) -> Group:
+            """Add a <group> child; the keywords are the attributes of Group."""
+            ...
 
         def add_sequence(
             self,
@@ -15846,7 +18016,12 @@ class Sequence(Element):
             timeGap: _t.Union[float, int, str] | None = None,
             transition: str | None = None,
             transitionDuration: T_positiveDecimal | None = None,
-        ) -> Sequence: ...
+        ) -> Sequence:
+            """Add a <sequence> child; the keywords are the attributes of Sequence.
+
+            Children play one after another: each child's start is the previous child's end plus @timeGap seconds (negative values overlap). A child's own start is an additional offset. If @transition is set, every junction gets that transition with @transitionDuration unless an explicit transition exists.
+            """
+            ...
 
         def add_layer(
             self,
@@ -15915,7 +18090,12 @@ class Sequence(Element):
             volume: T_unitDecimal | None = None,
             mute: _t.Union[bool, str] | None = None,
             audioBus: _t.Union[str, Element] | None = None,
-        ) -> Layer: ...
+        ) -> Layer:
+            """Add a <layer> child; the keywords are the attributes of Layer.
+
+            Places an asset. timeRemap, when present, replaces speed/reverse/loop. fit/boxWidth/boxHeight scale the asset into a box (responsive media); crop* trim fractions of the source. textAnimator and textPath apply when the asset is text. volume/mute control a video asset's own audio, which is mixed into audioMix bus @audioBus (default: master).
+            """
+            ...
 
         def add_shape(
             self,
@@ -15993,7 +18173,9 @@ class Sequence(Element):
             region: _t.Union[str, Element] | None = None,
             regionLayer: _t.Union[str, Element] | None = None,
             regionPadding: _t.Union[float, int, str] | None = None,
-        ) -> Shape: ...
+        ) -> Shape:
+            """Add a <shape> child; the keywords are the attributes of Shape."""
+            ...
 
         def add_connector(
             self,
@@ -16049,7 +18231,12 @@ class Sequence(Element):
             labelAt: T_unitDecimal | None = None,
             labelOffset: _t.Union[float, int, str] | None = None,
             labelOrient: _t.Literal["horizontal", "along"] | None = None,
-        ) -> Connector: ...
+        ) -> Connector:
+            """Add a <connector> child; the keywords are the attributes of Connector.
+
+            A line between two nodes (or fixed points) that is recomputed every frame, so it stays attached while they move. @from and @to name a group, layer, shape or instance; with anchor auto the line is cut where it leaves the start node's box and enters the end node's box, less fromGap and toGap. route straight, orthogonal (axis-aligned elbows) or curved (bend in degrees); @points are waypoints. A connector has no box and no transform of its own.
+            """
+            ...
 
         def add_object3D(
             self,
@@ -16121,7 +18308,9 @@ class Sequence(Element):
             surface: _t.Literal["blocks"] | None = None,
             surfaceMemoryMiB: _t.Union[int, str] | None = None,
             volume: _t.Union[str, Element] | None = None,
-        ) -> Object3D: ...
+        ) -> Object3D:
+            """Add a <object3D> child; the keywords are the attributes of Object3D."""
+            ...
 
         def add_camera(
             self,
@@ -16163,7 +18352,12 @@ class Sequence(Element):
             pathSamples: _t.Union[int, str] | None = None,
             maxBounces: _t.Union[int, str] | None = None,
             denoise: _t.Union[bool, str] | None = None,
-        ) -> Camera: ...
+        ) -> Camera:
+            """Add a <camera> child; the keywords are the attributes of Camera.
+
+            Physical camera: when focalLength is set, fov derives from focalLength and sensorWidth (mm). depthOfField uses fStop, focusDistance (scene units) and apertureBlades. Several cameras may exist; the active one at time t is the last active camera whose [start, end) contains t (camera switching).
+            """
+            ...
 
         def add_particleEmitter(
             self,
@@ -16250,7 +18444,9 @@ class Sequence(Element):
             preroll: T_nonNegativeDecimal | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> ParticleEmitter: ...
+        ) -> ParticleEmitter:
+            """Add a <particleEmitter> child; the keywords are the attributes of ParticleEmitter."""
+            ...
 
         def add_particles3D(
             self,
@@ -16345,7 +18541,9 @@ class Sequence(Element):
             opacityEnd: T_unitDecimal | None = None,
             sizeCurve: T_curveType | None = None,
             colorCurve: T_curveType | None = None,
-        ) -> Particles3D: ...
+        ) -> Particles3D:
+            """Add a <particles3D> child; the keywords are the attributes of Particles3D."""
+            ...
 
         def add_ocean(
             self,
@@ -16400,7 +18598,9 @@ class Sequence(Element):
             bedResponse: _t.Literal["depthFiltered", "hydrostatic"] | None = None,
             density: T_positiveDecimal | None = None,
             bodyDrag: T_nonNegativeDecimal | None = None,
-        ) -> Ocean: ...
+        ) -> Ocean:
+            """Add a <ocean> child; the keywords are the attributes of Ocean."""
+            ...
 
         def add_blackHole(
             self,
@@ -16411,7 +18611,12 @@ class Sequence(Element):
             x: _t.Union[float, int, str] | None = None,
             y: _t.Union[float, int, str] | None = None,
             z: _t.Union[float, int, str] | None = None,
-        ) -> BlackHole: ...
+        ) -> BlackHole:
+            """Add a <blackHole> child; the keywords are the attributes of BlackHole.
+
+            Version 1.3 or later (BH1). A non-rotating, uncharged black hole in vacuum: the Schwarzschild solution, in units with G = c = 1, so that the mass is a length of scene units and the horizon is at r_s = 2 `mass` (BH1). One per scene (BH2). It is drawn by a camera with `geodesics="true"`; without it nothing is drawn (W11). Its place is the origin of the Schwarzschild coordinates; nothing else about it is authored.
+            """
+            ...
 
         def add_accretionDisk(
             self,
@@ -16430,7 +18635,12 @@ class Sequence(Element):
             rotationX: _t.Union[float, int, str] | None = None,
             rotationY: _t.Union[float, int, str] | None = None,
             rotation: _t.Union[float, int, str] | None = None,
-        ) -> AccretionDisk: ...
+        ) -> AccretionDisk:
+            """Add a <accretionDisk> child; the keywords are the attributes of AccretionDisk.
+
+            Version 1.3. A geometrically thin, optically thick disk of gas on circular orbits in the equatorial plane of the `blackHole` it names (BH3), from `innerRadius` to `outerRadius` in the Schwarzschild radial coordinate, scene units. `innerRadius` is at least the innermost stable circular orbit, 6 `mass` (BH4), and is that when absent; `outerRadius` is beyond it (BH4). Its temperature is the thin-disk profile with a zero-torque inner edge, T(r) = `temperatureScale` f(r) / f(49/36 r_in), f(r) = (r_in / r)^(3/4) (1 - (r_in / r)^(1/2))^(1/4): `temperatureScale`, in kelvin, is the local temperature at the peak, r = 49/36 r_in, before the shift of light. The gas orbits with the angular velocity sqrt(`mass` / r^3) times `timeScale`, in radians per scene second, about the axis of the disk, which is the scene's up, (0, -1, 0), turned by `rotationX`, `rotationY` and `rotation` (about z) degrees composed as an object3D composes them, Rz Ry Rx; seen from above it turns counter-clockwise. The disk is centred on its `blackHole` and has no place of its own. `angularPattern` is the azimuthal structure the gas carries and `seed` fixes it: `none` is a smooth disk, `clumps` (the default) seeded azimuthal noise that rotates differentially, `spiral` seeded logarithmic spiral arms; `contrast` is its amplitude, 0 to 1, and `intensity` scales the brightness. The disk is analytic, a surface the rays meet, and is not made of particles.
+            """
+            ...
 
         def add_flock(
             self,
@@ -16495,7 +18705,12 @@ class Sequence(Element):
             trail: T_nonNegativeDecimal | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Flock: ...
+        ) -> Flock:
+            """Add a <flock> child; the keywords are the attributes of Flock.
+
+            Boids (Reynolds 1987): `count` agents in the width x height box steer by separation, alignment and cohesion with neighbours within `perception`, capped at `maxSpeed` and `maxForce`, kept in the box by `bounds`, and pushed by the named force fields. Drawn like particles (disc, streak or sprite), oriented to their velocity unless `orientToVelocity` is false.
+            """
+            ...
 
         def add_fluid(
             self,
@@ -16551,7 +18766,12 @@ class Sequence(Element):
             useForceFields: _t.Union[bool, str] | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Fluid: ...
+        ) -> Fluid:
+            """Add a <fluid> child; the keywords are the attributes of Fluid.
+
+            Incompressible 2D fluid on a grid (Stam 1999, stable fluids): semi-Lagrangian advection of velocity and coloured dye, viscous diffusion, vorticity confinement and a pressure projection. Sources inject dye (per second) and velocity (px/s) inside their radius. Positions are in the fluid's box.
+            """
+            ...
 
         def add_slime(
             self,
@@ -16610,7 +18830,12 @@ class Sequence(Element):
             colorLow: T_paintType | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Slime: ...
+        ) -> Slime:
+            """Add a <slime> child; the keywords are the attributes of Slime.
+
+            Physarum transport network (Jones 2010): agents sense a trail map ahead and to either side, turn toward the strongest trail, move and deposit; the map diffuses and decays each step. Drawn as the trail map through a two-colour ramp (colorLow at 0, color at `saturation`).
+            """
+            ...
 
         def add_erosion(
             self,
@@ -16673,7 +18898,12 @@ class Sequence(Element):
             colorHigh: T_paintType | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Erosion: ...
+        ) -> Erosion:
+            """Add a <erosion> child; the keywords are the attributes of Erosion.
+
+            Hydraulic erosion of a heightmap by water droplets (Beyer 2015): each droplet runs downhill with inertia, carries sediment up to a capacity that grows with speed, water and slope, erodes within a radius and deposits where it slows or climbs, and evaporates. The terrain starts as fractal noise (or the `heightmap` image's luminance) and is drawn hill-shaded through colorLow to colorHigh.
+            """
+            ...
 
         def add_instance(
             self,
@@ -16725,7 +18955,12 @@ class Sequence(Element):
             fit: T_fitType | None = None,
             boxWidth: T_positiveLengthType | None = None,
             boxHeight: T_positiveLengthType | None = None,
-        ) -> Instance: ...
+        ) -> Instance:
+            """Add a <instance> child; the keywords are the attributes of Instance.
+
+            Instantiates a symbol (precomposition / component). The symbol runs on its own clock: local time = (t - start) * speed + clipIn, looped/reversed as for layers, or mapped by timeRemap. override children change attributes of elements inside this instance only; ids inside a symbol are scoped to the instance (effective id = instanceId/innerId).
+            """
+            ...
 
         def add_include(
             self,
@@ -16769,7 +19004,12 @@ class Sequence(Element):
             src: str | None = None,
             symbol: str | None = None,
             sha256: T_sha256Type | None = None,
-        ) -> Include: ...
+        ) -> Include:
+            """Add a <include> child; the keywords are the attributes of Include.
+
+            Pulls a symbol from another scene-render document (@src#@symbol) or that document's whole composition when @symbol is absent. The included file's assets, paints, styles and effects are merged under the namespace @id/.
+            """
+            ...
 
         def add_repeat(
             self,
@@ -16822,7 +19062,12 @@ class Sequence(Element):
             opacityStep: T_unitDecimal | None = None,
             timeStep: _t.Union[float, int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> Repeat: ...
+        ) -> Repeat:
+            """Add a <repeat> child; the keywords are the attributes of Repeat.
+
+            Generates copies of its children: @count copies, or one per item of the list parameter / data rows named by @over. Inside, expressions read index, count and param(@var) (the current item). Copy i receives the cumulative offsets i*offsetX, i*offsetY, i*rotationStep, scaleStep^i, opacity - i*opacityStep and a start delay of i*timeStep (stagger).
+            """
+            ...
 
         def add_adjustment(
             self,
@@ -16865,7 +19110,12 @@ class Sequence(Element):
             skewY: _t.Union[float, int, str] | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
             blend: T_blendType | None = None,
-        ) -> Adjustment: ...
+        ) -> Adjustment:
+            """Add a <adjustment> child; the keywords are the attributes of Adjustment.
+
+            Adjustment layer: applies @effects to the composite of every sibling below it (lower z / earlier in document order), limited by its masks, matte and opacity, during [start, end).
+            """
+            ...
 
         def add_transition(
             self,
@@ -16885,14 +19135,24 @@ class Sequence(Element):
             shader: str | None = None,
             motionBlur: _t.Union[bool, str] | None = None,
             audio: _t.Literal["crossfade", "equal-power", "cut", "none"] | None = None,
-        ) -> Transition: ...
+        ) -> Transition:
+            """Add a <transition> child; the keywords are the attributes of Transition.
+
+            Transition between sibling nodes @from (outgoing) and @to (incoming), or an in/out transition of a single node when only one is given. The transition window has length @duration, centred on the cut (alignment center), ending at it (end) or starting at it (start). The renderer extends the handles of both nodes by the needed amount.
+            """
+            ...
 
         def add_skeleton(
             self,
             *,
             id: str | None = None,
             weights: str | None = None,
-        ) -> Skeleton: ...
+        ) -> Skeleton:
+            """Add a <skeleton> child; the keywords are the attributes of Skeleton.
+
+            2D bone hierarchy; bind to a node with a deform modifier type="skin" skeleton="id". Bones accept transformConstraint type="ik".
+            """
+            ...
 
         def add_compute(
             self,
@@ -16942,7 +19202,12 @@ class Sequence(Element):
             fractionBits: _t.Union[int, str] | None = None,
             seed: _t.Union[int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> Compute: ...
+        ) -> Compute:
+            """Add a <compute> child; the keywords are the attributes of Compute.
+
+            Runs the WGSL compute shader @src for @invocations invocations; sr_accumulate adds integer amounts into a width x height histogram, which tonemap turns into this node's picture. SREP 67.
+            """
+            ...
 
         def add_iterate(
             self,
@@ -16988,7 +19253,12 @@ class Sequence(Element):
             tolerance: T_positiveDecimal | None = None,
             checkEvery: _t.Union[int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> Iterate: ...
+        ) -> Iterate:
+            """Add a <iterate> child; the keywords are the attributes of Iterate.
+
+            Each frame, the stateful nodes inside start from their zero state and advance @steps steps (fewer with until="converged") before the frame is drawn. For stills; SREP 68 is the animated form.
+            """
+            ...
 
         def add_program(
             self,
@@ -17041,7 +19311,12 @@ class Sequence(Element):
             stepsPerFrame: _t.Union[int, str] | None = None,
             prewarm: _t.Union[int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> ProgramNode: ...
+        ) -> ProgramNode:
+            """Add a <program> child; the keywords are the attributes of ProgramNode.
+
+            Runs the WebAssembly module @src (SHA-256 @sha256) under the determinism rules of SREP 66. In build mode it runs once when the document is built and the scene-render nodes it returns are this node's children, drawn as a group. With mode="step" (SREP 69) it keeps state, advances stepsPerFrame steps per frame after prewarm steps, and draws the width x height RGBA picture its frame export returns.
+            """
+            ...
 
         def add_viewport3D(
             self,
@@ -17089,7 +19364,12 @@ class Sequence(Element):
             background: T_paintType | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Viewport3D: ...
+        ) -> Viewport3D:
+            """Add a <viewport3D> child; the keywords are the attributes of Viewport3D.
+
+            Renders its own 3D scene (its object3D and camera children, and the lights named by @lights) into a width x height picture drawn at its origin. Isolated from the document's 3D scene. SREP 74.
+            """
+            ...
 
     else:
 
@@ -17226,6 +19506,10 @@ class Instance(Element):
         "safeAreaForce", "xs:boolean", use="optional", default="false", fixed=None,
         doc="true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)\nfrom the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate\nplacement outside the safe region is never silent.",
     )
+    """true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)
+    from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate
+    placement outside the safe region is never silent.
+    """
     z: Attr[int, _t.Union[int, str]] = Attr("z", "xs:int", use="optional", default="0", fixed=None, doc="")
     visible: Attr[bool, _t.Union[bool, str]] = Attr(
         "visible", "xs:boolean", use="optional", default="true", fixed=None, doc="",
@@ -17250,8 +19534,12 @@ class Instance(Element):
             "item": None,
         },
         use="optional", default=None, fixed=None,
-        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\n      nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\n      whole frame interval. Only where motion blur is on for the node.",
+        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\nnearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\nwhole frame interval. Only where motion blur is on for the node.",
     )
+    """The shutter angle, in degrees, of this node's motion blur, instead of the project's: the
+    nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the
+    whole frame interval. Only where motion blur is on for the node.
+    """
     startMarker: Attr[str, str] = Attr(
         "startMarker", "xs:NCName", use="optional", default=None, fixed=None, doc="",
     )
@@ -17262,6 +19550,7 @@ class Instance(Element):
         "condition", "expressionString", use="optional", default=None, fixed=None,
         doc='Node is rendered only when the expression is truthy (e.g. "param(\'showPrice\')").',
     )
+    """Node is rendered only when the expression is truthy (e.g. "param('showPrice')")."""
     motionBlur: Attr[G_triStateType, T_triStateType] = Attr(
         "motionBlur", "triStateType", use="optional", default="inherit", fixed=None, doc="",
     )
@@ -17269,6 +19558,7 @@ class Instance(Element):
         "matte", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".',
     )
+    """Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true"."""
     matteMode: Attr[G_matteModeType, T_matteModeType] = Attr(
         "matteMode", "matteModeType", use="optional", default="alpha", fixed=None, doc="",
     )
@@ -17286,16 +19576,24 @@ class Instance(Element):
             "item": None,
         },
         use="optional", default="inherit", fixed=None,
-        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\n      composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\n      on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\n      true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\n      it. SREP 72.",
+        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\ncomposite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\non display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\ntrue and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\nit. SREP 72.",
     )
+    """The space in which this node's own pixels (their colour C and coverage x opacity a)
+    composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same
+    on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is
+    true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit
+    it. SREP 72.
+    """
     parent: Attr[str, _t.Union[str, Element]] = Attr(
         "parent", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".',
     )
+    """Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent"."""
     threeD: Attr[bool, _t.Union[bool, str]] = Attr(
         "threeD", "xs:boolean", use="optional", default="false", fixed=None,
         doc="2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.",
     )
+    """2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY."""
     zDepth: Attr[float, _t.Union[float, int, str]] = Attr(
         "zDepth", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -17318,6 +19616,7 @@ class Instance(Element):
         use="optional", default=None, fixed=None,
         doc="Responsive anchoring: overrides x so the node's box aligns within alignTo.",
     )
+    """Responsive anchoring: overrides x so the node's box aligns within alignTo."""
     alignY: Attr[_t.Literal["top", "middle", "bottom", "stretch"], _t.Literal["top", "middle", "bottom", "stretch"]] = Attr(
         "alignY",
         {
@@ -17378,8 +19677,13 @@ class Instance(Element):
         "symbol", "xs:IDREF", use="required", default=None, fixed=None, doc="",
     )
     blend: Attr[G_blendType, T_blendType] = Attr(
-        "blend", "blendType", use="optional", default="normal", fixed=None, doc="",
+        "blend", "blendType", use="optional", default="normal", fixed=None,
+        doc="The 1.0 modes plus the full separable/non-separable set used by After\nEffects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette\nmodes cut through every layer below within the isolated parent buffer.",
     )
+    """The 1.0 modes plus the full separable/non-separable set used by After
+    Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette
+    modes cut through every layer below within the isolated parent buffer.
+    """
     effects: Attr[_t.List[str], _t.Sequence[_t.Union[str, Element]]] = Attr(
         "effects", "xs:IDREFS", use="optional", default=None, fixed=None, doc="",
     )
@@ -17460,7 +19764,21 @@ class Instance(Element):
             fit: T_fitType | None = None,
             boxWidth: T_positiveLengthType | None = None,
             boxHeight: T_positiveLengthType | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Instantiates a symbol (precomposition / component). The symbol runs on its own clock: local time = (t - start) * speed + clipIn, looped/reversed as for layers, or mapped by timeRemap. override children change attributes of elements inside this instance only; ids inside a symbol are scoped to the instance (effective id = instanceId/innerId).
+
+            Args:
+                safeAreaForce: true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws) from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate placement outside the safe region is never silent.
+                shutterAngle: The shutter angle, in degrees, of this node's motion blur, instead of the project's: the nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the whole frame interval. Only where motion blur is on for the node.
+                condition: Node is rendered only when the expression is truthy (e.g. "param('showPrice')").
+                matte: Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".
+                edgeBlend: The space in which this node's own pixels (their colour C and coverage x opacity a) composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit it. SREP 72.
+                parent: Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".
+                threeD: 2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.
+                alignX: Responsive anchoring: overrides x so the node's box aligns within alignTo.
+                blend: The 1.0 modes plus the full separable/non-separable set used by After Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette modes cut through every layer below within the isolated parent buffer.
+            """
+            ...
 
         def add_animate(
             self,
@@ -17471,7 +19789,9 @@ class Instance(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -17479,7 +19799,12 @@ class Instance(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -17492,7 +19817,12 @@ class Instance(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -17510,7 +19840,12 @@ class Instance(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_mask(
             self,
@@ -17530,7 +19865,12 @@ class Instance(Element):
             expansion: _t.Union[float, int, str] | None = None,
             opacity: T_unitDecimal | None = None,
             mode: _t.Literal["intersect", "add", "subtract", "lighten", "darken", "difference", "none"] | None = None,
-        ) -> Mask: ...
+        ) -> Mask:
+            """Add a <mask> child; the keywords are the attributes of Mask.
+
+            Masks combine in document order using @mode; the 1.0 behaviour (product of coverages) is mode="intersect", the default. Coverage is anti-aliased, then expanded/contracted by @expansion and blurred by @feather pixels.
+            """
+            ...
 
         def add_transformConstraint(
             self,
@@ -17552,7 +19892,12 @@ class Instance(Element):
             softness: T_unitDecimal | None = None,
             progress: T_unitDecimal | None = None,
             autoOrient: _t.Union[bool, str] | None = None,
-        ) -> TransformConstraint: ...
+        ) -> TransformConstraint:
+            """Add a <transformConstraint> child; the keywords are the attributes of TransformConstraint.
+
+            Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target's transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target's world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.
+            """
+            ...
 
         def add_override(
             self,
@@ -17560,14 +19905,24 @@ class Instance(Element):
             target: str | None = None,
             property: str | None = None,
             value: str | None = None,
-        ) -> Override: ...
+        ) -> Override:
+            """Add a <override> child; the keywords are the attributes of Override.
+
+            Sets attribute @property of the element whose id is @target (resolved in the scope of the enclosing instance, layout or variant) to @value.
+            """
+            ...
 
         def add_timeRemap(
             self,
             *,
             defaultInterpolation: T_curveType | None = None,
             frameBlend: _t.Literal["none", "frame-mix", "optical-flow"] | None = None,
-        ) -> TimeRemap: ...
+        ) -> TimeRemap:
+            """Add a <timeRemap> child; the keywords are the attributes of TimeRemap.
+
+            Maps layer-local time (key/@time) to source time (key/@value, seconds). Replaces speed/reverse/loop when present; speed ramps, freezes and reversals are expressed as keys.
+            """
+            ...
 
     else:
 
@@ -17629,6 +19984,10 @@ class Include(Element):
         "safeAreaForce", "xs:boolean", use="optional", default="false", fixed=None,
         doc="true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)\nfrom the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate\nplacement outside the safe region is never silent.",
     )
+    """true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)
+    from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate
+    placement outside the safe region is never silent.
+    """
     z: Attr[int, _t.Union[int, str]] = Attr("z", "xs:int", use="optional", default="0", fixed=None, doc="")
     visible: Attr[bool, _t.Union[bool, str]] = Attr(
         "visible", "xs:boolean", use="optional", default="true", fixed=None, doc="",
@@ -17653,8 +20012,12 @@ class Include(Element):
             "item": None,
         },
         use="optional", default=None, fixed=None,
-        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\n      nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\n      whole frame interval. Only where motion blur is on for the node.",
+        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\nnearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\nwhole frame interval. Only where motion blur is on for the node.",
     )
+    """The shutter angle, in degrees, of this node's motion blur, instead of the project's: the
+    nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the
+    whole frame interval. Only where motion blur is on for the node.
+    """
     startMarker: Attr[str, str] = Attr(
         "startMarker", "xs:NCName", use="optional", default=None, fixed=None, doc="",
     )
@@ -17665,6 +20028,7 @@ class Include(Element):
         "condition", "expressionString", use="optional", default=None, fixed=None,
         doc='Node is rendered only when the expression is truthy (e.g. "param(\'showPrice\')").',
     )
+    """Node is rendered only when the expression is truthy (e.g. "param('showPrice')")."""
     motionBlur: Attr[G_triStateType, T_triStateType] = Attr(
         "motionBlur", "triStateType", use="optional", default="inherit", fixed=None, doc="",
     )
@@ -17672,6 +20036,7 @@ class Include(Element):
         "matte", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".',
     )
+    """Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true"."""
     matteMode: Attr[G_matteModeType, T_matteModeType] = Attr(
         "matteMode", "matteModeType", use="optional", default="alpha", fixed=None, doc="",
     )
@@ -17689,16 +20054,24 @@ class Include(Element):
             "item": None,
         },
         use="optional", default="inherit", fixed=None,
-        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\n      composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\n      on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\n      true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\n      it. SREP 72.",
+        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\ncomposite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\non display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\ntrue and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\nit. SREP 72.",
     )
+    """The space in which this node's own pixels (their colour C and coverage x opacity a)
+    composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same
+    on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is
+    true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit
+    it. SREP 72.
+    """
     parent: Attr[str, _t.Union[str, Element]] = Attr(
         "parent", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".',
     )
+    """Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent"."""
     threeD: Attr[bool, _t.Union[bool, str]] = Attr(
         "threeD", "xs:boolean", use="optional", default="false", fixed=None,
         doc="2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.",
     )
+    """2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY."""
     zDepth: Attr[float, _t.Union[float, int, str]] = Attr(
         "zDepth", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -17721,6 +20094,7 @@ class Include(Element):
         use="optional", default=None, fixed=None,
         doc="Responsive anchoring: overrides x so the node's box aligns within alignTo.",
     )
+    """Responsive anchoring: overrides x so the node's box aligns within alignTo."""
     alignY: Attr[_t.Literal["top", "middle", "bottom", "stretch"], _t.Literal["top", "middle", "bottom", "stretch"]] = Attr(
         "alignY",
         {
@@ -17827,7 +20201,20 @@ class Include(Element):
             src: str | None = None,
             symbol: str | None = None,
             sha256: T_sha256Type | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Pulls a symbol from another scene-render document (@src#@symbol) or that document's whole composition when @symbol is absent. The included file's assets, paints, styles and effects are merged under the namespace @id/.
+
+            Args:
+                safeAreaForce: true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws) from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate placement outside the safe region is never silent.
+                shutterAngle: The shutter angle, in degrees, of this node's motion blur, instead of the project's: the nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the whole frame interval. Only where motion blur is on for the node.
+                condition: Node is rendered only when the expression is truthy (e.g. "param('showPrice')").
+                matte: Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".
+                edgeBlend: The space in which this node's own pixels (their colour C and coverage x opacity a) composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit it. SREP 72.
+                parent: Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".
+                threeD: 2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.
+                alignX: Responsive anchoring: overrides x so the node's box aligns within alignTo.
+            """
+            ...
 
         def add_animate(
             self,
@@ -17838,7 +20225,9 @@ class Include(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -17846,7 +20235,12 @@ class Include(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -17859,7 +20253,12 @@ class Include(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -17877,7 +20276,12 @@ class Include(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_mask(
             self,
@@ -17897,7 +20301,12 @@ class Include(Element):
             expansion: _t.Union[float, int, str] | None = None,
             opacity: T_unitDecimal | None = None,
             mode: _t.Literal["intersect", "add", "subtract", "lighten", "darken", "difference", "none"] | None = None,
-        ) -> Mask: ...
+        ) -> Mask:
+            """Add a <mask> child; the keywords are the attributes of Mask.
+
+            Masks combine in document order using @mode; the 1.0 behaviour (product of coverages) is mode="intersect", the default. Coverage is anti-aliased, then expanded/contracted by @expansion and blurred by @feather pixels.
+            """
+            ...
 
         def add_transformConstraint(
             self,
@@ -17919,7 +20328,12 @@ class Include(Element):
             softness: T_unitDecimal | None = None,
             progress: T_unitDecimal | None = None,
             autoOrient: _t.Union[bool, str] | None = None,
-        ) -> TransformConstraint: ...
+        ) -> TransformConstraint:
+            """Add a <transformConstraint> child; the keywords are the attributes of TransformConstraint.
+
+            Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target's transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target's world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.
+            """
+            ...
 
         def add_override(
             self,
@@ -17927,7 +20341,12 @@ class Include(Element):
             target: str | None = None,
             property: str | None = None,
             value: str | None = None,
-        ) -> Override: ...
+        ) -> Override:
+            """Add a <override> child; the keywords are the attributes of Override.
+
+            Sets attribute @property of the element whose id is @target (resolved in the scope of the enclosing instance, layout or variant) to @value.
+            """
+            ...
 
     else:
 
@@ -18036,7 +20455,9 @@ class Points(Element):
             height: T_nonNegativeDecimal | None = None,
             at: T_pointListType | None = None,
             seed: _t.Union[int, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Generates the points on which a repeat places its copies: one copy per point, copy i on point i, in the repeat's own space (pixels, +y down). type grid (columns x rows, centred on the origin), along-path (count points at equal arc length along @path), scatter (count seeded points inside width x height centred on the origin, or inside @path), vertices (one point per vertex of @path) or list (the pairs of @at). Expressions inside the repeat read pointX, pointY, pointAngle, pointU and pointRandom."""
+            ...
 
         def add_animate(
             self,
@@ -18047,7 +20468,9 @@ class Points(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
     else:
 
@@ -18118,6 +20541,10 @@ class Repeat(Element):
         "safeAreaForce", "xs:boolean", use="optional", default="false", fixed=None,
         doc="true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)\nfrom the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate\nplacement outside the safe region is never silent.",
     )
+    """true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)
+    from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate
+    placement outside the safe region is never silent.
+    """
     z: Attr[int, _t.Union[int, str]] = Attr("z", "xs:int", use="optional", default="0", fixed=None, doc="")
     visible: Attr[bool, _t.Union[bool, str]] = Attr(
         "visible", "xs:boolean", use="optional", default="true", fixed=None, doc="",
@@ -18142,8 +20569,12 @@ class Repeat(Element):
             "item": None,
         },
         use="optional", default=None, fixed=None,
-        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\n      nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\n      whole frame interval. Only where motion blur is on for the node.",
+        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\nnearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\nwhole frame interval. Only where motion blur is on for the node.",
     )
+    """The shutter angle, in degrees, of this node's motion blur, instead of the project's: the
+    nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the
+    whole frame interval. Only where motion blur is on for the node.
+    """
     startMarker: Attr[str, str] = Attr(
         "startMarker", "xs:NCName", use="optional", default=None, fixed=None, doc="",
     )
@@ -18154,6 +20585,7 @@ class Repeat(Element):
         "condition", "expressionString", use="optional", default=None, fixed=None,
         doc='Node is rendered only when the expression is truthy (e.g. "param(\'showPrice\')").',
     )
+    """Node is rendered only when the expression is truthy (e.g. "param('showPrice')")."""
     motionBlur: Attr[G_triStateType, T_triStateType] = Attr(
         "motionBlur", "triStateType", use="optional", default="inherit", fixed=None, doc="",
     )
@@ -18161,6 +20593,7 @@ class Repeat(Element):
         "matte", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".',
     )
+    """Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true"."""
     matteMode: Attr[G_matteModeType, T_matteModeType] = Attr(
         "matteMode", "matteModeType", use="optional", default="alpha", fixed=None, doc="",
     )
@@ -18178,16 +20611,24 @@ class Repeat(Element):
             "item": None,
         },
         use="optional", default="inherit", fixed=None,
-        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\n      composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\n      on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\n      true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\n      it. SREP 72.",
+        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\ncomposite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\non display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\ntrue and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\nit. SREP 72.",
     )
+    """The space in which this node's own pixels (their colour C and coverage x opacity a)
+    composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same
+    on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is
+    true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit
+    it. SREP 72.
+    """
     parent: Attr[str, _t.Union[str, Element]] = Attr(
         "parent", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".',
     )
+    """Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent"."""
     threeD: Attr[bool, _t.Union[bool, str]] = Attr(
         "threeD", "xs:boolean", use="optional", default="false", fixed=None,
         doc="2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.",
     )
+    """2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY."""
     zDepth: Attr[float, _t.Union[float, int, str]] = Attr(
         "zDepth", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -18210,6 +20651,7 @@ class Repeat(Element):
         use="optional", default=None, fixed=None,
         doc="Responsive anchoring: overrides x so the node's box aligns within alignTo.",
     )
+    """Responsive anchoring: overrides x so the node's box aligns within alignTo."""
     alignY: Attr[_t.Literal["top", "middle", "bottom", "stretch"], _t.Literal["top", "middle", "bottom", "stretch"]] = Attr(
         "alignY",
         {
@@ -18298,8 +20740,13 @@ class Repeat(Element):
         "timeStep", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
     blend: Attr[G_blendType, T_blendType] = Attr(
-        "blend", "blendType", use="optional", default="normal", fixed=None, doc="",
+        "blend", "blendType", use="optional", default="normal", fixed=None,
+        doc="The 1.0 modes plus the full separable/non-separable set used by After\nEffects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette\nmodes cut through every layer below within the isolated parent buffer.",
     )
+    """The 1.0 modes plus the full separable/non-separable set used by After
+    Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette
+    modes cut through every layer below within the isolated parent buffer.
+    """
 
     if _t.TYPE_CHECKING:
 
@@ -18354,7 +20801,21 @@ class Repeat(Element):
             opacityStep: T_unitDecimal | None = None,
             timeStep: _t.Union[float, int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Generates copies of its children: @count copies, or one per item of the list parameter / data rows named by @over. Inside, expressions read index, count and param(@var) (the current item). Copy i receives the cumulative offsets i*offsetX, i*offsetY, i*rotationStep, scaleStep^i, opacity - i*opacityStep and a start delay of i*timeStep (stagger).
+
+            Args:
+                safeAreaForce: true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws) from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate placement outside the safe region is never silent.
+                shutterAngle: The shutter angle, in degrees, of this node's motion blur, instead of the project's: the nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the whole frame interval. Only where motion blur is on for the node.
+                condition: Node is rendered only when the expression is truthy (e.g. "param('showPrice')").
+                matte: Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".
+                edgeBlend: The space in which this node's own pixels (their colour C and coverage x opacity a) composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit it. SREP 72.
+                parent: Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".
+                threeD: 2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.
+                alignX: Responsive anchoring: overrides x so the node's box aligns within alignTo.
+                blend: The 1.0 modes plus the full separable/non-separable set used by After Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette modes cut through every layer below within the isolated parent buffer.
+            """
+            ...
 
         def add_points(
             self,
@@ -18373,7 +20834,12 @@ class Repeat(Element):
             height: T_nonNegativeDecimal | None = None,
             at: T_pointListType | None = None,
             seed: _t.Union[int, str] | None = None,
-        ) -> Points: ...
+        ) -> Points:
+            """Add a <points> child; the keywords are the attributes of Points.
+
+            Generates the points on which a repeat places its copies: one copy per point, copy i on point i, in the repeat's own space (pixels, +y down). type grid (columns x rows, centred on the origin), along-path (count points at equal arc length along @path), scatter (count seeded points inside width x height centred on the origin, or inside @path), vertices (one point per vertex of @path) or list (the pairs of @at). Expressions inside the repeat read pointX, pointY, pointAngle, pointU and pointRandom.
+            """
+            ...
 
         def add_animate(
             self,
@@ -18384,7 +20850,9 @@ class Repeat(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -18392,7 +20860,12 @@ class Repeat(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -18405,7 +20878,12 @@ class Repeat(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -18423,7 +20901,12 @@ class Repeat(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_mask(
             self,
@@ -18443,7 +20926,12 @@ class Repeat(Element):
             expansion: _t.Union[float, int, str] | None = None,
             opacity: T_unitDecimal | None = None,
             mode: _t.Literal["intersect", "add", "subtract", "lighten", "darken", "difference", "none"] | None = None,
-        ) -> Mask: ...
+        ) -> Mask:
+            """Add a <mask> child; the keywords are the attributes of Mask.
+
+            Masks combine in document order using @mode; the 1.0 behaviour (product of coverages) is mode="intersect", the default. Coverage is anti-aliased, then expanded/contracted by @expansion and blurred by @feather pixels.
+            """
+            ...
 
         def add_transformConstraint(
             self,
@@ -18465,7 +20953,12 @@ class Repeat(Element):
             softness: T_unitDecimal | None = None,
             progress: T_unitDecimal | None = None,
             autoOrient: _t.Union[bool, str] | None = None,
-        ) -> TransformConstraint: ...
+        ) -> TransformConstraint:
+            """Add a <transformConstraint> child; the keywords are the attributes of TransformConstraint.
+
+            Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target's transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target's world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.
+            """
+            ...
 
         def add_group(
             self,
@@ -18521,7 +21014,9 @@ class Repeat(Element):
             gridColumns: _t.Union[int, str] | None = None,
             timeOffset: _t.Union[float, int, str] | None = None,
             timeScale: T_positiveDecimal | None = None,
-        ) -> Group: ...
+        ) -> Group:
+            """Add a <group> child; the keywords are the attributes of Group."""
+            ...
 
         def add_sequence(
             self,
@@ -18580,7 +21075,12 @@ class Repeat(Element):
             timeGap: _t.Union[float, int, str] | None = None,
             transition: str | None = None,
             transitionDuration: T_positiveDecimal | None = None,
-        ) -> Sequence: ...
+        ) -> Sequence:
+            """Add a <sequence> child; the keywords are the attributes of Sequence.
+
+            Children play one after another: each child's start is the previous child's end plus @timeGap seconds (negative values overlap). A child's own start is an additional offset. If @transition is set, every junction gets that transition with @transitionDuration unless an explicit transition exists.
+            """
+            ...
 
         def add_layer(
             self,
@@ -18649,7 +21149,12 @@ class Repeat(Element):
             volume: T_unitDecimal | None = None,
             mute: _t.Union[bool, str] | None = None,
             audioBus: _t.Union[str, Element] | None = None,
-        ) -> Layer: ...
+        ) -> Layer:
+            """Add a <layer> child; the keywords are the attributes of Layer.
+
+            Places an asset. timeRemap, when present, replaces speed/reverse/loop. fit/boxWidth/boxHeight scale the asset into a box (responsive media); crop* trim fractions of the source. textAnimator and textPath apply when the asset is text. volume/mute control a video asset's own audio, which is mixed into audioMix bus @audioBus (default: master).
+            """
+            ...
 
         def add_shape(
             self,
@@ -18727,7 +21232,9 @@ class Repeat(Element):
             region: _t.Union[str, Element] | None = None,
             regionLayer: _t.Union[str, Element] | None = None,
             regionPadding: _t.Union[float, int, str] | None = None,
-        ) -> Shape: ...
+        ) -> Shape:
+            """Add a <shape> child; the keywords are the attributes of Shape."""
+            ...
 
         def add_connector(
             self,
@@ -18783,7 +21290,12 @@ class Repeat(Element):
             labelAt: T_unitDecimal | None = None,
             labelOffset: _t.Union[float, int, str] | None = None,
             labelOrient: _t.Literal["horizontal", "along"] | None = None,
-        ) -> Connector: ...
+        ) -> Connector:
+            """Add a <connector> child; the keywords are the attributes of Connector.
+
+            A line between two nodes (or fixed points) that is recomputed every frame, so it stays attached while they move. @from and @to name a group, layer, shape or instance; with anchor auto the line is cut where it leaves the start node's box and enters the end node's box, less fromGap and toGap. route straight, orthogonal (axis-aligned elbows) or curved (bend in degrees); @points are waypoints. A connector has no box and no transform of its own.
+            """
+            ...
 
         def add_object3D(
             self,
@@ -18855,7 +21367,9 @@ class Repeat(Element):
             surface: _t.Literal["blocks"] | None = None,
             surfaceMemoryMiB: _t.Union[int, str] | None = None,
             volume: _t.Union[str, Element] | None = None,
-        ) -> Object3D: ...
+        ) -> Object3D:
+            """Add a <object3D> child; the keywords are the attributes of Object3D."""
+            ...
 
         def add_camera(
             self,
@@ -18897,7 +21411,12 @@ class Repeat(Element):
             pathSamples: _t.Union[int, str] | None = None,
             maxBounces: _t.Union[int, str] | None = None,
             denoise: _t.Union[bool, str] | None = None,
-        ) -> Camera: ...
+        ) -> Camera:
+            """Add a <camera> child; the keywords are the attributes of Camera.
+
+            Physical camera: when focalLength is set, fov derives from focalLength and sensorWidth (mm). depthOfField uses fStop, focusDistance (scene units) and apertureBlades. Several cameras may exist; the active one at time t is the last active camera whose [start, end) contains t (camera switching).
+            """
+            ...
 
         def add_particleEmitter(
             self,
@@ -18984,7 +21503,9 @@ class Repeat(Element):
             preroll: T_nonNegativeDecimal | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> ParticleEmitter: ...
+        ) -> ParticleEmitter:
+            """Add a <particleEmitter> child; the keywords are the attributes of ParticleEmitter."""
+            ...
 
         def add_particles3D(
             self,
@@ -19079,7 +21600,9 @@ class Repeat(Element):
             opacityEnd: T_unitDecimal | None = None,
             sizeCurve: T_curveType | None = None,
             colorCurve: T_curveType | None = None,
-        ) -> Particles3D: ...
+        ) -> Particles3D:
+            """Add a <particles3D> child; the keywords are the attributes of Particles3D."""
+            ...
 
         def add_ocean(
             self,
@@ -19134,7 +21657,9 @@ class Repeat(Element):
             bedResponse: _t.Literal["depthFiltered", "hydrostatic"] | None = None,
             density: T_positiveDecimal | None = None,
             bodyDrag: T_nonNegativeDecimal | None = None,
-        ) -> Ocean: ...
+        ) -> Ocean:
+            """Add a <ocean> child; the keywords are the attributes of Ocean."""
+            ...
 
         def add_blackHole(
             self,
@@ -19145,7 +21670,12 @@ class Repeat(Element):
             x: _t.Union[float, int, str] | None = None,
             y: _t.Union[float, int, str] | None = None,
             z: _t.Union[float, int, str] | None = None,
-        ) -> BlackHole: ...
+        ) -> BlackHole:
+            """Add a <blackHole> child; the keywords are the attributes of BlackHole.
+
+            Version 1.3 or later (BH1). A non-rotating, uncharged black hole in vacuum: the Schwarzschild solution, in units with G = c = 1, so that the mass is a length of scene units and the horizon is at r_s = 2 `mass` (BH1). One per scene (BH2). It is drawn by a camera with `geodesics="true"`; without it nothing is drawn (W11). Its place is the origin of the Schwarzschild coordinates; nothing else about it is authored.
+            """
+            ...
 
         def add_accretionDisk(
             self,
@@ -19164,7 +21694,12 @@ class Repeat(Element):
             rotationX: _t.Union[float, int, str] | None = None,
             rotationY: _t.Union[float, int, str] | None = None,
             rotation: _t.Union[float, int, str] | None = None,
-        ) -> AccretionDisk: ...
+        ) -> AccretionDisk:
+            """Add a <accretionDisk> child; the keywords are the attributes of AccretionDisk.
+
+            Version 1.3. A geometrically thin, optically thick disk of gas on circular orbits in the equatorial plane of the `blackHole` it names (BH3), from `innerRadius` to `outerRadius` in the Schwarzschild radial coordinate, scene units. `innerRadius` is at least the innermost stable circular orbit, 6 `mass` (BH4), and is that when absent; `outerRadius` is beyond it (BH4). Its temperature is the thin-disk profile with a zero-torque inner edge, T(r) = `temperatureScale` f(r) / f(49/36 r_in), f(r) = (r_in / r)^(3/4) (1 - (r_in / r)^(1/2))^(1/4): `temperatureScale`, in kelvin, is the local temperature at the peak, r = 49/36 r_in, before the shift of light. The gas orbits with the angular velocity sqrt(`mass` / r^3) times `timeScale`, in radians per scene second, about the axis of the disk, which is the scene's up, (0, -1, 0), turned by `rotationX`, `rotationY` and `rotation` (about z) degrees composed as an object3D composes them, Rz Ry Rx; seen from above it turns counter-clockwise. The disk is centred on its `blackHole` and has no place of its own. `angularPattern` is the azimuthal structure the gas carries and `seed` fixes it: `none` is a smooth disk, `clumps` (the default) seeded azimuthal noise that rotates differentially, `spiral` seeded logarithmic spiral arms; `contrast` is its amplitude, 0 to 1, and `intensity` scales the brightness. The disk is analytic, a surface the rays meet, and is not made of particles.
+            """
+            ...
 
         def add_flock(
             self,
@@ -19229,7 +21764,12 @@ class Repeat(Element):
             trail: T_nonNegativeDecimal | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Flock: ...
+        ) -> Flock:
+            """Add a <flock> child; the keywords are the attributes of Flock.
+
+            Boids (Reynolds 1987): `count` agents in the width x height box steer by separation, alignment and cohesion with neighbours within `perception`, capped at `maxSpeed` and `maxForce`, kept in the box by `bounds`, and pushed by the named force fields. Drawn like particles (disc, streak or sprite), oriented to their velocity unless `orientToVelocity` is false.
+            """
+            ...
 
         def add_fluid(
             self,
@@ -19285,7 +21825,12 @@ class Repeat(Element):
             useForceFields: _t.Union[bool, str] | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Fluid: ...
+        ) -> Fluid:
+            """Add a <fluid> child; the keywords are the attributes of Fluid.
+
+            Incompressible 2D fluid on a grid (Stam 1999, stable fluids): semi-Lagrangian advection of velocity and coloured dye, viscous diffusion, vorticity confinement and a pressure projection. Sources inject dye (per second) and velocity (px/s) inside their radius. Positions are in the fluid's box.
+            """
+            ...
 
         def add_slime(
             self,
@@ -19344,7 +21889,12 @@ class Repeat(Element):
             colorLow: T_paintType | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Slime: ...
+        ) -> Slime:
+            """Add a <slime> child; the keywords are the attributes of Slime.
+
+            Physarum transport network (Jones 2010): agents sense a trail map ahead and to either side, turn toward the strongest trail, move and deposit; the map diffuses and decays each step. Drawn as the trail map through a two-colour ramp (colorLow at 0, color at `saturation`).
+            """
+            ...
 
         def add_erosion(
             self,
@@ -19407,7 +21957,12 @@ class Repeat(Element):
             colorHigh: T_paintType | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Erosion: ...
+        ) -> Erosion:
+            """Add a <erosion> child; the keywords are the attributes of Erosion.
+
+            Hydraulic erosion of a heightmap by water droplets (Beyer 2015): each droplet runs downhill with inertia, carries sediment up to a capacity that grows with speed, water and slope, erodes within a radius and deposits where it slows or climbs, and evaporates. The terrain starts as fractal noise (or the `heightmap` image's luminance) and is drawn hill-shaded through colorLow to colorHigh.
+            """
+            ...
 
         def add_instance(
             self,
@@ -19459,7 +22014,12 @@ class Repeat(Element):
             fit: T_fitType | None = None,
             boxWidth: T_positiveLengthType | None = None,
             boxHeight: T_positiveLengthType | None = None,
-        ) -> Instance: ...
+        ) -> Instance:
+            """Add a <instance> child; the keywords are the attributes of Instance.
+
+            Instantiates a symbol (precomposition / component). The symbol runs on its own clock: local time = (t - start) * speed + clipIn, looped/reversed as for layers, or mapped by timeRemap. override children change attributes of elements inside this instance only; ids inside a symbol are scoped to the instance (effective id = instanceId/innerId).
+            """
+            ...
 
         def add_include(
             self,
@@ -19503,7 +22063,12 @@ class Repeat(Element):
             src: str | None = None,
             symbol: str | None = None,
             sha256: T_sha256Type | None = None,
-        ) -> Include: ...
+        ) -> Include:
+            """Add a <include> child; the keywords are the attributes of Include.
+
+            Pulls a symbol from another scene-render document (@src#@symbol) or that document's whole composition when @symbol is absent. The included file's assets, paints, styles and effects are merged under the namespace @id/.
+            """
+            ...
 
         def add_repeat(
             self,
@@ -19556,7 +22121,12 @@ class Repeat(Element):
             opacityStep: T_unitDecimal | None = None,
             timeStep: _t.Union[float, int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> Repeat: ...
+        ) -> Repeat:
+            """Add a <repeat> child; the keywords are the attributes of Repeat.
+
+            Generates copies of its children: @count copies, or one per item of the list parameter / data rows named by @over. Inside, expressions read index, count and param(@var) (the current item). Copy i receives the cumulative offsets i*offsetX, i*offsetY, i*rotationStep, scaleStep^i, opacity - i*opacityStep and a start delay of i*timeStep (stagger).
+            """
+            ...
 
         def add_adjustment(
             self,
@@ -19599,7 +22169,12 @@ class Repeat(Element):
             skewY: _t.Union[float, int, str] | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
             blend: T_blendType | None = None,
-        ) -> Adjustment: ...
+        ) -> Adjustment:
+            """Add a <adjustment> child; the keywords are the attributes of Adjustment.
+
+            Adjustment layer: applies @effects to the composite of every sibling below it (lower z / earlier in document order), limited by its masks, matte and opacity, during [start, end).
+            """
+            ...
 
         def add_transition(
             self,
@@ -19619,14 +22194,24 @@ class Repeat(Element):
             shader: str | None = None,
             motionBlur: _t.Union[bool, str] | None = None,
             audio: _t.Literal["crossfade", "equal-power", "cut", "none"] | None = None,
-        ) -> Transition: ...
+        ) -> Transition:
+            """Add a <transition> child; the keywords are the attributes of Transition.
+
+            Transition between sibling nodes @from (outgoing) and @to (incoming), or an in/out transition of a single node when only one is given. The transition window has length @duration, centred on the cut (alignment center), ending at it (end) or starting at it (start). The renderer extends the handles of both nodes by the needed amount.
+            """
+            ...
 
         def add_skeleton(
             self,
             *,
             id: str | None = None,
             weights: str | None = None,
-        ) -> Skeleton: ...
+        ) -> Skeleton:
+            """Add a <skeleton> child; the keywords are the attributes of Skeleton.
+
+            2D bone hierarchy; bind to a node with a deform modifier type="skin" skeleton="id". Bones accept transformConstraint type="ik".
+            """
+            ...
 
         def add_compute(
             self,
@@ -19676,7 +22261,12 @@ class Repeat(Element):
             fractionBits: _t.Union[int, str] | None = None,
             seed: _t.Union[int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> Compute: ...
+        ) -> Compute:
+            """Add a <compute> child; the keywords are the attributes of Compute.
+
+            Runs the WGSL compute shader @src for @invocations invocations; sr_accumulate adds integer amounts into a width x height histogram, which tonemap turns into this node's picture. SREP 67.
+            """
+            ...
 
         def add_iterate(
             self,
@@ -19722,7 +22312,12 @@ class Repeat(Element):
             tolerance: T_positiveDecimal | None = None,
             checkEvery: _t.Union[int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> Iterate: ...
+        ) -> Iterate:
+            """Add a <iterate> child; the keywords are the attributes of Iterate.
+
+            Each frame, the stateful nodes inside start from their zero state and advance @steps steps (fewer with until="converged") before the frame is drawn. For stills; SREP 68 is the animated form.
+            """
+            ...
 
         def add_program(
             self,
@@ -19775,7 +22370,12 @@ class Repeat(Element):
             stepsPerFrame: _t.Union[int, str] | None = None,
             prewarm: _t.Union[int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> ProgramNode: ...
+        ) -> ProgramNode:
+            """Add a <program> child; the keywords are the attributes of ProgramNode.
+
+            Runs the WebAssembly module @src (SHA-256 @sha256) under the determinism rules of SREP 66. In build mode it runs once when the document is built and the scene-render nodes it returns are this node's children, drawn as a group. With mode="step" (SREP 69) it keeps state, advances stepsPerFrame steps per frame after prewarm steps, and draws the width x height RGBA picture its frame export returns.
+            """
+            ...
 
         def add_viewport3D(
             self,
@@ -19823,7 +22423,12 @@ class Repeat(Element):
             background: T_paintType | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Viewport3D: ...
+        ) -> Viewport3D:
+            """Add a <viewport3D> child; the keywords are the attributes of Viewport3D.
+
+            Renders its own 3D scene (its object3D and camera children, and the lights named by @lights) into a width x height picture drawn at its origin. Isolated from the document's 3D scene. SREP 74.
+            """
+            ...
 
     else:
 
@@ -19959,6 +22564,10 @@ class Adjustment(Element):
         "safeAreaForce", "xs:boolean", use="optional", default="false", fixed=None,
         doc="true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)\nfrom the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate\nplacement outside the safe region is never silent.",
     )
+    """true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)
+    from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate
+    placement outside the safe region is never silent.
+    """
     z: Attr[int, _t.Union[int, str]] = Attr("z", "xs:int", use="optional", default="0", fixed=None, doc="")
     visible: Attr[bool, _t.Union[bool, str]] = Attr(
         "visible", "xs:boolean", use="optional", default="true", fixed=None, doc="",
@@ -19983,8 +22592,12 @@ class Adjustment(Element):
             "item": None,
         },
         use="optional", default=None, fixed=None,
-        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\n      nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\n      whole frame interval. Only where motion blur is on for the node.",
+        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\nnearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\nwhole frame interval. Only where motion blur is on for the node.",
     )
+    """The shutter angle, in degrees, of this node's motion blur, instead of the project's: the
+    nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the
+    whole frame interval. Only where motion blur is on for the node.
+    """
     startMarker: Attr[str, str] = Attr(
         "startMarker", "xs:NCName", use="optional", default=None, fixed=None, doc="",
     )
@@ -19995,6 +22608,7 @@ class Adjustment(Element):
         "condition", "expressionString", use="optional", default=None, fixed=None,
         doc='Node is rendered only when the expression is truthy (e.g. "param(\'showPrice\')").',
     )
+    """Node is rendered only when the expression is truthy (e.g. "param('showPrice')")."""
     motionBlur: Attr[G_triStateType, T_triStateType] = Attr(
         "motionBlur", "triStateType", use="optional", default="inherit", fixed=None, doc="",
     )
@@ -20002,6 +22616,7 @@ class Adjustment(Element):
         "matte", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".',
     )
+    """Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true"."""
     matteMode: Attr[G_matteModeType, T_matteModeType] = Attr(
         "matteMode", "matteModeType", use="optional", default="alpha", fixed=None, doc="",
     )
@@ -20019,16 +22634,24 @@ class Adjustment(Element):
             "item": None,
         },
         use="optional", default="inherit", fixed=None,
-        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\n      composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\n      on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\n      true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\n      it. SREP 72.",
+        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\ncomposite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\non display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\ntrue and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\nit. SREP 72.",
     )
+    """The space in which this node's own pixels (their colour C and coverage x opacity a)
+    composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same
+    on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is
+    true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit
+    it. SREP 72.
+    """
     parent: Attr[str, _t.Union[str, Element]] = Attr(
         "parent", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".',
     )
+    """Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent"."""
     threeD: Attr[bool, _t.Union[bool, str]] = Attr(
         "threeD", "xs:boolean", use="optional", default="false", fixed=None,
         doc="2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.",
     )
+    """2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY."""
     zDepth: Attr[float, _t.Union[float, int, str]] = Attr(
         "zDepth", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -20051,6 +22674,7 @@ class Adjustment(Element):
         use="optional", default=None, fixed=None,
         doc="Responsive anchoring: overrides x so the node's box aligns within alignTo.",
     )
+    """Responsive anchoring: overrides x so the node's box aligns within alignTo."""
     alignY: Attr[_t.Literal["top", "middle", "bottom", "stretch"], _t.Literal["top", "middle", "bottom", "stretch"]] = Attr(
         "alignY",
         {
@@ -20111,8 +22735,13 @@ class Adjustment(Element):
         "effects", "xs:IDREFS", use="required", default=None, fixed=None, doc="",
     )
     blend: Attr[G_blendType, T_blendType] = Attr(
-        "blend", "blendType", use="optional", default="normal", fixed=None, doc="",
+        "blend", "blendType", use="optional", default="normal", fixed=None,
+        doc="The 1.0 modes plus the full separable/non-separable set used by After\nEffects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette\nmodes cut through every layer below within the isolated parent buffer.",
     )
+    """The 1.0 modes plus the full separable/non-separable set used by After
+    Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette
+    modes cut through every layer below within the isolated parent buffer.
+    """
 
     if _t.TYPE_CHECKING:
 
@@ -20157,7 +22786,21 @@ class Adjustment(Element):
             skewY: _t.Union[float, int, str] | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
             blend: T_blendType | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Adjustment layer: applies @effects to the composite of every sibling below it (lower z / earlier in document order), limited by its masks, matte and opacity, during [start, end).
+
+            Args:
+                safeAreaForce: true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws) from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate placement outside the safe region is never silent.
+                shutterAngle: The shutter angle, in degrees, of this node's motion blur, instead of the project's: the nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the whole frame interval. Only where motion blur is on for the node.
+                condition: Node is rendered only when the expression is truthy (e.g. "param('showPrice')").
+                matte: Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".
+                edgeBlend: The space in which this node's own pixels (their colour C and coverage x opacity a) composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit it. SREP 72.
+                parent: Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".
+                threeD: 2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.
+                alignX: Responsive anchoring: overrides x so the node's box aligns within alignTo.
+                blend: The 1.0 modes plus the full separable/non-separable set used by After Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette modes cut through every layer below within the isolated parent buffer.
+            """
+            ...
 
         def add_animate(
             self,
@@ -20168,7 +22811,9 @@ class Adjustment(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -20176,7 +22821,12 @@ class Adjustment(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -20189,7 +22839,12 @@ class Adjustment(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -20207,7 +22862,12 @@ class Adjustment(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_mask(
             self,
@@ -20227,7 +22887,12 @@ class Adjustment(Element):
             expansion: _t.Union[float, int, str] | None = None,
             opacity: T_unitDecimal | None = None,
             mode: _t.Literal["intersect", "add", "subtract", "lighten", "darken", "difference", "none"] | None = None,
-        ) -> Mask: ...
+        ) -> Mask:
+            """Add a <mask> child; the keywords are the attributes of Mask.
+
+            Masks combine in document order using @mode; the 1.0 behaviour (product of coverages) is mode="intersect", the default. Coverage is anti-aliased, then expanded/contracted by @expansion and blurred by @feather pixels.
+            """
+            ...
 
         def add_transformConstraint(
             self,
@@ -20249,7 +22914,12 @@ class Adjustment(Element):
             softness: T_unitDecimal | None = None,
             progress: T_unitDecimal | None = None,
             autoOrient: _t.Union[bool, str] | None = None,
-        ) -> TransformConstraint: ...
+        ) -> TransformConstraint:
+            """Add a <transformConstraint> child; the keywords are the attributes of TransformConstraint.
+
+            Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target's transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target's world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.
+            """
+            ...
 
     else:
 
@@ -20367,8 +23037,14 @@ class Transition(Element):
         doc="",
     )
     curve: Attr[G_curveType, T_curveType] = Attr(
-        "curve", "curveType", use="optional", default="ease-in-out", fixed=None, doc="",
+        "curve", "curveType", use="optional", default="ease-in-out", fixed=None,
+        doc='1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom,\ntcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping,\n@mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2"\nor key/@easeOut + next key/@easeIn handles.',
     )
+    """1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom,
+    tcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping,
+    @mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2"
+    or key/@easeOut + next key/@easeIn handles.
+    """
     direction: Attr[_t.Literal["left", "right", "up", "down", "angle"], _t.Literal["left", "right", "up", "down", "angle"]] = Attr(
         "direction",
         {
@@ -20386,8 +23062,12 @@ class Transition(Element):
         "angle", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
     color: Attr[G_colorType, T_colorType] = Attr(
-        "color", "colorType", use="optional", default="#000000FF", fixed=None, doc="",
+        "color", "colorType", use="optional", default="#000000FF", fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     softness: Attr[G_unitDecimal, T_unitDecimal] = Attr(
         "softness", "unitDecimal", use="optional", default="0.1", fixed=None, doc="",
     )
@@ -20398,6 +23078,7 @@ class Transition(Element):
         "shader", "xs:anyURI", use="optional", default=None, fixed=None,
         doc='type="shader": GLSL fragment in the gl-transitions convention (vec4 transition(vec2 uv), uniform float progress).',
     )
+    """type="shader": GLSL fragment in the gl-transitions convention (vec4 transition(vec2 uv), uniform float progress)."""
     motionBlur: Attr[bool, _t.Union[bool, str]] = Attr(
         "motionBlur", "xs:boolean", use="optional", default="true", fixed=None, doc="",
     )
@@ -20412,8 +23093,14 @@ class Transition(Element):
             "item": None,
         },
         use="optional", default="crossfade", fixed=None,
-        doc="How the transition mixes the sound of the video layers on its sides (a side that is\n      such a layer, and such layers inside a side), at the transition's eased progress p: crossfade gives the outgoing side\n      1 - p and the incoming side p; equal-power cos(pi p / 2) and sin(pi p / 2); cut the outgoing side while p < 1/2\n      and the incoming side from p = 1/2; none leaves both at their own volume. The gains multiply the layers' volume.\n      A sequence junction cuts its sound when its type is cut and crossfades it otherwise. SREP 82.",
+        doc="How the transition mixes the sound of the video layers on its sides (a side that is\nsuch a layer, and such layers inside a side), at the transition's eased progress p: crossfade gives the outgoing side\n1 - p and the incoming side p; equal-power cos(pi p / 2) and sin(pi p / 2); cut the outgoing side while p < 1/2\nand the incoming side from p = 1/2; none leaves both at their own volume. The gains multiply the layers' volume.\nA sequence junction cuts its sound when its type is cut and crossfades it otherwise. SREP 82.",
     )
+    """How the transition mixes the sound of the video layers on its sides (a side that is
+    such a layer, and such layers inside a side), at the transition's eased progress p: crossfade gives the outgoing side
+    1 - p and the incoming side p; equal-power cos(pi p / 2) and sin(pi p / 2); cut the outgoing side while p < 1/2
+    and the incoming side from p = 1/2; none leaves both at their own volume. The gains multiply the layers' volume.
+    A sequence junction cuts its sound when its type is cut and crossfades it otherwise. SREP 82.
+    """
 
     if _t.TYPE_CHECKING:
 
@@ -20435,7 +23122,16 @@ class Transition(Element):
             shader: str | None = None,
             motionBlur: _t.Union[bool, str] | None = None,
             audio: _t.Literal["crossfade", "equal-power", "cut", "none"] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Transition between sibling nodes @from (outgoing) and @to (incoming), or an in/out transition of a single node when only one is given. The transition window has length @duration, centred on the cut (alignment center), ending at it (end) or starting at it (start). The renderer extends the handles of both nodes by the needed amount.
+
+            Args:
+                curve: 1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom, tcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping, @mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2" or key/@easeOut + next key/@easeIn handles.
+                color: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+                shader: type="shader": GLSL fragment in the gl-transitions convention (vec4 transition(vec2 uv), uniform float progress).
+                audio: How the transition mixes the sound of the video layers on its sides (a side that is such a layer, and such layers inside a side), at the transition's eased progress p: crossfade gives the outgoing side 1 - p and the incoming side p; equal-power cos(pi p / 2) and sin(pi p / 2); cut the outgoing side while p < 1/2 and the incoming side from p = 1/2; none leaves both at their own volume. The gains multiply the layers' volume. A sequence junction cuts its sound when its type is cut and crossfades it otherwise. SREP 82.
+            """
+            ...
 
         def add_animate(
             self,
@@ -20446,7 +23142,9 @@ class Transition(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -20454,7 +23152,12 @@ class Transition(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -20467,7 +23170,12 @@ class Transition(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -20485,14 +23193,24 @@ class Transition(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_param(
             self,
             *,
             name: str | None = None,
             value: str | None = None,
-        ) -> ParamValue: ...
+        ) -> ParamValue:
+            """Add a <param> child; the keywords are the attributes of ParamValue.
+
+            Generic named value (shader uniforms, plugin params).
+            """
+            ...
 
     else:
 
@@ -20545,6 +23263,10 @@ class Flock(Element):
         "safeAreaForce", "xs:boolean", use="optional", default="false", fixed=None,
         doc="true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)\nfrom the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate\nplacement outside the safe region is never silent.",
     )
+    """true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)
+    from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate
+    placement outside the safe region is never silent.
+    """
     z: Attr[int, _t.Union[int, str]] = Attr("z", "xs:int", use="optional", default="0", fixed=None, doc="")
     visible: Attr[bool, _t.Union[bool, str]] = Attr(
         "visible", "xs:boolean", use="optional", default="true", fixed=None, doc="",
@@ -20569,8 +23291,12 @@ class Flock(Element):
             "item": None,
         },
         use="optional", default=None, fixed=None,
-        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\n      nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\n      whole frame interval. Only where motion blur is on for the node.",
+        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\nnearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\nwhole frame interval. Only where motion blur is on for the node.",
     )
+    """The shutter angle, in degrees, of this node's motion blur, instead of the project's: the
+    nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the
+    whole frame interval. Only where motion blur is on for the node.
+    """
     startMarker: Attr[str, str] = Attr(
         "startMarker", "xs:NCName", use="optional", default=None, fixed=None, doc="",
     )
@@ -20581,6 +23307,7 @@ class Flock(Element):
         "condition", "expressionString", use="optional", default=None, fixed=None,
         doc='Node is rendered only when the expression is truthy (e.g. "param(\'showPrice\')").',
     )
+    """Node is rendered only when the expression is truthy (e.g. "param('showPrice')")."""
     motionBlur: Attr[G_triStateType, T_triStateType] = Attr(
         "motionBlur", "triStateType", use="optional", default="inherit", fixed=None, doc="",
     )
@@ -20588,6 +23315,7 @@ class Flock(Element):
         "matte", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".',
     )
+    """Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true"."""
     matteMode: Attr[G_matteModeType, T_matteModeType] = Attr(
         "matteMode", "matteModeType", use="optional", default="alpha", fixed=None, doc="",
     )
@@ -20605,16 +23333,24 @@ class Flock(Element):
             "item": None,
         },
         use="optional", default="inherit", fixed=None,
-        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\n      composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\n      on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\n      true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\n      it. SREP 72.",
+        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\ncomposite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\non display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\ntrue and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\nit. SREP 72.",
     )
+    """The space in which this node's own pixels (their colour C and coverage x opacity a)
+    composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same
+    on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is
+    true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit
+    it. SREP 72.
+    """
     parent: Attr[str, _t.Union[str, Element]] = Attr(
         "parent", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".',
     )
+    """Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent"."""
     threeD: Attr[bool, _t.Union[bool, str]] = Attr(
         "threeD", "xs:boolean", use="optional", default="false", fixed=None,
         doc="2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.",
     )
+    """2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY."""
     zDepth: Attr[float, _t.Union[float, int, str]] = Attr(
         "zDepth", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -20637,6 +23373,7 @@ class Flock(Element):
         use="optional", default=None, fixed=None,
         doc="Responsive anchoring: overrides x so the node's box aligns within alignTo.",
     )
+    """Responsive anchoring: overrides x so the node's box aligns within alignTo."""
     alignY: Attr[_t.Literal["top", "middle", "bottom", "stretch"], _t.Literal["top", "middle", "bottom", "stretch"]] = Attr(
         "alignY",
         {
@@ -20749,16 +23486,22 @@ class Flock(Element):
         "forceFields", "xs:IDREFS", use="optional", default=None, fixed=None,
         doc="The force fields that act on this simulation. Absent: every forceField of the scene. Present: only\nthose listed.",
     )
+    """The force fields that act on this simulation. Absent: every forceField of the scene. Present: only
+    those listed.
+    """
     useForceFields: Attr[bool, _t.Union[bool, str]] = Attr(
         "useForceFields", "xs:boolean", use="optional", default="true", fixed=None,
         doc="false: no force field acts on this simulation, whatever forceFields lists.",
     )
+    """false: no force field acts on this simulation, whatever forceFields lists."""
     size: Attr[G_positiveDecimal, T_positiveDecimal] = Attr(
         "size", "positiveDecimal", use="optional", default="6", fixed=None, doc="",
     )
     color: Attr[G_paintType, T_paintType] = Attr(
-        "color", "paintType", use="optional", default="#FFFFFFFF", fixed=None, doc="",
+        "color", "paintType", use="optional", default="#FFFFFFFF", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     shape: Attr[_t.Literal["disc", "streak", "sprite"], _t.Literal["disc", "streak", "sprite"]] = Attr(
         "shape",
         {
@@ -20777,14 +23520,22 @@ class Flock(Element):
     )
     orientToVelocity: Attr[bool, _t.Union[bool, str]] = Attr(
         "orientToVelocity", "xs:boolean", use="optional", default="true", fixed=None,
-        doc="true (the default): each agent's disc or sprite is turned to point along its velocity.\n      false: it keeps rotation 0 in the flock's space. Streaks always follow the velocity. SREP 73.",
+        doc="true (the default): each agent's disc or sprite is turned to point along its velocity.\nfalse: it keeps rotation 0 in the flock's space. Streaks always follow the velocity. SREP 73.",
     )
+    """true (the default): each agent's disc or sprite is turned to point along its velocity.
+    false: it keeps rotation 0 in the flock's space. Streaks always follow the velocity. SREP 73.
+    """
     trail: Attr[G_nonNegativeDecimal, T_nonNegativeDecimal] = Attr(
         "trail", "nonNegativeDecimal", use="optional", default="0", fixed=None, doc="",
     )
     blend: Attr[G_blendType, T_blendType] = Attr(
-        "blend", "blendType", use="optional", default="normal", fixed=None, doc="",
+        "blend", "blendType", use="optional", default="normal", fixed=None,
+        doc="The 1.0 modes plus the full separable/non-separable set used by After\nEffects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette\nmodes cut through every layer below within the isolated parent buffer.",
     )
+    """The 1.0 modes plus the full separable/non-separable set used by After
+    Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette
+    modes cut through every layer below within the isolated parent buffer.
+    """
     effects: Attr[_t.List[str], _t.Sequence[_t.Union[str, Element]]] = Attr(
         "effects", "xs:IDREFS", use="optional", default=None, fixed=None, doc="",
     )
@@ -20854,7 +23605,25 @@ class Flock(Element):
             trail: T_nonNegativeDecimal | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Boids (Reynolds 1987): `count` agents in the width x height box steer by separation, alignment and cohesion with neighbours within `perception`, capped at `maxSpeed` and `maxForce`, kept in the box by `bounds`, and pushed by the named force fields. Drawn like particles (disc, streak or sprite), oriented to their velocity unless `orientToVelocity` is false.
+
+            Args:
+                safeAreaForce: true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws) from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate placement outside the safe region is never silent.
+                shutterAngle: The shutter angle, in degrees, of this node's motion blur, instead of the project's: the nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the whole frame interval. Only where motion blur is on for the node.
+                condition: Node is rendered only when the expression is truthy (e.g. "param('showPrice')").
+                matte: Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".
+                edgeBlend: The space in which this node's own pixels (their colour C and coverage x opacity a) composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit it. SREP 72.
+                parent: Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".
+                threeD: 2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.
+                alignX: Responsive anchoring: overrides x so the node's box aligns within alignTo.
+                forceFields: The force fields that act on this simulation. Absent: every forceField of the scene. Present: only those listed.
+                useForceFields: false: no force field acts on this simulation, whatever forceFields lists.
+                color: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                orientToVelocity: true (the default): each agent's disc or sprite is turned to point along its velocity. false: it keeps rotation 0 in the flock's space. Streaks always follow the velocity. SREP 73.
+                blend: The 1.0 modes plus the full separable/non-separable set used by After Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette modes cut through every layer below within the isolated parent buffer.
+            """
+            ...
 
         def add_animate(
             self,
@@ -20865,7 +23634,9 @@ class Flock(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -20873,7 +23644,12 @@ class Flock(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -20886,7 +23662,12 @@ class Flock(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -20904,7 +23685,12 @@ class Flock(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_mask(
             self,
@@ -20924,7 +23710,12 @@ class Flock(Element):
             expansion: _t.Union[float, int, str] | None = None,
             opacity: T_unitDecimal | None = None,
             mode: _t.Literal["intersect", "add", "subtract", "lighten", "darken", "difference", "none"] | None = None,
-        ) -> Mask: ...
+        ) -> Mask:
+            """Add a <mask> child; the keywords are the attributes of Mask.
+
+            Masks combine in document order using @mode; the 1.0 behaviour (product of coverages) is mode="intersect", the default. Coverage is anti-aliased, then expanded/contracted by @expansion and blurred by @feather pixels.
+            """
+            ...
 
         def add_transformConstraint(
             self,
@@ -20946,7 +23737,12 @@ class Flock(Element):
             softness: T_unitDecimal | None = None,
             progress: T_unitDecimal | None = None,
             autoOrient: _t.Union[bool, str] | None = None,
-        ) -> TransformConstraint: ...
+        ) -> TransformConstraint:
+            """Add a <transformConstraint> child; the keywords are the attributes of TransformConstraint.
+
+            Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target's transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target's world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.
+            """
+            ...
 
     else:
 
@@ -20988,8 +23784,10 @@ class FluidSource(Element):
         "radius", "positiveDecimal", use="optional", default="20", fixed=None, doc="",
     )
     color: Attr[G_paintType, T_paintType] = Attr(
-        "color", "paintType", use="optional", default="#FFFFFFFF", fixed=None, doc="",
+        "color", "paintType", use="optional", default="#FFFFFFFF", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     density: Attr[G_nonNegativeDecimal, T_nonNegativeDecimal] = Attr(
         "density", "nonNegativeDecimal", use="optional", default="1", fixed=None, doc="",
     )
@@ -21020,7 +23818,11 @@ class FluidSource(Element):
             velocityY: _t.Union[float, int, str] | None = None,
             start: _t.Union[float, int, str] | None = None,
             end: _t.Union[float, int, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                color: A colour or url(#id) of a paints/* gradient, pattern or noise.
+            """
+            ...
 
 
 class Fluid(Element):
@@ -21057,6 +23859,10 @@ class Fluid(Element):
         "safeAreaForce", "xs:boolean", use="optional", default="false", fixed=None,
         doc="true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)\nfrom the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate\nplacement outside the safe region is never silent.",
     )
+    """true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)
+    from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate
+    placement outside the safe region is never silent.
+    """
     z: Attr[int, _t.Union[int, str]] = Attr("z", "xs:int", use="optional", default="0", fixed=None, doc="")
     visible: Attr[bool, _t.Union[bool, str]] = Attr(
         "visible", "xs:boolean", use="optional", default="true", fixed=None, doc="",
@@ -21081,8 +23887,12 @@ class Fluid(Element):
             "item": None,
         },
         use="optional", default=None, fixed=None,
-        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\n      nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\n      whole frame interval. Only where motion blur is on for the node.",
+        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\nnearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\nwhole frame interval. Only where motion blur is on for the node.",
     )
+    """The shutter angle, in degrees, of this node's motion blur, instead of the project's: the
+    nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the
+    whole frame interval. Only where motion blur is on for the node.
+    """
     startMarker: Attr[str, str] = Attr(
         "startMarker", "xs:NCName", use="optional", default=None, fixed=None, doc="",
     )
@@ -21093,6 +23903,7 @@ class Fluid(Element):
         "condition", "expressionString", use="optional", default=None, fixed=None,
         doc='Node is rendered only when the expression is truthy (e.g. "param(\'showPrice\')").',
     )
+    """Node is rendered only when the expression is truthy (e.g. "param('showPrice')")."""
     motionBlur: Attr[G_triStateType, T_triStateType] = Attr(
         "motionBlur", "triStateType", use="optional", default="inherit", fixed=None, doc="",
     )
@@ -21100,6 +23911,7 @@ class Fluid(Element):
         "matte", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".',
     )
+    """Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true"."""
     matteMode: Attr[G_matteModeType, T_matteModeType] = Attr(
         "matteMode", "matteModeType", use="optional", default="alpha", fixed=None, doc="",
     )
@@ -21117,16 +23929,24 @@ class Fluid(Element):
             "item": None,
         },
         use="optional", default="inherit", fixed=None,
-        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\n      composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\n      on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\n      true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\n      it. SREP 72.",
+        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\ncomposite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\non display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\ntrue and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\nit. SREP 72.",
     )
+    """The space in which this node's own pixels (their colour C and coverage x opacity a)
+    composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same
+    on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is
+    true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit
+    it. SREP 72.
+    """
     parent: Attr[str, _t.Union[str, Element]] = Attr(
         "parent", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".',
     )
+    """Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent"."""
     threeD: Attr[bool, _t.Union[bool, str]] = Attr(
         "threeD", "xs:boolean", use="optional", default="false", fixed=None,
         doc="2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.",
     )
+    """2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY."""
     zDepth: Attr[float, _t.Union[float, int, str]] = Attr(
         "zDepth", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -21149,6 +23969,7 @@ class Fluid(Element):
         use="optional", default=None, fixed=None,
         doc="Responsive anchoring: overrides x so the node's box aligns within alignTo.",
     )
+    """Responsive anchoring: overrides x so the node's box aligns within alignTo."""
     alignY: Attr[_t.Literal["top", "middle", "bottom", "stretch"], _t.Literal["top", "middle", "bottom", "stretch"]] = Attr(
         "alignY",
         {
@@ -21272,13 +24093,22 @@ class Fluid(Element):
         "forceFields", "xs:IDREFS", use="optional", default=None, fixed=None,
         doc="The force fields that act on this simulation. Absent: every forceField of the scene. Present: only\nthose listed.",
     )
+    """The force fields that act on this simulation. Absent: every forceField of the scene. Present: only
+    those listed.
+    """
     useForceFields: Attr[bool, _t.Union[bool, str]] = Attr(
         "useForceFields", "xs:boolean", use="optional", default="true", fixed=None,
         doc="false: no force field acts on this simulation, whatever forceFields lists.",
     )
+    """false: no force field acts on this simulation, whatever forceFields lists."""
     blend: Attr[G_blendType, T_blendType] = Attr(
-        "blend", "blendType", use="optional", default="normal", fixed=None, doc="",
+        "blend", "blendType", use="optional", default="normal", fixed=None,
+        doc="The 1.0 modes plus the full separable/non-separable set used by After\nEffects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette\nmodes cut through every layer below within the isolated parent buffer.",
     )
+    """The 1.0 modes plus the full separable/non-separable set used by After
+    Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette
+    modes cut through every layer below within the isolated parent buffer.
+    """
     effects: Attr[_t.List[str], _t.Sequence[_t.Union[str, Element]]] = Attr(
         "effects", "xs:IDREFS", use="optional", default=None, fixed=None, doc="",
     )
@@ -21339,7 +24169,23 @@ class Fluid(Element):
             useForceFields: _t.Union[bool, str] | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Incompressible 2D fluid on a grid (Stam 1999, stable fluids): semi-Lagrangian advection of velocity and coloured dye, viscous diffusion, vorticity confinement and a pressure projection. Sources inject dye (per second) and velocity (px/s) inside their radius. Positions are in the fluid's box.
+
+            Args:
+                safeAreaForce: true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws) from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate placement outside the safe region is never silent.
+                shutterAngle: The shutter angle, in degrees, of this node's motion blur, instead of the project's: the nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the whole frame interval. Only where motion blur is on for the node.
+                condition: Node is rendered only when the expression is truthy (e.g. "param('showPrice')").
+                matte: Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".
+                edgeBlend: The space in which this node's own pixels (their colour C and coverage x opacity a) composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit it. SREP 72.
+                parent: Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".
+                threeD: 2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.
+                alignX: Responsive anchoring: overrides x so the node's box aligns within alignTo.
+                forceFields: The force fields that act on this simulation. Absent: every forceField of the scene. Present: only those listed.
+                useForceFields: false: no force field acts on this simulation, whatever forceFields lists.
+                blend: The 1.0 modes plus the full separable/non-separable set used by After Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette modes cut through every layer below within the isolated parent buffer.
+            """
+            ...
 
         def add_animate(
             self,
@@ -21350,7 +24196,9 @@ class Fluid(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -21358,7 +24206,12 @@ class Fluid(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -21371,7 +24224,12 @@ class Fluid(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -21389,7 +24247,12 @@ class Fluid(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_mask(
             self,
@@ -21409,7 +24272,12 @@ class Fluid(Element):
             expansion: _t.Union[float, int, str] | None = None,
             opacity: T_unitDecimal | None = None,
             mode: _t.Literal["intersect", "add", "subtract", "lighten", "darken", "difference", "none"] | None = None,
-        ) -> Mask: ...
+        ) -> Mask:
+            """Add a <mask> child; the keywords are the attributes of Mask.
+
+            Masks combine in document order using @mode; the 1.0 behaviour (product of coverages) is mode="intersect", the default. Coverage is anti-aliased, then expanded/contracted by @expansion and blurred by @feather pixels.
+            """
+            ...
 
         def add_transformConstraint(
             self,
@@ -21431,7 +24299,12 @@ class Fluid(Element):
             softness: T_unitDecimal | None = None,
             progress: T_unitDecimal | None = None,
             autoOrient: _t.Union[bool, str] | None = None,
-        ) -> TransformConstraint: ...
+        ) -> TransformConstraint:
+            """Add a <transformConstraint> child; the keywords are the attributes of TransformConstraint.
+
+            Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target's transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target's world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.
+            """
+            ...
 
         def add_fluidSource(
             self,
@@ -21445,7 +24318,9 @@ class Fluid(Element):
             velocityY: _t.Union[float, int, str] | None = None,
             start: _t.Union[float, int, str] | None = None,
             end: _t.Union[float, int, str] | None = None,
-        ) -> FluidSource: ...
+        ) -> FluidSource:
+            """Add a <fluidSource> child; the keywords are the attributes of FluidSource."""
+            ...
 
     else:
 
@@ -21503,6 +24378,10 @@ class Slime(Element):
         "safeAreaForce", "xs:boolean", use="optional", default="false", fixed=None,
         doc="true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)\nfrom the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate\nplacement outside the safe region is never silent.",
     )
+    """true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)
+    from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate
+    placement outside the safe region is never silent.
+    """
     z: Attr[int, _t.Union[int, str]] = Attr("z", "xs:int", use="optional", default="0", fixed=None, doc="")
     visible: Attr[bool, _t.Union[bool, str]] = Attr(
         "visible", "xs:boolean", use="optional", default="true", fixed=None, doc="",
@@ -21527,8 +24406,12 @@ class Slime(Element):
             "item": None,
         },
         use="optional", default=None, fixed=None,
-        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\n      nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\n      whole frame interval. Only where motion blur is on for the node.",
+        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\nnearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\nwhole frame interval. Only where motion blur is on for the node.",
     )
+    """The shutter angle, in degrees, of this node's motion blur, instead of the project's: the
+    nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the
+    whole frame interval. Only where motion blur is on for the node.
+    """
     startMarker: Attr[str, str] = Attr(
         "startMarker", "xs:NCName", use="optional", default=None, fixed=None, doc="",
     )
@@ -21539,6 +24422,7 @@ class Slime(Element):
         "condition", "expressionString", use="optional", default=None, fixed=None,
         doc='Node is rendered only when the expression is truthy (e.g. "param(\'showPrice\')").',
     )
+    """Node is rendered only when the expression is truthy (e.g. "param('showPrice')")."""
     motionBlur: Attr[G_triStateType, T_triStateType] = Attr(
         "motionBlur", "triStateType", use="optional", default="inherit", fixed=None, doc="",
     )
@@ -21546,6 +24430,7 @@ class Slime(Element):
         "matte", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".',
     )
+    """Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true"."""
     matteMode: Attr[G_matteModeType, T_matteModeType] = Attr(
         "matteMode", "matteModeType", use="optional", default="alpha", fixed=None, doc="",
     )
@@ -21563,16 +24448,24 @@ class Slime(Element):
             "item": None,
         },
         use="optional", default="inherit", fixed=None,
-        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\n      composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\n      on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\n      true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\n      it. SREP 72.",
+        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\ncomposite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\non display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\ntrue and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\nit. SREP 72.",
     )
+    """The space in which this node's own pixels (their colour C and coverage x opacity a)
+    composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same
+    on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is
+    true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit
+    it. SREP 72.
+    """
     parent: Attr[str, _t.Union[str, Element]] = Attr(
         "parent", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".',
     )
+    """Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent"."""
     threeD: Attr[bool, _t.Union[bool, str]] = Attr(
         "threeD", "xs:boolean", use="optional", default="false", fixed=None,
         doc="2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.",
     )
+    """2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY."""
     zDepth: Attr[float, _t.Union[float, int, str]] = Attr(
         "zDepth", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -21595,6 +24488,7 @@ class Slime(Element):
         use="optional", default=None, fixed=None,
         doc="Responsive anchoring: overrides x so the node's box aligns within alignTo.",
     )
+    """Responsive anchoring: overrides x so the node's box aligns within alignTo."""
     alignY: Attr[_t.Literal["top", "middle", "bottom", "stretch"], _t.Literal["top", "middle", "bottom", "stretch"]] = Attr(
         "alignY",
         {
@@ -21724,14 +24618,23 @@ class Slime(Element):
         "saturation", "positiveDecimal", use="optional", default="4", fixed=None, doc="",
     )
     color: Attr[G_paintType, T_paintType] = Attr(
-        "color", "paintType", use="optional", default="#FFD27AFF", fixed=None, doc="",
+        "color", "paintType", use="optional", default="#FFD27AFF", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     colorLow: Attr[G_paintType, T_paintType] = Attr(
-        "colorLow", "paintType", use="optional", default="#00000000", fixed=None, doc="",
+        "colorLow", "paintType", use="optional", default="#00000000", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     blend: Attr[G_blendType, T_blendType] = Attr(
-        "blend", "blendType", use="optional", default="normal", fixed=None, doc="",
+        "blend", "blendType", use="optional", default="normal", fixed=None,
+        doc="The 1.0 modes plus the full separable/non-separable set used by After\nEffects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette\nmodes cut through every layer below within the isolated parent buffer.",
     )
+    """The 1.0 modes plus the full separable/non-separable set used by After
+    Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette
+    modes cut through every layer below within the isolated parent buffer.
+    """
     effects: Attr[_t.List[str], _t.Sequence[_t.Union[str, Element]]] = Attr(
         "effects", "xs:IDREFS", use="optional", default=None, fixed=None, doc="",
     )
@@ -21795,7 +24698,23 @@ class Slime(Element):
             colorLow: T_paintType | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Physarum transport network (Jones 2010): agents sense a trail map ahead and to either side, turn toward the strongest trail, move and deposit; the map diffuses and decays each step. Drawn as the trail map through a two-colour ramp (colorLow at 0, color at `saturation`).
+
+            Args:
+                safeAreaForce: true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws) from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate placement outside the safe region is never silent.
+                shutterAngle: The shutter angle, in degrees, of this node's motion blur, instead of the project's: the nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the whole frame interval. Only where motion blur is on for the node.
+                condition: Node is rendered only when the expression is truthy (e.g. "param('showPrice')").
+                matte: Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".
+                edgeBlend: The space in which this node's own pixels (their colour C and coverage x opacity a) composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit it. SREP 72.
+                parent: Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".
+                threeD: 2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.
+                alignX: Responsive anchoring: overrides x so the node's box aligns within alignTo.
+                color: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                colorLow: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                blend: The 1.0 modes plus the full separable/non-separable set used by After Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette modes cut through every layer below within the isolated parent buffer.
+            """
+            ...
 
         def add_animate(
             self,
@@ -21806,7 +24725,9 @@ class Slime(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -21814,7 +24735,12 @@ class Slime(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -21827,7 +24753,12 @@ class Slime(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -21845,7 +24776,12 @@ class Slime(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_mask(
             self,
@@ -21865,7 +24801,12 @@ class Slime(Element):
             expansion: _t.Union[float, int, str] | None = None,
             opacity: T_unitDecimal | None = None,
             mode: _t.Literal["intersect", "add", "subtract", "lighten", "darken", "difference", "none"] | None = None,
-        ) -> Mask: ...
+        ) -> Mask:
+            """Add a <mask> child; the keywords are the attributes of Mask.
+
+            Masks combine in document order using @mode; the 1.0 behaviour (product of coverages) is mode="intersect", the default. Coverage is anti-aliased, then expanded/contracted by @expansion and blurred by @feather pixels.
+            """
+            ...
 
         def add_transformConstraint(
             self,
@@ -21887,7 +24828,12 @@ class Slime(Element):
             softness: T_unitDecimal | None = None,
             progress: T_unitDecimal | None = None,
             autoOrient: _t.Union[bool, str] | None = None,
-        ) -> TransformConstraint: ...
+        ) -> TransformConstraint:
+            """Add a <transformConstraint> child; the keywords are the attributes of TransformConstraint.
+
+            Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target's transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target's world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.
+            """
+            ...
 
     else:
 
@@ -21944,6 +24890,10 @@ class Erosion(Element):
         "safeAreaForce", "xs:boolean", use="optional", default="false", fixed=None,
         doc="true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)\nfrom the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate\nplacement outside the safe region is never silent.",
     )
+    """true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)
+    from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate
+    placement outside the safe region is never silent.
+    """
     z: Attr[int, _t.Union[int, str]] = Attr("z", "xs:int", use="optional", default="0", fixed=None, doc="")
     visible: Attr[bool, _t.Union[bool, str]] = Attr(
         "visible", "xs:boolean", use="optional", default="true", fixed=None, doc="",
@@ -21968,8 +24918,12 @@ class Erosion(Element):
             "item": None,
         },
         use="optional", default=None, fixed=None,
-        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\n      nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\n      whole frame interval. Only where motion blur is on for the node.",
+        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\nnearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\nwhole frame interval. Only where motion blur is on for the node.",
     )
+    """The shutter angle, in degrees, of this node's motion blur, instead of the project's: the
+    nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the
+    whole frame interval. Only where motion blur is on for the node.
+    """
     startMarker: Attr[str, str] = Attr(
         "startMarker", "xs:NCName", use="optional", default=None, fixed=None, doc="",
     )
@@ -21980,6 +24934,7 @@ class Erosion(Element):
         "condition", "expressionString", use="optional", default=None, fixed=None,
         doc='Node is rendered only when the expression is truthy (e.g. "param(\'showPrice\')").',
     )
+    """Node is rendered only when the expression is truthy (e.g. "param('showPrice')")."""
     motionBlur: Attr[G_triStateType, T_triStateType] = Attr(
         "motionBlur", "triStateType", use="optional", default="inherit", fixed=None, doc="",
     )
@@ -21987,6 +24942,7 @@ class Erosion(Element):
         "matte", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".',
     )
+    """Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true"."""
     matteMode: Attr[G_matteModeType, T_matteModeType] = Attr(
         "matteMode", "matteModeType", use="optional", default="alpha", fixed=None, doc="",
     )
@@ -22004,16 +24960,24 @@ class Erosion(Element):
             "item": None,
         },
         use="optional", default="inherit", fixed=None,
-        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\n      composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\n      on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\n      true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\n      it. SREP 72.",
+        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\ncomposite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\non display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\ntrue and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\nit. SREP 72.",
     )
+    """The space in which this node's own pixels (their colour C and coverage x opacity a)
+    composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same
+    on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is
+    true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit
+    it. SREP 72.
+    """
     parent: Attr[str, _t.Union[str, Element]] = Attr(
         "parent", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".',
     )
+    """Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent"."""
     threeD: Attr[bool, _t.Union[bool, str]] = Attr(
         "threeD", "xs:boolean", use="optional", default="false", fixed=None,
         doc="2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.",
     )
+    """2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY."""
     zDepth: Attr[float, _t.Union[float, int, str]] = Attr(
         "zDepth", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -22036,6 +25000,7 @@ class Erosion(Element):
         use="optional", default=None, fixed=None,
         doc="Responsive anchoring: overrides x so the node's box aligns within alignTo.",
     )
+    """Responsive anchoring: overrides x so the node's box aligns within alignTo."""
     alignY: Attr[_t.Literal["top", "middle", "bottom", "stretch"], _t.Literal["top", "middle", "bottom", "stretch"]] = Attr(
         "alignY",
         {
@@ -22177,14 +25142,23 @@ class Erosion(Element):
         "sunElevation", "xs:double", use="optional", default="45", fixed=None, doc="",
     )
     colorLow: Attr[G_paintType, T_paintType] = Attr(
-        "colorLow", "paintType", use="optional", default="#3B4A2FFF", fixed=None, doc="",
+        "colorLow", "paintType", use="optional", default="#3B4A2FFF", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     colorHigh: Attr[G_paintType, T_paintType] = Attr(
-        "colorHigh", "paintType", use="optional", default="#E8E2D0FF", fixed=None, doc="",
+        "colorHigh", "paintType", use="optional", default="#E8E2D0FF", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     blend: Attr[G_blendType, T_blendType] = Attr(
-        "blend", "blendType", use="optional", default="normal", fixed=None, doc="",
+        "blend", "blendType", use="optional", default="normal", fixed=None,
+        doc="The 1.0 modes plus the full separable/non-separable set used by After\nEffects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette\nmodes cut through every layer below within the isolated parent buffer.",
     )
+    """The 1.0 modes plus the full separable/non-separable set used by After
+    Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette
+    modes cut through every layer below within the isolated parent buffer.
+    """
     effects: Attr[_t.List[str], _t.Sequence[_t.Union[str, Element]]] = Attr(
         "effects", "xs:IDREFS", use="optional", default=None, fixed=None, doc="",
     )
@@ -22252,7 +25226,23 @@ class Erosion(Element):
             colorHigh: T_paintType | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Hydraulic erosion of a heightmap by water droplets (Beyer 2015): each droplet runs downhill with inertia, carries sediment up to a capacity that grows with speed, water and slope, erodes within a radius and deposits where it slows or climbs, and evaporates. The terrain starts as fractal noise (or the `heightmap` image's luminance) and is drawn hill-shaded through colorLow to colorHigh.
+
+            Args:
+                safeAreaForce: true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws) from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate placement outside the safe region is never silent.
+                shutterAngle: The shutter angle, in degrees, of this node's motion blur, instead of the project's: the nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the whole frame interval. Only where motion blur is on for the node.
+                condition: Node is rendered only when the expression is truthy (e.g. "param('showPrice')").
+                matte: Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".
+                edgeBlend: The space in which this node's own pixels (their colour C and coverage x opacity a) composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit it. SREP 72.
+                parent: Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".
+                threeD: 2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.
+                alignX: Responsive anchoring: overrides x so the node's box aligns within alignTo.
+                colorLow: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                colorHigh: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                blend: The 1.0 modes plus the full separable/non-separable set used by After Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette modes cut through every layer below within the isolated parent buffer.
+            """
+            ...
 
         def add_animate(
             self,
@@ -22263,7 +25253,9 @@ class Erosion(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -22271,7 +25263,12 @@ class Erosion(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -22284,7 +25281,12 @@ class Erosion(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -22302,7 +25304,12 @@ class Erosion(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_mask(
             self,
@@ -22322,7 +25329,12 @@ class Erosion(Element):
             expansion: _t.Union[float, int, str] | None = None,
             opacity: T_unitDecimal | None = None,
             mode: _t.Literal["intersect", "add", "subtract", "lighten", "darken", "difference", "none"] | None = None,
-        ) -> Mask: ...
+        ) -> Mask:
+            """Add a <mask> child; the keywords are the attributes of Mask.
+
+            Masks combine in document order using @mode; the 1.0 behaviour (product of coverages) is mode="intersect", the default. Coverage is anti-aliased, then expanded/contracted by @expansion and blurred by @feather pixels.
+            """
+            ...
 
         def add_transformConstraint(
             self,
@@ -22344,7 +25356,12 @@ class Erosion(Element):
             softness: T_unitDecimal | None = None,
             progress: T_unitDecimal | None = None,
             autoOrient: _t.Union[bool, str] | None = None,
-        ) -> TransformConstraint: ...
+        ) -> TransformConstraint:
+            """Add a <transformConstraint> child; the keywords are the attributes of TransformConstraint.
+
+            Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target's transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target's world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.
+            """
+            ...
 
     else:
 
@@ -22458,7 +25475,9 @@ class ClayBlob(Element):
             rotation: _t.Union[float, int, str] | None = None,
             blend: T_nonNegativeDecimal | None = None,
             subtract: _t.Union[bool, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """One solid of a clay object (primitive="clay"), in the object's local scene units: its signed distance field joins the others with a smooth union of width `blend` (or is carved out with `subtract`). Blobs animate like any element, so topology can change over time."""
+            ...
 
         def add_animate(
             self,
@@ -22469,7 +25488,9 @@ class ClayBlob(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -22477,7 +25498,12 @@ class ClayBlob(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -22490,7 +25516,12 @@ class ClayBlob(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -22508,7 +25539,12 @@ class ClayBlob(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -22559,6 +25595,10 @@ class Viewport3D(Element):
         "safeAreaForce", "xs:boolean", use="optional", default="false", fixed=None,
         doc="true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)\nfrom the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate\nplacement outside the safe region is never silent.",
     )
+    """true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)
+    from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate
+    placement outside the safe region is never silent.
+    """
     z: Attr[int, _t.Union[int, str]] = Attr("z", "xs:int", use="optional", default="0", fixed=None, doc="")
     visible: Attr[bool, _t.Union[bool, str]] = Attr(
         "visible", "xs:boolean", use="optional", default="true", fixed=None, doc="",
@@ -22583,8 +25623,12 @@ class Viewport3D(Element):
             "item": None,
         },
         use="optional", default=None, fixed=None,
-        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\n      nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\n      whole frame interval. Only where motion blur is on for the node.",
+        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\nnearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\nwhole frame interval. Only where motion blur is on for the node.",
     )
+    """The shutter angle, in degrees, of this node's motion blur, instead of the project's: the
+    nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the
+    whole frame interval. Only where motion blur is on for the node.
+    """
     startMarker: Attr[str, str] = Attr(
         "startMarker", "xs:NCName", use="optional", default=None, fixed=None, doc="",
     )
@@ -22595,6 +25639,7 @@ class Viewport3D(Element):
         "condition", "expressionString", use="optional", default=None, fixed=None,
         doc='Node is rendered only when the expression is truthy (e.g. "param(\'showPrice\')").',
     )
+    """Node is rendered only when the expression is truthy (e.g. "param('showPrice')")."""
     motionBlur: Attr[G_triStateType, T_triStateType] = Attr(
         "motionBlur", "triStateType", use="optional", default="inherit", fixed=None, doc="",
     )
@@ -22602,6 +25647,7 @@ class Viewport3D(Element):
         "matte", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".',
     )
+    """Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true"."""
     matteMode: Attr[G_matteModeType, T_matteModeType] = Attr(
         "matteMode", "matteModeType", use="optional", default="alpha", fixed=None, doc="",
     )
@@ -22619,16 +25665,24 @@ class Viewport3D(Element):
             "item": None,
         },
         use="optional", default="inherit", fixed=None,
-        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\n      composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\n      on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\n      true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\n      it. SREP 72.",
+        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\ncomposite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\non display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\ntrue and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\nit. SREP 72.",
     )
+    """The space in which this node's own pixels (their colour C and coverage x opacity a)
+    composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same
+    on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is
+    true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit
+    it. SREP 72.
+    """
     parent: Attr[str, _t.Union[str, Element]] = Attr(
         "parent", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".',
     )
+    """Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent"."""
     threeD: Attr[bool, _t.Union[bool, str]] = Attr(
         "threeD", "xs:boolean", use="optional", default="false", fixed=None,
         doc="2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.",
     )
+    """2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY."""
     zDepth: Attr[float, _t.Union[float, int, str]] = Attr(
         "zDepth", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -22651,6 +25705,7 @@ class Viewport3D(Element):
         use="optional", default=None, fixed=None,
         doc="Responsive anchoring: overrides x so the node's box aligns within alignTo.",
     )
+    """Responsive anchoring: overrides x so the node's box aligns within alignTo."""
     alignY: Attr[_t.Literal["top", "middle", "bottom", "stretch"], _t.Literal["top", "middle", "bottom", "stretch"]] = Attr(
         "alignY",
         {
@@ -22720,11 +25775,18 @@ class Viewport3D(Element):
         "lights", "xs:IDREFS", use="optional", default=None, fixed=None, doc="",
     )
     background: Attr[G_paintType, T_paintType] = Attr(
-        "background", "paintType", use="optional", default="#00000000", fixed=None, doc="",
+        "background", "paintType", use="optional", default="#00000000", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     blend: Attr[G_blendType, T_blendType] = Attr(
-        "blend", "blendType", use="optional", default="normal", fixed=None, doc="",
+        "blend", "blendType", use="optional", default="normal", fixed=None,
+        doc="The 1.0 modes plus the full separable/non-separable set used by After\nEffects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette\nmodes cut through every layer below within the isolated parent buffer.",
     )
+    """The 1.0 modes plus the full separable/non-separable set used by After
+    Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette
+    modes cut through every layer below within the isolated parent buffer.
+    """
     effects: Attr[_t.List[str], _t.Sequence[_t.Union[str, Element]]] = Attr(
         "effects", "xs:IDREFS", use="optional", default=None, fixed=None, doc="",
     )
@@ -22777,7 +25839,22 @@ class Viewport3D(Element):
             background: T_paintType | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Renders its own 3D scene (its object3D and camera children, and the lights named by @lights) into a width x height picture drawn at its origin. Isolated from the document's 3D scene. SREP 74.
+
+            Args:
+                safeAreaForce: true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws) from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate placement outside the safe region is never silent.
+                shutterAngle: The shutter angle, in degrees, of this node's motion blur, instead of the project's: the nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the whole frame interval. Only where motion blur is on for the node.
+                condition: Node is rendered only when the expression is truthy (e.g. "param('showPrice')").
+                matte: Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".
+                edgeBlend: The space in which this node's own pixels (their colour C and coverage x opacity a) composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit it. SREP 72.
+                parent: Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".
+                threeD: 2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.
+                alignX: Responsive anchoring: overrides x so the node's box aligns within alignTo.
+                background: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                blend: The 1.0 modes plus the full separable/non-separable set used by After Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette modes cut through every layer below within the isolated parent buffer.
+            """
+            ...
 
         def add_animate(
             self,
@@ -22788,7 +25865,9 @@ class Viewport3D(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -22796,7 +25875,12 @@ class Viewport3D(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -22809,7 +25893,12 @@ class Viewport3D(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -22827,7 +25916,12 @@ class Viewport3D(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_mask(
             self,
@@ -22847,7 +25941,12 @@ class Viewport3D(Element):
             expansion: _t.Union[float, int, str] | None = None,
             opacity: T_unitDecimal | None = None,
             mode: _t.Literal["intersect", "add", "subtract", "lighten", "darken", "difference", "none"] | None = None,
-        ) -> Mask: ...
+        ) -> Mask:
+            """Add a <mask> child; the keywords are the attributes of Mask.
+
+            Masks combine in document order using @mode; the 1.0 behaviour (product of coverages) is mode="intersect", the default. Coverage is anti-aliased, then expanded/contracted by @expansion and blurred by @feather pixels.
+            """
+            ...
 
         def add_transformConstraint(
             self,
@@ -22869,7 +25968,12 @@ class Viewport3D(Element):
             softness: T_unitDecimal | None = None,
             progress: T_unitDecimal | None = None,
             autoOrient: _t.Union[bool, str] | None = None,
-        ) -> TransformConstraint: ...
+        ) -> TransformConstraint:
+            """Add a <transformConstraint> child; the keywords are the attributes of TransformConstraint.
+
+            Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target's transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target's world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.
+            """
+            ...
 
         def add_object3D(
             self,
@@ -22941,7 +26045,9 @@ class Viewport3D(Element):
             surface: _t.Literal["blocks"] | None = None,
             surfaceMemoryMiB: _t.Union[int, str] | None = None,
             volume: _t.Union[str, Element] | None = None,
-        ) -> Object3D: ...
+        ) -> Object3D:
+            """Add a <object3D> child; the keywords are the attributes of Object3D."""
+            ...
 
         def add_camera(
             self,
@@ -22983,7 +26089,12 @@ class Viewport3D(Element):
             pathSamples: _t.Union[int, str] | None = None,
             maxBounces: _t.Union[int, str] | None = None,
             denoise: _t.Union[bool, str] | None = None,
-        ) -> Camera: ...
+        ) -> Camera:
+            """Add a <camera> child; the keywords are the attributes of Camera.
+
+            Physical camera: when focalLength is set, fov derives from focalLength and sensorWidth (mm). depthOfField uses fStop, focusDistance (scene units) and apertureBlades. Several cameras may exist; the active one at time t is the last active camera whose [start, end) contains t (camera switching).
+            """
+            ...
 
         def add_particles3D(
             self,
@@ -23078,7 +26189,9 @@ class Viewport3D(Element):
             opacityEnd: T_unitDecimal | None = None,
             sizeCurve: T_curveType | None = None,
             colorCurve: T_curveType | None = None,
-        ) -> Particles3D: ...
+        ) -> Particles3D:
+            """Add a <particles3D> child; the keywords are the attributes of Particles3D."""
+            ...
 
     else:
 
@@ -23143,6 +26256,10 @@ class Compute(Element):
         "safeAreaForce", "xs:boolean", use="optional", default="false", fixed=None,
         doc="true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)\nfrom the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate\nplacement outside the safe region is never silent.",
     )
+    """true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)
+    from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate
+    placement outside the safe region is never silent.
+    """
     z: Attr[int, _t.Union[int, str]] = Attr("z", "xs:int", use="optional", default="0", fixed=None, doc="")
     visible: Attr[bool, _t.Union[bool, str]] = Attr(
         "visible", "xs:boolean", use="optional", default="true", fixed=None, doc="",
@@ -23167,8 +26284,12 @@ class Compute(Element):
             "item": None,
         },
         use="optional", default=None, fixed=None,
-        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\n      nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\n      whole frame interval. Only where motion blur is on for the node.",
+        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\nnearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\nwhole frame interval. Only where motion blur is on for the node.",
     )
+    """The shutter angle, in degrees, of this node's motion blur, instead of the project's: the
+    nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the
+    whole frame interval. Only where motion blur is on for the node.
+    """
     startMarker: Attr[str, str] = Attr(
         "startMarker", "xs:NCName", use="optional", default=None, fixed=None, doc="",
     )
@@ -23179,6 +26300,7 @@ class Compute(Element):
         "condition", "expressionString", use="optional", default=None, fixed=None,
         doc='Node is rendered only when the expression is truthy (e.g. "param(\'showPrice\')").',
     )
+    """Node is rendered only when the expression is truthy (e.g. "param('showPrice')")."""
     motionBlur: Attr[G_triStateType, T_triStateType] = Attr(
         "motionBlur", "triStateType", use="optional", default="inherit", fixed=None, doc="",
     )
@@ -23186,6 +26308,7 @@ class Compute(Element):
         "matte", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".',
     )
+    """Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true"."""
     matteMode: Attr[G_matteModeType, T_matteModeType] = Attr(
         "matteMode", "matteModeType", use="optional", default="alpha", fixed=None, doc="",
     )
@@ -23203,16 +26326,24 @@ class Compute(Element):
             "item": None,
         },
         use="optional", default="inherit", fixed=None,
-        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\n      composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\n      on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\n      true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\n      it. SREP 72.",
+        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\ncomposite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\non display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\ntrue and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\nit. SREP 72.",
     )
+    """The space in which this node's own pixels (their colour C and coverage x opacity a)
+    composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same
+    on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is
+    true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit
+    it. SREP 72.
+    """
     parent: Attr[str, _t.Union[str, Element]] = Attr(
         "parent", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".',
     )
+    """Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent"."""
     threeD: Attr[bool, _t.Union[bool, str]] = Attr(
         "threeD", "xs:boolean", use="optional", default="false", fixed=None,
         doc="2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.",
     )
+    """2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY."""
     zDepth: Attr[float, _t.Union[float, int, str]] = Attr(
         "zDepth", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -23235,6 +26366,7 @@ class Compute(Element):
         use="optional", default=None, fixed=None,
         doc="Responsive anchoring: overrides x so the node's box aligns within alignTo.",
     )
+    """Responsive anchoring: overrides x so the node's box aligns within alignTo."""
     alignY: Attr[_t.Literal["top", "middle", "bottom", "stretch"], _t.Literal["top", "middle", "bottom", "stretch"]] = Attr(
         "alignY",
         {
@@ -23344,8 +26476,13 @@ class Compute(Element):
         "seed", "xs:unsignedLong", use="optional", default="0", fixed=None, doc="",
     )
     blend: Attr[G_blendType, T_blendType] = Attr(
-        "blend", "blendType", use="optional", default="normal", fixed=None, doc="",
+        "blend", "blendType", use="optional", default="normal", fixed=None,
+        doc="The 1.0 modes plus the full separable/non-separable set used by After\nEffects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette\nmodes cut through every layer below within the isolated parent buffer.",
     )
+    """The 1.0 modes plus the full separable/non-separable set used by After
+    Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette
+    modes cut through every layer below within the isolated parent buffer.
+    """
 
     if _t.TYPE_CHECKING:
 
@@ -23397,14 +26534,33 @@ class Compute(Element):
             fractionBits: _t.Union[int, str] | None = None,
             seed: _t.Union[int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Runs the WGSL compute shader @src for @invocations invocations; sr_accumulate adds integer amounts into a width x height histogram, which tonemap turns into this node's picture. SREP 67.
+
+            Args:
+                safeAreaForce: true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws) from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate placement outside the safe region is never silent.
+                shutterAngle: The shutter angle, in degrees, of this node's motion blur, instead of the project's: the nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the whole frame interval. Only where motion blur is on for the node.
+                condition: Node is rendered only when the expression is truthy (e.g. "param('showPrice')").
+                matte: Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".
+                edgeBlend: The space in which this node's own pixels (their colour C and coverage x opacity a) composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit it. SREP 72.
+                parent: Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".
+                threeD: 2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.
+                alignX: Responsive anchoring: overrides x so the node's box aligns within alignTo.
+                blend: The 1.0 modes plus the full separable/non-separable set used by After Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette modes cut through every layer below within the isolated parent buffer.
+            """
+            ...
 
         def add_param(
             self,
             *,
             name: str | None = None,
             value: str | None = None,
-        ) -> ParamValue: ...
+        ) -> ParamValue:
+            """Add a <param> child; the keywords are the attributes of ParamValue.
+
+            Generic named value (shader uniforms, plugin params).
+            """
+            ...
 
         def add_tonemap(
             self,
@@ -23415,7 +26571,9 @@ class Compute(Element):
             reference: _t.Union[T_positiveDecimal, _t.Literal["max"]] | None = None,
             ramp: str | None = None,
             alpha: _t.Literal["opaque", "density"] | None = None,
-        ) -> DensityTonemap: ...
+        ) -> DensityTonemap:
+            """Add a <tonemap> child; the keywords are the attributes of DensityTonemap."""
+            ...
 
         def add_animate(
             self,
@@ -23426,7 +26584,9 @@ class Compute(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -23434,7 +26594,12 @@ class Compute(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -23447,7 +26612,12 @@ class Compute(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -23465,7 +26635,12 @@ class Compute(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_mask(
             self,
@@ -23485,7 +26660,12 @@ class Compute(Element):
             expansion: _t.Union[float, int, str] | None = None,
             opacity: T_unitDecimal | None = None,
             mode: _t.Literal["intersect", "add", "subtract", "lighten", "darken", "difference", "none"] | None = None,
-        ) -> Mask: ...
+        ) -> Mask:
+            """Add a <mask> child; the keywords are the attributes of Mask.
+
+            Masks combine in document order using @mode; the 1.0 behaviour (product of coverages) is mode="intersect", the default. Coverage is anti-aliased, then expanded/contracted by @expansion and blurred by @feather pixels.
+            """
+            ...
 
         def add_transformConstraint(
             self,
@@ -23507,7 +26687,12 @@ class Compute(Element):
             softness: T_unitDecimal | None = None,
             progress: T_unitDecimal | None = None,
             autoOrient: _t.Union[bool, str] | None = None,
-        ) -> TransformConstraint: ...
+        ) -> TransformConstraint:
+            """Add a <transformConstraint> child; the keywords are the attributes of TransformConstraint.
+
+            Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target's transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target's world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.
+            """
+            ...
 
     else:
 
@@ -23587,6 +26772,7 @@ class DensityTonemap(Element):
         use="optional", default="max", fixed=None,
         doc='"max" (the largest density in the frame) or a positive number: the density that maps to 1.',
     )
+    """"max" (the largest density in the frame) or a positive number: the density that maps to 1."""
     ramp: Attr[str, str] = Attr(
         "ramp", "xs:string", use="optional", default="#000000FF #FFFFFFFF", fixed=None, doc="",
     )
@@ -23615,7 +26801,11 @@ class DensityTonemap(Element):
             reference: _t.Union[T_positiveDecimal, _t.Literal["max"]] | None = None,
             ramp: str | None = None,
             alpha: _t.Literal["opaque", "density"] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                reference: "max" (the largest density in the frame) or a positive number: the density that maps to 1.
+            """
+            ...
 
 
 class Iterate(Element):
@@ -23677,6 +26867,10 @@ class Iterate(Element):
         "safeAreaForce", "xs:boolean", use="optional", default="false", fixed=None,
         doc="true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)\nfrom the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate\nplacement outside the safe region is never silent.",
     )
+    """true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)
+    from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate
+    placement outside the safe region is never silent.
+    """
     z: Attr[int, _t.Union[int, str]] = Attr("z", "xs:int", use="optional", default="0", fixed=None, doc="")
     visible: Attr[bool, _t.Union[bool, str]] = Attr(
         "visible", "xs:boolean", use="optional", default="true", fixed=None, doc="",
@@ -23701,8 +26895,12 @@ class Iterate(Element):
             "item": None,
         },
         use="optional", default=None, fixed=None,
-        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\n      nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\n      whole frame interval. Only where motion blur is on for the node.",
+        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\nnearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\nwhole frame interval. Only where motion blur is on for the node.",
     )
+    """The shutter angle, in degrees, of this node's motion blur, instead of the project's: the
+    nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the
+    whole frame interval. Only where motion blur is on for the node.
+    """
     startMarker: Attr[str, str] = Attr(
         "startMarker", "xs:NCName", use="optional", default=None, fixed=None, doc="",
     )
@@ -23713,6 +26911,7 @@ class Iterate(Element):
         "condition", "expressionString", use="optional", default=None, fixed=None,
         doc='Node is rendered only when the expression is truthy (e.g. "param(\'showPrice\')").',
     )
+    """Node is rendered only when the expression is truthy (e.g. "param('showPrice')")."""
     motionBlur: Attr[G_triStateType, T_triStateType] = Attr(
         "motionBlur", "triStateType", use="optional", default="inherit", fixed=None, doc="",
     )
@@ -23720,6 +26919,7 @@ class Iterate(Element):
         "matte", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".',
     )
+    """Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true"."""
     matteMode: Attr[G_matteModeType, T_matteModeType] = Attr(
         "matteMode", "matteModeType", use="optional", default="alpha", fixed=None, doc="",
     )
@@ -23737,16 +26937,24 @@ class Iterate(Element):
             "item": None,
         },
         use="optional", default="inherit", fixed=None,
-        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\n      composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\n      on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\n      true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\n      it. SREP 72.",
+        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\ncomposite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\non display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\ntrue and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\nit. SREP 72.",
     )
+    """The space in which this node's own pixels (their colour C and coverage x opacity a)
+    composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same
+    on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is
+    true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit
+    it. SREP 72.
+    """
     parent: Attr[str, _t.Union[str, Element]] = Attr(
         "parent", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".',
     )
+    """Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent"."""
     threeD: Attr[bool, _t.Union[bool, str]] = Attr(
         "threeD", "xs:boolean", use="optional", default="false", fixed=None,
         doc="2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.",
     )
+    """2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY."""
     zDepth: Attr[float, _t.Union[float, int, str]] = Attr(
         "zDepth", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -23769,6 +26977,7 @@ class Iterate(Element):
         use="optional", default=None, fixed=None,
         doc="Responsive anchoring: overrides x so the node's box aligns within alignTo.",
     )
+    """Responsive anchoring: overrides x so the node's box aligns within alignTo."""
     alignY: Attr[_t.Literal["top", "middle", "bottom", "stretch"], _t.Literal["top", "middle", "bottom", "stretch"]] = Attr(
         "alignY",
         {
@@ -23858,8 +27067,13 @@ class Iterate(Element):
         "checkEvery", "xs:positiveInteger", use="optional", default="100", fixed=None, doc="",
     )
     blend: Attr[G_blendType, T_blendType] = Attr(
-        "blend", "blendType", use="optional", default="normal", fixed=None, doc="",
+        "blend", "blendType", use="optional", default="normal", fixed=None,
+        doc="The 1.0 modes plus the full separable/non-separable set used by After\nEffects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette\nmodes cut through every layer below within the isolated parent buffer.",
     )
+    """The 1.0 modes plus the full separable/non-separable set used by After
+    Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette
+    modes cut through every layer below within the isolated parent buffer.
+    """
 
     if _t.TYPE_CHECKING:
 
@@ -23907,7 +27121,21 @@ class Iterate(Element):
             tolerance: T_positiveDecimal | None = None,
             checkEvery: _t.Union[int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Each frame, the stateful nodes inside start from their zero state and advance @steps steps (fewer with until="converged") before the frame is drawn. For stills; SREP 68 is the animated form.
+
+            Args:
+                safeAreaForce: true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws) from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate placement outside the safe region is never silent.
+                shutterAngle: The shutter angle, in degrees, of this node's motion blur, instead of the project's: the nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the whole frame interval. Only where motion blur is on for the node.
+                condition: Node is rendered only when the expression is truthy (e.g. "param('showPrice')").
+                matte: Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".
+                edgeBlend: The space in which this node's own pixels (their colour C and coverage x opacity a) composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit it. SREP 72.
+                parent: Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".
+                threeD: 2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.
+                alignX: Responsive anchoring: overrides x so the node's box aligns within alignTo.
+                blend: The 1.0 modes plus the full separable/non-separable set used by After Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette modes cut through every layer below within the isolated parent buffer.
+            """
+            ...
 
         def add_animate(
             self,
@@ -23918,7 +27146,9 @@ class Iterate(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -23926,7 +27156,12 @@ class Iterate(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -23939,7 +27174,12 @@ class Iterate(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -23957,7 +27197,12 @@ class Iterate(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_mask(
             self,
@@ -23977,7 +27222,12 @@ class Iterate(Element):
             expansion: _t.Union[float, int, str] | None = None,
             opacity: T_unitDecimal | None = None,
             mode: _t.Literal["intersect", "add", "subtract", "lighten", "darken", "difference", "none"] | None = None,
-        ) -> Mask: ...
+        ) -> Mask:
+            """Add a <mask> child; the keywords are the attributes of Mask.
+
+            Masks combine in document order using @mode; the 1.0 behaviour (product of coverages) is mode="intersect", the default. Coverage is anti-aliased, then expanded/contracted by @expansion and blurred by @feather pixels.
+            """
+            ...
 
         def add_transformConstraint(
             self,
@@ -23999,7 +27249,12 @@ class Iterate(Element):
             softness: T_unitDecimal | None = None,
             progress: T_unitDecimal | None = None,
             autoOrient: _t.Union[bool, str] | None = None,
-        ) -> TransformConstraint: ...
+        ) -> TransformConstraint:
+            """Add a <transformConstraint> child; the keywords are the attributes of TransformConstraint.
+
+            Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target's transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target's world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.
+            """
+            ...
 
         def add_group(
             self,
@@ -24055,7 +27310,9 @@ class Iterate(Element):
             gridColumns: _t.Union[int, str] | None = None,
             timeOffset: _t.Union[float, int, str] | None = None,
             timeScale: T_positiveDecimal | None = None,
-        ) -> Group: ...
+        ) -> Group:
+            """Add a <group> child; the keywords are the attributes of Group."""
+            ...
 
         def add_sequence(
             self,
@@ -24114,7 +27371,12 @@ class Iterate(Element):
             timeGap: _t.Union[float, int, str] | None = None,
             transition: str | None = None,
             transitionDuration: T_positiveDecimal | None = None,
-        ) -> Sequence: ...
+        ) -> Sequence:
+            """Add a <sequence> child; the keywords are the attributes of Sequence.
+
+            Children play one after another: each child's start is the previous child's end plus @timeGap seconds (negative values overlap). A child's own start is an additional offset. If @transition is set, every junction gets that transition with @transitionDuration unless an explicit transition exists.
+            """
+            ...
 
         def add_layer(
             self,
@@ -24183,7 +27445,12 @@ class Iterate(Element):
             volume: T_unitDecimal | None = None,
             mute: _t.Union[bool, str] | None = None,
             audioBus: _t.Union[str, Element] | None = None,
-        ) -> Layer: ...
+        ) -> Layer:
+            """Add a <layer> child; the keywords are the attributes of Layer.
+
+            Places an asset. timeRemap, when present, replaces speed/reverse/loop. fit/boxWidth/boxHeight scale the asset into a box (responsive media); crop* trim fractions of the source. textAnimator and textPath apply when the asset is text. volume/mute control a video asset's own audio, which is mixed into audioMix bus @audioBus (default: master).
+            """
+            ...
 
         def add_shape(
             self,
@@ -24261,7 +27528,9 @@ class Iterate(Element):
             region: _t.Union[str, Element] | None = None,
             regionLayer: _t.Union[str, Element] | None = None,
             regionPadding: _t.Union[float, int, str] | None = None,
-        ) -> Shape: ...
+        ) -> Shape:
+            """Add a <shape> child; the keywords are the attributes of Shape."""
+            ...
 
         def add_connector(
             self,
@@ -24317,7 +27586,12 @@ class Iterate(Element):
             labelAt: T_unitDecimal | None = None,
             labelOffset: _t.Union[float, int, str] | None = None,
             labelOrient: _t.Literal["horizontal", "along"] | None = None,
-        ) -> Connector: ...
+        ) -> Connector:
+            """Add a <connector> child; the keywords are the attributes of Connector.
+
+            A line between two nodes (or fixed points) that is recomputed every frame, so it stays attached while they move. @from and @to name a group, layer, shape or instance; with anchor auto the line is cut where it leaves the start node's box and enters the end node's box, less fromGap and toGap. route straight, orthogonal (axis-aligned elbows) or curved (bend in degrees); @points are waypoints. A connector has no box and no transform of its own.
+            """
+            ...
 
         def add_object3D(
             self,
@@ -24389,7 +27663,9 @@ class Iterate(Element):
             surface: _t.Literal["blocks"] | None = None,
             surfaceMemoryMiB: _t.Union[int, str] | None = None,
             volume: _t.Union[str, Element] | None = None,
-        ) -> Object3D: ...
+        ) -> Object3D:
+            """Add a <object3D> child; the keywords are the attributes of Object3D."""
+            ...
 
         def add_camera(
             self,
@@ -24431,7 +27707,12 @@ class Iterate(Element):
             pathSamples: _t.Union[int, str] | None = None,
             maxBounces: _t.Union[int, str] | None = None,
             denoise: _t.Union[bool, str] | None = None,
-        ) -> Camera: ...
+        ) -> Camera:
+            """Add a <camera> child; the keywords are the attributes of Camera.
+
+            Physical camera: when focalLength is set, fov derives from focalLength and sensorWidth (mm). depthOfField uses fStop, focusDistance (scene units) and apertureBlades. Several cameras may exist; the active one at time t is the last active camera whose [start, end) contains t (camera switching).
+            """
+            ...
 
         def add_particleEmitter(
             self,
@@ -24518,7 +27799,9 @@ class Iterate(Element):
             preroll: T_nonNegativeDecimal | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> ParticleEmitter: ...
+        ) -> ParticleEmitter:
+            """Add a <particleEmitter> child; the keywords are the attributes of ParticleEmitter."""
+            ...
 
         def add_particles3D(
             self,
@@ -24613,7 +27896,9 @@ class Iterate(Element):
             opacityEnd: T_unitDecimal | None = None,
             sizeCurve: T_curveType | None = None,
             colorCurve: T_curveType | None = None,
-        ) -> Particles3D: ...
+        ) -> Particles3D:
+            """Add a <particles3D> child; the keywords are the attributes of Particles3D."""
+            ...
 
         def add_ocean(
             self,
@@ -24668,7 +27953,9 @@ class Iterate(Element):
             bedResponse: _t.Literal["depthFiltered", "hydrostatic"] | None = None,
             density: T_positiveDecimal | None = None,
             bodyDrag: T_nonNegativeDecimal | None = None,
-        ) -> Ocean: ...
+        ) -> Ocean:
+            """Add a <ocean> child; the keywords are the attributes of Ocean."""
+            ...
 
         def add_blackHole(
             self,
@@ -24679,7 +27966,12 @@ class Iterate(Element):
             x: _t.Union[float, int, str] | None = None,
             y: _t.Union[float, int, str] | None = None,
             z: _t.Union[float, int, str] | None = None,
-        ) -> BlackHole: ...
+        ) -> BlackHole:
+            """Add a <blackHole> child; the keywords are the attributes of BlackHole.
+
+            Version 1.3 or later (BH1). A non-rotating, uncharged black hole in vacuum: the Schwarzschild solution, in units with G = c = 1, so that the mass is a length of scene units and the horizon is at r_s = 2 `mass` (BH1). One per scene (BH2). It is drawn by a camera with `geodesics="true"`; without it nothing is drawn (W11). Its place is the origin of the Schwarzschild coordinates; nothing else about it is authored.
+            """
+            ...
 
         def add_accretionDisk(
             self,
@@ -24698,7 +27990,12 @@ class Iterate(Element):
             rotationX: _t.Union[float, int, str] | None = None,
             rotationY: _t.Union[float, int, str] | None = None,
             rotation: _t.Union[float, int, str] | None = None,
-        ) -> AccretionDisk: ...
+        ) -> AccretionDisk:
+            """Add a <accretionDisk> child; the keywords are the attributes of AccretionDisk.
+
+            Version 1.3. A geometrically thin, optically thick disk of gas on circular orbits in the equatorial plane of the `blackHole` it names (BH3), from `innerRadius` to `outerRadius` in the Schwarzschild radial coordinate, scene units. `innerRadius` is at least the innermost stable circular orbit, 6 `mass` (BH4), and is that when absent; `outerRadius` is beyond it (BH4). Its temperature is the thin-disk profile with a zero-torque inner edge, T(r) = `temperatureScale` f(r) / f(49/36 r_in), f(r) = (r_in / r)^(3/4) (1 - (r_in / r)^(1/2))^(1/4): `temperatureScale`, in kelvin, is the local temperature at the peak, r = 49/36 r_in, before the shift of light. The gas orbits with the angular velocity sqrt(`mass` / r^3) times `timeScale`, in radians per scene second, about the axis of the disk, which is the scene's up, (0, -1, 0), turned by `rotationX`, `rotationY` and `rotation` (about z) degrees composed as an object3D composes them, Rz Ry Rx; seen from above it turns counter-clockwise. The disk is centred on its `blackHole` and has no place of its own. `angularPattern` is the azimuthal structure the gas carries and `seed` fixes it: `none` is a smooth disk, `clumps` (the default) seeded azimuthal noise that rotates differentially, `spiral` seeded logarithmic spiral arms; `contrast` is its amplitude, 0 to 1, and `intensity` scales the brightness. The disk is analytic, a surface the rays meet, and is not made of particles.
+            """
+            ...
 
         def add_flock(
             self,
@@ -24763,7 +28060,12 @@ class Iterate(Element):
             trail: T_nonNegativeDecimal | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Flock: ...
+        ) -> Flock:
+            """Add a <flock> child; the keywords are the attributes of Flock.
+
+            Boids (Reynolds 1987): `count` agents in the width x height box steer by separation, alignment and cohesion with neighbours within `perception`, capped at `maxSpeed` and `maxForce`, kept in the box by `bounds`, and pushed by the named force fields. Drawn like particles (disc, streak or sprite), oriented to their velocity unless `orientToVelocity` is false.
+            """
+            ...
 
         def add_fluid(
             self,
@@ -24819,7 +28121,12 @@ class Iterate(Element):
             useForceFields: _t.Union[bool, str] | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Fluid: ...
+        ) -> Fluid:
+            """Add a <fluid> child; the keywords are the attributes of Fluid.
+
+            Incompressible 2D fluid on a grid (Stam 1999, stable fluids): semi-Lagrangian advection of velocity and coloured dye, viscous diffusion, vorticity confinement and a pressure projection. Sources inject dye (per second) and velocity (px/s) inside their radius. Positions are in the fluid's box.
+            """
+            ...
 
         def add_slime(
             self,
@@ -24878,7 +28185,12 @@ class Iterate(Element):
             colorLow: T_paintType | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Slime: ...
+        ) -> Slime:
+            """Add a <slime> child; the keywords are the attributes of Slime.
+
+            Physarum transport network (Jones 2010): agents sense a trail map ahead and to either side, turn toward the strongest trail, move and deposit; the map diffuses and decays each step. Drawn as the trail map through a two-colour ramp (colorLow at 0, color at `saturation`).
+            """
+            ...
 
         def add_erosion(
             self,
@@ -24941,7 +28253,12 @@ class Iterate(Element):
             colorHigh: T_paintType | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Erosion: ...
+        ) -> Erosion:
+            """Add a <erosion> child; the keywords are the attributes of Erosion.
+
+            Hydraulic erosion of a heightmap by water droplets (Beyer 2015): each droplet runs downhill with inertia, carries sediment up to a capacity that grows with speed, water and slope, erodes within a radius and deposits where it slows or climbs, and evaporates. The terrain starts as fractal noise (or the `heightmap` image's luminance) and is drawn hill-shaded through colorLow to colorHigh.
+            """
+            ...
 
         def add_instance(
             self,
@@ -24993,7 +28310,12 @@ class Iterate(Element):
             fit: T_fitType | None = None,
             boxWidth: T_positiveLengthType | None = None,
             boxHeight: T_positiveLengthType | None = None,
-        ) -> Instance: ...
+        ) -> Instance:
+            """Add a <instance> child; the keywords are the attributes of Instance.
+
+            Instantiates a symbol (precomposition / component). The symbol runs on its own clock: local time = (t - start) * speed + clipIn, looped/reversed as for layers, or mapped by timeRemap. override children change attributes of elements inside this instance only; ids inside a symbol are scoped to the instance (effective id = instanceId/innerId).
+            """
+            ...
 
         def add_include(
             self,
@@ -25037,7 +28359,12 @@ class Iterate(Element):
             src: str | None = None,
             symbol: str | None = None,
             sha256: T_sha256Type | None = None,
-        ) -> Include: ...
+        ) -> Include:
+            """Add a <include> child; the keywords are the attributes of Include.
+
+            Pulls a symbol from another scene-render document (@src#@symbol) or that document's whole composition when @symbol is absent. The included file's assets, paints, styles and effects are merged under the namespace @id/.
+            """
+            ...
 
         def add_repeat(
             self,
@@ -25090,7 +28417,12 @@ class Iterate(Element):
             opacityStep: T_unitDecimal | None = None,
             timeStep: _t.Union[float, int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> Repeat: ...
+        ) -> Repeat:
+            """Add a <repeat> child; the keywords are the attributes of Repeat.
+
+            Generates copies of its children: @count copies, or one per item of the list parameter / data rows named by @over. Inside, expressions read index, count and param(@var) (the current item). Copy i receives the cumulative offsets i*offsetX, i*offsetY, i*rotationStep, scaleStep^i, opacity - i*opacityStep and a start delay of i*timeStep (stagger).
+            """
+            ...
 
         def add_adjustment(
             self,
@@ -25133,7 +28465,12 @@ class Iterate(Element):
             skewY: _t.Union[float, int, str] | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
             blend: T_blendType | None = None,
-        ) -> Adjustment: ...
+        ) -> Adjustment:
+            """Add a <adjustment> child; the keywords are the attributes of Adjustment.
+
+            Adjustment layer: applies @effects to the composite of every sibling below it (lower z / earlier in document order), limited by its masks, matte and opacity, during [start, end).
+            """
+            ...
 
         def add_transition(
             self,
@@ -25153,14 +28490,24 @@ class Iterate(Element):
             shader: str | None = None,
             motionBlur: _t.Union[bool, str] | None = None,
             audio: _t.Literal["crossfade", "equal-power", "cut", "none"] | None = None,
-        ) -> Transition: ...
+        ) -> Transition:
+            """Add a <transition> child; the keywords are the attributes of Transition.
+
+            Transition between sibling nodes @from (outgoing) and @to (incoming), or an in/out transition of a single node when only one is given. The transition window has length @duration, centred on the cut (alignment center), ending at it (end) or starting at it (start). The renderer extends the handles of both nodes by the needed amount.
+            """
+            ...
 
         def add_skeleton(
             self,
             *,
             id: str | None = None,
             weights: str | None = None,
-        ) -> Skeleton: ...
+        ) -> Skeleton:
+            """Add a <skeleton> child; the keywords are the attributes of Skeleton.
+
+            2D bone hierarchy; bind to a node with a deform modifier type="skin" skeleton="id". Bones accept transformConstraint type="ik".
+            """
+            ...
 
         def add_compute(
             self,
@@ -25210,7 +28557,12 @@ class Iterate(Element):
             fractionBits: _t.Union[int, str] | None = None,
             seed: _t.Union[int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> Compute: ...
+        ) -> Compute:
+            """Add a <compute> child; the keywords are the attributes of Compute.
+
+            Runs the WGSL compute shader @src for @invocations invocations; sr_accumulate adds integer amounts into a width x height histogram, which tonemap turns into this node's picture. SREP 67.
+            """
+            ...
 
         def add_iterate(
             self,
@@ -25256,7 +28608,12 @@ class Iterate(Element):
             tolerance: T_positiveDecimal | None = None,
             checkEvery: _t.Union[int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> Iterate: ...
+        ) -> Iterate:
+            """Add a <iterate> child; the keywords are the attributes of Iterate.
+
+            Each frame, the stateful nodes inside start from their zero state and advance @steps steps (fewer with until="converged") before the frame is drawn. For stills; SREP 68 is the animated form.
+            """
+            ...
 
         def add_program(
             self,
@@ -25309,7 +28666,12 @@ class Iterate(Element):
             stepsPerFrame: _t.Union[int, str] | None = None,
             prewarm: _t.Union[int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> ProgramNode: ...
+        ) -> ProgramNode:
+            """Add a <program> child; the keywords are the attributes of ProgramNode.
+
+            Runs the WebAssembly module @src (SHA-256 @sha256) under the determinism rules of SREP 66. In build mode it runs once when the document is built and the scene-render nodes it returns are this node's children, drawn as a group. With mode="step" (SREP 69) it keeps state, advances stepsPerFrame steps per frame after prewarm steps, and draws the width x height RGBA picture its frame export returns.
+            """
+            ...
 
         def add_viewport3D(
             self,
@@ -25357,7 +28719,12 @@ class Iterate(Element):
             background: T_paintType | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Viewport3D: ...
+        ) -> Viewport3D:
+            """Add a <viewport3D> child; the keywords are the attributes of Viewport3D.
+
+            Renders its own 3D scene (its object3D and camera children, and the lights named by @lights) into a width x height picture drawn at its origin. Isolated from the document's 3D scene. SREP 74.
+            """
+            ...
 
     else:
 
@@ -25554,7 +28921,9 @@ class Composition(Element):
             gridColumns: _t.Union[int, str] | None = None,
             timeOffset: _t.Union[float, int, str] | None = None,
             timeScale: T_positiveDecimal | None = None,
-        ) -> Group: ...
+        ) -> Group:
+            """Add a <group> child; the keywords are the attributes of Group."""
+            ...
 
         def add_sequence(
             self,
@@ -25613,7 +28982,12 @@ class Composition(Element):
             timeGap: _t.Union[float, int, str] | None = None,
             transition: str | None = None,
             transitionDuration: T_positiveDecimal | None = None,
-        ) -> Sequence: ...
+        ) -> Sequence:
+            """Add a <sequence> child; the keywords are the attributes of Sequence.
+
+            Children play one after another: each child's start is the previous child's end plus @timeGap seconds (negative values overlap). A child's own start is an additional offset. If @transition is set, every junction gets that transition with @transitionDuration unless an explicit transition exists.
+            """
+            ...
 
         def add_layer(
             self,
@@ -25682,7 +29056,12 @@ class Composition(Element):
             volume: T_unitDecimal | None = None,
             mute: _t.Union[bool, str] | None = None,
             audioBus: _t.Union[str, Element] | None = None,
-        ) -> Layer: ...
+        ) -> Layer:
+            """Add a <layer> child; the keywords are the attributes of Layer.
+
+            Places an asset. timeRemap, when present, replaces speed/reverse/loop. fit/boxWidth/boxHeight scale the asset into a box (responsive media); crop* trim fractions of the source. textAnimator and textPath apply when the asset is text. volume/mute control a video asset's own audio, which is mixed into audioMix bus @audioBus (default: master).
+            """
+            ...
 
         def add_shape(
             self,
@@ -25760,7 +29139,9 @@ class Composition(Element):
             region: _t.Union[str, Element] | None = None,
             regionLayer: _t.Union[str, Element] | None = None,
             regionPadding: _t.Union[float, int, str] | None = None,
-        ) -> Shape: ...
+        ) -> Shape:
+            """Add a <shape> child; the keywords are the attributes of Shape."""
+            ...
 
         def add_connector(
             self,
@@ -25816,7 +29197,12 @@ class Composition(Element):
             labelAt: T_unitDecimal | None = None,
             labelOffset: _t.Union[float, int, str] | None = None,
             labelOrient: _t.Literal["horizontal", "along"] | None = None,
-        ) -> Connector: ...
+        ) -> Connector:
+            """Add a <connector> child; the keywords are the attributes of Connector.
+
+            A line between two nodes (or fixed points) that is recomputed every frame, so it stays attached while they move. @from and @to name a group, layer, shape or instance; with anchor auto the line is cut where it leaves the start node's box and enters the end node's box, less fromGap and toGap. route straight, orthogonal (axis-aligned elbows) or curved (bend in degrees); @points are waypoints. A connector has no box and no transform of its own.
+            """
+            ...
 
         def add_object3D(
             self,
@@ -25888,7 +29274,9 @@ class Composition(Element):
             surface: _t.Literal["blocks"] | None = None,
             surfaceMemoryMiB: _t.Union[int, str] | None = None,
             volume: _t.Union[str, Element] | None = None,
-        ) -> Object3D: ...
+        ) -> Object3D:
+            """Add a <object3D> child; the keywords are the attributes of Object3D."""
+            ...
 
         def add_camera(
             self,
@@ -25930,7 +29318,12 @@ class Composition(Element):
             pathSamples: _t.Union[int, str] | None = None,
             maxBounces: _t.Union[int, str] | None = None,
             denoise: _t.Union[bool, str] | None = None,
-        ) -> Camera: ...
+        ) -> Camera:
+            """Add a <camera> child; the keywords are the attributes of Camera.
+
+            Physical camera: when focalLength is set, fov derives from focalLength and sensorWidth (mm). depthOfField uses fStop, focusDistance (scene units) and apertureBlades. Several cameras may exist; the active one at time t is the last active camera whose [start, end) contains t (camera switching).
+            """
+            ...
 
         def add_particleEmitter(
             self,
@@ -26017,7 +29410,9 @@ class Composition(Element):
             preroll: T_nonNegativeDecimal | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> ParticleEmitter: ...
+        ) -> ParticleEmitter:
+            """Add a <particleEmitter> child; the keywords are the attributes of ParticleEmitter."""
+            ...
 
         def add_particles3D(
             self,
@@ -26112,7 +29507,9 @@ class Composition(Element):
             opacityEnd: T_unitDecimal | None = None,
             sizeCurve: T_curveType | None = None,
             colorCurve: T_curveType | None = None,
-        ) -> Particles3D: ...
+        ) -> Particles3D:
+            """Add a <particles3D> child; the keywords are the attributes of Particles3D."""
+            ...
 
         def add_ocean(
             self,
@@ -26167,7 +29564,9 @@ class Composition(Element):
             bedResponse: _t.Literal["depthFiltered", "hydrostatic"] | None = None,
             density: T_positiveDecimal | None = None,
             bodyDrag: T_nonNegativeDecimal | None = None,
-        ) -> Ocean: ...
+        ) -> Ocean:
+            """Add a <ocean> child; the keywords are the attributes of Ocean."""
+            ...
 
         def add_blackHole(
             self,
@@ -26178,7 +29577,12 @@ class Composition(Element):
             x: _t.Union[float, int, str] | None = None,
             y: _t.Union[float, int, str] | None = None,
             z: _t.Union[float, int, str] | None = None,
-        ) -> BlackHole: ...
+        ) -> BlackHole:
+            """Add a <blackHole> child; the keywords are the attributes of BlackHole.
+
+            Version 1.3 or later (BH1). A non-rotating, uncharged black hole in vacuum: the Schwarzschild solution, in units with G = c = 1, so that the mass is a length of scene units and the horizon is at r_s = 2 `mass` (BH1). One per scene (BH2). It is drawn by a camera with `geodesics="true"`; without it nothing is drawn (W11). Its place is the origin of the Schwarzschild coordinates; nothing else about it is authored.
+            """
+            ...
 
         def add_accretionDisk(
             self,
@@ -26197,7 +29601,12 @@ class Composition(Element):
             rotationX: _t.Union[float, int, str] | None = None,
             rotationY: _t.Union[float, int, str] | None = None,
             rotation: _t.Union[float, int, str] | None = None,
-        ) -> AccretionDisk: ...
+        ) -> AccretionDisk:
+            """Add a <accretionDisk> child; the keywords are the attributes of AccretionDisk.
+
+            Version 1.3. A geometrically thin, optically thick disk of gas on circular orbits in the equatorial plane of the `blackHole` it names (BH3), from `innerRadius` to `outerRadius` in the Schwarzschild radial coordinate, scene units. `innerRadius` is at least the innermost stable circular orbit, 6 `mass` (BH4), and is that when absent; `outerRadius` is beyond it (BH4). Its temperature is the thin-disk profile with a zero-torque inner edge, T(r) = `temperatureScale` f(r) / f(49/36 r_in), f(r) = (r_in / r)^(3/4) (1 - (r_in / r)^(1/2))^(1/4): `temperatureScale`, in kelvin, is the local temperature at the peak, r = 49/36 r_in, before the shift of light. The gas orbits with the angular velocity sqrt(`mass` / r^3) times `timeScale`, in radians per scene second, about the axis of the disk, which is the scene's up, (0, -1, 0), turned by `rotationX`, `rotationY` and `rotation` (about z) degrees composed as an object3D composes them, Rz Ry Rx; seen from above it turns counter-clockwise. The disk is centred on its `blackHole` and has no place of its own. `angularPattern` is the azimuthal structure the gas carries and `seed` fixes it: `none` is a smooth disk, `clumps` (the default) seeded azimuthal noise that rotates differentially, `spiral` seeded logarithmic spiral arms; `contrast` is its amplitude, 0 to 1, and `intensity` scales the brightness. The disk is analytic, a surface the rays meet, and is not made of particles.
+            """
+            ...
 
         def add_flock(
             self,
@@ -26262,7 +29671,12 @@ class Composition(Element):
             trail: T_nonNegativeDecimal | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Flock: ...
+        ) -> Flock:
+            """Add a <flock> child; the keywords are the attributes of Flock.
+
+            Boids (Reynolds 1987): `count` agents in the width x height box steer by separation, alignment and cohesion with neighbours within `perception`, capped at `maxSpeed` and `maxForce`, kept in the box by `bounds`, and pushed by the named force fields. Drawn like particles (disc, streak or sprite), oriented to their velocity unless `orientToVelocity` is false.
+            """
+            ...
 
         def add_fluid(
             self,
@@ -26318,7 +29732,12 @@ class Composition(Element):
             useForceFields: _t.Union[bool, str] | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Fluid: ...
+        ) -> Fluid:
+            """Add a <fluid> child; the keywords are the attributes of Fluid.
+
+            Incompressible 2D fluid on a grid (Stam 1999, stable fluids): semi-Lagrangian advection of velocity and coloured dye, viscous diffusion, vorticity confinement and a pressure projection. Sources inject dye (per second) and velocity (px/s) inside their radius. Positions are in the fluid's box.
+            """
+            ...
 
         def add_slime(
             self,
@@ -26377,7 +29796,12 @@ class Composition(Element):
             colorLow: T_paintType | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Slime: ...
+        ) -> Slime:
+            """Add a <slime> child; the keywords are the attributes of Slime.
+
+            Physarum transport network (Jones 2010): agents sense a trail map ahead and to either side, turn toward the strongest trail, move and deposit; the map diffuses and decays each step. Drawn as the trail map through a two-colour ramp (colorLow at 0, color at `saturation`).
+            """
+            ...
 
         def add_erosion(
             self,
@@ -26440,7 +29864,12 @@ class Composition(Element):
             colorHigh: T_paintType | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Erosion: ...
+        ) -> Erosion:
+            """Add a <erosion> child; the keywords are the attributes of Erosion.
+
+            Hydraulic erosion of a heightmap by water droplets (Beyer 2015): each droplet runs downhill with inertia, carries sediment up to a capacity that grows with speed, water and slope, erodes within a radius and deposits where it slows or climbs, and evaporates. The terrain starts as fractal noise (or the `heightmap` image's luminance) and is drawn hill-shaded through colorLow to colorHigh.
+            """
+            ...
 
         def add_instance(
             self,
@@ -26492,7 +29921,12 @@ class Composition(Element):
             fit: T_fitType | None = None,
             boxWidth: T_positiveLengthType | None = None,
             boxHeight: T_positiveLengthType | None = None,
-        ) -> Instance: ...
+        ) -> Instance:
+            """Add a <instance> child; the keywords are the attributes of Instance.
+
+            Instantiates a symbol (precomposition / component). The symbol runs on its own clock: local time = (t - start) * speed + clipIn, looped/reversed as for layers, or mapped by timeRemap. override children change attributes of elements inside this instance only; ids inside a symbol are scoped to the instance (effective id = instanceId/innerId).
+            """
+            ...
 
         def add_include(
             self,
@@ -26536,7 +29970,12 @@ class Composition(Element):
             src: str | None = None,
             symbol: str | None = None,
             sha256: T_sha256Type | None = None,
-        ) -> Include: ...
+        ) -> Include:
+            """Add a <include> child; the keywords are the attributes of Include.
+
+            Pulls a symbol from another scene-render document (@src#@symbol) or that document's whole composition when @symbol is absent. The included file's assets, paints, styles and effects are merged under the namespace @id/.
+            """
+            ...
 
         def add_repeat(
             self,
@@ -26589,7 +30028,12 @@ class Composition(Element):
             opacityStep: T_unitDecimal | None = None,
             timeStep: _t.Union[float, int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> Repeat: ...
+        ) -> Repeat:
+            """Add a <repeat> child; the keywords are the attributes of Repeat.
+
+            Generates copies of its children: @count copies, or one per item of the list parameter / data rows named by @over. Inside, expressions read index, count and param(@var) (the current item). Copy i receives the cumulative offsets i*offsetX, i*offsetY, i*rotationStep, scaleStep^i, opacity - i*opacityStep and a start delay of i*timeStep (stagger).
+            """
+            ...
 
         def add_adjustment(
             self,
@@ -26632,7 +30076,12 @@ class Composition(Element):
             skewY: _t.Union[float, int, str] | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
             blend: T_blendType | None = None,
-        ) -> Adjustment: ...
+        ) -> Adjustment:
+            """Add a <adjustment> child; the keywords are the attributes of Adjustment.
+
+            Adjustment layer: applies @effects to the composite of every sibling below it (lower z / earlier in document order), limited by its masks, matte and opacity, during [start, end).
+            """
+            ...
 
         def add_transition(
             self,
@@ -26652,14 +30101,24 @@ class Composition(Element):
             shader: str | None = None,
             motionBlur: _t.Union[bool, str] | None = None,
             audio: _t.Literal["crossfade", "equal-power", "cut", "none"] | None = None,
-        ) -> Transition: ...
+        ) -> Transition:
+            """Add a <transition> child; the keywords are the attributes of Transition.
+
+            Transition between sibling nodes @from (outgoing) and @to (incoming), or an in/out transition of a single node when only one is given. The transition window has length @duration, centred on the cut (alignment center), ending at it (end) or starting at it (start). The renderer extends the handles of both nodes by the needed amount.
+            """
+            ...
 
         def add_skeleton(
             self,
             *,
             id: str | None = None,
             weights: str | None = None,
-        ) -> Skeleton: ...
+        ) -> Skeleton:
+            """Add a <skeleton> child; the keywords are the attributes of Skeleton.
+
+            2D bone hierarchy; bind to a node with a deform modifier type="skin" skeleton="id". Bones accept transformConstraint type="ik".
+            """
+            ...
 
         def add_compute(
             self,
@@ -26709,7 +30168,12 @@ class Composition(Element):
             fractionBits: _t.Union[int, str] | None = None,
             seed: _t.Union[int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> Compute: ...
+        ) -> Compute:
+            """Add a <compute> child; the keywords are the attributes of Compute.
+
+            Runs the WGSL compute shader @src for @invocations invocations; sr_accumulate adds integer amounts into a width x height histogram, which tonemap turns into this node's picture. SREP 67.
+            """
+            ...
 
         def add_iterate(
             self,
@@ -26755,7 +30219,12 @@ class Composition(Element):
             tolerance: T_positiveDecimal | None = None,
             checkEvery: _t.Union[int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> Iterate: ...
+        ) -> Iterate:
+            """Add a <iterate> child; the keywords are the attributes of Iterate.
+
+            Each frame, the stateful nodes inside start from their zero state and advance @steps steps (fewer with until="converged") before the frame is drawn. For stills; SREP 68 is the animated form.
+            """
+            ...
 
         def add_program(
             self,
@@ -26808,7 +30277,12 @@ class Composition(Element):
             stepsPerFrame: _t.Union[int, str] | None = None,
             prewarm: _t.Union[int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> ProgramNode: ...
+        ) -> ProgramNode:
+            """Add a <program> child; the keywords are the attributes of ProgramNode.
+
+            Runs the WebAssembly module @src (SHA-256 @sha256) under the determinism rules of SREP 66. In build mode it runs once when the document is built and the scene-render nodes it returns are this node's children, drawn as a group. With mode="step" (SREP 69) it keeps state, advances stepsPerFrame steps per frame after prewarm steps, and draws the width x height RGBA picture its frame export returns.
+            """
+            ...
 
         def add_viewport3D(
             self,
@@ -26856,7 +30330,12 @@ class Composition(Element):
             background: T_paintType | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Viewport3D: ...
+        ) -> Viewport3D:
+            """Add a <viewport3D> child; the keywords are the attributes of Viewport3D.
+
+            Renders its own 3D scene (its object3D and camera children, and the lights named by @lights) into a width x height picture drawn at its origin. Isolated from the document's 3D scene. SREP 74.
+            """
+            ...
 
     else:
 
@@ -26987,12 +30466,18 @@ class Symbol(Element):
         "duration", "durationType", use="optional", default=None, fixed=None, doc="",
     )
     background: Attr[G_paintType, T_paintType] = Attr(
-        "background", "paintType", use="optional", default="#00000000", fixed=None, doc="",
+        "background", "paintType", use="optional", default="#00000000", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     safeAreaForce: Attr[bool, _t.Union[bool, str]] = Attr(
         "safeAreaForce", "xs:boolean", use="optional", default="false", fixed=None,
         doc="true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)\nfrom the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate\nplacement outside the safe region is never silent.",
     )
+    """true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)
+    from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate
+    placement outside the safe region is never silent.
+    """
 
     if _t.TYPE_CHECKING:
 
@@ -27006,7 +30491,12 @@ class Symbol(Element):
             duration: T_durationType | None = None,
             background: T_paintType | None = None,
             safeAreaForce: _t.Union[bool, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                background: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                safeAreaForce: true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws) from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate placement outside the safe region is never silent.
+            """
+            ...
 
         def add_group(
             self,
@@ -27062,7 +30552,9 @@ class Symbol(Element):
             gridColumns: _t.Union[int, str] | None = None,
             timeOffset: _t.Union[float, int, str] | None = None,
             timeScale: T_positiveDecimal | None = None,
-        ) -> Group: ...
+        ) -> Group:
+            """Add a <group> child; the keywords are the attributes of Group."""
+            ...
 
         def add_sequence(
             self,
@@ -27121,7 +30613,12 @@ class Symbol(Element):
             timeGap: _t.Union[float, int, str] | None = None,
             transition: str | None = None,
             transitionDuration: T_positiveDecimal | None = None,
-        ) -> Sequence: ...
+        ) -> Sequence:
+            """Add a <sequence> child; the keywords are the attributes of Sequence.
+
+            Children play one after another: each child's start is the previous child's end plus @timeGap seconds (negative values overlap). A child's own start is an additional offset. If @transition is set, every junction gets that transition with @transitionDuration unless an explicit transition exists.
+            """
+            ...
 
         def add_layer(
             self,
@@ -27190,7 +30687,12 @@ class Symbol(Element):
             volume: T_unitDecimal | None = None,
             mute: _t.Union[bool, str] | None = None,
             audioBus: _t.Union[str, Element] | None = None,
-        ) -> Layer: ...
+        ) -> Layer:
+            """Add a <layer> child; the keywords are the attributes of Layer.
+
+            Places an asset. timeRemap, when present, replaces speed/reverse/loop. fit/boxWidth/boxHeight scale the asset into a box (responsive media); crop* trim fractions of the source. textAnimator and textPath apply when the asset is text. volume/mute control a video asset's own audio, which is mixed into audioMix bus @audioBus (default: master).
+            """
+            ...
 
         def add_shape(
             self,
@@ -27268,7 +30770,9 @@ class Symbol(Element):
             region: _t.Union[str, Element] | None = None,
             regionLayer: _t.Union[str, Element] | None = None,
             regionPadding: _t.Union[float, int, str] | None = None,
-        ) -> Shape: ...
+        ) -> Shape:
+            """Add a <shape> child; the keywords are the attributes of Shape."""
+            ...
 
         def add_connector(
             self,
@@ -27324,7 +30828,12 @@ class Symbol(Element):
             labelAt: T_unitDecimal | None = None,
             labelOffset: _t.Union[float, int, str] | None = None,
             labelOrient: _t.Literal["horizontal", "along"] | None = None,
-        ) -> Connector: ...
+        ) -> Connector:
+            """Add a <connector> child; the keywords are the attributes of Connector.
+
+            A line between two nodes (or fixed points) that is recomputed every frame, so it stays attached while they move. @from and @to name a group, layer, shape or instance; with anchor auto the line is cut where it leaves the start node's box and enters the end node's box, less fromGap and toGap. route straight, orthogonal (axis-aligned elbows) or curved (bend in degrees); @points are waypoints. A connector has no box and no transform of its own.
+            """
+            ...
 
         def add_object3D(
             self,
@@ -27396,7 +30905,9 @@ class Symbol(Element):
             surface: _t.Literal["blocks"] | None = None,
             surfaceMemoryMiB: _t.Union[int, str] | None = None,
             volume: _t.Union[str, Element] | None = None,
-        ) -> Object3D: ...
+        ) -> Object3D:
+            """Add a <object3D> child; the keywords are the attributes of Object3D."""
+            ...
 
         def add_camera(
             self,
@@ -27438,7 +30949,12 @@ class Symbol(Element):
             pathSamples: _t.Union[int, str] | None = None,
             maxBounces: _t.Union[int, str] | None = None,
             denoise: _t.Union[bool, str] | None = None,
-        ) -> Camera: ...
+        ) -> Camera:
+            """Add a <camera> child; the keywords are the attributes of Camera.
+
+            Physical camera: when focalLength is set, fov derives from focalLength and sensorWidth (mm). depthOfField uses fStop, focusDistance (scene units) and apertureBlades. Several cameras may exist; the active one at time t is the last active camera whose [start, end) contains t (camera switching).
+            """
+            ...
 
         def add_particleEmitter(
             self,
@@ -27525,7 +31041,9 @@ class Symbol(Element):
             preroll: T_nonNegativeDecimal | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> ParticleEmitter: ...
+        ) -> ParticleEmitter:
+            """Add a <particleEmitter> child; the keywords are the attributes of ParticleEmitter."""
+            ...
 
         def add_particles3D(
             self,
@@ -27620,7 +31138,9 @@ class Symbol(Element):
             opacityEnd: T_unitDecimal | None = None,
             sizeCurve: T_curveType | None = None,
             colorCurve: T_curveType | None = None,
-        ) -> Particles3D: ...
+        ) -> Particles3D:
+            """Add a <particles3D> child; the keywords are the attributes of Particles3D."""
+            ...
 
         def add_ocean(
             self,
@@ -27675,7 +31195,9 @@ class Symbol(Element):
             bedResponse: _t.Literal["depthFiltered", "hydrostatic"] | None = None,
             density: T_positiveDecimal | None = None,
             bodyDrag: T_nonNegativeDecimal | None = None,
-        ) -> Ocean: ...
+        ) -> Ocean:
+            """Add a <ocean> child; the keywords are the attributes of Ocean."""
+            ...
 
         def add_blackHole(
             self,
@@ -27686,7 +31208,12 @@ class Symbol(Element):
             x: _t.Union[float, int, str] | None = None,
             y: _t.Union[float, int, str] | None = None,
             z: _t.Union[float, int, str] | None = None,
-        ) -> BlackHole: ...
+        ) -> BlackHole:
+            """Add a <blackHole> child; the keywords are the attributes of BlackHole.
+
+            Version 1.3 or later (BH1). A non-rotating, uncharged black hole in vacuum: the Schwarzschild solution, in units with G = c = 1, so that the mass is a length of scene units and the horizon is at r_s = 2 `mass` (BH1). One per scene (BH2). It is drawn by a camera with `geodesics="true"`; without it nothing is drawn (W11). Its place is the origin of the Schwarzschild coordinates; nothing else about it is authored.
+            """
+            ...
 
         def add_accretionDisk(
             self,
@@ -27705,7 +31232,12 @@ class Symbol(Element):
             rotationX: _t.Union[float, int, str] | None = None,
             rotationY: _t.Union[float, int, str] | None = None,
             rotation: _t.Union[float, int, str] | None = None,
-        ) -> AccretionDisk: ...
+        ) -> AccretionDisk:
+            """Add a <accretionDisk> child; the keywords are the attributes of AccretionDisk.
+
+            Version 1.3. A geometrically thin, optically thick disk of gas on circular orbits in the equatorial plane of the `blackHole` it names (BH3), from `innerRadius` to `outerRadius` in the Schwarzschild radial coordinate, scene units. `innerRadius` is at least the innermost stable circular orbit, 6 `mass` (BH4), and is that when absent; `outerRadius` is beyond it (BH4). Its temperature is the thin-disk profile with a zero-torque inner edge, T(r) = `temperatureScale` f(r) / f(49/36 r_in), f(r) = (r_in / r)^(3/4) (1 - (r_in / r)^(1/2))^(1/4): `temperatureScale`, in kelvin, is the local temperature at the peak, r = 49/36 r_in, before the shift of light. The gas orbits with the angular velocity sqrt(`mass` / r^3) times `timeScale`, in radians per scene second, about the axis of the disk, which is the scene's up, (0, -1, 0), turned by `rotationX`, `rotationY` and `rotation` (about z) degrees composed as an object3D composes them, Rz Ry Rx; seen from above it turns counter-clockwise. The disk is centred on its `blackHole` and has no place of its own. `angularPattern` is the azimuthal structure the gas carries and `seed` fixes it: `none` is a smooth disk, `clumps` (the default) seeded azimuthal noise that rotates differentially, `spiral` seeded logarithmic spiral arms; `contrast` is its amplitude, 0 to 1, and `intensity` scales the brightness. The disk is analytic, a surface the rays meet, and is not made of particles.
+            """
+            ...
 
         def add_flock(
             self,
@@ -27770,7 +31302,12 @@ class Symbol(Element):
             trail: T_nonNegativeDecimal | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Flock: ...
+        ) -> Flock:
+            """Add a <flock> child; the keywords are the attributes of Flock.
+
+            Boids (Reynolds 1987): `count` agents in the width x height box steer by separation, alignment and cohesion with neighbours within `perception`, capped at `maxSpeed` and `maxForce`, kept in the box by `bounds`, and pushed by the named force fields. Drawn like particles (disc, streak or sprite), oriented to their velocity unless `orientToVelocity` is false.
+            """
+            ...
 
         def add_fluid(
             self,
@@ -27826,7 +31363,12 @@ class Symbol(Element):
             useForceFields: _t.Union[bool, str] | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Fluid: ...
+        ) -> Fluid:
+            """Add a <fluid> child; the keywords are the attributes of Fluid.
+
+            Incompressible 2D fluid on a grid (Stam 1999, stable fluids): semi-Lagrangian advection of velocity and coloured dye, viscous diffusion, vorticity confinement and a pressure projection. Sources inject dye (per second) and velocity (px/s) inside their radius. Positions are in the fluid's box.
+            """
+            ...
 
         def add_slime(
             self,
@@ -27885,7 +31427,12 @@ class Symbol(Element):
             colorLow: T_paintType | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Slime: ...
+        ) -> Slime:
+            """Add a <slime> child; the keywords are the attributes of Slime.
+
+            Physarum transport network (Jones 2010): agents sense a trail map ahead and to either side, turn toward the strongest trail, move and deposit; the map diffuses and decays each step. Drawn as the trail map through a two-colour ramp (colorLow at 0, color at `saturation`).
+            """
+            ...
 
         def add_erosion(
             self,
@@ -27948,7 +31495,12 @@ class Symbol(Element):
             colorHigh: T_paintType | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Erosion: ...
+        ) -> Erosion:
+            """Add a <erosion> child; the keywords are the attributes of Erosion.
+
+            Hydraulic erosion of a heightmap by water droplets (Beyer 2015): each droplet runs downhill with inertia, carries sediment up to a capacity that grows with speed, water and slope, erodes within a radius and deposits where it slows or climbs, and evaporates. The terrain starts as fractal noise (or the `heightmap` image's luminance) and is drawn hill-shaded through colorLow to colorHigh.
+            """
+            ...
 
         def add_instance(
             self,
@@ -28000,7 +31552,12 @@ class Symbol(Element):
             fit: T_fitType | None = None,
             boxWidth: T_positiveLengthType | None = None,
             boxHeight: T_positiveLengthType | None = None,
-        ) -> Instance: ...
+        ) -> Instance:
+            """Add a <instance> child; the keywords are the attributes of Instance.
+
+            Instantiates a symbol (precomposition / component). The symbol runs on its own clock: local time = (t - start) * speed + clipIn, looped/reversed as for layers, or mapped by timeRemap. override children change attributes of elements inside this instance only; ids inside a symbol are scoped to the instance (effective id = instanceId/innerId).
+            """
+            ...
 
         def add_include(
             self,
@@ -28044,7 +31601,12 @@ class Symbol(Element):
             src: str | None = None,
             symbol: str | None = None,
             sha256: T_sha256Type | None = None,
-        ) -> Include: ...
+        ) -> Include:
+            """Add a <include> child; the keywords are the attributes of Include.
+
+            Pulls a symbol from another scene-render document (@src#@symbol) or that document's whole composition when @symbol is absent. The included file's assets, paints, styles and effects are merged under the namespace @id/.
+            """
+            ...
 
         def add_repeat(
             self,
@@ -28097,7 +31659,12 @@ class Symbol(Element):
             opacityStep: T_unitDecimal | None = None,
             timeStep: _t.Union[float, int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> Repeat: ...
+        ) -> Repeat:
+            """Add a <repeat> child; the keywords are the attributes of Repeat.
+
+            Generates copies of its children: @count copies, or one per item of the list parameter / data rows named by @over. Inside, expressions read index, count and param(@var) (the current item). Copy i receives the cumulative offsets i*offsetX, i*offsetY, i*rotationStep, scaleStep^i, opacity - i*opacityStep and a start delay of i*timeStep (stagger).
+            """
+            ...
 
         def add_adjustment(
             self,
@@ -28140,7 +31707,12 @@ class Symbol(Element):
             skewY: _t.Union[float, int, str] | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
             blend: T_blendType | None = None,
-        ) -> Adjustment: ...
+        ) -> Adjustment:
+            """Add a <adjustment> child; the keywords are the attributes of Adjustment.
+
+            Adjustment layer: applies @effects to the composite of every sibling below it (lower z / earlier in document order), limited by its masks, matte and opacity, during [start, end).
+            """
+            ...
 
         def add_transition(
             self,
@@ -28160,14 +31732,24 @@ class Symbol(Element):
             shader: str | None = None,
             motionBlur: _t.Union[bool, str] | None = None,
             audio: _t.Literal["crossfade", "equal-power", "cut", "none"] | None = None,
-        ) -> Transition: ...
+        ) -> Transition:
+            """Add a <transition> child; the keywords are the attributes of Transition.
+
+            Transition between sibling nodes @from (outgoing) and @to (incoming), or an in/out transition of a single node when only one is given. The transition window has length @duration, centred on the cut (alignment center), ending at it (end) or starting at it (start). The renderer extends the handles of both nodes by the needed amount.
+            """
+            ...
 
         def add_skeleton(
             self,
             *,
             id: str | None = None,
             weights: str | None = None,
-        ) -> Skeleton: ...
+        ) -> Skeleton:
+            """Add a <skeleton> child; the keywords are the attributes of Skeleton.
+
+            2D bone hierarchy; bind to a node with a deform modifier type="skin" skeleton="id". Bones accept transformConstraint type="ik".
+            """
+            ...
 
         def add_compute(
             self,
@@ -28217,7 +31799,12 @@ class Symbol(Element):
             fractionBits: _t.Union[int, str] | None = None,
             seed: _t.Union[int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> Compute: ...
+        ) -> Compute:
+            """Add a <compute> child; the keywords are the attributes of Compute.
+
+            Runs the WGSL compute shader @src for @invocations invocations; sr_accumulate adds integer amounts into a width x height histogram, which tonemap turns into this node's picture. SREP 67.
+            """
+            ...
 
         def add_iterate(
             self,
@@ -28263,7 +31850,12 @@ class Symbol(Element):
             tolerance: T_positiveDecimal | None = None,
             checkEvery: _t.Union[int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> Iterate: ...
+        ) -> Iterate:
+            """Add a <iterate> child; the keywords are the attributes of Iterate.
+
+            Each frame, the stateful nodes inside start from their zero state and advance @steps steps (fewer with until="converged") before the frame is drawn. For stills; SREP 68 is the animated form.
+            """
+            ...
 
         def add_program(
             self,
@@ -28316,7 +31908,12 @@ class Symbol(Element):
             stepsPerFrame: _t.Union[int, str] | None = None,
             prewarm: _t.Union[int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> ProgramNode: ...
+        ) -> ProgramNode:
+            """Add a <program> child; the keywords are the attributes of ProgramNode.
+
+            Runs the WebAssembly module @src (SHA-256 @sha256) under the determinism rules of SREP 66. In build mode it runs once when the document is built and the scene-render nodes it returns are this node's children, drawn as a group. With mode="step" (SREP 69) it keeps state, advances stepsPerFrame steps per frame after prewarm steps, and draws the width x height RGBA picture its frame export returns.
+            """
+            ...
 
         def add_viewport3D(
             self,
@@ -28364,7 +31961,12 @@ class Symbol(Element):
             background: T_paintType | None = None,
             blend: T_blendType | None = None,
             effects: _t.Sequence[_t.Union[str, Element]] | None = None,
-        ) -> Viewport3D: ...
+        ) -> Viewport3D:
+            """Add a <viewport3D> child; the keywords are the attributes of Viewport3D.
+
+            Renders its own 3D scene (its object3D and camera children, and the lights named by @lights) into a width x height picture drawn at its origin. Isolated from the document's 3D scene. SREP 74.
+            """
+            ...
 
     else:
 
@@ -28472,7 +32074,9 @@ class Symbols(Element):
             duration: T_durationType | None = None,
             background: T_paintType | None = None,
             safeAreaForce: _t.Union[bool, str] | None = None,
-        ) -> Symbol: ...
+        ) -> Symbol:
+            """Add a <symbol> child; the keywords are the attributes of Symbol."""
+            ...
 
     else:
 
@@ -28635,11 +32239,17 @@ class Effect(Element):
         "brightness", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
     color: Attr[G_colorType, T_colorType] = Attr(
-        "color", "colorType", use="optional", default=None, fixed=None, doc="",
+        "color", "colorType", use="optional", default=None, fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     paint: Attr[G_paintType, T_paintType] = Attr(
-        "paint", "paintType", use="optional", default=None, fixed=None, doc="",
+        "paint", "paintType", use="optional", default=None, fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     offsetX: Attr[G_effectOffsetType, T_effectOffsetType] = Attr(
         "offsetX", "effectOffsetType", use="optional", default="8", fixed=None, doc="",
     )
@@ -28740,8 +32350,12 @@ class Effect(Element):
         "levels", "xs:positiveInteger", use="optional", default="8", fixed=None, doc="",
     )
     keyColor: Attr[G_colorType, T_colorType] = Attr(
-        "keyColor", "colorType", use="optional", default=None, fixed=None, doc="",
+        "keyColor", "colorType", use="optional", default=None, fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     tolerance: Attr[G_unitDecimal, T_unitDecimal] = Attr(
         "tolerance", "unitDecimal", use="optional", default="0.2", fixed=None, doc="",
     )
@@ -28755,6 +32369,7 @@ class Effect(Element):
         "source", "xs:IDREF", use="optional", default=None, fixed=None,
         doc="Second input: displacement map, gradient-map paint source, difference-key plate.",
     )
+    """Second input: displacement map, gradient-map paint source, difference-key plate."""
     src: Attr[str, str] = Attr("src", "xs:anyURI", use="optional", default=None, fixed=None, doc="")
     space: Attr[G_colorSpaceType, T_colorSpaceType] = Attr(
         "space", "colorSpaceType", use="optional", default=None, fixed=None, doc="",
@@ -28873,6 +32488,7 @@ class Effect(Element):
         use="optional", default="1", fixed=None,
         doc='type="shader" with PERSISTENT passes: steps (evaluations of all passes) per frame. SREP 68.',
     )
+    """type="shader" with PERSISTENT passes: steps (evaluations of all passes) per frame. SREP 68."""
     prewarm: Attr[int, _t.Union[int, str]] = Attr(
         "prewarm",
         {
@@ -28886,6 +32502,7 @@ class Effect(Element):
         use="optional", default="0", fixed=None,
         doc="Steps run before the node's first active frame, with the inputs of that frame. SREP 68.",
     )
+    """Steps run before the node's first active frame, with the inputs of that frame. SREP 68."""
 
     if _t.TYPE_CHECKING:
 
@@ -28955,7 +32572,18 @@ class Effect(Element):
             high: T_unitDecimal | None = None,
             stepsPerFrame: _t.Union[int, str] | None = None,
             prewarm: _t.Union[int, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """One element type for every effect; each type reads only the attributes it documents. Colour-grade family: color-grade (saturation/contrast/ brightness, as 1.0), lift-gamma-gain (lift/gamma/gain "r,g,b"), cdl (slope/offset/power "r,g,b", saturation; ASC CDL), lut (@src .cube/.clf/ .3dl, @space), curves (@curve "x,y x,y ..." per @channel), levels, white-balance (temperature/tint), exposure, hue-saturation, tonemap. shader: GLSL fragment at @src with param children as uniforms. It runs on a tile: the node's pixels, for a layer or shape without children, with a margin of 2 px plus the outward rounding of its box to whole pixels (up to 64 px past the frame); for any other node, the frame. sr_ContentRect (vec4: left, top, width, height of the node's content box in tile pixels from the tile's top-left, exact) and sr_PixelCoord (vec2: the fragment's centre relative to that corner) locate the content within it (SREP 72); the sr_ prefix is the engine's. selective-color: @hue (degrees) or @color (its hue) centres a window of width @tolerance; inside it @saturation scales and @brightness adds; @amount mixes the result with the original. @channel is not read. halftone: @size is the cell, @angle the screen's angle (default 0), @color the ink (default black) and @paint the ground between the dots (default white).
+
+            Args:
+                color: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+                paint: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                keyColor: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+                source: Second input: displacement map, gradient-map paint source, difference-key plate.
+                stepsPerFrame: type="shader" with PERSISTENT passes: steps (evaluations of all passes) per frame. SREP 68.
+                prewarm: Steps run before the node's first active frame, with the inputs of that frame. SREP 68.
+            """
+            ...
 
         def add_animate(
             self,
@@ -28966,7 +32594,9 @@ class Effect(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -28974,7 +32604,12 @@ class Effect(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -28987,7 +32622,12 @@ class Effect(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -29005,14 +32645,24 @@ class Effect(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_param(
             self,
             *,
             name: str | None = None,
             value: str | None = None,
-        ) -> ParamValue: ...
+        ) -> ParamValue:
+            """Add a <param> child; the keywords are the attributes of ParamValue.
+
+            Generic named value (shader uniforms, plugin params).
+            """
+            ...
 
     else:
 
@@ -29113,7 +32763,12 @@ class Effects(Element):
             high: T_unitDecimal | None = None,
             stepsPerFrame: _t.Union[int, str] | None = None,
             prewarm: _t.Union[int, str] | None = None,
-        ) -> Effect: ...
+        ) -> Effect:
+            """Add a <effect> child; the keywords are the attributes of Effect.
+
+            One element type for every effect; each type reads only the attributes it documents. Colour-grade family: color-grade (saturation/contrast/ brightness, as 1.0), lift-gamma-gain (lift/gamma/gain "r,g,b"), cdl (slope/offset/power "r,g,b", saturation; ASC CDL), lut (@src .cube/.clf/ .3dl, @space), curves (@curve "x,y x,y ..." per @channel), levels, white-balance (temperature/tint), exposure, hue-saturation, tonemap. shader: GLSL fragment at @src with param children as uniforms. It runs on a tile: the node's pixels, for a layer or shape without children, with a margin of 2 px plus the outward rounding of its box to whole pixels (up to 64 px past the frame); for any other node, the frame. sr_ContentRect (vec4: left, top, width, height of the node's content box in tile pixels from the tile's top-left, exact) and sr_PixelCoord (vec2: the fragment's centre relative to that corner) locate the content within it (SREP 72); the sr_ prefix is the engine's. selective-color: @hue (degrees) or @color (its hue) centres a window of width @tolerance; inside it @saturation scales and @brightness adds; @amount mixes the result with the original. @channel is not read. halftone: @size is the cell, @angle the screen's angle (default 0), @color the ink (default black) and @paint the ground between the dots (default white).
+            """
+            ...
 
     else:
 
@@ -29162,8 +32817,12 @@ class Light(Element):
         doc="",
     )
     color: Attr[G_colorType, T_colorType] = Attr(
-        "color", "colorType", use="optional", default="#FFFFFFFF", fixed=None, doc="",
+        "color", "colorType", use="optional", default="#FFFFFFFF", fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     colorTemperature: Attr[G_kelvinType, T_kelvinType] = Attr(
         "colorTemperature", "kelvinType", use="optional", default=None, fixed=None, doc="",
     )
@@ -29226,6 +32885,7 @@ class Light(Element):
         "environment", "xs:anyURI", use="optional", default=None, fixed=None,
         doc='type="dome": equirectangular HDRI used for image-based lighting and reflections.',
     )
+    """type="dome": equirectangular HDRI used for image-based lighting and reflections."""
     environmentVisible: Attr[bool, _t.Union[bool, str]] = Attr(
         "environmentVisible", "xs:boolean", use="optional", default="false", fixed=None, doc="",
     )
@@ -29268,14 +32928,26 @@ class Light(Element):
         doc="",
     )
     skyZenith: Attr[G_colorType, T_colorType] = Attr(
-        "skyZenith", "colorType", use="optional", default="#3A6EA5FF", fixed=None, doc="",
+        "skyZenith", "colorType", use="optional", default="#3A6EA5FF", fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     skyHorizon: Attr[G_colorType, T_colorType] = Attr(
-        "skyHorizon", "colorType", use="optional", default="#C8D8E8FF", fixed=None, doc="",
+        "skyHorizon", "colorType", use="optional", default="#C8D8E8FF", fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     skyGround: Attr[G_colorType, T_colorType] = Attr(
-        "skyGround", "colorType", use="optional", default="#4A4038FF", fixed=None, doc="",
+        "skyGround", "colorType", use="optional", default="#4A4038FF", fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     skyExponent: Attr[G_positiveDecimal, T_positiveDecimal] = Attr(
         "skyExponent", "positiveDecimal", use="optional", default="0.5", fixed=None, doc="",
     )
@@ -29289,8 +32961,12 @@ class Light(Element):
         "sunSize", "nonNegativeDecimal", use="optional", default="0.53", fixed=None, doc="",
     )
     sunColor: Attr[G_colorType, T_colorType] = Attr(
-        "sunColor", "colorType", use="optional", default="#FFFFFFFF", fixed=None, doc="",
+        "sunColor", "colorType", use="optional", default="#FFFFFFFF", fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     sunIntensity: Attr[G_nonNegativeDecimal, T_nonNegativeDecimal] = Attr(
         "sunIntensity", "nonNegativeDecimal", use="optional", default="0", fixed=None, doc="",
     )
@@ -29340,7 +33016,16 @@ class Light(Element):
             sunSize: T_nonNegativeDecimal | None = None,
             sunColor: T_colorType | None = None,
             sunIntensity: T_nonNegativeDecimal | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                color: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+                environment: type="dome": equirectangular HDRI used for image-based lighting and reflections.
+                skyZenith: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+                skyHorizon: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+                skyGround: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+                sunColor: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+            """
+            ...
 
         def add_animate(
             self,
@@ -29351,7 +33036,9 @@ class Light(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -29359,7 +33046,12 @@ class Light(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -29372,7 +33064,12 @@ class Light(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -29390,7 +33087,12 @@ class Light(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_transformConstraint(
             self,
@@ -29412,7 +33114,12 @@ class Light(Element):
             softness: T_unitDecimal | None = None,
             progress: T_unitDecimal | None = None,
             autoOrient: _t.Union[bool, str] | None = None,
-        ) -> TransformConstraint: ...
+        ) -> TransformConstraint:
+            """Add a <transformConstraint> child; the keywords are the attributes of TransformConstraint.
+
+            Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target's transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target's world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.
+            """
+            ...
 
     else:
 
@@ -29490,7 +33197,9 @@ class Lights(Element):
             sunSize: T_nonNegativeDecimal | None = None,
             sunColor: T_colorType | None = None,
             sunIntensity: T_nonNegativeDecimal | None = None,
-        ) -> Light: ...
+        ) -> Light:
+            """Add a <light> child; the keywords are the attributes of Light."""
+            ...
 
     else:
 
@@ -29536,6 +33245,7 @@ class ForceField(Element):
         "z", "xs:double", use="optional", default="0", fixed=None,
         doc="Depth of a radial field's centre in pixels (scene z), for 3D bodies.",
     )
+    """Depth of a radial field's centre in pixels (scene z), for 3D bodies."""
     forceX: Attr[float, _t.Union[float, int, str]] = Attr(
         "forceX", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -29546,6 +33256,7 @@ class ForceField(Element):
         "forceZ", "xs:double", use="optional", default="0", fixed=None,
         doc="m/s² toward the camera, for 3D bodies.",
     )
+    """m/s² toward the camera, for 3D bodies."""
     strength: Attr[float, _t.Union[float, int, str]] = Attr(
         "strength", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -29604,7 +33315,12 @@ class ForceField(Element):
             start: _t.Union[float, int, str] | None = None,
             end: _t.Union[float, int, str] | None = None,
             affects: _t.Literal["all", "bodies", "particles"] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                z: Depth of a radial field's centre in pixels (scene z), for 3D bodies.
+                forceZ: m/s² toward the camera, for 3D bodies.
+            """
+            ...
 
         def add_animate(
             self,
@@ -29615,7 +33331,9 @@ class ForceField(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -29623,7 +33341,12 @@ class ForceField(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -29636,7 +33359,12 @@ class ForceField(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -29654,7 +33382,12 @@ class ForceField(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -29776,7 +33509,9 @@ class Constraint(Element):
             motorSpeed: _t.Union[float, int, str] | None = None,
             maxForce: T_nonNegativeDecimal | None = None,
             breakForce: T_nonNegativeDecimal | None = None,
-        ) -> None: ...
+        ) -> None:
+            """spring/distance/rope/hinge/slider/weld/motor join bodies a and b; pin ties body a to the world point x, y (b is not allowed) and is rigid unless stiffness is given. breakForce removes the constraint when exceeded. Between 3D bodies (object3D rigidBody) the anchor is x, y, z; hinge, motor and slider turn about or slide along axisX, axisY, axisZ (scene axes; z by default for hinges and motors, x for sliders); ball is a ball-and-socket joint."""
+            ...
 
 
 class Physics(Element):
@@ -29807,6 +33542,7 @@ class Physics(Element):
         "gravityZ", "xs:double", use="optional", default="0", fixed=None,
         doc="m/s² toward the camera, for 3D bodies.",
     )
+    """m/s² toward the camera, for 3D bodies."""
     pixelsPerMeter: Attr[G_positiveDecimal, T_positiveDecimal] = Attr(
         "pixelsPerMeter", "positiveDecimal", use="optional", default="100", fixed=None, doc="",
     )
@@ -29837,6 +33573,13 @@ class Physics(Element):
         "fixInternalEdges", "xs:boolean", use="optional", default="false", fixed=None,
         doc="For 3D bodies: fix the contacts that the edges between the triangles of a mesh make. A body that meets\na flat mesh gets the mesh's normal whatever its tessellation (without it the normal of the triangle\nedge or corner the body met, which tilts by several degrees and kicks a sliding body sideways), and\na crater from an impact on such a mesh has its axis and speed from the surface either way. The meshes\nare taken as two-sided. It changes the motion of every body that slides or lands on a mesh, so it\nis off by default, which is the behaviour there always was.",
     )
+    """For 3D bodies: fix the contacts that the edges between the triangles of a mesh make. A body that meets
+    a flat mesh gets the mesh's normal whatever its tessellation (without it the normal of the triangle
+    edge or corner the body met, which tilts by several degrees and kicks a sliding body sideways), and
+    a crater from an impact on such a mesh has its axis and speed from the surface either way. The meshes
+    are taken as two-sided. It changes the motion of every body that slides or lands on a mesh, so it
+    is off by default, which is the behaviour there always was.
+    """
 
     if _t.TYPE_CHECKING:
 
@@ -29854,7 +33597,14 @@ class Physics(Element):
             cache: str | None = None,
             cacheSha256: T_sha256Type | None = None,
             fixInternalEdges: _t.Union[bool, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """softBody: validation also rejects a body whose stable integration needs more than 4096 substeps per fixedStep. The physics world is metres, +y up; pixelsPerMeter maps it to screen pixels (+y down).
+
+            Args:
+                gravityZ: m/s² toward the camera, for 3D bodies.
+                fixInternalEdges: For 3D bodies: fix the contacts that the edges between the triangles of a mesh make. A body that meets a flat mesh gets the mesh's normal whatever its tessellation (without it the normal of the triangle edge or corner the body met, which tilts by several degrees and kicks a sliding body sideways), and a crater from an impact on such a mesh has its axis and speed from the surface either way. The meshes are taken as two-sided. It changes the motion of every body that slides or lands on a mesh, so it is off by default, which is the behaviour there always was.
+            """
+            ...
 
         def add_forceField(
             self,
@@ -29876,7 +33626,9 @@ class Physics(Element):
             start: _t.Union[float, int, str] | None = None,
             end: _t.Union[float, int, str] | None = None,
             affects: _t.Literal["all", "bodies", "particles"] | None = None,
-        ) -> ForceField: ...
+        ) -> ForceField:
+            """Add a <forceField> child; the keywords are the attributes of ForceField."""
+            ...
 
         def add_constraint(
             self,
@@ -29900,7 +33652,12 @@ class Physics(Element):
             motorSpeed: _t.Union[float, int, str] | None = None,
             maxForce: T_nonNegativeDecimal | None = None,
             breakForce: T_nonNegativeDecimal | None = None,
-        ) -> Constraint: ...
+        ) -> Constraint:
+            """Add a <constraint> child; the keywords are the attributes of Constraint.
+
+            spring/distance/rope/hinge/slider/weld/motor join bodies a and b; pin ties body a to the world point x, y (b is not allowed) and is rigid unless stiffness is given. breakForce removes the constraint when exceeded. Between 3D bodies (object3D rigidBody) the anchor is x, y, z; hinge, motor and slider turn about or slide along axisX, axisY, axisZ (scene axes; z by default for hinges and motors, x for sliders); ball is a ball-and-socket joint.
+            """
+            ...
 
     else:
 
@@ -29998,7 +33755,9 @@ class Tracking(Element):
             footage: _t.Union[str, Element] | None = None,
             timeOffset: _t.Union[float, int, str] | None = None,
             sha256: T_sha256Type | None = None,
-        ) -> TrackData: ...
+        ) -> TrackData:
+            """Add a <trackData> child; the keywords are the attributes of TrackData."""
+            ...
 
     else:
 
@@ -30178,7 +33937,9 @@ class AudioEffect(Element):
             frequency: T_positiveDecimal | None = None,
             gain: T_decibelType | None = None,
             q: T_positiveDecimal | None = None,
-        ) -> EqBand: ...
+        ) -> EqBand:
+            """Add a <band> child; the keywords are the attributes of EqBand."""
+            ...
 
         def add_animate(
             self,
@@ -30189,7 +33950,9 @@ class AudioEffect(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -30197,7 +33960,12 @@ class AudioEffect(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -30210,7 +33978,12 @@ class AudioEffect(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -30228,14 +34001,24 @@ class AudioEffect(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_param(
             self,
             *,
             name: str | None = None,
             value: str | None = None,
-        ) -> ParamValue: ...
+        ) -> ParamValue:
+            """Add a <param> child; the keywords are the attributes of ParamValue.
+
+            Generic named value (shader uniforms, plugin params).
+            """
+            ...
 
     else:
 
@@ -30335,8 +34118,10 @@ class AudioTrack(Element):
         "mute", "xs:boolean", use="optional", default="false", fixed=None, doc="",
     )
     role: Attr[G_audioRoleType, T_audioRoleType] = Attr(
-        "role", "audioRoleType", use="optional", default="other", fixed=None, doc="",
+        "role", "audioRoleType", use="optional", default="other", fixed=None,
+        doc="What an audio track carries.",
     )
+    """What an audio track carries."""
     language: Attr[G_languageTagType, T_languageTagType] = Attr(
         "language", "languageTagType", use="optional", default=None, fixed=None, doc="",
     )
@@ -30347,6 +34132,7 @@ class AudioTrack(Element):
         "fitToDuration", "xs:boolean", use="optional", default="false", fixed=None,
         doc="Music edit: loop/trim the asset at bar boundaries (asset @bpm) so it ends exactly at the project end.",
     )
+    """Music edit: loop/trim the asset at bar boundaries (asset @bpm) so it ends exactly at the project end."""
     duckUnder: Attr[_t.List[str], _t.Sequence[_t.Union[str, Element]]] = Attr(
         "duckUnder", "xs:IDREFS", use="optional", default=None, fixed=None, doc="",
     )
@@ -30394,7 +34180,14 @@ class AudioTrack(Element):
             duckThreshold: T_decibelType | None = None,
             duckAttack: T_nonNegativeDecimal | None = None,
             duckRelease: T_nonNegativeDecimal | None = None,
-        ) -> None: ...
+        ) -> None:
+            """volume, pan and gain animate with nested animation elements (audio automation).
+
+            Args:
+                role: What an audio track carries.
+                fitToDuration: Music edit: loop/trim the asset at bar boundaries (asset @bpm) so it ends exactly at the project end.
+            """
+            ...
 
         def add_animate(
             self,
@@ -30405,7 +34198,9 @@ class AudioTrack(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -30413,7 +34208,12 @@ class AudioTrack(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -30426,7 +34226,12 @@ class AudioTrack(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -30444,7 +34249,12 @@ class AudioTrack(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_audioEffect(
             self,
@@ -30466,7 +34276,9 @@ class AudioTrack(Element):
             semitones: _t.Union[float, int, str] | None = None,
             amount: T_unitDecimal | None = None,
             sidechain: _t.Union[str, Element] | None = None,
-        ) -> AudioEffect: ...
+        ) -> AudioEffect:
+            """Add a <audioEffect> child; the keywords are the attributes of AudioEffect."""
+            ...
 
     else:
 
@@ -30562,7 +34374,9 @@ class Bus(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -30570,7 +34384,12 @@ class Bus(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -30583,7 +34402,12 @@ class Bus(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -30601,7 +34425,12 @@ class Bus(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_audioEffect(
             self,
@@ -30623,7 +34452,9 @@ class Bus(Element):
             semitones: _t.Union[float, int, str] | None = None,
             amount: T_unitDecimal | None = None,
             sidechain: _t.Union[str, Element] | None = None,
-        ) -> AudioEffect: ...
+        ) -> AudioEffect:
+            """Add a <audioEffect> child; the keywords are the attributes of AudioEffect."""
+            ...
 
     else:
 
@@ -30703,7 +34534,9 @@ class Master(Element):
             truePeak: T_decibelType | None = None,
             limiter: _t.Union[bool, str] | None = None,
             dither: _t.Union[bool, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Master bus. normalize="integrated" measures ITU-R BS.1770 integrated loudness of the full mix and applies static gain to reach @loudness LUFS, then the true-peak limiter caps at @truePeak dBTP."""
+            ...
 
         def add_animate(
             self,
@@ -30714,7 +34547,9 @@ class Master(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -30722,7 +34557,12 @@ class Master(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -30735,7 +34575,12 @@ class Master(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -30753,7 +34598,12 @@ class Master(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_audioEffect(
             self,
@@ -30775,7 +34625,9 @@ class Master(Element):
             semitones: _t.Union[float, int, str] | None = None,
             amount: T_unitDecimal | None = None,
             sidechain: _t.Union[str, Element] | None = None,
-        ) -> AudioEffect: ...
+        ) -> AudioEffect:
+            """Add a <audioEffect> child; the keywords are the attributes of AudioEffect."""
+            ...
 
     else:
 
@@ -30881,7 +34733,12 @@ class AudioMix(Element):
             duckThreshold: T_decibelType | None = None,
             duckAttack: T_nonNegativeDecimal | None = None,
             duckRelease: T_nonNegativeDecimal | None = None,
-        ) -> AudioTrack: ...
+        ) -> AudioTrack:
+            """Add a <audioTrack> child; the keywords are the attributes of AudioTrack.
+
+            volume, pan and gain animate with nested animation elements (audio automation).
+            """
+            ...
 
         def add_bus(
             self,
@@ -30897,7 +34754,9 @@ class AudioMix(Element):
             duckThreshold: T_decibelType | None = None,
             duckAttack: T_nonNegativeDecimal | None = None,
             duckRelease: T_nonNegativeDecimal | None = None,
-        ) -> Bus: ...
+        ) -> Bus:
+            """Add a <bus> child; the keywords are the attributes of Bus."""
+            ...
 
         def add_master(
             self,
@@ -30908,7 +34767,12 @@ class AudioMix(Element):
             truePeak: T_decibelType | None = None,
             limiter: _t.Union[bool, str] | None = None,
             dither: _t.Union[bool, str] | None = None,
-        ) -> Master: ...
+        ) -> Master:
+            """Add a <master> child; the keywords are the attributes of Master.
+
+            Master bus. normalize="integrated" measures ITU-R BS.1770 integrated loudness of the full mix and applies static gain to reach @loudness LUFS, then the true-peak limiter caps at @truePeak dBTP.
+            """
+            ...
 
     else:
 
@@ -30996,7 +34860,9 @@ class Cue(Element):
             end: _t.Union[float, int, str] | None = None,
             text: str | None = None,
             emphasis: _t.Union[bool, str] | None = None,
-        ) -> Word: ...
+        ) -> Word:
+            """Add a <word> child; the keywords are the attributes of Word."""
+            ...
 
     else:
 
@@ -31054,6 +34920,7 @@ class CaptionTrack(Element):
         "readingSpeed", "positiveDecimal", use="optional", default=None, fixed=None,
         doc="Characters per second this track may reach; overrides accessibility/@readingSpeed.",
     )
+    """Characters per second this track may reach; overrides accessibility/@readingSpeed."""
     transcribe: Attr[str, _t.Union[str, Element]] = Attr(
         "transcribe", "xs:IDREF", use="optional", default=None, fixed=None, doc="",
     )
@@ -31065,14 +34932,19 @@ class CaptionTrack(Element):
         "provider", "xs:string", use="optional", default="whisper", fixed=None,
         doc="The transcriber the resolve step runs to fill @cache: whisper (the Whisper speech\nrecognition models), or the name of any provider program. Rendering only reads the cache.",
     )
+    """The transcriber the resolve step runs to fill @cache: whisper (the Whisper speech
+    recognition models), or the name of any provider program. Rendering only reads the cache.
+    """
     model: Attr[str, str] = Attr(
         "model", "xs:string", use="optional", default="base", fixed=None,
         doc="The transcriber's model (whisper: tiny, base, small, medium, large-v3, with .en for English-only; or a model file).",
     )
+    """The transcriber's model (whisper: tiny, base, small, medium, large-v3, with .en for English-only; or a model file)."""
     prompt: Attr[str, str] = Attr(
         "prompt", "xs:string", use="optional", default=None, fixed=None,
         doc="Text that primes the transcriber (names, spellings, vocabulary).",
     )
+    """Text that primes the transcriber (names, spellings, vocabulary)."""
     lineBreaks: Attr[_t.Literal["greedy", "source"], _t.Literal["greedy", "source"]] = Attr(
         "lineBreaks",
         {
@@ -31084,8 +34956,12 @@ class CaptionTrack(Element):
             "item": None,
         },
         use="optional", default="greedy", fixed=None,
-        doc="greedy treats source newlines as spaces (legacy). source ends a line at each\n      cue newline; maxCharsPerLine, maxWordsPerLine and maxLines still apply. Blank source lines do not add empty caption\n      rows; one-word still pages each word.",
+        doc="greedy treats source newlines as spaces (legacy). source ends a line at each\ncue newline; maxCharsPerLine, maxWordsPerLine and maxLines still apply. Blank source lines do not add empty caption\nrows; one-word still pages each word.",
     )
+    """greedy treats source newlines as spaces (legacy). source ends a line at each
+    cue newline; maxCharsPerLine, maxWordsPerLine and maxLines still apply. Blank source lines do not add empty caption
+    rows; one-word still pages each word.
+    """
     mode: Attr[_t.Literal["burn", "sidecar", "both"], _t.Literal["burn", "sidecar", "both"]] = Attr(
         "mode",
         {
@@ -31133,8 +35009,10 @@ class CaptionTrack(Element):
         "activeStyle", "xs:IDREF", use="optional", default=None, fixed=None, doc="",
     )
     activeColor: Attr[G_paintType, T_paintType] = Attr(
-        "activeColor", "paintType", use="optional", default=None, fixed=None, doc="",
+        "activeColor", "paintType", use="optional", default=None, fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     maxWordsPerLine: Attr[int, _t.Union[int, str]] = Attr(
         "maxWordsPerLine", "xs:positiveInteger", use="optional", default=None, fixed=None, doc="",
     )
@@ -31196,7 +35074,18 @@ class CaptionTrack(Element):
             safeArea: _t.Union[str, Element] | None = None,
             z: _t.Union[int, str] | None = None,
             profanityFilter: _t.Union[bool, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Captions from inline cues, a subtitle file (@src), or a transcription of audio track @transcribe. Transcriptions are read from @cache (verified by @cacheSha256) so renders stay deterministic; a resolve step, run before rendering, writes the cache from the track as it plays in the mix, in composition time. mode=burn draws them into the picture using @preset and @style; sidecar writes a file next to each output.
+
+            Args:
+                readingSpeed: Characters per second this track may reach; overrides accessibility/@readingSpeed.
+                provider: The transcriber the resolve step runs to fill @cache: whisper (the Whisper speech recognition models), or the name of any provider program. Rendering only reads the cache.
+                model: The transcriber's model (whisper: tiny, base, small, medium, large-v3, with .en for English-only; or a model file).
+                prompt: Text that primes the transcriber (names, spellings, vocabulary).
+                lineBreaks: greedy treats source newlines as spaces (legacy). source ends a line at each cue newline; maxCharsPerLine, maxWordsPerLine and maxLines still apply. Blank source lines do not add empty caption rows; one-word still pages each word.
+                activeColor: A colour or url(#id) of a paints/* gradient, pattern or noise.
+            """
+            ...
 
         def add_cue(
             self,
@@ -31207,7 +35096,9 @@ class CaptionTrack(Element):
             speaker: str | None = None,
             style: _t.Union[str, Element] | None = None,
             position: str | None = None,
-        ) -> Cue: ...
+        ) -> Cue:
+            """Add a <cue> child; the keywords are the attributes of Cue."""
+            ...
 
     else:
 
@@ -31261,7 +35152,12 @@ class Captions(Element):
             safeArea: _t.Union[str, Element] | None = None,
             z: _t.Union[int, str] | None = None,
             profanityFilter: _t.Union[bool, str] | None = None,
-        ) -> CaptionTrack: ...
+        ) -> CaptionTrack:
+            """Add a <captionTrack> child; the keywords are the attributes of CaptionTrack.
+
+            Captions from inline cues, a subtitle file (@src), or a transcription of audio track @transcribe. Transcriptions are read from @cache (verified by @cacheSha256) so renders stay deterministic; a resolve step, run before rendering, writes the cache from the track as it plays in the mix, in composition time. mode=burn draws them into the picture using @preset and @style; sidecar writes a file next to each output.
+            """
+            ...
 
     else:
 
@@ -31300,8 +35196,12 @@ class Marker(Element):
     )
     label: Attr[str, str] = Attr("label", "xs:string", use="optional", default=None, fixed=None, doc="")
     color: Attr[G_colorType, T_colorType] = Attr(
-        "color", "colorType", use="optional", default=None, fixed=None, doc="",
+        "color", "colorType", use="optional", default=None, fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
 
     if _t.TYPE_CHECKING:
 
@@ -31314,7 +35214,11 @@ class Marker(Element):
             kind: _t.Literal["cue", "chapter", "section", "beat", "comment", "todo", "cta"] | None = None,
             label: str | None = None,
             color: T_colorType | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                color: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+            """
+            ...
 
 
 class BeatGrid(Element):
@@ -31348,7 +35252,9 @@ class BeatGrid(Element):
             offset: _t.Union[float, int, str] | None = None,
             beatsPerBar: _t.Union[int, str] | None = None,
             source: _t.Union[str, Element] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Musical grid for cutting on the beat; expressions read beat() and keys can snap with @marker to generated ids beat.N and bar.N."""
+            ...
 
 
 class Markers(Element):
@@ -31378,7 +35284,9 @@ class Markers(Element):
             kind: _t.Literal["cue", "chapter", "section", "beat", "comment", "todo", "cta"] | None = None,
             label: str | None = None,
             color: T_colorType | None = None,
-        ) -> Marker: ...
+        ) -> Marker:
+            """Add a <marker> child; the keywords are the attributes of Marker."""
+            ...
 
         def add_beatGrid(
             self,
@@ -31387,7 +35295,12 @@ class Markers(Element):
             offset: _t.Union[float, int, str] | None = None,
             beatsPerBar: _t.Union[int, str] | None = None,
             source: _t.Union[str, Element] | None = None,
-        ) -> BeatGrid: ...
+        ) -> BeatGrid:
+            """Add a <beatGrid> child; the keywords are the attributes of BeatGrid.
+
+            Musical grid for cutting on the beat; expressions read beat() and keys can snap with @marker to generated ids beat.N and bar.N.
+            """
+            ...
 
     else:
 
@@ -31461,7 +35374,9 @@ class Param(Element):
             maxLength: _t.Union[int, str] | None = None,
             pattern: str | None = None,
             options: str | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Template input. Values reach the document through {{id}} in text, param('id') in expressions and conditions, bind elements, and link source="param:id". Values come from @default, a variant, a data row or the command line (--param id=value)."""
+            ...
 
 
 class Bind(Element):
@@ -31486,6 +35401,7 @@ class Bind(Element):
         "map", "xs:string", use="optional", default=None, fixed=None,
         doc='Optional value map "in1=out1;in2=out2" applied before assignment.',
     )
+    """Optional value map "in1=out1;in2=out2" applied before assignment."""
 
     if _t.TYPE_CHECKING:
 
@@ -31496,7 +35412,11 @@ class Bind(Element):
             target: _t.Union[str, Element] | None = None,
             property: str | None = None,
             map: str | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                map: Optional value map "in1=out1;in2=out2" applied before assignment.
+            """
+            ...
 
 
 class DataSource(Element):
@@ -31536,7 +35456,9 @@ class DataSource(Element):
             src: str | None = None,
             format: _t.Literal["json", "csv", "tsv"] | None = None,
             sha256: T_sha256Type | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Rows for repeat/@over and for batch rendering (one output set per row)."""
+            ...
 
 
 class Set(Element):
@@ -31585,14 +35507,18 @@ class Variant(Element):
             *,
             id: str | None = None,
             label: str | None = None,
-        ) -> None: ...
+        ) -> None:
+            """A named parameter set (A/B test cell, language, market)."""
+            ...
 
         def add_set(
             self,
             *,
             param: _t.Union[str, Element] | None = None,
             value: str | None = None,
-        ) -> Set: ...
+        ) -> Set:
+            """Add a <set> child; the keywords are the attributes of Set."""
+            ...
 
         def add_override(
             self,
@@ -31600,7 +35526,12 @@ class Variant(Element):
             target: str | None = None,
             property: str | None = None,
             value: str | None = None,
-        ) -> Override: ...
+        ) -> Override:
+            """Add a <override> child; the keywords are the attributes of Override.
+
+            Sets attribute @property of the element whose id is @target (resolved in the scope of the enclosing instance, layout or variant) to @value.
+            """
+            ...
 
     else:
 
@@ -31646,7 +35577,12 @@ class Parameters(Element):
             maxLength: _t.Union[int, str] | None = None,
             pattern: str | None = None,
             options: str | None = None,
-        ) -> Param: ...
+        ) -> Param:
+            """Add a <param> child; the keywords are the attributes of Param.
+
+            Template input. Values reach the document through {{id}} in text, param('id') in expressions and conditions, bind elements, and link source="param:id". Values come from @default, a variant, a data row or the command line (--param id=value).
+            """
+            ...
 
         def add_bind(
             self,
@@ -31655,7 +35591,9 @@ class Parameters(Element):
             target: _t.Union[str, Element] | None = None,
             property: str | None = None,
             map: str | None = None,
-        ) -> Bind: ...
+        ) -> Bind:
+            """Add a <bind> child; the keywords are the attributes of Bind."""
+            ...
 
         def add_data(
             self,
@@ -31664,14 +35602,24 @@ class Parameters(Element):
             src: str | None = None,
             format: _t.Literal["json", "csv", "tsv"] | None = None,
             sha256: T_sha256Type | None = None,
-        ) -> DataSource: ...
+        ) -> DataSource:
+            """Add a <data> child; the keywords are the attributes of DataSource.
+
+            Rows for repeat/@over and for batch rendering (one output set per row).
+            """
+            ...
 
         def add_variant(
             self,
             *,
             id: str | None = None,
             label: str | None = None,
-        ) -> Variant: ...
+        ) -> Variant:
+            """Add a <variant> child; the keywords are the attributes of Variant.
+
+            A named parameter set (A/B test cell, language, market).
+            """
+            ...
 
         def add_program(
             self,
@@ -31683,7 +35631,12 @@ class Parameters(Element):
             fuel: _t.Union[int, str] | None = None,
             memoryLimit: _t.Union[int, str] | None = None,
             outputSha256: T_sha256Type | None = None,
-        ) -> ProgramData: ...
+        ) -> ProgramData:
+            """Add a <program> child; the keywords are the attributes of ProgramData.
+
+            Runs the module once; the JSON rows it returns are a data source for repeat/@over.
+            """
+            ...
 
     else:
 
@@ -31780,7 +35733,9 @@ class SafeArea(Element):
             bottom: T_unitDecimal | None = None,
             left: T_unitDecimal | None = None,
             enforce: _t.Literal["off", "warn", "error"] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Regions the platform UI covers. Presets carry the renderer's maintained insets for that placement; explicit top/right/bottom/left (fractions of the frame) override them. enforce=warn|error checks that text, captions and nodes tagged "cta" or "logo" stay inside the safe region."""
+            ...
 
 
 class SafeAreas(Element):
@@ -31808,7 +35763,12 @@ class SafeAreas(Element):
             bottom: T_unitDecimal | None = None,
             left: T_unitDecimal | None = None,
             enforce: _t.Literal["off", "warn", "error"] | None = None,
-        ) -> SafeArea: ...
+        ) -> SafeArea:
+            """Add a <safeArea> child; the keywords are the attributes of SafeArea.
+
+            Regions the platform UI covers. Presets carry the renderer's maintained insets for that placement; explicit top/right/bottom/left (fractions of the frame) override them. enforce=warn|error checks that text, captions and nodes tagged "cta" or "logo" stay inside the safe region.
+            """
+            ...
 
     else:
 
@@ -31874,7 +35834,9 @@ class Layout(Element):
             reframe: _t.Literal["reflow", "crop", "fit", "fit-blur"] | None = None,
             focusX: T_unitDecimal | None = None,
             focusY: T_unitDecimal | None = None,
-        ) -> None: ...
+        ) -> None:
+            """An alternative frame (e.g. 9:16, 4:5, 1:1, 16:9). Relative lengths and align* attributes reflow automatically; override children handle the rest. An output selects it with @layout."""
+            ...
 
         def add_override(
             self,
@@ -31882,7 +35844,12 @@ class Layout(Element):
             target: str | None = None,
             property: str | None = None,
             value: str | None = None,
-        ) -> Override: ...
+        ) -> Override:
+            """Add a <override> child; the keywords are the attributes of Override.
+
+            Sets attribute @property of the element whose id is @target (resolved in the scope of the enclosing instance, layout or variant) to @value.
+            """
+            ...
 
     else:
 
@@ -31916,7 +35883,12 @@ class Layouts(Element):
             reframe: _t.Literal["reflow", "crop", "fit", "fit-blur"] | None = None,
             focusX: T_unitDecimal | None = None,
             focusY: T_unitDecimal | None = None,
-        ) -> Layout: ...
+        ) -> Layout:
+            """Add a <layout> child; the keywords are the attributes of Layout.
+
+            An alternative frame (e.g. 9:16, 4:5, 1:1, 16:9). Relative lengths and align* attributes reflow automatically; override children handle the rest. An output selects it with @layout.
+            """
+            ...
 
     else:
 
@@ -32032,7 +36004,9 @@ class ColorManagement(Element):
             toneMapping: _t.Literal["none", "aces", "aces2", "agx", "filmic", "reinhard"] | None = None,
             exposure: _t.Union[float, int, str] | None = None,
             bitDepth: _t.Literal["8", "16", "16f", "32f"] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Scene-referred pipeline: inputs decode by asset colorSpace+transfer into @workingSpace, @looks (LUTs or ASC CDL) apply in order, then the display/view transform and tone mapping produce each output's colorSpace and transfer. @ocioConfig delegates all of this to an OpenColorIO v2 config, where @workingSpace, @display, @view and look ids name OCIO objects."""
+            ...
 
         def add_look(
             self,
@@ -32045,7 +36019,9 @@ class ColorManagement(Element):
             power: str | None = None,
             saturation: _t.Union[float, int, str] | None = None,
             mix: T_unitDecimal | None = None,
-        ) -> Look: ...
+        ) -> Look:
+            """Add a <look> child; the keywords are the attributes of Look."""
+            ...
 
     else:
 
@@ -32164,7 +36140,9 @@ class Accessibility(Element):
             readingSpeed: T_positiveDecimal | None = None,
             minDisplayTime: T_nonNegativeDecimal | None = None,
             minTextSize: T_lengthType | None = None,
-        ) -> None: ...
+        ) -> None:
+            """flashCheck runs a photosensitive-seizure analysis (general and red flashes above 3 per second over the ITU-R BT.1702 / WCAG 2.3.1 area threshold). contrastCheck verifies burned-in text and captions against their background at @minContrast."""
+            ...
 
 
 class Metadata(Element):
@@ -32224,7 +36202,9 @@ class Metadata(Element):
             *,
             name: str | None = None,
             value: str | None = None,
-        ) -> Meta: ...
+        ) -> Meta:
+            """Add a <meta> child; the keywords are the attributes of Meta."""
+            ...
 
         def add_accessibility(
             self,
@@ -32239,7 +36219,12 @@ class Metadata(Element):
             readingSpeed: T_positiveDecimal | None = None,
             minDisplayTime: T_nonNegativeDecimal | None = None,
             minTextSize: T_lengthType | None = None,
-        ) -> Accessibility: ...
+        ) -> Accessibility:
+            """Add a <accessibility> child; the keywords are the attributes of Accessibility.
+
+            flashCheck runs a photosensitive-seizure analysis (general and red flashes above 3 per second over the ITU-R BT.1702 / WCAG 2.3.1 area threshold). contrastCheck verifies burned-in text and captions against their background at @minContrast.
+            """
+            ...
 
     else:
 
@@ -32341,8 +36326,10 @@ class Project(Element):
         "workingColorSpace", "colorSpaceType", use="optional", default="srgb", fixed=None, doc="",
     )
     background: Attr[G_paintType, T_paintType] = Attr(
-        "background", "paintType", use="optional", default="#000000FF", fixed=None, doc="",
+        "background", "paintType", use="optional", default="#000000FF", fixed=None,
+        doc="A colour or url(#id) of a paints/* gradient, pattern or noise.",
     )
+    """A colour or url(#id) of a paints/* gradient, pattern or noise."""
     mode: Attr[_t.Literal["standard", "equirectangular", "viewport"], _t.Literal["standard", "equirectangular", "viewport"]] = Attr(
         "mode",
         {
@@ -32382,6 +36369,7 @@ class Project(Element):
         use="optional", default="f16", fixed=None,
         doc="Working textures (offscreens, effect passes, persistent buffers, the frame): f16 or f32 per channel. SREP 72.",
     )
+    """Working textures (offscreens, effect passes, persistent buffers, the frame): f16 or f32 per channel. SREP 72."""
     supersample: Attr[int, _t.Union[int, str]] = Attr(
         "supersample",
         {
@@ -32393,8 +36381,13 @@ class Project(Element):
             "item": None,
         },
         use="optional", default="1", fixed=None,
-        doc="n > 1 renders the frame at n x width by n x height, every length scaled by n, and filters\n      it down with supersampleFilter: output pixel i is the weighted mean of the samples, sample k centred at (k + 0.5)/n\n      output pixels, the weights renormalised at the frame's edges, in the working space before output encoding, and\n      clamped to [0, max(1, M)], M the largest sample of non-zero weight. SREPs 72 and 89.",
+        doc="n > 1 renders the frame at n x width by n x height, every length scaled by n, and filters\nit down with supersampleFilter: output pixel i is the weighted mean of the samples, sample k centred at (k + 0.5)/n\noutput pixels, the weights renormalised at the frame's edges, in the working space before output encoding, and\nclamped to [0, max(1, M)], M the largest sample of non-zero weight. SREPs 72 and 89.",
     )
+    """n > 1 renders the frame at n x width by n x height, every length scaled by n, and filters
+    it down with supersampleFilter: output pixel i is the weighted mean of the samples, sample k centred at (k + 0.5)/n
+    output pixels, the weights renormalised at the frame's edges, in the working space before output encoding, and
+    clamped to [0, max(1, M)], M the largest sample of non-zero weight. SREPs 72 and 89.
+    """
     supersampleFilter: Attr[_t.Literal["box", "lanczos3"], _t.Literal["box", "lanczos3"]] = Attr(
         "supersampleFilter",
         {
@@ -32406,8 +36399,11 @@ class Project(Element):
             "item": None,
         },
         use="optional", default="box", fixed=None,
-        doc="box: the mean of the n x n samples inside the pixel; lanczos3: the separable kernel\n      sinc(x) sinc(x/3) for |x| < 3 output pixels. Read only when supersample > 1. SREP 72.",
+        doc="box: the mean of the n x n samples inside the pixel; lanczos3: the separable kernel\nsinc(x) sinc(x/3) for |x| < 3 output pixels. Read only when supersample > 1. SREP 72.",
     )
+    """box: the mean of the n x n samples inside the pixel; lanczos3: the separable kernel
+    sinc(x) sinc(x/3) for |x| < 3 output pixels. Read only when supersample > 1. SREP 72.
+    """
     motionBlur: Attr[bool, _t.Union[bool, str]] = Attr(
         "motionBlur", "xs:boolean", use="optional", default="false", fixed=None, doc="",
     )
@@ -32507,7 +36503,14 @@ class Project(Element):
             safeArea: _t.Union[str, Element] | None = None,
             quality: _t.Literal["draft", "preview", "final"] | None = None,
             fontPolicy: _t.Literal["system", "pinned"] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                background: A colour or url(#id) of a paints/* gradient, pattern or noise.
+                precision: Working textures (offscreens, effect passes, persistent buffers, the frame): f16 or f32 per channel. SREP 72.
+                supersample: n > 1 renders the frame at n x width by n x height, every length scaled by n, and filters it down with supersampleFilter: output pixel i is the weighted mean of the samples, sample k centred at (k + 0.5)/n output pixels, the weights renormalised at the frame's edges, in the working space before output encoding, and clamped to [0, max(1, M)], M the largest sample of non-zero weight. SREPs 72 and 89.
+                supersampleFilter: box: the mean of the n x n samples inside the pixel; lanczos3: the separable kernel sinc(x) sinc(x/3) for |x| < 3 output pixels. Read only when supersample > 1. SREP 72.
+            """
+            ...
 
 
 class Still(Element):
@@ -32594,7 +36597,9 @@ class Destination(Element):
             kind: _t.Literal["file", "s3", "gcs", "azure-blob", "http-put", "sftp", "webhook"] | None = None,
             uri: str | None = None,
             credentials: str | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Post-render delivery. Credentials are never stored in the document: @credentials names an environment profile."""
+            ...
 
 
 class Segment(Element):
@@ -32666,14 +36671,21 @@ class Segment(Element):
             audio: _t.Literal["stretch", "resample", "mute"] | None = None,
             focusX: T_unitDecimal | None = None,
             focusY: T_unitDecimal | None = None,
-        ) -> None: ...
+        ) -> None:
+            """A span of the composition played by this output: from..to (seconds) or fromMarker..toMarker at speed, or a timeRemap child mapping segment time (key/@time, from 0) to composition time (key/@value) for ramps, freezes and reversals. The output plays its segments in document order. A transition child joins this segment to the next one. audio says how the span's sound is fitted to its duration: stretch keeps pitch, resample changes pitch with speed, mute is silence. focusX and focusY (animatable in segment time, by animate children) replace the layout's reframing focus for crop and fit-blur."""
+            ...
 
         def add_timeRemap(
             self,
             *,
             defaultInterpolation: T_curveType | None = None,
             frameBlend: _t.Literal["none", "frame-mix", "optical-flow"] | None = None,
-        ) -> TimeRemap: ...
+        ) -> TimeRemap:
+            """Add a <timeRemap> child; the keywords are the attributes of TimeRemap.
+
+            Maps layer-local time (key/@time) to source time (key/@value, seconds). Replaces speed/reverse/loop when present; speed ramps, freezes and reversals are expressed as keys.
+            """
+            ...
 
         def add_transition(
             self,
@@ -32693,7 +36705,12 @@ class Segment(Element):
             shader: str | None = None,
             motionBlur: _t.Union[bool, str] | None = None,
             audio: _t.Literal["crossfade", "equal-power", "cut", "none"] | None = None,
-        ) -> Transition: ...
+        ) -> Transition:
+            """Add a <transition> child; the keywords are the attributes of Transition.
+
+            Transition between sibling nodes @from (outgoing) and @to (incoming), or an in/out transition of a single node when only one is given. The transition window has length @duration, centred on the cut (alignment center), ending at it (end) or starting at it (start). The renderer extends the handles of both nodes by the needed amount.
+            """
+            ...
 
         def add_animate(
             self,
@@ -32704,7 +36721,9 @@ class Segment(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
     else:
 
@@ -32752,6 +36771,7 @@ class Output(Element):
         "overlay", "xs:IDREF", use="optional", default=None, fixed=None,
         doc="A symbol drawn over the output's picture in output time (series tags, calls to action, end cards).",
     )
+    """A symbol drawn over the output's picture in output time (series tags, calls to action, end cards)."""
     joinFade: Attr[G_nonNegativeDecimal, T_nonNegativeDecimal] = Attr(
         "joinFade", "nonNegativeDecimal", use="optional", default="0.01", fixed=None, doc="",
     )
@@ -32913,10 +36933,12 @@ class Output(Element):
         "loopCount", "xs:nonNegativeInteger", use="optional", default="0", fixed=None,
         doc="GIF/APNG/WebP loop count; 0 = infinite.",
     )
+    """GIF/APNG/WebP loop count; 0 = infinite."""
     maxFileSize: Attr[int, _t.Union[int, str]] = Attr(
         "maxFileSize", "xs:positiveInteger", use="optional", default=None, fixed=None,
         doc="Bytes; the encoder picks a bitrate that fits (platform upload limits).",
     )
+    """Bytes; the encoder picks a bitrate that fits (platform upload limits)."""
     embedMetadata: Attr[bool, _t.Union[bool, str]] = Attr(
         "embedMetadata", "xs:boolean", use="optional", default="true", fixed=None, doc="",
     )
@@ -32924,10 +36946,12 @@ class Output(Element):
         "representation", "xs:NMTOKEN", use="optional", default=None, fixed=None,
         doc='Preferred asset representation name for this output (e.g. "proxy" for drafts).',
     )
+    """Preferred asset representation name for this output (e.g. "proxy" for drafts)."""
     report: Attr[str, str] = Attr(
         "report", "xs:anyURI", use="optional", default=None, fixed=None,
         doc="Where to write this output's render report (scene-render-report/1), relative to the document.",
     )
+    """Where to write this output's render report (scene-render-report/1), relative to the document."""
 
     if _t.TYPE_CHECKING:
 
@@ -32981,7 +37005,17 @@ class Output(Element):
             embedMetadata: _t.Union[bool, str] | None = None,
             representation: str | None = None,
             report: str | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Several outputs render one scene into different placements. layout picks a layoutVariant frame; variant picks a parameter set; start/end render a range. Width/height default to the layout's, else the project's. Sequence codecs write numbered files at @path (printf pattern).
+
+            Args:
+                overlay: A symbol drawn over the output's picture in output time (series tags, calls to action, end cards).
+                loopCount: GIF/APNG/WebP loop count; 0 = infinite.
+                maxFileSize: Bytes; the encoder picks a bitrate that fits (platform upload limits).
+                representation: Preferred asset representation name for this output (e.g. "proxy" for drafts).
+                report: Where to write this output's render report (scene-render-report/1), relative to the document.
+            """
+            ...
 
         def add_poster(
             self,
@@ -32992,7 +37026,9 @@ class Output(Element):
             format: _t.Literal["jpeg", "png", "webp", "avif"] | None = None,
             width: _t.Union[int, str] | None = None,
             quality: T_unitDecimal | None = None,
-        ) -> Still: ...
+        ) -> Still:
+            """Add a <poster> child; the keywords are the attributes of Still."""
+            ...
 
         def add_thumbnail(
             self,
@@ -33003,7 +37039,9 @@ class Output(Element):
             format: _t.Literal["jpeg", "png", "webp", "avif"] | None = None,
             width: _t.Union[int, str] | None = None,
             quality: T_unitDecimal | None = None,
-        ) -> Still: ...
+        ) -> Still:
+            """Add a <thumbnail> child; the keywords are the attributes of Still."""
+            ...
 
         def add_destination(
             self,
@@ -33011,7 +37049,12 @@ class Output(Element):
             kind: _t.Literal["file", "s3", "gcs", "azure-blob", "http-put", "sftp", "webhook"] | None = None,
             uri: str | None = None,
             credentials: str | None = None,
-        ) -> Destination: ...
+        ) -> Destination:
+            """Add a <destination> child; the keywords are the attributes of Destination.
+
+            Post-render delivery. Credentials are never stored in the document: @credentials names an environment profile.
+            """
+            ...
 
         def add_segment(
             self,
@@ -33025,7 +37068,12 @@ class Output(Element):
             audio: _t.Literal["stretch", "resample", "mute"] | None = None,
             focusX: T_unitDecimal | None = None,
             focusY: T_unitDecimal | None = None,
-        ) -> Segment: ...
+        ) -> Segment:
+            """Add a <segment> child; the keywords are the attributes of Segment.
+
+            A span of the composition played by this output: from..to (seconds) or fromMarker..toMarker at speed, or a timeRemap child mapping segment time (key/@time, from 0) to composition time (key/@value) for ramps, freezes and reversals. The output plays its segments in document order. A transition child joins this segment to the next one. audio says how the span's sound is fitted to its duration: stretch keeps pitch, resample changes pitch with speed, mute is silence. focusX and focusY (animatable in segment time, by animate children) replace the layout's reframing focus for crop and fit-blur.
+            """
+            ...
 
         def add_audioTrack(
             self,
@@ -33056,7 +37104,12 @@ class Output(Element):
             duckThreshold: T_decibelType | None = None,
             duckAttack: T_nonNegativeDecimal | None = None,
             duckRelease: T_nonNegativeDecimal | None = None,
-        ) -> AudioTrack: ...
+        ) -> AudioTrack:
+            """Add a <audioTrack> child; the keywords are the attributes of AudioTrack.
+
+            volume, pan and gain animate with nested animation elements (audio automation).
+            """
+            ...
 
         def add_captionTrack(
             self,
@@ -33089,7 +37142,12 @@ class Output(Element):
             safeArea: _t.Union[str, Element] | None = None,
             z: _t.Union[int, str] | None = None,
             profanityFilter: _t.Union[bool, str] | None = None,
-        ) -> CaptionTrack: ...
+        ) -> CaptionTrack:
+            """Add a <captionTrack> child; the keywords are the attributes of CaptionTrack.
+
+            Captions from inline cues, a subtitle file (@src), or a transcription of audio track @transcribe. Transcriptions are read from @cache (verified by @cacheSha256) so renders stay deterministic; a resolve step, run before rendering, writes the cache from the track as it plays in the mix, in composition time. mode=burn draws them into the picture using @preset and @style; sidecar writes a file next to each output.
+            """
+            ...
 
     else:
 
@@ -33164,8 +37222,10 @@ class VolumeAsset(Element):
     )
     fps: Attr[G_fpsType, T_fpsType] = Attr("fps", "fpsType", use="optional", default=None, fixed=None, doc="")
     interpolation: Attr[G_volumeInterpolationType, T_volumeInterpolationType] = Attr(
-        "interpolation", "volumeInterpolationType", use="optional", default="hold", fixed=None, doc="",
+        "interpolation", "volumeInterpolationType", use="optional", default="hold", fixed=None,
+        doc="Version 1.3. Hold freezes a frame; linear blends scalar fields in asset-world coordinates. Advect requires all three velocityGrid components (VOL9): signed asset-world vectors in scene units/second, with matching component transforms per frame. Frozen endpoint midpoint traces precede density/kelvin blending. Numbered caches use object-local seconds; SRVSEQ uses composition seconds. Clamped or identical held endpoints freeze. Grid transforms locate samples without transforming velocity vectors. Assets and their channel references are immutable during rendering; channel names identify owned cache fields, not paths.",
     )
+    """Version 1.3. Hold freezes a frame; linear blends scalar fields in asset-world coordinates. Advect requires all three velocityGrid components (VOL9): signed asset-world vectors in scene units/second, with matching component transforms per frame. Frozen endpoint midpoint traces precede density/kelvin blending. Numbered caches use object-local seconds; SRVSEQ uses composition seconds. Clamped or identical held endpoints freeze. Grid transforms locate samples without transforming velocity vectors. Assets and their channel references are immutable during rendering; channel names identify owned cache fields, not paths."""
     missingFrame: Attr[G_volumeMissingFrameType, T_volumeMissingFrameType] = Attr(
         "missingFrame", "volumeMissingFrameType", use="optional", default="error", fixed=None, doc="",
     )
@@ -33213,7 +37273,11 @@ class VolumeAsset(Element):
             boundsMaxX: _t.Union[float, int, str] | None = None,
             boundsMaxY: _t.Union[float, int, str] | None = None,
             boundsMaxZ: _t.Union[float, int, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                interpolation: Version 1.3. Hold freezes a frame; linear blends scalar fields in asset-world coordinates. Advect requires all three velocityGrid components (VOL9): signed asset-world vectors in scene units/second, with matching component transforms per frame. Frozen endpoint midpoint traces precede density/kelvin blending. Numbered caches use object-local seconds; SRVSEQ uses composition seconds. Clamped or identical held endpoints freeze. Grid transforms locate samples without transforming velocity vectors. Assets and their channel references are immutable during rendering; channel names identify owned cache fields, not paths.
+            """
+            ...
 
 
 class VoxelAsset(Element):
@@ -33312,7 +37376,9 @@ class VoxelAsset(Element):
             license: str | None = None,
             credit: str | None = None,
             proxy: str | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Version 1.3 or later (VOX1). A model of cells, each with a palette index 1 to 255: either a file (`src`, `format` vox, MagicaVoxel, or srvol, the engine's volume cache with the indices as exact values of the grid `voxelGrid`) or a closed mesh asset cut into cells (`fromMesh` and `cellSize`, the cells whose centres are inside the mesh, on a lattice of multiples of the cell size, by the test that the smoke's colliders use, with the mesh in the frame it is drawn in: scene units, an imported asset in metres being 100 to the metre, and scene axes, so `cellSize` is in scene units), exactly one of the two (VOX2, VOX3). A `vox` file with a scene graph is the whole scene, the models placed as the graph says, unless `model` names one (its number from 0), which is then unplaced. MagicaVoxel's axes (z up) are turned into the scene's (y down, z forward) by a proper rotation. `maxCells` and `maxMemoryMiB` bound what is built, before it is allocated, and over either is an error that names the number, never a model cut short. The engine's defaults are 4194304 cells, 128 MiB and the grid `voxels`; they are not XSD defaults so that the attributes that belong to one source can be refused on the other (VOX2)."""
+            ...
 
 
 class MeshSequenceAsset(Element):
@@ -33418,8 +37484,12 @@ class Medium(Element):
         "extinction", "nonNegativeDecimal", use="optional", default="1", fixed=None, doc="",
     )
     albedo: Attr[G_colorType, T_colorType] = Attr(
-        "albedo", "colorType", use="optional", default="#FFFFFFFF", fixed=None, doc="",
+        "albedo", "colorType", use="optional", default="#FFFFFFFF", fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     anisotropy: Attr[float, _t.Union[float, int, str]] = Attr(
         "anisotropy",
         {
@@ -33434,8 +37504,12 @@ class Medium(Element):
         doc="",
     )
     emissionColor: Attr[G_colorType, T_colorType] = Attr(
-        "emissionColor", "colorType", use="optional", default="#000000FF", fixed=None, doc="",
+        "emissionColor", "colorType", use="optional", default="#000000FF", fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     emissionScale: Attr[G_nonNegativeDecimal, T_nonNegativeDecimal] = Attr(
         "emissionScale", "nonNegativeDecimal", use="optional", default="0", fixed=None, doc="",
     )
@@ -33474,6 +37548,7 @@ class Medium(Element):
         use="optional", default="exact", fixed=None,
         doc="Version 1.3. How the medium's in-scattering is lit by the path tracer: exact marches a shadow ray from every sample; grid reads transmittance and surface visibility from per-light grids built once per frame (see the cinematic impact SREP). The lightGrid* attributes apply only with grid (VOL10).",
     )
+    """Version 1.3. How the medium's in-scattering is lit by the path tracer: exact marches a shadow ray from every sample; grid reads transmittance and surface visibility from per-light grids built once per frame (see the cinematic impact SREP). The lightGrid* attributes apply only with grid (VOL10)."""
     lightGridCell: Attr[int, _t.Union[int, str]] = Attr(
         "lightGridCell",
         {
@@ -33526,6 +37601,7 @@ class Medium(Element):
         use="optional", default="1", fixed=None,
         doc="Version 1.3. The most collisions a path may have in the medium before the light reaches the camera, counting the one that is lit directly: 1 is single scattering (what the medium does without the attribute), 0 is a medium that does not scatter (absorption and emission only), and more add the light that has been scattered more than once, estimated by the path tracer by a random walk.",
     )
+    """Version 1.3. The most collisions a path may have in the medium before the light reaches the camera, counting the one that is lit directly: 1 is single scattering (what the medium does without the attribute), 0 is a medium that does not scatter (absorption and emission only), and more add the light that has been scattered more than once, estimated by the path tracer by a random walk."""
 
     if _t.TYPE_CHECKING:
 
@@ -33547,7 +37623,14 @@ class Medium(Element):
             lightGridDomeDirections: _t.Union[int, str] | None = None,
             lightGridMemoryMiB: _t.Union[int, str] | None = None,
             scatterBounces: _t.Union[int, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                albedo: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+                emissionColor: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+                lighting: Version 1.3. How the medium's in-scattering is lit by the path tracer: exact marches a shadow ray from every sample; grid reads transmittance and surface visibility from per-light grids built once per frame (see the cinematic impact SREP). The lightGrid* attributes apply only with grid (VOL10).
+                scatterBounces: Version 1.3. The most collisions a path may have in the medium before the light reaches the camera, counting the one that is lit directly: 1 is single scattering (what the medium does without the attribute), 0 is a medium that does not scatter (absorption and emission only), and more add the light that has been scattered more than once, estimated by the path tracer by a random walk.
+            """
+            ...
 
         def add_animate(
             self,
@@ -33558,7 +37641,9 @@ class Medium(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -33566,7 +37651,12 @@ class Medium(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -33579,7 +37669,12 @@ class Medium(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -33597,7 +37692,12 @@ class Medium(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -33659,8 +37759,12 @@ class Particles3D(Element):
         "end", "xs:double", use="optional", default=None, fixed=None, doc="",
     )
     condition: Attr[G_expressionString, T_expressionString] = Attr(
-        "condition", "expressionString", use="optional", default=None, fixed=None, doc="",
+        "condition", "expressionString", use="optional", default=None, fixed=None,
+        doc="A deterministic expression in the scene-render expression language (see\nexpressionType). Used by @condition attributes and expression elements.",
     )
+    """A deterministic expression in the scene-render expression language (see
+    expressionType). Used by @condition attributes and expression elements.
+    """
     parent: Attr[str, _t.Union[str, Element]] = Attr(
         "parent", "xs:IDREF", use="optional", default=None, fixed=None, doc="",
     )
@@ -33668,6 +37772,7 @@ class Particles3D(Element):
         "parentJoint", "xs:string", use="optional", default=None, fixed=None,
         doc='With a @parent (or a transformConstraint of type="parent") that is an object3D drawing an imported model: the name of a node of that model. The element is placed in that node\'s frame as the model\'s clips pose it, instead of in the object\'s own frame. The first node of that name in the model\'s node order is used.',
     )
+    """With a @parent (or a transformConstraint of type="parent") that is an object3D drawing an imported model: the name of a node of that model. The element is placed in that node's frame as the model's clips pose it, instead of in the object's own frame. The first node of that name in the model's node order is used."""
     scaleX: Attr[float, _t.Union[float, int, str]] = Attr(
         "scaleX", "xs:double", use="optional", default="1", fixed=None, doc="",
     )
@@ -33966,6 +38071,19 @@ class Particles3D(Element):
         "gas", "xs:IDREF", use="optional", default=None, fixed=None,
         doc="The object3D whose native pyro volume drags the particles along. Absent (the default) is the behaviour there\nalways was. The acceleration of a particle gains `drag` times the gas's velocity at its place and time, so\nwith the emitter's `drag` k the particle obeys p'' = k (u - v) plus gravity and fields: it is dragged by the gas\ninside the volume's domain and by still air outside it, with the same coefficient (the gas fades to rest across\none cell outside the domain, so there is no jump at its boundary); a `drag` of zero gives no coupling. The place\nis taken to the volume's axes by the inverse of its world matrix at that time and the velocity back by its\nlinear part. In time the gas is the linear interpolation of the two smoke steps around the instant; the\nparticles run before the smoke in the frame and ask it, in order, for the steps they need, so that it is simulated\nonce for each of its steps, and a smoke that fails fails the particles with its message. The velocity fields of the steps in use are charged to the volume's `maxMemoryMiB`\nand exceeding it is an error. The particles do not push the gas, and the coupling is linear in the relative\nvelocity: for 0.34 m rocks of 2100 kg/m3 in air at 50 m/s the quadratic drag is a rate of about 0.03 per second,\nso it moves dust-sized particles and not ejecta. The volume must be on the composition clock.",
     )
+    """The object3D whose native pyro volume drags the particles along. Absent (the default) is the behaviour there
+    always was. The acceleration of a particle gains `drag` times the gas's velocity at its place and time, so
+    with the emitter's `drag` k the particle obeys p'' = k (u - v) plus gravity and fields: it is dragged by the gas
+    inside the volume's domain and by still air outside it, with the same coefficient (the gas fades to rest across
+    one cell outside the domain, so there is no jump at its boundary); a `drag` of zero gives no coupling. The place
+    is taken to the volume's axes by the inverse of its world matrix at that time and the velocity back by its
+    linear part. In time the gas is the linear interpolation of the two smoke steps around the instant; the
+    particles run before the smoke in the frame and ask it, in order, for the steps they need, so that it is simulated
+    once for each of its steps, and a smoke that fails fails the particles with its message. The velocity fields of the steps in use are charged to the volume's `maxMemoryMiB`
+    and exceeding it is an error. The particles do not push the gas, and the coupling is linear in the relative
+    velocity: for 0.34 m rocks of 2100 kg/m3 in air at 50 m/s the quadratic drag is a rate of about 0.03 per second,
+    so it moves dust-sized particles and not ejecta. The volume must be on the composition clock.
+    """
     emitterShape: Attr[_t.Literal["point", "box", "sphere", "mesh"], _t.Literal["point", "box", "sphere", "mesh"]] = Attr(
         "emitterShape",
         {
@@ -33996,20 +38114,40 @@ class Particles3D(Element):
         "sizeEnd", "nonNegativeDecimal", use="optional", default=None, fixed=None, doc="",
     )
     color: Attr[G_colorType, T_colorType] = Attr(
-        "color", "colorType", use="optional", default="#FFFFFFFF", fixed=None, doc="",
+        "color", "colorType", use="optional", default="#FFFFFFFF", fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     colorEnd: Attr[G_colorType, T_colorType] = Attr(
-        "colorEnd", "colorType", use="optional", default=None, fixed=None, doc="",
+        "colorEnd", "colorType", use="optional", default=None, fixed=None,
+        doc='#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a\nstyle token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.',
     )
+    """#RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a
+    style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+    """
     opacityEnd: Attr[G_unitDecimal, T_unitDecimal] = Attr(
         "opacityEnd", "unitDecimal", use="optional", default=None, fixed=None, doc="",
     )
     sizeCurve: Attr[G_curveType, T_curveType] = Attr(
-        "sizeCurve", "curveType", use="optional", default="linear", fixed=None, doc="",
+        "sizeCurve", "curveType", use="optional", default="linear", fixed=None,
+        doc='1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom,\ntcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping,\n@mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2"\nor key/@easeOut + next key/@easeIn handles.',
     )
+    """1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom,
+    tcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping,
+    @mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2"
+    or key/@easeOut + next key/@easeIn handles.
+    """
     colorCurve: Attr[G_curveType, T_curveType] = Attr(
-        "colorCurve", "curveType", use="optional", default="linear", fixed=None, doc="",
+        "colorCurve", "curveType", use="optional", default="linear", fixed=None,
+        doc='1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom,\ntcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping,\n@mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2"\nor key/@easeOut + next key/@easeIn handles.',
     )
+    """1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom,
+    tcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping,
+    @mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2"
+    or key/@easeOut + next key/@easeIn handles.
+    """
 
     if _t.TYPE_CHECKING:
 
@@ -34106,7 +38244,17 @@ class Particles3D(Element):
             opacityEnd: T_unitDecimal | None = None,
             sizeCurve: T_curveType | None = None,
             colorCurve: T_curveType | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                condition: A deterministic expression in the scene-render expression language (see expressionType). Used by @condition attributes and expression elements.
+                parentJoint: With a @parent (or a transformConstraint of type="parent") that is an object3D drawing an imported model: the name of a node of that model. The element is placed in that node's frame as the model's clips pose it, instead of in the object's own frame. The first node of that name in the model's node order is used.
+                gas: The object3D whose native pyro volume drags the particles along. Absent (the default) is the behaviour there always was. The acceleration of a particle gains `drag` times the gas's velocity at its place and time, so with the emitter's `drag` k the particle obeys p'' = k (u - v) plus gravity and fields: it is dragged by the gas inside the volume's domain and by still air outside it, with the same coefficient (the gas fades to rest across one cell outside the domain, so there is no jump at its boundary); a `drag` of zero gives no coupling. The place is taken to the volume's axes by the inverse of its world matrix at that time and the velocity back by its linear part. In time the gas is the linear interpolation of the two smoke steps around the instant; the particles run before the smoke in the frame and ask it, in order, for the steps they need, so that it is simulated once for each of its steps, and a smoke that fails fails the particles with its message. The velocity fields of the steps in use are charged to the volume's `maxMemoryMiB` and exceeding it is an error. The particles do not push the gas, and the coupling is linear in the relative velocity: for 0.34 m rocks of 2100 kg/m3 in air at 50 m/s the quadratic drag is a rate of about 0.03 per second, so it moves dust-sized particles and not ejecta. The volume must be on the composition clock.
+                color: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+                colorEnd: #RRGGBB, #RRGGBBAA, 3-4 normalised channels in [0,1] ("1,0.5,0,1"), or a style token reference var(--name) resolved from styles/token. The shorthand #RGB and #RGBA is not accepted.
+                sizeCurve: 1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom, tcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping, @mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2" or key/@easeOut + next key/@easeIn handles.
+                colorCurve: 1.0 curves plus hold (alias of step), steps (uses key/@steps), catmull-rom, tcb (key/@tension, @continuity, @bias), spring (key/@stiffness, @damping, @mass) and the Penner family. cubic-bezier uses key/@bezier "x1,y1,x2,y2" or key/@easeOut + next key/@easeIn handles.
+            """
+            ...
 
         def add_animate(
             self,
@@ -34117,7 +38265,9 @@ class Particles3D(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -34125,7 +38275,12 @@ class Particles3D(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -34138,7 +38293,12 @@ class Particles3D(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -34156,7 +38316,12 @@ class Particles3D(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_transformConstraint(
             self,
@@ -34178,7 +38343,12 @@ class Particles3D(Element):
             softness: T_unitDecimal | None = None,
             progress: T_unitDecimal | None = None,
             autoOrient: _t.Union[bool, str] | None = None,
-        ) -> TransformConstraint: ...
+        ) -> TransformConstraint:
+            """Add a <transformConstraint> child; the keywords are the attributes of TransformConstraint.
+
+            Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target's transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target's world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.
+            """
+            ...
 
         def add_burst(
             self,
@@ -34190,7 +38360,12 @@ class Particles3D(Element):
             crater: _t.Union[str, Element] | None = None,
             angle: T_nonNegativeDecimal | None = None,
             angleSpread: T_nonNegativeDecimal | None = None,
-        ) -> Burst3D: ...
+        ) -> Burst3D:
+            """Add a <burst> child; the keywords are the attributes of Burst3D.
+
+            A burst of a 3D emitter at an instant (`time`, `count`, `repeat`, `interval`), or what the impact of a crater throws out of it: `crater` names a crater that grows from an impact (`crater@source`), `count` is then the number of particles that stand for the ejecta (for the crater of an object of cells, whose particles are the cells that the cut throws with the cut's own velocities, there is no count, no `angle` and no `angleSpread`: CRT16 and CRT17), and when, where, how fast and how heavy each one is are derived (the instant, `repeat` and `interval` are not given). Each particle is born at the instant it is launched, at its launch distance from the impact point, with its own velocity and mass; the mass is kept in the particle (the render size still comes from `size`) and the particles together hold 80% of the crater's mass. Launch speed and mass follow the ejecta scaling of Housen and Holsapple (2011) as the engine reads it, which has not been checked against the paper; the launch angle, its spread, the launch time and the lopsidedness of an oblique impact are the engine's own. `angle` is the launch angle above the tangent plane of the contact and `angleSpread` the half-width of the uniform spread around it, in degrees; both stay within 0 to 90 together. The ejecta of regolith and ice have no table row and are an error. Positions and velocities are in scene units through `physics/@pixelsPerMeter`, and gravity, drag and colliders are those of the emitter. The crater's pose is that of its owner at the impact. More particles than `maxParticles` is an error, not a truncation.
+            """
+            ...
 
     else:
 
@@ -34264,6 +38439,7 @@ class Burst3D(Element):
         use="optional", default=None, fixed=None,
         doc="The launch angle above the tangent plane, degrees; the engine's default is 45. It is not an XSD default, so that it can be refused on a burst that is not from a crater (P3D9).",
     )
+    """The launch angle above the tangent plane, degrees; the engine's default is 45. It is not an XSD default, so that it can be refused on a burst that is not from a crater (P3D9)."""
     angleSpread: Attr[G_nonNegativeDecimal, T_nonNegativeDecimal] = Attr(
         "angleSpread",
         {
@@ -34277,6 +38453,7 @@ class Burst3D(Element):
         use="optional", default=None, fixed=None,
         doc="The half-width of the uniform spread of the launch angle, degrees; the engine's default is 15, with the same reason as `angle`. The angle and its spread stay between 0 and 90 together (P3D10).",
     )
+    """The half-width of the uniform spread of the launch angle, degrees; the engine's default is 15, with the same reason as `angle`. The angle and its spread stay between 0 and 90 together (P3D10)."""
 
     if _t.TYPE_CHECKING:
 
@@ -34290,7 +38467,14 @@ class Burst3D(Element):
             crater: _t.Union[str, Element] | None = None,
             angle: T_nonNegativeDecimal | None = None,
             angleSpread: T_nonNegativeDecimal | None = None,
-        ) -> None: ...
+        ) -> None:
+            """A burst of a 3D emitter at an instant (`time`, `count`, `repeat`, `interval`), or what the impact of a crater throws out of it: `crater` names a crater that grows from an impact (`crater@source`), `count` is then the number of particles that stand for the ejecta (for the crater of an object of cells, whose particles are the cells that the cut throws with the cut's own velocities, there is no count, no `angle` and no `angleSpread`: CRT16 and CRT17), and when, where, how fast and how heavy each one is are derived (the instant, `repeat` and `interval` are not given). Each particle is born at the instant it is launched, at its launch distance from the impact point, with its own velocity and mass; the mass is kept in the particle (the render size still comes from `size`) and the particles together hold 80% of the crater's mass. Launch speed and mass follow the ejecta scaling of Housen and Holsapple (2011) as the engine reads it, which has not been checked against the paper; the launch angle, its spread, the launch time and the lopsidedness of an oblique impact are the engine's own. `angle` is the launch angle above the tangent plane of the contact and `angleSpread` the half-width of the uniform spread around it, in degrees; both stay within 0 to 90 together. The ejecta of regolith and ice have no table row and are an error. Positions and velocities are in scene units through `physics/@pixelsPerMeter`, and gravity, drag and colliders are those of the emitter. The crater's pose is that of its owner at the impact. More particles than `maxParticles` is an error, not a truncation.
+
+            Args:
+                angle: The launch angle above the tangent plane, degrees; the engine's default is 45. It is not an XSD default, so that it can be refused on a burst that is not from a crater (P3D9).
+                angleSpread: The half-width of the uniform spread of the launch angle, degrees; the engine's default is 15, with the same reason as `angle`. The angle and its spread stay between 0 and 90 together (P3D10).
+            """
+            ...
 
 
 class Ocean(Element):
@@ -34340,8 +38524,12 @@ class Ocean(Element):
         "end", "xs:double", use="optional", default=None, fixed=None, doc="",
     )
     condition: Attr[G_expressionString, T_expressionString] = Attr(
-        "condition", "expressionString", use="optional", default=None, fixed=None, doc="",
+        "condition", "expressionString", use="optional", default=None, fixed=None,
+        doc="A deterministic expression in the scene-render expression language (see\nexpressionType). Used by @condition attributes and expression elements.",
     )
+    """A deterministic expression in the scene-render expression language (see
+    expressionType). Used by @condition attributes and expression elements.
+    """
     parent: Attr[str, _t.Union[str, Element]] = Attr(
         "parent", "xs:IDREF", use="optional", default=None, fixed=None, doc="",
     )
@@ -34528,6 +38716,18 @@ class Ocean(Element):
         "splash", "xs:IDREFS", use="optional", default=None, fixed=None,
         doc="The particles3D emitters whose particles fall into this ocean: each must throw out the ejecta of a crater (a\n`burst` with `crater`), whose particles have a mass (OCN13). Absent (the default) is the behaviour there always was.\nA particle of a listed emitter whose centre crosses the ocean's rest level (`waterLevel`) downward inside its\ndomain is removed there, and what it brings is given to the water in the canonical step of the crossing, summed\nby cell: the volume of the particle (its mass over the density of the crater's target) is taken out of the\ncell's water and given equally to its eight neighbours, never more than 90 % of the cell's water, and its\nhorizontal momentum, divided by the density of the water, is added to the cell's. The water volume and the\nhorizontal momentum that is applied are conserved; the vertical momentum and the energy of the particle are not\n(the shallow-water model has no vertical momentum), and a particle that has fallen in is gone, it does not sink.\nThe surface is the water's rest level, not the swell, and the ocean is taken at its pose when the emitter\nstarts. The deposit does not go through the depth filter of `bedResponse`. An emitter belongs to one ocean.",
     )
+    """The particles3D emitters whose particles fall into this ocean: each must throw out the ejecta of a crater (a
+    `burst` with `crater`), whose particles have a mass (OCN13). Absent (the default) is the behaviour there always was.
+    A particle of a listed emitter whose centre crosses the ocean's rest level (`waterLevel`) downward inside its
+    domain is removed there, and what it brings is given to the water in the canonical step of the crossing, summed
+    by cell: the volume of the particle (its mass over the density of the crater's target) is taken out of the
+    cell's water and given equally to its eight neighbours, never more than 90 % of the cell's water, and its
+    horizontal momentum, divided by the density of the water, is added to the cell's. The water volume and the
+    horizontal momentum that is applied are conserved; the vertical momentum and the energy of the particle are not
+    (the shallow-water model has no vertical momentum), and a particle that has fallen in is gone, it does not sink.
+    The surface is the water's rest level, not the swell, and the ocean is taken at its pose when the emitter
+    starts. The deposit does not go through the depth filter of `bedResponse`. An emitter belongs to one ocean.
+    """
     bodyCoupling: Attr[_t.Literal["none", "buoyancy", "full"], _t.Literal["none", "buoyancy", "full"]] = Attr(
         "bodyCoupling",
         {
@@ -34541,6 +38741,24 @@ class Ocean(Element):
         use="optional", default="none", fixed=None,
         doc="What the water does to the rigid bodies in `colliders`. `none` (the default) is the existing behaviour: a body\ndisplaces the water and nothing acts on the body. `buoyancy` loads each rigid body with the weight of the water it\ndisplaces (water density 1000 kg/m3, the ocean's gravity), upward through the centroid of the submerged volume\nso that a tilted body is turned by it, and with a quadratic form drag on its vertical motion, scaled by\n`bodyDrag`. A body floats if it is lighter than the water it displaces. The submerged part is measured against\nthe free surface under the body: the plane that the ocean fits, in the canonical step before the last one it has\ncompleted, through the surface of the wet columns of the body's footprint (the water the body displaces stands\nabove the rest level while it is there, and the plane says so), and against the rest level, `waterLevel`, while\nthere is none; the body's own motion therefore moves the water it floats on, and the water carries the energy of\na bobbing body away, so a body with no drag settles. `full` adds the horizontal momentum the body gave the water in\nthat step, taken back as a force along the body's centre over one canonical step, so that the body and the water\nkeep their momentum together (to what is in flight, one step late); roll is not damped, there is no added mass,\nand a body rides the rest level when the ocean has no water under it. The load is held for one rigid step and\nevaluated halfway through it. A body so light that the waterline's stiffness times the step reaches 1.8 is an\nerror (lower `physics/@fixedStep` or raise the mass), not a damped motion. The rigid body must be a sphere, box,\ncylinder, cone, capsule or closed mesh. The ocean and the bodies form a group (see the contract text): the ocean\nis stepped before the rigid world, and the document cannot be baked into a physics cache.",
     )
+    """What the water does to the rigid bodies in `colliders`. `none` (the default) is the existing behaviour: a body
+    displaces the water and nothing acts on the body. `buoyancy` loads each rigid body with the weight of the water it
+    displaces (water density 1000 kg/m3, the ocean's gravity), upward through the centroid of the submerged volume
+    so that a tilted body is turned by it, and with a quadratic form drag on its vertical motion, scaled by
+    `bodyDrag`. A body floats if it is lighter than the water it displaces. The submerged part is measured against
+    the free surface under the body: the plane that the ocean fits, in the canonical step before the last one it has
+    completed, through the surface of the wet columns of the body's footprint (the water the body displaces stands
+    above the rest level while it is there, and the plane says so), and against the rest level, `waterLevel`, while
+    there is none; the body's own motion therefore moves the water it floats on, and the water carries the energy of
+    a bobbing body away, so a body with no drag settles. `full` adds the horizontal momentum the body gave the water in
+    that step, taken back as a force along the body's centre over one canonical step, so that the body and the water
+    keep their momentum together (to what is in flight, one step late); roll is not damped, there is no added mass,
+    and a body rides the rest level when the ocean has no water under it. The load is held for one rigid step and
+    evaluated halfway through it. A body so light that the waterline's stiffness times the step reaches 1.8 is an
+    error (lower `physics/@fixedStep` or raise the mass), not a damped motion. The rigid body must be a sphere, box,
+    cylinder, cone, capsule or closed mesh. The ocean and the bodies form a group (see the contract text): the ocean
+    is stepped before the rigid world, and the document cannot be baked into a physics cache.
+    """
     bedResponse: Attr[_t.Literal["depthFiltered", "hydrostatic"], _t.Literal["depthFiltered", "hydrostatic"]] = Attr(
         "bedResponse",
         {
@@ -34554,14 +38772,39 @@ class Ocean(Element):
         use="optional", default="depthFiltered", fixed=None,
         doc="How the free surface answers what the objects in `colliders` do to the water: the bed that a crater moves and\nthe volume a body occupies. `depthFiltered` (the default) attenuates it by the depth of the water: a\ndisplacement much narrower than the depth does little to the surface, as in linear water-wave theory, where an\ninstantaneous displacement of wavenumber k is carried to the surface by 1/cosh(k h) for the bed (Kajiura 1963;\nread here only as quoted by the tsunami literature) and by cosh(k z0)/cosh(k h) for a volume at height z0 above the bed\n(derived by the engine). The displaced volume is conserved. `hydrostatic` lifts the whole column by the\ndisplacement, which is the long-wave answer, right when the displacement is much wider than the depth: the\nbehaviour of the first version, kept for comparison. With `depthFiltered` the horizontal momentum that a\nbody gives the water is also not the relaxation toward its velocity but the form drag of the body through\nit, (1/2) C_d A |U - u| (U - u) per unit density (C_d is `bodyDrag`, U the body's velocity, u the mean\nvelocity of the water under it, A the area its wet part presents to that flow), spread as the lift of the\nbody is and never past its velocity. It has no effect without `colliders`.",
     )
+    """How the free surface answers what the objects in `colliders` do to the water: the bed that a crater moves and
+    the volume a body occupies. `depthFiltered` (the default) attenuates it by the depth of the water: a
+    displacement much narrower than the depth does little to the surface, as in linear water-wave theory, where an
+    instantaneous displacement of wavenumber k is carried to the surface by 1/cosh(k h) for the bed (Kajiura 1963;
+    read here only as quoted by the tsunami literature) and by cosh(k z0)/cosh(k h) for a volume at height z0 above the bed
+    (derived by the engine). The displaced volume is conserved. `hydrostatic` lifts the whole column by the
+    displacement, which is the long-wave answer, right when the displacement is much wider than the depth: the
+    behaviour of the first version, kept for comparison. With `depthFiltered` the horizontal momentum that a
+    body gives the water is also not the relaxation toward its velocity but the form drag of the body through
+    it, (1/2) C_d A |U - u| (U - u) per unit density (C_d is `bodyDrag`, U the body's velocity, u the mean
+    velocity of the water under it, A the area its wet part presents to that flow), spread as the lift of the
+    body is and never past its velocity. It has no effect without `colliders`.
+    """
     density: Attr[G_positiveDecimal, T_positiveDecimal] = Attr(
         "density", "positiveDecimal", use="optional", default="1000", fixed=None,
         doc="Density of the water, kilograms per cubic metre (default 1000, fresh water; sea water is about 1025). It is the density of the\nweight of the water a body displaces (`bodyCoupling`), of the force the water gives back to it (the momentum the solver\nexchanges is per unit density), of what the ejecta that fall into the ocean bring (`splash`: their momentum is divided by it),\nand of the target of the cavity of a body that enters (`waterImpulse`). Without the attribute the water is 1000 kg/m3, as it was.",
     )
+    """Density of the water, kilograms per cubic metre (default 1000, fresh water; sea water is about 1025). It is the density of the
+    weight of the water a body displaces (`bodyCoupling`), of the force the water gives back to it (the momentum the solver
+    exchanges is per unit density), of what the ejecta that fall into the ocean bring (`splash`: their momentum is divided by it),
+    and of the target of the cavity of a body that enters (`waterImpulse`). Without the attribute the water is 1000 kg/m3, as it was.
+    """
     bodyDrag: Attr[G_nonNegativeDecimal, T_nonNegativeDecimal] = Attr(
         "bodyDrag", "nonNegativeDecimal", use="optional", default=None, fixed=None,
         doc='Coefficient of form drag of a body in the water. With `bodyCoupling` it is the coefficient of the vertical motion:\nthe force is -(1/2) rho C_d A |v| v with A the area the submerged part presents from above, limited to what\nstops the body within a step. With `bedResponse="depthFiltered"` it is also that of the horizontal exchange\nwith the water, the same law along the motion of the body relative to the water. Default 1.0, the engine\'s: not an XSD default, so that\nthe attribute can be refused on an ocean without `colliders` (OCN9). It is an engine parameter, not a value from the impact literature; 0 gives\nundamped bobbing.',
     )
+    """Coefficient of form drag of a body in the water. With `bodyCoupling` it is the coefficient of the vertical motion:
+    the force is -(1/2) rho C_d A |v| v with A the area the submerged part presents from above, limited to what
+    stops the body within a step. With `bedResponse="depthFiltered"` it is also that of the horizontal exchange
+    with the water, the same law along the motion of the body relative to the water. Default 1.0, the engine's: not an XSD default, so that
+    the attribute can be refused on an ocean without `colliders` (OCN9). It is an engine parameter, not a value from the impact literature; 0 gives
+    undamped bobbing.
+    """
 
     if _t.TYPE_CHECKING:
 
@@ -34618,7 +38861,16 @@ class Ocean(Element):
             bedResponse: _t.Literal["depthFiltered", "hydrostatic"] | None = None,
             density: T_positiveDecimal | None = None,
             bodyDrag: T_nonNegativeDecimal | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                condition: A deterministic expression in the scene-render expression language (see expressionType). Used by @condition attributes and expression elements.
+                splash: The particles3D emitters whose particles fall into this ocean: each must throw out the ejecta of a crater (a `burst` with `crater`), whose particles have a mass (OCN13). Absent (the default) is the behaviour there always was. A particle of a listed emitter whose centre crosses the ocean's rest level (`waterLevel`) downward inside its domain is removed there, and what it brings is given to the water in the canonical step of the crossing, summed by cell: the volume of the particle (its mass over the density of the crater's target) is taken out of the cell's water and given equally to its eight neighbours, never more than 90 % of the cell's water, and its horizontal momentum, divided by the density of the water, is added to the cell's. The water volume and the horizontal momentum that is applied are conserved; the vertical momentum and the energy of the particle are not (the shallow-water model has no vertical momentum), and a particle that has fallen in is gone, it does not sink. The surface is the water's rest level, not the swell, and the ocean is taken at its pose when the emitter starts. The deposit does not go through the depth filter of `bedResponse`. An emitter belongs to one ocean.
+                bodyCoupling: What the water does to the rigid bodies in `colliders`. `none` (the default) is the existing behaviour: a body displaces the water and nothing acts on the body. `buoyancy` loads each rigid body with the weight of the water it displaces (water density 1000 kg/m3, the ocean's gravity), upward through the centroid of the submerged volume so that a tilted body is turned by it, and with a quadratic form drag on its vertical motion, scaled by `bodyDrag`. A body floats if it is lighter than the water it displaces. The submerged part is measured against the free surface under the body: the plane that the ocean fits, in the canonical step before the last one it has completed, through the surface of the wet columns of the body's footprint (the water the body displaces stands above the rest level while it is there, and the plane says so), and against the rest level, `waterLevel`, while there is none; the body's own motion therefore moves the water it floats on, and the water carries the energy of a bobbing body away, so a body with no drag settles. `full` adds the horizontal momentum the body gave the water in that step, taken back as a force along the body's centre over one canonical step, so that the body and the water keep their momentum together (to what is in flight, one step late); roll is not damped, there is no added mass, and a body rides the rest level when the ocean has no water under it. The load is held for one rigid step and evaluated halfway through it. A body so light that the waterline's stiffness times the step reaches 1.8 is an error (lower `physics/@fixedStep` or raise the mass), not a damped motion. The rigid body must be a sphere, box, cylinder, cone, capsule or closed mesh. The ocean and the bodies form a group (see the contract text): the ocean is stepped before the rigid world, and the document cannot be baked into a physics cache.
+                bedResponse: How the free surface answers what the objects in `colliders` do to the water: the bed that a crater moves and the volume a body occupies. `depthFiltered` (the default) attenuates it by the depth of the water: a displacement much narrower than the depth does little to the surface, as in linear water-wave theory, where an instantaneous displacement of wavenumber k is carried to the surface by 1/cosh(k h) for the bed (Kajiura 1963; read here only as quoted by the tsunami literature) and by cosh(k z0)/cosh(k h) for a volume at height z0 above the bed (derived by the engine). The displaced volume is conserved. `hydrostatic` lifts the whole column by the displacement, which is the long-wave answer, right when the displacement is much wider than the depth: the behaviour of the first version, kept for comparison. With `depthFiltered` the horizontal momentum that a body gives the water is also not the relaxation toward its velocity but the form drag of the body through it, (1/2) C_d A |U - u| (U - u) per unit density (C_d is `bodyDrag`, U the body's velocity, u the mean velocity of the water under it, A the area its wet part presents to that flow), spread as the lift of the body is and never past its velocity. It has no effect without `colliders`.
+                density: Density of the water, kilograms per cubic metre (default 1000, fresh water; sea water is about 1025). It is the density of the weight of the water a body displaces (`bodyCoupling`), of the force the water gives back to it (the momentum the solver exchanges is per unit density), of what the ejecta that fall into the ocean bring (`splash`: their momentum is divided by it), and of the target of the cavity of a body that enters (`waterImpulse`). Without the attribute the water is 1000 kg/m3, as it was.
+                bodyDrag: Coefficient of form drag of a body in the water. With `bodyCoupling` it is the coefficient of the vertical motion: the force is -(1/2) rho C_d A |v| v with A the area the submerged part presents from above, limited to what stops the body within a step. With `bedResponse="depthFiltered"` it is also that of the horizontal exchange with the water, the same law along the motion of the body relative to the water. Default 1.0, the engine's: not an XSD default, so that the attribute can be refused on an ocean without `colliders` (OCN9). It is an engine parameter, not a value from the impact literature; 0 gives undamped bobbing.
+            """
+            ...
 
         def add_animate(
             self,
@@ -34629,7 +38881,9 @@ class Ocean(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -34637,7 +38891,12 @@ class Ocean(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -34650,7 +38909,12 @@ class Ocean(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -34668,7 +38932,12 @@ class Ocean(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_transformConstraint(
             self,
@@ -34690,7 +38959,12 @@ class Ocean(Element):
             softness: T_unitDecimal | None = None,
             progress: T_unitDecimal | None = None,
             autoOrient: _t.Union[bool, str] | None = None,
-        ) -> TransformConstraint: ...
+        ) -> TransformConstraint:
+            """Add a <transformConstraint> child; the keywords are the attributes of TransformConstraint.
+
+            Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target's transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target's world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.
+            """
+            ...
 
         def add_waterImpulse(
             self,
@@ -34704,7 +38978,12 @@ class Ocean(Element):
             velocityX: _t.Union[float, int, str] | None = None,
             velocityZ: _t.Union[float, int, str] | None = None,
             type: _t.Literal["displace", "add-water"] | None = None,
-        ) -> WaterImpulse: ...
+        ) -> WaterImpulse:
+            """Add a <waterImpulse> child; the keywords are the attributes of WaterImpulse.
+
+            An impulse at an instant (`time`, `x`, `z`, `radius`, `amplitude`, `velocityX`, `velocityZ`, `type`), or the cavity that a body makes of the water it enters: `source` names a dynamic rigidBody object that the ocean lists in `colliders`, and nothing is authored about when, where or how big (none of the others may be given, and a body has at most one). The entry is the first time the lowest point of the body crosses the ocean's rest level (`waterLevel`) downward, found step by step from the body's poses, with the body moving down at that instant; a body that starts in the water, or never reaches it, makes no cavity. The cavity is the transient crater of the scaling law of Holsapple (1993) for water as a target, with the body's mass and density, the speed it enters at (the component normal to the surface, from the displacement of its centre over the canonical step) and the ocean's gravity; the law's volume and depth give the disc that is emptied (a bowl profile of the law's depth at its centre holding the law's volume), the water going to the ring around it (`waterImpulse type="displace"` with a negative amplitude, conserving all the water). The cavity forms over the law's formation time (0.8 times the square root of its volume's cube root over gravity), in a part for every canonical step that grows smoothly from nothing to the whole (the shape of the growth is the engine's choice, the law gives only the time); a ring or a disc narrower than four cells is widened, keeping the volume. The cavity is limited by the water layer: it takes at most 90% of the water of its disc, and of any column in it, so it never exposes the bed and is never an error for lack of water; a body that reaches the bed excavates the bed's crater (`crater@source`) instead. The body goes on raising the columns it occupies, as before; the cavity is displacement in addition. Hydrostatic: no jet, no crown of spray, no air; the law is that of a crater in water, not a validated model of water entry. The event is made at the first entry only, for the owner's pose at that instant, and an entry outside the ocean makes nothing.
+            """
+            ...
 
         def add_wave(
             self,
@@ -34714,7 +38993,9 @@ class Ocean(Element):
             direction: _t.Union[float, int, str] | None = None,
             phase: _t.Union[float, int, str] | None = None,
             speed: T_nonNegativeDecimal | None = None,
-        ) -> OceanWave: ...
+        ) -> OceanWave:
+            """Add a <wave> child; the keywords are the attributes of OceanWave."""
+            ...
 
         def add_whitewater(
             self,
@@ -34739,7 +39020,12 @@ class Ocean(Element):
             foamRadius: T_positiveDecimal | None = None,
             foamAlbedo: T_unitDecimal | None = None,
             foamRoughness: T_unitDecimal | None = None,
-        ) -> Whitewater: ...
+        ) -> Whitewater:
+            """Add a <whitewater> child; the keywords are the attributes of Whitewater.
+
+            Cinematic read-only water tracers. Births at ocean dt endpoints follow excess surface slope or Froude number. Foam follows water; spray is ballistic with drag and becomes foam on landing. Own budgets and full-u64 seed; at most one child per ocean.
+            """
+            ...
 
     else:
 
@@ -34847,7 +39133,9 @@ class WaterImpulse(Element):
             velocityX: _t.Union[float, int, str] | None = None,
             velocityZ: _t.Union[float, int, str] | None = None,
             type: _t.Literal["displace", "add-water"] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """An impulse at an instant (`time`, `x`, `z`, `radius`, `amplitude`, `velocityX`, `velocityZ`, `type`), or the cavity that a body makes of the water it enters: `source` names a dynamic rigidBody object that the ocean lists in `colliders`, and nothing is authored about when, where or how big (none of the others may be given, and a body has at most one). The entry is the first time the lowest point of the body crosses the ocean's rest level (`waterLevel`) downward, found step by step from the body's poses, with the body moving down at that instant; a body that starts in the water, or never reaches it, makes no cavity. The cavity is the transient crater of the scaling law of Holsapple (1993) for water as a target, with the body's mass and density, the speed it enters at (the component normal to the surface, from the displacement of its centre over the canonical step) and the ocean's gravity; the law's volume and depth give the disc that is emptied (a bowl profile of the law's depth at its centre holding the law's volume), the water going to the ring around it (`waterImpulse type="displace"` with a negative amplitude, conserving all the water). The cavity forms over the law's formation time (0.8 times the square root of its volume's cube root over gravity), in a part for every canonical step that grows smoothly from nothing to the whole (the shape of the growth is the engine's choice, the law gives only the time); a ring or a disc narrower than four cells is widened, keeping the volume. The cavity is limited by the water layer: it takes at most 90% of the water of its disc, and of any column in it, so it never exposes the bed and is never an error for lack of water; a body that reaches the bed excavates the bed's crater (`crater@source`) instead. The body goes on raising the columns it occupies, as before; the cavity is displacement in addition. Hydrostatic: no jet, no crown of spray, no air; the law is that of a crater in water, not a validated model of water entry. The event is made at the first entry only, for the owner's pose at that instant, and an entry outside the ocean makes nothing."""
+            ...
 
 
 class Whitewater(Element):
@@ -34960,18 +39248,22 @@ class Whitewater(Element):
         use="optional", default="particles", fixed=None,
         doc="particles draws each foam tracer as a triangle batch (foamMaterial). albedo draws no foam triangles: the foam tracers become a per-vertex coverage of the ocean surface (a kernel of foamRadius, fading with age) that is the share of the surface's area the foam covers: where it covers, the surface is a diffuse white of albedo foamAlbedo and roughness foamRoughness that lets no light through, and the light that gets through the rest keeps the water's tint; foamMaterial is then unused. Spray is drawn in both modes. The mix is the path tracer's: with the raster renderer the frame reports an error instead of drawing no foam, and the water's material must have the opaque alpha mode.",
     )
+    """particles draws each foam tracer as a triangle batch (foamMaterial). albedo draws no foam triangles: the foam tracers become a per-vertex coverage of the ocean surface (a kernel of foamRadius, fading with age) that is the share of the surface's area the foam covers: where it covers, the surface is a diffuse white of albedo foamAlbedo and roughness foamRoughness that lets no light through, and the light that gets through the rest keeps the water's tint; foamMaterial is then unused. Spray is drawn in both modes. The mix is the path tracer's: with the raster renderer the frame reports an error instead of drawing no foam, and the water's material must have the opaque alpha mode."""
     foamRadius: Attr[G_positiveDecimal, T_positiveDecimal] = Attr(
         "foamRadius", "positiveDecimal", use="optional", default=None, fixed=None,
         doc="Radius in scene units of the coverage one foam tracer gives the surface in albedo mode; absent, one cell of the ocean; at most 64 cells of the ocean (OCN14). Ignored in particles mode.",
     )
+    """Radius in scene units of the coverage one foam tracer gives the surface in albedo mode; absent, one cell of the ocean; at most 64 cells of the ocean (OCN14). Ignored in particles mode."""
     foamAlbedo: Attr[G_unitDecimal, T_unitDecimal] = Attr(
         "foamAlbedo", "unitDecimal", use="optional", default="0.9", fixed=None,
         doc="Diffuse albedo of fully covered water in albedo mode.",
     )
+    """Diffuse albedo of fully covered water in albedo mode."""
     foamRoughness: Attr[G_unitDecimal, T_unitDecimal] = Attr(
         "foamRoughness", "unitDecimal", use="optional", default="0.8", fixed=None,
         doc="Roughness of fully covered water in albedo mode.",
     )
+    """Roughness of fully covered water in albedo mode."""
 
     if _t.TYPE_CHECKING:
 
@@ -34998,7 +39290,16 @@ class Whitewater(Element):
             foamRadius: T_positiveDecimal | None = None,
             foamAlbedo: T_unitDecimal | None = None,
             foamRoughness: T_unitDecimal | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Cinematic read-only water tracers. Births at ocean dt endpoints follow excess surface slope or Froude number. Foam follows water; spray is ballistic with drag and becomes foam on landing. Own budgets and full-u64 seed; at most one child per ocean.
+
+            Args:
+                foamMode: particles draws each foam tracer as a triangle batch (foamMaterial). albedo draws no foam triangles: the foam tracers become a per-vertex coverage of the ocean surface (a kernel of foamRadius, fading with age) that is the share of the surface's area the foam covers: where it covers, the surface is a diffuse white of albedo foamAlbedo and roughness foamRoughness that lets no light through, and the light that gets through the rest keeps the water's tint; foamMaterial is then unused. Spray is drawn in both modes. The mix is the path tracer's: with the raster renderer the frame reports an error instead of drawing no foam, and the water's material must have the opaque alpha mode.
+                foamRadius: Radius in scene units of the coverage one foam tracer gives the surface in albedo mode; absent, one cell of the ocean; at most 64 cells of the ocean (OCN14). Ignored in particles mode.
+                foamAlbedo: Diffuse albedo of fully covered water in albedo mode.
+                foamRoughness: Roughness of fully covered water in albedo mode.
+            """
+            ...
 
 
 class OceanWave(Element):
@@ -35224,7 +39525,9 @@ class PyroSource(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -35232,7 +39535,12 @@ class PyroSource(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -35245,7 +39553,12 @@ class PyroSource(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -35263,7 +39576,12 @@ class PyroSource(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
     else:
 
@@ -35512,7 +39830,9 @@ class PyroBlast(Element):
             ambientDensity: T_positiveDecimal | None = None,
             ambientPressure: T_positiveDecimal | None = None,
             gamma: T_positiveDecimal | None = None,
-        ) -> None: ...
+        ) -> None:
+            """A blast in the smoke (version 1.3): `energy` joules released at (x, y, z) in the pyro's own axes at `time` seconds, into air of `ambientDensity` kg/m^3 and `ambientPressure` Pa, a gas of `gamma`. The front is the Sedov-Taylor blast, R = xi (E t^2 / rho)^(1/5) metres, with the constant found from the self-similar solution, until it reaches 0.3 (E / p)^(1/3) metres (the end of the strong phase), where it stops; a metre is the scene's `pixelsPerMeter` (the physics element's, 100 if there is none) scene units. The solver is incompressible, so the shock is not carried: each step the air that the front swept in the step is displaced (the cells whose centres are in the sphere of the front's radius at the end of the step are given the divergence that makes their volume the volume swept), and the projection makes the potential flow outside. Nothing is heated and no smoke is made (a fireball is a pyroSource or a pyroImpulse that the author adds). A pyro with a blast needs boundary="open" (PYC5), and the blast's place is in the domain (PYC6). An energy of zero is a blast that does nothing. A pyro with no blast is the pyro it was."""
+            ...
 
 
 class Pyro(Element):
@@ -35606,14 +39926,33 @@ class Pyro(Element):
         "follow", "xs:boolean", use="optional", default=None, fixed=None,
         doc='A window that follows the plume (PYRO9: only with boundary="open"). The domain keeps the same number of cells and so\nthe same memory and cost of a step, and moves by whole cells to keep the smoke away from its faces, which an open\ndomain would otherwise cut it at; absent or false it stays where it is. Where the window may move is decided from the\nstate alone (the smoke along each axis, kept followMargin cells, plus the cells the fastest air goes in a step, from\neach face), so the same at any time requested and from a checkpoint; it never leaves a slab that a source acting in\nthe step covers, and it lets go of the density that followLoss allows and no more, counted by the solver. If the\nsmoke does not fit in the window the window cannot follow it and it is cut as before: the remedy is a larger window.\nThe domain is still centred on the object when the document begins; the moving window is in the object\'s own axes.',
     )
+    """A window that follows the plume (PYRO9: only with boundary="open"). The domain keeps the same number of cells and so
+    the same memory and cost of a step, and moves by whole cells to keep the smoke away from its faces, which an open
+    domain would otherwise cut it at; absent or false it stays where it is. Where the window may move is decided from the
+    state alone (the smoke along each axis, kept followMargin cells, plus the cells the fastest air goes in a step, from
+    each face), so the same at any time requested and from a checkpoint; it never leaves a slab that a source acting in
+    the step covers, and it lets go of the density that followLoss allows and no more, counted by the solver. If the
+    smoke does not fit in the window the window cannot follow it and it is cut as before: the remedy is a larger window.
+    The domain is still centred on the object when the document begins; the moving window is in the object's own axes.
+    """
     followMargin: Attr[int, _t.Union[int, str]] = Attr(
         "followMargin", "xs:positiveInteger", use="optional", default=None, fixed=None,
         doc="Cells the smoke is kept from every face of a window that follows it (PYRO10: only with follow; PYRO11: it leaves a\ncell between the faces of the window). The engine's default is 12, the distance from which the engine measured the\ntop face of a plume to have no effect on it (W02); it is not an XSD default so that it can be refused without follow.",
     )
+    """Cells the smoke is kept from every face of a window that follows it (PYRO10: only with follow; PYRO11: it leaves a
+    cell between the faces of the window). The engine's default is 12, the distance from which the engine measured the
+    top face of a plume to have no effect on it (W02); it is not an XSD default so that it can be refused without follow.
+    """
     followLoss: Attr[G_unitDecimal, T_unitDecimal] = Attr(
         "followLoss", "unitDecimal", use="optional", default=None, fixed=None,
         doc="The share (0 to 1) of all the smoke that the window of a followed plume may let go of each side when it moves\n(PYRO10: only with follow). The engine's default is 0: only slabs that hold no smoke and no heat, and nothing is let\ngo of; a plume has a thin numerical tail that is never exactly zero, so a window with a loss of zero follows only\nwhat leaves nothing behind. Not an XSD default so that it can be refused without follow. What is let go of is the\nsolver's own count (the state's lost density), never silent.",
     )
+    """The share (0 to 1) of all the smoke that the window of a followed plume may let go of each side when it moves
+    (PYRO10: only with follow). The engine's default is 0: only slabs that hold no smoke and no heat, and nothing is let
+    go of; a plume has a thin numerical tail that is never exactly zero, so a window with a loss of zero follows only
+    what leaves nothing behind. Not an XSD default so that it can be refused without follow. What is let go of is the
+    solver's own count (the state's lost density), never silent.
+    """
     pressureIterations: Attr[int, _t.Union[int, str]] = Attr(
         "pressureIterations",
         {
@@ -35725,7 +40064,13 @@ class Pyro(Element):
             maxMemoryMiB: _t.Union[int, str] | None = None,
             checkpointMemoryMiB: _t.Union[int, str] | None = None,
             meshMemoryMiB: _t.Union[int, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Args:
+                follow: A window that follows the plume (PYRO9: only with boundary="open"). The domain keeps the same number of cells and so the same memory and cost of a step, and moves by whole cells to keep the smoke away from its faces, which an open domain would otherwise cut it at; absent or false it stays where it is. Where the window may move is decided from the state alone (the smoke along each axis, kept followMargin cells, plus the cells the fastest air goes in a step, from each face), so the same at any time requested and from a checkpoint; it never leaves a slab that a source acting in the step covers, and it lets go of the density that followLoss allows and no more, counted by the solver. If the smoke does not fit in the window the window cannot follow it and it is cut as before: the remedy is a larger window. The domain is still centred on the object when the document begins; the moving window is in the object's own axes.
+                followMargin: Cells the smoke is kept from every face of a window that follows it (PYRO10: only with follow; PYRO11: it leaves a cell between the faces of the window). The engine's default is 12, the distance from which the engine measured the top face of a plume to have no effect on it (W02); it is not an XSD default so that it can be refused without follow.
+                followLoss: The share (0 to 1) of all the smoke that the window of a followed plume may let go of each side when it moves (PYRO10: only with follow). The engine's default is 0: only slabs that hold no smoke and no heat, and nothing is let go of; a plume has a thin numerical tail that is never exactly zero, so a window with a loss of zero follows only what leaves nothing behind. Not an XSD default so that it can be refused without follow. What is let go of is the solver's own count (the state's lost density), never silent.
+            """
+            ...
 
         def add_pyroSource(
             self,
@@ -35758,7 +40103,9 @@ class Pyro(Element):
             velocityRateY: _t.Union[float, int, str] | None = None,
             velocityRateZ: _t.Union[float, int, str] | None = None,
             expansion: _t.Union[float, int, str] | None = None,
-        ) -> PyroSource: ...
+        ) -> PyroSource:
+            """Add a <pyroSource> child; the keywords are the attributes of PyroSource."""
+            ...
 
         def add_pyroImpulse(
             self,
@@ -35790,7 +40137,9 @@ class Pyro(Element):
             velocityY: _t.Union[float, int, str] | None = None,
             velocityZ: _t.Union[float, int, str] | None = None,
             expansion: _t.Union[float, int, str] | None = None,
-        ) -> PyroImpulse: ...
+        ) -> PyroImpulse:
+            """Add a <pyroImpulse> child; the keywords are the attributes of PyroImpulse."""
+            ...
 
         def add_pyroBlast(
             self,
@@ -35803,7 +40152,12 @@ class Pyro(Element):
             ambientDensity: T_positiveDecimal | None = None,
             ambientPressure: T_positiveDecimal | None = None,
             gamma: T_positiveDecimal | None = None,
-        ) -> PyroBlast: ...
+        ) -> PyroBlast:
+            """Add a <pyroBlast> child; the keywords are the attributes of PyroBlast.
+
+            A blast in the smoke (version 1.3): `energy` joules released at (x, y, z) in the pyro's own axes at `time` seconds, into air of `ambientDensity` kg/m^3 and `ambientPressure` Pa, a gas of `gamma`. The front is the Sedov-Taylor blast, R = xi (E t^2 / rho)^(1/5) metres, with the constant found from the self-similar solution, until it reaches 0.3 (E / p)^(1/3) metres (the end of the strong phase), where it stops; a metre is the scene's `pixelsPerMeter` (the physics element's, 100 if there is none) scene units. The solver is incompressible, so the shock is not carried: each step the air that the front swept in the step is displaced (the cells whose centres are in the sphere of the front's radius at the end of the step are given the divergence that makes their volume the volume swept), and the projection makes the potential flow outside. Nothing is heated and no smoke is made (a fireball is a pyroSource or a pyroImpulse that the author adds). A pyro with a blast needs boundary="open" (PYC5), and the blast's place is in the domain (PYC6). An energy of zero is a blast that does nothing. A pyro with no blast is the pyro it was.
+            """
+            ...
 
     else:
 
@@ -35893,10 +40247,19 @@ class Fracture(Element):
         use="optional", default=None, fixed=None,
         doc="On an object of cells (FRX9): how the body is cut into pieces, `voronoi` (the engine's value: `pieces` seeds drawn from `seed` in the box of the cells, each cell\nto the nearest), `planes` (the cells are the pieces' sides of the planes in `planes`) or `labels` (the cells that have one palette index are one part). A part that is not\nconnected by faces is split into its components, so every piece is connected. `pieces` and `seed` belong to voronoi (FRX10). The pieces have the material of\ntheir cells, and a face that a cut exposes is drawn with the palette like any other: there is no interior material (FRX8).",
     )
+    """On an object of cells (FRX9): how the body is cut into pieces, `voronoi` (the engine's value: `pieces` seeds drawn from `seed` in the box of the cells, each cell
+    to the nearest), `planes` (the cells are the pieces' sides of the planes in `planes`) or `labels` (the cells that have one palette index are one part). A part that is not
+    connected by faces is split into its components, so every piece is connected. `pieces` and `seed` belong to voronoi (FRX10). The pieces have the material of
+    their cells, and a face that a cut exposes is drawn with the palette like any other: there is no interior material (FRX8).
+    """
     planes: Attr[str, str] = Attr(
         "planes", "xs:string", use="optional", default=None, fixed=None,
         doc='With partition="planes" (FRX11): up to 63 planes, each four numbers `nx ny nz offset`, in object units (the object\'s own axes, before its scale, the\norigin at the corner of the cells): a cell is on the positive side of a plane if the dot product of the normal with the centre of the cell, `(key + 1/2) * cellSize`,\nis at least the offset. The normal is not unit and need not be, but it is not all zeros (a plane with no direction cuts nothing), and all the numbers are finite; it is taken to 2^-32 of its largest component.',
     )
+    """With partition="planes" (FRX11): up to 63 planes, each four numbers `nx ny nz offset`, in object units (the object's own axes, before its scale, the
+    origin at the corner of the cells): a cell is on the positive side of a plane if the dot product of the normal with the centre of the cell, `(key + 1/2) * cellSize`,
+    is at least the offset. The normal is not unit and need not be, but it is not all zeros (a plane with no direction cuts nothing), and all the numbers are finite; it is taken to 2^-32 of its largest component.
+    """
     labels: Attr[_t.Literal["material"], _t.Literal["material"]] = Attr(
         "labels",
         {
@@ -35910,6 +40273,7 @@ class Fracture(Element):
         use="optional", default=None, fixed=None,
         doc='With partition="labels" (FRX12): `material`, the palette index of a cell is its label, so that a model breaks along its materials.',
     )
+    """With partition="labels" (FRX12): `material`, the palette index of a cell is its label, so that a model breaks along its materials."""
     mode: Attr[_t.Literal["impact", "stress"], _t.Literal["impact", "stress"]] = Attr(
         "mode",
         {
@@ -35923,10 +40287,21 @@ class Fracture(Element):
         use="optional", default=None, fixed=None,
         doc="What breaks the body: `impact` (the engine's value, and the one of every fracture before this attribute: at a time, or by the impact of `source`) or `stress`\n(FRX13 to FRX15): the body of cells is one rigid body until the load on it makes more stress in a joint between two of its pieces than `strength`, and the\njoints that are over it break together, at the start of the next step. The loads are all of them (the weight, the fields, the contacts, and the one joint of\nthe world that may hold the body), so there is no `source`, no time and no push (FRX15); the body is a dynamic body of cells (FRX14). Not an XSD default, so that\n`strength` can be refused without it. The model is a rigid one: no stress wave, no energy kept in the joints, a joint that is in a cycle takes the share of its plane's cut by\nits area and its distance from the centre of the cut, and the stress of a body at rest on its contacts is the one of the way the solver spread the pressure over them\n(a block on a floor is held at the corners of its foot, and reads the bending of a beam on two supports).",
     )
+    """What breaks the body: `impact` (the engine's value, and the one of every fracture before this attribute: at a time, or by the impact of `source`) or `stress`
+    (FRX13 to FRX15): the body of cells is one rigid body until the load on it makes more stress in a joint between two of its pieces than `strength`, and the
+    joints that are over it break together, at the start of the next step. The loads are all of them (the weight, the fields, the contacts, and the one joint of
+    the world that may hold the body), so there is no `source`, no time and no push (FRX15); the body is a dynamic body of cells (FRX14). Not an XSD default, so that
+    `strength` can be refused without it. The model is a rigid one: no stress wave, no energy kept in the joints, a joint that is in a cycle takes the share of its plane's cut by
+    its area and its distance from the centre of the cut, and the stress of a body at rest on its contacts is the one of the way the solver spread the pressure over them
+    (a block on a floor is held at the corners of its foot, and reads the bending of a beam on two supports).
+    """
     strength: Attr[G_positiveDecimal, T_positiveDecimal] = Attr(
         "strength", "positiveDecimal", use="optional", default=None, fixed=None,
         doc='With mode="stress" (FRX13), required: the principal tension, in pascals, at which a joint between two pieces breaks, from the normal and the bending stress of the\nload on the section of the joint added and the shear and the twist added (Rankine: a brittle joint). A push does not break a joint by itself.',
     )
+    """With mode="stress" (FRX13), required: the principal tension, in pascals, at which a joint between two pieces breaks, from the normal and the bending stress of the
+    load on the section of the joint added and the shear and the twist added (Rankine: a brittle joint). A push does not break a joint by itself.
+    """
     impulseX: Attr[float, _t.Union[float, int, str]] = Attr(
         "impulseX", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -35976,7 +40351,17 @@ class Fracture(Element):
             impulseZ: _t.Union[float, int, str] | None = None,
             radialImpulse: T_nonNegativeDecimal | None = None,
             maxMemoryMiB: _t.Union[int, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Owned seeded closed-solid fracture. at is composition time, quantized to the first physics boundary at or after that time when the source object participates. Exactly one rigidBody supplies total mass, collision properties and inherited motion. Exterior materials and attributes come from the frozen source surface; cut faces use interiorMaterial, with planar UV repeats per scene unit given by interiorUvScale. impulseX/Y/Z are the total directed world-scene impulse in kg*scene-unit/second, distributed in proportion to piece mass. radialImpulse is a nonnegative total scalar impulse, distributed by piece mass along the source-centroid-to-piece directions. maxMemoryMiB bounds component geometry/reconstruction admission, not whole-process RSS. Fracture is cinematic partitioning, not a material stress/failure calculation. `source` names the dynamic rigid body that breaks it (FRX5): the fracture fires on the step after the first impact of that body on this one is noticed, above `minImpulse`, the total normal impulse of the pair in one step in kg*scene-unit/second (absent: twice the weight of the source in one step, as for a crater from an impact). Its time and its push are then derived, so `at`, `radialImpulse` and `impulseX`/`Y`/`Z` are not given (FRX6), and `minImpulse` and `energyFraction` belong to a fracture with `source` (FRX7). The pieces keep the velocity the body had after the contact, and a part of the kinetic energy of the impact relative to the pair, 1/2 mu v_n^2 (mu the reduced mass of the two bodies, v_n the closing speed), `energyFraction` of it (0 to 1; the engine's default is 0.3, with no published value, and not an XSD default so that it can be refused without `source`), becomes the pieces' push on each other, with no momentum added. The partition is the seeded one of the document and does not depend on where the impact was.
+
+            Args:
+                partition: On an object of cells (FRX9): how the body is cut into pieces, `voronoi` (the engine's value: `pieces` seeds drawn from `seed` in the box of the cells, each cell to the nearest), `planes` (the cells are the pieces' sides of the planes in `planes`) or `labels` (the cells that have one palette index are one part). A part that is not connected by faces is split into its components, so every piece is connected. `pieces` and `seed` belong to voronoi (FRX10). The pieces have the material of their cells, and a face that a cut exposes is drawn with the palette like any other: there is no interior material (FRX8).
+                planes: With partition="planes" (FRX11): up to 63 planes, each four numbers `nx ny nz offset`, in object units (the object's own axes, before its scale, the origin at the corner of the cells): a cell is on the positive side of a plane if the dot product of the normal with the centre of the cell, `(key + 1/2) * cellSize`, is at least the offset. The normal is not unit and need not be, but it is not all zeros (a plane with no direction cuts nothing), and all the numbers are finite; it is taken to 2^-32 of its largest component.
+                labels: With partition="labels" (FRX12): `material`, the palette index of a cell is its label, so that a model breaks along its materials.
+                mode: What breaks the body: `impact` (the engine's value, and the one of every fracture before this attribute: at a time, or by the impact of `source`) or `stress` (FRX13 to FRX15): the body of cells is one rigid body until the load on it makes more stress in a joint between two of its pieces than `strength`, and the joints that are over it break together, at the start of the next step. The loads are all of them (the weight, the fields, the contacts, and the one joint of the world that may hold the body), so there is no `source`, no time and no push (FRX15); the body is a dynamic body of cells (FRX14). Not an XSD default, so that `strength` can be refused without it. The model is a rigid one: no stress wave, no energy kept in the joints, a joint that is in a cycle takes the share of its plane's cut by its area and its distance from the centre of the cut, and the stress of a body at rest on its contacts is the one of the way the solver spread the pressure over them (a block on a floor is held at the corners of its foot, and reads the bending of a beam on two supports).
+                strength: With mode="stress" (FRX13), required: the principal tension, in pascals, at which a joint between two pieces breaks, from the normal and the bending stress of the load on the section of the joint added and the shear and the twist added (Rankine: a brittle joint). A push does not break a joint by itself.
+            """
+            ...
 
 
 class Crater(Element):
@@ -36029,6 +40414,9 @@ class Crater(Element):
         "id", "xs:ID", use="optional", default=None, fixed=None,
         doc="Names the crater so that what its impact causes can refer to it: with `source`, the consequences of the\nimpact (ejecta, smoke) name this crater instead of repeating its body and material.",
     )
+    """Names the crater so that what its impact causes can refer to it: with `source`, the consequences of the
+    impact (ejecta, smoke) name this crater instead of repeating its body and material.
+    """
     source: Attr[str, _t.Union[str, Element]] = Attr(
         "source", "xs:IDREF", use="optional", default=None, fixed=None, doc="",
     )
@@ -36036,6 +40424,17 @@ class Crater(Element):
         "capture", "xs:boolean", use="optional", default="false", fixed=None,
         doc="With `source`: the body that makes the crater is arrested by it. From the impact until its velocity relative to\nthe owner is zero, and only while its centre is inside the crater's rim radius (the law's, in the owner's frame\nat the point of impact), the body loses velocity at a constant rate of U^2 / (2 d), `U` the body's speed at the\nimpact and `d` the crater's depth by the law, never more than stops it in the step, along minus its velocity\nrelative to the owner; its spin loses the same share. All of its kinetic energy leaves the body, which is what\nthe law spends digging the crater, and none can be added. It is a model of the engine, the mean force of a\npenetration of depth `d` (kinetic energy over depth), not a published law: the projectile neither breaks up\nnor buries itself, it stops and follows the floor of the pit. Without it (the default, the behaviour there\nalways was) the body keeps what the contact leaves it, which for a glancing impact is a body that rolls out\nof the crater it made.",
     )
+    """With `source`: the body that makes the crater is arrested by it. From the impact until its velocity relative to
+    the owner is zero, and only while its centre is inside the crater's rim radius (the law's, in the owner's frame
+    at the point of impact), the body loses velocity at a constant rate of U^2 / (2 d), `U` the body's speed at the
+    impact and `d` the crater's depth by the law, never more than stops it in the step, along minus its velocity
+    relative to the owner; its spin loses the same share. All of its kinetic energy leaves the body, which is what
+    the law spends digging the crater, and none can be added. It is a model of the engine, the mean force of a
+    penetration of depth `d` (kinetic energy over depth), not a published law: the projectile neither breaks up
+    nor buries itself, it stops and follows the floor of the pit. Without it (the default, the behaviour there
+    always was) the body keeps what the contact leaves it, which for a glancing impact is a body that rolls out
+    of the crater it made.
+    """
     targetMaterial: Attr[_t.Literal["water", "drySand", "drySoil", "wetSoil", "softRock", "hardRock", "regolith", "ice"], _t.Literal["water", "drySand", "drySoil", "wetSoil", "softRock", "hardRock", "regolith", "ice"]] = Attr(
         "targetMaterial",
         {
@@ -36053,6 +40452,11 @@ class Crater(Element):
         "mantle", "xs:boolean", use="optional", default="false", fixed=None,
         doc="Only with `source` (CRT10). The ejecta that the law throws out (0.8 of the crater's volume) come down outside the rim as a mantle\n`t0 (R / r)^3` thick, `R` the rim crest's radius, which is part of the ground (the same deformation as the bowl and the rim) and\nis cut at twenty crest radii and scaled to hold exactly the ejecta's volume; the bowl is made to excavate exactly the law's volume.\nThe ejecta particles that come to rest on it are removed (they have become the ground). Off, the ground is as it was.",
     )
+    """Only with `source` (CRT10). The ejecta that the law throws out (0.8 of the crater's volume) come down outside the rim as a mantle
+    `t0 (R / r)^3` thick, `R` the rim crest's radius, which is part of the ground (the same deformation as the bowl and the rim) and
+    is cut at twenty crest radii and scaled to hold exactly the ejecta's volume; the bowl is made to excavate exactly the law's volume.
+    The ejecta particles that come to rest on it are removed (they have become the ground). Off, the ground is as it was.
+    """
     bulking: Attr[float, _t.Union[float, int, str]] = Attr(
         "bulking",
         {
@@ -36066,6 +40470,11 @@ class Crater(Element):
         use="optional", default=None, fixed=None,
         doc='Only with `mantle="true"` (CRT10, CRT11). What is put back, the rim and the mantle together, is this many times the volume that the bowl\nexcavates: broken rock takes more room than the rock did (1 to 1.3). Without it the rim keeps the height of the law and the bulking is what\nthat asks for: the law\'s rim (0.326 of the volume for the authored rock in soft rock) and its 0.8 of ejecta, 1.126 there, a value\nderived from the law and inside the physical range. With 1 the rim holds 0.2 of the volume.',
     )
+    """Only with `mantle="true"` (CRT10, CRT11). What is put back, the rim and the mantle together, is this many times the volume that the bowl
+    excavates: broken rock takes more room than the rock did (1 to 1.3). Without it the rim keeps the height of the law and the bulking is what
+    that asks for: the law's rim (0.326 of the volume for the authored rock in soft rock) and its 0.8 of ejecta, 1.126 there, a value
+    derived from the law and inside the physical range. With 1 the rim holds 0.2 of the volume.
+    """
     repose: Attr[float, _t.Union[float, int, str]] = Attr(
         "repose",
         {
@@ -36079,6 +40488,13 @@ class Crater(Element):
         use="optional", default=None, fixed=None,
         doc='Only with `source` (CRT10), and not with `mantle="true"` (CRT12): the angle of repose of the debris, in degrees (10 to 60). The ejecta\nparticles that come to rest on the ground are removed and their volume (mass over the target\'s density) is poured onto a\nheight field of deposit over the final crater, which relaxes at this angle in a fixed order over sixteen neighbours, without making or losing\nvolume; the deposit is added to the height of the ground in the crater\'s deformation. Absent (the default), the settled particles\nare not removed and nothing is added to the ground. The deposit is as faithful as the grid is fine: a pile of fewer than ten cells\'\nradius is not within two degrees of the angle. The particles do not see the deposit, and nor does the rigid world or the ocean.',
     )
+    """Only with `source` (CRT10), and not with `mantle="true"` (CRT12): the angle of repose of the debris, in degrees (10 to 60). The ejecta
+    particles that come to rest on the ground are removed and their volume (mass over the target's density) is poured onto a
+    height field of deposit over the final crater, which relaxes at this angle in a fixed order over sixteen neighbours, without making or losing
+    volume; the deposit is added to the height of the ground in the crater's deformation. Absent (the default), the settled particles
+    are not removed and nothing is added to the ground. The deposit is as faithful as the grid is fine: a pile of fewer than ten cells'
+    radius is not within two degrees of the angle. The particles do not see the deposit, and nor does the rigid world or the ocean.
+    """
     targetDensity: Attr[G_positiveDecimal, T_positiveDecimal] = Attr(
         "targetDensity", "positiveDecimal", use="optional", default=None, fixed=None, doc="",
     )
@@ -36184,7 +40600,17 @@ class Crater(Element):
             end: T_nonNegativeDecimal | None = None,
             curve: _t.Literal["linear", "ease-in", "ease-out", "ease-in-out", "step"] | None = None,
             maxMemoryMiB: _t.Union[int, str] | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Owned cinematic deformation in object-space scene units, after imported basis/node transforms. Let p be the clamped eased fraction of local time from start to end; dimensions grow with p. With outward unit n, h=dot(vertex-center,n), r=length(vertex-center-n*h), and B(x)=max(0,1-x*x)^2 for abs(x)<1 (zero otherwise), displace along n by p*(-depth*B(r/(radius*p))+rimHeight*B((r-radius*p)/(rimWidth*p)))*B(h/influenceDepth). At p=0 the map is identity. Normals use the inverse-transpose differential; tangents use the differential. influenceDepth defaults to twice max(radius,depth,rimHeight); it must be at least twice max(depth,rimHeight) (CRT4, for a crater without a `source`; the size of a crater from an impact is not in the document, so its envelope is checked when the crater is made). This compact axial envelope preserves orientation and leaves distant back surfaces unchanged. maxMemoryMiB bounds additional deformation vertex buffers and admits each rigid collision replacement by a conservative geometry-storage estimate; it does not bound source decoding, checkpoint retention or the entire scene. Static and kinematic rigid surfaces are rebuilt at fixed physics substeps. Dynamic rigid bodies are rejected. Particle collider references interpolate deformed world-space vertices over canonical particle dt intervals, with continuous sphere/triangle contacts and barycentric boundary velocities. Particle geometry admission also uses this memory allowance. Pyro collider references sample closed midpoint surfaces with barycentric material velocities evaluated at MAC faces, reserving retained and step-local geometry under both this allowance and the domain meshMemoryMiB. Crater planes retain a centred colliderThickness slab.
+
+            Args:
+                id: Names the crater so that what its impact causes can refer to it: with `source`, the consequences of the impact (ejecta, smoke) name this crater instead of repeating its body and material.
+                capture: With `source`: the body that makes the crater is arrested by it. From the impact until its velocity relative to the owner is zero, and only while its centre is inside the crater's rim radius (the law's, in the owner's frame at the point of impact), the body loses velocity at a constant rate of U^2 / (2 d), `U` the body's speed at the impact and `d` the crater's depth by the law, never more than stops it in the step, along minus its velocity relative to the owner; its spin loses the same share. All of its kinetic energy leaves the body, which is what the law spends digging the crater, and none can be added. It is a model of the engine, the mean force of a penetration of depth `d` (kinetic energy over depth), not a published law: the projectile neither breaks up nor buries itself, it stops and follows the floor of the pit. Without it (the default, the behaviour there always was) the body keeps what the contact leaves it, which for a glancing impact is a body that rolls out of the crater it made.
+                mantle: Only with `source` (CRT10). The ejecta that the law throws out (0.8 of the crater's volume) come down outside the rim as a mantle `t0 (R / r)^3` thick, `R` the rim crest's radius, which is part of the ground (the same deformation as the bowl and the rim) and is cut at twenty crest radii and scaled to hold exactly the ejecta's volume; the bowl is made to excavate exactly the law's volume. The ejecta particles that come to rest on it are removed (they have become the ground). Off, the ground is as it was.
+                bulking: Only with `mantle="true"` (CRT10, CRT11). What is put back, the rim and the mantle together, is this many times the volume that the bowl excavates: broken rock takes more room than the rock did (1 to 1.3). Without it the rim keeps the height of the law and the bulking is what that asks for: the law's rim (0.326 of the volume for the authored rock in soft rock) and its 0.8 of ejecta, 1.126 there, a value derived from the law and inside the physical range. With 1 the rim holds 0.2 of the volume.
+                repose: Only with `source` (CRT10), and not with `mantle="true"` (CRT12): the angle of repose of the debris, in degrees (10 to 60). The ejecta particles that come to rest on the ground are removed and their volume (mass over the target's density) is poured onto a height field of deposit over the final crater, which relaxes at this angle in a fixed order over sixteen neighbours, without making or losing volume; the deposit is added to the height of the ground in the crater's deformation. Absent (the default), the settled particles are not removed and nothing is added to the ground. The deposit is as faithful as the grid is fine: a pile of fewer than ten cells' radius is not within two degrees of the angle. The particles do not see the deposit, and nor does the rigid world or the ocean.
+            """
+            ...
 
 
 class ProgramNode(Element):
@@ -36221,6 +40647,10 @@ class ProgramNode(Element):
         "safeAreaForce", "xs:boolean", use="optional", default="false", fixed=None,
         doc="true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)\nfrom the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate\nplacement outside the safe region is never silent.",
     )
+    """true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws)
+    from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate
+    placement outside the safe region is never silent.
+    """
     z: Attr[int, _t.Union[int, str]] = Attr("z", "xs:int", use="optional", default="0", fixed=None, doc="")
     visible: Attr[bool, _t.Union[bool, str]] = Attr(
         "visible", "xs:boolean", use="optional", default="true", fixed=None, doc="",
@@ -36245,8 +40675,12 @@ class ProgramNode(Element):
             "item": None,
         },
         use="optional", default=None, fixed=None,
-        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\n      nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\n      whole frame interval. Only where motion blur is on for the node.",
+        doc="The shutter angle, in degrees, of this node's motion blur, instead of the project's: the\nnearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the\nwhole frame interval. Only where motion blur is on for the node.",
     )
+    """The shutter angle, in degrees, of this node's motion blur, instead of the project's: the
+    nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the
+    whole frame interval. Only where motion blur is on for the node.
+    """
     startMarker: Attr[str, str] = Attr(
         "startMarker", "xs:NCName", use="optional", default=None, fixed=None, doc="",
     )
@@ -36257,6 +40691,7 @@ class ProgramNode(Element):
         "condition", "expressionString", use="optional", default=None, fixed=None,
         doc='Node is rendered only when the expression is truthy (e.g. "param(\'showPrice\')").',
     )
+    """Node is rendered only when the expression is truthy (e.g. "param('showPrice')")."""
     motionBlur: Attr[G_triStateType, T_triStateType] = Attr(
         "motionBlur", "triStateType", use="optional", default="inherit", fixed=None, doc="",
     )
@@ -36264,6 +40699,7 @@ class ProgramNode(Element):
         "matte", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".',
     )
+    """Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true"."""
     matteMode: Attr[G_matteModeType, T_matteModeType] = Attr(
         "matteMode", "matteModeType", use="optional", default="alpha", fixed=None, doc="",
     )
@@ -36281,16 +40717,24 @@ class ProgramNode(Element):
             "item": None,
         },
         use="optional", default="inherit", fixed=None,
-        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\n      composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\n      on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\n      true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\n      it. SREP 72.",
+        doc="The space in which this node's own pixels (their colour C and coverage x opacity a)\ncomposite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same\non display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is\ntrue and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit\nit. SREP 72.",
     )
+    """The space in which this node's own pixels (their colour C and coverage x opacity a)
+    composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same
+    on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is
+    true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit
+    it. SREP 72.
+    """
     parent: Attr[str, _t.Union[str, Element]] = Attr(
         "parent", "xs:IDREF", use="optional", default=None, fixed=None,
         doc='Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".',
     )
+    """Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent"."""
     threeD: Attr[bool, _t.Union[bool, str]] = Attr(
         "threeD", "xs:boolean", use="optional", default="false", fixed=None,
         doc="2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.",
     )
+    """2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY."""
     zDepth: Attr[float, _t.Union[float, int, str]] = Attr(
         "zDepth", "xs:double", use="optional", default="0", fixed=None, doc="",
     )
@@ -36313,6 +40757,7 @@ class ProgramNode(Element):
         use="optional", default=None, fixed=None,
         doc="Responsive anchoring: overrides x so the node's box aligns within alignTo.",
     )
+    """Responsive anchoring: overrides x so the node's box aligns within alignTo."""
     alignY: Attr[_t.Literal["top", "middle", "bottom", "stretch"], _t.Literal["top", "middle", "bottom", "stretch"]] = Attr(
         "alignY",
         {
@@ -36389,6 +40834,7 @@ class ProgramNode(Element):
         use="optional", default="1000000000", fixed=None,
         doc="Instructions a call of the module may execute (SREP 66, Determinism 4).",
     )
+    """Instructions a call of the module may execute (SREP 66, Determinism 4)."""
     memoryLimit: Attr[int, _t.Union[int, str]] = Attr(
         "memoryLimit",
         {
@@ -36402,6 +40848,7 @@ class ProgramNode(Element):
         use="optional", default="64", fixed=None,
         doc="MiB of linear memory the module may hold (a multiple of 64 KiB pages: 16 pages per MiB).",
     )
+    """MiB of linear memory the module may hold (a multiple of 64 KiB pages: 16 pages per MiB)."""
     outputSha256: Attr[G_sha256Type, T_sha256Type] = Attr(
         "outputSha256", "sha256Type", use="optional", default=None, fixed=None, doc="",
     )
@@ -36451,8 +40898,13 @@ class ProgramNode(Element):
         doc="",
     )
     blend: Attr[G_blendType, T_blendType] = Attr(
-        "blend", "blendType", use="optional", default="normal", fixed=None, doc="",
+        "blend", "blendType", use="optional", default="normal", fixed=None,
+        doc="The 1.0 modes plus the full separable/non-separable set used by After\nEffects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette\nmodes cut through every layer below within the isolated parent buffer.",
     )
+    """The 1.0 modes plus the full separable/non-separable set used by After
+    Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette
+    modes cut through every layer below within the isolated parent buffer.
+    """
 
     if _t.TYPE_CHECKING:
 
@@ -36507,14 +40959,35 @@ class ProgramNode(Element):
             stepsPerFrame: _t.Union[int, str] | None = None,
             prewarm: _t.Union[int, str] | None = None,
             blend: T_blendType | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Runs the WebAssembly module @src (SHA-256 @sha256) under the determinism rules of SREP 66. In build mode it runs once when the document is built and the scene-render nodes it returns are this node's children, drawn as a group. With mode="step" (SREP 69) it keeps state, advances stepsPerFrame steps per frame after prewarm steps, and draws the width x height RGBA picture its frame export returns.
+
+            Args:
+                safeAreaForce: true exempts this node and everything it contains (for a symbol: every instance of it, and what it draws) from the safeArea enforce check (SA01); validate lists every node that carries it (SA02), so a deliberate placement outside the safe region is never silent.
+                shutterAngle: The shutter angle, in degrees, of this node's motion blur, instead of the project's: the nearest node up its parents that sets it, else project/@shutterAngle. 0 draws the node sharp; 360 blurs over the whole frame interval. Only where motion blur is on for the node.
+                condition: Node is rendered only when the expression is truthy (e.g. "param('showPrice')").
+                matte: Track matte: any node whose alpha or luma gates this node. The matte node is not drawn itself unless matteVisible="true".
+                edgeBlend: The space in which this node's own pixels (their colour C and coverage x opacity a) composite onto what lies beneath (B): linear, out = a C + (1 - a) B in the linear working space; encoded, the same on display-encoded values (the sRGB transfer function), decoded back; inherit, linear when project/@linearLight is true and encoded when it is false. A group's value applies when its offscreen composites; children do not inherit it. SREP 72.
+                parent: Transform parent outside the XML tree (After Effects parenting); shorthand for a transformConstraint type="parent".
+                threeD: 2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.
+                alignX: Responsive anchoring: overrides x so the node's box aligns within alignTo.
+                fuel: Instructions a call of the module may execute (SREP 66, Determinism 4).
+                memoryLimit: MiB of linear memory the module may hold (a multiple of 64 KiB pages: 16 pages per MiB).
+                blend: The 1.0 modes plus the full separable/non-separable set used by After Effects, Lottie, SVG/CSS compositing and Synfig. Stencil and silhouette modes cut through every layer below within the isolated parent buffer.
+            """
+            ...
 
         def add_param(
             self,
             *,
             name: str | None = None,
             value: str | None = None,
-        ) -> ParamValue: ...
+        ) -> ParamValue:
+            """Add a <param> child; the keywords are the attributes of ParamValue.
+
+            Generic named value (shader uniforms, plugin params).
+            """
+            ...
 
         def add_animate(
             self,
@@ -36525,7 +40998,9 @@ class ProgramNode(Element):
             extrapolateAfter: T_extrapolationType | None = None,
             additive: _t.Union[bool, str] | None = None,
             timeBase: _t.Literal["composition", "local", "normalized"] | None = None,
-        ) -> Animate: ...
+        ) -> Animate:
+            """Add a <animate> child; the keywords are the attributes of Animate."""
+            ...
 
         def add_expression(
             self,
@@ -36533,7 +41008,12 @@ class ProgramNode(Element):
             property: str | None = None,
             seed: _t.Union[int, str] | None = None,
             enabled: _t.Union[bool, str] | None = None,
-        ) -> Expression: ...
+        ) -> Expression:
+            """Add a <expression> child; the keywords are the attributes of Expression.
+
+            Computes @property every frame; @property names an attribute the element's own type declares (or position, scale, anchor, skew): a text layer's text, for one, is not an animatable property. The language is a pure, side-effect-free subset of ECMAScript expressions with these built-ins: time, frame, value, index, count, seed, param(name), prop("id.property"), propAtTime("id.property", t), valueAtTime(t), penner("curve", u), wiggle(freq, amp[, octaves, ampMult, t, hold]), noise(x[,y,z]), random([min,max]), loopIn/loopOut(type, n), linear/ease/easeIn/easeOut(t, t0, t1, v0, v1), clamp, lerp, smoothstep, spring(t, stiffness, damping, mass), audioAmplitude(trackId[, band]), beat(), markerTime(id), textIndex, textTotal, geo(mapId, lon, lat) (where a place lands on a map asset now, in map pixels) and geoVisible(mapId, lon, lat) (1 on the near side of a globe and inside the map frame, else 0). random and noise are seeded; no I/O or wall clock exists.
+            """
+            ...
 
         def add_motionPath(
             self,
@@ -36546,7 +41026,12 @@ class ProgramNode(Element):
             orientOffset: _t.Union[float, int, str] | None = None,
             constantSpeed: _t.Union[bool, str] | None = None,
             additive: _t.Union[bool, str] | None = None,
-        ) -> MotionPath: ...
+        ) -> MotionPath:
+            """Add a <motionPath> child; the keywords are the attributes of MotionPath.
+
+            Moves the node's position along an SVG path over [start, end]. progress (0..1) may be animated with a nested animate on "progress".
+            """
+            ...
 
         def add_link(
             self,
@@ -36564,7 +41049,12 @@ class ProgramNode(Element):
             stiffness: T_positiveDecimal | None = None,
             damping: T_nonNegativeDecimal | None = None,
             mass: T_positiveDecimal | None = None,
-        ) -> Link: ...
+        ) -> Link:
+            """Add a <link> child; the keywords are the attributes of Link.
+
+            Drives @property from another value without writing an expression: source is "nodeId.property", "param:name", "audio:trackId[:low|mid|high]" or "marker:id". output = clamp(source * scale + offset, min, max), delayed by @delay seconds and smoothed over @smoothing seconds.
+            """
+            ...
 
         def add_mask(
             self,
@@ -36584,7 +41074,12 @@ class ProgramNode(Element):
             expansion: _t.Union[float, int, str] | None = None,
             opacity: T_unitDecimal | None = None,
             mode: _t.Literal["intersect", "add", "subtract", "lighten", "darken", "difference", "none"] | None = None,
-        ) -> Mask: ...
+        ) -> Mask:
+            """Add a <mask> child; the keywords are the attributes of Mask.
+
+            Masks combine in document order using @mode; the 1.0 behaviour (product of coverages) is mode="intersect", the default. Coverage is anti-aliased, then expanded/contracted by @expansion and blurred by @feather pixels.
+            """
+            ...
 
         def add_transformConstraint(
             self,
@@ -36606,7 +41101,12 @@ class ProgramNode(Element):
             softness: T_unitDecimal | None = None,
             progress: T_unitDecimal | None = None,
             autoOrient: _t.Union[bool, str] | None = None,
-        ) -> TransformConstraint: ...
+        ) -> TransformConstraint:
+            """Add a <transformConstraint> child; the keywords are the attributes of TransformConstraint.
+
+            Kinematic constraints evaluated after keyframes and before physics. parent: inherit @target's transform (After Effects parenting across the tree). look-at: rotate toward @target. follow-path: ride @path. copy-*: copy @target's world component. distance: keep within [minDistance, maxDistance]. ik: two-bone IK toward @target with @bendPositive. track: attach to point @point of tracking data @target. influence blends the constrained result with the unconstrained one.
+            """
+            ...
 
     else:
 
@@ -36662,6 +41162,7 @@ class ProgramData(Element):
         use="optional", default="1000000000", fixed=None,
         doc="Instructions a call of the module may execute (SREP 66, Determinism 4).",
     )
+    """Instructions a call of the module may execute (SREP 66, Determinism 4)."""
     memoryLimit: Attr[int, _t.Union[int, str]] = Attr(
         "memoryLimit",
         {
@@ -36675,6 +41176,7 @@ class ProgramData(Element):
         use="optional", default="64", fixed=None,
         doc="MiB of linear memory the module may hold (a multiple of 64 KiB pages: 16 pages per MiB).",
     )
+    """MiB of linear memory the module may hold (a multiple of 64 KiB pages: 16 pages per MiB)."""
     outputSha256: Attr[G_sha256Type, T_sha256Type] = Attr(
         "outputSha256", "sha256Type", use="optional", default=None, fixed=None, doc="",
     )
@@ -36691,14 +41193,26 @@ class ProgramData(Element):
             fuel: _t.Union[int, str] | None = None,
             memoryLimit: _t.Union[int, str] | None = None,
             outputSha256: T_sha256Type | None = None,
-        ) -> None: ...
+        ) -> None:
+            """Runs the module once; the JSON rows it returns are a data source for repeat/@over.
+
+            Args:
+                fuel: Instructions a call of the module may execute (SREP 66, Determinism 4).
+                memoryLimit: MiB of linear memory the module may hold (a multiple of 64 KiB pages: 16 pages per MiB).
+            """
+            ...
 
         def add_param(
             self,
             *,
             name: str | None = None,
             value: str | None = None,
-        ) -> ParamValue: ...
+        ) -> ParamValue:
+            """Add a <param> child; the keywords are the attributes of ParamValue.
+
+            Generic named value (shader uniforms, plugin params).
+            """
+            ...
 
     else:
 
