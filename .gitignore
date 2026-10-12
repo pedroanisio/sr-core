@@ -5,3 +5,9 @@ dist/
 .pytest_cache/
 conformance/out/
 .venv/
+drift-risk-map.md
+drift-risk-map.svg
+quarantine-summaries.md
+quarantine-manifest.json
+doc-quarantine.sh
+doc-hygiene-report.md
