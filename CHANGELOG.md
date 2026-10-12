@@ -41,6 +41,10 @@ version:
 
 ### Fixed
 
+### Docs
+
+- The schema documents its attributes (schema CHANGELOG, SREP draft `srep-0000-schema-attribute-docs.md`): `tests/test_schema_attribute_docs.py` fails for an attribute with neither documentation nor an entry in `tests/undocumented-attributes.txt`. The bundled schema copy and generated reference carry the sentences.
+
 ## 1.7.0 — 2026-10-12
 
 ### Added
