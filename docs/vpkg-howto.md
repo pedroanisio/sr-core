@@ -122,6 +122,8 @@ plan ok: 4 files
 
 If `pack` refuses, see [section 7](#7-when-pack-refuses).
 
+`pack --with-archive` also packs the `draft` and `archive` scenes, which are otherwise left out unless an `include` glob names them.
+
 ### 2.4 Pack and verify
 
 ```bash
@@ -133,6 +135,8 @@ scenerender-vpkg verify packages/planet-orbit-1.0.0.vpkg.zip
 - every hash
 - no stray entries
 - every scene reference resolving inside the package
+
+`verify --shallow` skips the reference check, which needs an extraction, and checks only the hashes and entries.
 
 ### 2.5 Test it the way a recipient would
 
@@ -229,6 +233,7 @@ Large inputs that anyone can download, such as voice models, HDRIs or datasets, 
 - `unpack --fetch`, `run` or `scenerender-vpkg fetch DIR` downloads the file and rejects it if the hash differs.
 - Keep small companion files, such as the voice's `.onnx.json`, in the project: they are bundled normally.
 - `pack --bundle-fetch` puts the fetch files inside the zip, for an offline recipient.
+- `unpack --no-fetch` and `run --no-fetch` skip the downloads; use them on a machine that has no network or that already holds the files.
 
 ### 4.2 Fonts
 
@@ -264,6 +269,8 @@ Bundled system fonts record their copyright and licence strings in `fonts[]` aut
 ## 5. Set up render engines on a machine
 
 `run` calls engines by these default command names, which must be on PATH: `scenerender` (py), `scene-render-rs`, `scene-render-c` and `scene-render-js`.
+
+Only the Rust engine is active; the C, Python and JavaScript engines are discontinued ([SREP 25](../srep/srep-0025.md)) and are listed for packages that still target them.
 
 The C, Rust and JavaScript engines each install a binary named `scene-render`, so one PATH can't tell them apart. The three names above are aliases you create once per machine, pointing at each engine's `scene-render`:
 
@@ -302,7 +309,7 @@ An engine id that isn't in the table (`--engine myengine`) runs `myengine` with 
 ## 6. Rebuild a video from a package
 
 ```bash
-scenerender-vpkg info    orbit-1.0.0.vpkg.zip              # what it is, its steps and downloads
+scenerender-vpkg info    orbit-1.0.0.vpkg.zip              # what it is, its steps and downloads (--json for a script)
 scenerender-vpkg verify  orbit-1.0.0.vpkg.zip              # integrity before trusting it
 scenerender-vpkg unpack  orbit-1.0.0.vpkg.zip work/orbit --fetch
 scenerender-vpkg run     work/orbit --engine rs --list     # the plan
@@ -368,6 +375,8 @@ Scene references outside the project are fixed automatically: they're copied to 
    ```bash
    SOURCE_DATE_EPOCH=$(date -d 2026-09-28 +%s) scenerender-vpkg pack PROJECT -o packages/
    ```
+
+   `--date DATE` records a pack time directly and takes precedence over the variable.
 
    The same project and date always give a byte-identical zip, so its SHA-256 can be published beside it. Without `SOURCE_DATE_EPOCH`, entries are dated 1980-01-01 and no pack date is recorded; the zip is still reproducible.
 3. Run `verify`, then unpack and render once, as in [section 2.5](#25-test-it-the-way-a-recipient-would).

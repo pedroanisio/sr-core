@@ -36,10 +36,12 @@ BOTTOM = H - M - 14          # above the footer
 
 
 def frame_name(t: float) -> str:
+    """File name stem for the frame at `t` seconds: t plus milliseconds in 8 digits."""
     return f"t{round(t * 1000):08d}"
 
 
 def find_frame(folder: str, t: float) -> str | None:
+    """Path of the frame for `t` in `folder` (png, jpg or jpeg), or None."""
     for ext in (".png", ".jpg", ".jpeg"):
         p = os.path.join(folder, frame_name(t) + ext)
         if os.path.isfile(p):
@@ -75,6 +77,7 @@ class Flow:
         self.y = 0.0
 
     def start(self, page: pdf.Page, regions: list[tuple[float, float, float, float]]) -> None:
+        """Begin pouring text into `regions` on `page`."""
         self.page, self.regions = page, list(regions)
         self.y = self.regions[0][1]
 
@@ -91,6 +94,7 @@ class Flow:
 
     def para(self, text: str, size: float = 9, font: str = "F1", indent: float = 0, grey: float = 0,
              lead: str = "", gap: float = 2) -> None:
+        """Add a wrapped paragraph, with an optional bold `lead` label, moving to the next region when full."""
         x, _, _, w = self.regions[0]
         lw = pdf.text_width(lead, size, "F2") + 4 if lead else 0
         lines = pdf.wrap(text, w - indent - lw, size, font) if text else [""]
@@ -104,12 +108,14 @@ class Flow:
         self.y += gap
 
     def title(self, text: str) -> None:
+        """Add a bold sub-heading."""
         self._room(28)
         self.y += 8
         self.para(text, 11, "F2", gap=3)
 
 
 def cover(doc: pdf.Document, rv: Review) -> None:
+    """Add the cover page: title, facts, outputs, unread notes and the section list."""
     page = doc.page(W, H)
     page.text(M, M + 22, rv.title, 22, "F2")
     page.text(M, M + 40, "Review sheet", 11, "F1", 0.4)
@@ -135,6 +141,7 @@ def cover(doc: pdf.Document, rv: Review) -> None:
 
 def section_page(doc: pdf.Document, rv: Review, s: Section, frame: str | None, t: float, why: str | None,
                  aspect: float) -> None:
+    """Add one section's page: frame (or why it is missing), captions and markers."""
     page = doc.page(W, H)
     head = f"{s.index:02d}  {clock(s.start)}-{clock(s.end)}"
     page.text(M, M + 14, head, 13, "F2")
@@ -174,6 +181,7 @@ def section_page(doc: pdf.Document, rv: Review, s: Section, frame: str | None, t
 
 
 def closing(doc: pdf.Document, rv: Review) -> None:
+    """Add the last page: open to-dos, sources and credits, and metadata."""
     page = doc.page(W, H)
     flow = Flow(doc, "Open to-dos, sources and credits")
     half = (W - 2 * M - 30) / 2
@@ -196,6 +204,7 @@ def closing(doc: pdf.Document, rv: Review) -> None:
 
 
 def build(rv: Review, frames: dict[int, tuple[str | None, float, str | None]], aspect: float) -> bytes:
+    """The review sheet PDF as bytes; `frames` maps section index to (path, time, reason missing)."""
     doc = pdf.Document(title=f"{rv.title}: review sheet", producer=f"sr-review {__version__}")
     cover(doc, rv)
     for s in rv.sections:
@@ -210,6 +219,7 @@ def build(rv: Review, frames: dict[int, tuple[str | None, float, str | None]], a
 
 
 def main(argv: list[str] | None = None) -> int:
+    """Entry point; returns the exit status (0 written, 1 frames missing, 2 nothing written)."""
     ap = argparse.ArgumentParser(prog="sr-review", description="Review sheet (PDF) of a scene-render scene.")
     ap.add_argument("--version", action="version", version=f"sr-review {__version__}")
     ap.add_argument("scene", help="scene document")

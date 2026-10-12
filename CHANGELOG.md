@@ -55,6 +55,14 @@ version:
 - The case generators of `conformance/tools/` are re-run by `tests/test_conformance_generators.py`, which fails when
   the committed `srep_cases/` differ from what they write; the README's SDK example is executed from the README.
 - `srep/index.md` row 83 carries the header's title.
+- `docs/vpkg-howto.md` names every option of `scenerender-vpkg` (`pack --date`, `--with-archive`, `unpack`/`run
+  --no-fetch`, `verify --shallow`, `info --json` were missing) and says that only the Rust engine is active;
+  `tests/test_docs_cli.py` fails when an option is missing and runs every `python3 -m` command of the README.
+- `srep/srep-0000-generated-marker-ids.md`, the unnumbered draft of SREP 57, is removed; hygiene rule R4 now fails a
+  `srep-0000-*.md` file whose title a numbered SREP carries.
+- Docstrings for every public symbol of `vpkg/pack.py`, `review/{scene,pdf,cli}.py` and `schemadoc/html.py`;
+  `tests/test_docstring_coverage.py` keeps the coverage from falling.
+- `srep/index.md` says that engine-repository paths cited in SREPs are not files of this repository.
 - The corpus differentials of the SDK (D5, D6, the gates and the name tests) run by default; `SR_SCENE_CORPUS=0`
   switches them off. CI no longer sets a variable to enable them.
 - The tests of SREPs 76 to 85 no longer skip when the `schema-1.5.0` tag is missing: the two 1.5.0 files are kept,

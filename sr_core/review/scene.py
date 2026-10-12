@@ -20,11 +20,13 @@ TIMED = ("cue", "beat", "comment", "todo", "cta")
 
 
 class SceneError(ValueError):
+    """Raised when a scene document cannot be read or is not a scene."""
     pass
 
 
 @dataclass
 class Marker:
+    """A timeline marker: id, time in seconds, kind, label and optional duration."""
     id: str
     time: float
     kind: str
@@ -34,6 +36,7 @@ class Marker:
 
 @dataclass
 class Cue:
+    """A caption cue: start and end in seconds, text and speaker."""
     start: float
     end: float
     text: str
@@ -42,6 +45,7 @@ class Cue:
 
 @dataclass
 class Section:
+    """A stretch of the video with its chapter, the timed markers and the caption cues that fall in it."""
     index: int
     start: float
     end: float
@@ -51,12 +55,14 @@ class Section:
     cues: list[Cue] = field(default_factory=list)
 
     def frame_time(self, at: str, duration: float) -> float:
+        """Seconds to show a frame for: the start if `at` is "start", else the middle, kept inside `duration`."""
         t = self.start if at == "start" else (self.start + self.end) / 2
         return max(0.0, min(t, duration - 1e-3))
 
 
 @dataclass
 class Review:
+    """Everything a review sheet shows, as read from one scene document."""
     path: str
     sha256: str
     title: str
@@ -95,6 +101,7 @@ def _float(v, default: float = 0.0) -> float:
 
 
 def clock(t: float) -> str:
+    """Seconds as MM:SS.s."""
     s = max(0.0, t)
     return f"{int(s // 60):02d}:{s % 60:04.1f}"
 
@@ -165,6 +172,7 @@ def _group_sections(root, markers: dict[str, float], duration: float) -> list[Se
 
 
 def read(path: str, language: str | None = None) -> Review:
+    """Read the scene at `path` into a Review; `language` picks the caption track. Raises SceneError."""
     try:
         with open(path, "rb") as f:
             raw = f.read()
@@ -190,6 +198,7 @@ def read(path: str, language: str | None = None) -> Review:
     by_id = {m.id: m.time for m in markers if m.id}
 
     def from_markers(kind: str) -> list[Section]:
+        """Sections from the markers of `kind`; an unset duration leaves the end at -1 to be filled in."""
         return [Section(0, m.time, m.time + m.duration if m.duration > 0 else -1, m.label or m.id)
                 for m in markers if m.kind == kind]
 

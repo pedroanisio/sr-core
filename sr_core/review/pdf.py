@@ -19,14 +19,17 @@ FONTS = {"F1": ("Helvetica", REGULAR), "F2": ("Helvetica-Bold", BOLD)}
 
 
 class ImageError(ValueError):
+    """Raised when an image is not a supported PNG or JPEG."""
     pass
 
 
 def encode(text: str) -> bytes:
+    """Text as Windows-1252 bytes, with '?' for characters outside it."""
     return text.encode("cp1252", errors="replace")
 
 
 def text_width(text: str, size: float, font: str = "F1") -> float:
+    """Width in points of `text` at `size` in font F1 or F2."""
     table = FONTS[font][1]
     return sum(table[b] for b in encode(text)) * size / 1000
 
@@ -73,6 +76,7 @@ def _num(v: float) -> bytes:
 
 # ----------------------------------------------------------------------------------------------- images
 class Image:
+    """A decoded image ready to embed: size, colour components, data and PDF filter."""
     def __init__(self, width: int, height: int, colors: int, data: bytes, filter_: str, params: bytes = b""):
         self.width, self.height, self.colors, self.data, self.filter, self.params = (
             width, height, colors, data, filter_, params)
@@ -150,6 +154,7 @@ def _with_pillow(data: bytes, max_width: int) -> Image | None:
 
 
 def read_png(data: bytes, max_width: int = 0) -> Image:
+    """Read PNG bytes into an Image, reduced to `max_width` if set; raises ImageError for unsupported files."""
     if data[:8] != b"\x89PNG\r\n\x1a\n":
         raise ImageError("not a PNG file")
     pos, idat, palette = 8, bytearray(), None
@@ -210,6 +215,7 @@ def read_png(data: bytes, max_width: int = 0) -> Image:
 
 
 def read_jpeg(data: bytes) -> Image:
+    """Read JPEG bytes into an Image, embedded as is; raises ImageError for unsupported files."""
     if data[:2] != b"\xff\xd8":
         raise ImageError("not a JPEG file")
     pos = 2
@@ -228,6 +234,7 @@ def read_jpeg(data: bytes) -> Image:
 
 
 def read_image(path: str, max_width: int = 0, pillow: bool = True) -> Image:
+    """Read a PNG or JPEG file into an Image (Pillow first when `pillow`), reduced to `max_width` if set."""
     with open(path, "rb") as f:
         data = f.read()
     if pillow:
@@ -239,6 +246,7 @@ def read_image(path: str, max_width: int = 0, pillow: bool = True) -> Image:
 
 # ------------------------------------------------------------------------------------------------ pages
 class Page:
+    """One PDF page of drawing operations; y coordinates are measured down from the top."""
     def __init__(self, width: float, height: float):
         self.width, self.height = width, height
         self.ops: list[bytes] = []
@@ -250,13 +258,16 @@ class Page:
             _num(grey), font.encode(), _num(size), _num(x), _num(self.height - y), _literal(text)))
 
     def rect(self, x: float, y: float, w: float, h: float, grey: float) -> None:
+        """Fill a rectangle at (x, y) of size w x h with grey level `grey`."""
         self.ops.append(b"%s g %s %s %s %s re f" % (_num(grey), _num(x), _num(self.height - y - h), _num(w), _num(h)))
 
     def line(self, x1: float, y1: float, x2: float, y2: float, grey: float = 0.7, width: float = 0.5) -> None:
+        """Stroke a line from (x1, y1) to (x2, y2)."""
         self.ops.append(b"%s G %s w %s %s m %s %s l S" % (
             _num(grey), _num(width), _num(x1), _num(self.height - y1), _num(x2), _num(self.height - y2)))
 
     def image(self, img: Image, x: float, y: float, w: float, h: float) -> None:
+        """Place `img` in the box at (x, y) of size w x h."""
         name = f"Im{len(self.images) + 1}"
         self.images[name] = img
         self.ops.append(b"q %s 0 0 %s %s %s cm /%s Do Q" % (
@@ -264,23 +275,28 @@ class Page:
 
 
 class Document:
+    """A PDF document: a title, a producer and its pages."""
     def __init__(self, title: str = "", producer: str = ""):
         self.title, self.producer = title, producer
         self.pages: list[Page] = []
 
     def page(self, width: float, height: float) -> Page:
+        """Append a new blank page of the given size and return it."""
         p = Page(width, height)
         self.pages.append(p)
         return p
 
     def tobytes(self) -> bytes:
+        """The complete PDF file as bytes; the same document always gives the same bytes."""
         objs: list[bytes] = []
 
         def add(body: bytes) -> int:
+            """Append an object body and return its object number."""
             objs.append(body)
             return len(objs)
 
         def stream(dict_: bytes, data: bytes) -> bytes:
+            """A stream object with the dictionary entries `dict_` and the data `data`."""
             return b"<< %s /Length %d >>\nstream\n%s\nendstream" % (dict_, len(data), data)
 
         catalog, pages = add(b""), add(b"")

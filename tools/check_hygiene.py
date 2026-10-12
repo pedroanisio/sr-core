@@ -213,10 +213,18 @@ def r4_index(root, files):
                 out.append(Finding("R4", path, f"srep/index.md {col} is {got!r} but the header's {key} is {want!r}"))
     if seen != sorted(set(seen)):
         out.append(Finding("R4", "srep/index.md", "rows are not in ascending order, or repeat a number"))
+    titles = {}
     for p in files:
         m = re.fullmatch(r"srep/srep-(\d{4})\.md", p)
         if m and int(m.group(1)) not in seen:
             out.append(Finding("R4", p, "has no row in srep/index.md"))
+        if m and int(m.group(1)):
+            titles[_plain(srep_header(read(root, p) or "").get("Title", (0, ""))[1]).lower()] = p
+    for p in files:    # a proposal that still carries the number 0 (SREP 0, section "numbering") and a numbered SREP's title
+        if re.fullmatch(r"srep/srep-0000-[a-z0-9-]+\.md", p):
+            title = _plain(srep_header(read(root, p) or "").get("Title", (0, ""))[1]).lower()
+            if title in titles:
+                out.append(Finding("R4", p, f"same title as {titles[title]}: the draft was numbered; remove the copy"))
     return out
 
 

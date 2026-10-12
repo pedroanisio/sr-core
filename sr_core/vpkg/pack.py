@@ -58,6 +58,7 @@ EXTERNAL_DIR = "_external"
 
 
 class PackError(Exception):
+    """Raised by `plan` when the project cannot be packed; `errors` and `warnings` hold the messages."""
     def __init__(self, errors, warnings=()):
         self.errors, self.warnings = list(errors), list(warnings)
         super().__init__("cannot pack:\n  " + "\n  ".join(self.errors))
@@ -65,6 +66,7 @@ class PackError(Exception):
 
 @dataclass
 class Plan:
+    """What a pack will contain: files, roles, rewrites, fonts, credits and the problems found while planning."""
     project: str
     spec: dict
     files: dict = field(default_factory=dict)          # rel -> abs source path
@@ -109,12 +111,14 @@ def _glob_rx(pattern: str) -> re.Pattern:
 
 
 def matches(rel: str, patterns) -> bool:
+    """True when `rel` matches any of the gitignore-like glob `patterns`."""
     return any(_glob_rx(p).match(rel) for p in patterns)
 
 
 # ----------------------------------------------------------------------------------------------- helpers
 
 def sha256_file(path: str) -> str:
+    """Hex SHA-256 of the file at `path`, read in 1 MiB chunks."""
     h = hashlib.sha256()
     with open(path, "rb") as f:
         for chunk in iter(lambda: f.read(1 << 20), b""):
@@ -166,6 +170,7 @@ MEDIA_TYPES = {
 
 
 def media_type(rel: str) -> str | None:
+    """Media type for the extension of `rel` from the fixed MEDIA_TYPES table, or None if unknown."""
     return MEDIA_TYPES.get(os.path.splitext(rel)[1].lower())
 
 
@@ -223,6 +228,7 @@ def _is_generated(rel: str, patterns) -> bool:
 def plan(project: str, spec: dict | None = None, *, with_archive: bool = False, bundle_fetch: bool = False,
          allow_nonportable: bool = False, allow_missing_fonts: bool = False, allow_remote: bool = False,
          use_system_fonts: bool = True) -> Plan:
+    """Work out what to bundle from `project` and its vpkg.json `spec`; raises PackError listing every error found."""
     project = os.path.abspath(project)
     if spec is None:
         spec = mf.load(os.path.join(project, mf.MANIFEST), check=False)
@@ -546,12 +552,14 @@ def _rewrite_scenes(p: Plan, external: dict) -> None:
 # ----------------------------------------------------------------------------------------------- manifest
 
 def build_manifest(p: Plan, date: str | None = None) -> dict:
+    """The packed manifest: the spec plus video facts, per-file size/SHA-256/role, fonts, externals and rewrites."""
     spec = json.loads(json.dumps(p.spec))
     scan = p.scans.get(mf.primary(spec)["path"])
     if scan is not None:
         pr = scan.project
 
         def num(key, cast):
+            """`pr[key]` converted with `cast`, or None when the key is missing or not convertible."""
             try:
                 return cast(pr[key])
             except (KeyError, ValueError):
@@ -612,6 +620,7 @@ def _info(name: str, dt, executable: bool = False) -> zipfile.ZipInfo:
 
 
 def write_zip(p: Plan, out: str, date: str | None = None) -> dict:
+    """Write the reproducible package for plan `p` to `out` (via `out`.part); returns the packed manifest."""
     dt, epoch_date = _date_time()
     m = build_manifest(p, date or epoch_date)
     readme_bytes = readme(m).encode()
@@ -651,6 +660,7 @@ def pack(project: str, out: str | None = None, **options) -> tuple:
 
 
 def summary(m: dict) -> dict:
+    """Count and total size of the manifest's files per role, as {role: (count, bytes)}."""
     by_role: dict = {}
     for f in m.get("files", []):
         n, s = by_role.get(f["role"], (0, 0))
@@ -659,6 +669,7 @@ def summary(m: dict) -> dict:
 
 
 def human(n: float) -> str:
+    """A byte count as text, in B, KB, MB or GB."""
     for unit in ("B", "KB", "MB", "GB"):
         if n < 1024 or unit == "GB":
             return f"{n:.0f} {unit}" if unit == "B" else f"{n:.1f} {unit}"

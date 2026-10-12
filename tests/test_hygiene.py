@@ -176,3 +176,19 @@ def test_an_intended_difference_is_allowed_by_path_and_needs_a_reason(tmp_path):
     other.mkdir()
     found = hy.check(_index_repo(other, rows, sreps=kw, allow="srep/srep-0001.md:R4:\n"))
     assert [f.rule for f in found] == ["allow"] and "needs a reason" in found[0].message
+
+
+def test_a_numberless_draft_that_became_a_numbered_srep_is_a_finding(tmp_path):
+    """Doc-hygiene audit: srep-0000-generated-marker-ids.md stayed after it was numbered 57."""
+    files = {f"srep/srep-{n:04d}.md": _srep(n, title="Same title") for n in (1,)}
+    files["srep/srep-0000-same.md"] = _srep(0, title="Same title")
+    files["srep/index.md"] = INDEX_HEAD + _row(1, title="Same title") + _row(0, title="Same title").replace("srep-0000.md", "srep-0000-same.md")
+    found = [str(f) for f in hy.check(repo(tmp_path, files)) if f.rule == "R4"]
+    assert any("srep-0000-same.md" in f and "same title as srep/srep-0001.md" in f for f in found), found
+
+
+def test_a_numberless_draft_with_its_own_title_is_clean(tmp_path):
+    files = {"srep/srep-0001.md": _srep(1, title="One"), "srep/srep-0000-other.md": _srep(0, title="Other")}
+    files["srep/index.md"] = INDEX_HEAD + _row(1, title="One")
+    found = [str(f) for f in hy.check(repo(tmp_path, files)) if f.rule == "R4"]
+    assert not any("same title" in f for f in found), found
