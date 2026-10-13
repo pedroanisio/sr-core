@@ -94,12 +94,13 @@ def _strip_annotations(root) -> bytes:
 def test_diff_against_base_is_annotation_only_except_srep91():
     base = etree.fromstring(_base_xsd())
     now = etree.parse(XSD).getroot()
-    # Restore only the declared SREP 91 attribute changes to their baseline declarations.
+    # Restore only the declared SREP 91 and SREP 93 attribute changes to their baseline declarations.
     # Any other structural edit still fails the canonical comparison below.
     changes = {
         "markerType": {"color"},
         "colorManagementType": {"bitDepth"},
-        "projectType": {"mode"},
+        # SREP 93: antialias3d defaults to 4, the count the reference engine drew with.
+        "projectType": {"mode", "antialias3d"},
         "shapeModifierType": {"ridges"},
         "modifierType": {"axis"},
         "fractalAssetType": {"palette"},
