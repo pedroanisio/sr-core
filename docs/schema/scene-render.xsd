@@ -313,9 +313,15 @@
     <xs:attribute name="sha256" type="sha256Type">
       <xs:annotation><xs:documentation>SHA-256 digest of the source file, in hex. A local file is hashed when the scene is validated and a different digest is an error; a remote URL is not checked.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="license" type="xs:string"/>
-    <xs:attribute name="credit" type="xs:string"/>
-    <xs:attribute name="proxy" type="xs:anyURI"/>
+    <xs:attribute name="license" type="xs:string">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Licence identifier or text carried with the asset id into the render report.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="credit" type="xs:string">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Attribution text carried with the asset id into the render report.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="proxy" type="xs:anyURI">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): URI of an implicit representation named proxy, selected through representation preference; an explicit representation named proxy takes precedence.</xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:attributeGroup>
   <xs:attributeGroup name="strokeStyle">
     <xs:attribute name="strokeCap" type="strokeCapType" default="butt">
@@ -334,10 +340,10 @@
       <xs:annotation><xs:documentation>Distance in scene units into the dash pattern at which the outline starts, shifting the dashes along the path. Default 0.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="strokePosition" type="strokePositionType" default="center">
-      <xs:annotation><xs:documentation>For a shape: where the stroke sits relative to the outline: center (default), inside (only the part within the shape) or outside (only the part beyond it). Vector assets always stroke centred.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>For a shape: where the stroke sits relative to the outline: center (default), inside (only the part within the shape) or outside (only the part beyond it). Provisional (SREP 93): Stroke placement inside, outside or centred on the path, with the same behavior for vector assets and shapes.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="paintOrder" default="fill-stroke">
-      <xs:annotation><xs:documentation>For a shape: drawing order of fill and stroke: fill-stroke (default) paints the stroke over the fill, stroke-fill paints the fill over the stroke. Vector assets always paint the stroke over the fill.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>For a shape: drawing order of fill and stroke: fill-stroke (default) paints the stroke over the fill, stroke-fill paints the fill over the stroke. Provisional (SREP 93): Order of fill and stroke painting, fill-stroke or stroke-fill, for vector assets and shapes alike.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
         <xs:enumeration value="fill-stroke"/><xs:enumeration value="stroke-fill"/>
       </xs:restriction></xs:simpleType>
@@ -920,8 +926,12 @@
     <xs:attribute name="color" type="colorType" use="required">
       <xs:annotation><xs:documentation>Colour at this grid point; grid points without a point element take the colour of the nearest defined one.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="x" type="xs:double"/>
-    <xs:attribute name="y" type="xs:double"/>
+    <xs:attribute name="x" type="xs:double">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Horizontal position as a fraction of the painted box, using the regular grid position when absent.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="y" type="xs:double">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Vertical position as a fraction of the painted box, using the regular grid position when absent.</xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:complexType>
   <xs:complexType name="meshGradientType">
     <xs:annotation><xs:documentation>Freeform / mesh gradient: bicubic colour patch grid.</xs:documentation></xs:annotation>
@@ -1098,7 +1108,7 @@
     <xs:attributeGroup ref="characterStyle"/>
   </xs:complexType>
   <xs:complexType name="stylesType">
-    <xs:annotation><xs:documentation>Brand kit: colour/number tokens referenced as var(--name), and reusable text styles.</xs:documentation></xs:annotation>
+    <xs:annotation><xs:documentation>Brand kit: colour tokens referenced as var(--name), and reusable text styles.</xs:documentation></xs:annotation>
     <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:element name="token" type="tokenType"/>
       <xs:element name="textStyle" type="textStyleType"/>
@@ -1119,15 +1129,21 @@
     <xs:attribute name="src" type="xs:anyURI" use="required">
       <xs:annotation><xs:documentation>Path of the alternate file that replaces the asset's own file when this representation is chosen; a remote URL is not fetched when rendering.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="width" type="xs:positiveInteger"/>
-    <xs:attribute name="height" type="xs:positiveInteger"/>
+    <xs:attribute name="width" type="xs:positiveInteger">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Declared width of this representation in pixels, checked against its file while layout keeps the parent asset size and aspect ratio.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="height" type="xs:positiveInteger">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Declared height of this representation in pixels, checked against its file while layout keeps the parent asset size and aspect ratio.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="colorSpace" type="colorSpaceType">
       <xs:annotation><xs:documentation>Colour primaries of the alternate file, replacing the asset's own colorSpace when this representation is chosen.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="transfer" type="transferType">
       <xs:annotation><xs:documentation>Transfer curve of the alternate file, replacing the asset's own transfer when this representation is chosen.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="language" type="languageTagType"/>
+    <xs:attribute name="language" type="languageTagType">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Language used for representation selection when no name matches, by exact BCP-47 tag then primary subtag.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="sha256" type="sha256Type">
       <xs:annotation><xs:documentation>Expected SHA-256 digest of the alternate file; when the scene is validated, a different digest of a local file is an error. A remote URL is not checked.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -1198,8 +1214,12 @@
     <xs:attribute name="audioStream" type="xs:nonNegativeInteger" default="0">
       <xs:annotation><xs:documentation>Index, counted from 0, of the file's audio stream to mix when hasAudio is true. Default 0.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="timecodeStart" type="timecodeType"/>
-    <xs:attribute name="pixelAspect" type="positiveDecimal" default="1"/>
+    <xs:attribute name="timecodeStart" type="timecodeType">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Timecode label of the first source frame, used with clipIn and the asset frame rate to record each video layer's source in and out timecodes in the render report.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="pixelAspect" type="positiveDecimal" default="1">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Ratio of displayed pixel width to height; displayed intrinsic width is decoded width times this ratio, with height unchanged and default 1.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="rotation" default="0">
       <xs:annotation><xs:documentation>Clockwise rotation in degrees (0, 90, 180 or 270) applied to the decoded frames; 0 uses the orientation recorded in the file.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:integer">
@@ -1266,10 +1286,18 @@
     <xs:attribute name="src" type="xs:anyURI" use="required">
       <xs:annotation><xs:documentation>Path of the audio file, relative to the scene file; a file: URL also works. Other URLs are not fetched, so such a file cannot be mixed.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="duration" type="positiveDecimal"/>
-    <xs:attribute name="sampleRate" type="xs:positiveInteger"/>
-    <xs:attribute name="channels" type="xs:positiveInteger"/>
-    <xs:attribute name="language" type="languageTagType"/>
+    <xs:attribute name="duration" type="positiveDecimal">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Declared duration in seconds, compared with the probe and used when probing is unavailable; probed duration takes precedence.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="sampleRate" type="xs:positiveInteger">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Declared sample rate in Hz, compared with the file; the probe takes precedence on disagreement.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="channels" type="xs:positiveInteger">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Declared audio channel count, compared with the file; the probe takes precedence on disagreement.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="language" type="languageTagType">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Language tag written to the encoded audio stream.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="bpm" type="positiveDecimal">
       <xs:annotation><xs:documentation>Tempo of the audio in beats per minute; required by a track that fits the audio to a duration (fitToDuration).</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -1606,8 +1634,9 @@
       <xs:annotation><xs:documentation>bands picks a palette colour by the escape count; smooth interpolates between neighbouring palette colours using a fractional count. Default smooth.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string"><xs:enumeration value="bands"/><xs:enumeration value="smooth"/></xs:restriction></xs:simpleType>
     </xs:attribute>
-    <xs:attribute name="palette" type="xs:string" default="#000764FF #206BCBFF #EDFFFFFF #FFAA00FF #000200FF">
-      <xs:annotation><xs:documentation>Space-separated list of colours cycled through by escape count; a token that is not a colour is an error. Default: dark blue, blue, white, orange and near black.</xs:documentation></xs:annotation>
+    <xs:attribute name="palette" default="#000764FF #206BCBFF #EDFFFFFF #FFAA00FF #000200FF">
+      <xs:annotation><xs:documentation>Nonempty whitespace-separated list of colours cycled through by escape count, including var(--name) colour tokens; an invalid colour or an empty list is an error. Default: dark blue, blue, white, orange and near black.</xs:documentation></xs:annotation>
+          <xs:simpleType><xs:restriction base="colorListType"><xs:minLength value="1"/></xs:restriction></xs:simpleType>
     </xs:attribute>
     <xs:attribute name="paletteScale" type="positiveDecimal" default="0.05">
       <xs:annotation><xs:documentation>Smooth mode only: palette steps per escape iteration, so 0.05 moves one colour along every 20 iterations. Default 0.05.</xs:documentation></xs:annotation>
@@ -1670,7 +1699,9 @@
     </xs:attribute>
   </xs:complexType>
   <xs:complexType name="chartSeriesType">
-    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="name" type="xs:string" use="required">
+      <xs:annotation><xs:documentation>Text identifying this series in the legend and data labels.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="values" type="numberListType" use="required">
       <xs:annotation><xs:documentation>Whitespace-separated numbers. Bar, column, line and area take one per category; pie and donut slices come from the first series; scatter reads x y pairs; counter uses one or two values; progress one (above 1 is percent).</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -1688,7 +1719,7 @@
       <xs:annotation><xs:documentation>Unique identifier that layers use to show this chart.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="kind" use="required">
-      <xs:annotation><xs:documentation>Chart type: bar, column, line, area, pie, donut, scatter, counter (a number counting from the first value to the second, or from 0 to a single value) or progress (a fill bar). An unknown kind draws a column chart.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Chart type: bar, column, line, area, pie, donut, scatter, counter (a number counting from the first value to the second, or from 0 to a single value) or progress (a fill bar). An unknown kind is invalid.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
         <xs:enumeration value="bar"/><xs:enumeration value="column"/><xs:enumeration value="line"/>
         <xs:enumeration value="area"/><xs:enumeration value="pie"/><xs:enumeration value="donut"/>
@@ -1722,6 +1753,9 @@
     <xs:attribute name="format" type="xs:string">
       <xs:annotation><xs:documentation>Number pattern for values and axis ticks such as 0.0, #,##0, 0% or $#,##0.00 (or %.2f); decimals follow the pattern, a comma groups thousands, a trailing % scales by 100. Absent: whole numbers or up to two decimals.</xs:documentation></xs:annotation>
     </xs:attribute>
+    <xs:attribute name="legend" type="xs:boolean" default="false">
+      <xs:annotation><xs:documentation>For line, area, bar, column and scatter charts, draw one colour swatch and series name per series in document order. False (default) draws no legend; other chart kinds ignore it.</xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:complexType>
   <xs:complexType name="audiogramAssetType">
     <xs:attribute name="id" type="xs:ID" use="required">
@@ -1749,8 +1783,9 @@
     <xs:attribute name="color" type="paintType" default="#FFFFFFFF">
       <xs:annotation><xs:documentation>Colour or paint of everything drawn: the bars, line, wave or circle rays. Default opaque white.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="smoothing" type="unitDecimal" default="0.5">
-      <xs:annotation><xs:documentation>Smoothing of the loudness history from 0 (none) to 1 (strongest, capped just below 1); higher values react more slowly. The spectrum style ignores it. Default 0.5.</xs:documentation></xs:annotation>
+    <xs:attribute name="smoothing" default="0.5">
+      <xs:annotation><xs:documentation>Dimensionless smoothing of the loudness history, from 0 to 0.99 inclusive: next = previous * smoothing + sample * (1 - smoothing). Higher values react more slowly. The spectrum style ignores it. Default 0.5.</xs:documentation></xs:annotation>
+          <xs:simpleType><xs:restriction base="unitDecimal"><xs:maxInclusive value="0.99"/></xs:restriction></xs:simpleType>
     </xs:attribute>
   </xs:complexType>
   <xs:complexType name="codeAssetType">
@@ -1865,7 +1900,9 @@
     <xs:attribute name="duration" type="positiveDecimal">
       <xs:annotation><xs:documentation>Requested length in seconds, sent to the provider with the request; whether a provider uses it depends on the provider.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="license" type="xs:string"/>
+    <xs:attribute name="license" type="xs:string">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Licence identifier or text carried with the generated asset id into the render report.</xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:complexType>
   <!-- ===================================================== maps -->
   <xs:simpleType name="projectionType">
@@ -2293,17 +2330,17 @@
     <xs:attribute name="occurrence" type="xs:positiveInteger" default="1">
       <xs:annotation><xs:documentation>Which match of the phrase to use, counting from 1 from the start of the page's text; matches do not overlap and 1 is the default.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="x" type="xs:double" use="required">
-      <xs:annotation><xs:documentation>Left edge of the box in pixels of the page's cache image, measured from its left edge; written by the resolve step when text is set, but required even then, so give a value first.</xs:documentation></xs:annotation>
+    <xs:attribute name="x" type="xs:double" use="optional">
+      <xs:annotation><xs:documentation>Left edge of the box in pixels of the page's cache image, measured from its left edge; written by the resolve step when text is set and optional until then; without text, all four box attributes are required (C81).</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="y" type="xs:double" use="required">
-      <xs:annotation><xs:documentation>Top edge of the box in pixels of the page's cache image, measured downward from its top; written by the resolve step when text is set, but required even then, so give a value first.</xs:documentation></xs:annotation>
+    <xs:attribute name="y" type="xs:double" use="optional">
+      <xs:annotation><xs:documentation>Top edge of the box in pixels of the page's cache image, measured downward from its top; written by the resolve step when text is set and optional until then; without text, all four box attributes are required (C81).</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="width" type="nonNegativeDecimal" use="required">
-      <xs:annotation><xs:documentation>Width of the box in pixels of the page's cache image; written by the resolve step when text is set, but required even then, so give a value first.</xs:documentation></xs:annotation>
+    <xs:attribute name="width" type="nonNegativeDecimal" use="optional">
+      <xs:annotation><xs:documentation>Width of the box in pixels of the page's cache image; written by the resolve step when text is set and optional until then; without text, all four box attributes are required (C81).</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="height" type="nonNegativeDecimal" use="required">
-      <xs:annotation><xs:documentation>Height of the box in pixels of the page's cache image; written by the resolve step when text is set, but required even then, so give a value first.</xs:documentation></xs:annotation>
+    <xs:attribute name="height" type="nonNegativeDecimal" use="optional">
+      <xs:annotation><xs:documentation>Height of the box in pixels of the page's cache image; written by the resolve step when text is set and optional until then; without text, all four box attributes are required (C81).</xs:documentation></xs:annotation>
     </xs:attribute>
   </xs:complexType>
   <xs:complexType name="pdfAssetType">
@@ -2529,7 +2566,7 @@
       <xs:annotation><xs:documentation>Three factors from 0 to 1 that scale the subsurface radius for red, green and blue, so colors spread differently. Default 1 0.5 0.25. A loaded materialX document replaces it.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="materialX" type="xs:anyURI">
-      <xs:annotation><xs:documentation>URI of a MaterialX document whose parameters replace this material's own; uvScale and doubleSided are kept, as are maps the document does not supply. An unreadable document is reported as an error.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>URI of a MaterialX document whose parameters replace this material's own; uvScale and doubleSided remain effective (SREP 93), as are maps the document does not supply. An unreadable document is reported as an error.</xs:documentation></xs:annotation>
     </xs:attribute>
   </xs:complexType>
   <xs:complexType name="materialsType">
@@ -2574,7 +2611,9 @@
   <xs:attributeGroup name="nodeCoreAttributes">
     <xs:annotation><xs:documentation>The attributes every node takes, with no placement: identity, visibility, time window, condition, motion blur and track matte. A connector takes only this group.</xs:documentation></xs:annotation>
     <xs:attribute name="id" type="xs:ID" use="required"/>
-    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="name" type="xs:string">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Human label for render-report findings and debug output, with no effect on geometry or colour.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="tags" type="xs:NMTOKENS">
       <xs:annotation><xs:documentation>Space-separated free-form labels on the node. With safeArea enforcement on, a node tagged cta or logo is checked to stay inside the safe region unless safeAreaForce exempts it.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -2592,7 +2631,7 @@
       <xs:annotation><xs:documentation>When false, the node and everything it contains are not drawn; true when absent.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="opacity" type="unitDecimal" default="1">
-      <xs:annotation><xs:documentation>Node opacity from 0 (transparent) to 1 (opaque), multiplied with the opacity of its ancestors; 1 when absent.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Node opacity from 0 (transparent) to 1 (opaque), multiplied with the opacity of its ancestors; 1 when absent. Provisional (SREP 93): Own evaluated opacity and copy opacity factors are restricted to 0 through 1, with NaN treated as zero.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="start" type="xs:double" default="0">
       <xs:annotation><xs:documentation>Time in seconds, on the parent's timeline, at which the node first appears; 0 when absent. Added to the marker time when startMarker is set. A transition on the node can make it appear earlier.</xs:documentation></xs:annotation>
@@ -2649,13 +2688,13 @@
       <xs:annotation><xs:documentation>2.5D: place this 2D node in camera space at depth zDepth with rotationX/rotationY.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="zDepth" type="xs:double" default="0">
-      <xs:annotation><xs:documentation>Depth of the node in the frame's 2.5D camera space, in frame pixels, used only when threeD is true; 0 when absent.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Depth of the node in the frame's 2.5D camera space, in frame pixels, used only when threeD is true; 0 when absent. Provisional (SREP 93): Used only with threeD enabled; explicitly setting it on a 2D node produces an informational inert-attribute finding.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="rotationX" type="xs:double" default="0">
-      <xs:annotation><xs:documentation>Rotation about the horizontal axis through the node's pivot, in degrees, used only when threeD is true; positive values turn the top edge away.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Rotation about the horizontal axis through the node's pivot, in degrees, used only when threeD is true; positive values turn the top edge away. Provisional (SREP 93): Used only with threeD enabled; explicitly setting it on a 2D node produces an informational inert-attribute finding.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="rotationY" type="xs:double" default="0">
-      <xs:annotation><xs:documentation>Rotation about the vertical axis through the node's pivot, in degrees, used only when threeD is true; positive values turn the right edge away.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Rotation about the vertical axis through the node's pivot, in degrees, used only when threeD is true; positive values turn the right edge away. Provisional (SREP 93): Used only with threeD enabled; explicitly setting it on a 2D node produces an informational inert-attribute finding.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="alignX">
       <xs:annotation><xs:documentation>Responsive anchoring: overrides x so the node's box aligns within alignTo.</xs:documentation></xs:annotation>
@@ -2672,13 +2711,13 @@
       </xs:restriction></xs:simpleType>
     </xs:attribute>
     <xs:attribute name="alignTo" default="parent">
-      <xs:annotation><xs:documentation>Rectangle that alignX and alignY align within: the parent's box, the output frame, or the frame's safe area; parent when absent.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Rectangle that alignX and alignY align within: the parent's box, the output frame, or the frame's safe area; parent when absent. Provisional (SREP 93): Used only when alignX or alignY is set; without alignment an explicit value produces an informational inert-attribute finding.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
         <xs:enumeration value="parent"/><xs:enumeration value="frame"/><xs:enumeration value="safe-area"/>
       </xs:restriction></xs:simpleType>
     </xs:attribute>
     <xs:attribute name="margin" type="lengthType" default="0">
-      <xs:annotation><xs:documentation>Inset in pixels or a relative length (a percentage is of the parent's width on both axes) kept from the alignTo edge for left, right, top, bottom and stretch alignment; 0 when absent, unused without alignX or alignY.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Inset in pixels or a relative length (a percentage is of the parent's width on both axes) kept from the alignTo edge for left, right, top, bottom and stretch alignment; 0 when absent, unused without alignX or alignY. Provisional (SREP 93): Used only when alignX or alignY is set; without alignment an explicit value produces an informational inert-attribute finding.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attributeGroup ref="transformAttributes"/>
   </xs:attributeGroup>
@@ -2703,7 +2742,7 @@
     <xs:annotation><xs:documentation>Puppet pin at rest position restX/restY; x/y animate its displacement.</xs:documentation></xs:annotation>
     <xs:group ref="animationElements" minOccurs="0" maxOccurs="unbounded"/>
     <xs:attribute name="name" type="xs:NMTOKEN">
-      <xs:annotation><xs:documentation>Optional label for the pin; it has no effect on the deformation.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Optional label for the pin; it has no effect on the deformation. Provisional (SREP 93): Human label used in diagnostics and inspection or checkpoint output, falling back to the identifier or index.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="kind" default="position">
       <xs:annotation><xs:documentation>How the pin acts: position moves its point to the rest position plus x/y; bend also turns the surrounding area by rotation; starch moves nothing and stiffens the area around it. Default position.</xs:documentation></xs:annotation>
@@ -2757,14 +2796,15 @@
     <xs:attribute name="phase" type="xs:double" default="0">
       <xs:annotation><xs:documentation>Shifts the pattern: a phase in degrees for wave and ripple, a scroll of the noise field for turbulence. Default 0; ignored by other types.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="axis" type="xs:string" default="y">
-      <xs:annotation><xs:documentation>Direction, x or y (default y; any other value acts as y), along which bend and wave displace points and squash and stretch scale.</xs:documentation></xs:annotation>
+    <xs:attribute name="axis" default="y">
+      <xs:annotation><xs:documentation>Direction, x or y (default y), along which bend and wave displace points and squash and stretch scale; other values are invalid.</xs:documentation></xs:annotation>
+          <xs:simpleType><xs:restriction base="xs:string"><xs:enumeration value="x"/><xs:enumeration value="y"/></xs:restriction></xs:simpleType>
     </xs:attribute>
     <xs:attribute name="rows" type="gridSizeType" default="4">
-      <xs:annotation><xs:documentation>Mesh-warp: number of control-point rows in the warp grid (2 to 16, default 4); the point children address them by row.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Mesh-warp: number of control-point rows in the warp grid (2 to 16, default 4); the point children address them by row. Provisional (SREP 93): Mesh-warp grid count from 2 to 16 inclusive; the engine also bounds unchecked input before allocating the grid.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="cols" type="gridSizeType" default="4">
-      <xs:annotation><xs:documentation>Mesh-warp: number of control-point columns in the warp grid (2 to 16, default 4); the point children address them by col.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Mesh-warp: number of control-point columns in the warp grid (2 to 16, default 4); the point children address them by col. Provisional (SREP 93): Mesh-warp grid count from 2 to 16 inclusive; the engine also bounds unchecked input before allocating the grid.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="centerX" type="xs:double">
       <xs:annotation><xs:documentation>Horizontal centre of the effect in pixels from the left of the node's box; defaults to the middle of the box. Used by bend, twist, squash, stretch, bulge, pinch, spherize and ripple.</xs:documentation></xs:annotation>
@@ -2844,8 +2884,8 @@
     <xs:attribute name="path" type="xs:string">
       <xs:annotation><xs:documentation>SVG path data, in the node's own pixels from the top-left of its box, outlining the collider when shape is polygon (convex hull) or path (concave outline). Without it a box is used.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="mass" type="xs:double" default="1">
-      <xs:annotation><xs:documentation>Mass of a dynamic body in kilograms. Default 1.</xs:documentation></xs:annotation>
+    <xs:attribute name="mass" type="positiveDecimal" default="1">
+      <xs:annotation><xs:documentation>Strictly positive mass of a dynamic body in kilograms. Default 1; zero and negative values are invalid.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="friction" type="unitDecimal" default="0.5">
       <xs:annotation><xs:documentation>Surface friction from 0 (frictionless) to 1; against the world bounds the body's own value is used. Default 0.5.</xs:documentation></xs:annotation>
@@ -3017,7 +3057,7 @@
       <xs:annotation><xs:documentation>Damping along each spring, as a fraction of 2*sqrt(spring stiffness * point mass); 0 adds none and larger values resist the springs' relative motion more strongly. Default 0.1.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="pressure" type="xs:double" default="0">
-      <xs:annotation><xs:documentation>Jelly only: strength of the force that pushes the outline outward when its area falls below the rest area and inward when it grows; 0 (default) adds none.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Jelly boundary pressure coefficient in N/m, default 0. The pressure is pressure * (abs(restArea) / max(abs(area), 1e-9 m2) - 1); each boundary edge gives half this pressure times its outward edge-normal vector in metres to each endpoint. SREP 93 and D7.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="rows" type="gridSizeType" default="4">
       <xs:annotation><xs:documentation>Number of lattice rows (2 to 16, default 4); jelly and cloth have rows+1 point rows. A rope is one chain of cols points, whatever rows is.</xs:documentation></xs:annotation>
@@ -3040,7 +3080,7 @@
       </xs:restriction></xs:simpleType>
     </xs:attribute>
     <xs:attribute name="selfCollision" type="xs:boolean" default="false">
-      <xs:annotation><xs:documentation>When true, lattice points closer than half the shortest spring rest length push each other apart; false (default) lets the body pass through itself.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>When true, point pairs with separation greater than 1e-12 m and less than r = 0.5 * max(shortest spring rest length, 1e-6 m) receive equal opposite repulsive forces of magnitude effectiveStiffness * (r - separation). This is a force, not a guaranteed separation. Default false; SREP 93 and D7.</xs:documentation></xs:annotation>
     </xs:attribute>
   </xs:complexType>
 
@@ -3056,7 +3096,9 @@
       A nested expression with property="selector" makes an expression selector.
     </xs:documentation></xs:annotation>
     <xs:group ref="animationElements" minOccurs="0" maxOccurs="unbounded"/>
-    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="name" type="xs:string">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Human label used in diagnostics and inspection or checkpoint output, falling back to the identifier or index.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="preset">
       <xs:annotation><xs:documentation>Applies a built-in text animation (such as typewriter, fade-in, wave or counter); explicit property attributes override the preset's values. Of the selector only order, amount and seed take part, not the range window.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
@@ -3091,8 +3133,8 @@
         <xs:enumeration value="bounce-out"/>
       </xs:restriction></xs:simpleType>
     </xs:attribute>
-    <xs:attribute name="unit" default="character">
-      <xs:annotation><xs:documentation>Which text units the animator selects: each character, each non-space character, each word, each line, or each span. A preset's own unit is replaced only by a value other than character.</xs:documentation></xs:annotation>
+    <xs:attribute name="unit">
+      <xs:annotation><xs:documentation>Which text units the animator selects: character, character-no-space, word, line or span. An explicit value, including character, overrides the preset; absent uses the preset unit, or character without a preset.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
         <xs:enumeration value="character"/><xs:enumeration value="character-no-space"/>
         <xs:enumeration value="word"/><xs:enumeration value="line"/><xs:enumeration value="span"/>
@@ -3137,10 +3179,10 @@
       <xs:annotation><xs:documentation>For the square shape only, blends from a hard edge (0) to fractional coverage of the units at the window's ends (1, default). Not used when @preset is set.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="easeHigh" type="percentType" default="0">
-      <xs:annotation><xs:documentation>Percent. Together with @easeLow, blends the range falloff toward a smooth-step curve by (easeHigh + easeLow) / 200, clamped to 0-1; 0 leaves the shape unchanged. Not used with @preset.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Percent controlling easing near the top of the range-selector falloff independently of easeLow; zero leaves that end unchanged and presets do not use it.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="easeLow" type="percentType" default="0">
-      <xs:annotation><xs:documentation>Percent. Together with @easeHigh, blends the range falloff toward a smooth-step curve by (easeHigh + easeLow) / 200, clamped to 0-1; 0 leaves the shape unchanged. Not used with @preset.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Percent controlling easing near the bottom of the range-selector falloff independently of easeHigh; zero leaves that end unchanged and presets do not use it.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="order" default="forward">
       <xs:annotation><xs:documentation>Order in which units are placed along the range selector window: forward, reverse, center-out, edges-in, or a seeded random permutation. A preset takes its unit order from it too. Range selector only.</xs:documentation></xs:annotation>
@@ -3153,8 +3195,8 @@
     <xs:attribute name="stagger" type="nonNegativeDecimal">
       <xs:annotation><xs:documentation>Delay in seconds between the starts of consecutive units, for presets other than typewriter, word-by-word, wave, scramble and counter. Absent, the delay follows from presetDuration and the overlap.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="overlap" type="unitDecimal" default="0">
-      <xs:annotation><xs:documentation>Fraction 0-1 of each unit's window that overlaps the previous unit's, for presets other than typewriter, word-by-word, wave, scramble and counter. 0 or absent keeps the preset's own overlap.</xs:documentation></xs:annotation>
+    <xs:attribute name="overlap" type="unitDecimal">
+      <xs:annotation><xs:documentation>Fraction 0-1 of each unit window overlapping the previous one, for presets other than typewriter, word-by-word, wave, scramble and counter. Absent uses the preset overlap; explicit 0 means no overlap. Without a preset this attribute has no effect.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="seed" type="xs:unsignedLong">
       <xs:annotation><xs:documentation>Seed for this animator's random order and wiggly selector, combined with the project seed (alone when absent); scramble letters also depend on the seeds of every animator on the layer.</xs:documentation></xs:annotation>
@@ -3191,10 +3233,10 @@
       <xs:annotation><xs:documentation>Rotation in degrees about the unit's pivot, applied in proportion to its selection.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="rotationX" type="xs:double">
-      <xs:annotation><xs:documentation>Rotation in degrees about the horizontal axis, shown as vertical foreshortening by the cosine of the angle.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Per-glyph rotation in degrees about the corresponding axis, with perspective projection.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="rotationY" type="xs:double">
-      <xs:annotation><xs:documentation>Rotation in degrees about the vertical axis, shown as horizontal foreshortening by the cosine of the angle.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Per-glyph rotation in degrees about the corresponding axis, with perspective projection.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="skew" type="xs:double">
       <xs:annotation><xs:documentation>Horizontal skew angle in degrees, applied in proportion to the unit's selection.</xs:documentation></xs:annotation>
@@ -3291,8 +3333,9 @@
     <xs:attribute name="size" type="xs:double" default="10">
       <xs:annotation><xs:documentation>Wiggle-path: peak displacement of the points; zig-zag: distance every other point is offset from the path. Both in pixels, default 10.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="ridges" type="xs:nonNegativeInteger" default="5">
-      <xs:annotation><xs:documentation>Zig-zag: number of ridges per path segment (default 5); clamped to 1-1024, and values above 10000 are rejected.</xs:documentation></xs:annotation>
+    <xs:attribute name="ridges" default="5">
+      <xs:annotation><xs:documentation>Zig-zag: number of ridges per path segment, from 1 to 1024 inclusive. Default 5; values outside this range are invalid.</xs:documentation></xs:annotation>
+          <xs:simpleType><xs:restriction base="xs:positiveInteger"><xs:maxInclusive value="1024"/></xs:restriction></xs:simpleType>
     </xs:attribute>
     <xs:attribute name="frequency" type="xs:double" default="2">
       <xs:annotation><xs:documentation>Wiggle-path: how fast the displacement changes, in noise steps per second (default 2).</xs:documentation></xs:annotation>
@@ -3306,7 +3349,7 @@
     <xs:attribute name="mode" type="xs:NMTOKEN">
       <xs:annotation><xs:documentation>merge: add|subtract|intersect|exclude; zig-zag and wiggle-path: corner|smooth
       (wiggle-path smooth joins the wiggled points with a Catmull-Rom spline through them instead of straight lines);
-      offset-path join: miter|round|bevel.</xs:documentation></xs:annotation>
+      offset-path join: miter|round|bevel; trim: simultaneous|sequential, with simultaneous when absent (trim each subpath by the same fraction, or consume the combined length in subpath order).</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="offsetX" type="xs:double" default="0">
       <xs:annotation><xs:documentation>Repeater: horizontal shift in pixels applied cumulatively per copy (default 0).</xs:documentation></xs:annotation>
@@ -3483,7 +3526,7 @@
       <xs:simpleType><xs:restriction base="xs:positiveInteger"><xs:minInclusive value="2"/><xs:maxInclusive value="1000000"/></xs:restriction></xs:simpleType>
     </xs:attribute>
     <xs:attribute name="closed" type="xs:boolean" default="false">
-      <xs:annotation><xs:documentation>When true, the outline is closed back to its first point and the last sample stops one step short of t1; default false.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>When true, the outline is closed back to its first point and the last sample stops one step short of t1; default false. A non-finite sample after any finite point prevents closure, including a non-finite final sample; leading non-finite samples are skipped, and an all-non-finite path is empty (SREP 93).</xs:documentation></xs:annotation>
     </xs:attribute>
   </xs:complexType>
   <xs:simpleType name="surfaceSamplesType">
@@ -3688,7 +3731,7 @@
       <xs:annotation><xs:documentation>Distance in pixels, measured along the route, by which the visible line is pulled back from the end (after any cut at the end node's edge). Default 0; the line vanishes if the gaps overlap.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="route" default="straight">
-      <xs:annotation><xs:documentation>Shape of the line between the ends: straight (through any points), orthogonal (axis-aligned elbows), or curved (one smooth curve shaped by bend). Default straight.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Shape of the line between the ends: straight (through any points), orthogonal (axis-aligned elbows), or curved (one smooth curve shaped by bend). Default straight. Provisional (SREP 93): Routing method; curved routes use the shared SREP 58 length measure with 32 samples per true curve piece.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
         <xs:enumeration value="straight"/><xs:enumeration value="orthogonal"/><xs:enumeration value="curved"/>
       </xs:restriction></xs:simpleType>
@@ -3769,7 +3812,7 @@
     </xs:choice>
     <xs:attributeGroup ref="nodeAttributes"/>
     <xs:attribute name="preset">
-      <xs:annotation><xs:documentation>Named look (smoke, sparks, dust, rain, snow, confetti, fire, bubbles, bokeh, glitter) that supplies values for the emitter attributes it covers (all but rate) that are absent or at their defaults; other values win.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Named look (smoke, sparks, dust, rain, snow, confetti, fire, bubbles, bokeh, glitter) supplying its covered attributes (all but rate) only when absent; every explicit value wins, even a value equal to the no-preset fallback. The individual attribute documentation gives the fallback without a preset; SREP 93 lists the covered attributes.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
         <xs:enumeration value="smoke"/><xs:enumeration value="sparks"/>
         <xs:enumeration value="dust"/><xs:enumeration value="rain"/>
@@ -3781,74 +3824,74 @@
     <xs:attribute name="rate" type="nonNegativeDecimal" default="10">
       <xs:annotation><xs:documentation>Particles emitted per second, continuously while the emitter is active; fractions accumulate over time. Bursts add to it. Default 10; can be animated.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="lifetime" type="positiveDecimal" default="1">
-      <xs:annotation><xs:documentation>How long each particle lives, in seconds. Default 1; a preset supplies another value while this is left at its default.</xs:documentation></xs:annotation>
+    <xs:attribute name="lifetime" type="positiveDecimal">
+      <xs:annotation><xs:documentation>How long each particle lives, in seconds. Default 1; a preset supplies another value when absent. A preset may replace this fallback only when the attribute is absent.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="lifetimeVariance" type="nonNegativeDecimal" default="0">
-      <xs:annotation><xs:documentation>Random spread of a particle's lifetime in seconds: each lives lifetime plus or minus up to this amount (at least 1 ms). Default 0; a preset may supply a value.</xs:documentation></xs:annotation>
+    <xs:attribute name="lifetimeVariance" type="nonNegativeDecimal">
+      <xs:annotation><xs:documentation>Random spread of a particle's lifetime in seconds: each lives lifetime plus or minus up to this amount (at least 1 ms). Default 0; a preset may supply a value. A preset may replace this fallback only when the attribute is absent.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="speed" type="xs:double" default="100">
-      <xs:annotation><xs:documentation>Initial particle speed in pixels per second. Default 100; a preset supplies another value while this is left at its default.</xs:documentation></xs:annotation>
+    <xs:attribute name="speed" type="xs:double">
+      <xs:annotation><xs:documentation>Initial particle speed in pixels per second. Default 100; a preset supplies another value when absent. A preset may replace this fallback only when the attribute is absent.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="speedVariance" type="nonNegativeDecimal">
-      <xs:annotation><xs:documentation>Random spread of initial speed in pixels per second: plus or minus up to this amount. Default 0; a preset may supply a value.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Random spread of initial speed in pixels per second: plus or minus up to this amount. Default 0; a preset may supply a value. A preset may replace this fallback only when the attribute is absent.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="direction" type="xs:double" default="-90">
-      <xs:annotation><xs:documentation>Emission direction in degrees: 0 is right, 90 is down, -90 (default) is up. Turns with the emitter's rotation, including rotation inherited from its parents.</xs:documentation></xs:annotation>
+    <xs:attribute name="direction" type="xs:double">
+      <xs:annotation><xs:documentation>Emission direction in degrees: 0 is right, 90 is down, -90 (default) is up. Turns with the emitter's rotation, including rotation inherited from its parents. A preset may replace this fallback only when the attribute is absent.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="spread" type="xs:double" default="0">
-      <xs:annotation><xs:documentation>Width in degrees of the cone around direction in which particles are launched, centred on it: 0 is one direction, 360 is all directions. Default 0; a preset may supply a value.</xs:documentation></xs:annotation>
+    <xs:attribute name="spread" type="xs:double">
+      <xs:annotation><xs:documentation>Width in degrees of the cone around direction in which particles are launched, centred on it: 0 is one direction, 360 is all directions. Default 0; a preset may supply a value. A preset may replace this fallback only when the attribute is absent.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="gravityX" type="xs:double" default="0">
       <xs:annotation><xs:documentation>Constant horizontal acceleration of particles in pixels per second squared; positive is rightward. Default 0.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="gravityY" type="xs:double" default="0">
-      <xs:annotation><xs:documentation>Constant vertical acceleration of particles in pixels per second squared; positive pulls down, negative rises. Default 0; a preset may supply a value.</xs:documentation></xs:annotation>
+    <xs:attribute name="gravityY" type="xs:double">
+      <xs:annotation><xs:documentation>Constant vertical acceleration of particles in pixels per second squared; positive pulls down, negative rises. Default 0; a preset may supply a value. A preset may replace this fallback only when the attribute is absent.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="drag" type="nonNegativeDecimal" default="0">
-      <xs:annotation><xs:documentation>Air drag: particle velocity decays at about this rate per second (0 is none; larger slows faster). Default 0; a preset may supply a value.</xs:documentation></xs:annotation>
+    <xs:attribute name="drag" type="nonNegativeDecimal">
+      <xs:annotation><xs:documentation>Air drag: particle velocity decays at about this rate per second (0 is none; larger slows faster). Default 0; a preset may supply a value. A preset may replace this fallback only when the attribute is absent.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="turbulence" type="nonNegativeDecimal" default="0">
-      <xs:annotation><xs:documentation>Scale of a swirling noise acceleration on particles, in pixels per second squared: the acceleration is twice this value times a noise vector of roughly unit length. 0 (default) is none.</xs:documentation></xs:annotation>
+    <xs:attribute name="turbulence" type="nonNegativeDecimal">
+      <xs:annotation><xs:documentation>Scale of a swirling noise acceleration on particles, in pixels per second squared: the acceleration is twice this value times a noise vector of roughly unit length. 0 (default) is none. A preset may replace this fallback only when the attribute is absent.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="turbulenceScale" type="positiveDecimal" default="100">
       <xs:annotation><xs:documentation>Size in pixels of the swirls in the turbulence noise; larger values give broader, smoother motion. Default 100.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="size" type="positiveDecimal" default="4">
-      <xs:annotation><xs:documentation>Particle size at birth in pixels: diameter of a disc, side of a square or sprite, thickness of a streak. Default 4.</xs:documentation></xs:annotation>
+    <xs:attribute name="size" type="positiveDecimal">
+      <xs:annotation><xs:documentation>Particle size at birth in pixels: diameter of a disc, side of a square or sprite, thickness of a streak. Default 4. A preset may replace this fallback only when the attribute is absent.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="sizeEnd" type="nonNegativeDecimal">
-      <xs:annotation><xs:documentation>Particle size in pixels at the end of its life, reached by blending from size along sizeCurve. Absent: size does not change, unless a preset supplies an end size.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Particle size in pixels at the end of its life, reached by blending from size along sizeCurve. Absent: size does not change, unless a preset supplies an end size. A preset may replace this fallback only when the attribute is absent.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="sizeVariance" type="nonNegativeDecimal" default="0">
-      <xs:annotation><xs:documentation>Random size variation per particle as a fraction: each size is multiplied by 1 plus or minus up to this value (never below 0). Default 0; a preset may supply a value.</xs:documentation></xs:annotation>
+    <xs:attribute name="sizeVariance" type="nonNegativeDecimal">
+      <xs:annotation><xs:documentation>Random size variation per particle as a fraction: each size is multiplied by 1 plus or minus up to this value (never below 0). Default 0; a preset may supply a value. A preset may replace this fallback only when the attribute is absent.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="sizeCurve" type="curveType" default="linear">
       <xs:annotation><xs:documentation>Easing that shapes how size moves from size to sizeEnd over a particle's life. Default linear.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="color" type="paintType" default="#FFFFFFFF">
-      <xs:annotation><xs:documentation>Particle colour at birth, including its alpha; a gradient or pattern reference is not used and gives white. Default opaque white.</xs:documentation></xs:annotation>
+    <xs:attribute name="color" type="paintType">
+      <xs:annotation><xs:documentation>Particle colour at birth, including its alpha; a gradient or pattern reference is not used and gives white. Default opaque white. A preset may replace this fallback only when the attribute is absent.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="colorEnd" type="paintType">
-      <xs:annotation><xs:documentation>Colour a particle blends to by the end of its life, along colorCurve (preset confetti instead gives each particle a fixed random mix of the two). Absent: colour does not change.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Colour a particle blends to by the end of its life, along colorCurve (preset confetti instead gives each particle a fixed random mix of the two). Absent: colour does not change. A preset may replace this fallback only when the attribute is absent.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="colorCurve" type="curveType" default="linear">
       <xs:annotation><xs:documentation>Easing over a particle's life of the blend from color to colorEnd (not with preset confetti) and of the fade to opacityEnd. Default linear.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="opacityEnd" type="unitDecimal">
-      <xs:annotation><xs:documentation>Particle opacity at the end of its life, 0 to 1, reached from full opacity along colorCurve and multiplied with the colour's alpha. Absent: no fade.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Particle opacity at the end of its life, 0 to 1, reached from full opacity along colorCurve and multiplied with the colour's alpha. Absent: no fade. A preset may replace this fallback only when the attribute is absent.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="rotation0" type="xs:double" default="0">
       <xs:annotation><xs:documentation>Initial particle rotation in degrees. Default 0.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="rotationVariance" type="nonNegativeDecimal" default="0">
-      <xs:annotation><xs:documentation>Random spread of initial rotation in degrees: plus or minus up to this amount. Default 0; a preset may supply a value.</xs:documentation></xs:annotation>
+    <xs:attribute name="rotationVariance" type="nonNegativeDecimal">
+      <xs:annotation><xs:documentation>Random spread of initial rotation in degrees: plus or minus up to this amount. Default 0; a preset may supply a value. A preset may replace this fallback only when the attribute is absent.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="angularVelocity" type="xs:double" default="0">
-      <xs:annotation><xs:documentation>Particle spin in degrees per second. Default 0; a preset may supply a value.</xs:documentation></xs:annotation>
+    <xs:attribute name="angularVelocity" type="xs:double">
+      <xs:annotation><xs:documentation>Particle spin in degrees per second. Default 0; a preset may supply a value. A preset may replace this fallback only when the attribute is absent.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="angularVelocityVariance" type="nonNegativeDecimal" default="0">
-      <xs:annotation><xs:documentation>Random spread of spin in degrees per second: plus or minus up to this amount. Default 0; a preset may supply a value.</xs:documentation></xs:annotation>
+    <xs:attribute name="angularVelocityVariance" type="nonNegativeDecimal">
+      <xs:annotation><xs:documentation>Random spread of spin in degrees per second: plus or minus up to this amount. Default 0; a preset may supply a value. A preset may replace this fallback only when the attribute is absent.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="orientToVelocity" type="xs:boolean" default="false">
       <xs:annotation><xs:documentation>true turns each particle to face its direction of travel, overriding the rotation settings. Default false.</xs:documentation></xs:annotation>
@@ -3881,15 +3924,15 @@
     <xs:attribute name="seed" type="xs:unsignedLong">
       <xs:annotation><xs:documentation>Seed for the emitter's randomness; the same seed gives the same particles. Absent: derived from the emitter's id and the scene seed.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="shape" default="disc">
-      <xs:annotation><xs:documentation>Particle appearance: disc (default), square, sprite (draws the sprite asset, which is then required; a disc if no image is usable) or streak (elongated along motion). A preset may set it.</xs:documentation></xs:annotation>
+    <xs:attribute name="shape">
+      <xs:annotation><xs:documentation>Particle appearance: disc (default), square, sprite (draws the sprite asset, which is then required; a disc if no image is usable) or streak (elongated along motion). A preset may set it. A preset may replace this fallback only when the attribute is absent.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
         <xs:enumeration value="disc"/><xs:enumeration value="square"/>
         <xs:enumeration value="sprite"/><xs:enumeration value="streak"/>
       </xs:restriction></xs:simpleType>
     </xs:attribute>
     <xs:attribute name="sprite" type="xs:IDREF">
-      <xs:annotation><xs:documentation>Id of the image asset drawn for each particle when shape is sprite, where it is required; may be a sheet of spriteCols by spriteRows cells.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Id of the image, imageSequence, video or generator asset drawn for each particle when shape is sprite, where it is required; may be a sheet of spriteCols by spriteRows cells. Provisional (SREP 93): Sprite asset: image, imageSequence, video or generator; sequences sample particle age and video or generator samples layer time.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="spriteCols" type="xs:positiveInteger" default="1">
       <xs:annotation><xs:documentation>Number of columns in the sprite image's cell grid. Default 1.</xs:documentation></xs:annotation>
@@ -3900,8 +3943,8 @@
     <xs:attribute name="spriteFps" type="nonNegativeDecimal" default="0">
       <xs:annotation><xs:documentation>Frames per second at which each particle steps through the sprite cells, row by row, from its birth, wrapping around. 0 (default): each particle keeps one fixed cell, which differs between particles.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="trail" type="nonNegativeDecimal" default="0">
-      <xs:annotation><xs:documentation>Motion-trail length in seconds of travel: a faint tail (or streak) extends the particle's current speed times trail pixels behind it. Default 0 (none; streaks use 1/30 s); a preset may set it.</xs:documentation></xs:annotation>
+    <xs:attribute name="trail" type="nonNegativeDecimal">
+      <xs:annotation><xs:documentation>Motion-trail length in seconds of travel: a faint tail (or streak) extends the particle's current speed times trail pixels behind it. Default 0 (none; streaks use 1/30 s); a preset may set it. A preset may replace this fallback only when the attribute is absent.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="forceFields" type="xs:IDREFS">
       <xs:annotation><xs:documentation>
@@ -4441,7 +4484,9 @@
     <xs:attribute name="sensorWidth" type="positiveDecimal" default="36">
       <xs:annotation><xs:documentation>Sensor width in millimetres used to turn focalLength into a field of view and for depth of field; default 36.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="sensorHeight" type="positiveDecimal" default="24"/>
+    <xs:attribute name="sensorHeight" type="positiveDecimal" default="24">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Physical sensor height in millimetres, default 24, used with focalLength for vertical gate fitting when the frame is narrower than the sensor aspect ratio, including depth of field.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="orthoHeight" type="positiveDecimal">
       <xs:annotation><xs:documentation>Visible height in scene units of an orthographic camera; absent, the frame height is used.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -4503,7 +4548,7 @@
       </xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="pathSamples" default="64">
-      <xs:annotation><xs:documentation>Samples per pixel of the path tracer, 1 to 65536, default 64. With geodesics it is instead the antialiasing sample count of a pixel, 1 to 4096, default 16.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Samples per pixel of the path tracer, 1 to 65536, default 64. With geodesics it is instead the antialiasing sample count of a pixel, 1 to 4096, default 16. Provisional (SREP 93): Path-tracing sample count; geodesic cameras use 1 to 4096, default 16, and report a warning when a supplied value exceeds 4096.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:positiveInteger"><xs:maxInclusive value="65536"/></xs:restriction></xs:simpleType>
     </xs:attribute>
     <xs:attribute name="maxBounces" default="4">
@@ -4630,7 +4675,9 @@
     <xs:attribute name="clipIn" type="xs:double" default="0">
       <xs:annotation><xs:documentation>Seconds trimmed from the start of the symbol timeline; playback covers the rest of the symbol, running backwards from its end when reversed. Default 0.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="clipOut" type="xs:double"/>
+    <xs:attribute name="clipOut" type="xs:double">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): End time in seconds on the symbol timeline, using the symbol end when absent; playback length is max(clipOut - clipIn, 0).</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="loop" type="xs:nonNegativeInteger" default="0">
       <xs:annotation><xs:documentation>Number of extra times the symbol is played after the first; 0 (default) plays it once. Ignored when the instance has a timeRemap child.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -4640,9 +4687,15 @@
     <xs:attribute name="speed" type="xs:double" default="1">
       <xs:annotation><xs:documentation>Playback speed multiplier of the symbol; negative plays it backwards and cancels reverse. Unless the instance sets its own end or a timeRemap, it lasts (symbol length - clipIn) x (loop + 1) / |speed|. Default 1.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="fit" type="fitType" default="none"/>
-    <xs:attribute name="boxWidth" type="positiveLengthType"/>
-    <xs:attribute name="boxHeight" type="positiveLengthType"/>
+    <xs:attribute name="fit" type="fitType" default="none">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): How the symbol is placed in its declared box, using the same placement rules as a layer; none keeps its natural size.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="boxWidth" type="positiveLengthType">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Dimension of the destination box for fitted symbol content, using the same length units as a layer.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="boxHeight" type="positiveLengthType">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Dimension of the destination box for fitted symbol content, using the same length units as a layer.</xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:complexType>
   <xs:complexType name="includeType">
     <xs:annotation><xs:documentation>
@@ -4970,7 +5023,7 @@
       </xs:restriction></xs:simpleType>
     </xs:attribute>
     <xs:attribute name="sprite" type="xs:IDREF">
-      <xs:annotation><xs:documentation>Id of the image asset drawn for each agent when shape is sprite; required in that case.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Id of the image, imageSequence, video or generator asset drawn for each agent when shape is sprite; required in that case. Provisional (SREP 93): Sprite asset: image, imageSequence, video or generator; sequences sample particle age and video or generator samples layer time.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="orientToVelocity" type="xs:boolean" default="true">
       <xs:annotation><xs:documentation>true (the default): each agent's disc or sprite is turned to point along its velocity.
@@ -5459,7 +5512,9 @@
     <xs:attribute name="id" type="xs:ID" use="required">
       <xs:annotation><xs:documentation>Identifier of the symbol (required, unique); an instance, an include or an output overlay refers to the symbol by this value.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="name" type="xs:string">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Human label used in diagnostics and inspection or checkpoint output, falling back to the identifier or index.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="width" type="xs:positiveInteger">
       <xs:annotation><xs:documentation>Width in pixels of the symbol's frame; when absent, that of the document holding the instance, of the included document when included, and of the output when used as an overlay.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -5606,6 +5661,7 @@
       <xs:annotation><xs:documentation>Ids of lights whose positions and intensities light the picture in a lighting effect (up to four are used).</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="falloff" default="smooth">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Distance attenuation for lighting: none, linear, quadratic or smooth, with smooth preserving the prior lighting curve.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
         <xs:enumeration value="linear"/><xs:enumeration value="quadratic"/>
         <xs:enumeration value="smooth"/><xs:enumeration value="none"/>
@@ -5618,7 +5674,7 @@
       <xs:annotation><xs:documentation>Direction or rotation in degrees (default 0): of directional-blur, long-shadow and wave-warp; light direction of emboss, bevel and lighting (bevel and lighting take 0 as -45); halftone, mirror, gradient, twirl.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="amount" type="xs:double" default="1">
-      <xs:annotation><xs:documentation>Main strength of the effect (default 1): a displacement in pixels for displacement, wave, ripple and chromatic-aberration effects; a 0-1 mix for tint, grayscale, sepia, invert and overlays; for matte-choke, positive erodes and negative dilates.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Main strength of the effect (default 1): a displacement in pixels for displacement, wave, ripple and chromatic-aberration effects; a 0-1 mix for tint, grayscale, sepia, invert and overlays; for matte-choke, positive erodes and negative dilates. Provisional (SREP 93): For pixel-motion-blur, controls shutter fraction; the existing implementation uses half this value as the shutter fraction.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="size" type="nonNegativeDecimal" default="1">
       <xs:annotation><xs:documentation>Meaning depends on the type: cell size in pixels for halftone, pixelate and mosaic; line width for stroke and outline; wavelength for wave-warp and ripple; length for long-shadow; aspect ratio for letterbox.</xs:documentation></xs:annotation>
@@ -5639,7 +5695,7 @@
       <xs:annotation><xs:documentation>Vertical centre of the effect in node-local pixels; when absent the node's centre is used (lens-flare puts its source near the node's top-left instead). For radial, zoom, twirl, bulge, vignette and similar.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="samples" type="xs:positiveInteger" default="16">
-      <xs:annotation><xs:documentation>Number of samples (default 16): taps for directional, radial and zoom blur and god rays, copies for echo (2 to 16), samples for pixel-motion-blur; lens blur and tilt-shift derive their rings from it.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Number of samples (default 16): taps for directional, radial and zoom blur and god rays, copies for echo (2 to 16), samples for pixel-motion-blur; lens blur and tilt-shift derive their rings from it. Provisional (SREP 93): Pixel-motion-blur uses at most 256 samples and respects the rendering sample budget, with a fallback of 16.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="lift" type="xs:string">
       <xs:annotation><xs:documentation>lift-gamma-gain: black-level lift, as one number or three comma-separated r,g,b values, applied to display-encoded values (default 0 for each channel).</xs:documentation></xs:annotation>
@@ -5703,7 +5759,7 @@
       <xs:annotation><xs:documentation>0-1 (default 0.2): chroma-key and difference-key make pixels closer than this distance to the key transparent; in selective-color, the width of the hue window as a fraction of the hue circle.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="softness" type="unitDecimal" default="0.1">
-      <xs:annotation><xs:documentation>0-1 (default 0.1): soft edge width: the ramp beyond the tolerance in chroma-key and difference-key, around the threshold in luma-key, the vignette falloff; matte-choke blurs its edge only from about 0.25 (at full size).</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>0-1 (default 0.1): soft edge width: the ramp beyond the tolerance in chroma-key and difference-key, around the threshold in luma-key, the vignette falloff; matte-choke blurs its edge only from about 0.25 (at full size). Provisional (SREP 93): Stroke and outline blur their edge coverage only when softness is explicitly present; absence leaves their prior hard edge unchanged.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="spill" type="unitDecimal" default="0.5">
       <xs:annotation><xs:documentation>chroma-key and spill-suppress: how strongly the key colour's spill is removed from the remaining pixels, 0 to 1 (default 0.5).</xs:documentation></xs:annotation>
@@ -5725,7 +5781,7 @@
       </xs:restriction></xs:simpleType>
     </xs:attribute>
     <xs:attribute name="position" default="outside">
-      <xs:annotation><xs:documentation>Where the line sits relative to the shape's edge: outside (default), inside or center. Read by stroke and outline.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Where the line sits relative to the shape's edge: outside (default), inside or center. Read by stroke and outline. Provisional (SREP 93): Position applies to stroke and outline; matte-choke uses the sign of amount for erosion or dilation and does not use position.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
         <xs:enumeration value="outside"/><xs:enumeration value="inside"/><xs:enumeration value="center"/>
       </xs:restriction></xs:simpleType>
@@ -5830,7 +5886,9 @@
     <xs:attribute name="shadowSoftness" type="nonNegativeDecimal" default="0">
       <xs:annotation><xs:documentation>Width of the shadow edge blur, in shadow-map texels, with a minimum effective value of 1; defaults to 0. Only lights with castShadow true use it.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="shadowBias" type="xs:double" default="0.0005"/>
+    <xs:attribute name="shadowBias" type="xs:double" default="0.0005">
+      <xs:annotation><xs:documentation>Dimensionless bias subtracted from normalized shadow-map comparison depth (0-1 light depth range), after perspective division; positive values reduce self-shadowing. Default 0.0005; not a world-space offset.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="x" type="xs:double" default="0">
       <xs:annotation><xs:documentation>Horizontal position of the light in scene units; defaults to 0.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -5901,7 +5959,9 @@
     <xs:attribute name="skyGround" type="colorType" default="#4A4038FF">
       <xs:annotation><xs:documentation>Colour of the procedural sky below the horizon; defaults to a dark brown.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="skyExponent" type="positiveDecimal" default="0.5"/>
+    <xs:attribute name="skyExponent" type="positiveDecimal" default="0.5">
+      <xs:annotation><xs:documentation>Positive dimensionless exponent k of a dome procedural sky, default 0.5: for unit direction d, s = -d.y; above the horizon use H + (Z - H) * min(s, 1)^k, below use H + (G - H) * min(-s, 1)^k, with horizon H, zenith Z and ground G in linear working colour.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="sunAzimuth" type="xs:double" default="0">
       <xs:annotation><xs:documentation>Compass direction of the sun in the procedural sky in degrees; 0 faces +z and positive values turn toward +x; defaults to 0.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -6049,8 +6109,12 @@
     <xs:attribute name="motorSpeed" type="xs:double" default="0">
       <xs:annotation><xs:documentation>Target rotation speed of a motor constraint in degrees per second; defaults to 0.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="maxForce" type="nonNegativeDecimal"/>
-    <xs:attribute name="breakForce" type="nonNegativeDecimal"/>
+    <xs:attribute name="maxForce" type="nonNegativeDecimal">
+      <xs:annotation><xs:documentation>Maximum torque of a motor constraint in newton-metres (kg*m2/s2); the current 2D and 3D implementations apply this attribute to angular motors. This is distinct from agents/@maxForce acceleration. No explicit limit is passed when absent.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="breakForce" type="nonNegativeDecimal">
+      <xs:annotation><xs:documentation>Threshold in newtons (kg*m/s2) for removing a constraint when its measured linear impulse divided by the solver interval exceeds this value; angular impulses are excluded. The 2D and 3D interval discrepancy is recorded as an unresolved issue in SREP 93; no threshold is applied when absent.</xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:complexType>
   <xs:complexType name="physicsType">
     <xs:annotation><xs:documentation>
@@ -6116,6 +6180,7 @@
       <xs:annotation><xs:documentation>Path of the tracking file to read; only local files are supported, and a file that cannot be read or parsed is an error.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="kind" use="required">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Declared tracking-data kind, checked against the loaded data shape and the kind accepted by each consumer.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
         <xs:enumeration value="point"/><xs:enumeration value="planar"/>
         <xs:enumeration value="camera"/><xs:enumeration value="mask"/>
@@ -6190,7 +6255,7 @@
       <xs:annotation><xs:documentation>Frequency in hertz: the cut-off of highpass and lowpass (defaults 80 and 8000), the centre of a de-esser (6000) and of a single-band eq, and the modulation rate of a chorus (0.8).</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="gain" type="decibelType" default="0">
-      <xs:annotation><xs:documentation>Gain in decibels: the make-up gain of a compressor or gate, the level change of a gain effect, and the boost of a single-band eq; defaults to 0.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Gain in decibels: the make-up gain of a compressor or gate, the level change of a gain effect, and the boost of a single-band eq; defaults to 0. Provisional (SREP 93): Make-up gain in decibels also applies after the de-esser and limiter, with 0 dB preserving their output.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="threshold" type="decibelType" default="-18">
       <xs:annotation><xs:documentation>Level in decibels above which a compressor reduces gain, below which a gate attenuates, or at which a limiter caps the peaks; defaults to -18.</xs:documentation></xs:annotation>
@@ -6328,7 +6393,9 @@
     <xs:attribute name="role" type="audioRoleType" default="other">
       <xs:annotation><xs:documentation>What the track carries (dialogue, voiceover, music, effects, ambience, audio-description or other), which outputs can use to select tracks; defaults to other.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="language" type="languageTagType"/>
+    <xs:attribute name="language" type="languageTagType">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Audio stream language carried to the delivery manifest and container language metadata; an unmappable tag is reported.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="bus" type="xs:IDREF">
       <xs:annotation><xs:documentation>Id of the bus the track is routed to; absent routes it straight to the master.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -6433,7 +6500,9 @@
     <xs:attribute name="text" type="xs:string" use="required">
       <xs:annotation><xs:documentation>The word's text; a cue without its own text is built by joining its words with spaces.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="emphasis" type="xs:boolean" default="false"/>
+    <xs:attribute name="emphasis" type="xs:boolean" default="false">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Emphasised words keep the track active colour while their page is visible, using activeStyle fill then activeColor then #FFD400; presets without an active colour use bold weight.</xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:complexType>
   <xs:complexType name="cueType">
     <xs:sequence><xs:element name="word" type="wordType" minOccurs="0" maxOccurs="unbounded"/></xs:sequence>
@@ -6452,7 +6521,9 @@
     <xs:attribute name="style" type="xs:IDREF">
       <xs:annotation><xs:documentation>Id of a textStyle that styles this cue, overriding the caption track's style.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="position" type="xs:string"/>
+    <xs:attribute name="position" type="xs:string">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): WebVTT cue settings preserved in sidecars; burn-in uses line percent for the block top and position percent for its horizontal centre, reporting unsupported settings.</xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:complexType>
   <xs:complexType name="captionTrackType">
     <xs:annotation><xs:documentation>
@@ -6469,8 +6540,11 @@
     <xs:attribute name="language" type="languageTagType" use="required">
       <xs:annotation><xs:documentation>Language tag of the track; becomes part of the sidecar file name (stem.track.language.vtt or .srt).</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="label" type="xs:string"/>
+    <xs:attribute name="label" type="xs:string">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Human label carried in the report and a WebVTT NOTE label line.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="kind" default="captions">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Caption kind written in the WebVTT header, with sdh or forced also distinguished in SRT sidecar filenames.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
         <xs:enumeration value="captions"/><xs:enumeration value="subtitles"/>
         <xs:enumeration value="sdh"/><xs:enumeration value="forced"/>
@@ -6568,7 +6642,9 @@
     <xs:attribute name="safeArea" type="xs:IDREF">
       <xs:annotation><xs:documentation>Id of the safeArea this track's burned captions are checked against; otherwise the safe area in force for the render applies (the selected layout's, else the project's).</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="z" type="xs:int" default="1000000"/>
+    <xs:attribute name="z" type="xs:int" default="1000000">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Caption draw order among scene layers and nodes, sorted by z then document order, default 1000000.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="profanityFilter" type="xs:boolean" default="false">
       <xs:annotation><xs:documentation>When true, common profanity in the cues is masked after its first letter with asterisks; false when absent.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -6585,7 +6661,9 @@
     <xs:attribute name="time" type="xs:double" use="required">
       <xs:annotation><xs:documentation>Position of the marker on the composition timeline, in seconds.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="duration" type="nonNegativeDecimal" default="0"/>
+    <xs:attribute name="duration" type="nonNegativeDecimal" default="0">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Chapter duration in seconds; a positive duration ends at the earliest of start plus duration, the next chapter or output end, while zero keeps automatic chapter ends.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="kind" default="cue">
       <xs:annotation><xs:documentation>Marker type; markers of kind chapter become chapters in an output with segments when its container holds them (mp4, mov, mkv, webm or m4a). The other kinds are annotations only.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
@@ -6597,7 +6675,7 @@
     <xs:attribute name="label" type="xs:string">
       <xs:annotation><xs:documentation>Display text; for a chapter marker it is the chapter title, falling back to the marker id.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="color" type="colorType"/>
+
   </xs:complexType>
   <xs:complexType name="beatGridType">
     <xs:annotation><xs:documentation>Musical grid for cutting on the beat; expressions read beat() and keys can snap with @marker to generated ids beat.N and bar.N.</xs:documentation></xs:annotation>
@@ -6643,8 +6721,12 @@
     <xs:attribute name="default" type="xs:string">
       <xs:annotation><xs:documentation>Value used when no variant, data row or command-line value supplies one.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="label" type="xs:string"/>
-    <xs:attribute name="description" type="xs:string"/>
+    <xs:attribute name="label" type="xs:string">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Human-facing parameter label exposed by parameter inspection and diagnostics.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="description" type="xs:string">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Human-facing parameter explanation exposed by parameter inspection.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="required" type="xs:boolean" default="false">
       <xs:annotation><xs:documentation>When true, rendering fails if no value reaches the parameter; false when absent.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -6717,7 +6799,9 @@
     <xs:attribute name="id" type="xs:ID" use="required">
       <xs:annotation><xs:documentation>Name by which a render selects the variant, applying its set and override children.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="label" type="xs:string"/>
+    <xs:attribute name="label" type="xs:string">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Human-facing variant label exposed by parameter inspection.</xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:complexType>
   <xs:complexType name="parametersType">
     <xs:choice maxOccurs="unbounded">
@@ -6788,22 +6872,24 @@
     <xs:attribute name="height" type="xs:positiveInteger" use="required">
       <xs:annotation><xs:documentation>Height in pixels of the layout's frame.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="aspect" type="aspectType"/>
+    <xs:attribute name="aspect" type="aspectType">
+      <xs:annotation><xs:documentation>Optional assertion of the frame ratio W:H: W and H are positive and W * height equals H * width (C82). Equivalent unreduced ratios are accepted; width and height determine the frame.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="safeArea" type="xs:IDREF">
       <xs:annotation><xs:documentation>Id of the safeArea that applies when this layout is selected, in place of the project's.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="reframe" default="reflow">
-      <xs:annotation><xs:documentation>How the composition fills the layout frame: reflow re-lays it out at that size; crop, fit and fit-blur render it at the project size, then crop it, fit it centred, or fit it over a blurred copy. reflow when absent.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>How the composition fills the layout frame: reflow re-lays it out at that size; crop, fit and fit-blur render it at the project size, then crop it, fit it at the resolved focus, or fit it over a blurred copy. reflow when absent.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
         <xs:enumeration value="reflow"/><xs:enumeration value="crop"/><xs:enumeration value="fit"/>
         <xs:enumeration value="fit-blur"/>
       </xs:restriction></xs:simpleType>
     </xs:attribute>
     <xs:attribute name="focusX" type="unitDecimal" default="0.5">
-      <xs:annotation><xs:documentation>Horizontal anchor (0 left to 1 right) of the crop or fit-blur reframe; 0.5 when absent. A segment's own focusX replaces it.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Horizontal anchor (0 left to 1 right) of the crop, fit or fit-blur reframe; 0.5 when absent. A segment's own focusX replaces it. Provisional (SREP 93): Reframe anchor for crop, fit and fit-blur, with a segment value taking precedence over the layout value and a centred default of 0.5.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="focusY" type="unitDecimal" default="0.5">
-      <xs:annotation><xs:documentation>Vertical anchor (0 top to 1 bottom) of the crop or fit-blur reframe; 0.5 when absent. A segment's own focusY replaces it.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Vertical anchor (0 top to 1 bottom) of the crop, fit or fit-blur reframe; 0.5 when absent. A segment's own focusY replaces it. Provisional (SREP 93): Reframe anchor for crop, fit and fit-blur, with a segment value taking precedence over the layout value and a centred default of 0.5.</xs:documentation></xs:annotation>
     </xs:attribute>
   </xs:complexType>
   <xs:complexType name="layoutsType">
@@ -6871,17 +6957,17 @@
     <xs:attribute name="exposure" type="xs:double" default="0">
       <xs:annotation><xs:documentation>Exposure adjustment in stops (each +1 doubles the light), applied after the looks; 0 when absent.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="bitDepth" default="16f">
-      <xs:simpleType><xs:restriction base="xs:string">
-        <xs:enumeration value="8"/><xs:enumeration value="16"/><xs:enumeration value="16f"/><xs:enumeration value="32f"/>
-      </xs:restriction></xs:simpleType>
-    </xs:attribute>
+
   </xs:complexType>
 
   <!-- ===================================================== metadata and accessibility -->
   <xs:complexType name="metaType">
-    <xs:attribute name="name" type="xs:string" use="required"/>
-    <xs:attribute name="value" type="xs:string" use="required"/>
+    <xs:attribute name="name" type="xs:string" use="required">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Container tag name used with value when metadata embedding is enabled; an explicit standard metadata attribute wins a name collision.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="value" type="xs:string" use="required">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Container tag value paired with name when metadata embedding is enabled.</xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:complexType>
   <xs:complexType name="accessibilityType">
     <xs:annotation><xs:documentation>
@@ -6890,8 +6976,12 @@
       contrastCheck verifies burned-in text and captions against their
       background at @minContrast.
     </xs:documentation></xs:annotation>
-    <xs:attribute name="description" type="xs:string"/>
-    <xs:attribute name="audioDescription" type="xs:IDREF"/>
+    <xs:attribute name="description" type="xs:string">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Text alternative written as a synopsis or description container tag when metadata embedding is enabled.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="audioDescription" type="xs:IDREF">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Reference to an audioTrack delivered as a separate audio-description stream where supported, otherwise retained in the main mix with a warning.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="requireCaptions" type="xs:boolean" default="false">
       <xs:annotation><xs:documentation>When true, delivering an output that has no caption track at all fails; false when absent.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -6946,11 +7036,21 @@
     <xs:attribute name="copyright" type="xs:string">
       <xs:annotation><xs:documentation>Copyright notice, written to the output file's metadata when embedMetadata is on.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="revision" type="xs:string"/>
-    <xs:attribute name="created" type="xs:dateTime"/>
-    <xs:attribute name="modified" type="xs:dateTime"/>
-    <xs:attribute name="generator" type="xs:string"/>
-    <xs:attribute name="language" type="languageTagType"/>
+    <xs:attribute name="revision" type="xs:string">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Revision text written as the version container tag when metadata embedding is enabled.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="created" type="xs:dateTime">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Authored creation timestamp written as creation_time when metadata embedding is enabled; rendering never substitutes wall-clock time.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="modified" type="xs:dateTime">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Authored modification timestamp written as the date container tag when metadata embedding is enabled.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="generator" type="xs:string">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Generator text appended to the encoder container tag when metadata embedding is enabled.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="language" type="languageTagType">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Work language written as the language container tag when metadata embedding is enabled.</xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:complexType>
 
   <!-- ===================================================== 360 -->
@@ -7008,13 +7108,9 @@
     <xs:attribute name="background" type="paintType" default="#000000FF">
       <xs:annotation><xs:documentation>Paint drawn behind the whole composition; opaque black when absent. A visible gradient-sky dome light replaces it when no 3D node is drawn.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="mode" default="standard">
-      <xs:simpleType><xs:restriction base="xs:string">
-        <xs:enumeration value="standard"/><xs:enumeration value="equirectangular"/>
-        <xs:enumeration value="viewport"/>
-      </xs:restriction></xs:simpleType>
-    </xs:attribute>
+
     <xs:attribute name="antialias3d" default="1">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Multisample count for 3D raster passes: 1, 2 or 4 samples, with 3 selecting 4 and default 1 leaving output unchanged.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:positiveInteger"><xs:maxInclusive value="4"/></xs:restriction></xs:simpleType>
     </xs:attribute>
     <xs:attribute name="precision" default="f16">
@@ -7052,8 +7148,12 @@
     <xs:attribute name="adaptiveMotionBlur" type="xs:boolean" default="true">
       <xs:annotation><xs:documentation>When true, a node that barely moves across the shutter is not blurred, which saves work; when false such a node is still sampled, except still groups and adjustment layers, which never are. true when absent.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="timecodeStart" type="timecodeType"/>
-    <xs:attribute name="pixelAspect" type="positiveDecimal" default="1"/>
+    <xs:attribute name="timecodeStart" type="timecodeType">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Starting container timecode at the project frame rate, with semicolon notation selecting drop-frame timecode.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="pixelAspect" type="positiveDecimal" default="1">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Output sample aspect ratio tag, default 1, applied without resampling the rendered frame.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="safeArea" type="xs:IDREF">
       <xs:annotation><xs:documentation>Id of the safeArea checked for text, captions and nodes tagged cta or logo; the selected layout's safeArea replaces it, as does a caption track's own for that track's captions.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -7152,10 +7252,10 @@
       </xs:restriction></xs:simpleType>
     </xs:attribute>
     <xs:attribute name="focusX" type="unitDecimal">
-      <xs:annotation><xs:documentation>Horizontal anchor (0 left to 1 right) of the crop or fit-blur reframe for this segment, replacing the layout's focus.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Horizontal anchor (0 left to 1 right) of the crop, fit or fit-blur reframe for this segment, replacing the layout's focus. Provisional (SREP 93): Reframe anchor for crop, fit and fit-blur, with a segment value taking precedence over the layout value and a centred default of 0.5.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="focusY" type="unitDecimal">
-      <xs:annotation><xs:documentation>Vertical anchor (0 top to 1 bottom) of the crop or fit-blur reframe for this segment, replacing the layout's focus.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Vertical anchor (0 top to 1 bottom) of the crop, fit or fit-blur reframe for this segment, replacing the layout's focus. Provisional (SREP 93): Reframe anchor for crop, fit and fit-blur, with a segment value taking precedence over the layout value and a centred default of 0.5.</xs:documentation></xs:annotation>
     </xs:attribute>
   </xs:complexType>
   <xs:complexType name="outputType">
@@ -7618,7 +7718,7 @@
       <xs:annotation><xs:documentation>Extinction coefficient per scene unit at unit density: how strongly the medium attenuates light passing through; 1 when absent.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="albedo" type="colorType" default="#FFFFFFFF">
-      <xs:annotation><xs:documentation>Colour of the light the medium scatters rather than absorbs (white scatters all, black absorbs all); white when absent. No light is scattered when scatterBounces is 0.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Colour of the light the medium scatters rather than absorbs (white scatters all, black absorbs all); white when absent. No light is scattered when scatterBounces is 0. Provisional (SREP 93): Scattering albedo defaults to white in both the scene renderer and volume library.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="anisotropy" default="0">
       <xs:annotation><xs:documentation>Direction of scattering from -0.99 (backward) through 0 (even) to 0.99 (forward); 0 when absent.</xs:documentation></xs:annotation>
@@ -8059,7 +8159,7 @@
       <xs:annotation><xs:documentation>Depth of the flat sea floor below waterLevel (at greater y), in scene units, when no bathymetry is given; it also sets the default speed of a wave that gives none. Default 10.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="gravity" type="positiveDecimal" default="9.81">
-      <xs:annotation><xs:documentation>Gravitational acceleration used by the water: waves travel at the square root of gravity times depth. Default 9.81.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Gravitational acceleration in metres per second squared (m/s2), default 9.81. With pixelsPerMeter P and uniform ocean world scale S, solver acceleration is gravity * P / S in ocean-local units/s2, and shallow-water speed is sqrt(gravity * depthMetres) in m/s. Buoyancy and cavity physics use the physical acceleration directly. SREP 93.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="damping" type="nonNegativeDecimal" default="0">
       <xs:annotation><xs:documentation>Exponential decay rate per second of the water's horizontal velocity; 0 (default) is undamped.</xs:documentation></xs:annotation>
@@ -8101,8 +8201,8 @@
       <xs:annotation><xs:documentation>Cap on the simulation work one frame request may spend, counted per cell and step; exceeding it is an error. Default 100000000.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:positiveInteger"><xs:maxInclusive value="1000000000000"/></xs:restriction></xs:simpleType></xs:attribute>
     <xs:attribute name="boundary" default="closed">
-      <xs:annotation><xs:documentation>What happens at the edges of the domain: closed reflects the water (default), open extends the edge state outward with zero gradient and does not absorb waves, periodic wraps the domain around.</xs:documentation></xs:annotation>
-      <xs:simpleType><xs:restriction base="xs:string"><xs:enumeration value="closed"/><xs:enumeration value="open"/><xs:enumeration value="periodic"/></xs:restriction></xs:simpleType></xs:attribute>
+      <xs:annotation><xs:documentation>What happens at the domain edges: closed reflects water (default); open extends the edge state with zero gradient; periodic wraps the domain; absorbing uses open edges and a sponge layer that relaxes toward the initial rest state.</xs:documentation></xs:annotation>
+      <xs:simpleType><xs:restriction base="xs:string"><xs:enumeration value="closed"/><xs:enumeration value="open"/><xs:enumeration value="periodic"/><xs:enumeration value="absorbing"/></xs:restriction></xs:simpleType></xs:attribute>
     <xs:attribute name="bathymetryEncoding" default="red">
       <xs:annotation><xs:documentation>How an image asset gives sea-floor y values: red (default) takes the red channel as 0 to 1 for 8- and 16-bit images; terrarium and mapbox decode tile elevation and negate it, so higher ground has smaller y.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string"><xs:enumeration value="red"/><xs:enumeration value="terrarium"/><xs:enumeration value="mapbox"/></xs:restriction></xs:simpleType></xs:attribute>
@@ -8189,6 +8289,9 @@
         the attribute can be refused on an ocean without `colliders` (OCN9). It is an engine parameter, not a value from the impact literature; 0 gives
         undamped bobbing.
       </xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="spongeCells" type="xs:positiveInteger" default="16">
+      <xs:annotation><xs:documentation>Width in grid cells of the absorbing boundary layer (default 16); with boundary absorbing it is at least 4 and strictly less than half of each grid dimension (OCN15). Ignored for other boundaries.</xs:documentation></xs:annotation>
     </xs:attribute>
   </xs:complexType>
   <xs:complexType name="waterImpulseType">
@@ -8545,7 +8648,7 @@
       <xs:annotation><xs:documentation>Total normal impulse of the two bodies in one step, in kg*scene-unit/second, that an impact must exceed to break the object; absent, twice the source body's weight over one step. Only with source.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="energyFraction" type="unitDecimal">
-      <xs:annotation><xs:documentation>Fraction from 0 to 1 of the impact's relative kinetic energy that becomes the pieces' push on each other; 0.3 when absent. Only with source.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Fraction from 0 to 1 of the impact's relative kinetic energy that becomes the pieces' push on each other; 0.3 when absent. Only with source. Provisional (SREP 93): Fraction of impact energy assigned to fracture, using the single documented fallback 0.3 when absent.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="at" type="nonNegativeDecimal" default="0">
       <xs:annotation><xs:documentation>Composition time in seconds at which the object breaks, moved to the first physics step boundary at or after it when the object takes part in physics. Default 0; not given with source or mode stress.</xs:documentation></xs:annotation>
@@ -8797,7 +8900,7 @@
       <xs:simpleType><xs:restriction base="xs:positiveInteger"><xs:maxInclusive value="4096"/></xs:restriction></xs:simpleType>
     </xs:attribute>
     <xs:attribute name="outputSha256" type="sha256Type">
-      <xs:annotation><xs:documentation>SHA-256 of the output that a build or data program returns; the render fails if the output hashes differently, which pins the result across hosts.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>SHA-256 of the output that a build or data program returns; the render fails if the output hashes differently, which pins the result across hosts. Forbidden on mode="step" programs (PRG18).</xs:documentation></xs:annotation>
     </xs:attribute>
   </xs:attributeGroup>
   <xs:complexType name="programNodeType">
@@ -8814,14 +8917,14 @@
     <xs:attributeGroup ref="nodeAttributes"/>
     <xs:attributeGroup ref="programAttributes"/>
     <xs:attribute name="mode" default="build">
-      <xs:annotation><xs:documentation>build (default) runs the module once when the document is built and draws the nodes it returns as a group; step keeps state across frames and draws a picture.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>build (default) runs the module once when the document is built and draws the nodes it returns as a group; step keeps state across frames and draws a picture and forbids outputSha256 (PRG18).</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string"><xs:enumeration value="build"/><xs:enumeration value="step"/></xs:restriction></xs:simpleType>
     </xs:attribute>
     <xs:attribute name="width" type="xs:positiveInteger">
-      <xs:annotation><xs:documentation>Width in pixels of the picture a stepping program draws; required with mode step.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Width in pixels of the picture a stepping program draws; required with mode step. Provisional (SREP 93): Positive integer picture dimension required in step mode, with no default; build mode ignores it.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="height" type="xs:positiveInteger">
-      <xs:annotation><xs:documentation>Height in pixels of the picture a stepping program draws; required with mode step.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Height in pixels of the picture a stepping program draws; required with mode step. Provisional (SREP 93): Positive integer picture dimension required in step mode, with no default; build mode ignores it.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="stepsPerFrame" default="1">
       <xs:annotation><xs:documentation>Number of steps a stepping program advances at each frame in which it is drawn; 1 to 10000. Default 1; only with mode step.</xs:documentation></xs:annotation>

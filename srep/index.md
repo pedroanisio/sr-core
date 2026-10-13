@@ -94,6 +94,7 @@
 | [90](srep-0090.md) | Let SREP 87 refuse two kinds of 1.6 documents in 1.7.0 | Process | Active | n/a |
 | [91](srep-0091.md) | Generate a Python scene SDK from the schema | Process | Draft | n/a |
 | [92](srep-0092.md) | Document every schema attribute | Standards | Draft | 1.7 |
+| [93](srep-0093.md) | Align declared attributes with the engine | Standards | Draft | 2.0 (proposed) |
 
 Paths in an SREP such as `tests/corpus/...`, `tools/build_corpus.py`, `tools/evidence/...` or
 `srep-0000-cinematic-impact.md` belong to the engine repository (`rs-scene-render`), at the commit the SREP names;

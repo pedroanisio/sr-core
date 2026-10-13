@@ -856,4 +856,25 @@
       <sch:assert id="FRC1" test="(@kind='julia') = (boolean(@juliaX) and boolean(@juliaY))">a julia fractal has juliaX and juliaY; a mandelbrot has neither.</sch:assert>
     </sch:rule>
   </sch:pattern>
+  <!-- SREP 93 draft: attribute alignment; no release/version gate is implied. -->
+  <sch:pattern id="srep93-attributes">
+    <sch:rule context="program[@mode='step']">
+      <sch:assert id="PRG18" test="not(@outputSha256)">a stepping program has no single output to pin; outputSha256 is forbidden.</sch:assert>
+    </sch:rule>
+    <sch:rule context="pdf/region">
+      <sch:assert id="C81" test="@text or (@x and @y and @width and @height)">a pdf region needs text or all four box attributes x, y, width and height.</sch:assert>
+    </sch:rule>
+    <sch:rule context="layout[@aspect]">
+      <sch:let name="w" value="number(substring-before(normalize-space(@aspect), ':'))"/>
+      <sch:let name="h" value="number(substring-after(normalize-space(@aspect), ':'))"/>
+      <sch:assert id="C82" test="$w &gt; 0 and $h &gt; 0 and $w * number(translate(@height,'+','')) = $h * number(translate(@width,'+',''))">layout aspect must equal width:height, with positive ratio components.</sch:assert>
+    </sch:rule>
+    <sch:rule context="ocean[@boundary='absorbing']">
+      <sch:let name="sponge" value="number(translate(concat(@spongeCells, substring('16', 1 div not(@spongeCells))),'+',''))"/>
+      <sch:let name="cell" value="number(translate(concat(@cellSize, substring('1', 1 div not(@cellSize))),'+',''))"/>
+      <sch:let name="nx" value="number(translate(concat(@width, substring('64', 1 div not(@width))),'+','')) div $cell"/>
+      <sch:let name="nz" value="number(translate(concat(@depth, substring('64', 1 div not(@depth))),'+','')) div $cell"/>
+      <sch:assert id="OCN15" test="$sponge &gt;= 4 and 2 * $sponge &lt; round($nx) and 2 * $sponge &lt; round($nz)">an absorbing ocean needs at least 4 sponge cells and strictly fewer than half the cells in each grid dimension.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
 </sch:schema>

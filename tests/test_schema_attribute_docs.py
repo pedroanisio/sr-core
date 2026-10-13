@@ -1,7 +1,7 @@
 """Every attribute declared in the schema is documented, or listed with a reason in an allow-list that can only shrink.
 
-The documentation is annotation-only: the same documents are accepted and rejected as before (SREP 92,
-`srep-0092.md`).
+Documentation edits (SREP 92, `srep-0092.md`) remain annotation-only except for the explicit declarations proposed by SREP 93.
+The existing corpus keeps its XSD verdicts; focused SREP 93 tests cover the newly changed input boundaries.
 """
 from __future__ import annotations
 
@@ -91,9 +91,45 @@ def _strip_annotations(root) -> bytes:
     return etree.tostring(root, method="c14n")
 
 
-def test_diff_against_base_is_annotation_only():
+def test_diff_against_base_is_annotation_only_except_srep91():
     base = etree.fromstring(_base_xsd())
     now = etree.parse(XSD).getroot()
+    # Restore only the declared SREP 91 attribute changes to their baseline declarations.
+    # Any other structural edit still fails the canonical comparison below.
+    changes = {
+        "markerType": {"color"},
+        "colorManagementType": {"bitDepth"},
+        "projectType": {"mode"},
+        "shapeModifierType": {"ridges"},
+        "modifierType": {"axis"},
+        "fractalAssetType": {"palette"},
+        "audiogramAssetType": {"smoothing"},
+        "rigidBodyType": {"mass"},
+        "chartAssetType": {"legend"},
+        "oceanType": {"boundary", "spongeCells"},
+        "pdfRegionType": {"x", "y", "width", "height"},
+        "textAnimatorType": {"unit", "overlap"},
+        "particleEmitterType": set(
+            "lifetime lifetimeVariance speed direction spread gravityY drag turbulence size sizeVariance "
+            "color rotationVariance angularVelocity angularVelocityVariance shape trail".split()
+        ),
+    }
+    for owner, names in changes.items():
+        old = base.find(f"{_q('complexType')}[@name='{owner}']")
+        current = now.find(f"{_q('complexType')}[@name='{owner}']")
+        for name in names:
+            att = current.find(f"{_q('attribute')}[@name='{name}']")
+            if att is not None:
+                current.remove(att)
+        # Insert from the end so each next sibling has already been restored.
+        for att in reversed(list(old)):
+            if att.tag == _q("attribute") and att.get("name") in names:
+                following = att.getnext()
+                if following is None:
+                    current.append(etree.fromstring(etree.tostring(att)))
+                else:
+                    anchor = current.find(f"{following.tag}[@name='{following.get('name')}']")
+                    current.insert(current.index(anchor), etree.fromstring(etree.tostring(att)))
     assert _strip_annotations(now) == _strip_annotations(base)
 
 
@@ -176,6 +212,17 @@ def test_range_limited_attribute_doc_does_not_claim_clamp_or_cap(key):
     ("complexType:particles3DType/@color", "colorEnd"),
     ("complexType:outputType/@codec", "png-sequence"),
     ("complexType:lightType/@range", "lighting effect"),
+    ("complexType:chartSeriesType/@name", "legend"),
+    ("complexType:chartSeriesType/@values", "Whitespace-separated numbers"),
+    ("complexType:representationType/@width", "Declared width"),
+    ("complexType:representationType/@height", "Declared height"),
+    ("complexType:videoAssetType/@timecodeStart", "source in and out timecodes"),
+    ("complexType:audioAssetType/@sampleRate", "Hz"),
+    ("complexType:layoutType/@aspect", "W * height equals H * width"),
+    ("complexType:lightType/@shadowBias", "normalized shadow-map"),
+    ("complexType:lightType/@skyExponent", "dimensionless"),
+    ("complexType:constraintType/@maxForce", "newton-metres"),
+    ("complexType:constraintType/@breakForce", "newtons"),
 ])
 def test_reviewed_correction_is_present(key, phrase):
     doc = attribute_docs(etree.parse(XSD))[key]

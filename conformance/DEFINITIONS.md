@@ -233,7 +233,22 @@ simulated in the scene's physics world (gravity, bounds, step).
   schema bounds it to [0, 1]: each spring's damping coefficient is
   `damping` × 2√(`stiffness` × m), with m the mass of one lattice point.
 - **`pin`** fixes the named edge's points, or the four corners.
-- `pressure`, `selfCollision`, `cloth` and `rope` are not defined here.
+- **`pressure`** (N/m, jelly only) multiplies the relative area error: in solver metres,
+  `p = pressure * (abs(A0) / max(abs(A), 1e-9 m²) - 1)`, with signed rest/current
+  boundary areas A0/A. For an edge e from i to j, let sign be +1 if A0 >= 0,
+  otherwise -1; the unnormalised outward normal is `sign * (e.y, -e.x)`.
+  Each endpoint receives half of p times that vector in newtons. Zero adds no
+  force; pressure has no effect on cloth or rope.
+- **`selfCollision`** adds pairwise repulsion when true (false by default).
+  Set `r = 0.5 * max(shortest spring rest length, 1e-6 m)`. For each unordered
+  pair separated by l with `1e-12 m < l < r`, add equal opposite forces of
+  magnitude `kEff * (r-l)` along the pair, using the effective stiffness after
+  the solver's stability limit. Pinned points stay pinned and coincident pairs
+  are skipped. This penalty force does not guarantee a minimum separation.
+- These two definitions record scene-render c0c668b,
+  `crates/sr-sim/src/soft.rs`, `SoftState::step`, and the conversion to metres in
+  `crates/sr-sim/src/physics.rs`, `World::soft_m` (SREP 93 draft, 2026-10-12).
+  `cloth` and `rope` otherwise remain undefined here.
 
 ## D8. Force fields
 
