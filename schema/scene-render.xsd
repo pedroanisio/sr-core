@@ -7109,8 +7109,8 @@
       <xs:annotation><xs:documentation>Paint drawn behind the whole composition; opaque black when absent. A visible gradient-sky dome light replaces it when no 3D node is drawn.</xs:documentation></xs:annotation>
     </xs:attribute>
 
-    <xs:attribute name="antialias3d" default="1">
-      <xs:annotation><xs:documentation>Provisional (SREP 93): Multisample count for 3D raster passes: 1, 2 or 4 samples, with 3 selecting 4 and default 1 leaving output unchanged.</xs:documentation></xs:annotation>
+    <xs:attribute name="antialias3d" default="4">
+      <xs:annotation><xs:documentation>Provisional (SREP 93): Multisample count for 3D raster passes: 1, 2 or 4 samples, with 3 selecting 4; default 4, the count the reference engine drew with before it read this attribute.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:positiveInteger"><xs:maxInclusive value="4"/></xs:restriction></xs:simpleType>
     </xs:attribute>
     <xs:attribute name="precision" default="f16">
