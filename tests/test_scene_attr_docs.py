@@ -5,10 +5,13 @@ import ast
 import inspect
 from pathlib import Path
 
+import pytest
+
 from sr_core.schemadoc import model
 from sr_core.scene import CLASSES, Layer, generate
 from sr_core.scene import _generated as gen
 from sr_core.scene._runtime import Attr, _attr_specs
+from test_scene_generate import SCH_EMPTY, xsd
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = model.read((ROOT / "schema/scene-render.xsd").read_bytes(), (ROOT / "schema/scene-render.sch").read_bytes(),
@@ -36,16 +39,32 @@ def test_every_descriptor_carries_the_documentation_of_the_schema() -> None:
             checked += 1
             documented += bool(attr.doc)
     assert checked == gen.COUNTS["attributes"]
-    assert documented >= 380  # 264 attributes document themselves, 129 take the documentation of their type
+    assert documented >= 380  # The SREP 91 documentation baseline; SREP 92 adds declaration-level coverage.
 
 
-def test_type_documentation_is_the_fallback() -> None:
-    type_documented = [a for k in SCHEMA.complex for a in SCHEMA.all_attributes(k)
-                       if not a.doc and a.type in SCHEMA.simple and SCHEMA.simple[a.type].doc]
-    assert type_documented
-    a = type_documented[0]
-    owner = next(k for k in SCHEMA.complex if a in SCHEMA.all_attributes(k))
-    assert _attr_specs(CLASSES[owner])[a.name].doc == inspect.cleandoc(SCHEMA.simple[a.type].doc)
+@pytest.mark.parametrize("named", [False, True])
+@pytest.mark.parametrize("own_doc", ["", "Attribute documentation."])
+def test_type_documentation_is_the_fallback(named: bool, own_doc: str) -> None:
+    # SREP 92 leaves no named-type documentation fallback in the real schema; SREP 91 still requires it for inputs
+    # the generator may receive. Exercise both named and inline types, including attribute precedence.
+    simple = ('<xs:simpleType' + (' name="documentedType"' if named else '') + '>'
+              '<xs:annotation><xs:documentation>Type documentation.\n  Second line.</xs:documentation></xs:annotation>'
+              '<xs:restriction base="xs:string"/></xs:simpleType>')
+    annotation = f'<xs:annotation><xs:documentation>{own_doc}</xs:documentation></xs:annotation>' if own_doc else ''
+    attr = ('<xs:attribute name="value"' + (' type="documentedType"' if named else '') + '>'
+            + annotation + ('' if named else simple) + '</xs:attribute>')
+    source = generate.render(xsd(root_attrs=attr, simple=simple if named else ''), SCH_EMPTY)
+    tree = ast.parse(source["sr_core/scene/_generated.py"])
+    scene = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == "Scene")
+    declaration = next(n for n in scene.body if isinstance(n, ast.AnnAssign) and n.target.id == "value")
+    call = declaration.value
+    descriptor = Attr(*(ast.literal_eval(a) for a in call.args),
+                      **{k.arg: ast.literal_eval(k.value) for k in call.keywords})
+    want = own_doc or "Type documentation.\nSecond line."
+    assert descriptor.doc == want
+    assert descriptor.__doc__ == want
+    following = scene.body[scene.body.index(declaration) + 1]
+    assert inspect.cleandoc(ast.literal_eval(following.value)) == want
 
 
 def test_a_documented_attribute_shows_in_help() -> None:

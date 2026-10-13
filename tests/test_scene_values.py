@@ -985,7 +985,7 @@ class TestRealSchema:
                     for lex in (a.default, a.fixed):
                         if lex is not None:
                             assert c.is_valid_lexical(lex), (ct.key, a.name, lex)
-        assert inline == 350
+        assert inline == 352  # SREP 93: remove bitDepth; add axis, palette and smoothing restrictions.
         assert {"xs:double", "xs:string", "xs:positiveInteger", "xs:boolean", "xs:IDREF", "xs:ID", "xs:anyURI",
                 "xs:nonNegativeInteger", "xs:IDREFS", "xs:unsignedLong", "xs:NMTOKEN", "xs:NCName", "xs:integer",
                 "xs:decimal", "xs:int", "xs:dateTime", "xs:NMTOKENS"} == seen_builtins

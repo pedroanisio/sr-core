@@ -92,10 +92,11 @@ def test_a_valid_set_does_no_suggestion_work(monkeypatch: pytest.MonkeyPatch) ->
 def test_a_valid_enumeration_set_scales_linearly() -> None:
     def cost(n: int) -> float:
         layer = Layer(id="l")
-        t = time.perf_counter()
+        # Measure this thread's CPU work: a VM descheduling it must not count as setter cost.
+        t = time.thread_time_ns()
         for _ in range(n):
             layer.blend = "multiply"
-        return time.perf_counter() - t
+        return time.thread_time_ns() - t
 
     cost(2000)
     small, big = min(cost(4000) for _ in range(3)), min(cost(40000) for _ in range(3))

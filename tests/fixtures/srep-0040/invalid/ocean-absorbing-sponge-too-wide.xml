@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- expect: OCN15 -->
+<!-- SREP 93: twice the absorbing sponge width must be smaller than each grid dimension. -->
+<scene version="1.3"><project width="64" height="64" fps="24" duration="2"/><composition><ocean id="sea" boundary="absorbing" width="64" depth="64" cellSize="1" spongeCells="32"/></composition></scene>

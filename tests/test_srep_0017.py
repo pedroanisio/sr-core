@@ -68,7 +68,6 @@ def test_region_shape_with_padding_and_own_transform_is_accepted():
     ("page 0", pdf(' page="0"')),
     ("upper-case sha", pdf().replace(H, H.upper())),
     ("short sha", pdf().replace(H, H[:63])),
-    ("region without x", pdf(regions='<region id="a" y="0" width="1" height="1"/>')),
     ("region negative width", pdf(regions='<region id="a" x="0" y="0" width="-1" height="1"/>')),
     ("region occurrence 0", pdf(regions='<region id="a" occurrence="0" x="0" y="0" width="1" height="1"/>')),
     ("region without id", pdf(regions='<region x="0" y="0" width="1" height="1"/>')),
@@ -82,6 +81,19 @@ def test_xsd_rejects_a_non_numeric_region_padding():
 
 
 # ---- Schematron -----------------------------------------------------------------------------------------
+
+@pytest.mark.parametrize("missing", ["x", "y", "width", "height"])
+def test_C81_region_needs_text_or_a_complete_box(missing):
+    """SREP 93 supersedes SREP 17's unconditional XSD requirement with conditional Schematron rule C81."""
+    box = " ".join(f'{a}="0"' for a in ("x", "y", "width", "height") if a != missing)
+    assert verdict12(scene(LAYER, assets=pdf(regions=f'<region id="a" {box}/>'))) == "sch:C81"
+    assert verdict12(scene(LAYER, assets=pdf(regions=f'<region id="a" text="Abstract" {box}/>'))) == "ok"
+
+
+def test_text_region_needs_no_placeholder_box():
+    assert verdict12(scene(LAYER, assets=pdf(regions='<region id="a" text="Abstract"/>'))) == "ok"
+    assert verdict12(scene(LAYER, assets=pdf(regions='<region id="a"/>'))) == "sch:C81"
+
 
 def test_V9_pdf_needs_version_1_2():
     for v in ("1.0", "1.1"):
