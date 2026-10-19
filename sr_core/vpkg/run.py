@@ -118,12 +118,19 @@ def render_commands(m: dict, project: str, step: dict, engine: str) -> list:
                                           output=r.get("output", ""))
             out.append((argv + extra, env, None, to))
         return out
+    # a named output renders by its id, which keeps every setting it declares, and its file is copied to `to`;
+    # an ad-hoc path (`to` form) would replace it with an output at the engine's defaults
+    if r.get("output") and cfg.get("output"):
+        ids = dict(refs.scan(os.path.join(project, scene)).output_ids)
+        if r["output"] not in ids:
+            raise StepError(f'{scene} has no <output id="{r["output"]}"> for step {step["id"]!r} to render')
+        argv = cfg["command"] + _fill(cfg["output"], scene=scene, output=r["output"])
+        move = (os.path.join(os.path.dirname(scene), ids[r["output"]]), r["to"]) if r.get("to") else None
+        return [(argv + extra, env, move, r.get("to"))]
     if r.get("to") and cfg.get("to"):
         argv = cfg["command"] + _fill(cfg["to"], scene=scene, to=r["to"], output=r.get("output", ""))
         return [(argv + extra, env, None, r["to"])]
-    if r.get("output") and cfg.get("output"):
-        argv = cfg["command"] + _fill(cfg["output"], scene=scene, output=r["output"])
-    elif cfg.get("all"):
+    if cfg.get("all"):
         argv = cfg["command"] + _fill(cfg["all"], scene=scene)
     else:
         raise StepError(f"engine {engine!r} cannot render {scene}")
@@ -135,6 +142,16 @@ def render_commands(m: dict, project: str, step: dict, engine: str) -> list:
             raise StepError(f"{scene}: no <output> to render to {r['to']}")
         move = (os.path.join(os.path.dirname(scene), src), r["to"])
     return [(argv + extra, env, move, r.get("to"))]
+
+
+def ad_hoc_note(step: dict, engine: str) -> str | None:
+    """Why a render step loses its output's settings on `engine`, if it does: it names an `<output>` that the
+    engine cannot select, so the engine writes `to` as an ad-hoc output with its own defaults."""
+    r, cfg = step["render"], engine_config(engine)
+    if r.get("output") and r.get("to") and not r.get("stills") and not cfg.get("output") and cfg.get("to"):
+        return (f'engine {engine!r} cannot select <output id="{r["output"]}">; it writes {r["to"]} as an '
+                "ad-hoc output with its own defaults, not that output's size, codec, quality, colour or audio")
+    return None
 
 
 def run(path: str, engine: str | None = None, only=(), start: str | None = None, until: str | None = None,
@@ -192,6 +209,9 @@ def run(path: str, engine: str | None = None, only=(), start: str | None = None,
                 log(f"{label} a render step: choose an engine with --engine (py, rs, c, js)")
                 return 2
             commands = render_commands(m, project, s, engine)
+            note = ad_hoc_note(s, engine)
+            if note:
+                log(f"{label} warning: {note}")
         else:
             argv = list(s["run"])
             if argv[0] in ("python", "python3"):
@@ -207,8 +227,9 @@ def run(path: str, engine: str | None = None, only=(), start: str | None = None,
                 if s.get("optional"):
                     break
                 return 1
-            if to:
-                os.makedirs(os.path.dirname(os.path.join(project, to)) or project, exist_ok=True)
+            for target in (to, move and move[0]):
+                if target:
+                    os.makedirs(os.path.dirname(os.path.join(project, target)) or project, exist_ok=True)
             code = subprocess.run(argv, cwd=cwd, env={**env, **s.get("env", {}), **extra_env}).returncode
             if code != 0:
                 log(f"{label} failed with exit status {code}")

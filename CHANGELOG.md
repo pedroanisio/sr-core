@@ -68,6 +68,11 @@ version:
 
 ### Fixed
 
+- `scenerender-vpkg run`: a render step that names an `output` and a `to` renders that output by its id on py, rs
+  and js, then copies its file to `to`, so the output keeps the settings it declares (size, codec, quality, colour,
+  audio, report). Before, py and rs got `-o TO`, which wrote an ad-hoc output with the engine's defaults. A scene, or
+  the engine variant of one, that lacks the named output id now fails the step instead of rendering something else.
+  On c, which cannot select an output, `run` prints a warning that the output's settings are not applied.
 - `sr_core.scene` (second review, 2026-10-12):
   - `add` and direct changes of `.nodes` refuse the element itself or one of its ancestors; before, the tree became
     a cycle and `iter`, `check`, `xml_path` and writing never returned;

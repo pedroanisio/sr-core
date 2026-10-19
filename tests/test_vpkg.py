@@ -20,7 +20,7 @@ from sr_core.vpkg import archive, fonts, lint, manifest as mf, refs
 from sr_core.vpkg.cli import main
 from sr_core.vpkg.init import init, piper_url
 from sr_core.vpkg.pack import PackError, matches, pack, plan
-from sr_core.vpkg.run import render_commands, run
+from sr_core.vpkg.run import StepError, render_commands, run
 
 
 # ------------------------------------------------------------------------------------------------ fixtures
@@ -77,7 +77,7 @@ def project(tmp_path, monkeypatch):
     (root / "shared").mkdir()
     (root / "shared" / "logo.png").write_bytes(b"logo")
     (p / "scene.xml").write_text(SCENE)
-    (p / "scene.rust.xml").write_text(SCENE.replace('<output id="main"', '<output id="rs-main"'))
+    (p / "scene.rust.xml").write_text(SCENE.replace('path="renders/out.mp4"', 'path="renders/out-rs.mp4"'))
     (p / "scene.pre-3d.xml").write_text(SCENE)
     (p / "assets" / "bg.png").write_bytes(b"bg")
     for i in (1, 2, 3):
@@ -96,7 +96,13 @@ def project(tmp_path, monkeypatch):
     voice = b"voice-model"
     (p / "sources" / "voice" / "v.onnx").write_bytes(voice)
     engine = tmp_path / "engine.py"
-    engine.write_text("import sys, os\nargs = sys.argv[1:]\nout = args[args.index('-o') + 1]\n"
+    # writes its argv to -o PATH, or to the path the document gives the --output ID it is asked for
+    engine.write_text("import sys, os, xml.etree.ElementTree as ET\nargs = sys.argv[1:]\n"
+                      "scene = next(a for a in args if a.endswith('.xml'))\n"
+                      "if '-o' in args:\n    out = args[args.index('-o') + 1]\n"
+                      "else:\n    oid = args[args.index('--output') + 1]\n"
+                      "    el = next(o for o in ET.parse(scene).iter('output') if o.get('id') == oid)\n"
+                      "    out = os.path.join(os.path.dirname(scene), el.get('path'))\n"
                       "os.makedirs(os.path.dirname(out) or '.', exist_ok=True)\n"
                       "open(out, 'w').write(' '.join(args))\n")
     monkeypatch.setenv("VPKG_ENGINE_PY", f"{sys.executable} {engine}")
@@ -290,7 +296,7 @@ def test_run_pipeline_with_stand_in_engine(project, tmp_path, capsys):
     assert run(str(dest), engine="py", python=sys.executable) == 0
     proj = dest / "project"
     assert (proj / "assets" / "vo.wav").read_bytes() == b"vo"
-    assert (proj / "renders" / "out.mp4").read_text().startswith("render scene.xml -o renders/out.mp4")
+    assert (proj / "renders" / "out.mp4").read_text().startswith("render scene.xml --output main")
     log = capsys.readouterr().out
     assert run(str(dest), engine="py") == 0
     assert "[audio] up to date" in capsys.readouterr().out and "[audio] $" in log
@@ -300,13 +306,41 @@ def test_run_pipeline_with_stand_in_engine(project, tmp_path, capsys):
 def test_render_commands_pick_variants_and_engine_forms(project):
     m = mf.load(str(project / "vpkg.json"))
     step = m["pipeline"]["steps"][1]
+    # a named output renders by its id, so it keeps its settings, and its file is copied to `to`
     (argv, _, move, to), = render_commands(m, str(project), step, "rs")
-    assert argv[-4:] == ["encode", "scene.rust.xml", "-o", "renders/out.mp4"] and move is None
-    (argv, _, move, _), = render_commands(m, str(project), step, "js")
-    assert argv[-4:] == ["render", "scene.xml", "--output", "main"] and move == ("renders/out.mp4", "renders/out.mp4")
+    assert argv[-4:] == ["encode", "scene.rust.xml", "--output", "main"] and move == ("renders/out-rs.mp4", to)
+    for engine, verb in (("py", "render"), ("js", "render")):
+        (argv, _, move, _), = render_commands(m, str(project), step, engine)
+        assert argv[-4:] == [verb, "scene.xml", "--output", "main"] and move == ("renders/out.mp4", "renders/out.mp4")
+    (argv, _, move, _), = render_commands(m, str(project), step, "c")      # c cannot select an output
+    assert argv[-4:] == ["--scene", "scene.xml", "--output", "renders/out.mp4"] and move is None
     stills = {"id": "s", "kind": "render", "render": {"scene": "scene.xml", "stills": [0.5, 1], "to": "f/{time}.png"}}
     cmds = render_commands(m, str(project), stills, "c")
     assert [c[0][-4:] for c in cmds] == [["--frame", "15", "--output", "f/0.5.png"], ["--frame", "30", "--output", "f/1.png"]]
+
+
+def test_render_step_output_must_exist_in_the_scene_each_engine_renders(project):
+    m = mf.load(str(project / "vpkg.json"))
+    step = {"id": "r", "kind": "render", "render": {"scene": "scene.xml", "output": "master", "to": "renders/m.mp4"}}
+    for engine in ("rs", "py", "js"):
+        with pytest.raises(StepError, match=r"scene(\.rust)?\.xml has no <output id=\"master\">"):
+            render_commands(m, str(project), step, engine)
+    (project / "scene.rust.xml").write_text(SCENE.replace('id="main"', 'id="rs-main"'))
+    with pytest.raises(StepError, match=r"scene\.rust\.xml has no <output id=\"main\">"):
+        render_commands(m, str(project), m["pipeline"]["steps"][1], "rs")
+
+
+def test_an_engine_that_cannot_select_the_output_says_its_settings_are_dropped(project):
+    m = mf.load(str(project / "vpkg.json"))
+    step = m["pipeline"]["steps"][1]
+    lines = []
+    assert run(str(project), engine="c", only=["render"], dry=True, log=lines.append) == 0
+    note = next(line for line in lines if "warning" in line)
+    assert "engine 'c' cannot select <output id=\"main\">" in note and "renders/out.mp4" in note, lines
+    lines.clear()
+    assert run(str(project), engine="rs", only=["render"], dry=True, log=lines.append) == 0
+    assert not any("warning" in line for line in lines), lines
+    assert step["render"]["output"] == "main"
 
 
 def test_cli_round_trip(project, tmp_path, capsys):

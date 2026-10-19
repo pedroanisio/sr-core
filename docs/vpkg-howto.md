@@ -180,8 +180,8 @@ A render step names a scene, never an engine. The engine is chosen by whoever ru
  "render": {"scene": "scene.xml", "output": "out-master", "to": "renders/master.mp4"}}
 ```
 
-- **`to`** is the file to produce. Engines that take an ad-hoc output path (py, rs, c) write it directly.
-- **`output`** is the scene's `<output id>`. An engine that can only render document outputs (js) renders that one, and the result is copied to `to`. Give both fields whenever the scene has outputs.
+- **`to`** is the file to produce.
+- **`output`** is the scene's `<output id>`. Engines that can select an output (py, rs, js) render that one, with every setting it declares (size, codec, quality, colour, audio, report), and its file is copied to `to`. The scene each engine renders, variants included, must define that id, or the step fails. The c engine cannot select an output: it writes `to` as an ad-hoc output with its own defaults, and `run` prints a warning saying so. Give both fields whenever the scene has outputs.
 - **`args`** adds per-engine flags that belong to this package, for example `{"js": ["--anchor-mode", "position"]}` for scenes authored with anchor-positioned `x`/`y`.
 
 **Engine variants.** If `scene.rust.xml` is listed as
@@ -385,7 +385,7 @@ Scene references outside the project are fixed automatically: they're copied to 
 
 - [ ] Exactly one `primary` scene. Engine copies are `variant` with `targets` and `derivedFrom`; unfinished and old scenes are `draft` or `archive`.
 - [ ] Every generate step has `inputs` and `outputs`. Steps that need extra tools or network have `requires` and `optional`. In-place editors have `idempotent: false`.
-- [ ] The render step has both `output` (the scene's output id) and `to`.
+- [ ] The render step has both `output` (the scene's output id) and `to`, and every variant of its scene defines that output id.
 - [ ] Large public downloads are `fetch` entries with `sha256` and `size`.
 - [ ] Fonts the scenes name are declared, or present in `fonts/` with their licence.
 - [ ] Credits cover fonts, images, meshes, HDRIs and voices.
