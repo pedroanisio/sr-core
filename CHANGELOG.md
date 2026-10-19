@@ -122,6 +122,7 @@ version:
 
 - The schema documents its attributes (schema CHANGELOG, SREP 92, `srep-0092.md`): `tests/test_schema_attribute_docs.py` fails for an attribute with neither documentation nor an entry in `tests/undocumented-attributes.txt`. The bundled schema copy and generated reference carry the sentences.
 - 746 attribute docs corrected after an adversarial review against the engine code.
+- `docs/scene-sdk-guide.md` section 10 explains the cost of a path-traced camera, width × height × `pathSamples` × `maxBounces` per frame, and how to choose the two values. Its Python block, run by `tests/test_scene_guide.py`, reads the defaults and maxima from the schema.
 
 ## 1.7.0 — 2026-10-12
 

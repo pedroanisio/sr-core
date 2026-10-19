@@ -287,3 +287,30 @@ assert json.loads(text) == everything
 | forgetting a required attribute | `xsd:required` at `check()`, not at construction | construct with the attributes `describe` marks `required` |
 | `find("compositon")` | `None`, silently | take the name from `element_names()` |
 | editing `_generated.py` | overwritten by the next generation | change `schema/`, then `python3 -m sr_core.scene.generate` |
+
+## 10. The cost of a path-traced camera
+
+A camera with `renderer="pathtrace"` traces `pathSamples` paths per pixel, and each path meets at most `maxBounces`
+surfaces. The work of one frame is therefore bounded by width × height × `pathSamples` × `maxBounces`, and a video
+multiplies that by its frame count. Raising both values at once multiplies the cost: 320 samples at 20 bounces is 25
+times the work of the defaults, 64 samples at 4 bounces.
+
+```python
+from sr_core.scene import describe
+
+camera = {a.xml_name: a for a in describe("camera").attributes}
+assert (camera["pathSamples"].default, camera["maxBounces"].default) == ("64", "4")
+assert dict(camera["pathSamples"].type.facets)["maxInclusive"] == "65536"
+assert dict(camera["maxBounces"].type.facets)["maxInclusive"] == "64"
+```
+
+- **Start from the defaults.** The path-traced image is denoised unless `denoise="false"`. Raise `pathSamples` only
+  when noise is still visible in a test frame.
+- **Raise `maxBounces` to what a path has to cross.** Each surface a path meets uses one bounce. Seen from the side,
+  a glass of water puts four surfaces in the way: into the glass, into the water, into the glass again and out of
+  it, and one more bounce reaches what is behind. Count the surfaces in the view and set `maxBounces` a little above
+  that count, not at the maximum.
+- **Try a small frame first.** A test at a quarter of the width and height takes about a sixteenth of the work.
+- **Read the engine's warnings.** At check level 3 the engine's own codes are passed through. scene-render warns
+  with `W15` when one frame of a path-traced camera is more than 1920 × 1080 × 256 × 4 path segments, measured at
+  the size of its `viewport3D` or else of the project.
