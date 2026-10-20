@@ -21,102 +21,65 @@ version:
 
 ### Added
 
+### Fixed
+
+## 1.8.0 — 2026-10-20
+
+### Added
+
+- Validates and packs schema 1.7.1 documents: the source release carries schema 1.7.1 and its generated reference under `docs/schema`, and `sr_core.scene` is regenerated from it, so `describe()` and the class documentation carry the attribute documentation of SREP 92 and report schema release 1.7.1. See [schema/CHANGELOG.md](schema/CHANGELOG.md).
 - `sr_core.scene`, a Python scene SDK generated from the schema (SREP 91, `srep-0091.md`):
-  - classes for all 169 complex types, with values checked on assignment;
-  - reading and writing that keeps comments and lexical forms;
-  - version gates compiled from the Schematron, with `min_version()` and `version="auto"`;
-  - checks at four levels (construction, standard library, lxml, engine);
-  - the `sr-scene` command (`check`, `min-version`, `format`);
-  - the optional extra `sr-core[validate]` (lxml);
-  - a valid lexical `str` is accepted for every attribute whose type is not string-valued (numbers, booleans,
-    `xs:dateTime`) and written as given, so a ported builder can write the exact text of the one it replaces;
-  - `layout="indent"` for `to_bytes` and `write`: libxml2's pretty-print rule (indentation only inside elements that
-    have no text child), equal to `lxml.etree.tostring(..., pretty_print=True)`;
-  - a class that covers several element names takes the constructor keyword `xml_name`, typed as a `Literal` of
-    those names and refused with `SchemaValueError` otherwise: `Still(xml_name="thumbnail", path=...)` builds a
-    `<thumbnail>` (before, `to_bytes(Still())` could only write `<poster/>`).
+- classes for all 169 complex types, with values checked on assignment;
+- reading and writing that keeps comments and lexical forms;
+- version gates compiled from the Schematron, with `min_version()` and `version="auto"`;
+- checks at four levels (construction, standard library, lxml, engine);
+- the `sr-scene` command (`check`, `min-version`, `format`);
+- the optional extra `sr-core[validate]` (lxml);
+- a valid lexical `str` is accepted for every attribute whose type is not string-valued (numbers, booleans, `xs:dateTime`) and written as given, so a ported builder can write the exact text of the one it replaces;
+- `layout="indent"` for `to_bytes` and `write`: libxml2's pretty-print rule (indentation only inside elements that have no text child), equal to `lxml.etree.tostring(..., pretty_print=True)`;
+- a class that covers several element names takes the constructor keyword `xml_name`, typed as a `Literal` of those names and refused with `SchemaValueError` otherwise: `Still(xml_name="thumbnail", path=...)` builds a `<thumbnail>` (before, `to_bytes(Still())` could only write `<poster/>`).
 - `sr_core.scene` for AI agents and their users (section 3.12, 3.13 and 8 of the SDK SREP draft):
-  - `UnknownNameError`, a `SchemaValueError` and an `AttributeError`, for a wrong attribute, constructor keyword,
-    `add_<name>` factory, child or `xml_name`, with `suggestions` (another case, `from` for `from_`, close spellings) and
-    the `allowed` names: `<layer> has no attribute 'blendMode'; did you mean 'blend'?`;
-  - `describe(target)`, `describe_all()` and `element_names()`: documentation, minimum version, content model,
-    children with occurrences, and attributes with type, enumeration, facets, default, required, minimum version and
-    documentation, as a frozen record or JSON of the versioned format `sr-scene-describe/1`;
-  - `sr-scene describe NAME...`, `sr-scene describe --all --format json`, `sr-scene list` and `sr-scene new`;
-  - `sr-scene check --format json` carries `"format": "sr-scene-findings/1"`;
-  - `docs/scene-sdk-guide.md`, whose Python blocks the test suite runs.
+- `UnknownNameError`, a `SchemaValueError` and an `AttributeError`, for a wrong attribute, constructor keyword, `add_<name>` factory, child or `xml_name`, with `suggestions` (another case, `from` for `from_`, close spellings) and the `allowed` names: `<layer> has no attribute 'blendMode'; did you mean 'blend'?`;
+- `describe(target)`, `describe_all()` and `element_names()`: documentation, minimum version, content model, children with occurrences, and attributes with type, enumeration, facets, default, required, minimum version and documentation, as a frozen record or JSON of the versioned format `sr-scene-describe/1`;
+- `sr-scene describe NAME...`, `sr-scene describe --all --format json`, `sr-scene list` and `sr-scene new`;
+- `sr-scene check --format json` carries `"format": "sr-scene-findings/1"`;
+- `docs/scene-sdk-guide.md`, whose Python blocks the test suite runs.
 - Drift controls:
-  - `python3 -m sr_core.scene.generate --check`, run by `tools/release.py check`;
-  - `release schema` regenerates the SDK and needs an Unreleased entry for it.
-- `conformance/run.py` gains `--run-pending` (runs the pending cases that have a check: one that now passes is
-  reported as `retire` and fails the run, one that still fails stays pending) and the check form `failure`
-  (`{"code": "PRG12"}`: a non-zero exit, the code in the output, no picture). It prints how many cases were pending.
-- `tools/check_hygiene.py` rule R4 also compares `srep/index.md` with the SREP headers (Title, Type, Status, Version,
-  a row for every SREP, ascending order); an intended difference is an `srep/srep-NNNN.md:R4:reason` entry.
+- `python3 -m sr_core.scene.generate --check`, run by `tools/release.py check`;
+- `release schema` regenerates the SDK and needs an Unreleased entry for it.
+- `conformance/run.py` gains `--run-pending` (runs the pending cases that have a check: one that now passes is reported as `retire` and fails the run, one that still fails stays pending) and the check form `failure` (`{"code": "PRG12"}`: a non-zero exit, the code in the output, no picture). It prints how many cases were pending.
+- `tools/check_hygiene.py` rule R4 also compares `srep/index.md` with the SREP headers (Title, Type, Status, Version, a row for every SREP, ascending order); an intended difference is an `srep/srep-NNNN.md:R4:reason` entry.
 
 ### Changed
 
-- `sr_core.scene`: the documentation of an attribute is its `xs:documentation`, or else that of its simple type; it
-  reaches `Attr.doc`, the descriptor's `__doc__`, a docstring after each declaration and the docstrings of the checker
-  stubs (before, the descriptors carried only the declaration's own text, and the stubs none).
-- `sr_core.scene`: a refused enumeration value carries `suggestions` and says `did you mean 'multiply'?` for
-  `layer.blend = "mutliply"` (also inside list types and unions); a mistyped class name, `sr_core.scene.Layr` or
-  `sr_core.scene.textanimator`, raises `UnknownNameError` with `kind="class"` and `did you mean 'Layer'?` (still an
-  `AttributeError`; `from sr_core.scene import Layr` is still an `ImportError`). `SchemaValueError` now pickles.
-- `sr_core.scene`: an unknown attribute, factory or child now raises `UnknownNameError` (still an `AttributeError`, or a
-  `SchemaValueError` for a child) instead of a bare `AttributeError`.
+- `sr_core.scene`: the documentation of an attribute is its `xs:documentation`, or else that of its simple type; it reaches `Attr.doc`, the descriptor's `__doc__`, a docstring after each declaration and the docstrings of the checker stubs (before, the descriptors carried only the declaration's own text, and the stubs none).
+- `sr_core.scene`: a refused enumeration value carries `suggestions` and says `did you mean 'multiply'?` for `layer.blend = "mutliply"` (also inside list types and unions); a mistyped class name, `sr_core.scene.Layr` or `sr_core.scene.textanimator`, raises `UnknownNameError` with `kind="class"` and `did you mean 'Layer'?` (still an `AttributeError`; `from sr_core.scene import Layr` is still an `ImportError`). `SchemaValueError` now pickles.
+- `sr_core.scene`: an unknown attribute, factory or child now raises `UnknownNameError` (still an `AttributeError`, or a `SchemaValueError` for a child) instead of a bare `AttributeError`.
 
 ### Fixed
 
-- `scenerender-vpkg run`: a render step that names an `output` and a `to` renders that output by its id on py, rs
-  and js, then copies its file to `to`, so the output keeps the settings it declares (size, codec, quality, colour,
-  audio, report). Before, py and rs got `-o TO`, which wrote an ad-hoc output with the engine's defaults. A scene, or
-  the engine variant of one, that lacks the named output id now fails the step instead of rendering something else.
-  On c, which cannot select an output, `run` prints a warning that the output's settings are not applied.
+- `scenerender-vpkg run`: a render step that names an `output` and a `to` renders that output by its id on py, rs and js, then copies its file to `to`, so the output keeps the settings it declares (size, codec, quality, colour, audio, report). Before, py and rs got `-o TO`, which wrote an ad-hoc output with the engine's defaults. A scene, or the engine variant of one, that lacks the named output id now fails the step instead of rendering something else. On c, which cannot select an output, `run` prints a warning that the output's settings are not applied.
 - `sr_core.scene` (second review, 2026-10-12):
-  - `add` and direct changes of `.nodes` refuse the element itself or one of its ancestors; before, the tree became
-    a cycle and `iter`, `check`, `xml_path` and writing never returned;
-  - white space is XML white space only (space, tab, CR, LF): a no-break space or U+2003 in element-only content is
-    `xsd:occurs` at level 1 as it is for lxml, `layout="pretty"` keeps it instead of deleting it, and `new_id`, the
-    program `mode` test and the gate compiler no longer trim Unicode spaces;
-  - `new_id` keeps an index of the document's ids, so building a document with one `new_id` per element is linear
-    (8,000 ids: quadratic before);
-  - the generator checks the XSD against the XML Schema vocabulary it implements (D3): `xs:unique`, `xs:key`,
-    `xs:keyref`, `xs:any`, `xs:import`, `nillable`, `targetNamespace` and the like fail the generation instead of
-    being ignored, which made the SDK pass documents lxml refuses;
-  - `read` ignores comments and processing instructions inside a DOCTYPE's internal subset; it moved them into the
-    prolog, and the written document's C14N 2.0 form differed from the original's;
-  - `sr-scene check` reports a clean document as `ok (level 1)`, `ok (levels 1, 2)` ..., and its JSON output has
-    `levels`: a bare `ok` after level 1, which runs only the Schematron's version gates, overstated the check;
-  - the SREP draft (4.3) no longer says NaN and the infinities are refused outright: a Python NaN or infinity is,
-    while the `xs:double` lexical forms `NaN`, `INF`, `-INF` are accepted as a `str` unless a facet refuses them;
-  - the D4 test of the generated gates takes its expectation from the `.sch` through ElementTree and two regular
-    expressions instead of `compile_gates`, which the generator itself uses, so a fault there cannot pass unseen;
-- `conformance/run.py` no longer reports `pass` for a case that checks nothing: an `expected.json` entry with an
-  unknown key, an empty check or no check at all is an `error`, and so is a form whose checks did not run.
-- `conformance/make_cases.py` reads the implicit camera's field of view and the default sensor width from the
-  constants block in `conformance/CONVENTIONS.md` (2.8) instead of restating them; a test fails when the block and
-  the prose disagree. The generated cases are unchanged.
-- The case generators of `conformance/tools/` are re-run by `tests/test_conformance_generators.py`, which fails when
-  the committed `srep_cases/` differ from what they write; the README's SDK example is executed from the README.
+- `add` and direct changes of `.nodes` refuse the element itself or one of its ancestors; before, the tree became a cycle and `iter`, `check`, `xml_path` and writing never returned;
+- white space is XML white space only (space, tab, CR, LF): a no-break space or U+2003 in element-only content is `xsd:occurs` at level 1 as it is for lxml, `layout="pretty"` keeps it instead of deleting it, and `new_id`, the program `mode` test and the gate compiler no longer trim Unicode spaces;
+- `new_id` keeps an index of the document's ids, so building a document with one `new_id` per element is linear (8,000 ids: quadratic before);
+- the generator checks the XSD against the XML Schema vocabulary it implements (D3): `xs:unique`, `xs:key`, `xs:keyref`, `xs:any`, `xs:import`, `nillable`, `targetNamespace` and the like fail the generation instead of being ignored, which made the SDK pass documents lxml refuses;
+- `read` ignores comments and processing instructions inside a DOCTYPE's internal subset; it moved them into the prolog, and the written document's C14N 2.0 form differed from the original's;
+- `sr-scene check` reports a clean document as `ok (level 1)`, `ok (levels 1, 2)` ..., and its JSON output has `levels`: a bare `ok` after level 1, which runs only the Schematron's version gates, overstated the check;
+- the SREP draft (4.3) no longer says NaN and the infinities are refused outright: a Python NaN or infinity is, while the `xs:double` lexical forms `NaN`, `INF`, `-INF` are accepted as a `str` unless a facet refuses them;
+- the D4 test of the generated gates takes its expectation from the `.sch` through ElementTree and two regular expressions instead of `compile_gates`, which the generator itself uses, so a fault there cannot pass unseen;
+- `conformance/run.py` no longer reports `pass` for a case that checks nothing: an `expected.json` entry with an unknown key, an empty check or no check at all is an `error`, and so is a form whose checks did not run.
+- `conformance/make_cases.py` reads the implicit camera's field of view and the default sensor width from the constants block in `conformance/CONVENTIONS.md` (2.8) instead of restating them; a test fails when the block and the prose disagree. The generated cases are unchanged.
+- The case generators of `conformance/tools/` are re-run by `tests/test_conformance_generators.py`, which fails when the committed `srep_cases/` differ from what they write; the README's SDK example is executed from the README.
 - `srep/index.md` row 83 carries the header's title.
-- `docs/vpkg-howto.md` names every option of `scenerender-vpkg` (`pack --date`, `--with-archive`, `unpack`/`run
-  --no-fetch`, `verify --shallow`, `info --json` were missing) and says that only the Rust engine is active;
-  `tests/test_docs_cli.py` fails when an option is missing and runs every `python3 -m` command of the README.
-- `srep/srep-0000-generated-marker-ids.md`, the unnumbered draft of SREP 57, is removed; hygiene rule R4 now fails a
-  `srep-0000-*.md` file whose title a numbered SREP carries.
-- Docstrings for every public symbol of `vpkg/pack.py`, `review/{scene,pdf,cli}.py` and `schemadoc/html.py`;
-  `tests/test_docstring_coverage.py` keeps the coverage from falling.
+- `docs/vpkg-howto.md` names every option of `scenerender-vpkg` (`pack --date`, `--with-archive`, `unpack`/`run --no-fetch`, `verify --shallow`, `info --json` were missing) and says that only the Rust engine is active; `tests/test_docs_cli.py` fails when an option is missing and runs every `python3 -m` command of the README.
+- `srep/srep-0000-generated-marker-ids.md`, the unnumbered draft of SREP 57, is removed; hygiene rule R4 now fails a `srep-0000-*.md` file whose title a numbered SREP carries.
+- Docstrings for every public symbol of `vpkg/pack.py`, `review/{scene,pdf,cli}.py` and `schemadoc/html.py`; `tests/test_docstring_coverage.py` keeps the coverage from falling.
 - `srep/index.md` says that engine-repository paths cited in SREPs are not files of this repository.
-- The corpus differentials of the SDK (D5, D6, the gates and the name tests) run by default; `SR_SCENE_CORPUS=0`
-  switches them off. CI no longer sets a variable to enable them.
-- The tests of SREPs 76 to 85 no longer skip when the `schema-1.5.0` tag is missing: the two 1.5.0 files are kept,
-  with their hashes checked against the inventory, in `conformance/tools/baseline-1.5.0/`.
-- `tests/test_conformance.py` regenerates `conformance/cases/` and `assets/` from nothing, so a file nobody generates
-  fails it; the three hand-kept case files moved to `tests/fixtures/kit/`.
-- `tests/test_drift_p2.py` pins the capability-manifest schema to the code and the validator that read it, the counts
-  quoted in SREP 0000 and here to the schema, the engine-gap inventory to the SREP diff blocks, and the packages
-  `ci.yml` installs to the extras and to what the tests import (including what they skip when absent).
+- The corpus differentials of the SDK (D5, D6, the gates and the name tests) run by default; `SR_SCENE_CORPUS=0` switches them off. CI no longer sets a variable to enable them.
+- The tests of SREPs 76 to 85 no longer skip when the `schema-1.5.0` tag is missing: the two 1.5.0 files are kept, with their hashes checked against the inventory, in `conformance/tools/baseline-1.5.0/`.
+- `tests/test_conformance.py` regenerates `conformance/cases/` and `assets/` from nothing, so a file nobody generates fails it; the three hand-kept case files moved to `tests/fixtures/kit/`.
+- `tests/test_drift_p2.py` pins the capability-manifest schema to the code and the validator that read it, the counts quoted in SREP 0000 and here to the schema, the engine-gap inventory to the SREP diff blocks, and the packages `ci.yml` installs to the extras and to what the tests import (including what they skip when absent).
 
 ### Docs
 

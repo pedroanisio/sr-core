@@ -32,7 +32,7 @@ sys.exit(2)
 '''
 
 
-def caps(schema="1.7.0", name="fake", version="9.9.9"):
+def caps(schema=_generated.SCHEMA_RELEASE, name="fake", version="9.9.9"):
     return json.dumps({"format": "scene-render-capabilities/1", "engine": {"name": name, "version": version},
                        "schema": schema, "entries": []})
 

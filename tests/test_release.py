@@ -1,6 +1,7 @@
 """tools/release.py: bumps from changelog classes, cutting a release, and the repository's own versions (SREP 4)."""
 import importlib.util
 import os
+import re
 
 import pytest
 
@@ -216,6 +217,8 @@ def test_sdk_entry_for_an_older_release_does_not_satisfy_a_newer_one():
 def release_root(tmp_root, monkeypatch):
     (tmp_root / "sr_core").mkdir(exist_ok=True)
     (tmp_root / "sr_core/__init__.py").write_text('__version__ = "1.7.0"\n')
+    xsd = tmp_root / "schema/scene-render.xsd"       # releases from 1.7.0, whatever the checkout's schema version is
+    xsd.write_text(re.sub(r'(<xs:schema\b[^>]*\bversion=")[^"]+(")', r"\g<1>1.7.0\2", xsd.read_text(), count=1))
     schema_log = LOG.replace("1.4.2", "1.7.0")
     (tmp_root / "schema/CHANGELOG.md").write_text(schema_log)
     (tmp_root / "CHANGELOG.md").write_text(TOOLS_LOG)

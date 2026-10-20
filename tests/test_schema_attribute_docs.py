@@ -94,6 +94,10 @@ def _strip_annotations(root) -> bytes:
 def test_diff_against_base_is_annotation_only():
     base = etree.fromstring(_base_xsd())
     now = etree.parse(XSD).getroot()
+    # the release stamp may move by a PATCH (annotation-only changes call for no more); the rest is unchanged
+    assert now.get("version").split(".")[:2] == base.get("version").split(".")[:2]
+    for root in (now, base):
+        root.attrib.pop("version")
     assert _strip_annotations(now) == _strip_annotations(base)
 
 

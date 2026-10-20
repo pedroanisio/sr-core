@@ -84,7 +84,8 @@ def test_no_schema_change_and_the_class_added_by_srep_90_calls_for_1_7_0():
     assert "class Added by the exception that SREP 90 records" in header("Resolution")
     chk = subprocess.run([sys.executable, os.path.join(ROOT, "tools", "release.py"), "check"],
                          check=True, capture_output=True, text=True).stdout.strip()
-    assert "schema 1.7.0" in chk, chk
+    current = re.search(r"schema (\d+)\.(\d+)\.(\d+)", chk)
+    assert current and tuple(map(int, current.groups())) >= (1, 7, 0), chk   # 1.7.0 or a later release that carries it
     for f in ("scene-render.xsd", "scene-render.sch"):
         assert "SREP 87" not in open(os.path.join(ROOT, "schema", f), encoding="utf-8").read()
 

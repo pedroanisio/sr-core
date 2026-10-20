@@ -21,6 +21,8 @@ computed from those classes by `python3 tools/release.py next schema`:
 
 ### Fixed
 
+## 1.7.1 — 2026-10-20
+
 ### Docs
 
 - Documentation for 1831 of the 1900 attributes that had none (SREP 92, `srep-0092.md`): unit, range, default and dependency, each read in the reference implementation, the schema or an accepted SREP. Annotation-only: no declaration, default, type, facet or rule changes, and the same documents are accepted and rejected. The 69 attributes whose meaning no source establishes are listed in `tests/undocumented-attributes.txt`. `tools/release.py next schema` gives 1.7.1 for this alone.

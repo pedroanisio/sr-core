@@ -9,6 +9,7 @@ from __future__ import annotations
 import ast
 import importlib
 import keyword
+import re
 import shutil
 import sys
 import types
@@ -687,7 +688,7 @@ class TestCheckMode:
     def test_a_changed_input_schema_makes_the_committed_output_stale(self, tmp_root):
         assert generate.main(["--root", str(tmp_root)]) == 0
         xsd_path = tmp_root / "schema" / "scene-render.xsd"
-        xsd_path.write_bytes(xsd_path.read_bytes().replace(b'version="1.7.0"', b'version="1.7.1"', 1))
+        xsd_path.write_bytes(re.sub(rb'(<xs:schema\b[^>]*\bversion=")[^"]+', rb'\g<1>0.0.0', xsd_path.read_bytes(), count=1))
         assert generate.main(["--check", "--root", str(tmp_root)]) == 1
 
     def test_d1_committed_output_is_current(self, real):
