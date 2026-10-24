@@ -21,6 +21,14 @@ version:
 
 ### Added
 
+- Draft SREP "Add scale: powers of ten, depth resolution and a floating origin" (`srep/srep-0000-scale.md`,
+  SP5 of SREP 12): a `depth` attribute on `camera` (`reversed`, the engine's mapping, or `logarithmic`) with a
+  resolution requirement the kit can measure (one part in 10⁵ at every decade up to a `far` / `near` ratio of
+  1e20, SC1), a `geometric` key interpolation for the powers of ten camera, a `scaleBar` child of `camera`
+  (1-2-5 bars in m, au, ly or pc at the measured depth) and a floating origin stated as an engine error bound
+  (binary64 rebasing about the eye, one space per SREP 14); reference module
+  `conformance/tools/scale_reference.py`, `tests/test_scale.py` (its numeric table checked row by row); the
+  schema files are unchanged, the diff (SC1-SC4, V17) is inside the draft; engine card SR-91.
 - Draft SREP "Add orbits and N-body motion" (`srep/srep-0000-orbits.md`, SP4 of SREP 12): an `orbit` child of
   `object3D` (classical elements about a central object, propagated by universal variables with two-body closure
   to 1e-12), an `nbody` child of `space` (members and Plummer clusters drawn from the random streams, integrators
