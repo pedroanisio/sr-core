@@ -6,8 +6,8 @@ exception SREP 90 records (Open issues 7, decided), and its erratum of 2026-10-1
 an instance or an include and the bone names of skin weights to the positions of rules 3 and 4 (Open issues 6).
 
 The kit: the cases of srep_cases/srep-0087.json are those conformance/tools/srep87_cases.py writes, in expected.json and
-cases/ as generated. The reference implementation is on main and passes them; only the cases whose check run.py cannot
-express (failed renders, a render comparison) stay pending, with the hand check in the reason kit_pending.py gives.
+cases/ as generated. The reference implementation is on main and passes them all: the failed renders through run.py's
+"failure" form, and the seed-local pair through its "compare" form, each the other's reference picture.
 Their expected values follow from the SREP's rules and the modules' constant output, recomputed here from the
 fragments: the namespaced ids are NCNames (Semantics 2), none has the form of a generated marker id (Hazards), and the
 amended SREP 66 collision case writes the namespaced id `p.g1` (Backwards compatibility).
@@ -179,22 +179,24 @@ def test_beat_program_cases_need_the_namespaced_id():
     assert CASES["srep-0087-program-ids-beat-program"]["expected"]["blue"] == {"cx": 200, "cy": 240, "w": 40, "h": 20}
 
 
-# the render comparisons; the failed renders run through the "failure" form
-HAND_CHECKED = {f"srep-0087-program-ids-{s}" for s in ("seed-local", "seed-local-by-hand")}
+# the render comparison: each case of the pair is the other's reference picture, pixel for pixel
+SEED_PAIR = ("srep-0087-program-ids-seed-local", "srep-0087-program-ids-seed-local-by-hand")
 
 
-def test_cases_are_in_the_kit_as_generated_and_pending_only_where_run_py_cannot_check():
+def test_cases_are_in_the_kit_as_generated_and_none_is_pending():
     assert set(CASES) == {f"srep-0087-program-ids-{s}" for s in srep87_cases.SLUGS}
-    assert HAND_CHECKED <= set(CASES)
     for name, case in CASES.items():
         assert KIT[name] == case["expected"], name
-        if name in HAND_CHECKED:
-            assert case["expected"]["pending"] == kit_pending.PENDING[name], name
-            assert kit_pending.SREP87 in case["expected"]["pending"] and "checked by hand" in case["expected"]["pending"]
-        else:
-            assert "pending" not in case["expected"] and name not in kit_pending.PENDING, name
+        assert "pending" not in case["expected"] and name not in kit_pending.PENDING, name
         with open(os.path.join(ROOT, "conformance", "cases", name + ".xml"), encoding="utf-8") as f:
             assert f.read() == case["xml"], name
+
+
+def test_the_seed_local_pair_compares_each_case_with_the_other():
+    a, b = SEED_PAIR
+    assert CASES[a]["expected"]["compare"] == {"case": b, "tolerance": 0}
+    assert CASES[b]["expected"]["compare"] == {"case": a, "tolerance": 0}
+    assert CASES[a]["expected"]["output"] == CASES[b]["expected"]["output"] == {"id": "still", "time": 0.5}
 
 
 def test_modules_return_their_fragments():

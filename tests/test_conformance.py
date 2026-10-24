@@ -507,3 +507,101 @@ def test_run_pending_retires_a_failed_render_case_the_engine_now_passes(tmp_path
     entry = {"rule": "x", "pending": "cannot check failed renders", "failure": {"code": "PRG12"}}
     r = _run_copy(tmp_path, _with_entry(tmp_path, entry), FAILING, "--run-pending")
     assert r.returncode == 1 and _result(tmp_path)["status"] == "retire", r.stdout
+
+
+# ---- the compare form: a render checked against another case's render (SREPs 71 and 87)
+def _pair_engine(a1, a2):
+    """Draws a green square into a1-anchor-translate's frame and into a2-anchor-rotate's, each lit to its own level
+    (an RGB triple, or None to fail the render); `a2` may also give a pixel to darken, (x, y, rgb)."""
+    return ("import os, sys\nfrom PIL import Image, ImageDraw\n"
+            f"levels = {{'a1-anchor-translate': {a1!r}, 'a2-anchor-rotate': {a2!r}}}\n"
+            "a = sys.argv\ncase = os.path.basename(os.path.dirname(os.path.abspath(a[2])))\nlevel = levels[case]\n"
+            "if level is None:\n    sys.stderr.write('error: cannot render\\n')\n    sys.exit(3)\n"
+            "spot = None\nif isinstance(level, tuple) and len(level) == 2:\n    level, spot = level\n"
+            "im = Image.new('RGB', (640, 360))\nImageDraw.Draw(im).rectangle([300, 160, 339, 199], fill=level)\n"
+            "if spot:\n    im.putpixel(spot[:2], spot[2])\n"
+            "im.save(a[a.index('-o') + 1])\n")
+
+
+def _with_pair(tmp_path, a1, a2):
+    copy = tmp_path / "conformance"
+    shutil.copytree(CONF, copy, ignore=shutil.ignore_patterns("out", "__pycache__"))
+    spec = json.load(open(copy / "expected.json"))
+    spec["cases"] = {"a1-anchor-translate": a1, "a2-anchor-rotate": a2}
+    json.dump(spec, open(copy / "expected.json", "w"))
+    return copy
+
+
+def _run_pair(tmp_path, copy, engine_script, *extra):
+    eng = tmp_path / "engine"
+    eng.write_text(f"#!{sys.executable}\n{engine_script}")
+    eng.chmod(0o755)
+    env = {k: v for k, v in os.environ.items() if k != "RS_RENDER_BIN"}
+    env["RS_RENDER_BIN"] = str(eng)
+    r = subprocess.run([sys.executable, str(copy / "run.py"), "--renderers", "rs", "--cases", "a1,a2", *extra],
+                       capture_output=True, text=True, env=env)
+    return r, json.loads((copy / "out" / "report.json").read_text())["results"]["rs"]
+
+
+SAME = {"rule": "x", "compare": {"case": "a2-anchor-rotate", "tolerance": 0}}
+SAME_BACK = {"rule": "x", "compare": {"case": "a1-anchor-translate", "tolerance": 0}}
+BRIGHTER = {"rule": "x", "compare": {"case": "a2-anchor-rotate", "brighter": True}}
+
+
+def test_a_render_that_equals_the_other_case_passes_both_ways(tmp_path):
+    r, res = _run_pair(tmp_path, _with_pair(tmp_path, SAME, SAME_BACK), _pair_engine((0, 255, 0), (0, 255, 0)))
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert res["a1-anchor-translate"]["status"] == res["a2-anchor-rotate"]["status"] == "pass", res
+
+
+def test_a_render_that_differs_beyond_the_tolerance_fails_and_counts_the_pixels(tmp_path):
+    engine = _pair_engine((0, 255, 0), ((0, 255, 0), (10, 10, (9, 0, 0))))
+    r, res = _run_pair(tmp_path, _with_pair(tmp_path, SAME, SAME_BACK), engine)
+    assert r.returncode == 1 and res["a1-anchor-translate"]["status"] == "fail", r.stdout
+    assert res["a1-anchor-translate"]["compare"]["differing"] == 1, res
+    # within a tolerance of 9 code values the one pixel agrees
+    loose = {"rule": "x", "compare": {"case": "a2-anchor-rotate", "tolerance": 9}}
+    r, res = _run_pair(tmp_path / "loose", _with_pair(tmp_path / "loose", loose, SAME_BACK), engine)
+    assert res["a1-anchor-translate"]["status"] == "pass", res
+
+
+def test_brighter_passes_when_brighter_somewhere_and_darker_nowhere(tmp_path):
+    r, res = _run_pair(tmp_path, _with_pair(tmp_path, BRIGHTER, SAME_BACK), _pair_engine((0, 255, 0), (0, 200, 0)))
+    assert res["a1-anchor-translate"]["status"] == "pass", r.stdout
+    assert res["a1-anchor-translate"]["compare"]["brighter"] == 1600, res
+
+
+@pytest.mark.parametrize("a2", [(0, 255, 0), ((0, 200, 0), (10, 10, (40, 40, 40)))])
+def test_brighter_fails_when_nowhere_brighter_or_darker_somewhere(tmp_path, a2):
+    r, res = _run_pair(tmp_path, _with_pair(tmp_path, BRIGHTER, SAME_BACK), _pair_engine((0, 255, 0), a2))
+    assert r.returncode == 1 and res["a1-anchor-translate"]["status"] == "fail", r.stdout
+
+
+def test_a_comparison_whose_other_render_fails_is_an_error(tmp_path):
+    r, res = _run_pair(tmp_path, _with_pair(tmp_path, SAME, SAME_BACK), _pair_engine((0, 255, 0), None))
+    assert res["a1-anchor-translate"]["status"] == "error", res
+    assert any("a2-anchor-rotate" in n for n in res["a1-anchor-translate"]["notes"]), res
+
+
+def test_run_pending_retires_a_pending_comparison_that_now_passes(tmp_path):
+    pending = {**SAME, "pending": "a render comparison"}
+    r, res = _run_pair(tmp_path, _with_pair(tmp_path, pending, SAME_BACK), _pair_engine((0, 255, 0), (0, 255, 0)),
+                       "--run-pending")
+    assert res["a1-anchor-translate"]["status"] == "retire", r.stdout
+
+
+@pytest.mark.parametrize("compare,why", [
+    ({"tolerance": 0}, "'case'"),
+    ({"case": "a2-anchor-rotate"}, "exactly one of"),
+    ({"case": "a2-anchor-rotate", "tolerance": 0, "brighter": True}, "exactly one of"),
+    ({"case": "a2-anchor-rotate", "brighter": False}, "brighter"),
+    ({"case": "a2-anchor-rotate", "tolerance": -1}, "tolerance"),
+    ({"case": "a2-anchor-rotate", "tolerance": 0, "tolerence": 1}, "unknown key"),
+    ({"case": "no-such-case", "tolerance": 0}, "no-such-case"),
+    ({"case": "a1-anchor-translate", "tolerance": 0}, "itself"),
+])
+def test_a_comparison_that_cannot_check_what_it_says_is_an_error(tmp_path, compare, why):
+    r, res = _run_pair(tmp_path, _with_pair(tmp_path, {"rule": "x", "compare": compare}, SAME_BACK),
+                       _pair_engine((0, 255, 0), (0, 255, 0)))
+    got = res["a1-anchor-translate"]
+    assert got["status"] == "error" and why in " ".join(got["notes"]), got

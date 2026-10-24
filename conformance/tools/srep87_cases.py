@@ -118,10 +118,12 @@ def main(conf=CONF):
     at_half = {"output": {"id": "still", "time": 0.5}}
     add("seed-local", "an emitted emitter without a seed draws as srep-0087-program-ids-seed-local-by-hand, its id "
                       "written by hand as g1: seeds use the local id, Semantics 7",
-        doc(prog("a", "particles")), dict(at_half))
+        doc(prog("a", "particles")),
+        {**at_half, "compare": {"case": "srep-0087-program-ids-seed-local-by-hand", "tolerance": 0}})
     add("seed-local-by-hand", "the reference picture of srep-0087-program-ids-seed-local: the same emitter written by "
                               "hand in a group a, with the id g1",
-        doc(f'<group id="a">{FRAGMENTS["particles"]}</group>'), dict(at_half))
+        doc(f'<group id="a">{FRAGMENTS["particles"]}</group>'),
+        {**at_half, "compare": {"case": "srep-0087-program-ids-seed-local", "tolerance": 0}})
     grid = '<markers><beatGrid bpm="120" offset="0"/></markers>\n'
     # n starts at the marker beat.1 and takes its x from the emitted node by its namespaced id beat.g1 (Semantics 4),
     # so the case needs both readings: beat.1 as the grid's generated id and beat.g1 as an element id. Without SREP 87

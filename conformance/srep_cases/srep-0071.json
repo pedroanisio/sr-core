@@ -167,14 +167,30 @@
   "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m\" baseColor=\"#B0B0B0FF\" roughness=\"0.5\" subsurface=\"0\" subsurfaceColor=\"#E0F0D0FF\" subsurfaceRadius=\"20\"/></materials>\n<composition>\n<object3D id=\"o\" primitive=\"sphere\" radius=\"80\" x=\"320\" y=\"180\" material=\"m\"/>\n</composition>\n<lights><light id=\"sun\" type=\"directional\" yaw=\"60\" intensity=\"3\"/></lights>\n</scene>\n",
   "expected": {
    "rule": "SREP 71 (renders the same as the scene without the subsurface attributes)",
-   "pending": "the check is a comparison with another render, which run.py cannot express yet; checked by hand on the Rust reference (release/0.4.0 at 6e0e4f71, 2026-10-11): with subsurface=\"0\" the render is pixel-identical to the scene without the subsurface attributes"
+   "compare": {
+    "case": "srep-0071-subsurface-absent",
+    "tolerance": 0
+   }
+  }
+ },
+ "srep-0071-subsurface-absent": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m\" baseColor=\"#B0B0B0FF\" roughness=\"0.5\"/></materials>\n<composition>\n<object3D id=\"o\" primitive=\"sphere\" radius=\"80\" x=\"320\" y=\"180\" material=\"m\"/>\n</composition>\n<lights><light id=\"sun\" type=\"directional\" yaw=\"60\" intensity=\"3\"/></lights>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 71 (the reference picture of srep-0071-subsurface-zero-neutral: the same scene without the subsurface attributes)",
+   "compare": {
+    "case": "srep-0071-subsurface-zero-neutral",
+    "tolerance": 0
+   }
   }
  },
  "srep-0071-subsurface-wraps-terminator": {
   "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.6\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m\" baseColor=\"#B0B0B0FF\" roughness=\"0.5\" subsurface=\"1\" subsurfaceColor=\"#E0F0D0FF\" subsurfaceRadius=\"20\"/></materials>\n<composition>\n<object3D id=\"o\" primitive=\"sphere\" radius=\"80\" x=\"320\" y=\"180\" material=\"m\"/>\n</composition>\n<lights><light id=\"sun\" type=\"directional\" yaw=\"60\" intensity=\"3\"/></lights>\n</scene>\n",
   "expected": {
-   "rule": "SREP 71 (the region just past the shadow terminator is brighter than with subsurface=0 (Semantics 1, item 3))",
-   "pending": "the check is a comparison with another render, which run.py cannot express yet; checked by hand on the Rust reference (release/0.4.0 at 6e0e4f71, 2026-10-11): with subsurface=\"1\", 20574 pixels are brighter than with \"0\" and none darker, and the lit span on row 180 reaches column 400 instead of 364"
+   "rule": "SREP 71 (the region just past the shadow terminator is brighter than with subsurface=0, and no pixel darker (Semantics 1, item 3))",
+   "compare": {
+    "case": "srep-0071-subsurface-zero-neutral",
+    "brighter": true
+   }
   }
  }
 }

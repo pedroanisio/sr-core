@@ -94,12 +94,18 @@ def main():
            'subsurfaceRadius="20"/></materials>\n')
     lit = '<lights><light id="sun" type="directional" yaw="60" intensity="3"/></lights>\n'
     ball = '<object3D id="o" primitive="sphere" radius="80" x="320" y="180" material="m"/>'
+    plain = '<materials><material id="m" baseColor="#B0B0B0FF" roughness="0.5"/></materials>\n'
     add("subsurface-zero-neutral", doc(ball, lights=lit, materials=sss.format(w=0)),
         note="renders the same as the scene without the subsurface attributes",
-        pending=PENDING + "; the check is equality with another render, which run.py cannot express yet")
+        compare={"case": "srep-0071-subsurface-absent", "tolerance": 0})
+    add("subsurface-absent", doc(ball, lights=lit, materials=plain),
+        note="the reference picture of srep-0071-subsurface-zero-neutral: the same scene without the subsurface "
+             "attributes",
+        compare={"case": "srep-0071-subsurface-zero-neutral", "tolerance": 0})
     add("subsurface-wraps-terminator", doc(ball, lights=lit, materials=sss.format(w=1)),
-        note="the region just past the shadow terminator is brighter than with subsurface=0 (Semantics 1, item 3)",
-        pending=PENDING + "; the check is a comparison with another render, which run.py cannot express yet")
+        note="the region just past the shadow terminator is brighter than with subsurface=0, and no pixel darker "
+             "(Semantics 1, item 3)",
+        compare={"case": "srep-0071-subsurface-zero-neutral", "brighter": True})
     kit_pending.settle(cases, 71)
     json.dump(cases, open(os.path.join(CONF, "srep_cases", "srep-0071.json"), "w"), indent=1, ensure_ascii=False)
     print(f"wrote {len(cases)} cases")

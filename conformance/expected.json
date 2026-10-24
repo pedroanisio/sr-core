@@ -41429,11 +41429,24 @@
     },
     "srep-0071-subsurface-zero-neutral": {
       "rule": "SREP 71 (renders the same as the scene without the subsurface attributes)",
-      "pending": "the check is a comparison with another render, which run.py cannot express yet; checked by hand on the Rust reference (release/0.4.0 at 6e0e4f71, 2026-10-11): with subsurface=\"0\" the render is pixel-identical to the scene without the subsurface attributes"
+      "compare": {
+        "case": "srep-0071-subsurface-absent",
+        "tolerance": 0
+      }
+    },
+    "srep-0071-subsurface-absent": {
+      "rule": "SREP 71 (the reference picture of srep-0071-subsurface-zero-neutral: the same scene without the subsurface attributes)",
+      "compare": {
+        "case": "srep-0071-subsurface-zero-neutral",
+        "tolerance": 0
+      }
     },
     "srep-0071-subsurface-wraps-terminator": {
-      "rule": "SREP 71 (the region just past the shadow terminator is brighter than with subsurface=0 (Semantics 1, item 3))",
-      "pending": "the check is a comparison with another render, which run.py cannot express yet; checked by hand on the Rust reference (release/0.4.0 at 6e0e4f71, 2026-10-11): with subsurface=\"1\", 20574 pixels are brighter than with \"0\" and none darker, and the lit span on row 180 reaches column 400 instead of 364"
+      "rule": "SREP 71 (the region just past the shadow terminator is brighter than with subsurface=0, and no pixel darker (Semantics 1, item 3))",
+      "compare": {
+        "case": "srep-0071-subsurface-zero-neutral",
+        "brighter": true
+      }
     },
     "srep-0072-precision-f32": {
       "rule": "SREP 72",
@@ -45077,7 +45090,10 @@
         "id": "still",
         "time": 0.5
       },
-      "pending": "the check is a comparison with another render, which run.py cannot express yet; checked by hand on the Rust reference (SREP 87 on rs-scene-render main 6602b81d, 2026-10-11): the picture at 0.5 s equals that of srep-0087-program-ids-seed-local-by-hand, pixel for pixel"
+      "compare": {
+        "case": "srep-0087-program-ids-seed-local-by-hand",
+        "tolerance": 0
+      }
     },
     "srep-0087-program-ids-seed-local-by-hand": {
       "rule": "SREP 87 (the reference picture of srep-0087-program-ids-seed-local: the same emitter written by hand in a group a, with the id g1)",
@@ -45085,7 +45101,10 @@
         "id": "still",
         "time": 0.5
       },
-      "pending": "the check is a comparison with another render, which run.py cannot express yet; checked by hand on the Rust reference (SREP 87 on rs-scene-render main 6602b81d, 2026-10-11): the reference picture of srep-0087-program-ids-seed-local, which equals it pixel for pixel at 0.5 s"
+      "compare": {
+        "case": "srep-0087-program-ids-seed-local",
+        "tolerance": 0
+      }
     },
     "srep-0087-program-ids-beat-program": {
       "rule": "SREP 87 (a program with the id beat beside a beatGrid: beat.1 is still the grid's beat at 0.5 s, and prop(\"beat.g1.x\") names the emitted node, Hazards)",

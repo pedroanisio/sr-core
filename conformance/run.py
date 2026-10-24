@@ -437,8 +437,9 @@ def check(meas, exp, tol, png=None):
 # The closed vocabulary of an expected.json entry. A key the runner does not read would otherwise be a check that
 # silently does not run, and an entry with no check at all would "pass": `all([])` is True.
 META_KEYS = {"rule", "source", "requires", "native_only", "pending"}
-FORM_KEYS = {"findings", "captions", "audio", "failure", "output", "regions", "absent"}
-CHECKING_FORMS = {"findings", "captions", "audio", "failure", "regions", "absent"}
+FORM_KEYS = {"findings", "captions", "audio", "failure", "output", "regions", "absent", "compare"}
+CHECKING_FORMS = {"findings", "captions", "audio", "failure", "regions", "absent", "compare"}
+COMPARE_KEYS = {"case", "tolerance", "brighter"}
 FINDINGS_CHECKS = {"codes", "absent", "counts", "messages", "valid"}
 CAPTIONS_CHECKS = {"pages", "preset", "wordCount", "activeWord", "wordsAndTimesEqualTo"}
 AUDIO_KEYS = {"output", "tones", "level", "window", "tolerance", "gains", "note"}
@@ -496,15 +497,62 @@ def entry_problems(entry: dict) -> list[str]:
     for i, r in enumerate(entry.get("regions", [])):
         if set(r) != {"box", "rgb"}:
             out.append(f"regions[{i}]: want exactly 'box' and 'rgb'")
+    if "compare" in entry:
+        c = entry["compare"]
+        if not isinstance(c, dict):
+            out.append("'compare': want an object")
+        else:
+            out += [f"compare: unknown key {k!r}" for k in sorted(set(c) - COMPARE_KEYS)]
+            if not (isinstance(c.get("case"), str) and c["case"]):
+                out.append("compare: want 'case', the case whose render this one is compared with")
+            if ("tolerance" in c) == ("brighter" in c):
+                out.append("compare: want exactly one of 'tolerance' (the same picture) and 'brighter'")
+            elif "tolerance" in c and not (type(c["tolerance"]) is int and c["tolerance"] >= 0):
+                out.append("compare: tolerance: want a non-negative integer of 8-bit code values")
+            elif "brighter" in c and c["brighter"] is not True:
+                out.append("compare: brighter: want true")
     if "absent" in entry and not (isinstance(entry["absent"], list) and set(entry["absent"]) <= set(CLASSES)):
         out.append(f"'absent': want a list of {sorted(CLASSES)}")
     if not entry.get("pending") and not (set(entry) & CHECKING_FORMS or colours):
-        out.append("no check: the entry names no colour, regions, absent, findings, captions or audio")
+        out.append("no check: the entry names no colour, regions, absent, findings, captions, audio or compare")
     return out
 
 
-def run_case(r, c, ent, tol):
-    """Run one case with its entry; (result dict, label of the form for the progress line)."""
+def compare(renderer, case, ent, cases):
+    """The compare form: this case's render against that of `ent["compare"]["case"]`, each at its own entry's output.
+    With `tolerance`, every channel of every pixel is within that many 8-bit code values of the other's; with
+    `brighter`, the render is brighter (by the sum of its channels) than the other somewhere and darker nowhere."""
+    want = ent["compare"]
+    other = want["case"]
+    png, _, dt, notes = render(renderer, case, ent.get("output"))
+    if not png:
+        return "error", dt, notes, {}
+    png_b, _, dt_b, notes_b = render(renderer, other, cases[other].get("output"))
+    dt += dt_b
+    if not png_b:
+        return "error", dt, [f"{other}: {n}" for n in notes_b] or [f"{other}: no frame was written"], {}
+    a = np.asarray(Image.open(png).convert("RGB")).astype(np.int16)
+    b = np.asarray(Image.open(png_b).convert("RGB")).astype(np.int16)
+    if a.shape != b.shape:
+        return "error", dt, [f"{other}: the frames differ in size ({a.shape[1]}x{a.shape[0]} and "
+                             f"{b.shape[1]}x{b.shape[0]})"], {}
+    if "tolerance" in want:
+        diff = np.abs(a - b).max(axis=2)
+        detail = {"case": other, "differing": int((diff > want["tolerance"]).sum()), "max_diff": int(diff.max())}
+        ok = detail["differing"] == 0
+    else:
+        la, lb = a.sum(axis=2), b.sum(axis=2)
+        detail = {"case": other, "brighter": int((la > lb).sum()), "darker": int((la < lb).sum())}
+        ok = detail["brighter"] > 0 and detail["darker"] == 0
+    return ("pass" if ok else "fail"), dt, notes, {"compare": detail}
+
+
+def run_case(r, c, ent, tol, cases=None):
+    """Run one case with its entry; (result dict, label of the form for the progress line). `cases` is the kit's
+    entries, which the compare form reads the other case's output from."""
+    if "compare" in ent:
+        st, dt, notes, detail = compare(r, c, ent, cases or {})
+        return {"status": st, "seconds": round(dt, 2), "notes": notes, **detail}, "compare"
     if "captions" in ent:
         st, dt, notes, detail = captions(r, c, ent["captions"])
         return {"status": st, "seconds": round(dt, 2), "notes": notes, **detail}, "captions"
@@ -550,6 +598,12 @@ def main() -> int:
         for c in cases:
             ent = spec["cases"][c]
             problems = entry_problems(ent)
+            other = ent.get("compare", {}).get("case") if isinstance(ent.get("compare"), dict) else None
+            if other is not None and not problems:
+                if other == c:
+                    problems = ["compare: a case cannot be compared with itself"]
+                elif other not in spec["cases"]:
+                    problems = [f"compare: case {other!r} is not in the kit"]
             if problems:
                 report["results"][r][c] = {"status": "error", "notes": ["expected.json: " + p for p in problems]}
                 print(f"{r:3s} {c:22s} error expected.json: {'; '.join(problems)[:110]}", flush=True)
@@ -561,7 +615,7 @@ def main() -> int:
                 report["results"][r][c] = {"status": "pending", "reason": pending, "notes": []}
                 print(f"{r:3s} {c:22s} pending ({pending[:90]}{why})", flush=True)
                 continue
-            entry, label = run_case(r, c, ent, tol)
+            entry, label = run_case(r, c, ent, tol, spec["cases"])
             if pending:                     # --run-pending: a pending case that passes is to be retired
                 if entry["status"] == "pass":
                     entry["status"], entry["reason"] = "retire", pending

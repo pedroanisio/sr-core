@@ -32,28 +32,17 @@ entry was removed.
 The failed-render cases of SREPs 66, 69 and 87 (eight, one and three cases) left PENDING on 2026-10-24, once run.py
 checked the "failure" form they carry: `run.py --run-pending` retires all twelve on a release build of scene-render
 main e586b57 (0.7.4, binary sha256 prefix b7285fa1d0fba26f) on llvmpipe. Only render comparisons stay pending.
+
+The render comparisons (SREP 71's two subsurface cases, SREP 87's seed-local pair) left PENDING on 2026-10-24, once
+run.py checked the "compare" form they now carry, against a new reference case srep-0071-subsurface-absent: on a
+release build of scene-render main a7d7b01 (binary sha256 prefix 47a6c00465e7813f, llvmpipe) srep-0071-subsurface-
+zero-neutral and srep-0071-subsurface-absent, and the SREP 87 pair, are pixel-identical (0 pixels differ), and
+srep-0071-subsurface-wraps-terminator is brighter than srep-0071-subsurface-zero-neutral at 20400 pixels and darker
+at none (the hand check on release/0.4.0 had counted 20574). No case of these SREPs is pending.
 """
 
-_RENDER_COMPARISON = ("the check is a comparison with another render, which run.py cannot express yet; checked by hand "
-                      "on the Rust reference (release/0.4.0 at 6e0e4f71, 2026-10-11): {what}")
-
-SREP87 = "SREP 87 on rs-scene-render main 6602b81d"
-_SREP87_COMPARISON = ("the check is a comparison with another render, which run.py cannot express yet; checked by hand "
-                      "on the Rust reference (" + SREP87 + ", 2026-10-11): {what}")
-
-PENDING = {
-    # SREP 71: render comparisons
-    "srep-0071-subsurface-zero-neutral": _RENDER_COMPARISON.format(
-        what='with subsurface="0" the render is pixel-identical to the scene without the subsurface attributes'),
-    "srep-0071-subsurface-wraps-terminator": _RENDER_COMPARISON.format(
-        what='with subsurface="1", 20574 pixels are brighter than with "0" and none darker, and the lit span on row 180 '
-             'reaches column 400 instead of 364'),
-    # SREP 87: a render comparison
-    "srep-0087-program-ids-seed-local": _SREP87_COMPARISON.format(
-        what="the picture at 0.5 s equals that of srep-0087-program-ids-seed-local-by-hand, pixel for pixel"),
-    "srep-0087-program-ids-seed-local-by-hand": _SREP87_COMPARISON.format(
-        what="the reference picture of srep-0087-program-ids-seed-local, which equals it pixel for pixel at 0.5 s"),
-}
+# Every case of these SREPs runs; a case the Rust reference cannot pass yet is added here with its reason.
+PENDING: dict[str, str] = {}
 
 
 def settle(cases: dict, srep: int) -> dict:
