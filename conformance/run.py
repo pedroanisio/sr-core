@@ -154,8 +154,10 @@ def findings(renderer, case, want):
     """A case whose expected entry has "findings": the engine validates the document and reports these diagnostics.
 
     {"codes": [...]} must all be present, {"absent": [...]} must not be, {"counts": {code: n}} gives exact numbers,
-    {"messages": [...]} are substrings some message holds, {"valid": bool} is the verdict. With {"via": "render"} the engine
-    renders frame 0 and only {"messages": [...]} is checked, against everything it printed. Only the Rust
+    {"messages": [...]} are substrings some message holds, {"valid": bool} is the verdict. With {"via": "report"}
+    the engine encodes the whole document with a render report (SREP 18) and every check but "valid" reads that
+    report's findings. With {"via": "render"} the engine renders frame 0 and only {"messages": [...]} is checked,
+    against everything it printed. Only the Rust
     engine is asked (`validate --format json`, which includes the evaluation warnings); another renderer is an error."""
     label, _, env = RENDERERS[renderer]
     if renderer != "rs":
@@ -178,6 +180,26 @@ def findings(renderer, case, want):
             return "error", time.time() - t0, ["no check ran"], {}
         ok = all(v for rows in checks.values() for _, v in rows)
         return ("pass" if ok else "fail"), time.time() - t0, [], {"reported": [l.strip()[:120] for l in said.splitlines() if l.strip()][:6], "valid": None, "checks": checks}
+    if want.get("via") == "report":
+        # findings only a render reports (SREP 18, 19, 21, 22): the engine encodes the whole document with a render
+        # report, as findings over time (a caption shown too briefly) need every frame, and the checks read its findings
+        rep = os.path.join(d, "report.json")
+        try:
+            subprocess.run([exe, "encode", s_, "-o", os.path.join(d, "frames", "f_%04d.png"), "--report", rep], cwd=d, capture_output=True, text=True, timeout=600,
+                           env={**os.environ, **env})
+            diags = json.load(open(rep))["findings"]
+            if not isinstance(diags, list) or not all(isinstance(x, dict) and "code" in x for x in diags):
+                raise ValueError(f"findings is not a list of findings: {diags!r:.80}")
+        except (FileNotFoundError, subprocess.TimeoutExpired, ValueError, KeyError, TypeError) as e:
+            return "error", time.time() - t0, [f"render report failed: {type(e).__name__}: {e}"], {}
+        got = sorted({x["code"] for x in diags})
+        checks = {"codes": [(c, c in got) for c in want.get("codes", [])],
+                  "absent": [(c, c not in got) for c in want.get("absent", [])],
+                  "counts": [(f"{c} x{n}", sum(1 for x in diags if x["code"] == c) == n)
+                             for c, n in want.get("counts", {}).items()],
+                  "messages": [(m, any(m in x.get("message", "") for x in diags)) for m in want.get("messages", [])]}
+        ok = all(v for rows in checks.values() for _, v in rows)
+        return ("pass" if ok else "fail"), time.time() - t0, [], {"reported": got, "valid": None, "checks": checks}
     try:
         p = subprocess.run([exe, "validate", s_, "--format", "json"], cwd=d, capture_output=True, text=True,
                            timeout=600, env={**os.environ, **env})
@@ -440,9 +462,13 @@ def entry_problems(entry: dict) -> list[str]:
             out.append("'findings': want an object")
         else:
             out += [f"findings: unknown key {k!r}" for k in sorted(set(f) - FINDINGS_CHECKS - {"via"})]
-            if f.get("via") == "render":
+            if "via" in f and f["via"] not in ("render", "report"):
+                out.append(f"findings: via {f['via']!r}: want 'render' or 'report'")
+            elif f.get("via") == "render":
                 if not f.get("messages"):
                     out.append("findings: via render checks only 'messages', and none is given")
+            elif f.get("via") == "report" and "valid" in f:
+                out.append("findings: via report has no 'valid' (a render report gives no verdict)")
             elif not set(f) & FINDINGS_CHECKS:
                 out.append("findings: no check (codes, absent, counts, messages or valid)")
     if "captions" in entry:

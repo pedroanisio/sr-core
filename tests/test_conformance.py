@@ -367,6 +367,46 @@ def test_an_unknown_envelope_format_is_an_error(tmp_path):
     assert r.returncode == 1 and got["status"] == "error" and "scene-render-cli/2" in " ".join(got["notes"]), got
 
 
+def _report_engine(findings):
+    """`encode ... --report PATH` writes a render report holding `findings`; `validate` reports nothing."""
+    return ("import json, sys\na = sys.argv\n"
+            "if a[1] == 'encode':\n"
+            f"    json.dump({{'format': 'scene-render-report/1', 'findings': {findings!r}}}, open(a[a.index('--report') + 1], 'w'))\n"
+            "else:\n"
+            "    print(json.dumps({'files': [{'valid': True, 'diagnostics': []}]}))\n")
+
+
+SUP = [{"code": "SUP-REPORTED", "severity": "warning", "message": "object3D/@shadowCatcher=true is not drawn"}]
+
+
+def test_findings_via_report_read_the_render_report(tmp_path):
+    entry = {"rule": "x", "findings": {"via": "report", "codes": ["SUP-REPORTED"], "messages": ["shadowCatcher"]}}
+    r = _run_copy(tmp_path, _with_entry(tmp_path, entry), _report_engine(SUP))
+    assert r.returncode == 0 and " pass " in r.stdout, r.stdout
+
+
+def test_findings_via_report_fail_on_a_finding_that_should_be_absent(tmp_path):
+    entry = {"rule": "x", "findings": {"via": "report", "absent": ["SUP-REPORTED"]}}
+    r = _run_copy(tmp_path, _with_entry(tmp_path, entry), _report_engine(SUP))
+    assert r.returncode == 1 and _result(tmp_path)["status"] == "fail", r.stdout
+
+
+def test_findings_via_report_without_a_report_is_an_error(tmp_path):
+    entry = {"rule": "x", "findings": {"via": "report", "absent": ["SUP-REPORTED"]}}
+    r = _run_copy(tmp_path, _with_entry(tmp_path, entry), "import sys\nsys.exit(0)\n")
+    assert r.returncode == 1 and _result(tmp_path)["status"] == "error", r.stdout
+
+
+@pytest.mark.parametrize("findings,why", [
+    ({"via": "report", "valid": True}, "via report"),
+    ({"via": "reprot", "codes": ["X"]}, "via"),
+])
+def test_a_findings_via_the_runner_cannot_honour_is_an_error(tmp_path, findings, why):
+    r = _run_copy(tmp_path, _with_entry(tmp_path, {"rule": "x", "findings": findings}), _report_engine(SUP))
+    got = _result(tmp_path)
+    assert r.returncode == 1 and got["status"] == "error" and why in " ".join(got["notes"]), got
+
+
 def test_every_entry_of_the_committed_kit_is_well_formed():
     """The closed vocabulary holds for all of expected.json, so the runner's rejection never hits a real case."""
     spec = importlib_run().__dict__
