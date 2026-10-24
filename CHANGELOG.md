@@ -21,6 +21,13 @@ version:
 
 ### Added
 
+- Draft SREP "Add star fields from the Bright Star Catalogue" (`srep/srep-0000-star-fields.md`, SP2 of SREP 12):
+  a `catalogue` asset (a gzipped nine-column CSV pinned by sha256) and a `starField` child of the dome light
+  (`limitMagnitude`, `magnitudeZero`, `pointSize`, `properMotion`, `epoch`, `constellations`); flux by the
+  magnitude scale, colour by Ballesteros' temperature through the CIE 1931 observer into linear sRGB, proper
+  motion from J2000 to the frame's epoch (the `space` clock when present), constellations by Roman's table with
+  Herget's precession; reference module `conformance/tools/star_fields_reference.py` (it also rebuilds the
+  fixture), fixture `conformance/assets/bsc5-compact.csv.gz` (9,096 stars, 198 KB), `tests/test_star_fields.py`
 - Draft SREP "Add time scales, celestial frames and JPL ephemerides" (`srep/srep-0000-time-frames.md`, SP1 of
   SREP 12): a `space` element (epoch in UTC, TT or TDB with the NAIF leap-second table and TDB formula, rate,
   origin, ICRF, ecliptic J2000 or IAU 2009 body-fixed frame, pixel mapping by SREP 14 rule 4), an `ephemeris`
