@@ -185,7 +185,9 @@ def test_describe_all() -> None:
     assert opacity["type"] == "unitDecimal"  # named types are looked up in "types"
     assert "python_name" not in opacity and "required" not in opacity and "use" not in opacity
     ident = next(a for a in layer["attributes"] if a["xml_name"] == "id")
-    assert ident == {"xml_name": "id", "type": "xs:ID", "required": True}
+    assert set(ident) == {"xml_name", "type", "required", "doc"}
+    assert (ident["xml_name"], ident["type"], ident["required"]) == ("id", "xs:ID", True)
+    assert ident["doc"].startswith("Unique identifier of the node, required.")  # the schema's own sentence
     assert "min_version" not in layer and layer["children"][0]["name"]
     text = json.dumps(allofit, separators=(",", ":"))
     assert json.loads(text) == allofit

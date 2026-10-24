@@ -39,13 +39,45 @@ def test_every_descriptor_carries_the_documentation_of_the_schema() -> None:
     assert documented >= 380  # 264 attributes document themselves, 129 take the documentation of their type
 
 
+def test_every_attribute_of_the_schema_documents_itself() -> None:
+    """Since the 69 attributes of `tests/undocumented-attributes.txt` were documented (SRC-3) no descriptor needs the
+    type fallback; the fallback is tested on a synthetic schema below."""
+    assert all(a.doc for k in SCHEMA.complex for a in SCHEMA.all_attributes(k))
+
+
+FALLBACK_XSD = b"""<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" version="9.9.9">
+  <xs:element name="scene"><xs:complexType>
+    <xs:attribute name="version" type="xs:string" use="required"/>
+    <xs:attribute name="named" type="unitType"/>
+    <xs:attribute name="inline">
+      <xs:simpleType>
+        <xs:annotation><xs:documentation>
+          Documented on the inline type.
+        </xs:documentation></xs:annotation>
+        <xs:restriction base="xs:string"><xs:enumeration value="a"/></xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="own" type="unitType">
+      <xs:annotation><xs:documentation>Its own sentence.</xs:documentation></xs:annotation>
+    </xs:attribute>
+  </xs:complexType></xs:element>
+  <xs:simpleType name="unitType">
+    <xs:annotation><xs:documentation>A number from 0 to 1.</xs:documentation></xs:annotation>
+    <xs:restriction base="xs:decimal"><xs:minInclusive value="0"/><xs:maxInclusive value="1"/></xs:restriction>
+  </xs:simpleType>
+</xs:schema>"""
+
+
 def test_type_documentation_is_the_fallback() -> None:
-    type_documented = [a for k in SCHEMA.complex for a in SCHEMA.all_attributes(k)
-                       if not a.doc and a.type in SCHEMA.simple and SCHEMA.simple[a.type].doc]
-    assert type_documented
-    a = type_documented[0]
-    owner = next(k for k in SCHEMA.complex if a in SCHEMA.all_attributes(k))
-    assert _attr_specs(CLASSES[owner])[a.name].doc == inspect.cleandoc(SCHEMA.simple[a.type].doc)
+    """An attribute without a sentence takes its simple type's (named or inline), dedented; its own sentence wins."""
+    schema = model.read(FALLBACK_XSD)
+    attrs = {a.name: a for k in schema.complex for a in schema.all_attributes(k)}
+    assert not attrs["named"].doc and not attrs["inline"].doc
+    assert generate.attribute_doc(schema, attrs["named"]) == "A number from 0 to 1."
+    assert generate.attribute_doc(schema, attrs["inline"]) == "Documented on the inline type."
+    assert generate.attribute_doc(schema, attrs["own"]) == "Its own sentence."
+    assert generate.attribute_doc(schema, attrs["version"]) == ""
 
 
 def test_a_documented_attribute_shows_in_help() -> None:
