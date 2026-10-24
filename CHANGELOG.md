@@ -21,6 +21,15 @@ version:
 
 ### Added
 
+- Draft SREP "Add spectral rendering" (`srep/srep-0000-spectral.md`, OW2 of SREP 12): `dispersionModel`
+  attributes (`cauchy`, `sellmeier`, named `glass` from a table with cited coefficients: BK7, SF10, SF11, fused
+  silica, water, diamond) on materials and on the ray-optics bench's elements, with the raster `dispersion`
+  derived through the Abbe number as KHR_materials_dispersion defines; a `spectral` path-tracer mode with
+  hero-wavelength sampling from SREP 92's path stream, CIE 1931 matching functions (Wyman fit), D65 and the
+  sRGB matrices; blackbody `temperature` and tabulated `spectrum` emitters; the Jakob-Hanika sigmoid uplift of
+  RGB colours; `wavelength` on bench sources; reference module `conformance/tools/spectral_reference.py`,
+  `tests/test_spectral.py` (its numeric table checked row by row); the schema files are unchanged, the diff
+  (SD1-SD4, V17) is inside the draft; engine card SR-94.
 - Draft SREP "Add ray-optics diagrams" (`srep/srep-0000-ray-optics.md`, OW1 of SREP 12): an `opticalBench`
   2D node with `source`s (point fans, parallel beams), thin and thick `lens`es, flat and spherical `mirror`s,
   `prism`s, refracting `block`s, parabolic `grin` slabs, `screen`s and an `object` that draws a thin lens's
