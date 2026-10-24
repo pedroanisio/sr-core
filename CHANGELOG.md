@@ -21,6 +21,12 @@ version:
 
 ### Added
 
+- Draft SREP "Add combustion and sparse tiles to pyro" (`srep/srep-0000-pyro-combustion.md`, S2 of SREP 12): a
+  fuel channel with `pyroSource/@fuelRate`, `pyroImpulse/@fuel` and a `pyroCombustion` child (ignition, rate,
+  heat, expansion, soot), sparse tiles (`pyro/@tile`, `@tileMargin`, `@tileThreshold`) with a masked step, a
+  relative floor on the confinement direction, and the plan's bars (divergence after projection, the
+  symmetric plume) as measured rules; reference module `conformance/tools/pyro_reference.py` and
+  `tests/test_pyro_combustion.py` (SRC-38, engine card SR-82).
 - Draft SREP "Add cloth and soft bodies in 3D" (`srep/srep-0000-softbody.md`, S1 of SREP 12): a `softBody3D`
   node of kind cloth, solid or rope; Vertex Block Descent with PSD-projected spring and stable neo-Hookean
   Hessians, offset self-contact, XPBD rods, fixed iteration and substep counts for the seek check; reference
