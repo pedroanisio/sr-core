@@ -21,6 +21,20 @@ version:
 
 ### Added
 
+- Draft SREP "Add the terrain grid" (`srep/srep-0000-terrain-grid.md`, F2 of SREP 12): a `terrain` element
+  holding a regular grid of named layers with units over a rectangle (`cells` along the longer side,
+  `metersPerCell`; `bedrock`, `loose`, `lava`, `ice`, `snow` by type solid in metres; `water`, `sediment`,
+  `flow`, `temperature`, `fuel`, `burn`, `hardness`, `wetness`), the ground surface the sum of the solid
+  layers; layers by a flat `value`, a `generate` child (`fbm`, `ridged` or `billow` value noise on the D24
+  lattice of the random-streams draft with `octaves`, `frequency`, `lacunarity`, `gain`, a domain `warp`,
+  `terraces` and `amplitude`/`offset`) or an asset (`from` with `gray`, `gray16`, `terrarium` or `mapbox`
+  `encoding`); `mask` children by `slope`, `altitude`, `curvature` or D8 `flow` with `min`, `max`, `feather`,
+  `invert` and `material` splatting over the altitude ramp; the 2D `picture` hill-shaded as the baseline's
+  `erosion`, the 3D surface as `object3D primitive="terrain"` (SREP 70's heightfield over the physical
+  extent); one grid resolution per element (the SREP 12 open issue, decided); layers pinned by a `sha256`
+  digest; reference module `conformance/tools/terrain_grid_reference.py`, `tests/test_terrain_grid.py` (its
+  numeric table checked row by row); the schema files are unchanged, the diff (TG1-TG6, V17) is inside the
+  draft; engine card SR-100.
 - Draft SREP "Add plate integration" (`srep/srep-0000-plate-integration.md`, LA3 of SREP 12): `camera` gains
   `track` (a camera `trackData` that drives it) and `trackScale` (scene units per track unit, default
   `pixelsPerMeter`), the row held at the frame written into the engine's conventions (y down, z forward,
