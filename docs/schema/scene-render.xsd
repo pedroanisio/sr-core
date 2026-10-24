@@ -3929,7 +3929,7 @@
       </xs:restriction></xs:simpleType>
     </xs:attribute>
     <xs:attribute name="sprite" type="xs:IDREF">
-      <xs:annotation><xs:documentation>Id of the image asset drawn for each particle when shape is sprite, where it is required; may be a sheet of spriteCols by spriteRows cells.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Id of the image, image sequence, video or generator asset drawn for each particle when shape is sprite, where it is required (R32); an image may be a sheet of spriteCols by spriteRows cells, a sequence or video shows its frame at the particle's age or the emitter's time.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="spriteCols" type="xs:positiveInteger" default="1">
       <xs:annotation><xs:documentation>Number of columns in the sprite image's cell grid. Default 1.</xs:documentation></xs:annotation>
@@ -8191,7 +8191,7 @@
       <xs:annotation><xs:documentation>Depth of the flat sea floor below waterLevel (at greater y), in scene units, when no bathymetry is given; it also sets the default speed of a wave that gives none. Default 10.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="gravity" type="positiveDecimal" default="9.81">
-      <xs:annotation><xs:documentation>Gravitational acceleration used by the water: waves travel at the square root of gravity times depth. Default 9.81.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Gravitational acceleration used by the water, in metres per second squared, converted to scene units through the physics pixelsPerMeter and the ocean's scale: waves travel at the square root of gravity times depth. Default 9.81.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="damping" type="nonNegativeDecimal" default="0">
       <xs:annotation><xs:documentation>Exponential decay rate per second of the water's horizontal velocity; 0 (default) is undamped.</xs:documentation></xs:annotation>
