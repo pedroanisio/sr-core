@@ -21,6 +21,15 @@ version:
 
 ### Added
 
+- Draft SREP "Add relativity diagrams" (`srep/srep-0000-relativity.md`, SP6 of SREP 12): a `spacetime`
+  child of the plots draft's `axes` (Minkowski diagrams in units of c with a `boost` keyed in rapidity, the
+  boosted frame's grid, `event`s with light cones, inertial, accelerated and parametric `worldline`s,
+  `lightRay`s, and `compact` modes for the Penrose diamond and the Kruskal–Szekeres Penrose diagram of a
+  `blackHole`), an `embedding` primitive of `object3D` (Flamm's paraboloid or the potential sheet as rings and
+  spokes) and a `strain` modifier (plus and cross polarisations at a frequency or along the chirp of a chirp
+  mass); reference module `conformance/tools/relativity_reference.py`, `tests/test_relativity.py` (its numeric
+  table checked row by row); the schema files are unchanged, the diff (RD1-RD4, V17) is inside the draft;
+  engine card SR-92.
 - Draft SREP "Add scale: powers of ten, depth resolution and a floating origin" (`srep/srep-0000-scale.md`,
   SP5 of SREP 12): a `depth` attribute on `camera` (`reversed`, the engine's mapping, or `logarithmic`) with a
   resolution requirement the kit can measure (one part in 10⁵ at every decade up to a `far` / `near` ratio of
