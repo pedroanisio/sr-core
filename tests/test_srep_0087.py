@@ -179,8 +179,8 @@ def test_beat_program_cases_need_the_namespaced_id():
     assert CASES["srep-0087-program-ids-beat-program"]["expected"]["blue"] == {"cx": 200, "cy": 240, "w": 40, "h": 20}
 
 
-HAND_CHECKED = {f"srep-0087-program-ids-{s}" for s in (
-    "ambiguous", "composed-collision", "duplicate-local", "seed-local", "seed-local-by-hand")}
+# the render comparisons; the failed renders run through the "failure" form
+HAND_CHECKED = {f"srep-0087-program-ids-{s}" for s in ("seed-local", "seed-local-by-hand")}
 
 
 def test_cases_are_in_the_kit_as_generated_and_pending_only_where_run_py_cannot_check():
@@ -268,8 +268,8 @@ def test_amended_srep_66_collision_case():
     assert [s.get("id") for s in t.iter("shape")] == ["p.g1"]
     assert [p.get("id") for p in t.iter("program")] == ["p"]
     assert case["expected"]["failure"] == {"code": "PRG14"}
-    assert case["expected"]["pending"] == kit_pending.PENDING["srep-0066-program-id-collision"]
-    assert kit_pending.SREP87 in case["expected"]["pending"] and "PRG14" in case["expected"]["pending"]
+    # run.py checks the failure form, so the case runs
+    assert "pending" not in case["expected"] and "srep-0066-program-id-collision" not in kit_pending.PENDING
 
 
 def test_generator_is_reproducible(tmp_path):

@@ -3,7 +3,7 @@
   "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><pdf id=\"p\" src=\"../assets/srep17-page.pdf\" sha256=\"24b3936ddbdc63807929a186eef299c63cb1426f7fd127e4dd195cecc6760036\" page=\"1\" dpi=\"72\" cache=\"../assets/srep17-page.png\" cacheSha256=\"0000000000000000000000000000000000000000000000000000000000000000\" width=\"200\" height=\"100\"><region id=\"rg\" x=\"20\" y=\"10\" width=\"60\" height=\"20\"/></pdf></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"l\" asset=\"p\" x=\"100\" y=\"50\" scaleX=\"2\" scaleY=\"2\"/>\n</composition>\n</scene>\n",
   "expected": {
    "rule": "SREP 17",
-   "pending": "the expected result is a failed render, which expected.json and run.py cannot express yet"
+   "pending": "SREP 17 states only that the render fails, and names no finding code, which the 'failure' form needs; scene-render fails the render with ASSET-MISSING (\"does not match @cacheSha256\"), exit status 1, on scene-render main e586b57 (0.7.4, llvmpipe, 2026-10-24)"
   }
  },
  "srep-0017-pdf-page": {
@@ -15,8 +15,7 @@
     "cy": 150,
     "w": 400,
     "h": 200
-   },
-   "pending": "the Rust reference does not implement SREP 17 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0017-pdf-region": {
@@ -28,8 +27,7 @@
     "cy": 90,
     "w": 140,
     "h": 60
-   },
-   "pending": "the Rust reference does not implement SREP 17 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0017-pdf-region-fit": {
@@ -41,8 +39,7 @@
     "cy": 35,
     "w": 30,
     "h": 10
-   },
-   "pending": "the Rust reference does not implement SREP 17 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0017-pdf-region-rotate": {
@@ -54,8 +51,7 @@
     "cy": 100,
     "w": 20,
     "h": 60
-   },
-   "pending": "the Rust reference does not implement SREP 17 yet; the entry keeps the values derived from the SREP"
+   }
   }
  }
 }

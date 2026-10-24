@@ -16,7 +16,6 @@ import kit_pending  # which cases are pending (SREP 0)
 
 CONF = os.path.dirname(HERE)
 PENDING = "SREP 69 is a draft; no engine implements <program mode=\"step\"> yet. The entry keeps the values derived from the SREP"
-FAILED = PENDING + "; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
 RED, BLUE = 0xFF0000FF - (1 << 32), 0xFFFF0000 - (1 << 32)   # RGBA bytes FF 00 00 FF and 00 00 FF FF, little-endian
 BASE, SIZE = 1024, 100 * 100 * 4
 
@@ -109,7 +108,7 @@ def main():
         seeds.setdefault(parity(1, s, 5), s)
     add("step-rng-odd", doc(mods, "rng", f' seed="{seeds[1]}"'), True, time=0.4)
     add("step-rng-even", doc(mods, "rng", f' seed="{seeds[0]}"'), False, time=0.4)
-    add("step-missing-export", doc(mods, "no-step"), failure={"code": "PRG11"}, pending=FAILED)
+    add("step-missing-export", doc(mods, "no-step"), failure={"code": "PRG11"})
     add("step-needs-size", doc(mods, "counter").replace(' width="100" height="100"', ""),
         findings={"valid": False, "codes": ["PRG3"]})
     add("build-mode-no-steps", doc(mods, "counter", ' stepsPerFrame="2"').replace(' mode="step"', ""),

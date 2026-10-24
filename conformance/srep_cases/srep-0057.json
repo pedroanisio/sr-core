@@ -10,8 +10,7 @@
      "W03",
      "W04"
     ]
-   },
-   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0057-generated-ids-bar": {
@@ -23,8 +22,7 @@
     "absent": [
      "R21"
     ]
-   },
-   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0057-generated-ids-key": {
@@ -36,8 +34,7 @@
     "absent": [
      "R21"
     ]
-   },
-   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0057-generated-ids-end": {
@@ -49,8 +46,7 @@
     "absent": [
      "R21"
     ]
-   },
-   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0057-generated-ids-poster": {
@@ -62,8 +58,7 @@
     "absent": [
      "W04"
     ]
-   },
-   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0057-generated-ids-poster-no-grid": {
@@ -78,8 +73,7 @@
     "counts": {
      "W04": 1
     }
-   },
-   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0057-generated-ids-poster-element-id": {
@@ -94,8 +88,7 @@
     "counts": {
      "W04": 1
     }
-   },
-   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0057-generated-ids-poster-dangling": {
@@ -110,8 +103,7 @@
     "counts": {
      "W04": 1
     }
-   },
-   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0057-generated-ids-no-grid": {
@@ -123,8 +115,7 @@
     "codes": [
      "R21"
     ]
-   },
-   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0057-generated-ids-malformed-dots": {
@@ -136,8 +127,7 @@
     "codes": [
      "R21"
     ]
-   },
-   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0057-generated-ids-malformed-empty": {
@@ -149,8 +139,7 @@
     "codes": [
      "R21"
     ]
-   },
-   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0057-generated-ids-malformed-kind": {
@@ -162,8 +151,7 @@
     "codes": [
      "R21"
     ]
-   },
-   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0057-generated-ids-malformed-letters": {
@@ -175,8 +163,7 @@
     "codes": [
      "R21"
     ]
-   },
-   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0057-generated-ids-too-many-digits": {
@@ -188,8 +175,7 @@
     "codes": [
      "R21"
     ]
-   },
-   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0057-generated-ids-element-id": {
@@ -201,8 +187,7 @@
     "codes": [
      "R21"
     ]
-   },
-   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0057-generated-ids-leading-zeros": {
@@ -214,8 +199,7 @@
     "absent": [
      "R21"
     ]
-   },
-   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0057-generated-ids-collision": {
@@ -230,8 +214,7 @@
     "counts": {
      "W03": 1
     }
-   },
-   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0057-generated-ids-collision-no-grid": {
@@ -243,8 +226,7 @@
     "absent": [
      "W03"
     ]
-   },
-   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0057-generated-ids-explicit": {
@@ -258,8 +240,7 @@
      "W03",
      "W04"
     ]
-   },
-   "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+   }
   }
  }
 }

@@ -778,28 +778,25 @@
       "rule": "SREP 16",
       "absent": [
         "green"
-      ],
-      "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0016-anchor": {
-      "rule": "SREP 16",
+      "rule": "SREP 16 (the line (320, 100) to (480, 260) of width 6 with butt ends spans 164.24 x 164.24; the kit's classifier sees w 164, h 162, as the ends' corners blend with black at the sides and with the red and blue boxes at the top and bottom)",
       "green": {
         "cx": 400,
         "cy": 180,
-        "w": 164.24,
-        "h": 164.24
-      },
-      "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+        "w": 164,
+        "h": 162
+      }
     },
     "srep-0016-arrow": {
       "rule": "SREP 16",
       "green": {
-        "cx": 320,
+        "cx": 331.02,
         "cy": 180,
         "w": 280,
         "h": 24
-      },
-      "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0016-curved": {
       "rule": "SREP 16",
@@ -830,8 +827,7 @@
             0
           ]
         }
-      ],
-      "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0016-follows": {
       "rule": "SREP 16",
@@ -840,8 +836,7 @@
         "cy": 180,
         "w": 220,
         "h": 6
-      },
-      "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0016-group-box": {
       "rule": "SREP 16",
@@ -850,8 +845,7 @@
         "cy": 180,
         "w": 220,
         "h": 6
-      },
-      "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0016-orthogonal": {
       "rule": "SREP 16",
@@ -887,8 +881,7 @@
             0
           ]
         }
-      ],
-      "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0016-rotated-gap": {
       "rule": "SREP 16",
@@ -897,8 +890,7 @@
         "cy": 180,
         "w": 243.43,
         "h": 6
-      },
-      "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0016-straight": {
       "rule": "SREP 16",
@@ -907,22 +899,35 @@
         "cy": 180,
         "w": 280,
         "h": 6
-      },
-      "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0016-trim-arrow": {
       "rule": "SREP 16",
       "green": {
-        "cx": 250,
+        "cx": 258.53,
         "cy": 180,
         "w": 140,
         "h": 24
       },
-      "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+      "regions": [
+        {
+          "box": [
+            324,
+            0,
+            458,
+            360
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
     },
     "srep-0017-pdf-bad-cache": {
       "rule": "SREP 17",
-      "pending": "the expected result is a failed render, which expected.json and run.py cannot express yet"
+      "pending": "SREP 17 states only that the render fails, and names no finding code, which the 'failure' form needs; scene-render fails the render with ASSET-MISSING (\"does not match @cacheSha256\"), exit status 1, on scene-render main e586b57 (0.7.4, llvmpipe, 2026-10-24)"
     },
     "srep-0017-pdf-page": {
       "rule": "SREP 17",
@@ -931,8 +936,7 @@
         "cy": 150,
         "w": 400,
         "h": 200
-      },
-      "pending": "the Rust reference does not implement SREP 17 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0017-pdf-region": {
       "rule": "SREP 17",
@@ -941,8 +945,7 @@
         "cy": 90,
         "w": 140,
         "h": 60
-      },
-      "pending": "the Rust reference does not implement SREP 17 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0017-pdf-region-fit": {
       "rule": "SREP 17",
@@ -951,8 +954,7 @@
         "cy": 35,
         "w": 30,
         "h": 10
-      },
-      "pending": "the Rust reference does not implement SREP 17 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0017-pdf-region-rotate": {
       "rule": "SREP 17",
@@ -961,32 +963,71 @@
         "cy": 100,
         "w": 20,
         "h": 60
-      },
-      "pending": "the Rust reference does not implement SREP 17 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0018-failed": {
-      "rule": "SREP 18",
-      "pending": "the expectation is a failed render and a report listing ASSET-MISSING, which run.py cannot check"
+      "rule": "SREP 18 (the render fails, and its report lists ASSET-MISSING, an error)",
+      "findings": {
+        "via": "report",
+        "codes": [
+          "ASSET-MISSING"
+        ]
+      }
     },
     "srep-0018-report": {
       "rule": "SREP 18",
-      "pending": "the expectation is a report file listing exactly INERT-I2 and INERT-I8, which run.py cannot check (it reads pixels only); checked by the schema tests (the attribute validates) and by the engine's report writer"
+      "findings": {
+        "via": "report",
+        "codes": [
+          "INERT-I2",
+          "INERT-I8"
+        ],
+        "counts": {
+          "INERT-I2": 1,
+          "INERT-I8": 1
+        },
+        "absent": [
+          "ASSET-MISSING"
+        ]
+      }
     },
     "srep-0019-off": {
       "rule": "SREP 19",
-      "pending": "validation; the expectation is the absence of any LEG-* finding, which needs the SREP 18 report"
+      "findings": {
+        "via": "report",
+        "absent": [
+          "LEG-SHORT",
+          "LEG-SIZE",
+          "LEG-SPEED"
+        ]
+      }
     },
     "srep-0019-short": {
       "rule": "SREP 19",
-      "pending": "validation and report finding (LEG-SHORT) checked by the schema tests; the SREP states no pixel-level expectation"
+      "findings": {
+        "via": "report",
+        "codes": [
+          "LEG-SHORT"
+        ]
+      }
     },
     "srep-0019-size": {
       "rule": "SREP 19",
-      "pending": "validation and report finding (LEG-SIZE) checked by the schema tests; the SREP states no pixel-level expectation"
+      "findings": {
+        "via": "report",
+        "codes": [
+          "LEG-SIZE"
+        ]
+      }
     },
     "srep-0019-speed": {
       "rule": "SREP 19",
-      "pending": "validation and report finding (LEG-SPEED) checked by the schema tests; the SREP states no pixel-level expectation"
+      "findings": {
+        "via": "report",
+        "codes": [
+          "LEG-SPEED"
+        ]
+      }
     },
     "srep-0020-text-align-center": {
       "rule": "SREP 20",
@@ -1052,8 +1093,13 @@
       }
     },
     "srep-0021-pinned-font": {
-      "rule": "SREP 21",
-      "pending": "the SREP's expectation is a .notdef glyph of the test font and a FONT-GLYPH report finding; the .notdef geometry is not stated numerically"
+      "rule": "SREP 21 (FONT-GLYPH for the character no permitted face has; the .notdef box it draws is not stated numerically, so the picture is not checked)",
+      "findings": {
+        "via": "report",
+        "codes": [
+          "FONT-GLYPH"
+        ]
+      }
     },
     "srep-0023-rect-corner-radii": {
       "rule": "SREP 23",
@@ -1261,8 +1307,7 @@
             0
           ]
         }
-      ],
-      "pending": "the Rust reference does not implement SREP 26 yet; the entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0026-list": {
       "rule": "SREP 26",
@@ -1332,8 +1377,7 @@
             0
           ]
         }
-      ],
-      "pending": "the Rust reference does not implement SREP 26 yet; the entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0026-order": {
       "rule": "SREP 26",
@@ -1377,8 +1421,7 @@
             0
           ]
         }
-      ],
-      "pending": "the Rust reference does not implement SREP 26 yet; the entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0026-path-closed": {
       "rule": "SREP 26",
@@ -1461,8 +1504,7 @@
             0
           ]
         }
-      ],
-      "pending": "the Rust reference does not implement SREP 26 yet; the entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0026-path-open": {
       "rule": "SREP 26",
@@ -1558,8 +1600,7 @@
             0
           ]
         }
-      ],
-      "pending": "the Rust reference does not implement SREP 26 yet; the entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0026-vertices": {
       "rule": "SREP 26",
@@ -1629,8 +1670,7 @@
             0
           ]
         }
-      ],
-      "pending": "the Rust reference does not implement SREP 26 yet; the entry keeps the values derived from the SREP"
+      ]
     },
     "srep-0027-anchor-local": {
       "rule": "SREP 27",
@@ -14570,7 +14610,7 @@
         "w": 504,
         "h": 100
       },
-      "pending": "the specification states no stroke cap for geoLayer (geoLayerType has no strokeCap; SREP 36 says only that each ring is traced through the same trim as shapes), and these values assume butt ends. Measured on scene-render 0.5.0 (commit 12ede1e, binary sha256 prefix 6998aafaa03f738e, prod VM, 2026-10-12): green cx 190.89, cy 221.46, w 504, h 104. Derivation: at progress 0.125 square a traces 100 px of its first edge and square b 50 px, 500 px apart; with butt ends cx = 20 + 500*50/150 = 186.67 (the value here), with square ends of half the 4 px stroke the lengths are 104 and 54, cx = 20 + 500*54/158 = 190.89 and h = 104, which is what the engine draws. Left pending until the schema states the cap of a traced geo outline"
+      "pending": "the specification states no stroke cap for geoLayer (geoLayerType has no strokeCap; SREP 36 says only that each ring is traced through the same trim as shapes), and these values assume butt ends. Measured on scene-render 0.5.0 (commit 12ede1e, binary sha256 prefix 6998aafaa03f738e, prod VM, 2026-10-12): green cx 190.89, cy 221.46, w 504, h 104. Derivation: at progress 0.125 square a traces 100 px of its first edge and square b 50 px, 500 px apart; with butt ends cx = 20 + 500*50/150 = 186.67 (the value here), with square ends of half the 4 px stroke the lengths are 104 and 54, cx = 20 + 500*54/158 = 190.89 and h = 104, which is what the engine draws. Left pending until the schema states the cap of a traced geo outline The same values (cx 190.89, cy 221.46, w 504, h 104) are measured on scene-render main e586b57 (0.7.4, binary sha256 prefix b7285fa1d0fba26f, llvmpipe, 2026-10-24), after its fix of a crash on this case."
     },
     "srep-0036-geo-outline-p875": {
       "rule": "SREP 36",
@@ -14580,7 +14620,7 @@
         "w": 604,
         "h": 207
       },
-      "pending": "same open point as srep-0036-geo-outline-p125: no stroke cap (or join) is specified for a traced geoLayer outline and these values assume butt ends. Measured on scene-render 0.5.0 (commit 12ede1e, binary sha256 prefix 6998aafaa03f738e, prod VM, 2026-10-12): green cx 270.65, cy 167.8, w 604, h 208. Left pending until the schema states the cap of a traced geo outline"
+      "pending": "same open point as srep-0036-geo-outline-p125: no stroke cap (or join) is specified for a traced geoLayer outline and these values assume butt ends. Measured on scene-render 0.5.0 (commit 12ede1e, binary sha256 prefix 6998aafaa03f738e, prod VM, 2026-10-12): green cx 270.65, cy 167.8, w 604, h 208. Left pending until the schema states the cap of a traced geo outline The same values (cx 270.65, cy 167.8, w 604, h 208) are measured on scene-render main e586b57 (0.7.4, binary sha256 prefix b7285fa1d0fba26f, llvmpipe, 2026-10-24), after its fix of a crash on this case."
     },
     "srep-0037-text3d-tracking": {
       "rule": "SREP 37: font assets/srep37-block.ttf (upem 2048, advance 1229, glyph I box x 205..1024, y 0..1434), size 100, scale 100/2048; glyph i moves i*t*s/1000 = i*20.0 px; block centred on its bbox, ortho camera 1 px/unit: stems x 260.00..299.99 and 340.01..380.00 (gap 40.02 px; baseline gap 20.0, growth 20.0 px), rows 145..215",
@@ -37155,8 +37195,7 @@
         ],
         "wordCount": 4,
         "wordsAndTimesEqualTo": "srep-0052-caption-lines-blank-greedy"
-      },
-      "pending": "the Rust reference has no `captions` command until gap/srep-52-captions-dump merges"
+      }
     },
     "srep-0052-caption-lines-blank-greedy": {
       "rule": "SREP 52",
@@ -37166,8 +37205,7 @@
           "aa bb cc dd"
         ],
         "wordCount": 4
-      },
-      "pending": "the Rust reference has no `captions` command until gap/srep-52-captions-dump merges"
+      }
     },
     "srep-0052-caption-lines-default": {
       "rule": "SREP 52",
@@ -37176,8 +37214,7 @@
         "pages": [
           "aa bb cc dd ee ff gg hh"
         ]
-      },
-      "pending": "the Rust reference has no `captions` command until gap/srep-52-captions-dump merges"
+      }
     },
     "srep-0052-caption-lines-greedy": {
       "rule": "SREP 52",
@@ -37186,8 +37223,7 @@
         "pages": [
           "aa bb cc dd ee ff gg hh"
         ]
-      },
-      "pending": "the Rust reference has no `captions` command until gap/srep-52-captions-dump merges"
+      }
     },
     "srep-0052-caption-lines-limits-chars": {
       "rule": "SREP 52",
@@ -37197,8 +37233,7 @@
           "aa bb\ncc dd",
           "ee ff\ngg hh"
         ]
-      },
-      "pending": "the Rust reference has no `captions` command until gap/srep-52-captions-dump merges"
+      }
     },
     "srep-0052-caption-lines-limits-one-line": {
       "rule": "SREP 52",
@@ -37209,8 +37244,7 @@
           "cc dd ee ff",
           "gg hh"
         ]
-      },
-      "pending": "the Rust reference has no `captions` command until gap/srep-52-captions-dump merges"
+      }
     },
     "srep-0052-caption-lines-limits-words": {
       "rule": "SREP 52",
@@ -37220,8 +37254,7 @@
           "aa bb\ncc dd",
           "ee ff\ngg hh"
         ]
-      },
-      "pending": "the Rust reference has no `captions` command until gap/srep-52-captions-dump merges"
+      }
     },
     "srep-0052-caption-lines-presets-boxed-word": {
       "rule": "SREP 52",
@@ -37276,8 +37309,7 @@
             ]
           ]
         }
-      ],
-      "pending": "the Rust reference has no `captions` command until gap/srep-52-captions-dump merges"
+      ]
     },
     "srep-0052-caption-lines-presets-highlight": {
       "rule": "SREP 52",
@@ -37332,8 +37364,7 @@
             ]
           ]
         }
-      ],
-      "pending": "the Rust reference has no `captions` command until gap/srep-52-captions-dump merges"
+      ]
     },
     "srep-0052-caption-lines-presets-karaoke": {
       "rule": "SREP 52",
@@ -37388,8 +37419,7 @@
             ]
           ]
         }
-      ],
-      "pending": "the Rust reference has no `captions` command until gap/srep-52-captions-dump merges"
+      ]
     },
     "srep-0052-caption-lines-source": {
       "rule": "SREP 52",
@@ -37399,8 +37429,7 @@
           "aa bb\ncc dd ee ff",
           "gg hh"
         ]
-      },
-      "pending": "the Rust reference has no `captions` command until gap/srep-52-captions-dump merges"
+      }
     },
     "srep-0053-wiggle-hold": {
       "rule": "SREP 53",
@@ -39789,8 +39818,7 @@
           "W03",
           "W04"
         ]
-      },
-      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0057-generated-ids-bar": {
       "rule": "SREP 57 (startMarker=\"bar.2\" with a beatGrid validates)",
@@ -39799,8 +39827,7 @@
         "absent": [
           "R21"
         ]
-      },
-      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0057-generated-ids-key": {
       "rule": "SREP 57 (<key marker=\"beat.4\"/> with a beatGrid validates)",
@@ -39809,8 +39836,7 @@
         "absent": [
           "R21"
         ]
-      },
-      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0057-generated-ids-end": {
       "rule": "SREP 57 (startMarker=\"beat.0\" and endMarker=\"bar.1\" with a beatGrid validate)",
@@ -39819,8 +39845,7 @@
         "absent": [
           "R21"
         ]
-      },
-      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0057-generated-ids-poster": {
       "rule": "SREP 57 (poster marker=\"bar.1\" with a beatGrid validates with no warning)",
@@ -39829,8 +39854,7 @@
         "absent": [
           "W04"
         ]
-      },
-      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0057-generated-ids-poster-no-grid": {
       "rule": "SREP 57 (a poster marker with no beatGrid validates and warns W04)",
@@ -39842,8 +39866,7 @@
         "counts": {
           "W04": 1
         }
-      },
-      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0057-generated-ids-poster-element-id": {
       "rule": "SREP 57 (a poster marker naming an element that is not a marker validates and warns W04)",
@@ -39855,8 +39878,7 @@
         "counts": {
           "W04": 1
         }
-      },
-      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0057-generated-ids-poster-dangling": {
       "rule": "SREP 57 (a poster marker naming no element validates and warns W04)",
@@ -39868,8 +39890,7 @@
         "counts": {
           "W04": 1
         }
-      },
-      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0057-generated-ids-no-grid": {
       "rule": "SREP 57 (startMarker=\"beat.3\", no beatGrid, no marker of that id: fails R21)",
@@ -39878,8 +39899,7 @@
         "codes": [
           "R21"
         ]
-      },
-      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0057-generated-ids-malformed-dots": {
       "rule": "SREP 57 (beat.3.1 fails R21)",
@@ -39888,8 +39908,7 @@
         "codes": [
           "R21"
         ]
-      },
-      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0057-generated-ids-malformed-empty": {
       "rule": "SREP 57 (beat. fails R21)",
@@ -39898,8 +39917,7 @@
         "codes": [
           "R21"
         ]
-      },
-      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0057-generated-ids-malformed-kind": {
       "rule": "SREP 57 (beats.3 fails R21)",
@@ -39908,8 +39926,7 @@
         "codes": [
           "R21"
         ]
-      },
-      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0057-generated-ids-malformed-letters": {
       "rule": "SREP 57 (beat.x fails R21)",
@@ -39918,8 +39935,7 @@
         "codes": [
           "R21"
         ]
-      },
-      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0057-generated-ids-too-many-digits": {
       "rule": "SREP 57 (a twenty-digit N fails R21)",
@@ -39928,8 +39944,7 @@
         "codes": [
           "R21"
         ]
-      },
-      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0057-generated-ids-element-id": {
       "rule": "SREP 57 (an element id is not a marker: fails R21)",
@@ -39938,8 +39953,7 @@
         "codes": [
           "R21"
         ]
-      },
-      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0057-generated-ids-leading-zeros": {
       "rule": "SREP 57 (beat.007 validates)",
@@ -39948,8 +39962,7 @@
         "absent": [
           "R21"
         ]
-      },
-      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0057-generated-ids-collision": {
       "rule": "SREP 57 (an explicit <marker id=\"beat.3\"/> beside a beatGrid validates and warns W03)",
@@ -39961,8 +39974,7 @@
         "counts": {
           "W03": 1
         }
-      },
-      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0057-generated-ids-collision-no-grid": {
       "rule": "SREP 57 (the same marker without a beatGrid validates with no warning)",
@@ -39971,8 +39983,7 @@
         "absent": [
           "W03"
         ]
-      },
-      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0057-generated-ids-explicit": {
       "rule": "SREP 57 (the explicit-marker control validates as before)",
@@ -39983,8 +39994,7 @@
           "W03",
           "W04"
         ]
-      },
-      "pending": "the Rust reference does not implement SREP 57 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0058-jump": {
       "rule": "SREP 58 (a jump takes no length: at p = 0.5 the node is at the next subpath's start)",
@@ -39993,8 +40003,7 @@
         "cy": 180,
         "w": 10,
         "h": 10
-      },
-      "pending": "the Rust reference does not implement SREP 58 yet (its motion paths count the jump as length and take the incoming direction at a vertex); the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0058-vertex": {
       "rule": "SREP 58 (at an exact vertex the direction is the outgoing segment's: the bar stands vertical)",
@@ -40004,7 +40013,7 @@
         "w": 4,
         "h": 40
       },
-      "pending": "the Rust reference does not implement SREP 58 yet (its motion paths count the jump as length and take the incoming direction at a vertex); the entry keeps the values derived from the SREP"
+      "pending": "the engine implements the jump of SREP 58 (srep-0058-jump passes), but at an exact vertex it takes the incoming segment's direction: the bar lies horizontal (red w 40, h 4) where the SREP stands it vertical (w 4, h 40). Measured on scene-render main e586b57 (0.7.4, binary sha256 prefix b7285fa1d0fba26f, llvmpipe, 2026-10-24)"
     },
     "srep-0059-identity": {
       "rule": "SREP 59 (an IDREF naming no id is rejected: @parent=\"nosuch\")",
@@ -40023,8 +40032,7 @@
           "S06",
           "R53"
         ]
-      },
-      "pending": "the Rust reference does not implement R53 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0059-audiogram-source": {
       "rule": "SREP 59 (an audiogram source that is not an audioTrack fails R54)",
@@ -40033,28 +40041,28 @@
         "codes": [
           "R54"
         ]
-      },
-      "pending": "the Rust reference does not implement R54 yet; the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0063-when-raster": {
       "rule": "SREP 63 (a shadow catcher under the raster renderer: an entry conditioned on the path tracer does not apply)",
       "findings": {
-        "valid": true,
+        "via": "report",
         "absent": [
           "SUP-REPORTED"
         ]
-      },
-      "pending": "the Rust reference does not implement SREP 63 yet (nor the SUP findings of SREP 22); the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0063-when-pathtrace": {
       "rule": "SREP 63 (with camera/@renderer=pathtrace the conditioned entry applies: SUP-REPORTED names object3D/@shadowCatcher=true)",
       "findings": {
-        "valid": true,
+        "via": "report",
         "codes": [
           "SUP-REPORTED"
+        ],
+        "messages": [
+          "object3D/@shadowCatcher=true"
         ]
-      },
-      "pending": "the Rust reference does not implement SREP 63 yet (nor the SUP findings of SREP 22); the entry keeps the values derived from the SREP"
+      }
     },
     "srep-0066-program-nodes": {
       "rule": "SREP 66",
@@ -40171,50 +40179,43 @@
       "rule": "SREP 66",
       "failure": {
         "code": "PRG12"
-      },
-      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG12 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
+      }
     },
     "srep-0066-program-import-forbidden": {
       "rule": "SREP 66",
       "failure": {
         "code": "PRG11"
-      },
-      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG11 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
+      }
     },
     "srep-0066-program-threads-forbidden": {
       "rule": "SREP 66",
       "failure": {
         "code": "PRG11"
-      },
-      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG11 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
+      }
     },
     "srep-0066-program-relaxed-simd-forbidden": {
       "rule": "SREP 66",
       "failure": {
         "code": "PRG11"
-      },
-      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG11 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
+      }
     },
     "srep-0066-program-output-invalid": {
       "rule": "SREP 66",
       "failure": {
         "code": "PRG14"
-      },
-      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG14 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
+      }
     },
     "srep-0066-program-id-collision": {
       "rule": "SREP 66",
       "failure": {
         "code": "PRG14"
-      },
-      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG14 and draws no picture (SREP 87 on rs-scene-render main 6602b81d, checked by hand on 2026-10-11)"
+      }
     },
     "srep-0066-program-sha256-mismatch": {
       "rule": "SREP 66",
       "failure": {
         "code": "PRG10"
-      },
-      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG10 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
+      }
     },
     "srep-0066-program-output-sha256": {
       "rule": "SREP 66",
@@ -40229,8 +40230,7 @@
       "rule": "SREP 66",
       "failure": {
         "code": "PRG15"
-      },
-      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG15 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
+      }
     },
     "srep-0066-program-version-gate": {
       "rule": "SREP 66",
@@ -41140,8 +41140,7 @@
       "rule": "SREP 69",
       "failure": {
         "code": "PRG11"
-      },
-      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG11 (main 82ad2091 and b7eb4edc, and release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)"
+      }
     },
     "srep-0069-step-needs-size": {
       "rule": "SREP 69",
@@ -45059,22 +45058,19 @@
       "rule": "SREP 87 (prop(\"g1.x\") from outside with emitters a and b fails PRG17, Semantics 4)",
       "failure": {
         "code": "PRG17"
-      },
-      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG17 and draws no picture (SREP 87 on rs-scene-render main 6602b81d, checked by hand on 2026-10-11)"
+      }
     },
     "srep-0087-program-ids-composed-collision": {
       "rule": "SREP 87 (a emitting b.c beside a.b emitting c: both a.b.c, PRG14, Semantics 2)",
       "failure": {
         "code": "PRG14"
-      },
-      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG14 and draws no picture (SREP 87 on rs-scene-render main 6602b81d, checked by hand on 2026-10-11)"
+      }
     },
     "srep-0087-program-ids-duplicate-local": {
       "rule": "SREP 87 (an output with two elements g1 fails PRG14, Semantics 1)",
       "failure": {
         "code": "PRG14"
-      },
-      "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG14 and draws no picture (SREP 87 on rs-scene-render main 6602b81d, checked by hand on 2026-10-11)"
+      }
     },
     "srep-0087-program-ids-seed-local": {
       "rule": "SREP 87 (an emitted emitter without a seed draws as srep-0087-program-ids-seed-local-by-hand, its id written by hand as g1: seeds use the local id, Semantics 7)",

@@ -117,8 +117,7 @@
    "rule": "SREP 87 (prop(\"g1.x\") from outside with emitters a and b fails PRG17, Semantics 4)",
    "failure": {
     "code": "PRG17"
-   },
-   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG17 and draws no picture (SREP 87 on rs-scene-render main 6602b81d, checked by hand on 2026-10-11)"
+   }
   }
  },
  "srep-0087-program-ids-composed-collision": {
@@ -127,8 +126,7 @@
    "rule": "SREP 87 (a emitting b.c beside a.b emitting c: both a.b.c, PRG14, Semantics 2)",
    "failure": {
     "code": "PRG14"
-   },
-   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG14 and draws no picture (SREP 87 on rs-scene-render main 6602b81d, checked by hand on 2026-10-11)"
+   }
   }
  },
  "srep-0087-program-ids-duplicate-local": {
@@ -137,8 +135,7 @@
    "rule": "SREP 87 (an output with two elements g1 fails PRG14, Semantics 1)",
    "failure": {
     "code": "PRG14"
-   },
-   "pending": "the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot check yet; the Rust reference fails the render with PRG14 and draws no picture (SREP 87 on rs-scene-render main 6602b81d, checked by hand on 2026-10-11)"
+   }
   }
  },
  "srep-0087-program-ids-seed-local": {

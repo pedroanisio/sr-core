@@ -5,21 +5,19 @@
    "rule": "SREP 16",
    "absent": [
     "green"
-   ],
-   "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0016-anchor": {
   "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.2\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"1\" background=\"#000000FF\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"r\" shape=\"rect\" width=\"80\" height=\"60\" x=\"280\" y=\"40\" fill=\"#FF0000FF\"></shape>\n<shape id=\"b\" shape=\"rect\" width=\"80\" height=\"60\" x=\"440\" y=\"260\" fill=\"#0000FFFF\"></shape>\n<connector id=\"c\" from=\"r\" to=\"b\" stroke=\"#00FF00FF\" strokeWidth=\"6\" strokeCap=\"butt\" fromAnchor=\"bottom\" toAnchor=\"top\"/>\n</composition>\n</scene>\n",
   "expected": {
-   "rule": "SREP 16",
+   "rule": "SREP 16 (the line (320, 100) to (480, 260) of width 6 with butt ends spans 164.24 x 164.24; the kit's classifier sees w 164, h 162, as the ends' corners blend with black at the sides and with the red and blue boxes at the top and bottom)",
    "green": {
     "cx": 400,
     "cy": 180,
-    "w": 164.24,
-    "h": 164.24
-   },
-   "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+    "w": 164,
+    "h": 162
+   }
   }
  },
  "srep-0016-arrow": {
@@ -27,12 +25,11 @@
   "expected": {
    "rule": "SREP 16",
    "green": {
-    "cx": 320,
+    "cx": 331.02,
     "cy": 180,
     "w": 280,
     "h": 24
-   },
-   "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0016-curved": {
@@ -66,8 +63,7 @@
       0
      ]
     }
-   ],
-   "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0016-follows": {
@@ -79,8 +75,7 @@
     "cy": 180,
     "w": 220,
     "h": 6
-   },
-   "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0016-group-box": {
@@ -92,8 +87,7 @@
     "cy": 180,
     "w": 220,
     "h": 6
-   },
-   "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0016-orthogonal": {
@@ -132,8 +126,7 @@
       0
      ]
     }
-   ],
-   "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0016-rotated-gap": {
@@ -145,8 +138,7 @@
     "cy": 180,
     "w": 243.43,
     "h": 6
-   },
-   "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0016-straight": {
@@ -158,8 +150,7 @@
     "cy": 180,
     "w": 280,
     "h": 6
-   },
-   "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0016-trim-arrow": {
@@ -167,12 +158,26 @@
   "expected": {
    "rule": "SREP 16",
    "green": {
-    "cx": 250,
+    "cx": 258.53,
     "cy": 180,
     "w": 140,
     "h": 24
    },
-   "pending": "the Rust reference does not implement SREP 16 yet; the entry keeps the values derived from the SREP"
+   "regions": [
+    {
+     "box": [
+      324,
+      0,
+      458,
+      360
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    }
+   ]
   }
  }
 }

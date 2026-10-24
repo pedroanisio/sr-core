@@ -4,12 +4,11 @@
   "expected": {
    "rule": "SREP 63 (a shadow catcher under the raster renderer: an entry conditioned on the path tracer does not apply)",
    "findings": {
-    "valid": true,
+    "via": "report",
     "absent": [
      "SUP-REPORTED"
     ]
-   },
-   "pending": "the Rust reference does not implement SREP 63 yet (nor the SUP findings of SREP 22); the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0063-when-pathtrace": {
@@ -17,12 +16,14 @@
   "expected": {
    "rule": "SREP 63 (with camera/@renderer=pathtrace the conditioned entry applies: SUP-REPORTED names object3D/@shadowCatcher=true)",
    "findings": {
-    "valid": true,
+    "via": "report",
     "codes": [
      "SUP-REPORTED"
+    ],
+    "messages": [
+     "object3D/@shadowCatcher=true"
     ]
-   },
-   "pending": "the Rust reference does not implement SREP 63 yet (nor the SUP findings of SREP 22); the entry keeps the values derived from the SREP"
+   }
   }
  }
 }

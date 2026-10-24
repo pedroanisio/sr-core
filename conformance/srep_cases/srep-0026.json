@@ -108,8 +108,7 @@
       0
      ]
     }
-   ],
-   "pending": "the Rust reference does not implement SREP 26 yet; the entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0026-list": {
@@ -182,8 +181,7 @@
       0
      ]
     }
-   ],
-   "pending": "the Rust reference does not implement SREP 26 yet; the entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0026-order": {
@@ -230,8 +228,7 @@
       0
      ]
     }
-   ],
-   "pending": "the Rust reference does not implement SREP 26 yet; the entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0026-path-closed": {
@@ -317,8 +314,7 @@
       0
      ]
     }
-   ],
-   "pending": "the Rust reference does not implement SREP 26 yet; the entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0026-path-open": {
@@ -417,8 +413,7 @@
       0
      ]
     }
-   ],
-   "pending": "the Rust reference does not implement SREP 26 yet; the entry keeps the values derived from the SREP"
+   ]
   }
  },
  "srep-0026-vertices": {
@@ -491,8 +486,7 @@
       0
      ]
     }
-   ],
-   "pending": "the Rust reference does not implement SREP 26 yet; the entry keeps the values derived from the SREP"
+   ]
   }
  }
 }

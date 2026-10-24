@@ -21,8 +21,7 @@
      "S06",
      "R53"
     ]
-   },
-   "pending": "the Rust reference does not implement R53 yet; the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0059-audiogram-source": {
@@ -34,8 +33,7 @@
     "codes": [
      "R54"
     ]
-   },
-   "pending": "the Rust reference does not implement R54 yet; the entry keeps the values derived from the SREP"
+   }
   }
  }
 }

@@ -16,7 +16,6 @@ import kit_pending  # which cases are pending (SREP 0)
 CONF = os.path.dirname(HERE)
 ASSETS = os.path.join(CONF, "srep_cases", "assets")
 PENDING = "SREP 66 is a draft; no engine implements <program> yet. The entry keeps the values derived from the SREP"
-FAILED = PENDING + "; the expected result is a failed render with the error code in 'failure', which expected.json and run.py cannot express yet"
 
 RED = '<shape id="g1" shape="rect" width="40" height="20" anchorX="20" anchorY="10" x="480" y="180" fill="#FF0000FF"/>'
 BLUE = '<shape id="g1" shape="rect" width="40" height="20" anchorX="20" anchorY="10" x="160" y="180" fill="#0000FFFF"/>'
@@ -134,7 +133,7 @@ def main():
                                  '</repeat>',
                                  params=f'<parameters><program id="rows" src="../assets/srep66-rows.wasm" sha256="{sha(mods["rows"])}"/></parameters>\n'),
         {"red": {"cx": 320, "cy": 180, "w": 360, "h": 20}})
-    fail = lambda code: {"failure": {"code": code}, "pending": FAILED}  # noqa: E731
+    fail = lambda code: {"failure": {"code": code}}  # noqa: E731
     add("program-fuel", doc(prog("loop", mods, ' fuel="1000000"')), fail("PRG12"))
     add("program-import-forbidden", doc(prog("wasi", mods)), fail("PRG11"))
     add("program-threads-forbidden", doc(prog("shared", mods)), fail("PRG11"))

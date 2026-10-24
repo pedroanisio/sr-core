@@ -9,9 +9,9 @@ here and rerun the generator.
 Recorded 2026-10-11 from conformance/run.py with every "pending" removed, against sr-core cba5808 (SREPs 66 to 85 and
 89), on a release build of rs-scene-render release/0.4.0 at 6e0e4f71 (its later commits up to 57ee6293, the reference
 build for schema 1.6.0, change tests only), on llvmpipe (sr-prod-01): every case of those SREPs not listed here passes.
-Only two kinds of case stay pending: those whose check run.py cannot express yet (a failed render with an error code,
-SREPs 66 and 69; a comparison with another render, SREP 71), each checked by hand on the reference with the result
-given in its reason, and the one case the reference failed then, SREP 72's PREC1 (see below).
+Only two kinds of case stayed pending then: those whose check run.py could not express (a failed render with an error
+code, SREPs 66 and 69; a comparison with another render, SREP 71), each checked by hand on the reference with the
+result given in its reason, and the one case the reference failed then, SREP 72's PREC1 (see below).
 
 Earlier records: SREPs 66 to 75 and 82 on rs-scene-render main 82ad2091 and b7eb4edc (2026-10-10); SREP 84 on main
 a8310ca7 and its branch prep/srep-84-boolean-forms (ea8750bd); SREP 85 on release/0.4.0 a86e3c72 and v0.3.2 (a6f158e2),
@@ -28,40 +28,27 @@ checked by hand on the reference with the result given in its reason.
 
 SREP 72's PREC1 (srep-0072-precision-3d-note) reached main on 2026-10-11 (285a6931); the same run passes it, and its
 entry was removed.
+
+The failed-render cases of SREPs 66, 69 and 87 (eight, one and three cases) left PENDING on 2026-10-24, once run.py
+checked the "failure" form they carry: `run.py --run-pending` retires all twelve on a release build of scene-render
+main e586b57 (0.7.4, binary sha256 prefix b7285fa1d0fba26f) on llvmpipe. Only render comparisons stay pending.
 """
 
-_FAILURE = ("the expected result is a failed render with the error code in 'failure', which expected.json and run.py "
-            "cannot check yet; the Rust reference fails the render with {code} (main 82ad2091 and b7eb4edc, and "
-            "release/0.4.0 at 6e0e4f71, checked by hand on 2026-10-10 and 2026-10-11)")
 _RENDER_COMPARISON = ("the check is a comparison with another render, which run.py cannot express yet; checked by hand "
                       "on the Rust reference (release/0.4.0 at 6e0e4f71, 2026-10-11): {what}")
 
 SREP87 = "SREP 87 on rs-scene-render main 6602b81d"
-_SREP87_FAILURE = ("the expected result is a failed render with the error code in 'failure', which expected.json and "
-                   "run.py cannot check yet; the Rust reference fails the render with {code} and draws no picture "
-                   "(" + SREP87 + ", checked by hand on 2026-10-11)")
 _SREP87_COMPARISON = ("the check is a comparison with another render, which run.py cannot express yet; checked by hand "
                       "on the Rust reference (" + SREP87 + ", 2026-10-11): {what}")
 
 PENDING = {
-    # SREP 66 and 69: failed renders
-    **{f"srep-0066-program-{slug}": _FAILURE.format(code=code) for slug, code in [
-        ("fuel", "PRG12"), ("import-forbidden", "PRG11"), ("threads-forbidden", "PRG11"),
-        ("relaxed-simd-forbidden", "PRG11"), ("output-invalid", "PRG14"),
-        ("sha256-mismatch", "PRG10"), ("output-sha256-mismatch", "PRG15")]},
-    # amended by SREP 87: <shape id="p.g1"> beside program p emitting g1 collides (its Semantics 2); under SREP 66
-    # alone the ids p.g1 and g1 differ and the document is valid
-    "srep-0066-program-id-collision": _SREP87_FAILURE.format(code="PRG14"),
-    "srep-0069-step-missing-export": _FAILURE.format(code="PRG11"),
     # SREP 71: render comparisons
     "srep-0071-subsurface-zero-neutral": _RENDER_COMPARISON.format(
         what='with subsurface="0" the render is pixel-identical to the scene without the subsurface attributes'),
     "srep-0071-subsurface-wraps-terminator": _RENDER_COMPARISON.format(
         what='with subsurface="1", 20574 pixels are brighter than with "0" and none darker, and the lit span on row 180 '
              'reaches column 400 instead of 364'),
-    # SREP 87: failed renders and a render comparison
-    **{f"srep-0087-program-ids-{slug}": _SREP87_FAILURE.format(code=code) for slug, code in [
-        ("ambiguous", "PRG17"), ("composed-collision", "PRG14"), ("duplicate-local", "PRG14")]},
+    # SREP 87: a render comparison
     "srep-0087-program-ids-seed-local": _SREP87_COMPARISON.format(
         what="the picture at 0.5 s equals that of srep-0087-program-ids-seed-local-by-hand, pixel for pixel"),
     "srep-0087-program-ids-seed-local-by-hand": _SREP87_COMPARISON.format(

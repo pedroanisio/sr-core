@@ -8,8 +8,7 @@
     "cy": 180,
     "w": 10,
     "h": 10
-   },
-   "pending": "the Rust reference does not implement SREP 58 yet (its motion paths count the jump as length and take the incoming direction at a vertex); the entry keeps the values derived from the SREP"
+   }
   }
  },
  "srep-0058-vertex": {
@@ -22,7 +21,7 @@
     "w": 4,
     "h": 40
    },
-   "pending": "the Rust reference does not implement SREP 58 yet (its motion paths count the jump as length and take the incoming direction at a vertex); the entry keeps the values derived from the SREP"
+   "pending": "the engine implements the jump of SREP 58 (srep-0058-jump passes), but at an exact vertex it takes the incoming segment's direction: the bar lies horizontal (red w 40, h 4) where the SREP stands it vertical (w 4, h 40). Measured on scene-render main e586b57 (0.7.4, binary sha256 prefix b7285fa1d0fba26f, llvmpipe, 2026-10-24)"
   }
  }
 }
