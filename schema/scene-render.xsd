@@ -313,9 +313,15 @@
     <xs:attribute name="sha256" type="sha256Type">
       <xs:annotation><xs:documentation>SHA-256 digest of the source file, in hex. A local file is hashed when the scene is validated and a different digest is an error; a remote URL is not checked.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="license" type="xs:string"/>
-    <xs:attribute name="credit" type="xs:string"/>
-    <xs:attribute name="proxy" type="xs:anyURI"/>
+    <xs:attribute name="license" type="xs:string">
+      <xs:annotation><xs:documentation>Licence of the asset file as free text; copied into the render report's asset credits together with credit, and never checked.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="credit" type="xs:string">
+      <xs:annotation><xs:documentation>Attribution for the asset file as free text; copied into the render report's asset credits. An asset with neither license nor credit is left out of that list.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="proxy" type="xs:anyURI">
+      <xs:annotation><xs:documentation>Path of a lighter stand-in file. Rendering with the representation proxy (output/@representation or the --representation option) decodes it instead of src for images, videos, meshes and mixed audio when no representation named proxy exists; it carries no colorSpace, transfer or language of its own. A missing proxy file is warning A01.</xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:attributeGroup>
   <xs:attributeGroup name="strokeStyle">
     <xs:attribute name="strokeCap" type="strokeCapType" default="butt">
@@ -920,8 +926,12 @@
     <xs:attribute name="color" type="colorType" use="required">
       <xs:annotation><xs:documentation>Colour at this grid point; grid points without a point element take the colour of the nearest defined one.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="x" type="xs:double"/>
-    <xs:attribute name="y" type="xs:double"/>
+    <xs:attribute name="x" type="xs:double">
+      <xs:annotation><xs:documentation>Horizontal position of the point across the painted box, 0 at the left edge to 1 at the right; absent, or not finite, the point sits on the regular grid at col/(cols-1). A moved point warps the gradient.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="y" type="xs:double">
+      <xs:annotation><xs:documentation>Vertical position of the point down the painted box, 0 at the top edge to 1 at the bottom; absent, or not finite, the point sits on the regular grid at row/(rows-1). A moved point warps the gradient.</xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:complexType>
   <xs:complexType name="meshGradientType">
     <xs:annotation><xs:documentation>Freeform / mesh gradient: bicubic colour patch grid.</xs:documentation></xs:annotation>
@@ -1119,15 +1129,21 @@
     <xs:attribute name="src" type="xs:anyURI" use="required">
       <xs:annotation><xs:documentation>Path of the alternate file that replaces the asset's own file when this representation is chosen; a remote URL is not fetched when rendering.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="width" type="xs:positiveInteger"/>
-    <xs:attribute name="height" type="xs:positiveInteger"/>
+    <xs:attribute name="width" type="xs:positiveInteger">
+      <xs:annotation><xs:documentation>Declared width in pixels of the alternate file; when assets are verified, a different probed width, or an aspect ratio other than the asset's, is warning A08. Layout always uses the asset's own size.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="height" type="xs:positiveInteger">
+      <xs:annotation><xs:documentation>Declared height in pixels of the alternate file; when assets are verified, a different probed height, or an aspect ratio other than the asset's, is warning A08. Layout always uses the asset's own size.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="colorSpace" type="colorSpaceType">
       <xs:annotation><xs:documentation>Colour primaries of the alternate file, replacing the asset's own colorSpace when this representation is chosen.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="transfer" type="transferType">
       <xs:annotation><xs:documentation>Transfer curve of the alternate file, replacing the asset's own transfer when this representation is chosen.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="language" type="languageTagType"/>
+    <xs:attribute name="language" type="languageTagType">
+      <xs:annotation><xs:documentation>Language tag of the alternate file. Rendering with a representation value that is a language tag chooses the representation with that tag (ignoring case), else the first with the same primary subtag, and the tag becomes the output audio stream's language.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="sha256" type="sha256Type">
       <xs:annotation><xs:documentation>Expected SHA-256 digest of the alternate file; when the scene is validated, a different digest of a local file is an error. A remote URL is not checked.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -1198,8 +1214,12 @@
     <xs:attribute name="audioStream" type="xs:nonNegativeInteger" default="0">
       <xs:annotation><xs:documentation>Index, counted from 0, of the file's audio stream to mix when hasAudio is true. Default 0.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="timecodeStart" type="timecodeType"/>
-    <xs:attribute name="pixelAspect" type="positiveDecimal" default="1"/>
+    <xs:attribute name="timecodeStart" type="timecodeType">
+      <xs:annotation><xs:documentation>Timecode of the first frame of the file at its own fps; the render report lists, for each layer that plays the video, the source in and out timecodes derived from it and clipIn and clipOut, with a TIMECODE warning when they cannot be labelled. Decoding ignores it.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="pixelAspect" type="positiveDecimal" default="1">
+      <xs:annotation><xs:documentation>Width of a source pixel relative to its height; a layer showing the video is laid out width times pixelAspect by height, so anamorphic footage is widened. Default 1.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="rotation" default="0">
       <xs:annotation><xs:documentation>Clockwise rotation in degrees (0, 90, 180 or 270) applied to the decoded frames; 0 uses the orientation recorded in the file.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:integer">
@@ -1266,10 +1286,18 @@
     <xs:attribute name="src" type="xs:anyURI" use="required">
       <xs:annotation><xs:documentation>Path of the audio file, relative to the scene file; a file: URL also works. Other URLs are not fetched, so such a file cannot be mixed.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="duration" type="positiveDecimal"/>
-    <xs:attribute name="sampleRate" type="xs:positiveInteger"/>
-    <xs:attribute name="channels" type="xs:positiveInteger"/>
-    <xs:attribute name="language" type="languageTagType"/>
+    <xs:attribute name="duration" type="positiveDecimal">
+      <xs:annotation><xs:documentation>Declared length of the file in seconds; when assets are verified, a probed length more than 0.05 s away is warning A09 and the file's own length is used.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="sampleRate" type="xs:positiveInteger">
+      <xs:annotation><xs:documentation>Declared sample rate of the file in hertz; when assets are verified, a different probed rate is warning A09. The mix runs at audioMix/@sampleRate, not at this value.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="channels" type="xs:positiveInteger">
+      <xs:annotation><xs:documentation>Declared channel count of the file; when assets are verified, a different probed count is warning A09 and the file's own channels are mixed.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="language" type="languageTagType">
+      <xs:annotation><xs:documentation>Language tag of the audio; it becomes the output audio stream's language for a track that plays this asset and declares no language of its own, when the selected representation declares none either.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="bpm" type="positiveDecimal">
       <xs:annotation><xs:documentation>Tempo of the audio in beats per minute; required by a track that fits the audio to a duration (fitToDuration).</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -1496,7 +1524,9 @@
     <xs:attribute name="id" type="xs:string" use="required">
       <xs:annotation><xs:documentation>Id (sid) of the Lottie slot whose value this overrides.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="value" type="xs:string" use="required"/>
+    <xs:attribute name="value" type="xs:string" use="required">
+      <xs:annotation><xs:documentation>Replacement value, required: #RRGGBB or #RRGGBBAA sets a colour, a comma-separated list of numbers a static scalar or vector, and anything else is parsed as Lottie JSON (a bare value is wrapped as a static property). Only slots are overridden; named layers are not.</xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:complexType>
   <xs:complexType name="lottieAssetType">
     <xs:sequence><xs:element name="slot" type="slotType" minOccurs="0" maxOccurs="unbounded"/></xs:sequence>
@@ -1670,7 +1700,9 @@
     </xs:attribute>
   </xs:complexType>
   <xs:complexType name="chartSeriesType">
-    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="name" type="xs:string" use="required">
+      <xs:annotation><xs:documentation>Name of the series; carried with the data but not drawn, as charts have no legend.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="values" type="numberListType" use="required">
       <xs:annotation><xs:documentation>Whitespace-separated numbers. Bar, column, line and area take one per category; pie and donut slices come from the first series; scatter reads x y pairs; counter uses one or two values; progress one (above 1 is percent).</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -1865,7 +1897,9 @@
     <xs:attribute name="duration" type="positiveDecimal">
       <xs:annotation><xs:documentation>Requested length in seconds, sent to the provider with the request; whether a provider uses it depends on the provider.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="license" type="xs:string"/>
+    <xs:attribute name="license" type="xs:string">
+      <xs:annotation><xs:documentation>Licence of the generated asset as free text; copied into the render report's asset credits and never checked.</xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:complexType>
   <!-- ===================================================== maps -->
   <xs:simpleType name="projectionType">
@@ -2573,8 +2607,12 @@
   </xs:attributeGroup>
   <xs:attributeGroup name="nodeCoreAttributes">
     <xs:annotation><xs:documentation>The attributes every node takes, with no placement: identity, visibility, time window, condition, motion blur and track matte. A connector takes only this group.</xs:documentation></xs:annotation>
-    <xs:attribute name="id" type="xs:ID" use="required"/>
-    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="id" type="xs:ID" use="required">
+      <xs:annotation><xs:documentation>Unique identifier of the node, required. Inside an instance or repeat it is scoped as parent/id and object3D copies get id[k]; every IDREF to the node resolves through it, it seeds the node's random numbers unless seed is set, and it names the node in diagnostics.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="name" type="xs:string">
+      <xs:annotation><xs:documentation>Human-readable label shown in validation diagnostics, render-report findings and checkpoint label files in preference to the id; it has no effect on the picture and is never used as a key.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="tags" type="xs:NMTOKENS">
       <xs:annotation><xs:documentation>Space-separated free-form labels on the node. With safeArea enforcement on, a node tagged cta or logo is checked to stay inside the safe region unless safeAreaForce exempts it.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -3056,7 +3094,9 @@
       A nested expression with property="selector" makes an expression selector.
     </xs:documentation></xs:annotation>
     <xs:group ref="animationElements" minOccurs="0" maxOccurs="unbounded"/>
-    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="name" type="xs:string">
+      <xs:annotation><xs:documentation>Human-readable label used in diagnostics, such as the expression-selector error, in preference to the id; it has no effect on the picture.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="preset">
       <xs:annotation><xs:documentation>Applies a built-in text animation (such as typewriter, fade-in, wave or counter); explicit property attributes override the preset's values. Of the selector only order, amount and seed take part, not the range window.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
@@ -3941,7 +3981,9 @@
     <xs:attribute name="id" type="xs:ID" use="required">
       <xs:annotation><xs:documentation>Unique identifier of the black hole; an accretion disk refers to it by this id.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="name" type="xs:string">
+      <xs:annotation><xs:documentation>Human-readable label shown in diagnostics, render-report findings and checkpoint label files in preference to the id; it has no effect on the picture.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="mass" type="positiveDecimal" use="required">
       <xs:annotation><xs:documentation>Mass of the black hole in scene units (geometric units, G = c = 1); the horizon radius is twice the mass. Required and must be positive.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -3974,7 +4016,9 @@
     <xs:attribute name="id" type="xs:ID" use="required">
       <xs:annotation><xs:documentation>Unique identifier of the accretion disk.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="name" type="xs:string">
+      <xs:annotation><xs:documentation>Human-readable label shown in diagnostics, render-report findings and checkpoint label files in preference to the id; it has no effect on the picture.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="blackHole" type="xs:IDREF" use="required">
       <xs:annotation><xs:documentation>Id of the black hole the disk orbits; the disk is centred on it. Required.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -4083,7 +4127,9 @@
     <xs:attribute name="id" type="xs:ID" use="required">
       <xs:annotation><xs:documentation>Unique identifier of the object; other nodes refer to it by this id.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="name" type="xs:string">
+      <xs:annotation><xs:documentation>Human-readable label shown in diagnostics, render-report findings and checkpoint label files in preference to the id; it has no effect on the picture.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="primitive" use="required">
       <xs:annotation><xs:documentation>Kind of object: built-in solid (sphere, box, plane, cylinder, cone, torus, capsule), extruded path or text, imported mesh, clay, map, globe, volume, voxels, parametric surface or heightfield. Required.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
@@ -4389,7 +4435,9 @@
     <xs:attribute name="id" type="xs:ID" use="required">
       <xs:annotation><xs:documentation>Unique identifier of the camera; other nodes can refer to it.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="name" type="xs:string">
+      <xs:annotation><xs:documentation>Human-readable label shown in diagnostics, render-report findings and checkpoint label files in preference to the id; it has no effect on the picture.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="active" type="xs:boolean" default="true">
       <xs:annotation><xs:documentation>Whether the camera can be the frame camera; of the active cameras live at time t, the one last in drawing order renders. Cameras inside a viewport3D never qualify. Default true.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -4441,7 +4489,9 @@
     <xs:attribute name="sensorWidth" type="positiveDecimal" default="36">
       <xs:annotation><xs:documentation>Sensor width in millimetres used to turn focalLength into a field of view and for depth of field; default 36.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="sensorHeight" type="positiveDecimal" default="24"/>
+    <xs:attribute name="sensorHeight" type="positiveDecimal" default="24">
+      <xs:annotation><xs:documentation>Sensor height in millimetres. With focalLength set, a frame narrower than the sensor's aspect ratio fits the lens to the sensor height (the vertical gate) and derives the field of view from it; otherwise only sensorWidth is used. Default 24.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="orthoHeight" type="positiveDecimal">
       <xs:annotation><xs:documentation>Visible height in scene units of an orthographic camera; absent, the frame height is used.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -4461,7 +4511,9 @@
       <xs:annotation><xs:documentation>Number of aperture blades for the depth-of-field blur shape; 3 or more gives a polygon, fewer a round blur. Default 0. A camera with renderer pathtrace always blurs round.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:nonNegativeInteger"><xs:maxInclusive value="16"/></xs:restriction></xs:simpleType>
     </xs:attribute>
-    <xs:attribute name="shutterAngle" type="nonNegativeDecimal"/>
+    <xs:attribute name="shutterAngle" type="nonNegativeDecimal">
+      <xs:annotation><xs:documentation>Shutter angle in degrees for motion blur of the camera node itself, which draws nothing; 3D content takes its shutter angle from its own node chain, so this attribute has no visible effect.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="exposure" type="xs:double" default="0">
       <xs:annotation><xs:documentation>Exposure compensation in stops for the camera's 3D picture (2D layers are not affected): its colours are multiplied by 2 to the power exposure; 0 (default) leaves it unchanged.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -4630,7 +4682,9 @@
     <xs:attribute name="clipIn" type="xs:double" default="0">
       <xs:annotation><xs:documentation>Seconds trimmed from the start of the symbol timeline; playback covers the rest of the symbol, running backwards from its end when reversed. Default 0.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="clipOut" type="xs:double"/>
+    <xs:attribute name="clipOut" type="xs:double">
+      <xs:annotation><xs:documentation>Seconds on the symbol timeline where playback ends; absent, the symbol's duration, or the document duration when the symbol has none. One pass plays clipOut minus clipIn symbol seconds, divided by speed.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="loop" type="xs:nonNegativeInteger" default="0">
       <xs:annotation><xs:documentation>Number of extra times the symbol is played after the first; 0 (default) plays it once. Ignored when the instance has a timeRemap child.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -4640,9 +4694,15 @@
     <xs:attribute name="speed" type="xs:double" default="1">
       <xs:annotation><xs:documentation>Playback speed multiplier of the symbol; negative plays it backwards and cancels reverse. Unless the instance sets its own end or a timeRemap, it lasts (symbol length - clipIn) x (loop + 1) / |speed|. Default 1.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="fit" type="fitType" default="none"/>
-    <xs:attribute name="boxWidth" type="positiveLengthType"/>
-    <xs:attribute name="boxHeight" type="positiveLengthType"/>
+    <xs:attribute name="fit" type="fitType" default="none">
+      <xs:annotation><xs:documentation>How the symbol's own size (its width and height, else the document size) is placed in the box given by boxWidth and boxHeight, with the same modes as a layer's fit and the focus at the centre; none leaves the symbol at its natural size. Default none.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="boxWidth" type="positiveLengthType">
+      <xs:annotation><xs:documentation>Width of the box the symbol is fitted into when fit is not none, as a length (a percentage is of the parent box). Required together with boxHeight when fit is set (C16).</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="boxHeight" type="positiveLengthType">
+      <xs:annotation><xs:documentation>Height of the box the symbol is fitted into when fit is not none, as a length (a percentage is of the parent box). Required together with boxWidth when fit is set (C16).</xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:complexType>
   <xs:complexType name="includeType">
     <xs:annotation><xs:documentation>
@@ -4677,7 +4737,9 @@
     <xs:sequence>
       <xs:element name="animate" type="animateType" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="id" type="xs:ID"/>
+    <xs:attribute name="id" type="xs:ID">
+      <xs:annotation><xs:documentation>Identifier of the point generator, so that a bind or an override can change its attributes before the points are generated; otherwise unused.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="type" use="required">
       <xs:annotation><xs:documentation>Where the points go: grid, along-path (needs path and count), scatter (needs count and a path, or width and height), vertices (needs path) or list (needs at). Required.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
@@ -4803,7 +4865,9 @@
       <xs:group ref="animationElements"/>
       <xs:element name="param" type="paramValueType"/>
     </xs:choice>
-    <xs:attribute name="id" type="xs:ID"/>
+    <xs:attribute name="id" type="xs:ID">
+      <xs:annotation><xs:documentation>Identifier of the transition node; absent, one is synthesised from the parent id. It is scoped inside instances, serves as a bind or override target, seeds the node's random numbers and names it in diagnostics. A segment transition does not read it.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="type" use="required">
       <xs:annotation><xs:documentation>Kind of transition between the outgoing and incoming content: cut, crossfade, dissolve, dip, wipes, slides, zooms, 3D flips, glitch, shader and others. Required; shader needs shader, luma needs matte.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
@@ -5459,7 +5523,9 @@
     <xs:attribute name="id" type="xs:ID" use="required">
       <xs:annotation><xs:documentation>Identifier of the symbol (required, unique); an instance, an include or an output overlay refers to the symbol by this value.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="name" type="xs:string">
+      <xs:annotation><xs:documentation>Human-readable label shown by the inspect command and in diagnostics in preference to the id; it has no effect on the picture.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="width" type="xs:positiveInteger">
       <xs:annotation><xs:documentation>Width in pixels of the symbol's frame; when absent, that of the document holding the instance, of the included document when included, and of the output when used as an overlay.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -5606,6 +5672,7 @@
       <xs:annotation><xs:documentation>Ids of lights whose positions and intensities light the picture in a lighting effect (up to four are used).</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="falloff" default="smooth">
+      <xs:annotation><xs:documentation>Lighting effects only: how each light in lights fades with distance, linear, quadratic, smooth (a smoothstep) or none. Default smooth. On another effect type it is inert, warning INERT-I13.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
         <xs:enumeration value="linear"/><xs:enumeration value="quadratic"/>
         <xs:enumeration value="smooth"/><xs:enumeration value="none"/>
@@ -5790,7 +5857,9 @@
       <xs:group ref="animationElements"/>
       <xs:element name="transformConstraint" type="transformConstraintType"/>
     </xs:choice>
-    <xs:attribute name="id" type="xs:ID" use="required"/>
+    <xs:attribute name="id" type="xs:ID" use="required">
+      <xs:annotation><xs:documentation>Identifier of the light, required: a viewport3D names it in lights, a lighting effect in its lights, and the light's animated properties and constraints are keyed by it.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="type" use="required">
       <xs:annotation><xs:documentation>Kind of light: ambient, directional, point, spot, rect-area, disk-area, sphere-area or dome. A dome lights from an environment image or a gradient sky; with neither it lights uniformly like an ambient light.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
@@ -5830,7 +5899,9 @@
     <xs:attribute name="shadowSoftness" type="nonNegativeDecimal" default="0">
       <xs:annotation><xs:documentation>Width of the shadow edge blur, in shadow-map texels, with a minimum effective value of 1; defaults to 0. Only lights with castShadow true use it.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="shadowBias" type="xs:double" default="0.0005"/>
+    <xs:attribute name="shadowBias" type="xs:double" default="0.0005">
+      <xs:annotation><xs:documentation>Depth offset, in normalised device depth, subtracted before a surface is compared with the shadow map, to hide self-shadowing; larger values detach shadows from their casters. Default 0.0005.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="x" type="xs:double" default="0">
       <xs:annotation><xs:documentation>Horizontal position of the light in scene units; defaults to 0.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -5901,7 +5972,9 @@
     <xs:attribute name="skyGround" type="colorType" default="#4A4038FF">
       <xs:annotation><xs:documentation>Colour of the procedural sky below the horizon; defaults to a dark brown.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="skyExponent" type="positiveDecimal" default="0.5"/>
+    <xs:attribute name="skyExponent" type="positiveDecimal" default="0.5">
+      <xs:annotation><xs:documentation>Exponent of the procedural gradient sky's blend from the horizon colour to the zenith, and to the ground below the horizon: the mix is the sine of the elevation raised to this power, so values below 1 pull the zenith colour toward the horizon. Default 0.5.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="sunAzimuth" type="xs:double" default="0">
       <xs:annotation><xs:documentation>Compass direction of the sun in the procedural sky in degrees; 0 faces +z and positive values turn toward +x; defaults to 0.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -5925,7 +5998,9 @@
   <!-- ===================================================== physics -->
   <xs:complexType name="forceFieldType">
     <xs:group ref="animationElements" minOccurs="0" maxOccurs="unbounded"/>
-    <xs:attribute name="id" type="xs:ID" use="required"/>
+    <xs:attribute name="id" type="xs:ID" use="required">
+      <xs:annotation><xs:documentation>Identifier of the field, required. Bodies, particles, flocks and pyro name it in forceFields, the field's animated properties are keyed by it, and it seeds a turbulence field that has no seed.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="type" use="required">
       <xs:annotation><xs:documentation>Kind of field: directional, radial, vortex, turbulence, drag, wind or attractor-path. Directional pushes with a constant acceleration, radial pulls toward or pushes from a centre, vortex swirls around it, and drag slows motion.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
@@ -5993,7 +6068,9 @@
       motor and slider turn about or slide along axisX, axisY, axisZ (scene axes; z by default for hinges and
       motors, x for sliders); ball is a ball-and-socket joint.
     </xs:documentation></xs:annotation>
-    <xs:attribute name="id" type="xs:ID" use="required"/>
+    <xs:attribute name="id" type="xs:ID" use="required">
+      <xs:annotation><xs:documentation>Identifier of the constraint, required; it names the constraint in simulation warnings, such as a body with no rigidBody, and has no effect on the simulation.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="type" use="required">
       <xs:annotation><xs:documentation>Kind of joint: spring, distance, rope, hinge, slider, weld, motor, ball or pin. Pin ties body a to a world point; ball is a ball-and-socket joint between 3D bodies.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
@@ -6049,8 +6126,12 @@
     <xs:attribute name="motorSpeed" type="xs:double" default="0">
       <xs:annotation><xs:documentation>Target rotation speed of a motor constraint in degrees per second; defaults to 0.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="maxForce" type="nonNegativeDecimal"/>
-    <xs:attribute name="breakForce" type="nonNegativeDecimal"/>
+    <xs:attribute name="maxForce" type="nonNegativeDecimal">
+      <xs:annotation><xs:documentation>Motor constraints only: upper bound of the motor's force or torque, in newtons or newton-metres, passed to the physics solver; absent, the motor is unbounded.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="breakForce" type="nonNegativeDecimal">
+      <xs:annotation><xs:documentation>Force in newtons above which the constraint breaks and is removed for the rest of the simulation, measured after each step as the joint impulse divided by the step. Absent, the constraint never breaks.</xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:complexType>
   <xs:complexType name="physicsType">
     <xs:annotation><xs:documentation>
@@ -6116,6 +6197,7 @@
       <xs:annotation><xs:documentation>Path of the tracking file to read; only local files are supported, and a file that cannot be read or parsed is an error.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="kind" use="required">
+      <xs:annotation><xs:documentation>What the file tracks, required. The file must hold a matching series (points or planes for point, mask and face; planes for planar; cameras for camera), else error E17; only point, planar, mask and face may drive a transformConstraint or a layer's stabilize.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
         <xs:enumeration value="point"/><xs:enumeration value="planar"/>
         <xs:enumeration value="camera"/><xs:enumeration value="mask"/>
@@ -6135,7 +6217,9 @@
     <xs:attribute name="timeOffset" type="xs:double" default="0">
       <xs:annotation><xs:documentation>Seconds added to the time at which the tracking data is sampled, shifting the track against the footage; defaults to 0.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="sha256" type="sha256Type"/>
+    <xs:attribute name="sha256" type="sha256Type">
+      <xs:annotation><xs:documentation>Expected SHA-256 digest of the file at src; when assets are verified, a different digest is error A02.</xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:complexType>
   <xs:complexType name="trackingType">
     <xs:sequence><xs:element name="trackData" type="trackDataType" maxOccurs="unbounded"/></xs:sequence>
@@ -6328,7 +6412,9 @@
     <xs:attribute name="role" type="audioRoleType" default="other">
       <xs:annotation><xs:documentation>What the track carries (dialogue, voiceover, music, effects, ambience, audio-description or other), which outputs can use to select tracks; defaults to other.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="language" type="languageTagType"/>
+    <xs:attribute name="language" type="languageTagType">
+      <xs:annotation><xs:documentation>Language tag of the track, taking precedence over the asset's. The output audio stream's language is the tag shared by the audible tracks, mapped to ISO 639-2, mul when they differ and und when none; a tag that cannot be mapped warns. The render report lists it.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="bus" type="xs:IDREF">
       <xs:annotation><xs:documentation>Id of the bus the track is routed to; absent routes it straight to the master.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -6433,7 +6519,9 @@
     <xs:attribute name="text" type="xs:string" use="required">
       <xs:annotation><xs:documentation>The word's text; a cue without its own text is built by joining its words with spaces.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="emphasis" type="xs:boolean" default="false"/>
+    <xs:attribute name="emphasis" type="xs:boolean" default="false">
+      <xs:annotation><xs:documentation>Whether the word is emphasised: under the karaoke, highlight, pop and enlarge presets it keeps the active colour for the whole page, and under the other presets it is set in bold (weight 700 or more). Default false.</xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:complexType>
   <xs:complexType name="cueType">
     <xs:sequence><xs:element name="word" type="wordType" minOccurs="0" maxOccurs="unbounded"/></xs:sequence>
@@ -6452,7 +6540,9 @@
     <xs:attribute name="style" type="xs:IDREF">
       <xs:annotation><xs:documentation>Id of a textStyle that styles this cue, overriding the caption track's style.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="position" type="xs:string"/>
+    <xs:attribute name="position" type="xs:string">
+      <xs:annotation><xs:documentation>WebVTT cue settings of this cue: line:N% places the burned-in caption at N% of the frame height and position:N% centres it at N% of the frame width, replacing the track's x and y; any other setting is reported as unsupported. A VTT sidecar writes the string after the timing line.</xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:complexType>
   <xs:complexType name="captionTrackType">
     <xs:annotation><xs:documentation>
@@ -6469,8 +6559,11 @@
     <xs:attribute name="language" type="languageTagType" use="required">
       <xs:annotation><xs:documentation>Language tag of the track; becomes part of the sidecar file name (stem.track.language.vtt or .srt).</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="label" type="xs:string"/>
+    <xs:attribute name="label" type="xs:string">
+      <xs:annotation><xs:documentation>Display name of the track; reported in the delivery report and the CAPTION-TRACK finding, and written as Label in the NOTE block of a WebVTT sidecar (line breaks become spaces).</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="kind" default="captions">
+      <xs:annotation><xs:documentation>Purpose of the track, reported in the delivery report. An SRT sidecar of kind sdh or forced gets a .sdh or .forced suffix before its extension; a WebVTT sidecar of a kind other than captions, or with a label, carries a NOTE block with Kind, Language and Label. Default captions.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
         <xs:enumeration value="captions"/><xs:enumeration value="subtitles"/>
         <xs:enumeration value="sdh"/><xs:enumeration value="forced"/>
@@ -6568,7 +6661,9 @@
     <xs:attribute name="safeArea" type="xs:IDREF">
       <xs:annotation><xs:documentation>Id of the safeArea this track's burned captions are checked against; otherwise the safe area in force for the render applies (the selected layout's, else the project's).</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="z" type="xs:int" default="1000000"/>
+    <xs:attribute name="z" type="xs:int" default="1000000">
+      <xs:annotation><xs:documentation>Stacking position of a burned-in track among the root nodes: the captions are drawn after every root node whose z is at most this value, so nodes above it cover them. Default 1000000, above every node.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="profanityFilter" type="xs:boolean" default="false">
       <xs:annotation><xs:documentation>When true, common profanity in the cues is masked after its first letter with asterisks; false when absent.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -6585,7 +6680,9 @@
     <xs:attribute name="time" type="xs:double" use="required">
       <xs:annotation><xs:documentation>Position of the marker on the composition timeline, in seconds.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="duration" type="nonNegativeDecimal" default="0"/>
+    <xs:attribute name="duration" type="nonNegativeDecimal" default="0">
+      <xs:annotation><xs:documentation>Length of the marker in composition seconds. A link with source marker:id ramps from 0 to 1 over the duration (a step when 0), and a chapter marker with a duration above 0 ends there instead of at the next chapter. Default 0.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="kind" default="cue">
       <xs:annotation><xs:documentation>Marker type; markers of kind chapter become chapters in an output with segments when its container holds them (mp4, mov, mkv, webm or m4a). The other kinds are annotations only.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
@@ -6597,7 +6694,9 @@
     <xs:attribute name="label" type="xs:string">
       <xs:annotation><xs:documentation>Display text; for a chapter marker it is the chapter title, falling back to the marker id.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="color" type="colorType"/>
+    <xs:attribute name="color" type="colorType">
+      <xs:annotation><xs:documentation>Display colour of the marker for editing tools; the reference implementation does not read it.</xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:complexType>
   <xs:complexType name="beatGridType">
     <xs:annotation><xs:documentation>Musical grid for cutting on the beat; expressions read beat() and keys can snap with @marker to generated ids beat.N and bar.N.</xs:documentation></xs:annotation>
@@ -6643,8 +6742,12 @@
     <xs:attribute name="default" type="xs:string">
       <xs:annotation><xs:documentation>Value used when no variant, data row or command-line value supplies one.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="label" type="xs:string"/>
-    <xs:attribute name="description" type="xs:string"/>
+    <xs:attribute name="label" type="xs:string">
+      <xs:annotation><xs:documentation>Display name of the parameter, shown by the params command; it is not substituted into the scene.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="description" type="xs:string">
+      <xs:annotation><xs:documentation>Explanation of the parameter, shown by the params command.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="required" type="xs:boolean" default="false">
       <xs:annotation><xs:documentation>When true, rendering fails if no value reaches the parameter; false when absent.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -6717,7 +6820,9 @@
     <xs:attribute name="id" type="xs:ID" use="required">
       <xs:annotation><xs:documentation>Name by which a render selects the variant, applying its set and override children.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="label" type="xs:string"/>
+    <xs:attribute name="label" type="xs:string">
+      <xs:annotation><xs:documentation>Display name of the variant, shown by the params command; variants are selected by id.</xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:complexType>
   <xs:complexType name="parametersType">
     <xs:choice maxOccurs="unbounded">
@@ -6788,7 +6893,9 @@
     <xs:attribute name="height" type="xs:positiveInteger" use="required">
       <xs:annotation><xs:documentation>Height in pixels of the layout's frame.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="aspect" type="aspectType"/>
+    <xs:attribute name="aspect" type="aspectType">
+      <xs:annotation><xs:documentation>Aspect ratio of the layout as W:H, for documentation; layout selection in the reference implementation uses width, height, reframe, focus and the overrides, not this value.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="safeArea" type="xs:IDREF">
       <xs:annotation><xs:documentation>Id of the safeArea that applies when this layout is selected, in place of the project's.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -6872,6 +6979,7 @@
       <xs:annotation><xs:documentation>Exposure adjustment in stops (each +1 doubles the light), applied after the looks; 0 when absent.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="bitDepth" default="16f">
+      <xs:annotation><xs:documentation>Declared bit depth of the working picture; the reference implementation does not read it and takes the working texture format from project/@precision. Default 16f.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
         <xs:enumeration value="8"/><xs:enumeration value="16"/><xs:enumeration value="16f"/><xs:enumeration value="32f"/>
       </xs:restriction></xs:simpleType>
@@ -6880,8 +6988,12 @@
 
   <!-- ===================================================== metadata and accessibility -->
   <xs:complexType name="metaType">
-    <xs:attribute name="name" type="xs:string" use="required"/>
-    <xs:attribute name="value" type="xs:string" use="required"/>
+    <xs:attribute name="name" type="xs:string" use="required">
+      <xs:annotation><xs:documentation>Key of the custom tag, required; lowercased and written to the output container when embedMetadata is on. The named metadata attributes override a tag with the same key, and the last of repeated keys wins.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="value" type="xs:string" use="required">
+      <xs:annotation><xs:documentation>Value of the custom tag, required; {{param}} placeholders are substituted before it is written.</xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:complexType>
   <xs:complexType name="accessibilityType">
     <xs:annotation><xs:documentation>
@@ -6890,8 +7002,12 @@
       contrastCheck verifies burned-in text and captions against their
       background at @minContrast.
     </xs:documentation></xs:annotation>
-    <xs:attribute name="description" type="xs:string"/>
-    <xs:attribute name="audioDescription" type="xs:IDREF"/>
+    <xs:attribute name="description" type="xs:string">
+      <xs:annotation><xs:documentation>Synopsis of the work, written to the output file's metadata as its synopsis tag when embedMetadata is on.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="audioDescription" type="xs:IDREF">
+      <xs:annotation><xs:documentation>Id of the audioTrack that carries the audio-described version. An mp4, mov, mkv or webm output that takes audio muxes that track as a separate described stream with its own language; other containers warn and keep the narration in the main mix. A reference to anything but an audioTrack is error AD01.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="requireCaptions" type="xs:boolean" default="false">
       <xs:annotation><xs:documentation>When true, delivering an output that has no caption track at all fails; false when absent.</xs:documentation></xs:annotation>
     </xs:attribute>
@@ -6946,11 +7062,21 @@
     <xs:attribute name="copyright" type="xs:string">
       <xs:annotation><xs:documentation>Copyright notice, written to the output file's metadata when embedMetadata is on.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="revision" type="xs:string"/>
-    <xs:attribute name="created" type="xs:dateTime"/>
-    <xs:attribute name="modified" type="xs:dateTime"/>
-    <xs:attribute name="generator" type="xs:string"/>
-    <xs:attribute name="language" type="languageTagType"/>
+    <xs:attribute name="revision" type="xs:string">
+      <xs:annotation><xs:documentation>Revision of the work, written verbatim as the output file's version tag when embedMetadata is on.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="created" type="xs:dateTime">
+      <xs:annotation><xs:documentation>Creation date-time of the work, written as the output file's creation_time tag when embedMetadata is on; it must be an absolute date-time (YYYY-MM-DDThh:mm:ss), never taken from the clock.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="modified" type="xs:dateTime">
+      <xs:annotation><xs:documentation>Last-modified date-time of the work, written verbatim as the output file's date tag when embedMetadata is on.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="generator" type="xs:string">
+      <xs:annotation><xs:documentation>Tool that produced the scene, written as the output file's generator tag when embedMetadata is on; the renderer writes its own name in the encoder tag.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="language" type="languageTagType">
+      <xs:annotation><xs:documentation>Language tag of the work, written as the output file's language tag when embedMetadata is on.</xs:documentation></xs:annotation>
+    </xs:attribute>
   </xs:complexType>
 
   <!-- ===================================================== 360 -->
@@ -7009,12 +7135,14 @@
       <xs:annotation><xs:documentation>Paint drawn behind the whole composition; opaque black when absent. A visible gradient-sky dome light replaces it when no 3D node is drawn.</xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="mode" default="standard">
+      <xs:annotation><xs:documentation>Projection of the whole composition: standard, equirectangular or viewport. The reference implementation parses it and renders every mode as standard. Default standard.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:string">
         <xs:enumeration value="standard"/><xs:enumeration value="equirectangular"/>
         <xs:enumeration value="viewport"/>
       </xs:restriction></xs:simpleType>
     </xs:attribute>
     <xs:attribute name="antialias3d" default="1">
+      <xs:annotation><xs:documentation>Multisample count for 3D rasterisation, 1 to 4; 3 is promoted to 4, and an adapter that cannot supply the count falls back to the next lower supported one with a warning. Default 1.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:positiveInteger"><xs:maxInclusive value="4"/></xs:restriction></xs:simpleType>
     </xs:attribute>
     <xs:attribute name="precision" default="f16">
@@ -7052,8 +7180,12 @@
     <xs:attribute name="adaptiveMotionBlur" type="xs:boolean" default="true">
       <xs:annotation><xs:documentation>When true, a node that barely moves across the shutter is not blurred, which saves work; when false such a node is still sampled, except still groups and adjustment layers, which never are. true when absent.</xs:documentation></xs:annotation>
     </xs:attribute>
-    <xs:attribute name="timecodeStart" type="timecodeType"/>
-    <xs:attribute name="pixelAspect" type="positiveDecimal" default="1"/>
+    <xs:attribute name="timecodeStart" type="timecodeType">
+      <xs:annotation><xs:documentation>Timecode of the first frame at the project fps, written as the output's start timecode after conversion to the output fps and offset by the first delivered frame; drop-frame is kept only when the output fps is a multiple of 30.</xs:documentation></xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="pixelAspect" type="positiveDecimal" default="1">
+      <xs:annotation><xs:documentation>Width of a pixel relative to its height, written as the output video's sample aspect ratio; compositing ignores it. It must be representable as a ratio of integers up to 100000, and a WebM output warns with the rounded display width. Default 1.</xs:documentation></xs:annotation>
+    </xs:attribute>
     <xs:attribute name="safeArea" type="xs:IDREF">
       <xs:annotation><xs:documentation>Id of the safeArea checked for text, captions and nodes tagged cta or logo; the selected layout's safeArea replaces it, as does a caption track's own for that track's captions.</xs:documentation></xs:annotation>
     </xs:attribute>

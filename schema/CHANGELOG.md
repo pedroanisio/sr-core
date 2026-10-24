@@ -25,6 +25,7 @@ computed from those classes by `python3 tools/release.py next schema`:
 
 - `cameraType/@pathSamples`: the documentation said the default with geodesics is 16; the declaration's default is 64 and the reference applies 64 to geodesic cameras (`crates/sr-gpu/src/render_three.rs`, `num("pathSamples", 64.0)`), so the sentence now says 64. Annotation-only (SREP 92 difference "the pathSamples of a camera (16 against 64)"; SRC-2). `tests/test_schema_doc_defaults.py` now checks every numeric default a sentence states against its declaration.
 - `brandKit`: the documentation said colour/number tokens; `tokenType/@value` is a colour and the reference resolves `var(--name)` in colour values only (`crates/sr-model/src/document.rs`), so the sentence says colour tokens (SREP 92, "Documentation that contradicts the implementation"; SRC-6).
+- Documentation for the 69 attributes that 1.7.1 left without any (`tests/undocumented-attributes.txt`, now empty): each sentence states what the reference implementation does with the attribute, read in its source at scene-render 67a661a (render-report credits and proxy selection for `assetProvenance`, container tags for `metadata` and `meta`, the A08/A09 asset checks for `representation` and `audio`, sidecar naming for `captionTrack`, C16 box fitting for `instance`, and so on). Five attributes the reference does not read are documented as such (`project/@mode`, `layout/@aspect`, `marker/@color`, `colorManagement/@bitDepth`, `chartSeries/@name`). Annotation-only (SREP 92; SRC-3).
 
 ## 1.7.1 — 2026-10-20
 
