@@ -39752,7 +39752,15 @@
         "id": "still",
         "time": 0
       },
-      "pending": "engine discrepancy (32c8ac1, 755beb7): at output time 0 with the default shutterPhase (-90) the first sample times are negative and the engine draws NO blur at all (the project 180 degree square stays 20 px wide with a hard edge), although the SREP formula t + (phi/360 + (a/360)(k+1/2)/N)/fps defines them and the keys are defined there; the same scene at t = 0.3 blurs as the formula says (case srep-0055-node-shutter). Expected per the formula: blue cx 317.5..322.5 smear of 2.4 px each side. Left pending until the engine blurs frame 0. Re-measured on scene-render 0.5.0 (commit 12ede1e, binary sha256 prefix 6998aafaa03f738e, prod VM, 2026-10-12): red, green and blue all 20 px wide with hard edges at output time 0 (no partially lit pixels), so the discrepancy remains"
+      "blue": {
+        "cx": 320.63
+      },
+      "red": {
+        "cx": 322.81
+      },
+      "green": {
+        "cx": 320.0
+      }
     },
     "srep-0056-stroke-text-layout": {
       "rule": "SREP 56",

@@ -23,6 +23,8 @@ version:
 
 ### Fixed
 
+- Conformance: `srep-0055-node-shutter-frame0` is no longer pending. It checks the first frame's blur with the default `shutterPhase` (−90°) against SREP 55's sample times, with properties holding their first key before time 0 as the schema defines (blue 180°: cx 320.63; red 360°: cx 322.81; green 0°: sharp at 320.0). The pending note expected a smear on both sides, which would need linear extrapolation before the first key; the schema's default is hold.
+
 ## 1.8.0 — 2026-10-20
 
 ### Added
