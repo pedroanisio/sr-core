@@ -21,6 +21,14 @@ version:
 
 ### Added
 
+- Draft SREP "Add polarisation and wave optics" (`srep/srep-0000-wave-optics.md`, OW3 of SREP 12): Jones
+  vectors on the ray-optics bench's sources (`polarisation` linear, circular, elliptical or none) with
+  `polariser`, `waveplate`, `rotator` (an angle or Biot's law for a sugar column) and `detector` (Stokes
+  parameters) elements; a `diffraction` 2D node for `slit`, `doubleSlit`, `circular`, `grating` and `mask`
+  apertures with the closed forms (sinc², cos² sinc², Airy, grating), a radix-2 FFT of the aperture function,
+  Huygens-Fresnel summation for the near field and phase shown as hue; reference module
+  `conformance/tools/wave_optics_reference.py`, `tests/test_wave_optics.py` (its numeric table checked row by
+  row); the schema files are unchanged, the diff (WO1-WO4, V17) is inside the draft; engine card SR-95.
 - Draft SREP "Add spectral rendering" (`srep/srep-0000-spectral.md`, OW2 of SREP 12): `dispersionModel`
   attributes (`cauchy`, `sellmeier`, named `glass` from a table with cited coefficients: BK7, SF10, SF11, fused
   silica, water, diamond) on materials and on the ray-optics bench's elements, with the raster `dispersion`
