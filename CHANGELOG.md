@@ -21,6 +21,17 @@ version:
 
 ### Added
 
+- Draft SREP "Add computed tracking" (`srep/srep-0000-computed-tracking.md`, LA1 of SREP 12): `trackData`
+  gains `provider="tracks"` with one `solve` child, and a resolve step (SREP 9's pattern) writes the track
+  cache at `src` in the engine's JSON format, pinned by `sha256`, with sorted keys and four decimals so the
+  bytes are reproducible; `point` solves by normalised cross-correlation search and Lucas-Kanade refinement
+  with a confidence and a lost state; `planar` solves by a grid of tracked points and a homography from the
+  normalised DLT under RANSAC on the document's stream (SREP 92); `camera` solves from a planar target of
+  known size (Zhang) or survey points (DLT PnP), refined by Gauss-Newton on the re-projection error, as the
+  engine's camera row; synthetic plates with known motion measured below 0.5 px; frames read a static cache
+  (SREP 14); reference module `conformance/tools/computed_tracking_reference.py`,
+  `tests/test_computed_tracking.py` (its numeric table checked row by row); the schema files are unchanged,
+  the diff (CT1-CT4, V17) is inside the draft; engine card SR-97.
 - Draft SREP "Add wave simulations" (`srep/srep-0000-wave-sim.md`, OW4 of SREP 12): a `rippleTank` 2D node
   stepping the scalar wave equation by finite differences (leapfrog) with a document-stated Courant number
   checked against the CFL bound, point and line `source`s (continuous or pulsed), `wall`s with `slit`s,
