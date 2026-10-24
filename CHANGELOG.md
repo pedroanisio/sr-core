@@ -23,6 +23,7 @@ version:
 
 ### Fixed
 
+- Conformance: `run.py` checks only colour keys of an entry as colours. It checked `pending`, `source`, `requires` and `native_only` as colours that were missing, so `--run-pending` could never retire a pending colour case, and an entry with `source` or `requires` could not pass.
 - Conformance: `run.py` reads `validate --format json` from the `scene-render-cli/1` envelope (`result.files`), as well as the older top-level `files`. Every findings case had reported `KeyError: 'files'` against current scene-render. An envelope with another format, or with no file entry, is an error rather than a pass.
 - Conformance: `srep-0055-node-shutter-frame0` is no longer pending. It checks the first frame's blur with the default `shutterPhase` (−90°) against SREP 55's sample times, with properties holding their first key before time 0 as the schema defines (blue 180°: cx 320.63; red 360°: cx 322.81; green 0°: sharp at 320.0). The pending note expected a smear on both sides, which would need linear extrapolation before the first key; the schema's default is hold.
 

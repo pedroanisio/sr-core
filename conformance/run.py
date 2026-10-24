@@ -400,7 +400,7 @@ def check(meas, exp, tol, png=None):
     for col in exp.get("absent", []):
         rows.append((col, "fail" if col in meas else "pass", "absent", meas.get(col)))
     for col, e in exp.items():
-        if col in ("rule", "regions", "absent", "output"):
+        if col not in CLASSES:      # metadata (pending, source, ...) and the other forms are not colours
             continue
         m = meas.get(col)
         if m is None:

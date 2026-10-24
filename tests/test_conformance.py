@@ -414,6 +414,31 @@ def test_run_pending_says_when_no_check_form_can_run_a_case(tmp_path):
     assert r.returncode == 0 and "no check form can run it yet" in r.stdout, r.stdout
 
 
+GREEN_SQUARE = ("import sys\nfrom PIL import Image, ImageDraw\nim = Image.new('RGB', (640, 360))\n"
+                "ImageDraw.Draw(im).rectangle([300, 160, 339, 199], fill=(0, 255, 0))\n"
+                "im.save(sys.argv[sys.argv.index('-o') + 1])\n")
+
+
+@pytest.mark.parametrize("meta", [{"pending": "engine did not pass it"}, {"source": "s"}, {"requires": "r"},
+                                  {"native_only": True}])
+def test_the_metadata_of_an_entry_is_never_checked_as_a_colour(meta):
+    rows = importlib_run().check({"green": {"cx": 320.0, "cy": 180.0, "w": 40, "h": 40}},
+                                 {"rule": "x", **meta, "green": {"cx": 320, "w": 40}}, 1.0)
+    assert rows == [("green", "pass", {"cx": 320, "w": 40}, {"cx": 320.0, "w": 40})], rows
+
+
+def test_run_pending_retires_a_pending_colour_case_that_now_passes(tmp_path):
+    entry = {"rule": "x", "pending": "engine did not pass it", "green": {"cx": 320, "cy": 180, "w": 40, "h": 40}}
+    r = _run_copy(tmp_path, _with_entry(tmp_path, entry), GREEN_SQUARE, "--run-pending")
+    assert _result(tmp_path)["status"] == "retire", r.stdout
+
+
+def test_run_pending_leaves_a_pending_colour_case_that_still_fails_pending(tmp_path):
+    entry = {"rule": "x", "pending": "engine does not pass it", "green": {"cx": 100, "cy": 180, "w": 40, "h": 40}}
+    r = _run_copy(tmp_path, _with_entry(tmp_path, entry), GREEN_SQUARE, "--run-pending")
+    assert r.returncode == 0 and _result(tmp_path)["status"] == "pending", r.stdout
+
+
 FAILING = "import sys\nsys.stderr.write('error PRG12: fuel exhausted\\n')\nsys.exit(3)\n"
 
 
