@@ -21,6 +21,13 @@ version:
 
 ### Added
 
+- Draft SREP "Add particle liquids and granular media in 3D" (`srep/srep-0000-liquids.md`, S3 of SREP 12): a
+  `liquid3D` node stepped by APIC, FLIP or MLS-MPM on a MAC grid with quadratic B-spline transfers, a
+  projection over the particle cells with an interior density correction and a particle separation, `material`
+  children (fixed corotated, snow, Drucker-Prager sand), a `whitewater` child from Ihmsen's potentials with
+  hashed deterministic emission, the Zhu-Bridson surface, and the plan's bars (the Martin and Moyce dam-break
+  front, the volume) as measured rules; reference module `conformance/tools/liquids_reference.py` and
+  `tests/test_liquids.py` (SRC-39, engine card SR-83).
 - Draft SREP "Add combustion and sparse tiles to pyro" (`srep/srep-0000-pyro-combustion.md`, S2 of SREP 12): a
   fuel channel with `pyroSource/@fuelRate`, `pyroImpulse/@fuel` and a `pyroCombustion` child (ignition, rate,
   heat, expansion, soot), sparse tiles (`pyro/@tile`, `@tileMargin`, `@tileThreshold`) with a masked step, a
