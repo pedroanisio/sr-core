@@ -21,6 +21,15 @@ version:
 
 ### Added
 
+- Draft SREP "Add planets and the Sun as bodies" (`srep/srep-0000-planets.md`, SP3 of SREP 12): a
+  `primitive="planet"` for `object3D`, an oblate spheroid of the IAU 2009 radii of its `body` under
+  `pixelsPerMeter`, with the day texture and night lights read as equirectangular maps centred on the prime
+  meridian (`nightLights`, `twilight`), a cloud shell with its shadow (`cloudMap`, `cloudHeight`, `cloudRotation`,
+  `cloudShadow`), rings shadowing and shadowed by the planet (`ringMap`, `ringInner`, `ringOuter`), the
+  Hestroffer-Magnan limb darkening of the Sun (`limbDarkening="solar"`) and the physical-sky atmosphere as a shell
+  (`atmosphere`, `atmosphereHeight`); limb, terminator, cusps and phase in closed form; reference module
+  `conformance/tools/planets_reference.py`, `tests/test_planets.py` (its numeric table checked row by row); the
+  schema files are unchanged, the diff (PL1-PL5, V17) is inside the draft; engine card SR-89.
 - Draft SREP "Add star fields from the Bright Star Catalogue" (`srep/srep-0000-star-fields.md`, SP2 of SREP 12):
   a `catalogue` asset (a gzipped nine-column CSV pinned by sha256) and a `starField` child of the dome light
   (`limitMagnitude`, `magnitudeZero`, `pointSize`, `properMotion`, `epoch`, `constellations`); flux by the
