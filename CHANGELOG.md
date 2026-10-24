@@ -21,6 +21,14 @@ version:
 
 ### Added
 
+- Draft SREP "Add time scales, celestial frames and JPL ephemerides" (`srep/srep-0000-time-frames.md`, SP1 of
+  SREP 12): a `space` element (epoch in UTC, TT or TDB with the NAIF leap-second table and TDB formula, rate,
+  origin, ICRF, ecliptic J2000 or IAU 2009 body-fixed frame, pixel mapping by SREP 14 rule 4), an `ephemeris`
+  asset that is a JPL SPK file read by our own DAF reader and pinned by sha256 (de440s.bsp as the reference
+  file; Horizons vectors reproduced to 3.2 m), the Standish-Williams elements as the fallback, and bodies
+  placed on `object3D`; reference module `conformance/tools/time_frames_reference.py`, fixtures
+  `conformance/assets/de440s-excerpt.bsp` and `horizons-vectors.json`, `tests/test_time_frames.py`
+  (SRC-44, engine card SR-87).
 - Draft SREP "Add the physical sun, moon and sky to dome lights" (`srep/srep-0000-physical-sky.md`, A1 of
   SREP 12): `sky="physical"` on dome lights with `date`, `latitude`, `longitude`, `altitude`, `pressure`,
   `temperature` and `deltaT`; the sun by the Solar Position Algorithm of Reda and Andreas written from the
