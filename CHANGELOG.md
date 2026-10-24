@@ -21,6 +21,14 @@ version:
 
 ### Added
 
+- Draft SREP "Add orbits and N-body motion" (`srep/srep-0000-orbits.md`, SP4 of SREP 12): an `orbit` child of
+  `object3D` (classical elements about a central object, propagated by universal variables with two-body closure
+  to 1e-12), an `nbody` child of `space` (members and Plummer clusters drawn from the random streams, integrators
+  `leapfrog`, `wisdomHolman` in Jacobi coordinates and `ias15` with computed Gauss-Radau nodes, a fixed step that
+  divides the frame interval or an adaptive IAS15 step under `tolerance`) and a `trail` ribbon; bounded energy
+  error and time reversibility as reference tests; reference module `conformance/tools/orbits_reference.py`,
+  `tests/test_orbits.py` (its numeric table checked row by row); the schema files are unchanged, the diff
+  (OR1-OR5, V17) is inside the draft; engine card SR-90.
 - Draft SREP "Add planets and the Sun as bodies" (`srep/srep-0000-planets.md`, SP3 of SREP 12): a
   `primitive="planet"` for `object3D`, an oblate spheroid of the IAU 2009 radii of its `body` under
   `pixelsPerMeter`, with the day texture and night lights read as equirectangular maps centred on the prime
