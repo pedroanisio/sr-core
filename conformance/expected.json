@@ -926,8 +926,13 @@
       ]
     },
     "srep-0017-pdf-bad-cache": {
-      "rule": "SREP 17",
-      "pending": "SREP 17 states only that the render fails, and names no finding code, which the 'failure' form needs; scene-render fails the render with ASSET-MISSING (\"does not match @cacheSha256\"), exit status 1, on scene-render main e586b57 (0.7.4, llvmpipe, 2026-10-24)"
+      "rule": "SREP 17 (section 1.1: the render is refused when the cache file's SHA-256 differs from cacheSha256; its report lists ASSET-MISSING, the code SREP 18's table gives a failed sha256 or cacheSha256)",
+      "findings": {
+        "via": "report",
+        "codes": [
+          "ASSET-MISSING"
+        ]
+      }
     },
     "srep-0017-pdf-page": {
       "rule": "SREP 17",
@@ -6227,7 +6232,8 @@
             0
           ]
         }
-      ]
+      ],
+      "pending": "the reference implementation erodes on a negative amount: scene-render main 67a661a (0.7.4, binary sha256 prefix 2e9e7a8bf5e3e16e, llvmpipe, 2026-10-24) measures red and blue w=h=52 about their centres (the 60 px discs eroded by 4 px) where SREP 29 rule 4 and effectType/@amount (negative dilates) give 68 with a ring in the donor colour, so the grown-ring regions measure black; it also fails on the 0.7.2 and 0.7.3 release builds. Tracked on the engine board as SR-59; this note is true of main 67a661a"
     },
     "srep-0030-grid-line-width": {
       "rule": "SREP 30",
@@ -12675,7 +12681,8 @@
             255.0
           ]
         }
-      ]
+      ],
+      "pending": "the reference implementation differs from SREP 32's weights at five of the 32 sampled columns: scene-render main 67a661a (0.7.4, binary sha256 prefix 2e9e7a8bf5e3e16e, llvmpipe, 2026-10-24) gives, at pixel x 34, 38, 42, 46 and 50, the grey values 28, 0, 125, 128 and 250 where the Mitchell-Netravali formula in linear light with the anti-ringing clamp (recomputed from srep32-strip-8x1.png) gives 0, 28.6, 128, 139.3 and 255; x 34 and 38 are the texel-centre samples (t = 0), where the clamp pair is texels i and i+1. The other 27 columns match within 1. It also fails on the 0.7.2 and 0.7.3 release builds. Tracked on the engine board as SR-60; this note is true of main 67a661a"
     },
     "srep-0032-resample-minified": {
       "rule": "SREP 32",
@@ -13763,10 +13770,10 @@
       "rule": "SREP 34",
       "findings": {
         "codes": [
-          "E19"
+          "INERT-I9"
         ],
         "counts": {
-          "E19": 1
+          "INERT-I9": 1
         },
         "messages": [
           "collapse"
@@ -13777,10 +13784,10 @@
       "rule": "SREP 34",
       "findings": {
         "codes": [
-          "E19"
+          "INERT-I10"
         ],
         "counts": {
-          "E19": 1
+          "INERT-I10": 1
         },
         "messages": [
           "channel"
@@ -13799,10 +13806,10 @@
       "rule": "SREP 34",
       "findings": {
         "codes": [
-          "E19"
+          "INERT-I12"
         ],
         "counts": {
-          "E19": 1
+          "INERT-I12": 1
         },
         "messages": [
           "@overshoot"
@@ -13821,10 +13828,10 @@
       "rule": "SREP 34",
       "findings": {
         "codes": [
-          "E19"
+          "INERT-I13"
         ],
         "counts": {
-          "E19": 1
+          "INERT-I13": 1
         },
         "messages": [
           "@intensity"
@@ -13843,10 +13850,10 @@
       "rule": "SREP 34",
       "findings": {
         "codes": [
-          "E19"
+          "INERT-I11"
         ],
         "counts": {
-          "E19": 1
+          "INERT-I11": 1
         },
         "messages": [
           "opacity 0"
@@ -13865,10 +13872,10 @@
       "rule": "SREP 34",
       "findings": {
         "codes": [
-          "E20"
+          "MASK-MISS"
         ],
         "counts": {
-          "E20": 1
+          "MASK-MISS": 1
         }
       }
     },
@@ -14605,22 +14612,20 @@
     "srep-0036-geo-outline-p125": {
       "rule": "SREP 36",
       "green": {
-        "cx": 186.67,
-        "cy": 221.67,
+        "cx": 190.89,
+        "cy": 221.46,
         "w": 504,
-        "h": 100
-      },
-      "pending": "the specification states no stroke cap for geoLayer (geoLayerType has no strokeCap; SREP 36 says only that each ring is traced through the same trim as shapes), and these values assume butt ends. Measured on scene-render 0.5.0 (commit 12ede1e, binary sha256 prefix 6998aafaa03f738e, prod VM, 2026-10-12): green cx 190.89, cy 221.46, w 504, h 104. Derivation: at progress 0.125 square a traces 100 px of its first edge and square b 50 px, 500 px apart; with butt ends cx = 20 + 500*50/150 = 186.67 (the value here), with square ends of half the 4 px stroke the lengths are 104 and 54, cx = 20 + 500*54/158 = 190.89 and h = 104, which is what the engine draws. Left pending until the schema states the cap of a traced geo outline The same values (cx 190.89, cy 221.46, w 504, h 104) are measured on scene-render main e586b57 (0.7.4, binary sha256 prefix b7285fa1d0fba26f, llvmpipe, 2026-10-24), after its fix of a crash on this case."
+        "h": 104
+      }
     },
     "srep-0036-geo-outline-p875": {
       "rule": "SREP 36",
       "green": {
-        "cx": 275.96,
-        "cy": 167.99,
+        "cx": 270.65,
+        "cy": 167.8,
         "w": 604,
-        "h": 207
-      },
-      "pending": "same open point as srep-0036-geo-outline-p125: no stroke cap (or join) is specified for a traced geoLayer outline and these values assume butt ends. Measured on scene-render 0.5.0 (commit 12ede1e, binary sha256 prefix 6998aafaa03f738e, prod VM, 2026-10-12): green cx 270.65, cy 167.8, w 604, h 208. Left pending until the schema states the cap of a traced geo outline The same values (cx 270.65, cy 167.8, w 604, h 208) are measured on scene-render main e586b57 (0.7.4, binary sha256 prefix b7285fa1d0fba26f, llvmpipe, 2026-10-24), after its fix of a crash on this case."
+        "h": 208
+      }
     },
     "srep-0037-text3d-tracking": {
       "rule": "SREP 37: font assets/srep37-block.ttf (upem 2048, advance 1229, glyph I box x 205..1024, y 0..1434), size 100, scale 100/2048; glyph i moves i*t*s/1000 = i*20.0 px; block centred on its bbox, ortho camera 1 px/unit: stems x 260.00..299.99 and 340.01..380.00 (gap 40.02 px; baseline gap 20.0, growth 20.0 px), rows 145..215",

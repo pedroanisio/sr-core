@@ -5,10 +5,10 @@
    "rule": "SREP 34",
    "findings": {
     "codes": [
-     "E19"
+     "INERT-I9"
     ],
     "counts": {
-     "E19": 1
+     "INERT-I9": 1
     },
     "messages": [
      "collapse"
@@ -22,10 +22,10 @@
    "rule": "SREP 34",
    "findings": {
     "codes": [
-     "E19"
+     "INERT-I10"
     ],
     "counts": {
-     "E19": 1
+     "INERT-I10": 1
     },
     "messages": [
      "channel"
@@ -50,10 +50,10 @@
    "rule": "SREP 34",
    "findings": {
     "codes": [
-     "E19"
+     "INERT-I12"
     ],
     "counts": {
-     "E19": 1
+     "INERT-I12": 1
     },
     "messages": [
      "@overshoot"
@@ -78,10 +78,10 @@
    "rule": "SREP 34",
    "findings": {
     "codes": [
-     "E19"
+     "INERT-I13"
     ],
     "counts": {
-     "E19": 1
+     "INERT-I13": 1
     },
     "messages": [
      "@intensity"
@@ -106,10 +106,10 @@
    "rule": "SREP 34",
    "findings": {
     "codes": [
-     "E19"
+     "INERT-I11"
     ],
     "counts": {
-     "E19": 1
+     "INERT-I11": 1
     },
     "messages": [
      "opacity 0"
@@ -134,10 +134,10 @@
    "rule": "SREP 34",
    "findings": {
     "codes": [
-     "E20"
+     "MASK-MISS"
     ],
     "counts": {
-     "E20": 1
+     "MASK-MISS": 1
     }
    }
   }

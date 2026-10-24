@@ -551,12 +551,11 @@
   "expected": {
    "rule": "SREP 36",
    "green": {
-    "cx": 186.67,
-    "cy": 221.67,
+    "cx": 190.89,
+    "cy": 221.46,
     "w": 504,
-    "h": 100
-   },
-   "pending": "the specification states no stroke cap for geoLayer (geoLayerType has no strokeCap; SREP 36 says only that each ring is traced through the same trim as shapes), and these values assume butt ends. Measured on scene-render 0.5.0 (commit 12ede1e, binary sha256 prefix 6998aafaa03f738e, prod VM, 2026-10-12): green cx 190.89, cy 221.46, w 504, h 104. Derivation: at progress 0.125 square a traces 100 px of its first edge and square b 50 px, 500 px apart; with butt ends cx = 20 + 500*50/150 = 186.67 (the value here), with square ends of half the 4 px stroke the lengths are 104 and 54, cx = 20 + 500*54/158 = 190.89 and h = 104, which is what the engine draws. Left pending until the schema states the cap of a traced geo outline The same values (cx 190.89, cy 221.46, w 504, h 104) are measured on scene-render main e586b57 (0.7.4, binary sha256 prefix b7285fa1d0fba26f, llvmpipe, 2026-10-24), after its fix of a crash on this case."
+    "h": 104
+   }
   }
  },
  "srep-0036-geo-outline-p875": {
@@ -564,12 +563,11 @@
   "expected": {
    "rule": "SREP 36",
    "green": {
-    "cx": 275.96,
-    "cy": 167.99,
+    "cx": 270.65,
+    "cy": 167.8,
     "w": 604,
-    "h": 207
-   },
-   "pending": "same open point as srep-0036-geo-outline-p125: no stroke cap (or join) is specified for a traced geoLayer outline and these values assume butt ends. Measured on scene-render 0.5.0 (commit 12ede1e, binary sha256 prefix 6998aafaa03f738e, prod VM, 2026-10-12): green cx 270.65, cy 167.8, w 604, h 208. Left pending until the schema states the cap of a traced geo outline The same values (cx 270.65, cy 167.8, w 604, h 208) are measured on scene-render main e586b57 (0.7.4, binary sha256 prefix b7285fa1d0fba26f, llvmpipe, 2026-10-24), after its fix of a crash on this case."
+    "h": 208
+   }
   }
  }
 }

@@ -4516,7 +4516,8 @@
       0
      ]
     }
-   ]
+   ],
+   "pending": "the reference implementation erodes on a negative amount: scene-render main 67a661a (0.7.4, binary sha256 prefix 2e9e7a8bf5e3e16e, llvmpipe, 2026-10-24) measures red and blue w=h=52 about their centres (the 60 px discs eroded by 4 px) where SREP 29 rule 4 and effectType/@amount (negative dilates) give 68 with a ring in the donor colour, so the grown-ring regions measure black; it also fails on the 0.7.2 and 0.7.3 release builds. Tracked on the engine board as SR-59; this note is true of main 67a661a"
   }
  }
 }
