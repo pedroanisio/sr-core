@@ -1098,7 +1098,7 @@
     <xs:attributeGroup ref="characterStyle"/>
   </xs:complexType>
   <xs:complexType name="stylesType">
-    <xs:annotation><xs:documentation>Brand kit: colour/number tokens referenced as var(--name), and reusable text styles.</xs:documentation></xs:annotation>
+    <xs:annotation><xs:documentation>Brand kit: colour tokens referenced as var(--name) from colour values, and reusable text styles.</xs:documentation></xs:annotation>
     <xs:choice minOccurs="0" maxOccurs="unbounded">
       <xs:element name="token" type="tokenType"/>
       <xs:element name="textStyle" type="textStyleType"/>
@@ -4503,7 +4503,7 @@
       </xs:documentation></xs:annotation>
     </xs:attribute>
     <xs:attribute name="pathSamples" default="64">
-      <xs:annotation><xs:documentation>Samples per pixel of the path tracer, 1 to 65536, default 64. With geodesics it is instead the antialiasing sample count of a pixel, 1 to 4096, default 16.</xs:documentation></xs:annotation>
+      <xs:annotation><xs:documentation>Samples per pixel of the path tracer, 1 to 65536, default 64. With geodesics it is instead the antialiasing sample count of a pixel, 1 to 4096, default 64.</xs:documentation></xs:annotation>
       <xs:simpleType><xs:restriction base="xs:positiveInteger"><xs:maxInclusive value="65536"/></xs:restriction></xs:simpleType>
     </xs:attribute>
     <xs:attribute name="maxBounces" default="4">

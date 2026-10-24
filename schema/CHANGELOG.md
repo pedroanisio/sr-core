@@ -21,6 +21,11 @@ computed from those classes by `python3 tools/release.py next schema`:
 
 ### Fixed
 
+### Docs
+
+- `cameraType/@pathSamples`: the documentation said the default with geodesics is 16; the declaration's default is 64 and the reference applies 64 to geodesic cameras (`crates/sr-gpu/src/render_three.rs`, `num("pathSamples", 64.0)`), so the sentence now says 64. Annotation-only (SREP 92 difference "the pathSamples of a camera (16 against 64)"; SRC-2). `tests/test_schema_doc_defaults.py` now checks every numeric default a sentence states against its declaration.
+- `brandKit`: the documentation said colour/number tokens; `tokenType/@value` is a colour and the reference resolves `var(--name)` in colour values only (`crates/sr-model/src/document.rs`), so the sentence says colour tokens (SREP 92, "Documentation that contradicts the implementation"; SRC-6).
+
 ## 1.7.1 — 2026-10-20
 
 ### Docs
