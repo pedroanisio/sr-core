@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.7">
+<project width="640" height="360" fps="24" duration="2" background="#303030FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<assets><video id="clip" src="../assets/srep82-tone-500.mkv" width="64" height="36" fps="25" duration="2.2"/></assets>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/><material id="m-white" baseColor="#FFFFFFFF" unlit="true" doubleSided="true"/><material id="m-grey" baseColor="#808080FF" unlit="true" doubleSided="true"/></materials>
+<tracking><trackData id="trk" src="../assets/srep12-track.json" kind="point" footage="clip"/></tracking>
+<composition>
+<layer id="plate" asset="clip" fit="fill" boxWidth="640" boxHeight="360" x="0" y="0"/><shape id="boat" shape="ellipse" x="0" y="0" width="20" height="20" fill="#FF0000FF" anchorX="10" anchorY="10"><transformConstraint type="track" target="trk" point="boat"/></shape><shape id="callout" shape="rect" x="400" y="60" width="120" height="30" fill="#FFFF00FF"></shape><connector id="lead" from="callout" to="boat" stroke="#FFFFFFFF" strokeWidth="2"/>
+</composition>
+</scene>

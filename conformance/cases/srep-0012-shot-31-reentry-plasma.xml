@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.7">
+<project width="640" height="360" fps="24" duration="2" background="#000000FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/><material id="m-white" baseColor="#FFFFFFFF" unlit="true" doubleSided="true"/><material id="m-grey" baseColor="#808080FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<object3D id="shield" primitive="cylinder" radius="50" height="6" x="320" y="180" z="0" rotationX="90" material="m-red"/><object3D id="capsule" primitive="cone" radius="50" height="80" x="320" y="180" z="43" rotationX="-90" material="m-grey"/><particles3D id="sheath" x="320" y="180" z="-5" rate="300" speed="150" lifetime="1.2" size="5" spread="40" directionX="-1" directionY="0" material="m-yellow" seed="4"><burst time="0" count="150"/></particles3D>
+</composition>
+</scene>

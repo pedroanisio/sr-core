@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.7">
+<project width="640" height="360" fps="24" duration="2" background="#000000FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/><material id="m-white" baseColor="#FFFFFFFF" unlit="true" doubleSided="true"/><material id="m-grey" baseColor="#808080FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<repeat id="air" x="320" y="180"><points type="grid" columns="4" rows="3" spacingX="60" spacingY="70"/><shape id="mol" shape="ellipse" x="-6" y="-6" width="12" height="12" fill="#FFFFFFFF" stroke="#C0C0C0FF" strokeWidth="2"/></repeat><shape id="beam" shape="rect" x="0" y="170" width="300" height="20" fill="#FFFF00FF"></shape><shape id="sc1" shape="ellipse" x="294" y="94" width="12" height="12" fill="#0000FFFF"><animate property="y"><key time="0" value="94"/><key time="2" value="10"/></animate></shape><shape id="sc2" shape="ellipse" x="294" y="254" width="12" height="12" fill="#0000FFFF"><animate property="y"><key time="0" value="254"/><key time="2" value="340"/></animate></shape>
+</composition>
+</scene>

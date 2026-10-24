@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.7">
+<project width="640" height="360" fps="24" duration="2" background="#000000FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<assets><chart id="mix" kind="area" width="220" height="110" labels="0,1,2,3"><series name="hawk" values="2 3 5 4" color="#FF0000FF"/><series name="dove" values="6 5 3 4" color="#0000FFFF"/></chart></assets>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/><material id="m-white" baseColor="#FFFFFFFF" unlit="true" doubleSided="true"/><material id="m-grey" baseColor="#808080FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<shape id="p0" shape="ellipse" x="195" y="235" width="10" height="10" fill="#FFFF00FF"></shape><shape id="p1" shape="ellipse" x="315" y="235" width="10" height="10" fill="#FFFF00FF"></shape><shape id="p2" shape="ellipse" x="435" y="235" width="10" height="10" fill="#FFFF00FF"></shape><shape id="hawk" shape="ellipse" x="162" y="132" width="36" height="36" fill="#FF0000FF"><animate property="x"><key time="0" value="162"/><key time="1" value="190"/></animate></shape><shape id="dove" shape="ellipse" x="442" y="132" width="36" height="36" fill="#0000FFFF"><animate property="x"><key time="0" value="442"/><key time="1" value="410"/></animate></shape><layer id="mixgraph" asset="mix" x="40" y="20"/>
+</composition>
+</scene>

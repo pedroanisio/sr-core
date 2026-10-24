@@ -13,7 +13,10 @@ centroid (and size, where expected) with the normative value. Writes out/report.
 
 Three forms check something other than a picture: "findings" (the engine's diagnostics, `validate --format json`),
 "captions" (the caption pages after paging and the current word per time, `captions --at`; SREP 52) and "audio"
-(the gain of each test tone at given times in an audio-only WAV output; SREP 82).
+(the gain of each test tone at given times in an audio-only WAV output; SREP 82). The "coverage" form checks the
+fraction of a box that a colour class fills (a simulation or a 3D render fixes where content must appear, not its
+exact outline; SREP 12 milestone 0). `--catalogue` scores the probes of SREP 12's benchmark catalogue instead
+(catalogue.py: strict render, pixel checks and the seek check of SREP 14) and reports the native count.
 """
 import argparse
 import glob
@@ -73,6 +76,13 @@ CLASSES = {
     "green": lambda r, g, b: (g > 0.5) & (r < 0.3) & (b < 0.3),
     "blue": lambda r, g, b: (b > 0.5) & (r < 0.3) & (g < 0.3),
     "yellow": lambda r, g, b: (r > 0.5) & (g > 0.5) & (b < 0.3),
+}
+# the coverage form also counts any lit pixel (some channel above a quarter) and any dark one (every channel below a
+# tenth): what a shaded render or a simulation fixes is where something is drawn, not its colour
+COVERAGE_CLASSES = {
+    **CLASSES,
+    "lit": lambda r, g, b: np.maximum(np.maximum(r, g), b) > 0.25,
+    "dark": lambda r, g, b: np.maximum(np.maximum(r, g), b) < 0.1,
 }
 
 
@@ -407,6 +417,15 @@ def failure(renderer, case, want):
 COLOUR_TOL = 3  # 8-bit code values
 
 
+def coverage(png, colour, box):
+    """The fraction of the pixels of `box` (x0, y0, x1, y1; x1 and y1 exclusive) in the class `colour`."""
+    a = np.asarray(Image.open(png).convert("RGB")).astype(np.float64) / 255.0
+    x0, y0, x1, y1 = box
+    part = a[y0:y1, x0:x1]
+    m = COVERAGE_CLASSES[colour](part[..., 0], part[..., 1], part[..., 2])
+    return float(m.sum()) / float(m.size)
+
+
 def region_rgb(png, box):
     a = np.asarray(Image.open(png).convert("RGB")).astype(np.float64)
     x0, y0, x1, y1 = box
@@ -419,6 +438,11 @@ def check(meas, exp, tol, png=None):
         got = region_rgb(png, reg["box"])
         ok = all(abs(g - w) <= COLOUR_TOL for g, w in zip(got, reg["rgb"]))
         rows.append((f"region{k}", "pass" if ok else "fail", {"rgb": reg["rgb"]}, {"rgb": got}))
+    for k, c in enumerate(exp.get("coverage", [])):
+        got = coverage(png, c["colour"], c["box"])
+        ok = c.get("min", 0.0) <= got <= c.get("max", 1.0)
+        rows.append((f"coverage{k}", "pass" if ok else "fail",
+                     {kk: c[kk] for kk in ("colour", "box", "min", "max") if kk in c}, {"fraction": round(got, 4)}))
     for col in exp.get("absent", []):
         rows.append((col, "fail" if col in meas else "pass", "absent", meas.get(col)))
     for col, e in exp.items():
@@ -437,8 +461,9 @@ def check(meas, exp, tol, png=None):
 # The closed vocabulary of an expected.json entry. A key the runner does not read would otherwise be a check that
 # silently does not run, and an entry with no check at all would "pass": `all([])` is True.
 META_KEYS = {"rule", "source", "requires", "native_only", "pending"}
-FORM_KEYS = {"findings", "captions", "audio", "failure", "output", "regions", "absent", "compare"}
-CHECKING_FORMS = {"findings", "captions", "audio", "failure", "regions", "absent", "compare"}
+FORM_KEYS = {"findings", "captions", "audio", "failure", "output", "regions", "absent", "compare", "coverage"}
+CHECKING_FORMS = {"findings", "captions", "audio", "failure", "regions", "absent", "compare", "coverage"}
+COVERAGE_KEYS = {"colour", "box", "min", "max"}
 COMPARE_KEYS = {"case", "tolerance", "brighter"}
 FINDINGS_CHECKS = {"codes", "absent", "counts", "messages", "valid"}
 CAPTIONS_CHECKS = {"pages", "preset", "wordCount", "activeWord", "wordsAndTimesEqualTo"}
@@ -497,6 +522,26 @@ def entry_problems(entry: dict) -> list[str]:
     for i, r in enumerate(entry.get("regions", [])):
         if set(r) != {"box", "rgb"}:
             out.append(f"regions[{i}]: want exactly 'box' and 'rgb'")
+    if "coverage" in entry:
+        cov = entry["coverage"]
+        if not isinstance(cov, list) or not cov:
+            out.append("'coverage': want a non-empty list")
+        else:
+            for i, c in enumerate(cov):
+                if not isinstance(c, dict) or set(c) - COVERAGE_KEYS or not {"colour", "box"} <= set(c):
+                    out.append(f"coverage[{i}]: want 'colour', 'box' and 'min' and/or 'max'")
+                    continue
+                if c["colour"] not in COVERAGE_CLASSES:
+                    out.append(f"coverage[{i}]: colour {c['colour']!r}: want one of {sorted(COVERAGE_CLASSES)}")
+                box = c["box"]
+                if not (isinstance(box, list) and len(box) == 4 and all(type(v) is int for v in box)
+                        and box[0] < box[2] and box[1] < box[3]):
+                    out.append(f"coverage[{i}]: box: want [x0, y0, x1, y1] integers with x0 < x1 and y0 < y1")
+                bounds = {k: c[k] for k in ("min", "max") if k in c}
+                if not bounds:
+                    out.append(f"coverage[{i}]: want 'min' and/or 'max', a fraction of the box")
+                elif not all(isinstance(v, (int, float)) and 0 <= v <= 1 for v in bounds.values()):
+                    out.append(f"coverage[{i}]: min and max are fractions in [0, 1]")
     if "compare" in entry:
         c = entry["compare"]
         if not isinstance(c, dict):
@@ -514,7 +559,7 @@ def entry_problems(entry: dict) -> list[str]:
     if "absent" in entry and not (isinstance(entry["absent"], list) and set(entry["absent"]) <= set(CLASSES)):
         out.append(f"'absent': want a list of {sorted(CLASSES)}")
     if not entry.get("pending") and not (set(entry) & CHECKING_FORMS or colours):
-        out.append("no check: the entry names no colour, regions, absent, findings, captions, audio or compare")
+        out.append("no check: the entry names no colour, regions, absent, coverage, findings, captions, audio or compare")
     return out
 
 
@@ -588,7 +633,13 @@ def main() -> int:
                     help="also run the pending cases that have a check: one that now passes is reported as 'retire' "
                          "and fails the run (delete its entry from tools/kit_pending.py), one that still fails stays "
                          "pending")
+    ap.add_argument("--catalogue", action="store_true",
+                    help="score the probes of SREP 12's benchmark catalogue (catalogue.py) and report the native count")
+    ap.add_argument("--shots", default="", help="with --catalogue: the shot numbers to score, comma-separated")
     a = ap.parse_args()
+    if a.catalogue:
+        import catalogue
+        return catalogue.score_and_report(a.renderers.split(","), a.shots)
     spec = json.load(open(os.path.join(HERE, "expected.json")))
     tol = spec["tolerance_px"]
     cases = [c for c in spec["cases"] if not a.cases or any(c.startswith(x) for x in a.cases.split(","))]

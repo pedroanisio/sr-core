@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.7">
+<project width="640" height="360" fps="24" duration="2" background="#000000FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<assets><chart id="pop" kind="line" width="200" height="120" labels="0,1,2,3,4"><series name="n" values="10 14 12 9 11" color="#FFFF00FF"/><animate property="progress"><key time="0" value="0.2"/><key time="2" value="1"/></animate></chart></assets>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/><material id="m-white" baseColor="#FFFFFFFF" unlit="true" doubleSided="true"/><material id="m-grey" baseColor="#808080FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<shape id="blob1" shape="ellipse" x="180" y="180" width="40" height="40" fill="#00FF00FF"><animate property="x"><key time="0" value="180"/><key time="1" value="240"/></animate><animate property="y"><key time="0" value="180"/><key time="1" value="200"/></animate></shape><shape id="blob2" shape="ellipse" x="420" y="180" width="40" height="40" fill="#00FF00FF"><animate property="x"><key time="0" value="420"/><key time="1" value="360"/></animate><animate property="opacity"><key time="1.2" value="1"/><key time="1.8" value="0"/></animate></shape><shape id="food1" shape="ellipse" x="295" y="215" width="10" height="10" fill="#FF0000FF" end="1.2"></shape><shape id="food2" shape="ellipse" x="335" y="215" width="10" height="10" fill="#FF0000FF" end="1.6"></shape><layer id="graph" asset="pop" x="420" y="20"/>
+</composition>
+</scene>

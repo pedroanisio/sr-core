@@ -1,0 +1,896 @@
+{
+ "srep-0012-shot-01-light-pulse-on-footage": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#303030FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><video id=\"clip\" src=\"../assets/srep82-tone-500.mkv\" width=\"64\" height=\"36\" fps=\"25\" duration=\"2.2\"/><font id=\"f\" src=\"../assets/srep-test-font.ttf\" family=\"SREPTest\"/><text id=\"clock\" text=\"0\" width=\"200\" height=\"60\" size=\"40\" fontAsset=\"f\" color=\"#FFFFFFFF\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<tracking><trackData id=\"trk\" src=\"../assets/srep12-track.json\" kind=\"point\" footage=\"clip\"/></tracking>\n<composition>\n<layer id=\"plate\" asset=\"clip\" fit=\"fill\" boxWidth=\"640\" boxHeight=\"360\" x=\"0\" y=\"0\"/><shape id=\"pulse\" shape=\"ellipse\" x=\"0\" y=\"0\" width=\"24\" height=\"24\" fill=\"#FF0000FF\" anchorX=\"12\" anchorY=\"12\" effects=\"glow\"><transformConstraint type=\"track\" target=\"trk\" point=\"pulse\"/></shape><shape id=\"mirror\" shape=\"rect\" x=\"560\" y=\"150\" width=\"10\" height=\"60\" fill=\"#0000FFFF\"></shape><layer id=\"hud\" asset=\"clock\" x=\"20\" y=\"20\"><textAnimator preset=\"counter\" presetStart=\"0\" presetDuration=\"2\"/></layer>\n</composition>\n<effects><effect id=\"glow\" type=\"glow\" radius=\"12\" intensity=\"1\"/></effects>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 1 (video layer, point track from a JSON file mapped through the footage layer, track constraint, glow effect, counter text animator)",
+   "regions": [
+    {
+     "box": [
+      20,
+      300,
+      60,
+      340
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    }
+   ],
+   "red": {
+    "cx": 80,
+    "cy": 180
+   },
+   "blue": {
+    "cx": 565.0,
+    "cy": 180.0,
+    "w": 10,
+    "h": 60,
+    "px": 600
+   }
+  }
+ },
+ "srep-0012-shot-02-wire-loop-fields": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"wire\" shape=\"path\" path=\"M80 120 H560 V240 H80 Z\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#FFFFFFFF\" strokeWidth=\"4\"></shape><shape id=\"bulb\" shape=\"ellipse\" x=\"100\" y=\"170\" width=\"24\" height=\"24\" fill=\"#FFFF00FF\"></shape><shape id=\"switch\" shape=\"rect\" x=\"520\" y=\"180\" width=\"40\" height=\"6\" fill=\"#FF0000FF\" anchorX=\"0\" anchorY=\"3\"><animate property=\"rotation\"><key time=\"0\" value=\"0\"/><key time=\"0.5\" value=\"-30\"/></animate></shape><shape id=\"a0\" shape=\"polygon\" points=\"3\" x=\"300\" y=\"110\" width=\"14\" height=\"14\" fill=\"#00FF00FF\" start=\"0.5\"/><shape id=\"a1\" shape=\"polygon\" points=\"3\" x=\"340\" y=\"110\" width=\"14\" height=\"14\" fill=\"#00FF00FF\" start=\"0.6\"/><shape id=\"a2\" shape=\"polygon\" points=\"3\" x=\"300\" y=\"230\" width=\"14\" height=\"14\" fill=\"#00FF00FF\" start=\"0.7\"/><shape id=\"a3\" shape=\"polygon\" points=\"3\" x=\"340\" y=\"230\" width=\"14\" height=\"14\" fill=\"#00FF00FF\" start=\"0.8\"/><shape id=\"a4\" shape=\"polygon\" points=\"3\" x=\"260\" y=\"140\" width=\"14\" height=\"14\" fill=\"#00FF00FF\" start=\"0.9\"/><shape id=\"a5\" shape=\"polygon\" points=\"3\" x=\"380\" y=\"140\" width=\"14\" height=\"14\" fill=\"#00FF00FF\" start=\"1.0\"/><shape id=\"a6\" shape=\"polygon\" points=\"3\" x=\"260\" y=\"200\" width=\"14\" height=\"14\" fill=\"#00FF00FF\" start=\"1.1\"/><shape id=\"a7\" shape=\"polygon\" points=\"3\" x=\"380\" y=\"200\" width=\"14\" height=\"14\" fill=\"#00FF00FF\" start=\"1.2000000000000002\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 2 (path, ellipse, keyed rotation; the field arrows are hand-placed polygons with staggered starts)",
+   "yellow": {
+    "cx": 112.0,
+    "cy": 182.0,
+    "w": 24.0,
+    "h": 24.0
+   },
+   "red": {
+    "cx": 540.0,
+    "cy": 180.0,
+    "w": 40,
+    "h": 6,
+    "px": 240
+   },
+   "absent": [
+    "green"
+   ]
+  }
+ },
+ "srep-0012-shot-03-t-handle-flip": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"bar\" primitive=\"box\" width=\"160\" height=\"30\" depth=\"4\" x=\"320\" y=\"180\" z=\"0\" material=\"m-red\"><animate property=\"rotationY\"><key time=\"0\" value=\"0\"/><key time=\"0.5\" value=\"180\"/><key time=\"1\" value=\"360\"/></animate><animate property=\"rotationX\"><key time=\"0\" value=\"0\"/><key time=\"1\" value=\"180\"/><key time=\"2\" value=\"0\"/></animate></object3D><object3D id=\"stem\" primitive=\"box\" width=\"20\" height=\"60\" depth=\"4\" x=\"320\" y=\"225\" z=\"0\" material=\"m-green\"><animate property=\"rotationY\"><key time=\"0\" value=\"0\"/><key time=\"0.5\" value=\"180\"/><key time=\"1\" value=\"360\"/></animate></object3D><object3D id=\"ax\" primitive=\"box\" width=\"240\" height=\"2\" depth=\"2\" x=\"320\" y=\"180\" z=\"-3\" material=\"m-blue\"/><object3D id=\"ay\" primitive=\"box\" width=\"2\" height=\"150\" depth=\"2\" x=\"320\" y=\"180\" z=\"-3\" material=\"m-yellow\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 3 (3D boxes under the implicit camera with keyed rotationX and rotationY)",
+   "red": {
+    "cx": 320,
+    "cy": 180,
+    "w": 160.6,
+    "h": 30.1
+   },
+   "green": {
+    "cx": 320,
+    "cy": 225,
+    "w": 20.1,
+    "h": 60.2
+   }
+  }
+ },
+ "srep-0012-shot-04-curved-spacetime-sheet": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"sheet\" primitive=\"parametric\" x=\"320\" y=\"200\" z=\"0\" material=\"m-green\"><parametricSurface x=\"u\" y=\"30 * Math.exp(-(u * u + v * v) / 20000)\" z=\"v\" u0=\"-200\" u1=\"200\" v0=\"-150\" v1=\"150\" uSamples=\"40\" vSamples=\"30\"/></object3D><object3D id=\"apple\" primitive=\"parametric\" x=\"320\" y=\"196\" z=\"0\" material=\"m-red\"><parametricSurface x=\"u\" y=\"30 * Math.exp(-(u * u) / 20000) + v\" z=\"60\" u0=\"-200\" u1=\"200\" v0=\"-3\" v1=\"3\" uSamples=\"40\" vSamples=\"2\"/></object3D><camera id=\"orbit\" x=\"320\" y=\"60\" z=\"-554.256\" target=\"sheet\"><animate property=\"x\"><key time=\"0\" value=\"320\"/><key time=\"1\" value=\"620\"/><key time=\"2\" value=\"320\"/></animate><animate property=\"z\"><key time=\"0\" value=\"-554.256\"/><key time=\"1\" value=\"-434.256\"/><key time=\"2\" value=\"-554.256\"/></animate></camera>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 4 (parametric surfaces (a sheet and a thin ribbon for the worldline), a camera with a target and keyed position)",
+   "coverage": [
+    {
+     "colour": "green",
+     "box": [
+      120,
+      100,
+      520,
+      300
+     ],
+     "min": 0.3
+    },
+    {
+     "colour": "red",
+     "box": [
+      120,
+      100,
+      520,
+      300
+     ],
+     "min": 0.002
+    }
+   ]
+  }
+ },
+ "srep-0012-shot-05-einstein-solid-packets": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<repeat id=\"lattice\" x=\"320\" y=\"180\"><points type=\"grid\" columns=\"5\" rows=\"3\" spacingX=\"60\" spacingY=\"60\"/><shape id=\"atom\" shape=\"ellipse\" x=\"-10\" y=\"-10\" width=\"20\" height=\"20\" fill=\"#0000FFFF\"/></repeat><shape id=\"packet\" shape=\"ellipse\" x=\"-8\" y=\"-8\" width=\"16\" height=\"16\" fill=\"#FF0000FF\"><animate property=\"x\"><key time=\"0.0\" value=\"252\" interpolation=\"hold\"/><key time=\"0.4\" value=\"312\" interpolation=\"hold\"/><key time=\"0.8\" value=\"312\" interpolation=\"hold\"/><key time=\"1.2000000000000002\" value=\"372\" interpolation=\"hold\"/><key time=\"1.6\" value=\"372\" interpolation=\"hold\"/></animate><animate property=\"y\"><key time=\"0.0\" value=\"172\" interpolation=\"hold\"/><key time=\"0.4\" value=\"172\" interpolation=\"hold\"/><key time=\"0.8\" value=\"112\" interpolation=\"hold\"/><key time=\"1.2000000000000002\" value=\"112\" interpolation=\"hold\"/><key time=\"1.6\" value=\"172\" interpolation=\"hold\"/></animate></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 5 (a repeat over a grid of points, a packet with hold-keyed position)",
+   "blue": {
+    "w": 260,
+    "h": 140
+   },
+   "red": {
+    "cx": 260.0,
+    "cy": 180.0,
+    "w": 16.0,
+    "h": 16.0
+   }
+  }
+ },
+ "srep-0012-shot-06-shade-balls-callouts": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#303030FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><video id=\"clip\" src=\"../assets/srep82-tone-500.mkv\" width=\"64\" height=\"36\" fps=\"25\" duration=\"2.2\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<tracking><trackData id=\"trk\" src=\"../assets/srep12-track.json\" kind=\"point\" footage=\"clip\"/></tracking>\n<composition>\n<layer id=\"plate\" asset=\"clip\" fit=\"fill\" boxWidth=\"640\" boxHeight=\"360\" x=\"0\" y=\"0\"/><shape id=\"boat\" shape=\"ellipse\" x=\"0\" y=\"0\" width=\"20\" height=\"20\" fill=\"#FF0000FF\" anchorX=\"10\" anchorY=\"10\"><transformConstraint type=\"track\" target=\"trk\" point=\"boat\"/></shape><shape id=\"callout\" shape=\"rect\" x=\"400\" y=\"60\" width=\"120\" height=\"30\" fill=\"#FFFF00FF\"></shape><connector id=\"lead\" from=\"callout\" to=\"boat\" stroke=\"#FFFFFFFF\" strokeWidth=\"2\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 6 (video layer, point track mapped through the footage layer, a connector from a callout to the tracked node)",
+   "regions": [
+    {
+     "box": [
+      20,
+      300,
+      60,
+      340
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    }
+   ],
+   "red": {
+    "cx": 320,
+    "cy": 180
+   },
+   "yellow": {
+    "cx": 460.0,
+    "cy": 75.0,
+    "w": 120,
+    "h": 30,
+    "px": 3600
+   }
+  }
+ },
+ "srep-0012-shot-07-penrose-to-wormhole": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"diamond\" shape=\"path\" path=\"M320 40 L460 180 L320 320 L180 180 Z\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#FFFFFFFF\" strokeWidth=\"3\"></shape><shape id=\"singularity\" shape=\"rect\" x=\"240\" y=\"60\" width=\"160\" height=\"8\" fill=\"#0000FFFF\"></shape><shape id=\"horizon\" shape=\"path\" path=\"M180 180 L320 40\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#FFFFFFFF\" strokeWidth=\"2\" dash=\"8 6\"></shape><shape id=\"label\" shape=\"rect\" x=\"470\" y=\"172\" width=\"16\" height=\"16\" fill=\"#FF0000FF\"></shape><group id=\"bridge\" x=\"0\" y=\"0\" start=\"1\"><camera id=\"eye\" x=\"320\" y=\"180\" z=\"-300\" geodesics=\"true\"/><blackHole id=\"hole\" mass=\"8\" x=\"320\" y=\"180\" z=\"0\"/><accretionDisk id=\"disk\" blackHole=\"hole\" outerRadius=\"90\" temperatureScale=\"5000\" rotationX=\"70\"/></group>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 7 (paths and rects for the diagram; a geodesic camera with one black hole from 1 s)",
+   "blue": {
+    "cx": 320.0,
+    "cy": 64.0,
+    "w": 160,
+    "h": 8
+   },
+   "red": {
+    "cx": 478.0,
+    "cy": 180.0,
+    "w": 16,
+    "h": 16,
+    "px": 256
+   }
+  }
+ },
+ "srep-0012-shot-08-neural-network-layers": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<repeat id=\"pixels\" x=\"100\" y=\"180\"><points type=\"grid\" columns=\"8\" rows=\"8\" spacingX=\"12\" spacingY=\"12\"/><shape id=\"px\" shape=\"rect\" x=\"-5\" y=\"-5\" width=\"10\" height=\"10\" fill=\"#FFFFFFFF\"/></repeat><repeat id=\"in\" x=\"250\" y=\"180\"><points type=\"grid\" columns=\"1\" rows=\"8\" spacingY=\"30\"/><shape id=\"in-n\" shape=\"ellipse\" x=\"-8\" y=\"-8\" width=\"16\" height=\"16\" fill=\"#0000FFFF\"><animate property=\"opacity\"><key time=\"0\" value=\"0.4\"/><key time=\"1\" value=\"1\"/></animate></shape></repeat><repeat id=\"hid\" x=\"380\" y=\"180\"><points type=\"grid\" columns=\"1\" rows=\"6\" spacingY=\"36\"/><shape id=\"hid-n\" shape=\"ellipse\" x=\"-8\" y=\"-8\" width=\"16\" height=\"16\" fill=\"#00FF00FF\"><animate property=\"opacity\"><key time=\"0\" value=\"0.4\"/><key time=\"1\" value=\"1\"/></animate></shape></repeat><repeat id=\"out\" x=\"510\" y=\"180\"><points type=\"grid\" columns=\"1\" rows=\"4\" spacingY=\"50\"/><shape id=\"out-n\" shape=\"ellipse\" x=\"-8\" y=\"-8\" width=\"16\" height=\"16\" fill=\"#FF0000FF\"><animate property=\"opacity\"><key time=\"0\" value=\"0.4\"/><key time=\"1\" value=\"1\"/></animate></shape></repeat><connector id=\"l0\" fromX=\"258\" fromY=\"75\" toX=\"372\" toY=\"90\" stroke=\"#FFFFFFFF\" strokeWidth=\"1\"/><connector id=\"l1\" fromX=\"258\" fromY=\"105\" toX=\"372\" toY=\"126\" stroke=\"#FFFFFFFF\" strokeWidth=\"1\"/><connector id=\"l2\" fromX=\"258\" fromY=\"135\" toX=\"372\" toY=\"162\" stroke=\"#FFFFFFFF\" strokeWidth=\"1\"/><connector id=\"l3\" fromX=\"258\" fromY=\"165\" toX=\"372\" toY=\"198\" stroke=\"#FFFFFFFF\" strokeWidth=\"1\"/><connector id=\"l4\" fromX=\"258\" fromY=\"195\" toX=\"372\" toY=\"234\" stroke=\"#FFFFFFFF\" strokeWidth=\"1\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 8 (repeats over point grids, connectors between nodes, keyed opacity)",
+   "blue": {
+    "cx": 250,
+    "cy": 180,
+    "w": 16,
+    "h": 226
+   },
+   "green": {
+    "cx": 380,
+    "cy": 180,
+    "w": 16,
+    "h": 196
+   },
+   "red": {
+    "cx": 510,
+    "cy": 180,
+    "w": 16,
+    "h": 166
+   }
+  }
+ },
+ "srep-0012-shot-09-fourier-winding": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"wind\" shape=\"parametric\" x=\"0\" y=\"0\" fill=\"#00000000\" stroke=\"#FFFF00FF\" strokeWidth=\"2\"><parametricPath x=\"160 + 40 * (1 + Math.cos(3 * t)) * Math.cos((1 + time) * t)\" y=\"180 + 40 * (1 + Math.cos(3 * t)) * Math.sin((1 + time) * t)\" t0=\"0\" t1=\"12.566370614359172\" samples=\"600\"/></shape><shape id=\"plot\" shape=\"parametric\" x=\"0\" y=\"0\" fill=\"#00000000\" stroke=\"#FFFFFFFF\" strokeWidth=\"2\"><parametricPath x=\"360 + 60 * t\" y=\"300 - 100 * Math.exp(-((t - 3) * (t - 3)) / 0.5)\" t0=\"0\" t1=\"4\" samples=\"200\"/></shape><shape id=\"com\" shape=\"ellipse\" x=\"-6\" y=\"-6\" width=\"12\" height=\"12\" fill=\"#FF0000FF\"><animate property=\"x\"><key time=\"0\" value=\"154\"/><key time=\"2\" value=\"194\"/></animate><animate property=\"y\"><key time=\"0\" value=\"174\"/><key time=\"2\" value=\"174\"/></animate></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 9 (parametric paths whose expressions read time (the winding frequency sweeps), a keyed marker)",
+   "coverage": [
+    {
+     "colour": "yellow",
+     "box": [
+      60,
+      80,
+      260,
+      280
+     ],
+     "min": 0.02
+    }
+   ],
+   "red": {
+    "cx": 160.0,
+    "cy": 180.0,
+    "w": 12.0,
+    "h": 12.0
+   }
+  }
+ },
+ "srep-0012-shot-10-matrix-transformation": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><formula id=\"mat\" tex=\"\\begin{pmatrix} 1 &amp; 0 \\\\ 0 &amp; 1 \\end{pmatrix}\" width=\"160\" height=\"80\" size=\"36\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<group id=\"space\" x=\"320\" y=\"180\"><animate property=\"skewX\"><key time=\"0\" value=\"0\"/><key time=\"1\" value=\"30\"/></animate><animate property=\"rotation\"><key time=\"0\" value=\"0\"/><key time=\"1\" value=\"20\"/></animate><shape id=\"g0\" shape=\"rect\" x=\"-200\" y=\"-200\" width=\"1\" height=\"400\" fill=\"#FFFFFF66\"/><shape id=\"h0\" shape=\"rect\" x=\"-200\" y=\"-200\" width=\"400\" height=\"1\" fill=\"#FFFFFF66\"/><shape id=\"g1\" shape=\"rect\" x=\"-160\" y=\"-200\" width=\"1\" height=\"400\" fill=\"#FFFFFF66\"/><shape id=\"h1\" shape=\"rect\" x=\"-200\" y=\"-160\" width=\"400\" height=\"1\" fill=\"#FFFFFF66\"/><shape id=\"g2\" shape=\"rect\" x=\"-120\" y=\"-200\" width=\"1\" height=\"400\" fill=\"#FFFFFF66\"/><shape id=\"h2\" shape=\"rect\" x=\"-200\" y=\"-120\" width=\"400\" height=\"1\" fill=\"#FFFFFF66\"/><shape id=\"g3\" shape=\"rect\" x=\"-80\" y=\"-200\" width=\"1\" height=\"400\" fill=\"#FFFFFF66\"/><shape id=\"h3\" shape=\"rect\" x=\"-200\" y=\"-80\" width=\"400\" height=\"1\" fill=\"#FFFFFF66\"/><shape id=\"g4\" shape=\"rect\" x=\"-40\" y=\"-200\" width=\"1\" height=\"400\" fill=\"#FFFFFF66\"/><shape id=\"h4\" shape=\"rect\" x=\"-200\" y=\"-40\" width=\"400\" height=\"1\" fill=\"#FFFFFF66\"/><shape id=\"g5\" shape=\"rect\" x=\"0\" y=\"-200\" width=\"1\" height=\"400\" fill=\"#FFFFFF66\"/><shape id=\"h5\" shape=\"rect\" x=\"-200\" y=\"0\" width=\"400\" height=\"1\" fill=\"#FFFFFF66\"/><shape id=\"g6\" shape=\"rect\" x=\"40\" y=\"-200\" width=\"1\" height=\"400\" fill=\"#FFFFFF66\"/><shape id=\"h6\" shape=\"rect\" x=\"-200\" y=\"40\" width=\"400\" height=\"1\" fill=\"#FFFFFF66\"/><shape id=\"g7\" shape=\"rect\" x=\"80\" y=\"-200\" width=\"1\" height=\"400\" fill=\"#FFFFFF66\"/><shape id=\"h7\" shape=\"rect\" x=\"-200\" y=\"80\" width=\"400\" height=\"1\" fill=\"#FFFFFF66\"/><shape id=\"g8\" shape=\"rect\" x=\"120\" y=\"-200\" width=\"1\" height=\"400\" fill=\"#FFFFFF66\"/><shape id=\"h8\" shape=\"rect\" x=\"-200\" y=\"120\" width=\"400\" height=\"1\" fill=\"#FFFFFF66\"/><shape id=\"g9\" shape=\"rect\" x=\"160\" y=\"-200\" width=\"1\" height=\"400\" fill=\"#FFFFFF66\"/><shape id=\"h9\" shape=\"rect\" x=\"-200\" y=\"160\" width=\"400\" height=\"1\" fill=\"#FFFFFF66\"/><shape id=\"g10\" shape=\"rect\" x=\"200\" y=\"-200\" width=\"1\" height=\"400\" fill=\"#FFFFFF66\"/><shape id=\"h10\" shape=\"rect\" x=\"-200\" y=\"200\" width=\"400\" height=\"1\" fill=\"#FFFFFF66\"/><shape id=\"ihat\" shape=\"rect\" x=\"0\" y=\"-2\" width=\"60\" height=\"4\" fill=\"#FF0000FF\"></shape><shape id=\"jhat\" shape=\"rect\" x=\"-2\" y=\"-60\" width=\"4\" height=\"60\" fill=\"#00FF00FF\"></shape></group><layer id=\"entries\" asset=\"mat\" x=\"470\" y=\"20\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 10 (a group with keyed skew and rotation over a grid of rects, a TeX matrix formula asset)",
+   "red": {
+    "cx": 350.0,
+    "cy": 180.0,
+    "w": 60,
+    "h": 4
+   },
+   "green": {
+    "cx": 320.0,
+    "cy": 150.0,
+    "w": 4,
+    "h": 60
+   },
+   "coverage": [
+    {
+     "colour": "lit",
+     "box": [
+      470,
+      20,
+      630,
+      100
+     ],
+     "min": 0.01
+    }
+   ]
+  }
+ },
+ "srep-0012-shot-11-stereographic-projection": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"ball\" primitive=\"sphere\" radius=\"70\" x=\"320\" y=\"150\" z=\"0\" material=\"m-blue\"/><object3D id=\"ring\" primitive=\"torus\" radius=\"60\" x=\"320\" y=\"150\" z=\"-40\" rotationX=\"60\" material=\"m-red\"/><object3D id=\"plane\" primitive=\"plane\" width=\"400\" height=\"60\" x=\"320\" y=\"300\" z=\"0\" material=\"m-green\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 11 (an unlit sphere, a torus and a plane under the implicit camera)",
+   "blue": {
+    "cx": 320
+   },
+   "green": {
+    "cx": 320,
+    "cy": 300,
+    "w": 400,
+    "h": 60
+   },
+   "coverage": [
+    {
+     "colour": "red",
+     "box": [
+      200,
+      60,
+      440,
+      240
+     ],
+     "min": 0.005
+    }
+   ]
+  }
+ },
+ "srep-0012-shot-12-divergence-curl-particles": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<particleEmitter id=\"src\" x=\"200\" y=\"180\" rate=\"150\" lifetime=\"3\" speed=\"60\" direction=\"0\" spread=\"360\" size=\"5\" color=\"#FF0000FF\" seed=\"3\"><burst time=\"0\" count=\"300\"/></particleEmitter><shape id=\"v0\" shape=\"polygon\" points=\"3\" x=\"140\" y=\"100\" width=\"12\" height=\"12\" fill=\"#00FF00FF\" rotation=\"-45\"/><shape id=\"v1\" shape=\"polygon\" points=\"3\" x=\"260\" y=\"100\" width=\"12\" height=\"12\" fill=\"#00FF00FF\" rotation=\"45\"/><shape id=\"v2\" shape=\"polygon\" points=\"3\" x=\"140\" y=\"260\" width=\"12\" height=\"12\" fill=\"#00FF00FF\" rotation=\"-135\"/><shape id=\"v3\" shape=\"polygon\" points=\"3\" x=\"260\" y=\"260\" width=\"12\" height=\"12\" fill=\"#00FF00FF\" rotation=\"135\"/>\n</composition>\n<physics><forceField id=\"curl\" type=\"vortex\" x=\"440\" y=\"180\" strength=\"40\" radius=\"3\" affects=\"particles\"/></physics>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 12 (a particle emitter with a burst at 0, a vortex force field, hand-placed arrows)",
+   "coverage": [
+    {
+     "colour": "red",
+     "box": [
+      150,
+      130,
+      250,
+      230
+     ],
+     "min": 0.02
+    }
+   ],
+   "green": {
+    "cx": 200,
+    "cy": 180
+   }
+  }
+ },
+ "srep-0012-shot-13-light-cones": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"taxis\" shape=\"rect\" x=\"318\" y=\"40\" width=\"4\" height=\"280\" fill=\"#FFFFFFFF\"></shape><shape id=\"xaxis\" shape=\"rect\" x=\"100\" y=\"178\" width=\"440\" height=\"4\" fill=\"#FFFFFFFF\"></shape><shape id=\"future\" shape=\"path\" path=\"M320 180 L200 60 L440 60 Z\" width=\"640\" height=\"360\" fill=\"#FFFF00FF\"></shape><shape id=\"past\" shape=\"path\" path=\"M320 180 L200 300 L440 300 Z\" width=\"640\" height=\"360\" fill=\"#0000FFFF\"></shape><shape id=\"event\" shape=\"ellipse\" x=\"314\" y=\"174\" width=\"12\" height=\"12\" fill=\"#FF0000FF\"></shape><shape id=\"other\" shape=\"ellipse\" x=\"444\" y=\"104\" width=\"12\" height=\"12\" fill=\"#00FF00FF\"></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 13 (filled paths, rects and ellipses)",
+   "yellow": {
+    "cx": 320,
+    "cy": 100,
+    "w": 240
+   },
+   "blue": {
+    "cx": 320,
+    "cy": 260,
+    "w": 240
+   },
+   "red": {
+    "cx": 320.0,
+    "cy": 180.0,
+    "w": 12.0,
+    "h": 12.0
+   },
+   "green": {
+    "cx": 450.0,
+    "cy": 110.0,
+    "w": 12.0,
+    "h": 12.0
+   }
+  }
+ },
+ "srep-0012-shot-14-event-horizon-fall": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<camera id=\"eye\" x=\"320\" y=\"180\" z=\"-600\" geodesics=\"true\"><animate property=\"z\"><key time=\"0\" value=\"-600\"/><key time=\"2\" value=\"-250\"/></animate></camera><blackHole id=\"hole\" mass=\"10\" x=\"320\" y=\"180\" z=\"0\"/><accretionDisk id=\"disk\" blackHole=\"hole\" outerRadius=\"120\" temperatureScale=\"5000\" rotationX=\"75\" seed=\"2\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 14 (a geodesic camera with keyed position, a black hole with an accretion disk and its starfield)",
+   "coverage": [
+    {
+     "colour": "lit",
+     "box": [
+      0,
+      0,
+      640,
+      360
+     ],
+     "min": 0.02
+    },
+    {
+     "colour": "dark",
+     "box": [
+      310,
+      170,
+      330,
+      190
+     ],
+     "min": 0.9
+    }
+   ]
+  }
+ },
+ "srep-0012-shot-15-double-slit-hits": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"source\" shape=\"ellipse\" x=\"110\" y=\"170\" width=\"20\" height=\"20\" fill=\"#FFFF00FF\"></shape><shape id=\"b1\" shape=\"rect\" x=\"300\" y=\"60\" width=\"8\" height=\"80\" fill=\"#0000FFFF\"></shape><shape id=\"b2\" shape=\"rect\" x=\"300\" y=\"160\" width=\"8\" height=\"40\" fill=\"#0000FFFF\"></shape><shape id=\"b3\" shape=\"rect\" x=\"300\" y=\"220\" width=\"8\" height=\"80\" fill=\"#0000FFFF\"></shape><shape id=\"screen\" shape=\"rect\" x=\"500\" y=\"40\" width=\"6\" height=\"280\" fill=\"#808080FF\"></shape><shape id=\"hit0\" shape=\"ellipse\" x=\"500\" y=\"178\" width=\"4\" height=\"4\" fill=\"#FF0000FF\" start=\"0.2\"/><shape id=\"hit1\" shape=\"ellipse\" x=\"500\" y=\"120\" width=\"4\" height=\"4\" fill=\"#FF0000FF\" start=\"0.30000000000000004\"/><shape id=\"hit2\" shape=\"ellipse\" x=\"500\" y=\"236\" width=\"4\" height=\"4\" fill=\"#FF0000FF\" start=\"0.4\"/><shape id=\"hit3\" shape=\"ellipse\" x=\"500\" y=\"182\" width=\"4\" height=\"4\" fill=\"#FF0000FF\" start=\"0.5\"/><shape id=\"hit4\" shape=\"ellipse\" x=\"500\" y=\"60\" width=\"4\" height=\"4\" fill=\"#FF0000FF\" start=\"0.6000000000000001\"/><shape id=\"hit5\" shape=\"ellipse\" x=\"500\" y=\"300\" width=\"4\" height=\"4\" fill=\"#FF0000FF\" start=\"0.7\"/><shape id=\"hit6\" shape=\"ellipse\" x=\"500\" y=\"176\" width=\"4\" height=\"4\" fill=\"#FF0000FF\" start=\"0.8\"/><shape id=\"hit7\" shape=\"ellipse\" x=\"500\" y=\"124\" width=\"4\" height=\"4\" fill=\"#FF0000FF\" start=\"0.9000000000000001\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 15 (rects and ellipses; the hits are hand-placed with staggered starts)",
+   "yellow": {
+    "cx": 120.0,
+    "cy": 180.0,
+    "w": 20.0,
+    "h": 20.0
+   },
+   "blue": {
+    "cx": 304.0,
+    "cy": 180.0,
+    "w": 8,
+    "h": 240,
+    "px": 1600
+   },
+   "absent": [
+    "red"
+   ]
+  }
+ },
+ "srep-0012-shot-16-penrose-diamond": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"diamond\" shape=\"path\" path=\"M320 60 L440 180 L320 300 L200 180 Z\" width=\"640\" height=\"360\" fill=\"#FFFF00FF\"></shape><shape id=\"u0\" shape=\"parametric\" x=\"0\" y=\"0\" fill=\"#00000000\" stroke=\"#FFFFFFAA\" strokeWidth=\"1\"><parametricPath x=\"320 + 120 * ((1 - time / 2) * (-2 / 3) + (time / 2) * (Math.atan(t + -2) + Math.atan(t - -2)) / 3.1415926)\" y=\"180 - 120 * ((1 - time / 2) * (t / 3) + (time / 2) * (Math.atan(t + -2) - Math.atan(t - -2)) / 3.1415926)\" t0=\"-3\" t1=\"3\" samples=\"60\"/></shape><shape id=\"u1\" shape=\"parametric\" x=\"0\" y=\"0\" fill=\"#00000000\" stroke=\"#FFFFFFAA\" strokeWidth=\"1\"><parametricPath x=\"320 + 120 * ((1 - time / 2) * (-1 / 3) + (time / 2) * (Math.atan(t + -1) + Math.atan(t - -1)) / 3.1415926)\" y=\"180 - 120 * ((1 - time / 2) * (t / 3) + (time / 2) * (Math.atan(t + -1) - Math.atan(t - -1)) / 3.1415926)\" t0=\"-3\" t1=\"3\" samples=\"60\"/></shape><shape id=\"u2\" shape=\"parametric\" x=\"0\" y=\"0\" fill=\"#00000000\" stroke=\"#FFFFFFAA\" strokeWidth=\"1\"><parametricPath x=\"320 + 120 * ((1 - time / 2) * (0 / 3) + (time / 2) * (Math.atan(t + 0) + Math.atan(t - 0)) / 3.1415926)\" y=\"180 - 120 * ((1 - time / 2) * (t / 3) + (time / 2) * (Math.atan(t + 0) - Math.atan(t - 0)) / 3.1415926)\" t0=\"-3\" t1=\"3\" samples=\"60\"/></shape><shape id=\"u3\" shape=\"parametric\" x=\"0\" y=\"0\" fill=\"#00000000\" stroke=\"#FFFFFFAA\" strokeWidth=\"1\"><parametricPath x=\"320 + 120 * ((1 - time / 2) * (1 / 3) + (time / 2) * (Math.atan(t + 1) + Math.atan(t - 1)) / 3.1415926)\" y=\"180 - 120 * ((1 - time / 2) * (t / 3) + (time / 2) * (Math.atan(t + 1) - Math.atan(t - 1)) / 3.1415926)\" t0=\"-3\" t1=\"3\" samples=\"60\"/></shape><shape id=\"u4\" shape=\"parametric\" x=\"0\" y=\"0\" fill=\"#00000000\" stroke=\"#FFFFFFAA\" strokeWidth=\"1\"><parametricPath x=\"320 + 120 * ((1 - time / 2) * (2 / 3) + (time / 2) * (Math.atan(t + 2) + Math.atan(t - 2)) / 3.1415926)\" y=\"180 - 120 * ((1 - time / 2) * (t / 3) + (time / 2) * (Math.atan(t + 2) - Math.atan(t - 2)) / 3.1415926)\" t0=\"-3\" t1=\"3\" samples=\"60\"/></shape><shape id=\"ray1\" shape=\"path\" path=\"M230 90 L410 270\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#FF0000FF\" strokeWidth=\"3\"></shape><shape id=\"ray2\" shape=\"path\" path=\"M410 90 L230 270\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#FF0000FF\" strokeWidth=\"3\"></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 16 (a filled diamond path, parametric grid lines whose expressions read time, 45-degree stroked paths)",
+   "yellow": {
+    "cx": 320,
+    "cy": 180,
+    "w": 240,
+    "h": 240
+   },
+   "red": {
+    "cx": 320,
+    "cy": 180
+   }
+  }
+ },
+ "srep-0012-shot-17-figures-in-void": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<repeat id=\"stars0\" x=\"320\" y=\"180\" threeD=\"true\" zDepth=\"400\"><points type=\"scatter\" count=\"60\" width=\"900\" height=\"500\" seed=\"1\"/><shape id=\"star0\" shape=\"ellipse\" x=\"-1.5\" y=\"-1.5\" width=\"3\" height=\"3\" fill=\"#FFFFFFFF\"/></repeat><repeat id=\"stars1\" x=\"320\" y=\"180\" threeD=\"true\" zDepth=\"200\"><points type=\"scatter\" count=\"40\" width=\"900\" height=\"500\" seed=\"2\"/><shape id=\"star1\" shape=\"ellipse\" x=\"-1.5\" y=\"-1.5\" width=\"3\" height=\"3\" fill=\"#FFFFFFFF\"/></repeat><repeat id=\"stars2\" x=\"320\" y=\"180\" threeD=\"true\" zDepth=\"80\"><points type=\"scatter\" count=\"25\" width=\"900\" height=\"500\" seed=\"3\"/><shape id=\"star2\" shape=\"ellipse\" x=\"-1.5\" y=\"-1.5\" width=\"3\" height=\"3\" fill=\"#FFFFFFFF\"/></repeat><shape id=\"a\" shape=\"ellipse\" x=\"200\" y=\"130\" width=\"60\" height=\"100\" fill=\"#FF0000FF\"></shape><shape id=\"b\" shape=\"ellipse\" x=\"380\" y=\"130\" width=\"60\" height=\"100\" fill=\"#00FF00FF\"></shape><camera id=\"cam\" x=\"320\" y=\"180\" z=\"-554.256\"><animate property=\"x\"><key time=\"0\" value=\"320\"/><key time=\"2\" value=\"360\"/></animate></camera>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 17 (2.5D repeats of scattered points at three depths, a camera with keyed position, flat ellipses)",
+   "red": {
+    "cx": 230.0,
+    "cy": 180.0,
+    "w": 60.0,
+    "h": 100.0
+   },
+   "green": {
+    "cx": 410.0,
+    "cy": 180.0,
+    "w": 60.0,
+    "h": 100.0
+   }
+  }
+ },
+ "srep-0012-shot-18-star-size-zoom": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><font id=\"f\" src=\"../assets/srep-test-font.ttf\" family=\"SREPTest\"/><text id=\"l1\" text=\"Sun\" width=\"200\" height=\"40\" size=\"28\" fontAsset=\"f\"/><text id=\"l2\" text=\"Betelgeuse\" width=\"300\" height=\"40\" size=\"28\" fontAsset=\"f\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<group id=\"scale\" x=\"320\" y=\"180\"><animate property=\"scaleX\"><key time=\"0\" value=\"1\"/><key time=\"1\" value=\"0.1\"/><key time=\"2\" value=\"0.01\"/></animate><animate property=\"scaleY\"><key time=\"0\" value=\"1\"/><key time=\"1\" value=\"0.1\"/><key time=\"2\" value=\"0.01\"/></animate><shape id=\"betelgeuse\" shape=\"ellipse\" x=\"100\" y=\"-500\" width=\"1000\" height=\"1000\" fill=\"#0000FFFF\"></shape><shape id=\"sun\" shape=\"ellipse\" x=\"-20\" y=\"-20\" width=\"40\" height=\"40\" fill=\"#FFFF00FF\"></shape></group><layer id=\"n1\" asset=\"l1\" x=\"40\" y=\"300\" end=\"1\"/><layer id=\"n2\" asset=\"l2\" x=\"40\" y=\"300\" start=\"1\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 18 (a group with keyed scale, text layers with start and end)",
+   "yellow": {
+    "cx": 320.0,
+    "cy": 180.0,
+    "w": 40.0,
+    "h": 40.0
+   },
+   "coverage": [
+    {
+     "colour": "blue",
+     "box": [
+      400,
+      0,
+      640,
+      360
+     ],
+     "min": 0.5
+    }
+   ]
+  }
+ },
+ "srep-0012-shot-19-macrophage-engulfs": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"tissue\" shape=\"rect\" x=\"0\" y=\"0\" width=\"640\" height=\"360\" fill=\"#402030FF\"></shape><shape id=\"macro\" shape=\"ellipse\" x=\"300\" y=\"150\" width=\"80\" height=\"60\" fill=\"#00FF00FF\"><animate property=\"scaleX\"><key time=\"0\" value=\"1\"/><key time=\"1\" value=\"1.3\"/><key time=\"2\" value=\"1\"/></animate><animate property=\"scaleY\"><key time=\"0\" value=\"1\"/><key time=\"1\" value=\"1.3\"/><key time=\"2\" value=\"1\"/></animate></shape><shape id=\"bug1\" shape=\"ellipse\" x=\"192\" y=\"112\" width=\"16\" height=\"16\" fill=\"#FF0000FF\"><animate property=\"x\"><key time=\"0\" value=\"192\"/><key time=\"1\" value=\"300\"/></animate><animate property=\"y\"><key time=\"0\" value=\"112\"/><key time=\"1\" value=\"170\"/></animate><animate property=\"scaleX\"><key time=\"1\" value=\"1\"/><key time=\"1.5\" value=\"0\"/></animate><animate property=\"scaleY\"><key time=\"1\" value=\"1\"/><key time=\"1.5\" value=\"0\"/></animate></shape><shape id=\"bug2\" shape=\"ellipse\" x=\"432\" y=\"232\" width=\"16\" height=\"16\" fill=\"#FF0000FF\"><animate property=\"x\"><key time=\"0\" value=\"432\"/><key time=\"2\" value=\"380\"/></animate></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 19 (ellipses with keyed position and scale over a tissue-coloured background)",
+   "green": {
+    "cx": 340.0,
+    "cy": 180.0,
+    "w": 80.0,
+    "h": 60.0
+   },
+   "red": {
+    "cx": 320.0,
+    "cy": 180.0,
+    "w": 256.0,
+    "h": 136.0
+   }
+  }
+ },
+ "srep-0012-shot-20-land-use-bars": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><chart id=\"land\" kind=\"column\" width=\"300\" height=\"240\" labels=\"pasture,crops\"><series name=\"share\" values=\"77 23\" color=\"#FF0000FF\"/><animate property=\"progress\"><key time=\"0\" value=\"0.3\"/><key time=\"1.5\" value=\"1\"/></animate></chart></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"icon-pasture\" shape=\"rect\" x=\"60\" y=\"80\" width=\"80\" height=\"50\" fill=\"#00FF00FF\"></shape><shape id=\"icon-crops\" shape=\"rect\" x=\"60\" y=\"160\" width=\"80\" height=\"50\" fill=\"#FFFF00FF\"></shape><layer id=\"bars\" asset=\"land\" x=\"300\" y=\"60\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 20 (a column chart with keyed progress, icon rects)",
+   "green": {
+    "cx": 100.0,
+    "cy": 105.0,
+    "w": 80,
+    "h": 50,
+    "px": 4000
+   },
+   "yellow": {
+    "cx": 100.0,
+    "cy": 185.0,
+    "w": 80,
+    "h": 50,
+    "px": 4000
+   },
+   "coverage": [
+    {
+     "colour": "red",
+     "box": [
+      300,
+      60,
+      600,
+      300
+     ],
+     "min": 0.02
+    },
+    {
+     "colour": "lit",
+     "box": [
+      300,
+      60,
+      600,
+      300
+     ],
+     "min": 0.03
+    }
+   ]
+  }
+ },
+ "srep-0012-shot-21-nuke-skyline": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"b0\" shape=\"rect\" x=\"40\" y=\"220\" width=\"60\" height=\"100\" fill=\"#0000FFFF\"></shape><shape id=\"b1\" shape=\"rect\" x=\"120\" y=\"180\" width=\"50\" height=\"140\" fill=\"#0000FFFF\"></shape><shape id=\"b2\" shape=\"rect\" x=\"190\" y=\"240\" width=\"70\" height=\"80\" fill=\"#0000FFFF\"></shape><shape id=\"b3\" shape=\"rect\" x=\"280\" y=\"150\" width=\"40\" height=\"170\" fill=\"#0000FFFF\"></shape><shape id=\"b4\" shape=\"rect\" x=\"340\" y=\"200\" width=\"80\" height=\"120\" fill=\"#0000FFFF\"></shape><shape id=\"b5\" shape=\"rect\" x=\"440\" y=\"170\" width=\"60\" height=\"150\" fill=\"#0000FFFF\"></shape><shape id=\"b6\" shape=\"rect\" x=\"520\" y=\"230\" width=\"80\" height=\"90\" fill=\"#0000FFFF\"></shape><shape id=\"flash\" shape=\"rect\" x=\"0\" y=\"0\" width=\"640\" height=\"360\" fill=\"#FFFFFFFF\" start=\"0.5\" end=\"0.6\"></shape><shape id=\"fireball\" shape=\"ellipse\" x=\"310\" y=\"190\" width=\"20\" height=\"20\" fill=\"#FFFF00FF\" start=\"0.5\"><animate property=\"scaleX\"><key time=\"0.5\" value=\"1\"/><key time=\"1.5\" value=\"8\"/></animate><animate property=\"scaleY\"><key time=\"0.5\" value=\"1\"/><key time=\"1.5\" value=\"8\"/></animate></shape><shape id=\"ring\" shape=\"ellipse\" x=\"300\" y=\"180\" width=\"40\" height=\"40\" fill=\"#00000000\" stroke=\"#FF0000FF\" strokeWidth=\"6\" start=\"0.7\"><animate property=\"scaleX\"><key time=\"0.7\" value=\"1\"/><key time=\"2\" value=\"12\"/></animate><animate property=\"scaleY\"><key time=\"0.7\" value=\"1\"/><key time=\"2\" value=\"12\"/></animate></shape><shape id=\"cloud\" shape=\"ellipse\" x=\"260\" y=\"50\" width=\"120\" height=\"80\" fill=\"#FF8000FF\" start=\"1.0\"></shape><shape id=\"stem\" shape=\"rect\" x=\"300\" y=\"120\" width=\"40\" height=\"100\" fill=\"#FF8000FF\" start=\"1.0\"></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 21 (rects with start and end, ellipses with keyed scale, a stroked ring)",
+   "blue": {
+    "cx": 325.1,
+    "cy": 258.14,
+    "w": 560,
+    "h": 170,
+    "px": 51200
+   },
+   "absent": [
+    "yellow",
+    "red"
+   ]
+  }
+ },
+ "srep-0012-shot-22-timeline-typography": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><font id=\"f\" src=\"../assets/srep-test-font.ttf\" family=\"SREPTest\"/><text id=\"title\" text=\"Optimistic Nihilism\" width=\"500\" height=\"60\" size=\"40\" fontAsset=\"f\"/><text id=\"w1\" text=\"Big Bang\" width=\"200\" height=\"40\" size=\"24\" fontAsset=\"f\"/><text id=\"w2\" text=\"Now\" width=\"200\" height=\"40\" size=\"24\" fontAsset=\"f\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"line\" shape=\"rect\" x=\"100\" y=\"254\" width=\"440\" height=\"4\" fill=\"#FFFFFFFF\"></shape><shape id=\"m0\" shape=\"rect\" x=\"140\" y=\"236\" width=\"8\" height=\"40\" fill=\"#FFFF00FF\"></shape><shape id=\"m1\" shape=\"rect\" x=\"320\" y=\"236\" width=\"8\" height=\"40\" fill=\"#FFFF00FF\"></shape><shape id=\"m2\" shape=\"rect\" x=\"500\" y=\"236\" width=\"8\" height=\"40\" fill=\"#FFFF00FF\"></shape><shape id=\"now\" shape=\"rect\" x=\"100\" y=\"230\" width=\"4\" height=\"52\" fill=\"#FF0000FF\"><animate property=\"x\"><key time=\"0\" value=\"100\"/><key time=\"2\" value=\"500\"/></animate></shape><layer id=\"t\" asset=\"title\" x=\"70\" y=\"60\"><textAnimator preset=\"word-by-word\" presetStart=\"0.2\" presetDuration=\"1\"/></layer><layer id=\"k1\" asset=\"w1\" x=\"100\" y=\"290\"><textAnimator preset=\"slide-up\" presetStart=\"0.5\" presetDuration=\"0.5\"/></layer><layer id=\"k2\" asset=\"w2\" x=\"440\" y=\"290\"><textAnimator preset=\"slide-up\" presetStart=\"1.0\" presetDuration=\"0.5\"/></layer>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 22 (text animator presets (word-by-word, slide-up), rects, a keyed marker)",
+   "yellow": {
+    "cx": 324.0,
+    "cy": 256.0,
+    "w": 368,
+    "h": 40,
+    "px": 960
+   },
+   "red": {
+    "cx": 102.0,
+    "cy": 256.0,
+    "w": 4,
+    "h": 52,
+    "px": 208
+   }
+  }
+ },
+ "srep-0012-shot-23-black-hole-disk": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<camera id=\"eye\" x=\"320\" y=\"180\" z=\"-500\" geodesics=\"true\"/><blackHole id=\"hole\" mass=\"10\" x=\"320\" y=\"180\" z=\"0\"/><accretionDisk id=\"disk\" blackHole=\"hole\" outerRadius=\"150\" temperatureScale=\"6000\" rotationX=\"80\" angularPattern=\"spiral\" seed=\"5\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 23 (a geodesic camera, a black hole and an accretion disk)",
+   "coverage": [
+    {
+     "colour": "lit",
+     "box": [
+      0,
+      0,
+      640,
+      360
+     ],
+     "min": 0.05
+    },
+    {
+     "colour": "dark",
+     "box": [
+      310,
+      170,
+      330,
+      190
+     ],
+     "min": 0.9
+    }
+   ]
+  }
+ },
+ "srep-0012-shot-24-whiteboard-worldlines": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#F4F1E8FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><strokeFont id=\"hand\" src=\"../assets/stroke-hi.jhf\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<group id=\"frame\" x=\"320\" y=\"180\"><animate property=\"skewX\"><key time=\"0\" value=\"0\"/><key time=\"1\" value=\"-25\"/></animate><shape id=\"tline\" shape=\"path\" path=\"M0 120 L0 -120\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#FF0000FF\" strokeWidth=\"4\"></shape><shape id=\"xline\" shape=\"path\" path=\"M-60 120 L60 -120\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#00FF00FF\" strokeWidth=\"4\"></shape><shape id=\"wobble\" shape=\"path\" path=\"M-150 120 Q-100 116 -50 121 T50 119 T150 121\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#FFFFFFFF\" strokeWidth=\"3\"></shape></group><shape id=\"lt\" shape=\"stroke-text\" text=\"H\" strokeFont=\"hand\" x=\"330\" y=\"50\" width=\"30\" height=\"30\" stroke=\"#FFFFFFFF\" strokeWidth=\"2\"/><shape id=\"lx\" shape=\"stroke-text\" text=\"I\" strokeFont=\"hand\" x=\"480\" y=\"290\" width=\"30\" height=\"30\" stroke=\"#FFFFFFFF\" strokeWidth=\"2\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 24 (stroke-text with a single-line stroke font, stroked paths in a group with keyed skew)",
+   "red": {
+    "cx": 320,
+    "cy": 180,
+    "w": 4,
+    "h": 240
+   },
+   "green": {
+    "cx": 320,
+    "cy": 180,
+    "w": 124,
+    "h": 240
+   }
+  }
+ },
+ "srep-0012-shot-25-charges-field-lines": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"fl0\" shape=\"path\" path=\"M240 180 C 180 280, 460 280, 400 180\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#FFFF00FF\" strokeWidth=\"2\"><animate property=\"trimEnd\"><key time=\"0\" value=\"0\"/><key time=\"1\" value=\"1\"/></animate></shape><shape id=\"fl1\" shape=\"path\" path=\"M240 180 C 240 180, 400 180, 400 180\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#FFFF00FF\" strokeWidth=\"2\"><animate property=\"trimEnd\"><key time=\"0\" value=\"0\"/><key time=\"1\" value=\"1\"/></animate></shape><shape id=\"fl2\" shape=\"path\" path=\"M240 180 C 300 80, 340 80, 400 180\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#FFFF00FF\" strokeWidth=\"2\"><animate property=\"trimEnd\"><key time=\"0\" value=\"0\"/><key time=\"1\" value=\"1\"/></animate></shape><shape id=\"plus\" shape=\"ellipse\" x=\"225\" y=\"165\" width=\"30\" height=\"30\" fill=\"#FF0000FF\"></shape><shape id=\"minus\" shape=\"ellipse\" x=\"385\" y=\"165\" width=\"30\" height=\"30\" fill=\"#0000FFFF\"></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 25 (ellipses, hand-placed paths with keyed trimEnd)",
+   "red": {
+    "cx": 240.0,
+    "cy": 180.0,
+    "w": 30.0,
+    "h": 30.0
+   },
+   "blue": {
+    "cx": 400.0,
+    "cy": 180.0,
+    "w": 30.0,
+    "h": 30.0
+   },
+   "absent": [
+    "yellow"
+   ]
+  }
+ },
+ "srep-0012-shot-26-rayleigh-doodle": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<repeat id=\"air\" x=\"320\" y=\"180\"><points type=\"grid\" columns=\"4\" rows=\"3\" spacingX=\"60\" spacingY=\"70\"/><shape id=\"mol\" shape=\"ellipse\" x=\"-6\" y=\"-6\" width=\"12\" height=\"12\" fill=\"#FFFFFFFF\" stroke=\"#C0C0C0FF\" strokeWidth=\"2\"/></repeat><shape id=\"beam\" shape=\"rect\" x=\"0\" y=\"170\" width=\"300\" height=\"20\" fill=\"#FFFF00FF\"></shape><shape id=\"sc1\" shape=\"ellipse\" x=\"294\" y=\"94\" width=\"12\" height=\"12\" fill=\"#0000FFFF\"><animate property=\"y\"><key time=\"0\" value=\"94\"/><key time=\"2\" value=\"10\"/></animate></shape><shape id=\"sc2\" shape=\"ellipse\" x=\"294\" y=\"254\" width=\"12\" height=\"12\" fill=\"#0000FFFF\"><animate property=\"y\"><key time=\"0\" value=\"254\"/><key time=\"2\" value=\"340\"/></animate></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 26 (a repeat over a grid, a rect, ellipses with keyed position)",
+   "yellow": {
+    "cx": 150.0,
+    "cy": 180.0,
+    "w": 300,
+    "h": 20,
+    "px": 6000
+   },
+   "blue": {
+    "cx": 300.0,
+    "cy": 180.0,
+    "w": 12.0,
+    "h": 172.0
+   }
+  }
+ },
+ "srep-0012-shot-27-chain-fountain-overlays": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#303030FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><video id=\"clip\" src=\"../assets/srep82-tone-500.mkv\" width=\"64\" height=\"36\" fps=\"25\" duration=\"2.2\"/></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"plate\" asset=\"clip\" fit=\"fill\" boxWidth=\"640\" boxHeight=\"360\" x=\"0\" y=\"0\"/><shape id=\"shaft\" shape=\"rect\" x=\"400\" y=\"100\" width=\"4\" height=\"100\" fill=\"#FF0000FF\"></shape><shape id=\"head\" shape=\"path\" path=\"M392 100 L402 86 L412 100 Z\" width=\"640\" height=\"360\" fill=\"#FF0000FF\"></shape><shape id=\"label\" shape=\"rect\" x=\"430\" y=\"60\" width=\"100\" height=\"30\" fill=\"#FFFF00FF\"></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 27 (a video layer with shape overlays)",
+   "regions": [
+    {
+     "box": [
+      20,
+      300,
+      60,
+      340
+     ],
+     "rgb": [
+      0,
+      0,
+      0
+     ]
+    }
+   ],
+   "red": {
+    "cx": 402
+   },
+   "yellow": {
+    "cx": 480.0,
+    "cy": 75.0,
+    "w": 100,
+    "h": 30,
+    "px": 3000
+   }
+  }
+ },
+ "srep-0012-shot-28-optical-rotation-helix": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<paints><linearGradient id=\"bands\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" color=\"#FF0040FF\"/><stop offset=\"0.5\" color=\"#8000FFFF\"/><stop offset=\"1\" color=\"#0040FFFF\"/></linearGradient></paints>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"column\" shape=\"rect\" x=\"280\" y=\"40\" width=\"80\" height=\"280\" fill=\"url(#bands)\"/><shape id=\"helix\" shape=\"parametric\" x=\"0\" y=\"0\" fill=\"#00000000\" stroke=\"#FF0000FF\" strokeWidth=\"3\"><parametricPath x=\"320 + 30 * Math.cos(8 * t + 6 * time)\" y=\"40 + 280 * t\" t0=\"0\" t1=\"1\" samples=\"400\"/></shape><shape id=\"polariser\" shape=\"rect\" x=\"100\" y=\"150\" width=\"60\" height=\"60\" fill=\"#00FF00FF\"><animate property=\"rotation\"><key time=\"0\" value=\"0\"/><key time=\"2\" value=\"90\"/></animate></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 28 (a gradient-filled rect, a parametric helix whose expression reads time, a rect with keyed rotation)",
+   "coverage": [
+    {
+     "colour": "lit",
+     "box": [
+      280,
+      40,
+      360,
+      320
+     ],
+     "min": 0.9
+    },
+    {
+     "colour": "red",
+     "box": [
+      280,
+      40,
+      360,
+      320
+     ],
+     "min": 0.01
+    }
+   ],
+   "green": {
+    "cx": 130.0,
+    "cy": 180.0,
+    "w": 60,
+    "h": 60,
+    "px": 3600
+   }
+  }
+ },
+ "srep-0012-shot-29-booster-separation": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"tank\" primitive=\"cylinder\" radius=\"22\" height=\"200\" x=\"320\" y=\"180\" z=\"0\" material=\"m-white\"/><object3D id=\"orbiter\" primitive=\"box\" width=\"30\" height=\"120\" depth=\"20\" x=\"320\" y=\"200\" z=\"-40\" material=\"m-grey\"/><object3D id=\"srb0\" primitive=\"cylinder\" radius=\"12\" height=\"160\" x=\"280\" y=\"180\" z=\"0\" material=\"m-red\"><animate property=\"x\"><key time=\"0.3\" value=\"280\"/><key time=\"2\" value=\"180\"/></animate><animate property=\"y\"><key time=\"0.3\" value=\"180\"/><key time=\"2\" value=\"300\"/></animate><animate property=\"rotation\"><key time=\"0.3\" value=\"0\"/><key time=\"2\" value=\"-60\"/></animate></object3D><object3D id=\"srb1\" primitive=\"cylinder\" radius=\"12\" height=\"160\" x=\"360\" y=\"180\" z=\"0\" material=\"m-red\"><animate property=\"x\"><key time=\"0.3\" value=\"360\"/><key time=\"2\" value=\"460\"/></animate><animate property=\"y\"><key time=\"0.3\" value=\"180\"/><key time=\"2\" value=\"300\"/></animate><animate property=\"rotation\"><key time=\"0.3\" value=\"0\"/><key time=\"2\" value=\"60\"/></animate></object3D><particles3D id=\"plume0\" x=\"280\" y=\"262\" z=\"0\" rate=\"200\" speed=\"120\" lifetime=\"1\" size=\"6\" spread=\"20\" directionY=\"1\" material=\"m-yellow\" seed=\"1\"><burst time=\"0\" count=\"100\"/></particles3D><particles3D id=\"plume1\" x=\"360\" y=\"262\" z=\"0\" rate=\"200\" speed=\"120\" lifetime=\"1\" size=\"6\" spread=\"20\" directionY=\"1\" material=\"m-yellow\" seed=\"2\"><burst time=\"0\" count=\"100\"/></particles3D>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 29 (3D primitives with keyed position and rotation, 3D particle emitters with a burst)",
+   "red": {
+    "cx": 320,
+    "cy": 180
+   },
+   "coverage": [
+    {
+     "colour": "yellow",
+     "box": [
+      200,
+      250,
+      440,
+      360
+     ],
+     "min": 0.01
+    }
+   ]
+  }
+ },
+ "srep-0012-shot-30-nacelle-cutaway": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"wall0\" shape=\"rect\" x=\"120\" y=\"100\" width=\"400\" height=\"12\" fill=\"#0000FFFF\"></shape><shape id=\"wall1\" shape=\"rect\" x=\"120\" y=\"248\" width=\"400\" height=\"12\" fill=\"#0000FFFF\"></shape><shape id=\"spike\" shape=\"path\" path=\"M0 0 L120 -30 L120 30 Z\" width=\"640\" height=\"360\" fill=\"#FF0000FF\" x=\"140\" y=\"180\"><animate property=\"x\"><key time=\"0\" value=\"140\"/><key time=\"2\" value=\"200\"/></animate></shape><shape id=\"flow0\" shape=\"path\" path=\"M100 130 H540\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#FFFFFFFF\" strokeWidth=\"2\" dash=\"12 8\"><animate property=\"dashOffset\"><key time=\"0\" value=\"0\"/><key time=\"2\" value=\"-200\"/></animate></shape><shape id=\"flow1\" shape=\"path\" path=\"M100 160 H540\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#FFFFFFFF\" strokeWidth=\"2\" dash=\"12 8\"><animate property=\"dashOffset\"><key time=\"0\" value=\"0\"/><key time=\"2\" value=\"-200\"/></animate></shape><shape id=\"flow2\" shape=\"path\" path=\"M100 200 H540\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#FFFFFFFF\" strokeWidth=\"2\" dash=\"12 8\"><animate property=\"dashOffset\"><key time=\"0\" value=\"0\"/><key time=\"2\" value=\"-200\"/></animate></shape><shape id=\"flow3\" shape=\"path\" path=\"M100 230 H540\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#FFFFFFFF\" strokeWidth=\"2\" dash=\"12 8\"><animate property=\"dashOffset\"><key time=\"0\" value=\"0\"/><key time=\"2\" value=\"-200\"/></animate></shape><shape id=\"shock\" shape=\"path\" path=\"M260 112 L330 180 L260 248\" width=\"640\" height=\"360\" fill=\"#00000000\" stroke=\"#FFFF00FF\" strokeWidth=\"2\"></shape>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 30 (rects, a keyed path, dashed paths with keyed dash offset)",
+   "blue": {
+    "cx": 320.0,
+    "cy": 180.0,
+    "w": 400,
+    "h": 160
+   },
+   "red": {
+    "cx": 220,
+    "cy": 180,
+    "w": 120,
+    "h": 60
+   }
+  }
+ },
+ "srep-0012-shot-31-reentry-plasma": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"shield\" primitive=\"cylinder\" radius=\"50\" height=\"6\" x=\"320\" y=\"180\" z=\"0\" rotationX=\"90\" material=\"m-red\"/><object3D id=\"capsule\" primitive=\"cone\" radius=\"50\" height=\"80\" x=\"320\" y=\"180\" z=\"43\" rotationX=\"-90\" material=\"m-grey\"/><particles3D id=\"sheath\" x=\"320\" y=\"180\" z=\"-5\" rate=\"300\" speed=\"150\" lifetime=\"1.2\" size=\"5\" spread=\"40\" directionX=\"-1\" directionY=\"0\" material=\"m-yellow\" seed=\"4\"><burst time=\"0\" count=\"150\"/></particles3D>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 31 (3D primitives, an unlit shield, a 3D particle emitter with a burst)",
+   "red": {
+    "cy": 180
+   },
+   "coverage": [
+    {
+     "colour": "red",
+     "box": [
+      270,
+      130,
+      370,
+      230
+     ],
+     "min": 0.5
+    },
+    {
+     "colour": "yellow",
+     "box": [
+      0,
+      60,
+      320,
+      300
+     ],
+     "min": 0.002
+    }
+   ]
+  }
+ },
+ "srep-0012-shot-32-wind-farm-map-chart": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><geo id=\"farms\" src=\"../assets/srep12-wind.geojson\"/><map id=\"atlas\" width=\"320\" height=\"300\" projection=\"mercator\" fit=\"farms\" fitPadding=\"30\" background=\"#0000FFFF\"><geoLayer geo=\"farms\" fill=\"#FF0000FF\" stroke=\"#FFFFFFFF\" strokeWidth=\"2\" pointRadius=\"12\" label=\"capacity\"/></map><chart id=\"cap\" kind=\"bar\" width=\"260\" height=\"200\" labels=\"North,West,East\"><series name=\"MW\" values=\"320 180 450\" color=\"#FFFF00FF\"/></chart></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<layer id=\"m\" asset=\"atlas\" x=\"20\" y=\"30\"/><layer id=\"c\" asset=\"cap\" x=\"360\" y=\"80\" start=\"0\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 32 (a map asset fitted to a GeoJSON geo asset with a labelled geo layer, a bar chart)",
+   "coverage": [
+    {
+     "colour": "blue",
+     "box": [
+      20,
+      30,
+      340,
+      330
+     ],
+     "min": 0.6
+    },
+    {
+     "colour": "red",
+     "box": [
+      20,
+      30,
+      340,
+      330
+     ],
+     "min": 0.001
+    },
+    {
+     "colour": "yellow",
+     "box": [
+      360,
+      80,
+      620,
+      280
+     ],
+     "min": 0.05
+    }
+   ]
+  }
+ },
+ "srep-0012-shot-33-natural-selection-blobs": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><chart id=\"pop\" kind=\"line\" width=\"200\" height=\"120\" labels=\"0,1,2,3,4\"><series name=\"n\" values=\"10 14 12 9 11\" color=\"#FFFF00FF\"/><animate property=\"progress\"><key time=\"0\" value=\"0.2\"/><key time=\"2\" value=\"1\"/></animate></chart></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"blob1\" shape=\"ellipse\" x=\"180\" y=\"180\" width=\"40\" height=\"40\" fill=\"#00FF00FF\"><animate property=\"x\"><key time=\"0\" value=\"180\"/><key time=\"1\" value=\"240\"/></animate><animate property=\"y\"><key time=\"0\" value=\"180\"/><key time=\"1\" value=\"200\"/></animate></shape><shape id=\"blob2\" shape=\"ellipse\" x=\"420\" y=\"180\" width=\"40\" height=\"40\" fill=\"#00FF00FF\"><animate property=\"x\"><key time=\"0\" value=\"420\"/><key time=\"1\" value=\"360\"/></animate><animate property=\"opacity\"><key time=\"1.2\" value=\"1\"/><key time=\"1.8\" value=\"0\"/></animate></shape><shape id=\"food1\" shape=\"ellipse\" x=\"295\" y=\"215\" width=\"10\" height=\"10\" fill=\"#FF0000FF\" end=\"1.2\"></shape><shape id=\"food2\" shape=\"ellipse\" x=\"335\" y=\"215\" width=\"10\" height=\"10\" fill=\"#FF0000FF\" end=\"1.6\"></shape><layer id=\"graph\" asset=\"pop\" x=\"420\" y=\"20\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 33 (ellipses with keyed motion and opacity, a line chart with keyed progress)",
+   "green": {
+    "cx": 320.0,
+    "cy": 200.0,
+    "w": 280.0,
+    "h": 40.0
+   },
+   "red": {
+    "cx": 320.0,
+    "cy": 220.0,
+    "w": 50.0,
+    "h": 10.0
+   },
+   "coverage": [
+    {
+     "colour": "lit",
+     "box": [
+      420,
+      20,
+      620,
+      140
+     ],
+     "min": 0.02
+    }
+   ]
+  }
+ },
+ "srep-0012-shot-34-hawk-dove-chart": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<assets><chart id=\"mix\" kind=\"area\" width=\"220\" height=\"110\" labels=\"0,1,2,3\"><series name=\"hawk\" values=\"2 3 5 4\" color=\"#FF0000FF\"/><series name=\"dove\" values=\"6 5 3 4\" color=\"#0000FFFF\"/></chart></assets>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<shape id=\"p0\" shape=\"ellipse\" x=\"195\" y=\"235\" width=\"10\" height=\"10\" fill=\"#FFFF00FF\"></shape><shape id=\"p1\" shape=\"ellipse\" x=\"315\" y=\"235\" width=\"10\" height=\"10\" fill=\"#FFFF00FF\"></shape><shape id=\"p2\" shape=\"ellipse\" x=\"435\" y=\"235\" width=\"10\" height=\"10\" fill=\"#FFFF00FF\"></shape><shape id=\"hawk\" shape=\"ellipse\" x=\"162\" y=\"132\" width=\"36\" height=\"36\" fill=\"#FF0000FF\"><animate property=\"x\"><key time=\"0\" value=\"162\"/><key time=\"1\" value=\"190\"/></animate></shape><shape id=\"dove\" shape=\"ellipse\" x=\"442\" y=\"132\" width=\"36\" height=\"36\" fill=\"#0000FFFF\"><animate property=\"x\"><key time=\"0\" value=\"442\"/><key time=\"1\" value=\"410\"/></animate></shape><layer id=\"mixgraph\" asset=\"mix\" x=\"40\" y=\"20\"/>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 34 (ellipses with keyed motion, a two-series area chart)",
+   "yellow": {
+    "cx": 320.0,
+    "cy": 240.0,
+    "w": 250.0,
+    "h": 10.0
+   },
+   "coverage": [
+    {
+     "colour": "lit",
+     "box": [
+      40,
+      20,
+      260,
+      130
+     ],
+     "min": 0.02
+    }
+   ]
+  }
+ },
+ "srep-0012-shot-35-fluid-particles": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"floor\" primitive=\"plane\" width=\"300\" height=\"8\" x=\"320\" y=\"300\" z=\"0\" material=\"m-green\"/><object3D id=\"lwall\" primitive=\"plane\" width=\"8\" height=\"160\" x=\"174\" y=\"224\" z=\"0\" material=\"m-green\"/><object3D id=\"rwall\" primitive=\"plane\" width=\"8\" height=\"160\" x=\"466\" y=\"224\" z=\"0\" material=\"m-green\"/><particles3D id=\"pour\" x=\"320\" y=\"60\" z=\"0\" rate=\"400\" speed=\"40\" lifetime=\"4\" size=\"5\" spread=\"30\" directionY=\"1\" gravityY=\"400\" colliders=\"floor lwall rwall\" material=\"m-blue\" seed=\"7\"><burst time=\"0\" count=\"200\"/></particles3D>\n</composition>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 35 (a 3D particle emitter with gravity and plane colliders, unlit planes)",
+   "green": {
+    "cx": 320,
+    "cy": 260.77
+   },
+   "blue": {
+    "cx": 320,
+    "cy": 60
+   }
+  }
+ },
+ "srep-0012-shot-36-planet-limb-sunset": {
+  "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<scene version=\"1.7\">\n<project width=\"640\" height=\"360\" fps=\"24\" duration=\"2\" background=\"#000000FF\" seed=\"1\"/>\n<output id=\"still\" path=\"out/frame_%04d.png\" codec=\"png-sequence\"/>\n<materials><material id=\"m-red\" baseColor=\"#FF0000FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-green\" baseColor=\"#00FF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-blue\" baseColor=\"#0000FFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-yellow\" baseColor=\"#FFFF00FF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-white\" baseColor=\"#FFFFFFFF\" unlit=\"true\" doubleSided=\"true\"/><material id=\"m-grey\" baseColor=\"#808080FF\" unlit=\"true\" doubleSided=\"true\"/></materials>\n<composition>\n<object3D id=\"planet\" primitive=\"sphere\" radius=\"900\" x=\"320\" y=\"1200\" z=\"200\" material=\"m-blue\"/><object3D id=\"terrain\" primitive=\"heightfield\" x=\"320\" y=\"300\" z=\"-100\" material=\"m-green\"><heightfield height=\"12 * Math.sin(x / 15) * Math.cos(z / 15)\" width=\"500\" depth=\"120\" xSamples=\"50\" zSamples=\"12\"/></object3D><camera id=\"cam\" x=\"320\" y=\"180\" z=\"-554.256\"><animate property=\"x\"><key time=\"0\" value=\"320\"/><key time=\"2\" value=\"400\"/></animate><animate property=\"pitch\"><key time=\"0\" value=\"0\"/><key time=\"2\" value=\"6\"/></animate></camera>\n</composition>\n<lights><light id=\"sky\" type=\"dome\" sky=\"gradient\" skyZenith=\"#102060\" skyHorizon=\"#FF8040\" skyGround=\"#000000\" skyExponent=\"1\" sunAzimuth=\"0\" sunElevation=\"2\" sunSize=\"4\" sunColor=\"#FFE0A0\" sunIntensity=\"3\" environmentVisible=\"true\"/></lights>\n</scene>\n",
+  "expected": {
+   "rule": "SREP 12 Appendix A, shot 36 (a dome light with the procedural sky and a sun, an unlit sphere as the planet, a heightfield, a camera with keyed position and pitch)",
+   "coverage": [
+    {
+     "colour": "lit",
+     "box": [
+      0,
+      0,
+      640,
+      60
+     ],
+     "min": 0.9
+    },
+    {
+     "colour": "blue",
+     "box": [
+      160,
+      250,
+      480,
+      330
+     ],
+     "min": 0.3
+    },
+    {
+     "colour": "green",
+     "box": [
+      120,
+      200,
+      520,
+      320
+     ],
+     "min": 0.05
+    }
+   ]
+  }
+ }
+}

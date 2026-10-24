@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.7">
+<project width="640" height="360" fps="24" duration="2" background="#F4F1E8FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<assets><strokeFont id="hand" src="../assets/stroke-hi.jhf"/></assets>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/><material id="m-white" baseColor="#FFFFFFFF" unlit="true" doubleSided="true"/><material id="m-grey" baseColor="#808080FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<group id="frame" x="320" y="180"><animate property="skewX"><key time="0" value="0"/><key time="1" value="-25"/></animate><shape id="tline" shape="path" path="M0 120 L0 -120" width="640" height="360" fill="#00000000" stroke="#FF0000FF" strokeWidth="4"></shape><shape id="xline" shape="path" path="M-60 120 L60 -120" width="640" height="360" fill="#00000000" stroke="#00FF00FF" strokeWidth="4"></shape><shape id="wobble" shape="path" path="M-150 120 Q-100 116 -50 121 T50 119 T150 121" width="640" height="360" fill="#00000000" stroke="#FFFFFFFF" strokeWidth="3"></shape></group><shape id="lt" shape="stroke-text" text="H" strokeFont="hand" x="330" y="50" width="30" height="30" stroke="#FFFFFFFF" strokeWidth="2"/><shape id="lx" shape="stroke-text" text="I" strokeFont="hand" x="480" y="290" width="30" height="30" stroke="#FFFFFFFF" strokeWidth="2"/>
+</composition>
+</scene>

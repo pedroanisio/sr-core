@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.7">
+<project width="640" height="360" fps="24" duration="2" background="#000000FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<assets><font id="f" src="../assets/srep-test-font.ttf" family="SREPTest"/><text id="l1" text="Sun" width="200" height="40" size="28" fontAsset="f"/><text id="l2" text="Betelgeuse" width="300" height="40" size="28" fontAsset="f"/></assets>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/><material id="m-white" baseColor="#FFFFFFFF" unlit="true" doubleSided="true"/><material id="m-grey" baseColor="#808080FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<group id="scale" x="320" y="180"><animate property="scaleX"><key time="0" value="1"/><key time="1" value="0.1"/><key time="2" value="0.01"/></animate><animate property="scaleY"><key time="0" value="1"/><key time="1" value="0.1"/><key time="2" value="0.01"/></animate><shape id="betelgeuse" shape="ellipse" x="100" y="-500" width="1000" height="1000" fill="#0000FFFF"></shape><shape id="sun" shape="ellipse" x="-20" y="-20" width="40" height="40" fill="#FFFF00FF"></shape></group><layer id="n1" asset="l1" x="40" y="300" end="1"/><layer id="n2" asset="l2" x="40" y="300" start="1"/>
+</composition>
+</scene>

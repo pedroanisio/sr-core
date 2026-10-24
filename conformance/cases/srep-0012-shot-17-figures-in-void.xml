@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.7">
+<project width="640" height="360" fps="24" duration="2" background="#000000FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/><material id="m-white" baseColor="#FFFFFFFF" unlit="true" doubleSided="true"/><material id="m-grey" baseColor="#808080FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<repeat id="stars0" x="320" y="180" threeD="true" zDepth="400"><points type="scatter" count="60" width="900" height="500" seed="1"/><shape id="star0" shape="ellipse" x="-1.5" y="-1.5" width="3" height="3" fill="#FFFFFFFF"/></repeat><repeat id="stars1" x="320" y="180" threeD="true" zDepth="200"><points type="scatter" count="40" width="900" height="500" seed="2"/><shape id="star1" shape="ellipse" x="-1.5" y="-1.5" width="3" height="3" fill="#FFFFFFFF"/></repeat><repeat id="stars2" x="320" y="180" threeD="true" zDepth="80"><points type="scatter" count="25" width="900" height="500" seed="3"/><shape id="star2" shape="ellipse" x="-1.5" y="-1.5" width="3" height="3" fill="#FFFFFFFF"/></repeat><shape id="a" shape="ellipse" x="200" y="130" width="60" height="100" fill="#FF0000FF"></shape><shape id="b" shape="ellipse" x="380" y="130" width="60" height="100" fill="#00FF00FF"></shape><camera id="cam" x="320" y="180" z="-554.256"><animate property="x"><key time="0" value="320"/><key time="2" value="360"/></animate></camera>
+</composition>
+</scene>

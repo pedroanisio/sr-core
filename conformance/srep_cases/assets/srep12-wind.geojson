@@ -1,0 +1,71 @@
+{
+ "features": [
+  {
+   "geometry": {
+    "coordinates": [
+     -2.0,
+     52.0
+    ],
+    "type": "Point"
+   },
+   "properties": {
+    "capacity": 320,
+    "name": "North"
+   },
+   "type": "Feature"
+  },
+  {
+   "geometry": {
+    "coordinates": [
+     -6.0,
+     47.0
+    ],
+    "type": "Point"
+   },
+   "properties": {
+    "capacity": 180,
+    "name": "West"
+   },
+   "type": "Feature"
+  },
+  {
+   "geometry": {
+    "coordinates": [
+     6.0,
+     49.0
+    ],
+    "type": "Point"
+   },
+   "properties": {
+    "capacity": 450,
+    "name": "East"
+   },
+   "type": "Feature"
+  },
+  {
+   "geometry": {
+    "coordinates": [
+     [
+      -6.0,
+      47.0
+     ],
+     [
+      -2.0,
+      52.0
+     ],
+     [
+      6.0,
+      49.0
+     ]
+    ],
+    "type": "LineString"
+   },
+   "properties": {
+    "capacity": 0,
+    "name": "link"
+   },
+   "type": "Feature"
+  }
+ ],
+ "type": "FeatureCollection"
+}

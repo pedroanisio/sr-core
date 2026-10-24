@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.7">
+<project width="640" height="360" fps="24" duration="2" background="#000000FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<assets><chart id="land" kind="column" width="300" height="240" labels="pasture,crops"><series name="share" values="77 23" color="#FF0000FF"/><animate property="progress"><key time="0" value="0.3"/><key time="1.5" value="1"/></animate></chart></assets>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/><material id="m-white" baseColor="#FFFFFFFF" unlit="true" doubleSided="true"/><material id="m-grey" baseColor="#808080FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<shape id="icon-pasture" shape="rect" x="60" y="80" width="80" height="50" fill="#00FF00FF"></shape><shape id="icon-crops" shape="rect" x="60" y="160" width="80" height="50" fill="#FFFF00FF"></shape><layer id="bars" asset="land" x="300" y="60"/>
+</composition>
+</scene>

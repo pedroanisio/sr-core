@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.7">
+<project width="640" height="360" fps="24" duration="2" background="#000000FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<assets><font id="f" src="../assets/srep-test-font.ttf" family="SREPTest"/><text id="title" text="Optimistic Nihilism" width="500" height="60" size="40" fontAsset="f"/><text id="w1" text="Big Bang" width="200" height="40" size="24" fontAsset="f"/><text id="w2" text="Now" width="200" height="40" size="24" fontAsset="f"/></assets>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/><material id="m-white" baseColor="#FFFFFFFF" unlit="true" doubleSided="true"/><material id="m-grey" baseColor="#808080FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<shape id="line" shape="rect" x="100" y="254" width="440" height="4" fill="#FFFFFFFF"></shape><shape id="m0" shape="rect" x="140" y="236" width="8" height="40" fill="#FFFF00FF"></shape><shape id="m1" shape="rect" x="320" y="236" width="8" height="40" fill="#FFFF00FF"></shape><shape id="m2" shape="rect" x="500" y="236" width="8" height="40" fill="#FFFF00FF"></shape><shape id="now" shape="rect" x="100" y="230" width="4" height="52" fill="#FF0000FF"><animate property="x"><key time="0" value="100"/><key time="2" value="500"/></animate></shape><layer id="t" asset="title" x="70" y="60"><textAnimator preset="word-by-word" presetStart="0.2" presetDuration="1"/></layer><layer id="k1" asset="w1" x="100" y="290"><textAnimator preset="slide-up" presetStart="0.5" presetDuration="0.5"/></layer><layer id="k2" asset="w2" x="440" y="290"><textAnimator preset="slide-up" presetStart="1.0" presetDuration="0.5"/></layer>
+</composition>
+</scene>

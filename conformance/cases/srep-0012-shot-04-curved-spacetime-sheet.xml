@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.7">
+<project width="640" height="360" fps="24" duration="2" background="#000000FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/><material id="m-white" baseColor="#FFFFFFFF" unlit="true" doubleSided="true"/><material id="m-grey" baseColor="#808080FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<object3D id="sheet" primitive="parametric" x="320" y="200" z="0" material="m-green"><parametricSurface x="u" y="30 * Math.exp(-(u * u + v * v) / 20000)" z="v" u0="-200" u1="200" v0="-150" v1="150" uSamples="40" vSamples="30"/></object3D><object3D id="apple" primitive="parametric" x="320" y="196" z="0" material="m-red"><parametricSurface x="u" y="30 * Math.exp(-(u * u) / 20000) + v" z="60" u0="-200" u1="200" v0="-3" v1="3" uSamples="40" vSamples="2"/></object3D><camera id="orbit" x="320" y="60" z="-554.256" target="sheet"><animate property="x"><key time="0" value="320"/><key time="1" value="620"/><key time="2" value="320"/></animate><animate property="z"><key time="0" value="-554.256"/><key time="1" value="-434.256"/><key time="2" value="-554.256"/></animate></camera>
+</composition>
+</scene>

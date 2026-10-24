@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene version="1.7">
+<project width="640" height="360" fps="24" duration="2" background="#000000FF" seed="1"/>
+<output id="still" path="out/frame_%04d.png" codec="png-sequence"/>
+<materials><material id="m-red" baseColor="#FF0000FF" unlit="true" doubleSided="true"/><material id="m-green" baseColor="#00FF00FF" unlit="true" doubleSided="true"/><material id="m-blue" baseColor="#0000FFFF" unlit="true" doubleSided="true"/><material id="m-yellow" baseColor="#FFFF00FF" unlit="true" doubleSided="true"/><material id="m-white" baseColor="#FFFFFFFF" unlit="true" doubleSided="true"/><material id="m-grey" baseColor="#808080FF" unlit="true" doubleSided="true"/></materials>
+<composition>
+<shape id="tissue" shape="rect" x="0" y="0" width="640" height="360" fill="#402030FF"></shape><shape id="macro" shape="ellipse" x="300" y="150" width="80" height="60" fill="#00FF00FF"><animate property="scaleX"><key time="0" value="1"/><key time="1" value="1.3"/><key time="2" value="1"/></animate><animate property="scaleY"><key time="0" value="1"/><key time="1" value="1.3"/><key time="2" value="1"/></animate></shape><shape id="bug1" shape="ellipse" x="192" y="112" width="16" height="16" fill="#FF0000FF"><animate property="x"><key time="0" value="192"/><key time="1" value="300"/></animate><animate property="y"><key time="0" value="112"/><key time="1" value="170"/></animate><animate property="scaleX"><key time="1" value="1"/><key time="1.5" value="0"/></animate><animate property="scaleY"><key time="1" value="1"/><key time="1.5" value="0"/></animate></shape><shape id="bug2" shape="ellipse" x="432" y="232" width="16" height="16" fill="#FF0000FF"><animate property="x"><key time="0" value="432"/><key time="2" value="380"/></animate></shape>
+</composition>
+</scene>

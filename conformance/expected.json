@@ -520,6 +520,792 @@
         "h": 20
       }
     },
+    "srep-0012-shot-01-light-pulse-on-footage": {
+      "rule": "SREP 12 Appendix A, shot 1 (video layer, point track from a JSON file mapped through the footage layer, track constraint, glow effect, counter text animator)",
+      "regions": [
+        {
+          "box": [
+            20,
+            300,
+            60,
+            340
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "red": {
+        "cx": 80,
+        "cy": 180
+      },
+      "blue": {
+        "cx": 565.0,
+        "cy": 180.0,
+        "w": 10,
+        "h": 60,
+        "px": 600
+      }
+    },
+    "srep-0012-shot-02-wire-loop-fields": {
+      "rule": "SREP 12 Appendix A, shot 2 (path, ellipse, keyed rotation; the field arrows are hand-placed polygons with staggered starts)",
+      "yellow": {
+        "cx": 112.0,
+        "cy": 182.0,
+        "w": 24.0,
+        "h": 24.0
+      },
+      "red": {
+        "cx": 540.0,
+        "cy": 180.0,
+        "w": 40,
+        "h": 6,
+        "px": 240
+      },
+      "absent": [
+        "green"
+      ]
+    },
+    "srep-0012-shot-03-t-handle-flip": {
+      "rule": "SREP 12 Appendix A, shot 3 (3D boxes under the implicit camera with keyed rotationX and rotationY)",
+      "red": {
+        "cx": 320,
+        "cy": 180,
+        "w": 160.6,
+        "h": 30.1
+      },
+      "green": {
+        "cx": 320,
+        "cy": 225,
+        "w": 20.1,
+        "h": 60.2
+      }
+    },
+    "srep-0012-shot-04-curved-spacetime-sheet": {
+      "rule": "SREP 12 Appendix A, shot 4 (parametric surfaces (a sheet and a thin ribbon for the worldline), a camera with a target and keyed position)",
+      "coverage": [
+        {
+          "colour": "green",
+          "box": [
+            120,
+            100,
+            520,
+            300
+          ],
+          "min": 0.3
+        },
+        {
+          "colour": "red",
+          "box": [
+            120,
+            100,
+            520,
+            300
+          ],
+          "min": 0.002
+        }
+      ]
+    },
+    "srep-0012-shot-05-einstein-solid-packets": {
+      "rule": "SREP 12 Appendix A, shot 5 (a repeat over a grid of points, a packet with hold-keyed position)",
+      "blue": {
+        "w": 260,
+        "h": 140
+      },
+      "red": {
+        "cx": 260.0,
+        "cy": 180.0,
+        "w": 16.0,
+        "h": 16.0
+      }
+    },
+    "srep-0012-shot-06-shade-balls-callouts": {
+      "rule": "SREP 12 Appendix A, shot 6 (video layer, point track mapped through the footage layer, a connector from a callout to the tracked node)",
+      "regions": [
+        {
+          "box": [
+            20,
+            300,
+            60,
+            340
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "red": {
+        "cx": 320,
+        "cy": 180
+      },
+      "yellow": {
+        "cx": 460.0,
+        "cy": 75.0,
+        "w": 120,
+        "h": 30,
+        "px": 3600
+      }
+    },
+    "srep-0012-shot-07-penrose-to-wormhole": {
+      "rule": "SREP 12 Appendix A, shot 7 (paths and rects for the diagram; a geodesic camera with one black hole from 1 s)",
+      "blue": {
+        "cx": 320.0,
+        "cy": 64.0,
+        "w": 160,
+        "h": 8
+      },
+      "red": {
+        "cx": 478.0,
+        "cy": 180.0,
+        "w": 16,
+        "h": 16,
+        "px": 256
+      }
+    },
+    "srep-0012-shot-08-neural-network-layers": {
+      "rule": "SREP 12 Appendix A, shot 8 (repeats over point grids, connectors between nodes, keyed opacity)",
+      "blue": {
+        "cx": 250,
+        "cy": 180,
+        "w": 16,
+        "h": 226
+      },
+      "green": {
+        "cx": 380,
+        "cy": 180,
+        "w": 16,
+        "h": 196
+      },
+      "red": {
+        "cx": 510,
+        "cy": 180,
+        "w": 16,
+        "h": 166
+      }
+    },
+    "srep-0012-shot-09-fourier-winding": {
+      "rule": "SREP 12 Appendix A, shot 9 (parametric paths whose expressions read time (the winding frequency sweeps), a keyed marker)",
+      "coverage": [
+        {
+          "colour": "yellow",
+          "box": [
+            60,
+            80,
+            260,
+            280
+          ],
+          "min": 0.02
+        }
+      ],
+      "red": {
+        "cx": 160.0,
+        "cy": 180.0,
+        "w": 12.0,
+        "h": 12.0
+      }
+    },
+    "srep-0012-shot-10-matrix-transformation": {
+      "rule": "SREP 12 Appendix A, shot 10 (a group with keyed skew and rotation over a grid of rects, a TeX matrix formula asset)",
+      "red": {
+        "cx": 350.0,
+        "cy": 180.0,
+        "w": 60,
+        "h": 4
+      },
+      "green": {
+        "cx": 320.0,
+        "cy": 150.0,
+        "w": 4,
+        "h": 60
+      },
+      "coverage": [
+        {
+          "colour": "lit",
+          "box": [
+            470,
+            20,
+            630,
+            100
+          ],
+          "min": 0.01
+        }
+      ]
+    },
+    "srep-0012-shot-11-stereographic-projection": {
+      "rule": "SREP 12 Appendix A, shot 11 (an unlit sphere, a torus and a plane under the implicit camera)",
+      "blue": {
+        "cx": 320
+      },
+      "green": {
+        "cx": 320,
+        "cy": 300,
+        "w": 400,
+        "h": 60
+      },
+      "coverage": [
+        {
+          "colour": "red",
+          "box": [
+            200,
+            60,
+            440,
+            240
+          ],
+          "min": 0.005
+        }
+      ]
+    },
+    "srep-0012-shot-12-divergence-curl-particles": {
+      "rule": "SREP 12 Appendix A, shot 12 (a particle emitter with a burst at 0, a vortex force field, hand-placed arrows)",
+      "coverage": [
+        {
+          "colour": "red",
+          "box": [
+            150,
+            130,
+            250,
+            230
+          ],
+          "min": 0.02
+        }
+      ],
+      "green": {
+        "cx": 200,
+        "cy": 180
+      }
+    },
+    "srep-0012-shot-13-light-cones": {
+      "rule": "SREP 12 Appendix A, shot 13 (filled paths, rects and ellipses)",
+      "yellow": {
+        "cx": 320,
+        "cy": 100,
+        "w": 240
+      },
+      "blue": {
+        "cx": 320,
+        "cy": 260,
+        "w": 240
+      },
+      "red": {
+        "cx": 320.0,
+        "cy": 180.0,
+        "w": 12.0,
+        "h": 12.0
+      },
+      "green": {
+        "cx": 450.0,
+        "cy": 110.0,
+        "w": 12.0,
+        "h": 12.0
+      }
+    },
+    "srep-0012-shot-14-event-horizon-fall": {
+      "rule": "SREP 12 Appendix A, shot 14 (a geodesic camera with keyed position, a black hole with an accretion disk and its starfield)",
+      "coverage": [
+        {
+          "colour": "lit",
+          "box": [
+            0,
+            0,
+            640,
+            360
+          ],
+          "min": 0.02
+        },
+        {
+          "colour": "dark",
+          "box": [
+            310,
+            170,
+            330,
+            190
+          ],
+          "min": 0.9
+        }
+      ]
+    },
+    "srep-0012-shot-15-double-slit-hits": {
+      "rule": "SREP 12 Appendix A, shot 15 (rects and ellipses; the hits are hand-placed with staggered starts)",
+      "yellow": {
+        "cx": 120.0,
+        "cy": 180.0,
+        "w": 20.0,
+        "h": 20.0
+      },
+      "blue": {
+        "cx": 304.0,
+        "cy": 180.0,
+        "w": 8,
+        "h": 240,
+        "px": 1600
+      },
+      "absent": [
+        "red"
+      ]
+    },
+    "srep-0012-shot-16-penrose-diamond": {
+      "rule": "SREP 12 Appendix A, shot 16 (a filled diamond path, parametric grid lines whose expressions read time, 45-degree stroked paths)",
+      "yellow": {
+        "cx": 320,
+        "cy": 180,
+        "w": 240,
+        "h": 240
+      },
+      "red": {
+        "cx": 320,
+        "cy": 180
+      }
+    },
+    "srep-0012-shot-17-figures-in-void": {
+      "rule": "SREP 12 Appendix A, shot 17 (2.5D repeats of scattered points at three depths, a camera with keyed position, flat ellipses)",
+      "red": {
+        "cx": 230.0,
+        "cy": 180.0,
+        "w": 60.0,
+        "h": 100.0
+      },
+      "green": {
+        "cx": 410.0,
+        "cy": 180.0,
+        "w": 60.0,
+        "h": 100.0
+      }
+    },
+    "srep-0012-shot-18-star-size-zoom": {
+      "rule": "SREP 12 Appendix A, shot 18 (a group with keyed scale, text layers with start and end)",
+      "yellow": {
+        "cx": 320.0,
+        "cy": 180.0,
+        "w": 40.0,
+        "h": 40.0
+      },
+      "coverage": [
+        {
+          "colour": "blue",
+          "box": [
+            400,
+            0,
+            640,
+            360
+          ],
+          "min": 0.5
+        }
+      ]
+    },
+    "srep-0012-shot-19-macrophage-engulfs": {
+      "rule": "SREP 12 Appendix A, shot 19 (ellipses with keyed position and scale over a tissue-coloured background)",
+      "green": {
+        "cx": 340.0,
+        "cy": 180.0,
+        "w": 80.0,
+        "h": 60.0
+      },
+      "red": {
+        "cx": 320.0,
+        "cy": 180.0,
+        "w": 256.0,
+        "h": 136.0
+      }
+    },
+    "srep-0012-shot-20-land-use-bars": {
+      "rule": "SREP 12 Appendix A, shot 20 (a column chart with keyed progress, icon rects)",
+      "green": {
+        "cx": 100.0,
+        "cy": 105.0,
+        "w": 80,
+        "h": 50,
+        "px": 4000
+      },
+      "yellow": {
+        "cx": 100.0,
+        "cy": 185.0,
+        "w": 80,
+        "h": 50,
+        "px": 4000
+      },
+      "coverage": [
+        {
+          "colour": "red",
+          "box": [
+            300,
+            60,
+            600,
+            300
+          ],
+          "min": 0.02
+        },
+        {
+          "colour": "lit",
+          "box": [
+            300,
+            60,
+            600,
+            300
+          ],
+          "min": 0.03
+        }
+      ]
+    },
+    "srep-0012-shot-21-nuke-skyline": {
+      "rule": "SREP 12 Appendix A, shot 21 (rects with start and end, ellipses with keyed scale, a stroked ring)",
+      "blue": {
+        "cx": 325.1,
+        "cy": 258.14,
+        "w": 560,
+        "h": 170,
+        "px": 51200
+      },
+      "absent": [
+        "yellow",
+        "red"
+      ]
+    },
+    "srep-0012-shot-22-timeline-typography": {
+      "rule": "SREP 12 Appendix A, shot 22 (text animator presets (word-by-word, slide-up), rects, a keyed marker)",
+      "yellow": {
+        "cx": 324.0,
+        "cy": 256.0,
+        "w": 368,
+        "h": 40,
+        "px": 960
+      },
+      "red": {
+        "cx": 102.0,
+        "cy": 256.0,
+        "w": 4,
+        "h": 52,
+        "px": 208
+      }
+    },
+    "srep-0012-shot-23-black-hole-disk": {
+      "rule": "SREP 12 Appendix A, shot 23 (a geodesic camera, a black hole and an accretion disk)",
+      "coverage": [
+        {
+          "colour": "lit",
+          "box": [
+            0,
+            0,
+            640,
+            360
+          ],
+          "min": 0.05
+        },
+        {
+          "colour": "dark",
+          "box": [
+            310,
+            170,
+            330,
+            190
+          ],
+          "min": 0.9
+        }
+      ]
+    },
+    "srep-0012-shot-24-whiteboard-worldlines": {
+      "rule": "SREP 12 Appendix A, shot 24 (stroke-text with a single-line stroke font, stroked paths in a group with keyed skew)",
+      "red": {
+        "cx": 320,
+        "cy": 180,
+        "w": 4,
+        "h": 240
+      },
+      "green": {
+        "cx": 320,
+        "cy": 180,
+        "w": 124,
+        "h": 240
+      }
+    },
+    "srep-0012-shot-25-charges-field-lines": {
+      "rule": "SREP 12 Appendix A, shot 25 (ellipses, hand-placed paths with keyed trimEnd)",
+      "red": {
+        "cx": 240.0,
+        "cy": 180.0,
+        "w": 30.0,
+        "h": 30.0
+      },
+      "blue": {
+        "cx": 400.0,
+        "cy": 180.0,
+        "w": 30.0,
+        "h": 30.0
+      },
+      "absent": [
+        "yellow"
+      ]
+    },
+    "srep-0012-shot-26-rayleigh-doodle": {
+      "rule": "SREP 12 Appendix A, shot 26 (a repeat over a grid, a rect, ellipses with keyed position)",
+      "yellow": {
+        "cx": 150.0,
+        "cy": 180.0,
+        "w": 300,
+        "h": 20,
+        "px": 6000
+      },
+      "blue": {
+        "cx": 300.0,
+        "cy": 180.0,
+        "w": 12.0,
+        "h": 172.0
+      }
+    },
+    "srep-0012-shot-27-chain-fountain-overlays": {
+      "rule": "SREP 12 Appendix A, shot 27 (a video layer with shape overlays)",
+      "regions": [
+        {
+          "box": [
+            20,
+            300,
+            60,
+            340
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "red": {
+        "cx": 402
+      },
+      "yellow": {
+        "cx": 480.0,
+        "cy": 75.0,
+        "w": 100,
+        "h": 30,
+        "px": 3000
+      }
+    },
+    "srep-0012-shot-28-optical-rotation-helix": {
+      "rule": "SREP 12 Appendix A, shot 28 (a gradient-filled rect, a parametric helix whose expression reads time, a rect with keyed rotation)",
+      "coverage": [
+        {
+          "colour": "lit",
+          "box": [
+            280,
+            40,
+            360,
+            320
+          ],
+          "min": 0.9
+        },
+        {
+          "colour": "red",
+          "box": [
+            280,
+            40,
+            360,
+            320
+          ],
+          "min": 0.01
+        }
+      ],
+      "green": {
+        "cx": 130.0,
+        "cy": 180.0,
+        "w": 60,
+        "h": 60,
+        "px": 3600
+      }
+    },
+    "srep-0012-shot-29-booster-separation": {
+      "rule": "SREP 12 Appendix A, shot 29 (3D primitives with keyed position and rotation, 3D particle emitters with a burst)",
+      "red": {
+        "cx": 320,
+        "cy": 180
+      },
+      "coverage": [
+        {
+          "colour": "yellow",
+          "box": [
+            200,
+            250,
+            440,
+            360
+          ],
+          "min": 0.01
+        }
+      ]
+    },
+    "srep-0012-shot-30-nacelle-cutaway": {
+      "rule": "SREP 12 Appendix A, shot 30 (rects, a keyed path, dashed paths with keyed dash offset)",
+      "blue": {
+        "cx": 320.0,
+        "cy": 180.0,
+        "w": 400,
+        "h": 160
+      },
+      "red": {
+        "cx": 220,
+        "cy": 180,
+        "w": 120,
+        "h": 60
+      }
+    },
+    "srep-0012-shot-31-reentry-plasma": {
+      "rule": "SREP 12 Appendix A, shot 31 (3D primitives, an unlit shield, a 3D particle emitter with a burst)",
+      "red": {
+        "cy": 180
+      },
+      "coverage": [
+        {
+          "colour": "red",
+          "box": [
+            270,
+            130,
+            370,
+            230
+          ],
+          "min": 0.5
+        },
+        {
+          "colour": "yellow",
+          "box": [
+            0,
+            60,
+            320,
+            300
+          ],
+          "min": 0.002
+        }
+      ]
+    },
+    "srep-0012-shot-32-wind-farm-map-chart": {
+      "rule": "SREP 12 Appendix A, shot 32 (a map asset fitted to a GeoJSON geo asset with a labelled geo layer, a bar chart)",
+      "coverage": [
+        {
+          "colour": "blue",
+          "box": [
+            20,
+            30,
+            340,
+            330
+          ],
+          "min": 0.6
+        },
+        {
+          "colour": "red",
+          "box": [
+            20,
+            30,
+            340,
+            330
+          ],
+          "min": 0.001
+        },
+        {
+          "colour": "yellow",
+          "box": [
+            360,
+            80,
+            620,
+            280
+          ],
+          "min": 0.05
+        }
+      ]
+    },
+    "srep-0012-shot-33-natural-selection-blobs": {
+      "rule": "SREP 12 Appendix A, shot 33 (ellipses with keyed motion and opacity, a line chart with keyed progress)",
+      "green": {
+        "cx": 320.0,
+        "cy": 200.0,
+        "w": 280.0,
+        "h": 40.0
+      },
+      "red": {
+        "cx": 320.0,
+        "cy": 220.0,
+        "w": 50.0,
+        "h": 10.0
+      },
+      "coverage": [
+        {
+          "colour": "lit",
+          "box": [
+            420,
+            20,
+            620,
+            140
+          ],
+          "min": 0.02
+        }
+      ]
+    },
+    "srep-0012-shot-34-hawk-dove-chart": {
+      "rule": "SREP 12 Appendix A, shot 34 (ellipses with keyed motion, a two-series area chart)",
+      "yellow": {
+        "cx": 320.0,
+        "cy": 240.0,
+        "w": 250.0,
+        "h": 10.0
+      },
+      "coverage": [
+        {
+          "colour": "lit",
+          "box": [
+            40,
+            20,
+            260,
+            130
+          ],
+          "min": 0.02
+        }
+      ]
+    },
+    "srep-0012-shot-35-fluid-particles": {
+      "rule": "SREP 12 Appendix A, shot 35 (a 3D particle emitter with gravity and plane colliders, unlit planes)",
+      "green": {
+        "cx": 320,
+        "cy": 260.77
+      },
+      "blue": {
+        "cx": 320,
+        "cy": 60
+      }
+    },
+    "srep-0012-shot-36-planet-limb-sunset": {
+      "rule": "SREP 12 Appendix A, shot 36 (a dome light with the procedural sky and a sun, an unlit sphere as the planet, a heightfield, a camera with keyed position and pitch)",
+      "coverage": [
+        {
+          "colour": "lit",
+          "box": [
+            0,
+            0,
+            640,
+            60
+          ],
+          "min": 0.9
+        },
+        {
+          "colour": "blue",
+          "box": [
+            160,
+            250,
+            480,
+            330
+          ],
+          "min": 0.3
+        },
+        {
+          "colour": "green",
+          "box": [
+            120,
+            200,
+            520,
+            320
+          ],
+          "min": 0.05
+        }
+      ]
+    },
     "srep-0015-arrow": {
       "rule": "SREP 15",
       "green": {
