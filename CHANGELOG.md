@@ -21,6 +21,17 @@ version:
 
 ### Added
 
+- Draft SREP "Add wave simulations" (`srep/srep-0000-wave-sim.md`, OW4 of SREP 12): a `rippleTank` 2D node
+  stepping the scalar wave equation by finite differences (leapfrog) with a document-stated Courant number
+  checked against the CFL bound, point and line `source`s (continuous or pulsed), `wall`s with `slit`s,
+  `speedRegion`s and `absorbing` (sponge), `reflecting` or `periodic` boundaries, with the conserved discrete
+  energy and `hits` drawn from the pattern with the document's stream (SREP 92, channel HITS); a `string`
+  node with fixed or free ends, plucked, struck or driven, damped, with the closed-form modes n c/2L and nodes
+  at n lambda/2; a `chladniPlate` node with the simply supported closed form and the free square plate by
+  Ritz's method with free-free beam functions (Gander and Wanner 2012), split by symmetry, with sand walking
+  to the nodal lines; frames as pure functions of the frame (SREP 14); reference module
+  `conformance/tools/wave_sim_reference.py`, `tests/test_wave_sim.py` (its numeric table checked row by row);
+  the schema files are unchanged, the diff (WS1-WS4, V17) is inside the draft; engine card SR-96.
 - Draft SREP "Add polarisation and wave optics" (`srep/srep-0000-wave-optics.md`, OW3 of SREP 12): Jones
   vectors on the ray-optics bench's sources (`polarisation` linear, circular, elliptical or none) with
   `polariser`, `waveplate`, `rotator` (an angle or Biot's law for a sugar column) and `detector` (Stokes
