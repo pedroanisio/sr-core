@@ -21,6 +21,18 @@ version:
 
 ### Added
 
+- Draft SREP "Add computed masks and depth" (`srep/srep-0000-computed-masks.md`, LA2 of SREP 12):
+  `imageSequence` gains `provider="masks"` with a `segment` child or `provider="depth"` with an `estimate`
+  child, and a resolve step (SREP 9's pattern) writes one 16-bit PGM per frame under the `src` pattern plus a
+  manifest of every frame's digest, pinned by the asset's `sha256`; mattes by the engine's `chroma` and
+  `difference` key formulas, by `region` growing from `seeds` with a linear colour model on the boundary that
+  follows the object, and by keyed `roto` polygons, with `expansion` and `feather` as on `maskType`; depth
+  from the `plane` of a tracked target through a solved camera and from `stereo` block matching with
+  Lucas-Kanade refinement and a left-right consistency check; synthetic mattes measured at an intersection
+  over union of at least 0.95 per frame and the stereo depth within 2 %; frames read a static cache
+  (SREP 14); reference module `conformance/tools/computed_masks_reference.py`, `tests/test_computed_masks.py`
+  (its numeric table checked row by row); the schema files are unchanged, the diff (MD1-MD4, V17) is inside
+  the draft; engine card SR-98.
 - Draft SREP "Add computed tracking" (`srep/srep-0000-computed-tracking.md`, LA1 of SREP 12): `trackData`
   gains `provider="tracks"` with one `solve` child, and a resolve step (SREP 9's pattern) writes the track
   cache at `src` in the engine's JSON format, pinned by `sha256`, with sorted keys and four decimals so the
