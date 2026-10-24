@@ -21,6 +21,13 @@ version:
 
 ### Added
 
+- Draft SREP "Add ray-optics diagrams" (`srep/srep-0000-ray-optics.md`, OW1 of SREP 12): an `opticalBench`
+  2D node with `source`s (point fans, parallel beams), thin and thick `lens`es, flat and spherical `mirror`s,
+  `prism`s, refracting `block`s, parabolic `grin` slabs, `screen`s and an `object` that draws a thin lens's
+  image construction; rays traced non-sequentially or sequentially by Snell's law, total internal reflection
+  and an optional Fresnel split, with a bounce bound and a power floor owned by the document; reference module
+  `conformance/tools/ray_optics_reference.py`, `tests/test_ray_optics.py` (its numeric table checked row by
+  row); the schema files are unchanged, the diff (RO1-RO4, V17) is inside the draft; engine card SR-93.
 - Draft SREP "Add relativity diagrams" (`srep/srep-0000-relativity.md`, SP6 of SREP 12): a `spacetime`
   child of the plots draft's `axes` (Minkowski diagrams in units of c with a `boost` keyed in rapidity, the
   boosted frame's grid, `event`s with light cones, inertial, accelerated and parametric `worldline`s,
