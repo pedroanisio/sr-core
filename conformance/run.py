@@ -137,6 +137,19 @@ def render(renderer, case, output=None):
     return (png if os.path.exists(png) else None), p.returncode, dt, notes[:6]
 
 
+def validated_file(doc):
+    """The one file entry of `validate --format json`: inside the scene-render-cli/1 envelope's "result", or at the top
+    level from an engine that predates the envelope. Any other envelope format, or a missing or empty file list, raises."""
+    if "format" in doc:
+        if doc["format"] != "scene-render-cli/1":
+            raise ValueError(f"unknown output format {doc['format']!r}")
+        doc = doc["result"]
+    files = doc["files"]
+    if not isinstance(files, list) or not files or not isinstance(files[0], dict):
+        raise ValueError(f"no file entry in {files!r:.80}")
+    return files[0]
+
+
 def findings(renderer, case, want):
     """A case whose expected entry has "findings": the engine validates the document and reports these diagnostics.
 
@@ -168,8 +181,8 @@ def findings(renderer, case, want):
     try:
         p = subprocess.run([exe, "validate", s_, "--format", "json"], cwd=d, capture_output=True, text=True,
                            timeout=600, env={**os.environ, **env})
-        out = json.loads(p.stdout)["files"][0]
-    except (FileNotFoundError, subprocess.TimeoutExpired, ValueError, KeyError, IndexError) as e:
+        out = validated_file(json.loads(p.stdout))
+    except (FileNotFoundError, subprocess.TimeoutExpired, ValueError, KeyError, IndexError, TypeError) as e:
         return "error", time.time() - t0, [f"validate failed: {type(e).__name__}: {e}"], {}
     diags = out.get("diagnostics", [])
     # the safe-area audit prints SA01 and SA02 lines in the text form of `validate`

@@ -339,6 +339,34 @@ def test_a_well_formed_findings_entry_still_runs_and_can_fail(tmp_path):
     assert bad.returncode == 1 and " fail " in bad.stdout, bad.stdout
 
 
+def _envelope_engine(result):
+    """Reports `validate --format json` in the scene-render-cli/1 envelope, with `result` as its payload."""
+    return ("import json\nprint(json.dumps({'format': 'scene-render-cli/1', 'command': 'validate', 'ok': True, "
+            f"'exit_code': 0, 'error': None, 'diagnostics': [], 'result': {result!r}}}))\n")
+
+
+def test_findings_are_read_from_the_cli_envelope(tmp_path):
+    engine = _envelope_engine({"files": [{"valid": False, "diagnostics": [{"code": "E1", "message": "m"}]}], "valid": False})
+    r = _run_copy(tmp_path, _with_entry(tmp_path, {"rule": "x", "findings": {"valid": False, "codes": ["E1"]}}), engine)
+    assert r.returncode == 0 and " pass " in r.stdout, r.stdout
+
+
+@pytest.mark.parametrize("result", [None, {}, {"files": []}, {"files": "x"}, {"filez": [{"valid": True}]}])
+def test_an_envelope_without_files_is_an_error_not_a_pass(tmp_path, result):
+    r = _run_copy(tmp_path, _with_entry(tmp_path, {"rule": "x", "findings": {"valid": True}}), _envelope_engine(result))
+    got = json.loads((tmp_path / "conformance" / "out" / "report.json").read_text())["results"]["rs"]["a1-anchor-translate"]
+    assert r.returncode == 1 and got["status"] == "error", r.stdout
+    assert "validate failed" in " ".join(got["notes"]), got
+
+
+def test_an_unknown_envelope_format_is_an_error(tmp_path):
+    engine = ("import json\nprint(json.dumps({'format': 'scene-render-cli/2', "
+              "'result': {'files': [{'valid': True, 'diagnostics': []}]}}))\n")
+    r = _run_copy(tmp_path, _with_entry(tmp_path, {"rule": "x", "findings": {"valid": True}}), engine)
+    got = json.loads((tmp_path / "conformance" / "out" / "report.json").read_text())["results"]["rs"]["a1-anchor-translate"]
+    assert r.returncode == 1 and got["status"] == "error" and "scene-render-cli/2" in " ".join(got["notes"]), got
+
+
 def test_every_entry_of_the_committed_kit_is_well_formed():
     """The closed vocabulary holds for all of expected.json, so the runner's rejection never hits a real case."""
     spec = importlib_run().__dict__
