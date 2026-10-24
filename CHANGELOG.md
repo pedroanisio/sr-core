@@ -21,6 +21,18 @@ version:
 
 ### Added
 
+- Draft SREP "Add plate integration" (`srep/srep-0000-plate-integration.md`, LA3 of SREP 12): `camera` gains
+  `track` (a camera `trackData` that drives it) and `trackScale` (scene units per track unit, default
+  `pixelsPerMeter`), the row held at the frame written into the engine's conventions (y down, z forward,
+  yaw-pitch-roll about y, x, z, horizontal `fov`); `object3D` gains `anchor` and `anchorName` (a planar
+  track whose pose, carried through the tracked camera, places the object, so a `shadowCatcher` there
+  darkens the plate by SREP 41's rule); the camera `solve` gains `lens="plumb"`, the plumb-line estimate of
+  the engine's radial `k1` (`three_post.wgsl`) written into the track cache and taken by a tracked camera
+  without `lensDistortion`; a solved camera re-projects the target onto its plate positions within 0.5 px
+  (0.327 px measured; 0 px after undistortion of `k1 = 0.15`, 0.696 px without); reference module
+  `conformance/tools/plate_integration_reference.py`, `tests/test_plate_integration.py` (its numeric table
+  checked row by row); the schema files are unchanged, the diff (PI1-PI4, V17) is inside the draft; engine
+  card SR-99.
 - Draft SREP "Add computed masks and depth" (`srep/srep-0000-computed-masks.md`, LA2 of SREP 12):
   `imageSequence` gains `provider="masks"` with a `segment` child or `provider="depth"` with an `estimate`
   child, and a resolve step (SREP 9's pattern) writes one 16-bit PGM per frame under the `src` pattern plus a
