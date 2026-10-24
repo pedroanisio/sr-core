@@ -21,6 +21,15 @@ version:
 
 ### Added
 
+- Draft SREP "Add ragdolls and physics interchange to 3D rigid bodies" (`srep/srep-0000-ragdolls-interchange.md`,
+  S4 of SREP 12): the landed Voronoi glue of SREP 80 restated as measurable rules (pieces sum to the whole in
+  cells, mass and momentum; no joint below its principal-tension threshold breaks; the glued cantilever's beam
+  stresses), a `ragdoll` with `limb` children on an imported model (capsule limbs, ball or hinge joints with
+  limits, a `blend` weight that is kinematic at 0, drives the joints by 1 - blend above it and slerps the
+  drawn pose), `physics/@src` reading UsdPhysics and glTF KHR_physics_rigid_bodies assets and a
+  `physics-export` action writing them with a normative mapping table (SREP 11's physics frame, `sr:` custom
+  data for the identity round trip, typed errors for what the format cannot express); reference module
+  `conformance/tools/ragdoll_reference.py` and `tests/test_ragdolls_interchange.py` (SRC-40, engine card SR-84).
 - Draft SREP "Add particle liquids and granular media in 3D" (`srep/srep-0000-liquids.md`, S3 of SREP 12): a
   `liquid3D` node stepped by APIC, FLIP or MLS-MPM on a MAC grid with quadratic B-spline transfers, a
   projection over the particle cells with an interior density correction and a particle separation, `material`
