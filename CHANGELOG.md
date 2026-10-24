@@ -21,6 +21,12 @@ version:
 
 ### Added
 
+- Draft SREP "Add cutaways, exploded views and surface flow to 3D objects" (`srep/srep-0000-cutaways.md`, S5 of
+  SREP 12): `section` planes with capped, hatched cuts (crossing points computed once per edge so a closed mesh
+  stays closed, loops ear-clipped with holes bridged), `explode` views whose amount 0 is the identity exactly
+  (radial, axis and dense-rank modes), and `flow` lines of a field's tangent part over the surface (Runge–Kutta
+  with projected stages, Jobard–Lefer seeding at the chord); reference module
+  `conformance/tools/cutaways_reference.py` and `tests/test_cutaways.py` (SRC-41, engine card SR-85).
 - Draft SREP "Add ragdolls and physics interchange to 3D rigid bodies" (`srep/srep-0000-ragdolls-interchange.md`,
   S4 of SREP 12): the landed Voronoi glue of SREP 80 restated as measurable rules (pieces sum to the whole in
   cells, mass and momentum; no joint below its principal-tension threshold breaks; the glued cantilever's beam
