@@ -21,6 +21,13 @@ version:
 
 ### Added
 
+- Draft SREP "Add the physical sun, moon and sky to dome lights" (`srep/srep-0000-physical-sky.md`, A1 of
+  SREP 12): `sky="physical"` on dome lights with `date`, `latitude`, `longitude`, `altitude`, `pressure`,
+  `temperature` and `deltaT`; the sun by the Solar Position Algorithm of Reda and Andreas written from the
+  report (its example within 0.001°), the moon by Montenbruck and Pfleger, the atmosphere of Hillaire 2020
+  (Rayleigh, Mie, ozone; transmittance by quadrature, single and multiple scattering, sun disc, aerial
+  perspective, height fog); reference module `conformance/tools/physical_sky_reference.py` and
+  `tests/test_physical_sky.py` (SRC-43, engine card SR-86).
 - Draft SREP "Add cutaways, exploded views and surface flow to 3D objects" (`srep/srep-0000-cutaways.md`, S5 of
   SREP 12): `section` planes with capped, hatched cuts (crossing points computed once per edge so a closed mesh
   stays closed, loops ear-clipped with holes bridged), `explode` views whose amount 0 is the identity exactly
