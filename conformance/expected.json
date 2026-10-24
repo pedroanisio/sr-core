@@ -40012,8 +40012,7 @@
         "cy": 100,
         "w": 4,
         "h": 40
-      },
-      "pending": "the engine implements the jump of SREP 58 (srep-0058-jump passes), but at an exact vertex it takes the incoming segment's direction: the bar lies horizontal (red w 40, h 4) where the SREP stands it vertical (w 4, h 40). Measured on scene-render main e586b57 (0.7.4, binary sha256 prefix b7285fa1d0fba26f, llvmpipe, 2026-10-24)"
+      }
     },
     "srep-0059-identity": {
       "rule": "SREP 59 (an IDREF naming no id is rejected: @parent=\"nosuch\")",
