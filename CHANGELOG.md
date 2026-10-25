@@ -21,6 +21,17 @@ version:
 
 ### Added
 
+- Draft SREP "Add the wind field" (`srep/srep-0000-wind.md`, F4 of SREP 12): a `wind` element under
+  `physics`, a velocity field in m/s over the physics space with a mean (`speed`, `direction`, `speedZ`), a
+  stochastic gust factor (`gustiness`, `gustPeriod`, `gustOctaves`: an octave sum of the random-streams
+  draft's value noise over time), declared `gust` children (`at`, `duration`, `peak`, `shape` one of `cosine`,
+  `iec`) and a curl-noise `turbulence` (`turbulenceScale`, `turbulenceOctaves`, `turbulenceTime`): the analytic
+  curl of a vector potential of three D24 value-noise fields on pack(i, j, k), divergence-free, carried by the
+  mean wind (Taylor's frozen turbulence) and sliding in time; particles and bodies listing the wind in
+  `forceFields` relax toward it with a `response` time; later milestone 8 SREPs sample it directly; the 1.7
+  `forceField type="wind"` is unchanged. Rules WD1–WD5 and V17; the schema files are unchanged, the diff is
+  inside the draft. Reference module `conformance/tools/wind_reference.py` with a 33-row numeric table and
+  `tests/test_wind.py`. Engine card SR-101.
 - Draft SREP "Add the terrain grid" (`srep/srep-0000-terrain-grid.md`, F2 of SREP 12): a `terrain` element
   holding a regular grid of named layers with units over a rectangle (`cells` along the longer side,
   `metersPerCell`; `bedrock`, `loose`, `lava`, `ice`, `snow` by type solid in metres; `water`, `sediment`,
