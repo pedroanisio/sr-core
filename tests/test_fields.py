@@ -563,3 +563,16 @@ def test_the_kit_runs_an_engine_and_reports_every_case(tmp_path):
     assert os.path.exists(os.path.join(str(tmp_path), "srep-0000-field-uniform.xml"))
     table = fk.table(report)
     assert table.count("\n") == len(fk.NAMES) + 1 and "| field-poynting |" in table
+
+
+def test_the_draft_records_every_kit_case_measured_on_one_engine_commit():
+    text = open(DRAFT, encoding="utf-8").read()
+    body = text.split("### Kit cases", 1)[1].split("\n## ", 1)[0]
+    cells = re.findall(r"^\| `srep-<n>-field-[a-z]+\.xml` \| (?:[^|]|\\\|)* \| ([^|]*) \|$", body, re.M)
+    assert len(cells) == len(fk.NAMES)
+    for cell in cells:
+        assert cell.startswith("measured on scene-render feat/sr-67-fields 4f086d9 (0.8.0, llvmpipe): ")
+        assert cell.endswith("; pass")
+    assert "refuses" not in body
+    assert "feat/sr-67-fields at 4f086d9 (which vendors the draft as of f6cf12f, with the" in body
+    assert "the worst 3.51°" in cells[-1]

@@ -308,16 +308,18 @@ The cases are described here and added to `conformance/srep_cases/` once the SRE
 `conformance/tools/fields_kit.py` writes them (as `srep-0000-…`) and measures an engine's render of each
 (`--engine BIN`); the status column records the measurement and the engine commit. The 2026-10-25 run:
 `SR_GPU_BACKEND=vulkan SR_GPU_ADAPTER=llvmpipe python3 conformance/tools/fields_kit.py --engine scene-render` on a
-release build of the engine's feat/sr-67-fields at 9a40270 (which vendors the draft as of 5186b0c).
+release build of the engine's feat/sr-67-fields at 4f086d9 (which vendors the draft as of f6cf12f, with the
+`wire` source of SR-117). An earlier run on 9a40270 (vendoring 5186b0c, before the wire source) gave the same five
+measurements and refused the Poynting document (FLD1, and S02 for `wire`).
 
 | Case | Checks | Status |
 |---|---|---|
-| `srep-<n>-field-uniform.xml` | `u="1" v="0"` over a 400 × 400 box with `streamlines separation="80"`: five white horizontal lines whose centroids are 80 px apart within 0.5 px | measured on scene-render feat/sr-67-fields 9a40270 (0.8.0, llvmpipe): centroids 80, 160, 240, 320 and 400 px, every gap 80.0 px; pass |
-| `srep-<n>-field-vortex.xml` | `u="-y" v="x"` with `arrows cols="5" rows="5"`: every arrow's shaft is perpendicular to the radius from the centre within 1°, and the frame alone equals the frame played (SREP 14) | measured on scene-render feat/sr-67-fields 9a40270 (0.8.0, llvmpipe): 24 arrows, the worst 0.43° off perpendicular; frame 2 alone equals frame 2 of 0..=2; pass |
-| `srep-<n>-field-dipole.xml` | a `dipole` of moment (0, 1) at the origin with one streamline (`streamlines maxLines="1" step="2"`) seeded at (0.5, 0) on the equator, 200 px per unit: at 20 angles θ from 30° to 150° off the axis, the lit pixel nearest the point r = 0.5 sin²θ is within 1.5 px of it | measured on scene-render feat/sr-67-fields 9a40270 (0.8.0, llvmpipe): the farthest 0.67 px; pass |
-| `srep-<n>-field-portrait.xml` | `kind="complex" w="x*x - y*y - 1; 2*x*y"` divided by z as a `portrait`: the hue around the circle of radius 2 turns once (winding 1) and around radius 0.5 turns once backwards (−1), measured from the rendered pixels | measured on scene-render feat/sr-67-fields 9a40270 (0.8.0, llvmpipe): winding 1 at r = 2 and −1 at r = 0.5; pass |
-| `srep-<n>-field-lic.xml` | a horizontal field's `lic` over a 4 × 2 raster of a stated seed: each rendered row is constant within 1/255 | measured on scene-render feat/sr-67-fields 9a40270 (0.8.0, llvmpipe): every row constant (spread 0 code values, 8 distinct rows); pass |
-| `srep-<n>-field-poynting.xml` | shot 2 as two `wire`s of charge +1 and −1 carrying the current 1 round the loop ((−1, 0.5) → (1, 0.5) and (1, −0.5) → (−1, −0.5)) with `arrows show="poynting"` on a 9 × 9 grid: the 15 arrows between the wires with \|x\| ≤ 0.5 point along +x, from the source toward the load, within 5° (the reference gives 3.74° at most) | the engine at 9a40270 refuses the document (FLD1, and S02 for `wire`): its vendored diff predates the wire source; engine card SR-117 |
+| `srep-<n>-field-uniform.xml` | `u="1" v="0"` over a 400 × 400 box with `streamlines separation="80"`: five white horizontal lines whose centroids are 80 px apart within 0.5 px | measured on scene-render feat/sr-67-fields 4f086d9 (0.8.0, llvmpipe): centroids 80, 160, 240, 320 and 400 px, every gap 80.0 px; pass |
+| `srep-<n>-field-vortex.xml` | `u="-y" v="x"` with `arrows cols="5" rows="5"`: every arrow's shaft is perpendicular to the radius from the centre within 1°, and the frame alone equals the frame played (SREP 14) | measured on scene-render feat/sr-67-fields 4f086d9 (0.8.0, llvmpipe): 24 arrows, the worst 0.43° off perpendicular; frame 2 alone equals frame 2 of 0..=2; pass |
+| `srep-<n>-field-dipole.xml` | a `dipole` of moment (0, 1) at the origin with one streamline (`streamlines maxLines="1" step="2"`) seeded at (0.5, 0) on the equator, 200 px per unit: at 20 angles θ from 30° to 150° off the axis, the lit pixel nearest the point r = 0.5 sin²θ is within 1.5 px of it | measured on scene-render feat/sr-67-fields 4f086d9 (0.8.0, llvmpipe): the farthest 0.67 px; pass |
+| `srep-<n>-field-portrait.xml` | `kind="complex" w="x*x - y*y - 1; 2*x*y"` divided by z as a `portrait`: the hue around the circle of radius 2 turns once (winding 1) and around radius 0.5 turns once backwards (−1), measured from the rendered pixels | measured on scene-render feat/sr-67-fields 4f086d9 (0.8.0, llvmpipe): winding 1 at r = 2 and −1 at r = 0.5; pass |
+| `srep-<n>-field-lic.xml` | a horizontal field's `lic` over a 4 × 2 raster of a stated seed: each rendered row is constant within 1/255 | measured on scene-render feat/sr-67-fields 4f086d9 (0.8.0, llvmpipe): every row constant (spread 0 code values, 8 distinct rows); pass |
+| `srep-<n>-field-poynting.xml` | shot 2 as two `wire`s of charge +1 and −1 carrying the current 1 round the loop ((−1, 0.5) → (1, 0.5) and (1, −0.5) → (−1, −0.5)) with `arrows show="poynting"` on a 9 × 9 grid: the 15 arrows between the wires with \|x\| ≤ 0.5 point along +x, from the source toward the load, within 5° (the reference gives 3.74° at most) | measured on scene-render feat/sr-67-fields 4f086d9 (0.8.0, llvmpipe): 15 arrows between the wires, the worst 3.51° off +x; pass |
 
 ## Open issues
 
@@ -359,3 +361,5 @@ release build of the engine's feat/sr-67-fields at 9a40270 (which vendors the dr
   `current` has an in-plane B, and the Poynting vector of a loop needs the wires in the plane), with FLD6; the
   dipole kit case measured as pixel distances to r = C sin²θ; `conformance/tools/fields_kit.py` writes the six
   cases and measures a render.
+- 2026-10-25: all six kit cases measured on the engine's feat/sr-67-fields at 4f086d9 (SR-117 implemented the
+  `wire` source and the Poynting arrows): the Poynting arrows between the wires are within 3.51° of +x.
