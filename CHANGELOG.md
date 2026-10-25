@@ -21,6 +21,18 @@ version:
 
 ### Added
 
+- Draft SREP "Add relief layers to the map" (`srep/srep-0000-relief.md`, M1 of SREP 12): basemap styles draw the
+  MapLibre `raster` (opacity, hue rotation, brightness, saturation, contrast, resampling per MapLibre's raster
+  shader), `hillshade` (standard from MapLibre's legacy formula; basic, combined, igor and multidirectional from
+  gdaldem's formulas, GDAL MIT; exaggeration scales the slope, the viewport anchor turns the light with the map)
+  and `color-relief` (interpolate or step stops over `["elevation"]`, gdaldem's lookup) layers that SREP 9 skipped,
+  reading heights from `basemap/@elevation` with `@encoding` terrarium or mapbox; a `contours` child of `map` draws
+  level lines by marching squares at pixel centres with the cell-mean saddle rule; every frame shades one mosaic of
+  the visible tile set bordered by its neighbours (x modulo 2^z across the antimeridian, rows extrapolated beyond
+  the poles) with the Horn gradient in metres per metre, so no seam appears; heights are signed (bathymetry); on a
+  globe the layers join the SREP 10 drape from a whole-world mosaic. RL1–RL6, W-RL1, V17. Reference
+  `conformance/tools/relief_reference.py` (numpy; 36-row table), `tests/test_relief.py` (77 tests; the gdaldem and
+  gdal_contour comparisons skip without GDAL). Engine card SR-112.
 - Draft SREP "Add pattern systems to the scene" (`srep/srep-0000-patterns.md`, G2 of SREP 12): five 2D pattern
   nodes beside `flock` and `slime`, each a box stepped at `rate` steps per second with `prewarm` and `maxSteps`
   so every frame renders alone: `reaction` (Gray–Scott, Pearson 1993, nine-point Laplacian on a torus, a classifier
