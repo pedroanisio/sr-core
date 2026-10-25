@@ -450,3 +450,76 @@ def test_the_table_is_what_the_module_prints(draft, capsys):
     for line in printed:
         assert line in draft, line
     assert len(printed) == len(_draft_rows())
+
+
+# ------------------------------------------------------------------------------------ the engine's four points (SR-87)
+
+
+def test_a_utc_offset_is_bounded_and_1972_is_checked_after_it():
+    assert tf.parse_utc("2000-01-01T00:00:00+23:59") == (1999, 12, 31, 0, 1, 0.0)
+    for bad in ("2000-01-01T00:00:00+24:00", "2000-01-01T00:00:00+00:60", "2000-01-01T00:00:00+99:99"):
+        with pytest.raises(tf.FrameError):
+            tf.parse_utc(bad)
+    assert tf.et_from_utc("1971-12-31T23:30:00-01:00") < 0.0      # 1972-01-01T00:30 UTC after the offset
+    with pytest.raises(tf.FrameError):
+        tf.et_from_utc("1972-01-01T00:30:00+01:00")                # 1971-12-31T23:30 UTC after the offset
+
+
+def test_a_tt_or_tdb_epoch_is_a_decimal_lexical():
+    for text, value in (("2451545.0", 2451545.0), ("+2451545", 2451545.0), ("2451545.", 2451545.0), (".5", 0.5),
+                        ("-1.5", -1.5)):
+        assert tf.parse_julian_day(text) == value, text
+    for bad in ("nan", "inf", "-inf", "1e6", "1.2.3", "", " 2451545.0", "2451545.0 ", "0x10", "1_000", None):
+        with pytest.raises(tf.FrameError):
+            tf.parse_julian_day(bad)
+    assert tf.space("2451545.0", "tdb")["et0"] == 0.0
+    with pytest.raises(tf.FrameError):
+        tf.space("nan", "tt")
+
+
+def test_the_element_table_is_chosen_by_year_and_bounded():
+    def et(year):
+        return (tf.julian_day(year, 1, 1) - 2451545.0) * 86400.0
+    assert tf.element_table(et(1800)) == "1800-2050" and tf.element_table(et(2050)) == "1800-2050"
+    assert tf.element_table(et(1799)) == "3000BC-3000AD" and tf.element_table(et(2051)) == "3000BC-3000AD"
+    assert tf.element_table(et(-3000)) == "3000BC-3000AD" and tf.element_table(et(3000)) == "3000BC-3000AD"
+    for year in (-3001, 3001):
+        with pytest.raises(tf.FrameError):
+            tf.element_table(et(year))
+    assert (tf.julian_day(-3000, 1, 1), tf.julian_day(3001, 1, 1)) == (625332.5, 2817152.5)
+    assert tf.approximate_position(5, et(1500)) == tf.approximate_position(5, et(1500), "3000BC-3000AD")
+    assert tf.approximate_position(5, 0.0) == tf.approximate_position(5, 0.0, "1800-2050")
+    with pytest.raises(tf.FrameError):
+        tf.approximate_position(5, et(1500), "1800-2050")
+
+
+def test_the_approximate_origin_is_the_sun_or_a_planet():
+    assert tf.approximate_relative(4, 0, 0.0) == tf.approximate_position(4, 0.0)
+    assert tf.approximate_relative(4, 10, 0.0) == tf.approximate_position(4, 0.0)
+    assert tf.approximate_relative(10, 0, 0.0) == (0.0, 0.0, 0.0)
+    rel = tf.approximate_relative(4, 3, 0.0)
+    assert _close(rel, tuple(a - b for a, b in zip(tf.approximate_position(4, 0.0), tf.approximate_position(3, 0.0))))
+    for origin in (301, 399, 9):
+        with pytest.raises(tf.FrameError):
+            tf.approximate_relative(4, origin, 0.0)
+    sp = tf.space("2451545.0", "tdb", origin=3)
+    placed = tf.place_body("approximate", sp, 4, 0, 24.0, 1e-9)
+    assert _close(placed["position"], tf.scene_from_icrf(sp, rel, (0.0, 0.0, 0.0), 1e-9), 1e-6)
+    with pytest.raises(tf.FrameError):
+        tf.place_body("approximate", tf.space("2451545.0", "tdb", origin=399), 4, 0, 24.0, 1e-9)
+
+
+def test_the_draft_settles_the_engine_vendoring_points(draft):
+    text = re.sub(r"\n +", " ", draft)
+    for phrase in ("`ephemeris` is `approximate` or the `id` of an `ephemeris` asset",
+                   "with `approximate`, `origin` is 0, 10 or a body 1 to 8",
+                   "the barycentre 0 is read as the Sun 10",
+                   "its offset is at most 23:59",
+                   "after the offset, is not before 1972-01-01 UTC",
+                   "no exponent, `nan` or `inf`",
+                   "Julian day is 625332.5 or more and under 2817152.5",
+                   "`element_table(t)` chooses Table 1 when the year of t is 1800 to 2050",
+                   "`approximate_relative(body, origin, t)`",
+                   "`srep-<n>-space-no-asset.xml`",
+                   "45ff742"):
+        assert phrase in text, phrase

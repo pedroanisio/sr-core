@@ -59,26 +59,31 @@ files are not changed by this draft.
   64 hex digits of the file's sha256; TF1).
 - `spaceType`, a new optional child of `sceneType` after `physics` (7497), at most one:
   - `epoch` (`xs:string`, required; with `timeScale="utc"` an ISO 8601 date and time with seconds and `Z` or
-    a `+hh:mm` offset, from 1972-01-01 on; with `tt` or `tdb` a Julian day as a decimal number; TF2),
+    a `+hh:mm` offset of at most 23:59, from 1972-01-01 UTC on; with `tt` or `tdb` a Julian day as a decimal
+    number, a sign, digits and at most one point, no exponent, `nan` or `inf`; TF2),
     `timeScale` (one of `utc`, `tt`, `tdb`; default `utc`), `rate` (`nonNegativeDecimal`, seconds of
     ephemeris time per second of scene time, default 1; 0 freezes the clock).
   - `origin` (`xs:int`, a NAIF body id, default 0 the solar system barycentre), `frame` (one of `icrf`,
     `eclipticJ2000`, `bodyFixed`; default `icrf`), `frameBody` (`xs:int`, required with `bodyFixed`, TF3).
   - `ephemeris` (`xs:string`: the `id` of an `ephemeris` asset, or the keyword `approximate` for rule 5's
-    elements; default `approximate`).
+    elements; default `approximate`; TF5).
 - On `object3DType` (4112): `body` (`xs:int`, a NAIF id), `positionFrom` (one of `document`, `ephemeris`;
   default `document`), `orientation` (one of `document`, `bodyFixed`; default `document`). TF4.
 - Schematron:
   - **TF1** an `ephemeris` asset's file is a DAF/SPK file whose segments are all type 2 in frame 1 and whose
     sha256 digest equals `digest`; a mismatch is an error, not a warning.
-  - **TF2** `epoch` parses as rule 1 says; a UTC epoch is not before 1972-01-01; with `approximate` the
-    epoch's year is 1800 to 2050 (or −3000 to 3000 when the engine uses the long table, rule 5).
+  - **TF2** `epoch` parses as rule 1 says: a UTC epoch's fields are in range, its offset is at most 23:59 and
+    its instant, after the offset, is not before 1972-01-01 UTC; a TT or TDB epoch is a decimal number; with
+    `approximate` the epoch's Julian day is 625332.5 or more and under 2817152.5 (the years −3000 to 3000 of
+    rule 5's tables).
   - **TF3** `frame="bodyFixed"` needs `frameBody` with rotation elements (rule 6 lists the bodies).
   - **TF4** `positionFrom="ephemeris"` or `orientation="bodyFixed"` on an `object3D` needs `body` and a
     `space`; the body is in the ephemeris file (or in the approximate tables: 1 to 8), and `orientation`
     needs rotation elements for it.
-  - **TF5** `rate` is finite and non-negative; `origin` and `frameBody`, when the ephemeris is a file, are
-    in that file or are the barycentre 0.
+  - **TF5** `rate` is finite and non-negative; `ephemeris` is `approximate` or the `id` of an `ephemeris`
+    asset; `origin` and `frameBody`, when the ephemeris is a file, are in that file or are the barycentre 0;
+    with `approximate`, `origin` is 0, 10 or a body 1 to 8 (the elements are heliocentric: the barycentre 0
+    is read as the Sun 10).
   - **V17** `space`, `ephemeris` and the three `object3D` attributes need `scene/@version="1.8"` or later.
 
 ### Semantics
@@ -87,9 +92,11 @@ The reference module names the function of each rule. Positions are kilometres i
 rule 6 maps them to pixels; ephemeris time is seconds of TDB past J2000 (2000-01-01T12:00:00 TDB).
 
 1. **Calendar and time scales.** `julian_day` and `calendar` are the proleptic Gregorian calendar (Meeus,
-   chapter 7). `parse_utc` reads the epoch text and applies its offset. `leap_seconds` is the DELTA_AT table
-   of NAIF's `naif0012.tls`: 10 s on 1972-01-01, 37 s from 2017-01-01, 28 entries; a UTC date before 1972 is
-   an error. TAI = UTC + leap seconds; TT = TAI + 32.184 s; TDB = TT + K sin(E) with E = M + EB sin M,
+   chapter 7). `parse_utc` reads the epoch text, bounds its offset to 23:59 and applies it; `parse_julian_day`
+   reads a TT or TDB epoch as a decimal number (a sign, digits and at most one point: no exponent, `nan` or
+   `inf`, the lexical of `xs:decimal`). `leap_seconds` is the DELTA_AT table of NAIF's `naif0012.tls`: 10 s on
+   1972-01-01, 37 s from 2017-01-01, 28 entries; a UTC instant that, after the offset, is before 1972-01-01
+   UTC is an error. TAI = UTC + leap seconds; TT = TAI + 32.184 s; TDB = TT + K sin(E) with E = M + EB sin M,
    M = 6.239996 + 1.99096871 × 10⁻⁷ t, t seconds of TT past J2000, K = 1.657 × 10⁻³ s and EB = 1.671 × 10⁻²
    (the same file). `et_from_utc` carries seconds, not Julian days, so an epoch is exact to a microsecond.
 2. **The frame clock.** `space()` turns the epoch into ephemeris time; `frame_time(space, frame, fps)` is
@@ -107,12 +114,16 @@ rule 6 maps them to pixels; ephemeris time is seconds of TDB past J2000 (2000-01
    light time at most `MAX_LIGHT_TIME_ITERATIONS` times. Against the Horizons vectors of
    `conformance/assets/horizons-vectors.json` (14 bodies, 4 epochs from 2000 to 2040) the excerpt's worst
    distance is 3.2 m; the light time from the Earth to the Sun at J2000 is 490.685 s.
-5. **The approximate elements.** `approximate_position(body, t, table)` is Standish and Williams's
-   algorithm with their Table 1 (1800 to 2050) or Tables 2a and 2b (3000 BC to 3000 AD): elements at the
+5. **The approximate elements.** `approximate_position(body, t, table=None)` is Standish and Williams's
+   algorithm with their Table 1 (1800 to 2050) or Tables 2a and 2b (3000 BC to 3000 AD); `element_table(t)`
+   chooses Table 1 when the year of t is 1800 to 2050 and the long tables otherwise, to the years −3000 to
+   3000 (Julian days 625332.5 to 2817152.5): elements at the
    epoch's century, ω = ϖ − Ω, M = L − ϖ (+ bT² + c cos fT + s sin fT for Jupiter to Neptune in the long
    table), Kepler's equation by Newton's iterations from E₀ = M + e* sin M bounded by
    `MAX_KEPLER_ITERATIONS`, the orbital plane, and the obliquity 23.43928° to the ICRF. Years outside the
-   table and bodies other than 1 to 8 are errors. Against the excerpt the heliocentric direction of the
+   tables and bodies other than 1 to 8 are errors. `approximate_relative(body, origin, t)` is the position
+   about `origin`: the elements are heliocentric, so the Sun 10 and the barycentre 0 are their origin
+   (0, 0, 0), and a body 1 to 8 subtracts its own position (TF5). Against the excerpt the heliocentric direction of the
    Earth-Moon barycentre at J2000 is off by 2.8″, Mars in 2025 by 12.9″ and Jupiter from the long table by
    486″, inside the page's stated errors.
 6. **Frames and pixels.** `rotation_elements(body, t)` are the IAU 2009 values of `pck00010.tpc` (Sun,
@@ -124,8 +135,8 @@ rule 6 maps them to pixels; ephemeris time is seconds of TDB past J2000 (2000-01
    pixelsPerMeter)` takes p − origin through the space's frame matrix and maps ICRF (x, y, z) km to scene
    (x, −z, y) × 1000 × `pixelsPerMeter`: scene x is the ICRF x, up (−y) is the frame's pole, scene z the
    frame's y, a proper rotation (determinant 1).
-7. **Bodies in the scene.** `place_body` evaluates rule 2's time, rule 4's position about `origin` and
-   rule 6's mapping; with `orientation="bodyFixed"` the object's axes are the body's fixed axes in the
+7. **Bodies in the scene.** `place_body` evaluates rule 2's time, rule 4's position about `origin` (rule 5's
+   `approximate_relative` with `ephemeris="approximate"`) and rule 6's mapping; with `orientation="bodyFixed"` the object's axes are the body's fixed axes in the
    space's frame. With `positionFrom="ephemeris"` the object's own `x`, `y`, `z` are ignored with a warning.
    The physical sky draft's `date` stays a separate input (Open issue 1). A frame rendered alone equals the
    frame reached by playing (`seek_test`).
@@ -214,6 +225,11 @@ digest in the module.
 | mars error arcsec 2025 | `round(elements_error_arcsec(4, (2460977.5 - 2451545.0) * 86400.0), 3)` | `12.933` |
 | jupiter error arcsec table 2 | `round(elements_error_arcsec(5, 0.0, '3000BC-3000AD'), 3)` | `485.963` |
 | elements test | `elements_test()` | `(True, True)` |
+| julian day lexical | `parse_julian_day('+2451545.')` | `2451545.0` |
+| long table years | `(julian_day(-3000, 1, 1), julian_day(3001, 1, 1))` | `(625332.5, 2817152.5)` |
+| table by year | `(element_table(0.0), element_table((julian_day(1500, 1, 1) - 2451545.0) * 86400.0))` | `('1800-2050', '3000BC-3000AD')` |
+| approximate about the sun | `approximate_relative(10, 0, 0.0)` | `(0.0, 0.0, 0.0)` |
+| mars from the earth-moon barycentre km | `round(math.dist(approximate_relative(4, 3, 0.0), (0.0, 0.0, 0.0)), 3)` | `276691116.515` |
 | earth elements at J2000 | `tuple(round(x, 6) for x in rotation_elements(399, 0.0))` | `(0.0, 90.0, 190.147)` |
 | earth rotation determinant | `round(determinant(body_fixed_from_icrf(399, 12345.0)), 12)` | `1.0` |
 | moon pole at J2000 | `tuple(round(x, 6) for x in pole_icrf(301, 0.0))` | `(-0.022609, -0.411831, 0.91098)` |
@@ -234,6 +250,7 @@ measurable after SR-87 lands.
 |---|---|---|
 | `srep-<n>-space-earth-moon.xml` | `space` at J2000 TDB about the Earth in the ICRF with the excerpt as ephemeris and `pixelsPerMeter="1e-6"`: the Moon's sphere is centred within 1 px of the reference's scene position (402448.64 km from the origin) | to be measured |
 | `srep-<n>-space-digest.xml` | the same document with one hex digit of `digest` changed: the engine refuses the document (TF1) | to be measured |
+| `srep-<n>-space-no-asset.xml` | the same document with `ephemeris="de441"`, the `id` of no `ephemeris` asset: the engine refuses the document (TF5) | to be measured |
 | `srep-<n>-space-approximate.xml` | `ephemeris="approximate"` with Mars at the 2025 epoch: Mars's centre within 2 px of the ephemeris case at the same scale (12.9″ at 1 px per 10⁴ km is under a pixel) | to be measured |
 | `srep-<n>-space-body-fixed.xml` | `frame="bodyFixed" frameBody="399"` with the Sun at J2000: the Sun's direction is 1.14° east of the scene's +x axis | to be measured |
 | `srep-<n>-space-rate.xml` | `rate="3600"` over 48 frames at 24 fps: the Moon moves by its two-hour arc (about 1.1°) between the first and last frame within 1 px | to be measured |
@@ -276,3 +293,8 @@ measurable after SR-87 lands.
 
 - 2026-10-24: draft, with the reference module, the excerpt and Horizons fixtures, 40 numeric tests and the
   seven kit cases described; the engine work filed as SR-87.
+- 2026-10-25: four points the engine settled vendoring the draft (SR-87, scene-render 45ff742), adopted: with
+  `approximate` the origin is 0, 10 or a body 1 to 8 and 0 is read as the Sun; TF5 refuses an `ephemeris`
+  that names no asset (kit case `space-no-asset`); TF2 bounds a UTC offset to 23:59, checks 1972-01-01 after
+  it and reads a TT or TDB epoch with the lexical of `xs:decimal`; rule 5 chooses the table by year, so TF2's
+  bound is the years −3000 to 3000 (`element_table`, `approximate_relative`, five table rows).

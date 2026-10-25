@@ -92,6 +92,8 @@ def parse_utc(text):
     if not (1 <= mo <= 12 and 1 <= d <= 31 and 0 <= h <= 23 and 0 <= mi <= 59 and 0.0 <= s < 60.0):
         raise FrameError("the epoch has a field out of range: %r" % (text,))
     z = m.group(7)
+    if z != "Z" and not (int(z[1:3]) <= 23 and int(z[4:6]) <= 59):
+        raise FrameError("the epoch's offset is at most 23:59: %r" % (text,))
     offset = 0 if z == "Z" else (1 if z[0] == "+" else -1) * (int(z[1:3]) * 60 + int(z[4:6]))
     try:
         local = datetime.datetime(y, mo, d, h, mi)
@@ -99,6 +101,17 @@ def parse_utc(text):
         raise FrameError("the epoch is not a calendar date: %r" % (text,)) from exc
     utc = local - datetime.timedelta(minutes=offset)
     return (utc.year, utc.month, utc.day, utc.hour, utc.minute, s)
+
+
+_DECIMAL = re.compile(r"^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$")
+
+
+def parse_julian_day(text):
+    """A TT or TDB epoch: a Julian day as a decimal number (a sign, digits and at most one point; no exponent,
+    nan or inf), the lexical of xs:decimal."""
+    if not isinstance(text, str) or not _DECIMAL.match(text):
+        raise FrameError("a TT or TDB epoch is a Julian day as a decimal number: %r" % (text,))
+    return float(text)
 
 
 # NAIF naif0012.tls, DELTET/DELTA_AT: TAI - UTC after each leap second, from 1972-01-01.
@@ -181,10 +194,7 @@ def space(epoch, time_scale="utc", rate=1.0, origin=0, frame="icrf", frame_body=
     if time_scale == "utc":
         et0 = et_from_utc(epoch)
     else:
-        try:
-            jd = float(epoch)
-        except (TypeError, ValueError) as exc:
-            raise FrameError("a TT or TDB epoch is a Julian day") from exc
+        jd = parse_julian_day(epoch)
         tt = (jd - J2000_JD) * 86400.0
         et0 = tt + _tdb_minus_tt_seconds(tt) if time_scale == "tt" else tt
     if not (rate >= 0.0) or not math.isfinite(rate):
@@ -586,8 +596,25 @@ def solve_kepler(mean_anomaly, e):
     raise FrameError("Kepler's equation did not converge")
 
 
-def approximate_position(body, et, table="1800-2050"):
-    """Heliocentric ICRF position (km) of a planet or the Earth-Moon barycentre from the Keplerian elements."""
+APPROXIMATE_ORIGINS = (0, 10, 1, 2, 3, 4, 5, 6, 7, 8)
+
+
+def element_table(et):
+    """The table of rule 5 for a time: Table 1 for the years 1800 to 2050, else Tables 2a and 2b to the years
+    -3000 to 3000 (Julian days 625332.5 to 2817152.5); a year outside is an error."""
+    year = calendar(J2000_JD + et / 86400.0)[0]
+    if 1800 <= year <= 2050:
+        return "1800-2050"
+    if -3000 <= year <= 3000:
+        return "3000BC-3000AD"
+    raise FrameError("the approximate elements cover the years -3000 to 3000, not %d" % year)
+
+
+def approximate_position(body, et, table=None):
+    """Heliocentric ICRF position (km) of a planet or the Earth-Moon barycentre from the Keplerian elements;
+    the table is chosen by the year (element_table) unless named."""
+    if table is None:
+        table = element_table(et)
     if table not in ELEMENT_TABLES:
         raise FrameError("the element table is 1800-2050 or 3000BC-3000AD")
     if body not in BODY_NAMES:
@@ -616,6 +643,16 @@ def approximate_position(body, et, table="1800-2050"):
     z = (sw * si) * xp + (cw * si) * yp
     ce, se = math.cos(math.radians(OBLIQUITY_J2000)), math.sin(math.radians(OBLIQUITY_J2000))
     return (x * AU_KM, (ce * y - se * z) * AU_KM, (se * y + ce * z) * AU_KM)
+
+
+def approximate_relative(body, origin, et):
+    """Rule 5 about an origin: the elements are heliocentric, so the Sun 10 and the barycentre 0 are their origin
+    (0, 0, 0); a planet or the Earth-Moon barycentre 1 to 8 subtracts its own position."""
+    if origin not in APPROXIMATE_ORIGINS:
+        raise FrameError("with the approximate elements the origin is 0, 10 or a body 1 to 8, not %r" % (origin,))
+    p = approximate_position(body, et) if body not in (0, 10) else (0.0, 0.0, 0.0)
+    o = approximate_position(origin, et) if origin not in (0, 10) else (0.0, 0.0, 0.0)
+    return tuple(a - b for a, b in zip(p, o))
 
 
 def _angle_between(a, b):
@@ -751,7 +788,10 @@ def scene_from_icrf(sp, p_km, origin_km, pixels_per_meter, et=0.0):
 def place_body(spk, sp, body, frame, fps, pixels_per_meter):
     """Rule 6: a body's position and body-fixed orientation in the space at a frame."""
     et = frame_time(sp, frame, fps)
-    p = position(spk, body, sp["origin"], et)
+    if spk == "approximate":
+        p = approximate_relative(body, sp["origin"], et)
+    else:
+        p = position(spk, body, sp["origin"], et)
     pos = scene_from_icrf(sp, p, (0.0, 0.0, 0.0), pixels_per_meter, et)
     if body in ROTATION:
         axes = matmul(frame_matrix(sp, et), transpose(body_fixed_from_icrf(body, et)))
@@ -825,6 +865,11 @@ TABLE = (
     ("mars error arcsec 2025", "round(elements_error_arcsec(4, (2460977.5 - 2451545.0) * 86400.0), 3)", "0.0"),
     ("jupiter error arcsec table 2", "round(elements_error_arcsec(5, 0.0, '3000BC-3000AD'), 3)", "0.0"),
     ("elements test", "elements_test()", "(True, True)"),
+    ("julian day lexical", "parse_julian_day('+2451545.')", "2451545.0"),
+    ("long table years", "(julian_day(-3000, 1, 1), julian_day(3001, 1, 1))", "(625332.5, 2817152.5)"),
+    ("table by year", "(element_table(0.0), element_table((julian_day(1500, 1, 1) - 2451545.0) * 86400.0))", "('1800-2050', '3000BC-3000AD')"),
+    ("approximate about the sun", "approximate_relative(10, 0, 0.0)", "(0.0, 0.0, 0.0)"),
+    ("mars from the earth-moon barycentre km", "round(math.dist(approximate_relative(4, 3, 0.0), (0.0, 0.0, 0.0)), 3)", "276691116.515"),
     ("earth elements at J2000", "tuple(round(x, 6) for x in rotation_elements(399, 0.0))", "(0.0, 90.0, 190.147)"),
     ("earth rotation determinant", "round(determinant(body_fixed_from_icrf(399, 12345.0)), 12)", "1.0"),
     ("moon pole at J2000", "tuple(round(x, 6) for x in pole_icrf(301, 0.0))", "(0.0, 0.0, 0.0)"),
