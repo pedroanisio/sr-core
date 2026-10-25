@@ -21,6 +21,19 @@ version:
 
 ### Added
 
+- Draft SREP "Add a weather state" (`srep/srep-0000-weather.md`, A5 of SREP 12): `weather` elements of `physics`
+  beside `wind`, holding one animatable state (`temperature`, `humidity`, `precipitation`, `cloudiness`,
+  `visibility`, `lightning`) and a `wind`, that drives the elements naming it instead of their own attributes:
+  `cloudLayer` (coverage, precipitation), `snowpack` (snowfall, temperature), `shallowWater` and hydraulic `erode`
+  (rain), rain and snow `emitter`s (rate from the Marshall–Palmer and Gunn–Marshall fluxes), `medium` (the
+  Koschmieder extinction of the visibility) and `material`s (wetness darkens the dielectric albedo by the water
+  film's geometric series after Lekner and Dorf and lowers the roughness toward the film's; snow cover toward
+  0.85 / 0.7 on upward faces); rain and snow split by the temperature (Auer); wetness and snow depth by a stepped
+  recurrence (`wetTime`, `dryTime`, `snowScale`, `meltRate`, `step`, `maxSteps`); lightning as a Poisson process by
+  the time-change of the integrated rate with random-stream draws, each bolt a dielectric-breakdown channel on a
+  `lightningGrid` (`lightningEta`, `maxStrikes`, `flashDuration`); rules WX1–WX4 and V17 inside the draft, the
+  schema files unchanged. The clouds draft's map attribute is renamed `weatherMap`. Reference
+  `conformance/tools/weather_reference.py` (34-row numeric table), `tests/test_weather.py`. Engine card SR-107.
 - Draft SREP "Add snow and ice to the terrain grid" (`srep/srep-0000-snow.md`, T3 of SREP 12): one `snowpack`
   child of the terrain-grid draft's `terrain` acting on a snow `layer`, the `water` layer and the `ice` layer:
   `snowfall` varied by `snowfallVariation` through the random-streams draft at pack(i, j, 0) with the purpose
@@ -67,7 +80,7 @@ version:
   children of a dome light with `sky="physical"`, spherical shells between `base` and `base` + `thickness`
   whose shape is the random-streams value noise dilated by Worley billows, a height gradient blended from the
   stratus, stratocumulus and cumulus presets by `type`, a coverage threshold calibrated so that the covered
-  fraction equals `coverage` (or the `weather` map's red channel, with precipitation in green and type in blue),
+  fraction equals `coverage` (or the `weatherMap`'s red channel, with precipitation in green and type in blue),
   a Worley `detail` erosion and a drift by an F4 `wind`; lighting by Beer's law with the powder term, the media
   draft's `fog` phase for `dropletDiameter` and three multiple-scattering octaves; and the night sky's moon
   (Jensen's Lommel-Seeliger irradiance with `earthshine`, the moon's tint and the Hapke-Lommel-Seeliger disc),

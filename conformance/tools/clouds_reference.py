@@ -53,7 +53,7 @@ MOON_RAMP = ((340.0, 0.70), (740.0, 1.35))
 MOON_WAVELENGTHS = (650.0, 550.0, 450.0)
 
 DEFAULTS = {"base": 1500.0, "thickness": 2500.0, "coverage": 0.5, "type": 0.5, "precipitation": 0.0,
-            "weather": None, "weatherScale": 20000.0, "density": 0.02, "scale": 4000.0, "detailScale": 500.0,
+            "weatherMap": None, "weatherScale": 20000.0, "density": 0.02, "scale": 4000.0, "detailScale": 500.0,
             "detail": 0.3, "octaves": 3, "wind": None, "dropletDiameter": 20.0, "albedo": 0.95, "ambient": 1.0,
             "seed": None}
 LIGHT_DEFAULTS = {"airglow": 1.0, "starlight": 1.0, "earthshine": 1.0, "atmosphereHeight": 100000.0}
@@ -272,11 +272,11 @@ def sample_map(asset, u, v):
 def weather_at(layer, doc, m, t, fps=DEFAULT_FPS):
     """Rule 7: (coverage, precipitation, type) at the map point m = (east, north): the layer's attributes, or
     the weather map's red, green and blue sampled at (m - drift) / weatherScale, tiled."""
-    if _v(layer, "weather") is None:
+    if _v(layer, "weatherMap") is None:
         return (float(_v(layer, "coverage")), float(_v(layer, "precipitation")), float(_v(layer, "type")))
-    asset = _asset(doc, _v(layer, "weather"))
+    asset = _asset(doc, _v(layer, "weatherMap"))
     if asset is None:
-        raise CloudError(f"weather map {_v(layer, 'weather')!r} is not an image asset")
+        raise CloudError(f"weather map {_v(layer, 'weatherMap')!r} is not an image asset")
     dx, dy = drift(layer, doc, t, fps)
     s = _v(layer, "weatherScale")
     return sample_map(asset, (m[0] - dx) / s * asset["width"], (m[1] - dy) / s * asset["height"])
@@ -681,7 +681,7 @@ def night_frame(date, latitude, longitude, direction, altitude=0.0, airglow=1.0,
 
 def example_layer():
     return {"id": "c1", "seed": 5, "base": 1500.0, "thickness": 2500.0, "coverage": 0.5, "type": 0.5,
-            "precipitation": 0.0, "weather": None, "weatherScale": 20000.0, "density": 0.02, "scale": 4000.0,
+            "precipitation": 0.0, "weatherMap": None, "weatherScale": 20000.0, "density": 0.02, "scale": 4000.0,
             "detailScale": 500.0, "detail": 0.3, "octaves": 3, "wind": None, "dropletDiameter": 20.0,
             "albedo": 0.95, "ambient": 1.0}
 
@@ -698,7 +698,7 @@ def mapped_document():
     doc["physics"]["winds"] = [wind().example_wind()]
     doc["assets"] = [{"id": "wm", "type": "image", "width": 2, "height": 1, "pixels": [(255, 0, 0), (0, 0, 255)]}]
     layer = doc["lights"][0]["cloudLayers"][0]
-    layer["weather"] = "wm"
+    layer["weatherMap"] = "wm"
     layer["wind"] = "w1"
     return doc
 
@@ -739,7 +739,7 @@ def validate_layer(layer, doc, light):
     d = _v(layer, "dropletDiameter")
     if not (_number(d) and 5.0 <= d <= 50.0):
         codes.add("CN3")
-    if _v(layer, "weather") is not None and _asset(doc, _v(layer, "weather")) is None:
+    if _v(layer, "weatherMap") is not None and _asset(doc, _v(layer, "weatherMap")) is None:
         codes.add("CN4")
     if _v(layer, "wind") is not None and _wind_spec(layer, doc) is None:
         codes.add("CN4")

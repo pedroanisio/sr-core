@@ -365,7 +365,7 @@ def test_validation_rules_one_at_a_time():
         assert cl.validate_document(with_layer(**kw)) == ["CN2"], kw
     for kw in (dict(dropletDiameter=4.0), dict(dropletDiameter=51.0)):
         assert cl.validate_document(with_layer(**kw)) == ["CN3"], kw
-    assert cl.validate_document(with_layer(weather="ghost")) == ["CN4"]
+    assert cl.validate_document(with_layer(weatherMap="ghost")) == ["CN4"]
     assert cl.validate_document(with_layer(wind="ghost")) == ["CN4"]
     doc = cl.example_document()
     doc["lights"][0]["sky"] = "gradient"
@@ -424,7 +424,7 @@ def test_the_draft_has_the_srep_sections(draft):
 
 def test_the_draft_names_the_engine_card_and_the_elements(draft):
     for word in ("SR-102", "SREP 12", "SREP 14", "SREP 40", "SREP 79", "`cloudLayer`", "base", "thickness", "coverage",
-                 "`type`", "precipitation", "weather", "weatherScale", "density", "scale", "detailScale", "detail",
+                 "`type`", "precipitation", "weatherMap", "weatherScale", "density", "scale", "detailScale", "detail",
                  "octaves", "`wind`", "dropletDiameter", "albedo", "ambient", "earthshine", "airglow", "starlight",
                  "moonIntensity", "CN1", "CN2", "CN3", "CN4", "CN5", "CN6", "V17", "clouds_reference.py",
                  "random-streams", "D24", "pack(i, j, k)", "Worley", "Perlin", "Schneider", "Jendersie", "Jensen",

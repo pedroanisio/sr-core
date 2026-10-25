@@ -27,7 +27,7 @@ metres whose shape is the random-streams draft's value noise dilated by Worley b
 2015), shaped by a height gradient blended from the stratus, stratocumulus and cumulus presets by the cloud
 `type`, thresholded so that the covered fraction of the layer equals its `coverage` by construction, eroded by
 a Worley `detail` noise and carried by an F4 `wind` as a frozen pattern. `coverage`, `precipitation` and `type`
-are uniform or read from a `weather` map (red, green and blue). Light through a layer follows Beer's law with
+are uniform or read from a `weatherMap` (red, green and blue). Light through a layer follows Beer's law with
 the powder term, the media draft's `fog` phase function for `dropletDiameter` (Jendersie and d'Eon 2023) and
 three multiple-scattering octaves (Wrenninge). The night sky adds the moon's light by Jensen's Lommel-Seeliger
 irradiance with earthshine, a Hapke-Lommel-Seeliger disc, the airglow with the van Rhijn brightening, and the
@@ -48,7 +48,7 @@ files are unchanged, the diff lives in this draft.
   general integral, too costly for a sky-wide layer. Users paint clouds into HDR environment images today,
   which do not move, do not follow the sun and cannot be seeded.
 - The wind draft (F4) promised that clouds sample the wind directly; the weather map and the noise lattice drift
-  with the wind's displacement, so a time-lapse of a front crossing the sky is one `wind` and one `weather`
+  with the wind's displacement, so a time-lapse of a front crossing the sky is one `wind` and one `weatherMap`
   asset.
 
 ## Specification
@@ -65,10 +65,10 @@ from the lowest `base` up. The attributes:
 | `seed` | integer | absent | the layer's `@seed` in the element seed (rule 1) |
 | `base` | metres | 1500 | the shell's bottom altitude above the planet's surface |
 | `thickness` | metres | 2500 | the shell's thickness |
-| `coverage` | 0 to 1 | 0.5 | the covered fraction of the layer's plan when no `weather` map is set (rule 9) |
+| `coverage` | 0 to 1 | 0.5 | the covered fraction of the layer's plan when no `weatherMap` is set (rule 9) |
 | `type` | 0 to 1 | 0.5 | the cloud type: 0 stratus, 0.5 stratocumulus, 1 cumulus (rule 6) |
 | `precipitation` | 0 to 1 | 0 | rain: raises the coverage and the type toward cumulonimbus, darkens (rules 7, 11) |
-| `weather` | IDREF | absent | an image asset read as the weather map, red coverage, green precipitation, blue type (rule 7) |
+| `weatherMap` | IDREF | absent | an image asset read as the weather map, red coverage, green precipitation, blue type (rule 7) |
 | `weatherScale` | metres | 20000 | the ground extent of one tile of the weather map |
 | `density` | per metre | 0.02 | the extinction coefficient at normalised density 1 (rule 11) |
 | `scale` | metres | 4000 | the size of one cell of the base noise lattice |
@@ -95,7 +95,7 @@ Rules the Schematron would carry; the reference's `validate_document` returns th
 - **CN2** `base` is at least 0, `thickness` positive, and `base` + `thickness` at most the light's
   `atmosphereHeight` (100 km by default).
 - **CN3** `dropletDiameter` is 5 to 50 micrometres, the range of the media draft's fit.
-- **CN4** `weather` names an image asset and `wind` names a `wind` of `physics`.
+- **CN4** `weatherMap` names an image asset and `wind` names a `wind` of `physics`.
 - **CN5** a light with `cloudLayer` children has `sky="physical"`.
 - **CN6** `earthshine`, `airglow` and `starlight` are at least 0.
 - **V17** a document of version 1.7 or earlier has no `cloudLayer` and none of the three light attributes.
@@ -123,7 +123,7 @@ uniform draw and lattice index.
    d) = remap(h, a, b, 0, 1) · (1 − remap(h, c, d, 0, 1)); the presets are stratus (0, 0.1, 0.2, 0.3),
    stratocumulus (0, 0.15, 0.45, 0.6) and cumulus (0, 0.1, 0.7, 1). gradient(h, type) blends stratus to
    stratocumulus for type 0 to 0.5 and stratocumulus to cumulus for 0.5 to 1, linearly.
-7. **Weather.** Without a `weather` map, (coverage, precipitation, type) are the attributes everywhere. With one,
+7. **Weather.** Without a `weatherMap`, (coverage, precipitation, type) are the attributes everywhere. With one,
    they are the red, green and blue of the asset, 0 to 1, sampled bilinearly and tiled at ((m − D(t)) /
    `weatherScale`) · (width, height) for the map point m, pixel (i, j) sitting at coordinates (i, j). The
    effective weather raises coverage to at least 0.7 · precipitation and type to at least precipitation: rain
@@ -355,3 +355,5 @@ measurable after SR-61 (random streams), SR-101 (wind), the physical-sky card an
 ## History
 
 - 2026-10-24: draft from SRC-62 (A3 of SREP 12); engine card SR-102.
+- 2026-10-24: the map attribute is `weatherMap` (was `weather`), so that `weather` names the weather state of the
+  weather draft (SRC-64) on every reader; CN4 and rule 7 reworded, no other change.
