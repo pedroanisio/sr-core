@@ -221,6 +221,9 @@ heights 10 and 20), the resampled square against rule 6 (perimeter 40, step 5), 
 rule 7 (a rotation by 2 is undone by 6; a reversed square realigns to itself), the morph rows against rule 8,
 the sub-path rows against rule 9 (the extra square collapses to the triangle's centroid (5, 8/3)).
 
+The module's geometry uses square roots of explicit sums of squares and `math.fsum`, not `math.dist` and the
+built-in `sum`, whose rounding changed in Python 3.12: the table is the same on every Python of CI's matrix.
+
 | Test | Expression | Expected |
 |---|---|---|
 | part names | `tuple(p.name for p in parts('\\part{lhs}{E} = \\part{rhs}{m c^2}'))` | `('lhs', 'rhs')` |
@@ -297,3 +300,5 @@ measurable on an engine before SR-65 lands.
   its column (as the reference does); the case had measured ink-cluster centres, which differ by the cells'
   side bearings. The case now subtracts each cell's ink offset, taken from the same TeX typeset alone; the
   0.5 px bar and the 1.7.1 rendering stay. Found by the engine on SR-65 (scene-render 019d739).
+- 2026-10-25: the reference's distances and sums made the same on every Python (the `morph midway` row
+  differed in its last bits on 3.10, where CI was red; SRC-77).

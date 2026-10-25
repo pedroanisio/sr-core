@@ -183,7 +183,12 @@ kind is new. The element is refused below version 1.8 (V17).
 ### Numeric tests
 
 Each row is checked by `tests/test_star_fields.py` against the reference module, which prints this table
-from its `main()`.
+from its `main()`. The field digest is the first 16 hex digits of the sha256 of one line per star: the HR
+number, the three direction components, the flux and the three linear colour components, each written with
+six decimals, and the constellation, space-separated and newline-ended. Six decimals, because the platform's
+sine, cosine, atan2 and log10 differ in their last bit (macOS against glibc) and Python 3.12 changed the
+rounding of the built-in sum: the digest pins the field, not the rounding, and the module's three-term
+matrix products are written out.
 
 | Test | Expression | Value |
 |---|---|---|
@@ -228,7 +233,7 @@ from its `main()`.
 | Serpens' two parts | `constellation(236.0, 7.0), constellation(272.0, -5.0)` | `('Ser', 'Ser')` |
 | named stars agreeing with the lookup | `name_agreement(cat)` | `(3143, 3143)` |
 | field to V 6.5 at J2000 + 25 years | `len(star_field(cat, 6.5, 25.0, 1.0))` | `8404` |
-| field digest at J2000 + 25 years | `_field_digest(star_field(cat, 6.5, 25.0, 1.0))` | `'c923002297bc0982'` |
+| field digest at J2000 + 25 years | `_field_digest(star_field(cat, 6.5, 25.0, 1.0))` | `'4d9539e19c1f5a15'` |
 | seek check | `seek_test(cat)` | `True` |
 
 ### Kit cases
@@ -283,3 +288,5 @@ measurable after SR-88 lands.
 ## History
 
 - 2026-10-24: draft from SRC-45 (SP2 of SREP 12); engine card SR-88.
+- 2026-10-25: the field digest hashes six-decimal values (it hashed float reprs, which differ on macOS and on
+  Python 3.10: CI's matrix was red); the digest row refilled (SRC-77).

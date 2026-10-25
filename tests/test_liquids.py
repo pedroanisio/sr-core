@@ -575,3 +575,37 @@ def test_the_table_is_what_the_module_prints(draft, capsys):
     out = capsys.readouterr().out.strip().splitlines()
     table = [line for line in draft.splitlines() if ROW.match(line) and not line.startswith("| Test")]
     assert out == table
+
+
+def test_the_reference_exp_log_and_sin_are_close_to_libm():
+    """The MPM path uses the module's own exp, log and sine (IEEE basic operations only, so the same on every
+    platform); they stay within a few ulps of the platform's libm."""
+    import random
+    rng = random.Random(7)
+    for _ in range(2000):
+        x = rng.uniform(-40.0, 40.0)
+        assert math.isclose(lr._exp(x), math.exp(x), rel_tol=4e-16, abs_tol=0.0), x
+        y = math.exp(rng.uniform(-40.0, 40.0))
+        assert math.isclose(lr._log(y), math.log(y), rel_tol=8e-16, abs_tol=1e-300), y
+        z = rng.uniform(-1.5707963267948966, 1.5707963267948966)
+        assert math.isclose(lr._sin(z), math.sin(z), rel_tol=8e-16, abs_tol=1e-300), z
+    assert lr._exp(0.0) == 1.0 and lr._log(1.0) == 0.0 and lr._sin(0.0) == 0.0
+    assert lr._exp(-1000.0) == 0.0
+    with pytest.raises(OverflowError):          # as math.exp
+        lr._exp(1000.0)
+    with pytest.raises(ValueError):
+        lr._log(0.0)
+    with pytest.raises(ValueError):
+        lr._sin(3.0)
+
+
+def test_the_mpm_path_calls_no_libm_transcendental_and_no_built_in_float_sum():
+    """The sand collapse amplifies a last-bit difference of libm's exp, log or sin (macOS against glibc) into the
+    toe column of the pile's slope (0.316 against 0.257 at 30 degrees), and Python 3.12 changed the rounding of
+    the built-in sum over floats; the MPM step must use neither."""
+    import inspect
+    for fn in (lr.friction_alpha, lr.hencky_kirchhoff, lr.yield_value, lr.drucker_prager, lr._stress_term, lr.svd,
+               lr.polar, lr.corotated_stress, lr.plasticity, lr.p2g, lr.g2p, lr.step):
+        src = inspect.getsource(fn)
+        for bad in ("math.exp(", "math.log(", "math.sin(", "math.cos(", "math.tan(", " sum(", "(sum("):
+            assert bad not in src, f"{fn.__name__} uses {bad.strip()}"

@@ -69,7 +69,7 @@ def _scale(a, s):
 
 
 def _dot(a, b):
-    return sum(x * y for x, y in zip(a, b))
+    return math.fsum(x * y for x, y in zip(a, b))
 
 
 def _norm(a):
@@ -123,7 +123,7 @@ def determinant(m):
 
 
 def trace(m):
-    return sum(m[i][i] for i in range(len(m)))
+    return math.fsum(m[i][i] for i in range(len(m)))
 
 
 def eigen_symmetric(m, sweeps=64):
@@ -132,7 +132,7 @@ def eigen_symmetric(m, sweeps=64):
     a = [list(row) for row in m]
     v = [[1.0 if i == j else 0.0 for j in range(d)] for i in range(d)]
     for _ in range(sweeps):
-        off = sum(a[i][j] ** 2 for i in range(d) for j in range(d) if i != j)
+        off = math.fsum(a[i][j] ** 2 for i in range(d) for j in range(d) if i != j)
         if off < 1e-30:
             break
         for p in range(d):
@@ -183,9 +183,9 @@ def svd(f):
             for cand in range(d):
                 col = [1.0 if r == cand else 0.0 for r in range(d)]
                 for k in range(j):
-                    proj = sum(col[r] * u[r][k] for r in range(d))
+                    proj = math.fsum(col[r] * u[r][k] for r in range(d))
                     col = [col[r] - proj * u[r][k] for r in range(d)]
-                n = math.sqrt(sum(x * x for x in col))
+                n = math.sqrt(math.fsum(x * x for x in col))
                 if n > 1e-6:
                     for r in range(d):
                         u[r][j] = col[r] / n
@@ -272,9 +272,55 @@ def lame(youngs, poisson):
     return mu, lam
 
 
+# ------------------------------------------------------------------------------------ deterministic exp, log, sin
+# The MPM step amplifies a last-bit difference into the toe column of the sand pile's slope (0.316 on macOS against
+# 0.257 on glibc at 30 degrees, CI 2026-10-25), and the platform's libm is not correctly rounded. These three use
+# IEEE basic operations, frexp and ldexp only, so they return the same bits on every platform; within 3 ulps of libm.
+
+LN2 = 0.6931471805599453
+LN2_HI = 0.6931471803691238      # the leading 32 bits of ln 2: k * LN2_HI is exact for |k| < 2^20
+LN2_LO = 1.9082149292705877e-10
+
+
+def _exp(x):
+    if not (-745.0 < x < 709.78):
+        return math.exp(x)           # overflow (OverflowError), underflow (0.0) and nan: as math.exp
+    k = int(math.floor(x / LN2 + 0.5))
+    r = (x - k * LN2_HI) - k * LN2_LO            # Cody-Waite reduction: |r| <= ln 2 / 2
+    p = 1.0
+    for n in range(18, 0, -1):                   # 1 + r/1 (1 + r/2 (1 + ... r/18)), fixed length
+        p = 1.0 + r * p / n
+    return math.ldexp(p, k)
+
+
+def _log(x):
+    if not (x > 0.0) or not math.isfinite(x):
+        return math.log(x)           # the domain error, inf and nan are the platform's
+    m, e = math.frexp(x)                         # exact: m in [0.5, 1)
+    if m < 0.7071067811865476:
+        m, e = 2.0 * m, e - 1                    # m in [sqrt(1/2), sqrt(2))
+    s = (m - 1.0) / (m + 1.0)                    # |s| <= 0.1716
+    s2 = s * s
+    p = 0.0
+    for n in range(25, 0, -2):                   # 1/25 + s2 (1/23 + s2 (...)): s2^12 / 25 < 2e-17
+        p = 1.0 / n + s2 * p
+    return e * LN2 + 2.0 * s * p
+
+
+def _sin(x):
+    """For |x| <= pi / 2 (the friction angles): a fixed-length Taylor series."""
+    if not (abs(x) <= 1.5707963267948966):
+        raise ValueError("_sin: |x| <= pi / 2")
+    x2 = x * x
+    p = 0.0
+    for n in range(25, 1, -2):                   # x (1 - x2/(2 3) (1 - x2/(4 5) (...)))
+        p = 1.0 - x2 * p / ((n - 1) * n)
+    return x * p
+
+
 def friction_alpha(friction_degrees):
     """The Drucker-Prager cone's slope for a friction angle (Klar et al. 2016)."""
-    s = math.sin(math.radians(friction_degrees))
+    s = _sin(math.radians(friction_degrees))
     return math.sqrt(2.0 / 3.0) * 2.0 * s / (3.0 - s)
 
 
@@ -400,7 +446,7 @@ def _stress_term(liq, i):
     else:
         mu, lam = m["mu"], m["lam"]
         if m["kind"] == "snow":
-            e = math.exp(m["hardening"] * (1.0 - liq["Jp"][i]))
+            e = _exp(m["hardening"] * (1.0 - liq["Jp"][i]))
             mu, lam = mu * e, lam * e
         pft = matmul(corotated_stress(f, mu, lam), transpose(f))
     scale = -liq["spec"]["dt"] / liq["spec"]["substeps"] * 4.0 / liq["h"] ** 2 * liq["volume0"]
@@ -439,7 +485,7 @@ def p2g(liq):
 
 def interpolate(liq, faces, p):
     """The B-spline interpolation of the face velocities at p."""
-    return tuple(sum(w * faces["vel"][a][index] for index, w, _ in nodes)
+    return tuple(math.fsum(w * faces["vel"][a][index] for index, w, _ in nodes)
                  for a, nodes in enumerate(_particle_stencils(liq, p)))
 
 
@@ -630,10 +676,10 @@ def project(liq, faces, fluid, dt=None, target=None):
     inv_h2 = 1.0 / (h * h)
 
     def apply(q):
-        return [diagonal[k] * q[k] - inv_h2 * sum(q[j] for j in neighbours[k]) for k in range(n)]
+        return [diagonal[k] * q[k] - inv_h2 * math.fsum(q[j] for j in neighbours[k]) for k in range(n)]
 
     def error(r):
-        return dt * math.sqrt(sum(x * x for x in r) / n)
+        return dt * math.sqrt(math.fsum(x * x for x in r) / n)
 
     q = [0.0] * n
     r = list(b)
@@ -642,12 +688,12 @@ def project(liq, faces, fluid, dt=None, target=None):
     if err > s["tolerance"]:
         z = [r[k] / diagonal[k] for k in range(n)]
         p = list(z)
-        rz = sum(r[k] * z[k] for k in range(n))
+        rz = math.fsum(r[k] * z[k] for k in range(n))
         while True:
             if iterations >= s["iterations"]:
                 raise ProjectionError(f"the projection is at {err:.3e} after {iterations} iterations")
             ap = apply(p)
-            pap = sum(p[k] * ap[k] for k in range(n))
+            pap = math.fsum(p[k] * ap[k] for k in range(n))
             if pap <= 0.0:
                 raise ProjectionError("the projection's system is not positive")
             alpha = rz / pap
@@ -658,7 +704,7 @@ def project(liq, faces, fluid, dt=None, target=None):
             if err <= s["tolerance"]:
                 break
             z = [r[k] / diagonal[k] for k in range(n)]
-            rz_new = sum(r[k] * z[k] for k in range(n))
+            rz_new = math.fsum(r[k] * z[k] for k in range(n))
             beta = rz_new / rz
             rz = rz_new
             p = [z[k] + beta * p[k] for k in range(n)]
@@ -867,11 +913,11 @@ def run(liq, steps):
 def momentum(liq):
     d = liq["dim"]
     m = liq["mass"]
-    return tuple(sum(v[a] for v in liq["v"]) * m for a in range(d))
+    return tuple(math.fsum(v[a] for v in liq["v"]) * m for a in range(d))
 
 
 def kinetic_energy(liq):
-    return 0.5 * liq["mass"] * sum(_dot(v, v) for v in liq["v"])
+    return 0.5 * liq["mass"] * math.fsum(_dot(v, v) for v in liq["v"])
 
 
 def volume(liq):
@@ -1000,7 +1046,7 @@ def corotated_stress(f, mu, lam):
 def corotated_energy(f, mu, lam):
     _, sigma, _ = svd(f)
     j = determinant(f)
-    return mu * sum((x - 1.0) ** 2 for x in sigma) + 0.5 * lam * (j - 1.0) ** 2
+    return mu * math.fsum((x - 1.0) ** 2 for x in sigma) + 0.5 * lam * (j - 1.0) ** 2
 
 
 def inverse(m):
@@ -1022,8 +1068,8 @@ def hencky_kirchhoff(f, mu, lam):
     """The Kirchhoff stress P F^T of the Hencky (log-strain) elasticity: U (2 mu eps + lam tr eps) U^T."""
     d = len(f)
     u, sigma, _ = svd(f)
-    eps = [math.log(max(x, 1e-300)) for x in sigma]
-    t = sum(eps)
+    eps = [_log(max(x, 1e-300)) for x in sigma]
+    t = math.fsum(eps)
     core = diag(tuple(2.0 * mu * e + lam * t for e in eps))
     return matmul(matmul(u, core), transpose(u))
 
@@ -1031,10 +1077,10 @@ def hencky_kirchhoff(f, mu, lam):
 def yield_value(sigma, mu, lam, alpha):
     """The Drucker-Prager yield function of the singular values: |dev eps| + alpha (d lam + 2 mu) / (2 mu) tr eps."""
     d = len(sigma)
-    eps = [math.log(max(x, 1e-300)) for x in sigma]
-    t = sum(eps)
+    eps = [_log(max(x, 1e-300)) for x in sigma]
+    t = math.fsum(eps)
     dev = [e - t / d for e in eps]
-    return math.sqrt(sum(x * x for x in dev)) + alpha * (d * lam + 2.0 * mu) / (2.0 * mu) * t
+    return math.sqrt(math.fsum(x * x for x in dev)) + alpha * (d * lam + 2.0 * mu) / (2.0 * mu) * t
 
 
 def on_yield_surface(sigma, mu, lam, alpha, tol=1e-9):
@@ -1046,19 +1092,19 @@ def drucker_prager(sigma, mu, lam, alpha):
     tension (tr eps > 0) returns to the origin; a state inside the cone stays; a state outside is projected
     along the deviatoric direction onto it. Returns (sigma, delta_gamma)."""
     d = len(sigma)
-    eps = [math.log(max(x, 1e-300)) for x in sigma]
-    t = sum(eps)
+    eps = [_log(max(x, 1e-300)) for x in sigma]
+    t = math.fsum(eps)
     dev = [e - t / d for e in eps]
-    dev_norm = math.sqrt(sum(x * x for x in dev))
+    dev_norm = math.sqrt(math.fsum(x * x for x in dev))
     if dev_norm == 0.0 or t > 0.0:
         if t > 0.0:
-            return tuple(1.0 for _ in sigma), math.sqrt(sum(e * e for e in eps))
+            return tuple(1.0 for _ in sigma), math.sqrt(math.fsum(e * e for e in eps))
         return sigma, 0.0
     delta = dev_norm + alpha * (d * lam + 2.0 * mu) / (2.0 * mu) * t
     if delta <= 0.0:
         return sigma, 0.0
     new = [e - delta * x / dev_norm for e, x in zip(eps, dev)]
-    return tuple(math.exp(e) for e in new), delta
+    return tuple(_exp(e) for e in new), delta
 
 
 def plasticity(f, jp, m):
@@ -1079,7 +1125,7 @@ def plasticity(f, jp, m):
 
 def plastic_flow(liq):
     """The accumulated plastic measure of an MPM body: the sum of Jp - 1 over the particles for sand."""
-    return sum(jp - 1.0 for jp in liq["Jp"])
+    return math.fsum(jp - 1.0 for jp in liq["Jp"])
 
 
 @functools.lru_cache(maxsize=None)
@@ -1330,7 +1376,7 @@ def surface_test():
     inside = level_set_at((0.0, 0.0, 0.0), x, r, h)
     outside = level_set_at((2.0, 0.0, 0.0), x, r, h)
     vertices, faces = surface_mesh(x, r, h, (-1.5, 1.5, -1.5, 1.5, -1.5, 1.5), 24)
-    mean_radius = sum(_norm(v) for v in vertices) / len(vertices)
+    mean_radius = math.fsum(_norm(v) for v in vertices) / len(vertices)
     vol = _scalar3d.mesh_volume(vertices, faces)
     return {"particles": len(x), "inside": inside, "outside": outside,
             "radius_error": (mean_radius - radius) / h, "closed": _scalar3d.is_closed(vertices, faces),
@@ -1467,8 +1513,8 @@ TABLE = (
     ("drucker-tension", "drucker_prager((1.1, 1.05), *lame(1000.0, 0.3), friction_alpha(30.0))[0]", "(1.0, 1.0)"),
     ("momentum", "momentum_test()", "(True, True)"),
     ("rest", "rest_test()", "True"),
-    ("sand", "sand_summary()", "(2.945, 0.517, 0.257, True, True)"),
-    ("repose", "repose_test()", "((0.1, 0.257, 0.43), True, True)"),
+    ("sand", "sand_summary()", "(2.945, 0.517, 0.316, True, True)"),
+    ("repose", "repose_test()", "((0.1, 0.316, 0.43), True, True)"),
     ("clamp", "(clamp_potential(0.0, 1.0, 3.0), clamp_potential(2.0, 1.0, 3.0), clamp_potential(9.0, 1.0, 3.0))", "(0.0, 0.5, 1.0)"),
     ("trapped-air", "(trapped_air(0, ((0.0, 0.0, 0.0), (0.5, 0.0, 0.0)), ((1.0, 0.0, 0.0), (1.0, 0.0, 0.0)), 1.0), trapped_air(0, ((0.0, 0.0, 0.0), (0.5, 0.0, 0.0)), ((1.0, 0.0, 0.0), (-1.0, 0.0, 0.0)), 1.0))", "(0.0, 2.0)"),
     ("wave-crest", "round(wave_crest(0, ((0.0, 0.0, 0.0), (-0.5, -0.3, 0.0), (0.5, -0.3, 0.0)), ((0.0, 1.0, 0.0), (-0.6, 0.8, 0.0), (0.6, 0.8, 0.0)), ((0.0, 1.0, 0.0),) * 3, 1.0), 6)", "0.166762"),

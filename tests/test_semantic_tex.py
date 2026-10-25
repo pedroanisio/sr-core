@@ -321,3 +321,16 @@ def test_the_matrix_kit_case_measures_the_box_the_rule_centres():
     assert "centres the cell's box, not its ink" in row
     rule = text[text.index("**11. Layout rules measured by the kit.**"):text.index("**12. Time.**")]
     assert "ink offset" in rule
+
+
+def test_distances_and_sums_are_the_same_on_every_python():
+    """Python 3.12 changed the rounding of the built-in sum over floats and math.dist has had more than one
+    algorithm; the resampling, alignment and area use square roots of explicit sums of squares and math.fsum,
+    so the table is the same on 3.10, 3.12 and 3.13 (CI's matrix)."""
+    import inspect
+    for fn in (sx.perimeter, sx.resample, sx.align_start, sx.signed_area, sx.centroid, sx.match_subpaths, sx._nearest):
+        src = inspect.getsource(fn)
+        assert "math.dist(" not in src and " sum(" not in src and "(sum(" not in src, fn.__name__
+    square = ((0.0, 0.0), (10.0, 0.0), (10.0, 10.0), (0.0, 10.0))
+    assert sx.perimeter(square) == math.fsum(math.sqrt((b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2)
+                                             for a, b in zip(square, square[1:] + square[:1]))

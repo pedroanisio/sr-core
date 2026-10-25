@@ -393,6 +393,15 @@ version:
 
 ### Fixed
 
+- Three draft reference modules printed platform-dependent numeric tables, and the GitHub CI matrix (Ubuntu
+  and macOS; Python 3.10, 3.12, 3.13) had been red on main since 2026-10-24 while the local gate (Linux,
+  3.13) passed: `conformance/tools/liquids_reference.py` now computes the MPM step with its own `_exp`,
+  `_log` and `_sin` (IEEE basic operations only, within 3 ulps of libm) and `math.fsum`, since macOS's libm
+  turned the sand pile's slope from 0.257 into 0.316; `conformance/tools/star_fields_reference.py` hashes
+  six-decimal values in its field digest and writes its matrix products out; `conformance/tools/
+  semantic_tex_reference.py` uses explicit square roots of sums of squares and `math.fsum` instead of
+  `math.dist` and the built-in `sum`, whose rounding changed in Python 3.12. The three drafts' tables are
+  refilled and say why; tests pin each property (SRC-77).
 - The semantic-tex draft's matrix kit case measures what its rule 11 states: the rule centres each cell's box
   in its column, the case had measured ink-cluster centres, and the two differ by the cells' side bearings.
   The case now subtracts each cell's ink offset, taken from the same TeX typeset alone, within the same

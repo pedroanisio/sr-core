@@ -207,11 +207,17 @@ def opacity_in(p):
 
 # ------------------------------------------------------------------------------------------ 5. polygons
 
+def _dist(a, b):
+    """sqrt of an explicit sum of squares: IEEE basic operations only, so the same on every platform and Python
+    (math.dist has had more than one algorithm)."""
+    return math.sqrt((b[0] - a[0]) * (b[0] - a[0]) + (b[1] - a[1]) * (b[1] - a[1]))
+
+
 def signed_area(poly):
     """Twice the shoelace sum halved: positive for a counter-clockwise polygon in a y-up frame (clockwise on
     screen, where y is down)."""
     n = len(poly)
-    return sum(poly[i][0] * poly[(i + 1) % n][1] - poly[(i + 1) % n][0] * poly[i][1] for i in range(n)) / 2
+    return math.fsum(poly[i][0] * poly[(i + 1) % n][1] - poly[(i + 1) % n][0] * poly[i][1] for i in range(n)) / 2
 
 
 def centroid(poly):
@@ -219,7 +225,7 @@ def centroid(poly):
     a = signed_area(poly)
     n = len(poly)
     if abs(a) < 1e-12:
-        return (sum(p[0] for p in poly) / n, sum(p[1] for p in poly) / n)
+        return (math.fsum(p[0] for p in poly) / n, math.fsum(p[1] for p in poly) / n)
     cx = cy = 0.0
     for i in range(n):
         x0, y0 = poly[i]
@@ -232,7 +238,7 @@ def centroid(poly):
 
 def perimeter(poly):
     n = len(poly)
-    return sum(math.dist(poly[i], poly[(i + 1) % n]) for i in range(n))
+    return math.fsum(_dist(poly[i], poly[(i + 1) % n]) for i in range(n))
 
 
 def resample(poly, n):
@@ -251,7 +257,7 @@ def resample(poly, n):
         target = k * step
         while True:
             a, b = poly[edge % m], poly[(edge + 1) % m]
-            length = math.dist(a, b)
+            length = _dist(a, b)
             if acc + length >= target - 1e-12 * total or edge >= 2 * m:
                 t = 0.0 if length == 0 else (target - acc) / length
                 t = min(1.0, max(0.0, t))
@@ -299,7 +305,7 @@ def align_start(a, b):
         raise ValueError("align: equal sample counts")
     best, best_k = None, 0
     for k in range(n):
-        cost = sum((a[i][0] - b[(i + k) % n][0]) ** 2 + (a[i][1] - b[(i + k) % n][1]) ** 2 for i in range(n))
+        cost = math.fsum((a[i][0] - b[(i + k) % n][0]) ** 2 + (a[i][1] - b[(i + k) % n][1]) ** 2 for i in range(n))
         if best is None or cost < best - 1e-12:
             best, best_k = cost, k
     return best_k
@@ -336,7 +342,7 @@ def match_subpaths(A, B):
         raise ValueError("paths: at least one sub-path each")
     ca = [centroid(s) for s in A]
     cb = [centroid(s) for s in B]
-    cand = sorted(((math.dist(ca[i], cb[j]), i, j) for i in range(len(A)) for j in range(len(B))))
+    cand = sorted(((_dist(ca[i], cb[j]), i, j) for i in range(len(A)) for j in range(len(B))))
     pa, pb = {}, {}
     for _, i, j in cand:
         if i not in pa and j not in pb:
@@ -347,7 +353,7 @@ def match_subpaths(A, B):
 
 
 def _nearest(c, centroids):
-    return min(range(len(centroids)), key=lambda k: (math.dist(c, centroids[k]), k))
+    return min(range(len(centroids)), key=lambda k: (_dist(c, centroids[k]), k))
 
 
 def morph_path(A, B, p, n=MORPH_SAMPLES):

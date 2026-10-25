@@ -357,3 +357,24 @@ def test_the_table_is_what_the_module_prints(draft, capsys):
     for line in printed:
         assert line in draft, line
     assert len(printed) == len(_draft_rows())
+
+
+def test_the_field_digest_is_over_six_decimals(catalogue):
+    """The digest must be the same wherever sine, cosine and the built-in sum differ in their last bit (CI's
+    macOS and 3.10 jobs): it hashes each value written with six decimals, so a 1e-12 change leaves it and a
+    1e-5 change moves it."""
+    field = sf.star_field(catalogue, 4.0, 25.0, 1.0)
+    d, f, c = field[0]["direction"], field[0]["flux"], field[0]["colour"]
+    nudged = [dict(field[0], direction=(d[0] + 1e-12, d[1] - 1e-12, d[2]), flux=f * (1.0 + 1e-13),
+                   colour=(c[0] + 1e-12, c[1], c[2]))] + field[1:]
+    moved = [dict(field[0], direction=(d[0] + 1e-5, d[1], d[2]))] + field[1:]
+    assert sf._field_digest(nudged) == sf._field_digest(field)
+    assert sf._field_digest(moved) != sf._field_digest(field)
+
+
+def test_the_digest_path_uses_no_built_in_float_sum():
+    """Python 3.12 changed the rounding of the built-in sum over floats; the matrix products on the digest's path
+    add their three terms explicitly."""
+    import inspect
+    for fn in (sf.xyz_to_linear_srgb, sf.scene_direction, sf.precess):
+        assert "sum(" not in inspect.getsource(fn), fn.__name__

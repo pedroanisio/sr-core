@@ -710,7 +710,7 @@ def chromaticity(xyz):
 
 
 def xyz_to_linear_srgb(xyz):
-    return tuple(sum(m[j] * xyz[j] for j in range(3)) for m in XYZ_TO_SRGB)
+    return tuple(m[0] * xyz[0] + m[1] * xyz[1] + m[2] * xyz[2] for m in XYZ_TO_SRGB)
 
 
 def colour(t):
@@ -789,7 +789,7 @@ def moved(star, years):
 
 def scene_direction(d):
     """Scene direction of an ICRF direction: (x, -z, y), the axes of the time-frames draft."""
-    return tuple(sum(SCENE_FROM_ICRF_AXES[i][j] * d[j] for j in range(3)) for i in range(3))
+    return tuple(m[0] * d[0] + m[1] * d[1] + m[2] * d[2] for m in SCENE_FROM_ICRF_AXES)
 
 
 # ------------------------------------------------------------------------------------ rule 5: constellations
@@ -811,7 +811,7 @@ def precess(ra_deg, dec_deg, epoch1, epoch2):
     r = ((ca * cb * cc - sa * sb, -ca * sb - sa * cb * cc, -cb * sc),
          (sa * cb + ca * sb * cc, ca * cb - sa * sb * cc, -sb * sc),
          (ca * sc, -sa * sc, cc))
-    x2 = tuple(sum(r[i][j] * x1[j] for j in range(3)) for i in range(3))
+    x2 = tuple(row[0] * x1[0] + row[1] * x1[1] + row[2] * x1[2] for row in r)
     return radec(x2)
 
 
@@ -875,9 +875,14 @@ def star_field(catalogue, limit_magnitude, years, magnitude_zero):
 
 
 def _field_digest(field):
+    """The first 16 hex digits of the sha256 of one line per star: hr, the three direction components, the flux
+    and the three linear colour components each written with six decimals, and the constellation, separated by
+    spaces and ended by a newline. Six decimals, because the platform's sine, cosine, atan2 and log10 differ in
+    their last bit (macOS against glibc): the digest pins the field, not the rounding."""
     h = hashlib.sha256()
     for s in field:
-        h.update(repr((s["hr"], s["direction"], s["flux"], s["colour"], s["constellation"])).encode())
+        numbers = (*s["direction"], s["flux"], *s["colour"])
+        h.update((f"{s['hr']} " + " ".join(f"{x:.6f}" for x in numbers) + f" {s['constellation']}\n").encode())
     return h.hexdigest()[:16]
 
 
@@ -950,7 +955,7 @@ TABLE = [
     ("Serpens' two parts", "constellation(236.0, 7.0), constellation(272.0, -5.0)", "('Ser', 'Ser')"),
     ("named stars agreeing with the lookup", "name_agreement(cat)", '(3143, 3143)'),
     ("field to V 6.5 at J2000 + 25 years", "len(star_field(cat, 6.5, 25.0, 1.0))", '8404'),
-    ("field digest at J2000 + 25 years", "_field_digest(star_field(cat, 6.5, 25.0, 1.0))", "'c923002297bc0982'"),
+    ("field digest at J2000 + 25 years", "_field_digest(star_field(cat, 6.5, 25.0, 1.0))", "'4d9539e19c1f5a15'"),
     ("seek check", "seek_test(cat)", 'True'),
 ]
 

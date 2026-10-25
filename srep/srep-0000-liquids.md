@@ -249,6 +249,12 @@ document's liquid is the same in every engine that implements this SREP.
 this table and `tests/test_liquids.py` checks that every row evaluates to its expected value and that the
 printed table is this one.
 
+The MPM step is computed with IEEE basic operations, square roots, `math.fsum` and the module's own `_exp`,
+`_log` and `_sin` (Cody–Waite range reduction and fixed-length series, within 3 ulps of libm), not the
+platform's exp, log and sine: those are not correctly rounded, and 180 steps of the sand collapse amplify a
+last-bit difference into the toe column of the slope (0.257 on glibc against 0.316 on macOS at 30° before
+this change; CI's matrix was red). The table is therefore the same on every platform and Python version.
+
 | Test | Expression | Expected |
 |---|---|---|
 | bspline-centre | `bspline(0.0)` | `0.75` |
@@ -280,8 +286,8 @@ printed table is this one.
 | drucker-tension | `drucker_prager((1.1, 1.05), *lame(1000.0, 0.3), friction_alpha(30.0))[0]` | `(1.0, 1.0)` |
 | momentum | `momentum_test()` | `(True, True)` |
 | rest | `rest_test()` | `True` |
-| sand | `sand_summary()` | `(2.945, 0.517, 0.257, True, True)` |
-| repose | `repose_test()` | `((0.1, 0.257, 0.43), True, True)` |
+| sand | `sand_summary()` | `(2.945, 0.517, 0.316, True, True)` |
+| repose | `repose_test()` | `((0.1, 0.316, 0.43), True, True)` |
 | clamp | `(clamp_potential(0.0, 1.0, 3.0), clamp_potential(2.0, 1.0, 3.0), clamp_potential(9.0, 1.0, 3.0))` | `(0.0, 0.5, 1.0)` |
 | trapped-air | `(trapped_air(0, ((0.0, 0.0, 0.0), (0.5, 0.0, 0.0)), ((1.0, 0.0, 0.0), (1.0, 0.0, 0.0)), 1.0), trapped_air(0, ((0.0, 0.0, 0.0), (0.5, 0.0, 0.0)), ((1.0, 0.0, 0.0), (-1.0, 0.0, 0.0)), 1.0))` | `(0.0, 2.0)` |
 | wave-crest | `round(wave_crest(0, ((0.0, 0.0, 0.0), (-0.5, -0.3, 0.0), (0.5, -0.3, 0.0)), ((0.0, 1.0, 0.0), (-0.6, 0.8, 0.0), (0.6, 0.8, 0.0)), ((0.0, 1.0, 0.0),) * 3, 1.0), 6)` | `0.166762` |
@@ -348,3 +354,6 @@ measurable on an engine before SR-83 lands.
 
 - 2026-10-24: draft, with the reference module, 40 numeric tests and the seven kit cases described; the engine
   work filed as SR-83.
+- 2026-10-25: the MPM step computed with the module's own exp, log and sine and `math.fsum`, so the table is
+  the same on every platform (the sand rows differed on macOS, where CI's matrix was red); the `sand` and
+  `repose` rows refilled (SRC-77).
