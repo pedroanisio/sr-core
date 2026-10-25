@@ -586,7 +586,7 @@ def test_the_example_document_runs_and_its_summary_is_stable():
 def test_the_example_document_is_valid_and_the_bad_one_lists_every_code():
     assert dl.validate_document(dl.example_document()) == []
     codes = [c for c, _ in dl.validate_document(dl.bad_document())]
-    assert codes == ["DL1", "DL2", "DL3", "DL4", "DL5", "DL6", "DL7", "V18"]
+    assert codes == ["DL1", "DL2", "DL3", "DL4", "DL5", "DL6", "DL7", "V17"]
 
 
 def test_validation_one_at_a_time():
@@ -614,7 +614,7 @@ def test_validation_one_at_a_time():
     assert only(style_patch=lambda s: s["layers"][0]["paint"].__setitem__(
         "heatmap-color", ["interpolate", ["linear"], ["zoom"], 0, "#000000", 1, "#FFFFFF"])) == ["DL6"]
     assert only(lambda c: c["sprites"].append(dict(c["sprites"][0]))) == ["DL7"]
-    assert only(lambda c: c["sprites"][0].__setitem__("scale", 2)) == ["V18"]
+    assert only(lambda c: c["sprites"][0].__setitem__("scale", 2)) == ["V17"]
     assert dl.validate_document(base) == []
 
 
@@ -683,7 +683,7 @@ def test_the_draft_names_the_engine_card_and_the_elements(draft):
                  "icon-halo-width", "icon-halo-blur", "symbol-placement", "symbol-spacing", "symbol-sort-key",
                  "pixelRatio", "sdf", "Gaussian", "0.3989422804014327", "1/4080", "smoothstep", "non-zero",
                  "cooperative", "MapLibre", "BSD-3", "render-test", "DL1", "DL2", "DL3", "DL4", "DL5", "DL6", "DL7",
-                 "W-DL1", "V18", "data_layers_reference.py", "numpy", "bilinear", "premultiplied", "6378137",
+                 "W-DL1", "V17", "data_layers_reference.py", "numpy", "bilinear", "premultiplied", "6378137",
                  "ambient", "luma", "walls", "roofs"):
         assert word in draft, word
 

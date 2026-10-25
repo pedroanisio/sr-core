@@ -54,7 +54,7 @@ MAX_TILES = 1000000
 DEFAULT_COLOUR = (0.86, 0.85, 0.83)
 LIGHT = (-1.0 / math.sqrt(6.0), -1.0 / math.sqrt(6.0), -2.0 / math.sqrt(6.0))
 AMBIENT = 0.4
-CODE_ORDER = ("TL1", "TL2", "TL3", "TL4", "V21")
+CODE_ORDER = ("TL1", "TL2", "TL3", "TL4", "V17")
 VERSIONS = ("1.0", "1.1")
 REFINES = ("ADD", "REPLACE")
 SCHEMES = {"QUADTREE": 2, "OCTREE": 3}
@@ -1438,7 +1438,7 @@ def bad_document():
 
 
 def validate_document(doc):
-    """TL1 to TL4 and V21 for the document's tileset3d assets and tiles3d children, one entry per code, in
+    """TL1 to TL4 and V17 for the document's tileset3d assets and tiles3d children, one entry per code, in
     CODE_ORDER."""
     found = {}
 
@@ -1449,7 +1449,7 @@ def validate_document(doc):
     for key, asset in assets.items():
         for attr in asset:
             if attr not in KNOWN_TILESET + ("kind", "data"):
-                add("V21", f"tileset3d {key}: unknown attribute {attr}")
+                add("V17", f"tileset3d {key}: unknown attribute {attr}")
         digest = asset.get("cacheSha256")
         if not isinstance(digest, str) or not re.fullmatch(r"[0-9a-f]{64}", digest):
             add("TL1", f"tileset3d {key}: cacheSha256 is 64 hex digits")
@@ -1477,7 +1477,7 @@ def validate_document(doc):
         cid = child.get("id", "?")
         for attr in child:
             if attr not in KNOWN_TILES + ("kind",):
-                add("V21", f"tiles3d {cid}: unknown attribute {attr}")
+                add("V17", f"tiles3d {cid}: unknown attribute {attr}")
         if child.get("tileset") not in assets:
             add("TL3", f"tiles3d {cid}: tileset must name a tileset3d asset")
         op = child.get("opacity", TILES_DEFAULTS["opacity"])
@@ -1530,7 +1530,7 @@ TABLE = (
     ("the example's digest", "RUN48['digest']", "'2b41b8d27c93'"),
     ("the seek check", "trace(EXAMPLE, 6)[4] == run(EXAMPLE, 4)['digest']", "True"),
     ("the camera's choice over the example", "len(select_document(EXAMPLE, example_camera())['tiles'])", "10"),
-    ("the bad document's codes", "[c for c, _ in validate_document(bad_document())]", "['TL1', 'TL2', 'TL3', 'TL4', 'V21']"),
+    ("the bad document's codes", "[c for c, _ in validate_document(bad_document())]", "['TL1', 'TL2', 'TL3', 'TL4', 'V17']"),
 )
 
 _SCOPE = {}

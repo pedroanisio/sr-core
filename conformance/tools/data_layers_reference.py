@@ -1168,7 +1168,7 @@ def building_prisms(doc):
 
 def validate_document(doc):
     """(code, message) pairs sorted by code: DL1 sprite assets, DL2 sprite entries, DL3 heatmap paint, DL4 light,
-    DL5 symbol and fill-extrusion properties, DL6 heatmap ramp, DL7 duplicate sprite names, V18 unknown sprite
+    DL5 symbol and fill-extrusion properties, DL6 heatmap ramp, DL7 duplicate sprite names, V17 unknown sprite
     attributes."""
     out = []
     for child in doc["map"]["children"]:
@@ -1178,7 +1178,7 @@ def validate_document(doc):
         for s in child.get("sprites", []):
             for k in s:
                 if k not in SPRITE_KEYS:
-                    out.append(("V18", f"sprite has no attribute {k!r}"))
+                    out.append(("V17", f"sprite has no attribute {k!r}"))
             name = s.get("name", "default")
             if name in names:
                 out.append(("DL7", f"sprite name {name!r} is used twice in one basemap"))
@@ -1285,7 +1285,7 @@ def example_document():
 def bad_document():
     """One offender per code: DL1 (sprite index asset unknown), DL2 (an entry outside its sheet), DL3
     (heatmap-radius 0), DL4 (light intensity 2), DL5 (icon-anchor), DL6 (ramp over zoom), DL7 (a sprite name
-    twice), V18 (unknown sprite attribute)."""
+    twice), V17 (unknown sprite attribute)."""
     doc = example_document()
     doc["assets"]["bad_sprites"] = {"kind": "file", "index": {"pin": {"x": 20, "y": 0, "width": 8, "height": 8,
                                                                     "pixelRatio": 1}}}
@@ -1355,7 +1355,7 @@ TABLE = (
     ("the example's warnings", "RUN['warnings']", "['W-DL1']"),
     ("the example's digests", "RUN['digests']", "['3df3492b56b8', 'f35876a0f2cd', 'e9f3942b0591', 'f9ad00499edc']"),
     ("the example's prisms", "len(building_prisms(EXAMPLE))", "3"),
-    ("the bad document's codes", "[c for c, _ in validate_document(bad_document())]", "['DL1', 'DL2', 'DL3', 'DL4', 'DL5', 'DL6', 'DL7', 'V18']"),
+    ("the bad document's codes", "[c for c, _ in validate_document(bad_document())]", "['DL1', 'DL2', 'DL3', 'DL4', 'DL5', 'DL6', 'DL7', 'V17']"),
 )
 
 

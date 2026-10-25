@@ -640,7 +640,7 @@ def test_the_example_tileset_loads_under_a_perspective_camera():
 
 
 def test_validation_reports_each_code_once_in_order():
-    assert [c for c, _ in t3.validate_document(t3.bad_document())] == ["TL1", "TL2", "TL3", "TL4", "V21"]
+    assert [c for c, _ in t3.validate_document(t3.bad_document())] == ["TL1", "TL2", "TL3", "TL4", "V17"]
     assert t3.validate_document(t3.example_document()) == []
 
 
@@ -658,8 +658,8 @@ def test_validation_reports_each_code_once_in_order():
     (lambda d: d["assets"]["hki"].update(data=t3.archive({"readme.txt": b"x"}),
                                          cacheSha256=hashlib.sha256(t3.archive({"readme.txt": b"x"})).hexdigest()),
      "TL4"),
-    (lambda d: d["map"]["children"][0].update(glow=1), "V21"),
-    (lambda d: d["assets"]["hki"].update(lod=1), "V21"),
+    (lambda d: d["map"]["children"][0].update(glow=1), "V17"),
+    (lambda d: d["assets"]["hki"].update(lod=1), "V17"),
 ])
 def test_each_validation_rule_alone(patch, code):
     doc = t3.example_document()
@@ -673,7 +673,7 @@ def test_defaults_and_constants():
     assert t3.MAX_DEPTH == 32 and t3.MAX_TILES == 1000000
     assert t3.DEFAULT_COLOUR == (0.86, 0.85, 0.83)
     assert _close(t3.LIGHT, (-1 / math.sqrt(6), -1 / math.sqrt(6), -2 / math.sqrt(6)))
-    assert t3.CODE_ORDER == ("TL1", "TL2", "TL3", "TL4", "V21")
+    assert t3.CODE_ORDER == ("TL1", "TL2", "TL3", "TL4", "V17")
     assert set(t3.KNOWN_TILESET) == {"id", "src", "cache", "cacheSha256", "maxError", "maxTiles", "credit"}
     assert set(t3.KNOWN_TILES) == {"id", "tileset", "heightOffset", "opacity", "color"}
 
@@ -699,7 +699,7 @@ def test_the_draft_has_the_srep_sections(draft):
 
 def test_the_draft_names_its_rules_sources_and_terms(draft):
     for word in ("screen-space error", "3D Tiles 1.1", "OGC 22-025r4", "Morton", "subtree", "cacheSha256",
-                 "tileset3d", "tiles3d", "V21", "TL1", "TL2", "TL3", "TL4", "W-TL1", "W-TL2", "W-TL3",
+                 "tileset3d", "tiles3d", "V17", "TL1", "TL2", "TL3", "TL4", "W-TL1", "W-TL2", "W-TL3",
                  "Helsinki", "3d-tiles-samples", "CC BY 4.0", "SR-116", "viewerRequestVolume", "REPLACE", "ADD",
                  "y-up", "b3dm", "glb", "ZIP", "Apache-2.0", "seek check", "0d 32 01"):
         assert word in draft, word

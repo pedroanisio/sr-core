@@ -34,7 +34,7 @@ a perspective camera), refines a tile whose error exceeds **`maxError`** (**REPL
 **ADD** keeps it), always descends into an external tileset, reads **implicit tiling** through its subtrees in
 **Morton** order, and places every content through the tile's composed transform, the glTF **y-up** to z-up
 rotation and SREP 10's ground frame. Traversals are bounded by `maxTiles` and 32 levels. Validation rules
-TL1–TL4, warnings W-TL1–W-TL3, the schema gate V21. Reference `conformance/tools/tiles3d_reference.py`
+TL1–TL4, warnings W-TL1–W-TL3, the schema gate V17. Reference `conformance/tools/tiles3d_reference.py`
 (**numpy**; it also carries the subtree, glb and b3dm writers the tests use), tests `tests/test_tiles3d.py`.
 Engine card [SR-116](https://faz-ai.atlassian.net/browse/SR-116).
 
@@ -115,7 +115,7 @@ Schematron diff (`scene-render.sch`):
 </sch:rule>
 <!-- the version gate of SREP 9 (V5) is extended for 1.8 -->
 <sch:rule context="/scene[not(@version='1.8')]">
-  <sch:assert id="V21" test="not(assets/tileset3d | .//tiles3d)">3D Tiles need version="1.8".</sch:assert>
+  <sch:assert id="V17" test="not(assets/tileset3d | .//tiles3d)">3D Tiles need version="1.8".</sch:assert>
 </sch:rule>
 ```
 
@@ -148,7 +148,7 @@ An engine reports every rule it can check:
 - **W-TL3** (warning): a selected content is absent from the archive (the document's views changed after the
   resolve step); the frame is drawn without it and the warning is reported once per child. The resolve step
   itself fails on an absent content.
-- **V21** (error): a `tileset3d` or `tiles3d` in a document before version 1.8, or an attribute the schema
+- **V17** (error): a `tileset3d` or `tiles3d` in a document before version 1.8, or an attribute the schema
   does not declare on them.
 
 ### Semantics
@@ -293,14 +293,14 @@ of 32 levels and a hard `maxTiles` ceiling of 1 000 000 (TL2).
 
 ## Backwards compatibility
 
-Additive. No existing element changes. Schema version 1.8 (V21). SREP 10's `map` object draws a map with a
-`tiles3d` child as it draws one with buildings; a renderer before this draft ignores the child under V21.
+Additive. No existing element changes. Schema version 1.8 (V17). SREP 10's `map` object draws a map with a
+`tiles3d` child as it draws one with buildings; a renderer before this draft ignores the child under V17.
 
 ## Engine impact
 
 | Engine | Status | Work | Card |
 |---|---|---|---|
-| Rust (`rs-scene-render`), reference | not started | the `tileset3d` asset and the resolve step (tileset JSON, external tilesets, implicit tiling and subtree files, glb and b3dm fetch, the stored ZIP and its SHA-256), the `tiles3d` child (traversal by screen-space error for map and perspective views, request volumes, placement in the ground frame, the top-down raster and the `map` object's meshes), TL1–TL4, V21, W-TL1 to W-TL3, the numeric table and the kit cases as tests; the CesiumGS samples as test input | [SR-116](https://faz-ai.atlassian.net/browse/SR-116) |
+| Rust (`rs-scene-render`), reference | not started | the `tileset3d` asset and the resolve step (tileset JSON, external tilesets, implicit tiling and subtree files, glb and b3dm fetch, the stored ZIP and its SHA-256), the `tiles3d` child (traversal by screen-space error for map and perspective views, request volumes, placement in the ground frame, the top-down raster and the `map` object's meshes), TL1–TL4, V17, W-TL1 to W-TL3, the numeric table and the kit cases as tests; the CesiumGS samples as test input | [SR-116](https://faz-ai.atlassian.net/browse/SR-116) |
 
 ## Conformance
 
@@ -355,7 +355,7 @@ of the centre looking north and down.
 | the example's digest | `RUN48['digest']` | `'2b41b8d27c93'` |
 | the seek check | `trace(EXAMPLE, 6)[4] == run(EXAMPLE, 4)['digest']` | `True` |
 | the camera's choice over the example | `len(select_document(EXAMPLE, example_camera())['tiles'])` | `10` |
-| the bad document's codes | `[c for c, _ in validate_document(bad_document())]` | `['TL1', 'TL2', 'TL3', 'TL4', 'V21']` |
+| the bad document's codes | `[c for c, _ in validate_document(bad_document())]` | `['TL1', 'TL2', 'TL3', 'TL4', 'V17']` |
 
 Properties that hold for every input: a frame's selection and picture are pure functions of the document, the
 archive and the frame index; `geodetic(ecef(p))` returns p to 1e-6 m; a subtree written and read back gives the
@@ -382,7 +382,7 @@ To be measured on the engine (SREP 14's seek check applies to each):
 6. `tiles3d-archive`: the resolve of the example gives an archive whose SHA-256 equals the reference's; the
    archive with one bit flipped is refused with TL1 and the archive without `b3.b3dm` renders frame 0 with
    W-TL3 and three buildings.
-7. `tiles3d-errors`: the bad document; the engine reports TL1–TL4 and V21 and renders nothing for the invalid
+7. `tiles3d-errors`: the bad document; the engine reports TL1–TL4 and V17 and renders nothing for the invalid
    child.
 
 ## Open issues

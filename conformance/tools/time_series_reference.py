@@ -647,14 +647,14 @@ def _check_time_attributes(child, defaults, errors, what):
 def validate_document(doc):
     """The draft's rules on a document: TS1 (timeOrigin or time not a time), TS2 (trail negative, fade not a
     boolean, or fade with trail 0), TS3 (time attributes without timeBy, or a route's timeBy without geo), TS4
-    (timeEndBy equal to timeBy), V19 (an attribute the schema does not declare). Sorted by code."""
+    (timeEndBy equal to timeBy), V17 (an attribute the schema does not declare). Sorted by code."""
     errors = []
     for i, child in enumerate(doc["map"]["children"]):
         kind = child["kind"]
         what = f"{kind} {child.get('id', i)}"
         unknown = sorted(set(child) - KNOWN_ATTRIBUTES.get(kind, set(child)))
         if unknown:
-            errors.append(("V19", f"{what}: unknown attributes {unknown}"))
+            errors.append(("V17", f"{what}: unknown attributes {unknown}"))
         if kind == "basemap":
             _check_time_attributes(child, {"trail": 0.0, "fade": False}, errors, what)
         elif kind == "geoLayer":
@@ -721,7 +721,7 @@ def example_document():
 
 def bad_document():
     """One offender per code: TS1 (a basemap timeOrigin that is not a time), TS2 (a negative trail), TS3 (a
-    route's timeBy without geo), TS4 (timeEndBy equal to timeBy), V19 (an attribute the schema does not declare)."""
+    route's timeBy without geo), TS4 (timeEndBy equal to timeBy), V17 (an attribute the schema does not declare)."""
     doc = example_document()
     doc["map"]["children"][0]["timeOrigin"] = "yesterday"
     doc["map"]["children"][1]["trail"] = -1.0
@@ -767,7 +767,7 @@ TABLE = (
     ("the first trip's head pixel", "tuple(round(c, 3) for c in RUN['trips']['heads'][0])", "(77.724, 60.0)"),
     ("the example's warnings", "RUN['warnings']", "['W-TS1', 'W-TS2']"),
     ("the example's digests", "RUN['digests']", "['641da128a8bc', '031f84f9cffc', 'a7a297cca286', 'd55beb01b780']"),
-    ("the bad document's codes", "[c for c, _ in validate_document(bad_document())]", "['TS1', 'TS2', 'TS3', 'TS4', 'V19']"),
+    ("the bad document's codes", "[c for c, _ in validate_document(bad_document())]", "['TS1', 'TS2', 'TS3', 'TS4', 'V17']"),
     ("the seek check", "run(EXAMPLE, 6.0) == RUN", "True"),
 )
 

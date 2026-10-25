@@ -30,7 +30,7 @@ version:
   external tilesets always refined; implicit tiling through subtree files in Morton order; a `maxTiles` and
   32-level bound), places glb and legacy b3dm content through the node hierarchy, the y-up to z-up rotation and
   the composed tile transform into SREP 10's ground frame, and paints a 2D map from above with a north-west
-  shade; validation TL1-TL4 and V21, warnings W-TL1 (tile bound), W-TL2 (unsupported content), W-TL3 (content
+  shade; validation TL1-TL4 and V17, warnings W-TL1 (tile bound), W-TL2 (unsupported content), W-TL3 (content
   missing from the archive). The reference `conformance/tools/tiles3d_reference.py` carries the subtree, glb
   and b3dm writers and readers and reproduces the CesiumGS SparseImplicitQuadtree root subtree (352 bytes, tile
   bits 0d 32 01); tests `tests/test_tiles3d.py`. Engine card SR-116.
@@ -41,7 +41,7 @@ version:
   after webgl-wind (ISC): quantised trail fade floor(255 c fade)/255, the `colors` ramp at the speed fraction,
   a midpoint step of `speedup`/fps data seconds in metres mapped through cos(latitude), drop and respawn from
   the random-streams draft's addressed draws (purposes spawnX, spawnY, drop; step = frame), replay from frame 0
-  for the seek check; validation VF1-VF4 and V20, warning W-VF1 past the cache's time span. The reference
+  for the seek check; validation VF1-VF4 and V17, warning W-VF1 past the cache's time span. The reference
   `conformance/tools/vector_field_reference.py` carries the GRIB2 writer and reader (edition 2, templates 3.0,
   4.0 and 5.0 simple packing, bitmaps, scanning modes) and the classic NetCDF writer and reader (CDF 1 and 2,
   the specification's examples byte for byte, `_FillValue`, `scale_factor`, `add_offset`); tests
@@ -53,7 +53,7 @@ version:
   geo asset gains `timeBy` per-vertex timestamps with deck.gl TripsLayer's trail 120 and fade (the window from
   T − trail to the head interpolated by time, per-point alpha 1 − (T − τ)/trail, round-capped strokes, the head dot
   by `headRadius`/`headFill`; states pending/running/complete/gone); `basemap` gains `timeOrigin`/`time` so
-  `["global-state", "time"]` is T in style filters; rules TS1–TS4, warnings W-TS1/W-TS2, the version gate V19.
+  `["global-state", "time"]` is T in style filters; rules TS1–TS4, warnings W-TS1/W-TS2, the version gate V17.
   Reference `conformance/tools/time_series_reference.py` (numpy; prints the draft's 31-row table),
   `tests/test_time_series.py` (35 tests). Engine card SR-114.
 - Draft SREP "Add data layers to the map" (`srep/srep-0000-data-layers.md`, M2 of SREP 12): basemap styles draw the
@@ -65,7 +65,7 @@ version:
   `icon-offset` in icon pixels, rotation about the anchor, `icon-text-fit`, overlap modes never/always/cooperative,
   ignore-placement, the icon-optional/text-optional pairing with SREP 9's labels, SDF icons coloured by `icon-color`
   with a halo per the symbol_sdf shader, bilinear sampling) and `basemap/@icons`; rules DL1–DL7, warning W-DL1 and
-  the version gate V18. Reference `conformance/tools/data_layers_reference.py` (numpy; prints the draft's 48-row
+  the version gate V17. Reference `conformance/tools/data_layers_reference.py` (numpy; prints the draft's 48-row
   table), `tests/test_data_layers.py` (51 tests). Engine card SR-113.
 - Draft SREP "Add relief layers to the map" (`srep/srep-0000-relief.md`, M1 of SREP 12): basemap styles draw the
   MapLibre `raster` (opacity, hue rotation, brightness, saturation, contrast, resampling per MapLibre's raster
@@ -393,6 +393,17 @@ version:
 
 ### Fixed
 
+- One 1.8 version gate across the SREP 12 drafts: SREP 12's design rules now state that the gate is one
+  Schematron assert, V17, in one pattern after `p-srep75`, its test the conjunction of the drafts' clauses, and
+  the four drafts that had taken gate codes of their own are folded back to it (data-layers V18, time-series
+  V19, vector-field V20, 3D Tiles V21 are now V17 in the drafts, their reference modules and tests). Schematron
+  ids are unique within a file, and an engine vendoring the drafts on one 1.8 branch found two drafts claiming
+  the same slot (SR-64).
+- The space-transforms draft (`srep/srep-0000-space-transforms.md`) names `deform` alone as the element a
+  `group` gains (its Syntax 2 said the `bodyBehaviour` group, which would have admitted `rigidBody` and
+  `softBody` on a group with no semantics), writes out SPT2's XPath (the complex determinant of a `mobius`
+  modifier's eight `coefficients` with EXSLT `str:tokenize`) and states its gate as the shared V17. Found by the
+  engine review on SR-64.
 - The media draft's Draine cumulative (`conformance/tools/media_reference.py`, rule 19 of
   `srep/srep-0000-media.md`) is written in a form that never divides by g: the antiderivative in t lost
   every digit for |g| below about 1e-4 (F(1) = 5.7 at g = 2e-6), and `anisotropy` admits such a g. The

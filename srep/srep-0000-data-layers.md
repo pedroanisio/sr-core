@@ -33,7 +33,7 @@ sprite URL is never fetched), and the icon box, rotation, text fit, overlap mode
 `getOverlapMode` and `symbol_sdf` shader, placed together with SREP 9's text labels. Every pixel is defined:
 densities are **premultiplied** ramp colours, sprites are sampled **bilinear**ly, polygons fill under the
 **non-zero** rule, SDF edges are the shader's **smoothstep**. Validation rules DL1–DL7, warning W-DL1 and the
-schema gate V18. Reference `conformance/tools/data_layers_reference.py` (**numpy**), tests
+schema gate V17. Reference `conformance/tools/data_layers_reference.py` (**numpy**), tests
 `tests/test_data_layers.py`. Engine card [SR-113](https://faz-ai.atlassian.net/browse/SR-113).
 
 ## Motivation
@@ -108,7 +108,7 @@ Schema diff:
 </sch:rule>
 <!-- the version gate of SREP 9 (V5) is extended for 1.8 -->
 <sch:rule context="/scene[not(@version='1.8')]">
-  <sch:assert id="V18" test="not(.//basemap/sprite|.//basemap/@icons)">
+  <sch:assert id="V17" test="not(.//basemap/sprite|.//basemap/@icons)">
     sprite children and basemap/@icons need version="1.8".</sch:assert>
 </sch:rule>
 ```
@@ -134,7 +134,7 @@ Schema diff:
 - **DL7** (error): two `sprite` children of one basemap with the same `name`.
 - **W-DL1** (warning): an `icon-image` that names no entry of the basemap's sprites, or a prefixed name whose
   sprite id has no `sprite` child; the symbol has no icon and is reported once per layer.
-- **V18** (error): `sprite` children or `@icons` in a document before version 1.8, or an attribute `spriteType`
+- **V17** (error): `sprite` children or `@icons` in a document before version 1.8, or an attribute `spriteType`
   does not declare.
 
 Rules RL1–RL6 of the relief draft and SREP 9's rules are unchanged. The Schematron asserts above are the diff
@@ -275,7 +275,7 @@ changes its picture once it declares version 1.8. `heatmap-density` evaluates to
 
 | Engine | Status | Work | Card |
 |---|---|---|---|
-| Rust (`rs-scene-render`), reference | not started | heatmap density and ramp, roof shading and the SREP 10 prism source, sprite assets and the sprite index, icon shaping, the pair placement with overlap modes, SDF icons; DL1–DL7, W-DL1, V18; the draft's numeric table and kit cases | [SR-113](https://faz-ai.atlassian.net/browse/SR-113) |
+| Rust (`rs-scene-render`), reference | not started | heatmap density and ramp, roof shading and the SREP 10 prism source, sprite assets and the sprite index, icon shaping, the pair placement with overlap modes, SDF icons; DL1–DL7, W-DL1, V17; the draft's numeric table and kit cases | [SR-113](https://faz-ai.atlassian.net/browse/SR-113) |
 
 ## Conformance
 
@@ -335,7 +335,7 @@ placements and codes exactly.
 | the example's warnings | `RUN['warnings']` | `['W-DL1']` |
 | the example's digests | `RUN['digests']` | `['3df3492b56b8', 'f35876a0f2cd', 'e9f3942b0591', 'f9ad00499edc']` |
 | the example's prisms | `len(building_prisms(EXAMPLE))` | `3` |
-| the bad document's codes | `[c for c, _ in validate_document(bad_document())]` | `['DL1', 'DL2', 'DL3', 'DL4', 'DL5', 'DL6', 'DL7', 'V18']` |
+| the bad document's codes | `[c for c, _ in validate_document(bad_document())]` | `['DL1', 'DL2', 'DL3', 'DL4', 'DL5', 'DL6', 'DL7', 'V17']` |
 
 Properties the table pins: the kernel's peak is `G` and its value at one radius `G · e^−4.5`; the default quad
 half-side is 38.4575 px at radius 30; densities add; the default ramp at 0.4 is half-way from cyan to lime and
@@ -368,7 +368,7 @@ To be measured on the engine (SREP 14's seek check applies to each):
    text; the placed set equals the reference's.
 7. `icons-line`: icons along a line with `icon-rotation-alignment` `map` and `icon-keep-upright`; anchors and
    angles within 1e-6.
-8. `data-layers-errors`: the bad document; the engine reports DL1–DL7 and V18 and renders the valid remainder
+8. `data-layers-errors`: the bad document; the engine reports DL1–DL7 and V17 and renders the valid remainder
    with W-DL1.
 
 ## Open issues

@@ -34,7 +34,7 @@ style itself decides which features have happened. Every state is named (**pendi
 is defined (strokes with **round** caps and joins, **premultiplied**, the alpha of the nearest point of the
 path), and a frame depends on the document and the composition time alone, so **any frame alone** equals the
 played frame (SREP 14's **seek check**). Validation rules TS1–TS4, warnings W-TS1 and W-TS2, the schema gate
-V19. Reference `conformance/tools/time_series_reference.py` (**numpy**), tests `tests/test_time_series.py`.
+V17. Reference `conformance/tools/time_series_reference.py` (**numpy**), tests `tests/test_time_series.py`.
 Engine card [SR-114](https://faz-ai.atlassian.net/browse/SR-114).
 
 ## Motivation
@@ -115,7 +115,7 @@ Schematron diff (`scene-render.sch`):
 </sch:rule>
 <!-- the version gate of SREP 9 (V5) is extended for 1.8 -->
 <sch:rule context="/scene[not(@version='1.8')]">
-  <sch:assert id="V19" test="not(.//geoLayer/@timeBy|.//route/@timeBy|.//basemap/@time|.//basemap/@timeOrigin)">
+  <sch:assert id="V17" test="not(.//geoLayer/@timeBy|.//route/@timeBy|.//basemap/@time|.//basemap/@timeOrigin)">
     timed layers need version="1.8".</sch:assert>
 </sch:rule>
 ```
@@ -133,7 +133,7 @@ Schematron diff (`scene-render.sch`):
   times decrease, or a feature that is not a line; the feature is skipped and reported once per route.
 - **W-TS2** (warning): a feature whose `timeBy` or `timeEndBy` property is missing or not a time; the feature
   is hidden (state `unreadable`) and reported once per layer.
-- **V19** (error): any of these attributes in a document before version 1.8, or an attribute the schema does
+- **V17** (error): any of these attributes in a document before version 1.8, or an attribute the schema does
   not declare on a timed element.
 
 ### Semantics
@@ -217,13 +217,13 @@ Schematron diff (`scene-render.sch`):
 
 Additive. Documents without the new attributes are unchanged. SREP 9's rule that `global-state` evaluates to
 null still holds on a basemap without `timeOrigin` and `time`. A `route` with `timeBy` is drawn by its
-timestamps and ignores `progress`; without it `progress` applies as before. Schema version 1.8 (V19).
+timestamps and ignores `progress`; without it `progress` applies as before. Schema version 1.8 (V17).
 
 ## Engine impact
 
 | Engine | Status | Work | Card |
 |---|---|---|---|
-| Rust (`rs-scene-render`), reference | not started | time parsing, data time, feature states and fade on `geoLayer`, trips on `route` (window, interpolated head, per-point alpha stroke, head dot), `global-state` time in style filters; TS1–TS4, W-TS1, W-TS2, V19; the draft's numeric table and kit cases | [SR-114](https://faz-ai.atlassian.net/browse/SR-114) |
+| Rust (`rs-scene-render`), reference | not started | time parsing, data time, feature states and fade on `geoLayer`, trips on `route` (window, interpolated head, per-point alpha stroke, head dot), `global-state` time in style filters; TS1–TS4, W-TS1, W-TS2, V17; the draft's numeric table and kit cases | [SR-114](https://faz-ai.atlassian.net/browse/SR-114) |
 
 ## Conformance
 
@@ -265,7 +265,7 @@ checks every row against it (relative tolerance 5e-4). `PATH` is the polyline (0
 | the first trip's head pixel | `tuple(round(c, 3) for c in RUN['trips']['heads'][0])` | `(77.724, 60.0)` |
 | the example's warnings | `RUN['warnings']` | `['W-TS1', 'W-TS2']` |
 | the example's digests | `RUN['digests']` | `['641da128a8bc', '031f84f9cffc', 'a7a297cca286', 'd55beb01b780']` |
-| the bad document's codes | `[c for c, _ in validate_document(bad_document())]` | `['TS1', 'TS2', 'TS3', 'TS4', 'V19']` |
+| the bad document's codes | `[c for c, _ in validate_document(bad_document())]` | `['TS1', 'TS2', 'TS3', 'TS4', 'V17']` |
 | the seek check | `run(EXAMPLE, 6.0) == RUN` | `True` |
 
 Properties that hold for every input: a frame's result is a pure function of the document and the composition
@@ -284,7 +284,7 @@ To be measured on the engine (SREP 14's seek check applies to each):
 4. `basemap-filter-time`: a style filter on `["global-state", "time"]`; kept features 1, 3 and 5 at 0, 6 and
    12 seconds.
 5. `time-series-seek`: frames 0, 3, 6, 9 and 12 rendered alone equal the played frames pixel for pixel.
-6. `time-series-errors`: the bad document; the engine reports TS1–TS4 and V19 and renders the valid remainder
+6. `time-series-errors`: the bad document; the engine reports TS1–TS4 and V17 and renders the valid remainder
    with W-TS1 and W-TS2.
 
 ## Open issues

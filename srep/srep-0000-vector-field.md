@@ -34,7 +34,7 @@ probability `dropRate + speed · dropBump` to respawn at a position drawn from t
 **bilinear**ly in longitude and latitude and linearly in time at the data time T = **`timeOrigin`** +
 **`time`** (the time-series draft's data time). Frame k is the replay of frames 0 to k from the same seeds, so a
 frame rendered alone equals the played frame (SREP 14's **seek check**). Validation rules VF1–VF4, warnings
-W-VF1 and W-VF2, the schema gate V20. Reference `conformance/tools/vector_field_reference.py` (**numpy**; it
+W-VF1 and W-VF2, the schema gate V17. Reference `conformance/tools/vector_field_reference.py` (**numpy**; it
 also carries the GRIB2 and NetCDF writers and readers the tests use), tests `tests/test_vector_field.py`.
 Engine card [SR-115](https://faz-ai.atlassian.net/browse/SR-115).
 
@@ -139,7 +139,7 @@ Schematron diff (`scene-render.sch`):
 </sch:rule>
 <!-- the version gate of SREP 9 (V5) is extended for 1.8 -->
 <sch:rule context="/scene[not(@version='1.8')]">
-  <sch:assert id="V20" test="not(assets/uvGrid | .//flow)">vector-field layers need version="1.8".</sch:assert>
+  <sch:assert id="V17" test="not(assets/uvGrid | .//flow)">vector-field layers need version="1.8".</sch:assert>
 </sch:rule>
 ```
 
@@ -157,7 +157,7 @@ Schematron diff (`scene-render.sch`):
   nearest step and the warning is reported once per flow.
 - **W-VF2** (warning): at resolve, a valid time holding only one of the two components; the step is dropped and
   reported once per asset. When no step is complete the resolve step fails.
-- **V20** (error): a `uvGrid` or `flow` in a document before version 1.8, or an attribute the schema does not
+- **V17** (error): a `uvGrid` or `flow` in a document before version 1.8, or an attribute the schema does not
   declare on them.
 
 ### Semantics
@@ -266,14 +266,14 @@ Schematron diff (`scene-render.sch`):
 
 ## Backwards compatibility
 
-Additive. No existing element changes. Schema version 1.8 (V20). The random-streams draft's purposes 1 to 3
+Additive. No existing element changes. Schema version 1.8 (V17). The random-streams draft's purposes 1 to 3
 are reserved for `flow` under the `"stream"` purpose of its element seed.
 
 ## Engine impact
 
 | Engine | Status | Work | Card |
 |---|---|---|---|
-| Rust (`rs-scene-render`), reference | not started | the `uvGrid` asset and the resolve step (GRIB2 template 3.0/4.0/5.0 and bitmap reader, classic NetCDF reader and writer, pairing by valid time, the flow cache and its SHA-256), the `flow` child (spawn and drop from the D24 streams, fade, ramp paint, midpoint advection, replay), VF1–VF4, V20, W-VF1 and W-VF2, the numeric table and the kit cases as tests | [SR-115](https://faz-ai.atlassian.net/browse/SR-115) |
+| Rust (`rs-scene-render`), reference | not started | the `uvGrid` asset and the resolve step (GRIB2 template 3.0/4.0/5.0 and bitmap reader, classic NetCDF reader and writer, pairing by valid time, the flow cache and its SHA-256), the `flow` child (spawn and drop from the D24 streams, fade, ramp paint, midpoint advection, replay), VF1–VF4, V17, W-VF1 and W-VF2, the numeric table and the kit cases as tests | [SR-115](https://faz-ai.atlassian.net/browse/SR-115) |
 
 ## Conformance
 
@@ -323,7 +323,7 @@ keys to 7200 at 1.5 s), `FLOW` its flow child and `RUN` the example at frame 12.
 | the example's digest | `RUN['digest']` | `'5ac9db93e777'` |
 | the seek check | `trace(EXAMPLE, 12)[5] == run(EXAMPLE, 5)['digest']` | `True` |
 | the warning past the cache | `run(EXAMPLE, 36)['warnings']` | `['W-VF1']` |
-| the bad document's codes | `[c for c, _ in validate_document(bad_document())]` | `['VF1', 'VF2', 'VF3', 'VF4', 'V20']` |
+| the bad document's codes | `[c for c, _ in validate_document(bad_document())]` | `['VF1', 'VF2', 'VF3', 'VF4', 'V17']` |
 
 Properties that hold for every input: a frame's result is a pure function of the document and the frame
 index; the GRIB2 writer's output decodes to the input within half a packing step and the NetCDF writer's output
@@ -344,7 +344,7 @@ To be measured on the engine (SREP 14's seek check applies to each):
    W-VF1.
 5. `flow-circle`: a solid-body cache (open issue 3) with one particle; after 100 frames its ground distance
    from the centre is within 1e-5 of the start.
-6. `vector-field-errors`: the bad document; the engine reports VF1–VF4 and V20 and renders nothing for the
+6. `vector-field-errors`: the bad document; the engine reports VF1–VF4 and V17 and renders nothing for the
    invalid flow.
 
 ## Open issues

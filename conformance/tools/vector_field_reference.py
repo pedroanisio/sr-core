@@ -59,7 +59,7 @@ MAX_PARTICLES = 1_000_000
 KNOWN_FLOW = {"kind", "id", "grid", *FLOW_DEFAULTS}
 KNOWN_UVGRID = {"kind", "id", "src", "cache", "cacheSha256", "credit", "data", *UVGRID_DEFAULTS}
 FORMATS = ("auto", "grib2", "netcdf")
-CODE_ORDER = ("VF1", "VF2", "VF3", "VF4", "V20")
+CODE_ORDER = ("VF1", "VF2", "VF3", "VF4", "V17")
 
 
 class VectorFieldError(ValueError):
@@ -1285,7 +1285,7 @@ def _is_number(v):
 
 
 def validate_document(doc):
-    """The draft's validation: (code, message) pairs ordered VF1, VF2, VF3, VF4, V20."""
+    """The draft's validation: (code, message) pairs ordered VF1, VF2, VF3, VF4, V17."""
     errors = []
     assets = doc.get("assets", {})
     for aid, asset in assets.items():
@@ -1293,7 +1293,7 @@ def validate_document(doc):
             continue
         for key in asset:
             if key not in KNOWN_UVGRID:
-                errors.append(("V20", f"uvGrid {aid}: unknown attribute {key!r}"))
+                errors.append(("V17", f"uvGrid {aid}: unknown attribute {key!r}"))
         fmt = asset.get("format", UVGRID_DEFAULTS["format"])
         if fmt not in FORMATS:
             errors.append(("VF1", f"uvGrid {aid}: format is auto, grib2 or netcdf, not {fmt!r}"))
@@ -1331,7 +1331,7 @@ def validate_document(doc):
         cid = child.get("id", "?")
         for key in child:
             if key not in KNOWN_FLOW:
-                errors.append(("V20", f"flow {cid}: unknown attribute {key!r}"))
+                errors.append(("V17", f"flow {cid}: unknown attribute {key!r}"))
         grid = child.get("grid")
         if grid not in assets or assets[grid].get("kind") != "uvGrid":
             errors.append(("VF3", f"flow {cid}: grid must name a uvGrid asset, not {grid!r}"))
@@ -1441,7 +1441,7 @@ TABLE = (
     ("the example's digest", "RUN['digest']", "'5ac9db93e777'"),
     ("the seek check", "trace(EXAMPLE, 12)[5] == run(EXAMPLE, 5)['digest']", "True"),
     ("the warning past the cache", "run(EXAMPLE, 36)['warnings']", "['W-VF1']"),
-    ("the bad document's codes", "[c for c, _ in validate_document(bad_document())]", "['VF1', 'VF2', 'VF3', 'VF4', 'V20']"),
+    ("the bad document's codes", "[c for c, _ in validate_document(bad_document())]", "['VF1', 'VF2', 'VF3', 'VF4', 'V17']"),
 )
 
 _SCOPE = {}

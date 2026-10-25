@@ -438,7 +438,7 @@ def test_frame_zero_and_the_data_time():
 def test_the_example_document_is_valid_and_the_bad_one_lists_every_code():
     assert vf.validate_document(vf.example_document()) == []
     codes = [c for c, _ in vf.validate_document(vf.bad_document())]
-    assert codes == ["VF1", "VF2", "VF3", "VF4", "V20"]
+    assert codes == ["VF1", "VF2", "VF3", "VF4", "V17"]
 
 
 def test_validation_one_at_a_time():
@@ -452,7 +452,7 @@ def test_validation_one_at_a_time():
     assert only(colors=[(0.0, "#fff"), (0.0, "#000")]) == ["VF2"]
     assert only(grid="nowhere") == ["VF3"]
     assert only(timeOrigin="noon") == ["VF4"]
-    assert only(glow=1) == ["V20"]
+    assert only(glow=1) == ["V17"]
     doc = vf.example_document()
     doc["assets"]["wind"]["u"] = "TMP:X"
     assert [c for c, _ in vf.validate_document(doc)] == ["VF1"]
@@ -503,7 +503,7 @@ def test_the_draft_names_the_engine_card_and_the_elements(draft):
                  "`speedup`", "`fade`", "`dropRate`", "`dropBump`", "`colors`", "`seed`", "`strokeWidth`",
                  "`opacity`", "`timeOrigin`", "`time`", "stream", "purpose", "midpoint", "solid-body",
                  "analytic circle", "bilinear", "cos", "floor(255", "seek check", "VF1", "VF2", "VF3", "VF4",
-                 "W-VF1", "W-VF2", "V20", "vector_field_reference.py", "numpy", "public domain", "CDF",
+                 "W-VF1", "W-VF2", "V17", "vector_field_reference.py", "numpy", "public domain", "CDF",
                  "64-bit offset", "`_FillValue`", "`scale_factor`", "CF-1.8", "random-streams"):
         assert word in draft, word
 

@@ -304,7 +304,7 @@ def test_any_frame_alone_equals_the_played_frame():
 def test_the_example_document_is_valid_and_the_bad_one_lists_every_code():
     assert ts.validate_document(ts.example_document()) == []
     codes = [c for c, _ in ts.validate_document(ts.bad_document())]
-    assert codes == ["TS1", "TS2", "TS3", "TS4", "V19"]
+    assert codes == ["TS1", "TS2", "TS3", "TS4", "V17"]
 
 
 def test_validation_one_at_a_time():
@@ -326,7 +326,7 @@ def test_validation_one_at_a_time():
     del doc["map"]["children"][2]["geo"]
     assert [c for c, _ in ts.validate_document(doc)] == ["TS3"]
     assert only(1, timeEndBy="time") == ["TS4"]
-    assert only(2, timeScale=2) == ["V19"]
+    assert only(2, timeScale=2) == ["V17"]
     assert only(0, time={"keys": [[0.0, 0.0], [12.0, 480.0]]}) == []
 
 
@@ -369,7 +369,7 @@ def test_the_draft_names_the_engine_card_and_the_elements(draft):
                  "`headFill`", "`stroke`", "`strokeWidth`", "`opacity`", "global-state", "ISO 8601", "1970",
                  "deck.gl", "TripsLayer", "MIT", "interpolated", "trail", "linear", "non-decreasing", "round",
                  "premultiplied", "seek check", "any frame alone", "TS1", "TS2", "TS3", "TS4", "W-TS1", "W-TS2",
-                 "V19", "time_series_reference.py", "numpy", "6378137", "pending", "running", "complete", "gone",
+                 "V17", "time_series_reference.py", "numpy", "6378137", "pending", "running", "complete", "gone",
                  "expired", "unreadable", "kepler.gl", "filter"):
         assert word in draft, word
 
