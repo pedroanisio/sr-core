@@ -21,6 +21,16 @@ version:
 
 ### Added
 
+- Draft SREP "Add snow and ice to the terrain grid" (`srep/srep-0000-snow.md`, T3 of SREP 12): one `snowpack`
+  child of the terrain-grid draft's `terrain` acting on a snow `layer`, the `water` layer and the `ice` layer:
+  `snowfall` varied by `snowfallVariation` through the random-streams draft at pack(i, j, 0) with the purpose
+  2³¹ + 2¹⁶, degree-day melt (`meltRate`, `temperature` or the `temperature` layer, `density` into `water`),
+  drift by the wind-field draft's `wind` (the cubic saltation law with `driftRate` and `driftThreshold`, the
+  exposure of Fearing 2000 with `exposureGain`, snow leaving the grid reported), avalanches by the erosion draft's
+  thermal step at `repose` with `avalancheRate`, and glaciers by the shallow-ice approximation (`iceFlow`,
+  `iceTimeScale`, adaptive explicit substeps bounded at 1000 per step, volume conserved, ice non-negative);
+  `step`, `maxSteps`; rules SN1–SN5 and V17 inside the draft, the schema files unchanged. Reference
+  `conformance/tools/snow_reference.py` (31-row numeric table), `tests/test_snow.py`. Engine card SR-106.
 - Draft SREP "Add shallow-water flow to the terrain grid" (`srep/srep-0000-surface-water.md`, T2 of SREP 12):
   one `shallowWater` child of the terrain-grid draft's `terrain` integrating the shallow-water equations on the
   terrain's grid (the bed from the solid layers, `water` the depth, `flow` the discharge) with the central-upwind
