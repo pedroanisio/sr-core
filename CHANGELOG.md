@@ -21,6 +21,17 @@ version:
 
 ### Added
 
+- Draft SREP "Add cloud layers and the night sky" (`srep/srep-0000-clouds.md`, A3 of SREP 12): `cloudLayer`
+  children of a dome light with `sky="physical"`, spherical shells between `base` and `base` + `thickness`
+  whose shape is the random-streams value noise dilated by Worley billows, a height gradient blended from the
+  stratus, stratocumulus and cumulus presets by `type`, a coverage threshold calibrated so that the covered
+  fraction equals `coverage` (or the `weather` map's red channel, with precipitation in green and type in blue),
+  a Worley `detail` erosion and a drift by an F4 `wind`; lighting by Beer's law with the powder term, the media
+  draft's `fog` phase for `dropletDiameter` and three multiple-scattering octaves; and the night sky's moon
+  (Jensen's Lommel-Seeliger irradiance with `earthshine`, the moon's tint and the Hapke-Lommel-Seeliger disc),
+  `airglow` with the van Rhijn factor and `starlight` plus the galactic background, in the sun's units. Rules
+  CN1–CN6 and V17; reference `conformance/tools/clouds_reference.py` with a 37-row numeric table;
+  `tests/test_clouds.py`. The schema files are unchanged. Engine card SR-102.
 - Draft SREP "Define the random streams derived from the D24 hash" (`srep/srep-0000-random-streams.md`, F1 of
   SREP 12), recorded here with its first amendment: the unit and normal draws, permutations, the packing of 2D
   and 3D lattice indices, value and gradient noise, the octave sum, 3D Perlin noise, the element seed as the
