@@ -331,6 +331,32 @@ def test_the_draft_exists_with_its_sections_and_a_table():
     assert "SR-67" in text
 
 
+def test_the_draft_closes_the_schema_gaps_of_the_engine_vendoring():
+    # SRC-26, the eight gaps the engine found vendoring the draft (SR-67)
+    text = open(DRAFT, encoding="utf-8").read()
+    flat = re.sub(r"\n +", " ", text)   # the draft wraps at 110 columns
+    syntax = flat.split("### Syntax", 1)[1].split("### Semantics", 1)[0]
+    assert "`FLD3` and `FLD4` in one rule of context `field/portrait | field/contours | field/lines | field/streamlines`" in syntax
+    assert "first matching rule only" in syntax
+    assert "`V17`, the shared 1.8 gate of SREP 12" in syntax and "gains the clause `not(.//field)`" in syntax
+    assert "| `stroke`, `strokeWidth` | `paintType`, `positiveDecimal` | `#FFFFFFFF`, 2 |" in syntax
+    for child in ("arrows", "streamlines", "lines", "contours"):
+        row = [line for line in text.splitlines() if line.startswith(f"| `{child}` |")]
+        assert len(row) == 1 and "`stroke`, `strokeWidth` (the field's when absent)" in row[0], child
+    assert "`cols`, `rows` (`xs:positiveInteger`, at most 1000, default 10)" in syntax
+    assert "`perCharge` (`xs:positiveInteger`, at most 1000, default 8)" in syntax
+    assert syntax.count("at most 4096") == 2   # lic and contours resolution
+    assert "`scalar` takes `@u` without `@v`, or `@grid`; `complex` takes `@function` or `@w`" in syntax
+    assert "`@coefficients` appears with `@function='mobius'` only and then holds eight numbers" in syntax
+    assert "| `coefficients` | `numberListType` (xsd:94) |" in syntax
+    assert "`base` (`xs:double` with `minExclusive` 1, default 2)" in syntax
+    assert "`FLD5` on `field`: `ancestor::axes or (@width and @height)`" in syntax
+    semantics = flat.split("### Semantics", 1)[1].split("## Rationale", 1)[0]
+    assert "in the presentation's stroke" in semantics and "in the stroke's paint" not in semantics
+    assert "`cols`, `rows` and `perCharge` at most 1000, `resolution` at most 4096" in semantics
+    assert "2026-10-25: eight schema gaps the engine found vendoring the draft (SR-67)" in flat
+
+
 def _rows_close(a, b):
     if isinstance(a, tuple) and isinstance(b, tuple):
         return len(a) == len(b) and all(_rows_close(x, y) for x, y in zip(a, b))

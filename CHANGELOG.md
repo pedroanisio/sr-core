@@ -23,6 +23,7 @@ version:
 
 ### Fixed
 
+- Draft SREP "Add fields" (`srep/srep-0000-fields.md`): the eight schema gaps the engine found vendoring the draft (SR-67). FLD3 and FLD4 share one Schematron rule (a pattern tests a node by its first matching rule only, so the split rules lost FLD4 on `lines`); V17 is stated as a clause of the shared 1.8 gate; `field` and its stroked presentations gain `stroke` and `strokeWidth` (white, 2 px by default, inherited by the presentations), which the rules used without declaring; `cols`, `rows` and `perCharge` are at most 1000 and `resolution` at most 4096, so glyph, line and sample counts are bounded by the document (SREP 14); FLD1 ties each source to its kind (a vector field needs `v`, a complex one `function` or `w`) and `coefficients` to `function="mobius"` with eight numbers; `portrait/@base` is above 1 (log_base is undefined at 1 and flips below); FLD5 requires `width` and `height` outside an `axes`. Test `test_the_draft_closes_the_schema_gaps_of_the_engine_vendoring`.
 - Draft SREP "Add reactive values" (`srep/srep-0000-reactive-values.md`): rule 1 states how a fold of an included document steps, the engine's question from SR-66. An `include` merges values as it merges other assets and carries no clock, so n(t) counts the host's composition time for an included fold as for the host's own, and a looped, reversed or remapped `instance` or layer that reads the value restarts no fold; a restart is written in the update. Test `test_the_draft_rules_that_included_values_fold_in_composition_time`.
 
 ## 1.9.0 — 2026-10-25

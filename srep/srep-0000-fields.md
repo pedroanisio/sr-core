@@ -64,11 +64,13 @@ the schema editor; the schema files are not changed by this draft.
 | `kind` | `vector` \| `scalar` \| `complex` | `vector` | what the field is (rule 1) |
 | `u`, `v` | `expressionString` (xsd:303) | — | the components as expressions of `x` and `y` (vector) or the value (`u` alone, scalar) |
 | `function` | the `complex` enumeration of the space-transforms draft | — | a named complex function (complex) |
+| `coefficients` | `numberListType` (xsd:94) | — | with `function="mobius"` only: a, b, c, d of (a z + b)/(c z + d), each as its real and imaginary parts (eight numbers), as on the `complex` modifier of the space-transforms draft |
 | `w` | `expressionString` | — | a complex function as two expressions `re` and `im` of `x` and `y`, written `re; im` |
 | `grid` | `xs:IDREF` | — | a `data` source (xsd:6784) of rows `x y u v` (or `x y s`) on a regular lattice (rule 2) |
 | `forceField` | `xs:IDREF` | — | a `forceField` of `physics`, sampled as rule 2 states |
 | `xMin`, `xMax`, `yMin`, `yMax` | `xs:double` | the enclosing `axes`, else −1, 1, −1, 1 | the data ranges of the box (FLD2) |
-| `x`, `y`, `width`, `height` | as `axes` | — | the box in the parent's pixels when there is no enclosing `axes` |
+| `x`, `y`, `width`, `height` | as `axes` | — | the box in the parent's pixels when there is no enclosing `axes` (`width` and `height` required then, FLD5) |
+| `stroke`, `strokeWidth` | `paintType`, `positiveDecimal` | `#FFFFFFFF`, 2 | the paint and width (pixels) of every stroked presentation that gives none of its own |
 
 Exactly one source among `u`/`v`, `function`, `w`, `grid`, `forceField` and the source children is given
 (FLD1). Its content is `(charge | current | dipole)*` then `(arrows | streamlines | lic | portrait | lines |
@@ -79,12 +81,12 @@ contours)*`:
 | `charge` | `x`, `y`, `q` (`xs:double`) | a point charge at (x, y) of charge q (rule 2) |
 | `current` | `x`, `y`, `i` | a straight current out of the plane (rule 2) |
 | `dipole` | `x`, `y`, `mx`, `my` | a point dipole of moment (mx, my) (rule 2) |
-| `arrows` | `cols`, `rows` (`xs:positiveInteger`, default 10), `scale` (`positiveDecimal`, default 1), `maxLength` (`positiveDecimal`, default 40 px), `headLength` (default 0.3), `headWidth` (default 0.5), `strokeStyle` | glyphs on a grid (rule 5) |
-| `streamlines` | `separation` (`positiveDecimal`, pixels, default 20), `test` (default `separation` / 2), `step` (default `separation` / 4), `maxSteps` (default 10000, at most 1,000,000), `maxLines` (default 10000, at most 1,000,000), `seedX`, `seedY` (data; default the box centre), `strokeStyle`, `strokeMarkers` | evenly spaced streamlines (rule 6) |
-| `lic` | `length` (`positiveDecimal`, pixels, default 10), `step` (default 1), `resolution` (`xs:positiveInteger`, default the box's pixel size), `seed` (`xs:unsignedLong`), `opacity` | line integral convolution (rule 7) |
-| `portrait` | `modulus` (`xs:boolean`, default true), `base` (`positiveDecimal`, default 2), `opacity` | the phase portrait of a complex field (rule 8) |
-| `lines` | `perCharge` (`xs:positiveInteger`, default 8), `radius` (data, default 0.05), `step`, `maxSteps` (as `streamlines`), `strokeStyle`, `strokeMarkers` | charge field lines (rule 10) |
-| `contours` | `levels` (`numberListType`, xsd:94), `resolution` (default 64), `strokeStyle` | the level curves of a scalar field by the implicit-plot rule of the plots draft (rule 8 there) |
+| `arrows` | `cols`, `rows` (`xs:positiveInteger`, at most 1000, default 10), `scale` (`positiveDecimal`, default 1), `maxLength` (`positiveDecimal`, default 40 px), `headLength` (default 0.3), `headWidth` (default 0.5), `stroke`, `strokeWidth` (the field's when absent), `strokeStyle` | glyphs on a grid (rule 5) |
+| `streamlines` | `separation` (`positiveDecimal`, pixels, default 20), `test` (default `separation` / 2), `step` (default `separation` / 4), `maxSteps` (default 10000, at most 1,000,000), `maxLines` (default 10000, at most 1,000,000), `seedX`, `seedY` (data; default the box centre), `stroke`, `strokeWidth` (the field's when absent), `strokeStyle`, `strokeMarkers` | evenly spaced streamlines (rule 6) |
+| `lic` | `length` (`positiveDecimal`, pixels, default 10), `step` (default 1), `resolution` (`xs:positiveInteger`, at most 4096, default the box's pixel size capped the same), `seed` (`xs:unsignedLong`), `opacity` | line integral convolution (rule 7) |
+| `portrait` | `modulus` (`xs:boolean`, default true), `base` (`xs:double` with `minExclusive` 1, default 2), `opacity` | the phase portrait of a complex field (rule 8) |
+| `lines` | `perCharge` (`xs:positiveInteger`, at most 1000, default 8), `radius` (data, default 0.05), `step`, `maxSteps` (as `streamlines`), `stroke`, `strokeWidth` (the field's when absent), `strokeStyle`, `strokeMarkers` | charge field lines (rule 10) |
+| `contours` | `levels` (`numberListType`, xsd:94), `resolution` (`xs:positiveInteger`, at most 4096, default 64), `stroke`, `strokeWidth` (the field's when absent), `strokeStyle` | the level curves of a scalar field by the implicit-plot rule of the plots draft (rule 8 there) |
 
 **2. Expression names.** In `u`, `v` and `w`, `x` and `y` are the data coordinates of the sample point, `time`
 is composition time, and every D25 built-in is available; `prop` reads other values, so a field animates by
@@ -93,23 +95,35 @@ anything the document animates.
 **3. Schematron.** A pattern `p-srep-fields` after `p-srep75` (sch:851):
 
 - `FLD1` on `field`: exactly one of `@u`, `@function`, `@w`, `@grid`, `@forceField` and `(charge | current |
-  dipole)` is present; `@v` only with `@u` and `@kind='vector'`.
+  dipole)` is present, and the source fits the kind: `vector` (the default) takes `@u` with `@v`, `@grid`,
+  `@forceField` or the source children; `scalar` takes `@u` without `@v`, or `@grid`; `complex` takes
+  `@function` or `@w`; `@coefficients` appears with `@function='mobius'` only and then holds eight numbers,
+  as SPT1 of the space-transforms draft states for the `complex` modifier.
 - `FLD2` on `field`: `@xMin < @xMax and @yMin < @yMax` when given.
-- `FLD3` on `field/portrait`: the parent's `@kind='complex'`; on `field/contours`: `@kind='scalar'`; on
-  `field/lines`: the parent has a `charge` child.
-- `FLD4` on `field/streamlines` and `field/lines`: `@test <= @separation`, `@maxSteps <= 1000000`,
-  `@maxLines <= 1000000`.
-- `V17` on `/scene[@version` 1.0 to 1.7`]`: `not(.//field)`: "field nodes need version 1.8".
+- `FLD3` and `FLD4` in one rule of context `field/portrait | field/contours | field/lines | field/streamlines`
+  (a Schematron pattern tests a node by its first matching rule only, so two rules that both take
+  `field/lines` would silence the second on it). `FLD3`: a `portrait` needs the parent's `@kind='complex'`,
+  `contours` `@kind='scalar'`, `lines` a `charge` child of the parent. `FLD4`: `@test <= @separation`,
+  `@maxSteps <= 1000000`, `@maxLines <= 1000000`.
+- `FLD5` on `field`: `ancestor::axes or (@width and @height)`: a field outside an `axes` states its box.
+- `V17`, the shared 1.8 gate of SREP 12 on `/scene[@version` 1.0 to 1.7`]` (one pattern after `p-srep75`,
+  sch:851, one assert), gains the clause `not(.//field)`: "field nodes need version 1.8".
 
 ### Semantics
 
 Let the **data frame** be the `axes` mapping of the plots draft (rule 1 there): data (x, y) with +y up to the
 box's pixels. Every rule below is stated in data units; `separation`, `length`, `maxLength` and `step` are in
 pixels and convert through the box's pixels-per-unit on each axis (the mean of the two when they differ).
+Outside an `axes` the box is `width` × `height` pixels at the node's origin (FLD5). A stroked presentation
+(`arrows`, `streamlines`, `lines`, `contours`) draws in its own `stroke` and `strokeWidth`, else the field's
+(white, 2 px by default).
 
 1. **Kinds.** A `vector` field is F(x, y) = (u, v); a `scalar` field is s(x, y); a `complex` field is
    w(z) = f(x + iy), drawn as the vector (Re w, Im w) by `arrows`, `streamlines` and `lic`, and as a portrait
-   by `portrait`. A `scalar` field draws only `contours` and `lic` of its gradient.
+   by `portrait`. A `scalar` field draws only `contours` and `lic` of its gradient. The source fits the kind
+   (FLD1): a `vector` field comes from `u` and `v`, a `grid` of rows `x y u v`, a `forceField` or the source
+   children; a `scalar` field from `u` alone or a `grid` of rows `x y s`; a `complex` field from `function`
+   (with `coefficients` for `mobius`, as the space-transforms draft states) or `w`.
 2. **Sources** (`grid_sampler`, `complex_sampler`, `charge_field`, `wire_field`, `dipole_field`). A `grid`
    is bilinear between its lattice nodes and (0, 0) outside its lattice box. A `forceField` is the physics
    field in pixel space of `crates/sr-eval/src/sim.rs` (`to_pixels`), divided by `pixelsPerMeter` and with
@@ -127,7 +141,7 @@ pixels and convert through the box's pixels-per-unit on each axis (the mean of t
 5. **Arrows** (`arrow`, `arrow_grid`). At each node of the `cols` × `rows` grid spanning the box (edges
    included, row by row from yMin), the glyph is a shaft from the node of length min(|F| · `scale`,
    `maxLength`) along F and a head (tip, left, right) of length `headLength` × shaft and half-width
-   `headWidth` × that, in the stroke's paint; a zero vector draws nothing.
+   `headWidth` × that, in the presentation's stroke; a zero vector draws nothing.
 6. **Evenly spaced streamlines** (`evenly_spaced_streamlines`, `min_separation`), after Jobard and Lefer
    1997. Let d = `separation`, d_t = `test`, h = `step`. The first streamline starts at the seed. A queue holds
    the accepted streamlines in order; for each, the candidate seeds are the points at distance d on both sides
@@ -160,7 +174,10 @@ pixels and convert through the box's pixels-per-unit on each axis (the mean of t
     constant (θ the angle from the axis); the kit measures its largest relative change.
 11. **Determinism.** Every rule is a pure function of the field, the attributes and the D24 draws; the orders
     of the queue (rule 6), the grid scan and the samples are stated; the bounds are attributes with schema
-    maxima. The seek check of SREP 14 holds because nothing depends on earlier frames.
+    maxima (`cols`, `rows` and `perCharge` at most 1000, `resolution` at most 4096, `maxSteps` and `maxLines`
+    at most 1,000,000), so the glyph, line and sample counts of a frame are bounded by the document alone
+    (SREP 14's deterministic-bound rule). The seek check of SREP 14 holds because nothing depends on earlier
+    frames.
 
 ## Rationale
 
@@ -308,3 +325,7 @@ measurable on an engine before SR-67 lands.
 ## History
 
 - 2026-10-24: draft, with the reference module and tests; engine work filed as SR-67.
+- 2026-10-25: eight schema gaps the engine found vendoring the draft (SR-67): FLD3 and FLD4 share one rule;
+  V17 as a clause of the shared gate; `stroke` and `strokeWidth` on the field and its stroked presentations;
+  maxima on `cols`, `rows`, `perCharge` and `resolution`; FLD1 ties the source to the kind and
+  `coefficients` to `mobius`; `base` above 1; FLD5 for the box outside an `axes`.
