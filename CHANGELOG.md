@@ -380,6 +380,11 @@ version:
 
 ### Fixed
 
+- The media draft's Draine cumulative (`conformance/tools/media_reference.py`, rule 19 of
+  `srep/srep-0000-media.md`) is written in a form that never divides by g: the antiderivative in t lost
+  every digit for |g| below about 1e-4 (F(1) = 5.7 at g = 2e-6), and `anisotropy` admits such a g. The
+  numeric table is unchanged.
+
 - `tools/check_hygiene.py --artifacts` (R5) names the tests that fail from the unpacked sdist, from pytest's short summary (`-rfE`), after the counts line; it quoted the counts line alone, so a failing gate could not be traced to a test. Seen when R5 reported one failure twice under a machine load near ten while the same sdist's suite passed alone twice.
 - Conformance: the six SREP 34 findings cases (`srep-0034-inert-collapse`, `-inert-channel-red`, `-inert-key-param`, `-inert-effect-param`, `-inert-source-opacity-zero`, `-mask-miss`) expected the engine's pre-amendment codes `E19` and `E20`; they now expect `INERT-I9`, `INERT-I10`, `INERT-I12`, `INERT-I13`, `INERT-I11` and `MASK-MISS`, the codes SREP 34's own case table states and the Rust reference reports since 0.5.0. They had failed on every build from 0.7.2 on; they pass on scene-render main 67a661a (0.7.4, llvmpipe).
 - Conformance: `srep-0036-geo-outline-p125` and `srep-0036-geo-outline-p875` are no longer pending. Their boxes are those of a trace with round caps (p125: green cx 190.89, cy 221.46, w 504, h 104; p875: cx 270.65, cy 167.8, w 604, h 208), which the draft SREP "Stroke geoLayer outlines with round caps and joins" (`srep/srep-0000-geo-outline-cap.md`) states from the reference's behaviour, as SREP 0 settles a point the schema is silent on; measured on main 67a661a.

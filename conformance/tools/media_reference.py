@@ -25,8 +25,6 @@ RGB = tuple[float, float, float]
 ATTENUATION_FLOOR = 1e-4
 # Below this |g| the Henyey-Greenstein inversion is the isotropic one (SREP 79 rule 6).
 HG_ISOTROPIC = 1e-3
-# Below this |g| the Draine cumulative uses its g = 0 form; both forms agree to 1e-9 there.
-DRAINE_ISOTROPIC = 1e-6
 # Bisection steps of the Draine inversion: 2 / 2**64 is far below the 1e-12 the SREP asks.
 BISECTION_STEPS = 64
 
@@ -250,20 +248,23 @@ def phase_fog(mu: float, diameter: float) -> float:
 
 def cdf_draine(mu: float, g: float, alpha: float) -> float:
     """The cumulative of the Draine phase function in cos theta, from -1 to mu: the integral over the sphere of
-    the directions with a cosine at most mu. In closed form (the antiderivative in t = 1 + g^2 - 2 g mu)."""
+    the directions with a cosine at most mu. In a closed form that never divides by g, so it holds at g = 0 and
+    next to it (the antiderivative in t = 1 + g^2 - 2 g mu divides by g^2 and loses every digit below |g| ~ 1e-4):
+    with a = 1 + g^2, s1 = 1 + g, s2 = sqrt(a - 2 g mu) and P = s1 s2,
+        I0 = 2 (1 + mu) / (P (s1 + s2)),
+        Q = (mu - 1) (3a + P) (a (mu - 1) + 2 g mu) / (a + P) + mu (3a - P),
+        I2 = 2 (1 + mu) Q / (3 P (s1 + s2) (a + P)),
+        F = K (I0 + alpha I2)."""
     mu, g, alpha = _cosine(mu), _asymmetry(g), _alpha(alpha)
     k = (1.0 - g * g) / (2.0 * (1.0 + alpha * (1.0 + 2.0 * g * g) / 3.0))
-    if abs(g) < DRAINE_ISOTROPIC:
-        return k * ((mu + 1.0) + alpha * (mu ** 3 + 1.0) / 3.0)
     a = 1.0 + g * g
-
-    def antiderivative(t: float) -> float:
-        root = math.sqrt(t)
-        return -2.0 / root + alpha / (4.0 * g * g) * (-2.0 * a * a / root - 4.0 * a * root + (2.0 / 3.0) * t * root)
-
-    t_low = a + 2.0 * g          # mu = -1
-    t_mu = a - 2.0 * g * mu
-    return k * (antiderivative(t_mu) - antiderivative(t_low)) / (-2.0 * g)
+    s1 = 1.0 + g
+    s2 = math.sqrt(max(0.0, a - 2.0 * g * mu))
+    p = s1 * s2
+    i0 = 2.0 * (1.0 + mu) / (p * (s1 + s2))
+    q = (mu - 1.0) * (3.0 * a + p) * (a * (mu - 1.0) + 2.0 * g * mu) / (a + p) + mu * (3.0 * a - p)
+    i2 = 2.0 * (1.0 + mu) * q / (3.0 * p * (s1 + s2) * (a + p))
+    return k * (i0 + alpha * i2)
 
 
 def sample_hg(xi: float, g: float) -> float:

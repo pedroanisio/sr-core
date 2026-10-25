@@ -247,6 +247,22 @@ def test_draine_sampling_inverts_its_cdf(g, alpha, xi):
     assert mr.cdf_draine(mu, g, alpha) == pytest.approx(xi, abs=1e-9)
 
 
+@pytest.mark.parametrize("g", [0.0, 1.1e-6, 2e-6, 1e-5, -1e-5, 1e-4, 1e-3, -1e-3])
+@pytest.mark.parametrize("alpha", [0.0, 1.0, 30.0])
+def test_draine_cdf_holds_next_to_g_zero(g, alpha):
+    """The antiderivative in t = 1 + g^2 - 2 g mu divides by g^2 and loses every digit below |g| ~ 1e-4 (at
+    g = 2e-6 it gave F(1) = 5.7 and F(0.3) = -0.0); the cumulative must agree with the g = 0 closed form there to
+    the order of g, and reach exactly 0 and 1 at the ends."""
+    k = (1 - g * g) / (2 * (1 + alpha * (1 + 2 * g * g) / 3))
+    assert mr.cdf_draine(-1.0, g, alpha) == 0.0
+    assert mr.cdf_draine(1.0, g, alpha) == pytest.approx(1.0, abs=1e-12)
+    for mu in (-0.9, -0.3, 0.0, 0.3, 0.5, 0.9):
+        isotropic = k * ((mu + 1) + alpha * (mu ** 3 + 1) / 3)
+        assert mr.cdf_draine(mu, g, alpha) == pytest.approx(isotropic, abs=4 * abs(g) + 1e-12)
+    # the median moves away from 0 by about (3/2 + 3 alpha / 4) g: the shift grows with alpha
+    assert mr.sample_draine(0.5, g, alpha) == pytest.approx(0.0, abs=(4 + alpha) * abs(g) + 1e-9)
+
+
 def test_draine_cdf_is_monotone_from_zero_to_one():
     g, alpha = 0.7, 1.5
     assert mr.cdf_draine(-1.0, g, alpha) == 0.0

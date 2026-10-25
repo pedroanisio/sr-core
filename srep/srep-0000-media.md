@@ -199,12 +199,18 @@ exactly, so that the phase function and the pdf cancel and β is unchanged:
 18. **`hg`**: SREP 79's inversion, unchanged (`sample_hg`): u ~ U[0, 1); μ = 1 − 2u if |g| < 10⁻³, else
     s = (1 − g²) / (1 − g + 2gu) and μ = clamp((1 + g² − s²) / (2g), −1, 1).
 19. **`draine`** and **`rayleigh`** (= `draine` with g = 0, α = 1): the μ with F(μ) = u, where F is the
-    cumulative of p in μ (`cdf_draine`): with t(μ) = 1 + g² − 2gμ, a = 1 + g² and
-    K = (1 − g²) / (2 (1 + α (1 + 2g²) / 3)),
+    cumulative of p in μ (`cdf_draine`), in a form that never divides by g: with a = 1 + g², s₁ = 1 + g,
+    s₂ = √(a − 2gμ), P = s₁ s₂ and K = (1 − g²) / (2 (1 + α (1 + 2g²) / 3)),
 
-    F(μ) = K · (G(t(μ)) − G(t(−1))) / (−2g),  G(t) = −2 / √t + α / (4g²) · (−2a² / √t − 4a √t + (2/3) t √t),
+    I₀ = 2 (1 + μ) / (P (s₁ + s₂)),
+    Q = (μ − 1) (3a + P) (a (μ − 1) + 2gμ) / (a + P) + μ (3a − P),
+    I₂ = 2 (1 + μ) Q / (3 P (s₁ + s₂) (a + P)),
+    F(μ) = K (I₀ + α I₂).
 
-    and for g = 0, F(μ) = K ((μ + 1) + α (μ³ + 1) / 3). The reference inverts F by 64 bisection steps on
+    At g = 0 this is K ((μ + 1) + α (μ³ + 1) / 3). The antiderivative in t = 1 + g² − 2gμ, which divides by
+    g², is the same function but loses every digit for |g| below about 10⁻⁴ in double precision (at
+    g = 2 · 10⁻⁶ it gives F(1) = 5.7), and `anisotropy` admits such a g; a renderer that uses it MUST switch to
+    the g = 0 form below |g| = 10⁻³, where the two agree to 10⁻⁹. The reference inverts F by 64 bisection steps on
     [−1, 1] (`sample_draine`); Jendersie and d'Eon's supplemental (section 2.2) gives the closed-form inverse
     through a quartic. A renderer MAY use either: they agree within 10⁻¹² in μ, which is below the conformance
     tolerance of a Monte Carlo estimate (SREP 79 rule 10).
@@ -393,3 +399,5 @@ to 20 (there is no engine to measure the first two against before that).
 - 2026-10-24: draft, with the reference module and tests; engine work filed as SR-62.
 - 2026-10-25: MED4 version gate added (engine review on SR-62: the repository gates versions in Schematron,
   not per-version XSDs); rule 24 and Backwards compatibility reworded.
+- 2026-10-25: rule 19's cumulative rewritten in a form that never divides by g (engine review on SR-62: the
+  antiderivative in t lost every digit for |g| below about 10⁻⁴); the table's values are unchanged.
