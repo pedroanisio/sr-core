@@ -21,6 +21,16 @@ version:
 
 ### Added
 
+- Draft SREP "Add shallow-water flow to the terrain grid" (`srep/srep-0000-surface-water.md`, T2 of SREP 12):
+  one `shallowWater` child of the terrain-grid draft's `terrain` integrating the shallow-water equations on the
+  terrain's grid (the bed from the solid layers, `water` the depth, `flow` the discharge) with the central-upwind
+  flux of Kurganov and Petrova on the hydrostatic reconstruction of Audusse et al., `order` 1 or 2 (minmod and
+  Heun), well-balanced with dry islands and positivity preserving, semi-implicit `manning` friction, `rain` and
+  `source` children (`x`, `y`, `radius`, `rate`, `start`, `end`), a fixed `step` subdivided by `cfl`,
+  `dryTolerance`, `boundary` open or closed, `maxSteps`; rules SW1–SW5 and V17 inside the draft, the schema files
+  unchanged. Reference `conformance/tools/surface_water_reference.py` (28-row numeric table; Ritter dam break,
+  Thacker bowl and the SWASHES bump implemented from the papers), `tests/test_surface_water.py`. Engine card
+  SR-105.
 - Draft SREP "Add erosion processes to the terrain grid" (`srep/srep-0000-erosion.md`, T1 of SREP 12):
   `erode` children of the terrain-grid draft's `terrain` with `kind` one of `fluvial` (the linear stream power
   law with `uplift`, `erodibility`, `m` solved in closed form along the D8 flow paths by travel time, at the
