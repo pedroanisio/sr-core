@@ -21,6 +21,15 @@ version:
 
 ### Added
 
+- Draft SREP "Add pattern systems to the scene" (`srep/srep-0000-patterns.md`, G2 of SREP 12): five 2D pattern
+  nodes beside `flock` and `slime`, each a box stepped at `rate` steps per second with `prewarm` and `maxSteps`
+  so every frame renders alone: `reaction` (Gray–Scott, Pearson 1993, nine-point Laplacian on a torus, a classifier
+  of spots, labyrinth and extinction), `lenia` (Chan 2019, ring kernel, Gaussian growth, the Orbium glider whose
+  mass and speed the tests check), `automaton` (Life-like B/S rules, Golly RLE patterns, periods of the blinker and
+  the glider), `aggregation` (diffusion-limited aggregation with lattice walkers whose steps are stream draws,
+  radius-of-gyration dimension 1.71 ± 0.05) and `growth` (differential growth of a closed curve by insertion,
+  repulsion and splitting, frozen at `maxNodes`); PT1–PT5, V17. Reference `conformance/tools/patterns_reference.py`
+  (numpy) with its numeric table; `tests/test_patterns.py`. Engine card SR-111.
 - Draft SREP "Add scattering and vegetation to the terrain grid" (`srep/srep-0000-vegetation.md`, G1 of
   SREP 12): `tree` prototypes of `terrain` grown by an L-system (3D turtle, stochastic rules from the streams,
   bounded `iterations` and `maxSymbols`), by space colonisation (Runions et al. 2007, stream-drawn attractors in a
