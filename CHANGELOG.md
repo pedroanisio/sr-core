@@ -21,6 +21,17 @@ version:
 
 ### Added
 
+- Draft SREP "Add spectral seas, caustics and flow maps to the ocean" (`srep/srep-0000-ocean.md`, A4 of
+  SREP 12): one `sea` child of `ocean`, a statistical wave field over SREP 40's solver with `model` one of
+  `phillips`, `piersonMoskowitz`, `jonswap`, `tma` (`windSpeed`, `windDirection`, `fetch`, `gamma`, `spread`,
+  `cutoff`), the Longuet-Higgins spreading, a periodic grid (`size`, `resolution`) whose initial amplitudes are
+  the random-streams draft's normal draw on channels 1 and 2 at pack(i, j, 0), the Hermitian closed form in
+  time (Tessendorf), `choppiness` displacement, slopes, normal, the Jacobian and foam (`foamThreshold`,
+  `foamDecay`) feeding SREP 79's albedo; the ocean's `absorption` (Pope and Fry), `scattering`, `ior`, exact
+  Fresnel (0.020 at normal incidence, Snell's window 48.6°), `caustics` and `flowMap` with `flowSpeed` and
+  `flowCycle` (Vlachos). The variance equals the spectrum integral and the significant wave height is 4 √m₀.
+  Rules OC1–OC6 and V17; the schema files are unchanged. Reference `conformance/tools/ocean_reference.py` with
+  a 43-row numeric table; `tests/test_ocean.py`. Engine card SR-103.
 - Draft SREP "Add cloud layers and the night sky" (`srep/srep-0000-clouds.md`, A3 of SREP 12): `cloudLayer`
   children of a dome light with `sky="physical"`, spherical shells between `base` and `base` + `thickness`
   whose shape is the random-streams value noise dilated by Worley billows, a height gradient blended from the
