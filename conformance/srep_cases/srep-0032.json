@@ -4102,8 +4102,7 @@
       255.0
      ]
     }
-   ],
-   "pending": "the reference implementation differs from SREP 32's weights at five of the 32 sampled columns: scene-render main 67a661a (0.7.4, binary sha256 prefix 2e9e7a8bf5e3e16e, llvmpipe, 2026-10-24) gives, at pixel x 34, 38, 42, 46 and 50, the grey values 28, 0, 125, 128 and 250 where the Mitchell-Netravali formula in linear light with the anti-ringing clamp (recomputed from srep32-strip-8x1.png) gives 0, 28.6, 128, 139.3 and 255; x 34 and 38 are the texel-centre samples (t = 0), where the clamp pair is texels i and i+1. The other 27 columns match within 1. It also fails on the 0.7.2 and 0.7.3 release builds. Tracked on the engine board as SR-60; this note is true of main 67a661a"
+   ]
   }
  },
  "srep-0032-resample-minified": {

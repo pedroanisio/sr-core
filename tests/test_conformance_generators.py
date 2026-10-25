@@ -56,3 +56,14 @@ def test_every_pending_reason_in_kit_pending_is_in_expected_json():
     for name, why in kit_pending.PENDING.items():
         assert name in exp, name
         assert exp[name].get("pending") == why, name
+
+
+def test_the_matte_choke_grow_and_resample_mitchell_cases_run_again():
+    """SR-59 and SR-60 are fixed on the engine's feat/sr-67-fields at bb4e662 (the merge of perf/sr-70-denoise-prep):
+    run.py --run-pending retires both on a release build of that snapshot, so neither is pending any more."""
+    exp = json.load(open(os.path.join(CONF, "expected.json")))["cases"]
+    for srep, name in (("0029", "srep-0029-matte-choke-grow"), ("0032", "srep-0032-resample-mitchell")):
+        src = json.load(open(os.path.join(CONF, "srep_cases", f"srep-{srep}.json")))
+        assert "pending" not in src[name]["expected"], name
+        assert "pending" not in exp[name], name
+        assert set(exp[name]) & {"regions"}, name
