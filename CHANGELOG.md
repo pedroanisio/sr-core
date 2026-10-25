@@ -23,6 +23,8 @@ version:
 
 ### Fixed
 
+- Draft SREP "Add reactive values" (`srep/srep-0000-reactive-values.md`): rule 1 states how a fold of an included document steps, the engine's question from SR-66. An `include` merges values as it merges other assets and carries no clock, so n(t) counts the host's composition time for an included fold as for the host's own, and a looped, reversed or remapped `instance` or layer that reads the value restarts no fold; a restart is written in the update. Test `test_the_draft_rules_that_included_values_fold_in_composition_time`.
+
 ## 1.9.0 — 2026-10-25
 
 ### Added

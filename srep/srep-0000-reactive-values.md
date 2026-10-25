@@ -125,6 +125,12 @@ count at the composition's end (`compositionType/@duration`, xsd:1199) is at mos
    as a node's property; `prop("id.value")`, `propAtTime("id.value", t)` and `link source="id.value"` read
    it, from anywhere in the document, and read the fold's state when the value is a fold. A value draws
    nothing and has no time of its own: `time` in its expressions is composition time, as for an asset.
+   An `include` merges the included document's values into the host under `id/` as it merges its other
+   assets, and carries no clock (`includeType` has no `speed`, `loop`, `clipIn` or `timeRemap`): n(t) of
+   rule 2 counts the host's composition time for an included fold exactly as for a fold the host
+   declares, and a looped, reversed or remapped `instance` or layer that reads `id/x.value` reads the
+   state at the frame's composition time and restarts no fold. A fold that must restart expresses the
+   restart in its update (through `time`), never through the clock of a reader.
 2. **The step count.** For a time fold with `start` s and `step` h, the number of steps at or before
    composition time t is n(t) = 0 when t < s, else ⌊(t − s) / h + 10⁻⁹⌋, with the same tolerance D25 gives
    `frame`.
@@ -322,3 +328,5 @@ measurable on an engine before SR-66 lands.
 ## History
 
 - 2026-10-24: draft, with the reference module and tests; engine work filed as SR-66.
+- 2026-10-25: rule 1 states that included values fold in the host's composition time (an include carries
+  no clock; a looped or remapped reader restarts nothing), the engine's SR-66 question.

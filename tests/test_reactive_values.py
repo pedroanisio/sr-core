@@ -303,6 +303,19 @@ def test_the_draft_exists_with_its_sections_and_a_table():
     assert "SR-66" in text
 
 
+def test_the_draft_rules_that_included_values_fold_in_composition_time():
+    # SRC-25, from the engine's SR-66 review: an include merges assets and carries no clock, so a fold of an
+    # included document steps on the host's composition time; a looped or remapped reader restarts nothing.
+    text = open(DRAFT, encoding="utf-8").read()
+    rule = text.split("1. **A value is a property without a node.**", 1)[1].split("\n2. ", 1)[0]
+    rule = re.sub(r"\n +", " ", rule)   # the draft wraps at 110 columns
+    assert "An `include` merges the included document's values" in rule
+    assert "carries no clock" in rule
+    assert "n(t) of rule 2 counts the host's composition time" in rule
+    assert "restarts no fold" in rule
+    assert "2026-10-25: rule 1 states that included values fold in the host's composition time" in text
+
+
 def _close(a, b):
     if isinstance(a, dict) and isinstance(b, dict):
         return a.keys() == b.keys() and all(_close(a[k], b[k]) for k in a)
