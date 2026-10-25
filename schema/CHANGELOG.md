@@ -21,6 +21,8 @@ computed from those classes by `python3 tools/release.py next schema`:
 
 ### Fixed
 
+## 1.7.2 — 2026-10-25
+
 ### Docs
 
 - `cameraType/@pathSamples`: the documentation said the default with geodesics is 16; the declaration's default is 64 and the reference applies 64 to geodesic cameras (`crates/sr-gpu/src/render_three.rs`, `num("pathSamples", 64.0)`), so the sentence now says 64. Annotation-only (SREP 92 difference "the pathSamples of a camera (16 against 64)"; SRC-2). `tests/test_schema_doc_defaults.py` now checks every numeric default a sentence states against its declaration.
