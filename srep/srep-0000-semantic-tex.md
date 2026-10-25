@@ -79,8 +79,19 @@ formulas typeset at `size`, fitted as a formula is). **FRM2**: `from` and `to` a
 keys of an `animate property="path"` on the shape interpolate by Semantics rules 6 to 9; with `false`, they hold
 as today. `morph` is inert without such an animation (SREP 18 reports it).
 
-**5. Version gate.** A pattern `p-srep<n>` after `p-srep75` (sch:851) with **V17**: documents of version 1.0 to
-1.7 contain no `formulaAnimator`, no `formulaMorph`, no `shape/@morph` and no `\part{` in a formula's `tex`.
+**5. Version gate.** The shared 1.8 gate of SREP 12 (**V17**: one pattern after `p-srep75`, sch:851, one assert
+whose test is the conjunction of every 1.8 draft's clause) gains the clause: documents of version 1.0 to 1.7
+contain no `formulaAnimator`, no `formulaMorph`, no `shape/@morph` and no `\part{` in a formula's `tex`. The
+last part cannot be the literal `contains(@tex, '\part{')` in a Schematron test: the ISO skeleton copies the
+test into `svrl:failed-assert/@test`, an attribute value template, where the unmatched `{` fails to compile.
+The clause binds the literal with a rule-level `let`, as the file does elsewhere (56 `sch:let` today):
+
+```xml
+<sch:rule context="/scene[not(@version='1.8')]">
+  <sch:let name="partTag" value="'\part{'"/>
+  <sch:assert id="V17" test="not(.//formulaAnimator | .//formulaMorph | .//shape/@morph | /scene/assets/formula[contains(@tex, $partTag)])">formula parts, animators, morphs and shape/@morph need version="1.8".</sch:assert>
+</sch:rule>
+```
 
 ### Semantics
 
@@ -276,3 +287,6 @@ measurable on an engine before SR-65 lands.
 ## History
 
 - 2026-10-24: draft, with the reference module and tests; engine work filed as SR-65.
+- 2026-10-25: the gate clause for `\part{` written out through `sch:let` (a literal `{` in a Schematron test
+  breaks the ISO skeleton's attribute value template; found by the engine on SR-65) and stated as a clause of
+  the shared V17.

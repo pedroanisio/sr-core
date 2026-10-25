@@ -393,6 +393,10 @@ version:
 
 ### Fixed
 
+- The semantic-tex draft (`srep/srep-0000-semantic-tex.md`) writes out its V17 clause: the literal
+  `contains(@tex, '\part{')` cannot sit in a Schematron test (the ISO skeleton copies the test into an attribute
+  value template, where the unmatched `{` fails to compile), so the clause binds the literal with a rule-level
+  `sch:let`. Found by the engine on SR-65.
 - One 1.8 version gate across the SREP 12 drafts: SREP 12's design rules now state that the gate is one
   Schematron assert, V17, in one pattern after `p-srep75`, its test the conjunction of the drafts' clauses, and
   the four drafts that had taken gate codes of their own are folded back to it (data-layers V18, time-series

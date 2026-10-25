@@ -298,3 +298,14 @@ def test_the_table_is_what_the_module_prints(capsys):
     out = capsys.readouterr().out
     printed = re.findall(r"^\| ([^|]+?) \| `([^`]+)` \| `([^`]+)` \|$", out, re.M)
     assert printed == _numeric_rows()
+
+
+def test_the_draft_writes_out_the_gate_clause_with_a_let():
+    """The V17 clause "no \\part{ in a formula's tex" cannot be a literal in a Schematron test: the ISO skeleton
+    copies the test into an attribute value template, where an unmatched '{' fails to compile (engine review on
+    SR-65). The draft states the clause through sch:let, as the repository's Schematron does elsewhere."""
+    text = open(DRAFT, encoding="utf-8").read()
+    assert "<sch:let name=\"partTag\" value=\"'\\part{'\"/>" in text
+    assert "contains(@tex, $partTag)" in text
+    assert "attribute value template" in text
+    assert "shared 1.8 gate" in text
