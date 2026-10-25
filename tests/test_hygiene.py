@@ -96,6 +96,19 @@ def test_sdist_without_release_tooling_fails(tmp_path):
     assert any("lacks schema/scene-render.xsd" in m for m in messages)
 
 
+def test_sdist_failure_message_names_the_failed_tests():
+    out = ("....F..\n=========================== short test summary info ============================\n"
+           "FAILED tests/test_a.py::test_x - assert 1 == 2\n"
+           "ERROR tests/test_b.py::test_y[3] - RuntimeError: boom\n"
+           "1 failed, 12913 passed, 7 skipped, 1 error in 762.89s (0:12:42)\n")
+    msg = hy.sdist_failure_message(out)
+    assert msg.startswith("tests fail from the unpacked sdist: 1 failed, 12913 passed, 7 skipped, 1 error")
+    assert msg.endswith("(FAILED tests/test_a.py::test_x, ERROR tests/test_b.py::test_y[3])")
+    assert hy.sdist_failure_message("") == "tests fail from the unpacked sdist: ?"
+    assert hy.sdist_failure_message("1 failed in 2.00s\n") == "tests fail from the unpacked sdist: 1 failed in 2.00s"
+    assert "-rfE" in hy.SDIST_PYTEST
+
+
 def in_checkout():
     r = subprocess.run(["git", "-C", ROOT, "rev-parse", "--verify", "-q", "HEAD"], capture_output=True)
     return r.returncode == 0 and bool(hy.tracked(ROOT))

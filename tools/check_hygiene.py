@@ -236,6 +236,18 @@ def r6(root):
     return [Finding("R6", "tools/release.py check", p) for p in release.check()]
 
 
+SDIST_PYTEST = ("-m", "pytest", "-q", "-p", "no:cacheprovider", "-rfE", "tests")
+
+
+def sdist_failure_message(stdout: str) -> str:
+    """The R5 message for a failing sdist suite: pytest's last line, then its FAILED and ERROR summary entries
+    without their reasons, so the finding names the tests."""
+    lines = stdout.strip().splitlines() or ["?"]
+    named = [ln.split(" - ", 1)[0] for ln in lines if ln.startswith(("FAILED ", "ERROR "))]
+    msg = "tests fail from the unpacked sdist: " + lines[-1]
+    return msg + (" (" + ", ".join(named) + ")" if named else "")
+
+
 def r5(root, run_tests: bool = True) -> list[Finding]:
     """Build the sdist and wheel from HEAD in a scratch directory and inspect them."""
     out = []
@@ -269,11 +281,9 @@ def r5(root, run_tests: bool = True) -> list[Finding]:
                 _extract(s, os.path.join(tmp, "sd"))
                 sd = os.path.join(tmp, "sd", sdist_name[:-len(".tar.gz")])
                 subprocess.run(["git", "init", "-q"], cwd=sd, check=True)
-                t = subprocess.run([sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests"],
-                                   cwd=sd, capture_output=True, text=True)
+                t = subprocess.run([sys.executable, *SDIST_PYTEST], cwd=sd, capture_output=True, text=True)
                 if t.returncode:
-                    out.append(Finding("R5", sdist_name, "tests fail from the unpacked sdist: "
-                                                         + (t.stdout.strip().splitlines() or ["?"])[-1]))
+                    out.append(Finding("R5", sdist_name, sdist_failure_message(t.stdout)))
     return out
 
 
