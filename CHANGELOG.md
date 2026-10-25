@@ -393,6 +393,10 @@ version:
 
 ### Fixed
 
+- The semantic-tex draft's matrix kit case measures what its rule 11 states: the rule centres each cell's box
+  in its column, the case had measured ink-cluster centres, and the two differ by the cells' side bearings.
+  The case now subtracts each cell's ink offset, taken from the same TeX typeset alone, within the same
+  0.5 px bar. Found by the engine on SR-65.
 - The semantic-tex draft (`srep/srep-0000-semantic-tex.md`) writes out its V17 clause: the literal
   `contains(@tex, '\part{')` cannot sit in a Schematron test (the ISO skeleton copies the test into an attribute
   value template, where the unmatched `{` fails to compile), so the clause binds the literal with a rule-level

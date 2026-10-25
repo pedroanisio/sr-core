@@ -157,7 +157,10 @@ row (the typesetter centres each cell in its column, TeXbook Appendix G rule 20'
 cells); an accent's glyph is centred over its base's box within 0.5 px (rule 12 of Appendix G, with the MATH
 table's `TopAccentAttachment` when the font gives it); and a part under a `formulaAnimator` with offsets x, y
 lands within 0.5 px of its box translated by (x, y). The reference typesets as stated at 67a661a
-(`formula.rs:600`, matrices; `:647`, accents); this SREP makes it normative.
+(`formula.rs:600`, matrices, where a cell is shifted by half of the column width minus the cell's own
+width; `:647`, accents); this SREP makes it normative. The matrix rule is about the cell's box, not its ink:
+a glyph's ink is not centred in its advance (`1` and `100` differ in their side bearings), so the kit
+measures the box by taking each cell's ink offset from the same TeX typeset alone.
 
 **12. Time.** `progress` and the animator's offsets are ordinary animated numbers; the parts, boxes, samples and
 alignments are functions of the two formulas alone and may be computed once. Nothing keeps state between
@@ -261,7 +264,7 @@ measurable on an engine before SR-65 lands.
 | `srep-<n>-formula-part.xml` | `\part{lhs}{E} = \part{rhs}{m c^2}` in white at size 48, shown twice: once plain, once with a `formulaAnimator part="rhs" y="-40"`; the white class of the second frame's upper region is the first frame's `rhs` box moved up 40 px within 0.5 px (SREP 12's bar), and the `lhs` glyphs are pixel-identical | to be measured against the reference when SR-65 lands |
 | `srep-<n>-formula-morph.xml` | a `formulaMorph` of `\part{a}{x^2} + \part{b}{2x} + \part{c}{1}` into `\part{a}{x^2} + \part{d}{2x + 1}` at progress 0.5: the `a` glyphs at the midpoint of their two boxes within 0.5 px; `b` and `c` at half opacity; `d` at half opacity | to be measured |
 | `srep-<n>-path-morph.xml` | a `shape="path"` with `morph="true"` keyed from a 200 px square to a circle of the same perimeter over 1 s, in red; at frames 6, 12, 18 the red class's outline, traced as a polygon, has no self-intersections and its area is between the two shapes' areas | to be measured |
-| `srep-<n>-formula-matrix.xml` | `\begin{pmatrix} 1 & 10 \\ 100 & 1 \end{pmatrix}` in white: the column centres of the four white glyph clusters agree row to row within 0.5 px (rule 11) | to be measured |
+| `srep-<n>-formula-matrix.xml` | `\begin{pmatrix} 1 & 10 \\ 100 & 1 \end{pmatrix}` in white at size 48 in the upper half, and the three distinct cell contents `1`, `10` and `100` typeset alone at the same size in the lower half, each in a box of its own: a cell's ink offset is its lone cluster's centre minus that box's centre; the column centres of the four white glyph clusters in the matrix, each minus its cell's ink offset, agree row to row within 0.5 px (rule 11 centres the cell's box, not its ink) | to be measured |
 | `srep-<n>-formula-accent.xml` | `\hat{x}` and `\bar{x}` at size 96: the accent cluster's centre over the base cluster's centre within 0.5 px (rule 11) | to be measured |
 
 ## Open issues
@@ -290,3 +293,7 @@ measurable on an engine before SR-65 lands.
 - 2026-10-25: the gate clause for `\part{` written out through `sch:let` (a literal `{` in a Schematron test
   breaks the ISO skeleton's attribute value template; found by the engine on SR-65) and stated as a clause of
   the shared V17.
+- 2026-10-25: the matrix kit case measures the quantity rule 11 states. The rule centres each cell's box in
+  its column (as the reference does); the case had measured ink-cluster centres, which differ by the cells'
+  side bearings. The case now subtracts each cell's ink offset, taken from the same TeX typeset alone; the
+  0.5 px bar and the 1.7.1 rendering stay. Found by the engine on SR-65 (scene-render 019d739).

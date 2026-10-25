@@ -309,3 +309,15 @@ def test_the_draft_writes_out_the_gate_clause_with_a_let():
     assert "contains(@tex, $partTag)" in text
     assert "attribute value template" in text
     assert "shared 1.8 gate" in text
+
+
+def test_the_matrix_kit_case_measures_the_box_the_rule_centres():
+    """Rule 11 centres each cell's box in its column; glyph ink is not centred in its
+    advance, so the kit case corrects each cluster by the cell's ink offset."""
+    text = open(DRAFT, encoding="utf-8").read()
+    row = next(line for line in text.splitlines() if line.startswith("| `srep-<n>-formula-matrix.xml`"))
+    assert "typeset alone" in row
+    assert "minus its cell's ink offset" in row
+    assert "centres the cell's box, not its ink" in row
+    rule = text[text.index("**11. Layout rules measured by the kit.**"):text.index("**12. Time.**")]
+    assert "ink offset" in rule
