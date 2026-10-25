@@ -78,6 +78,7 @@ in its changelog, as Breaking, Added or Fixed, and let the release tool compute 
 python3 tools/release.py check                 # every version agrees; hashes and reference are current
 python3 tools/release.py next schema           # what the Unreleased entries call for (PATCH unless they add or break)
 python3 tools/release.py release schema        # cut it: changelog, version, SHA256SUMS, docs/schema; prints the tag
+python3 tools/release.py publish schema        # after the tag is pushed: the GitHub Release, notes from the changelog, tarball attached
 ```
 
 ## Licence

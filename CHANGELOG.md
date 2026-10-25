@@ -21,6 +21,11 @@ version:
 
 ### Added
 
+- `python3 tools/release.py publish tools|schema`: creates the GitHub Release of a tagged version with `gh`,
+  titled `sr-core X.Y.Z` or `scene-render schema X.Y.Z`, with the version's changelog section as its notes
+  and, for the schema, the reproducible tarball and its `.sha256` attached. It refuses a tag that is missing,
+  not on origin, or already released; `release` now prints the push and publish commands with the tag.
+  GitHub's releases had stopped at `schema-1.1.4` while the tags went on to `schema-1.7.1` and `v1.8.0`.
 - Draft SREP "Add 3D Tiles to the map" (`srep/srep-0000-tiles3d.md`, M5 of SREP 12): a `tileset3d` asset
   names an OGC 3D Tiles 1.1 (or 1.0) tileset and pins the resolved archive (a stored ZIP of the root tileset,
   the external tilesets and subtree files loaded and every glb or b3dm any frame selects; sorted, 1980

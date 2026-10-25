@@ -5,6 +5,7 @@
     python3 tools/release.py next tools|schema     # the version the Unreleased entries call for
     python3 tools/release.py release tools|schema [--date YYYY-MM-DD]
     python3 tools/release.py archive schema [--ref schema-X.Y.Z] [-o dist]   # the schema release tarball
+    python3 tools/release.py publish tools|schema [--version X.Y.Z] [-o dist]  # the GitHub Release of a tag
 
 Nobody picks version numbers. Each change is recorded once under "## Unreleased" in the class that fits, and a
 release takes the single largest bump those classes call for: Breaking/Removed -> MAJOR, Added/Deprecated ->
@@ -21,6 +22,10 @@ Breaking or Removed entries, Added when it has only Added, Deprecated, Changed o
 `archive schema` builds the schema's release artifact from a tag's committed tree (never the working copy):
 scene-render-schema-X.Y.Z.tar.gz with the XSD, the Schematron, their hashes, README, CHANGELOG, LICENSE and the
 generated HTML reference, plus a .sha256 file. The tarball is reproducible: the same tag gives the same bytes.
+
+`publish` creates the GitHub Release of a tagged version with `gh` (the tag must exist and be on origin, and
+the release must not): the title names the component and the version, the notes are the version's
+changelog section as committed at the tag, and a schema release carries its tarball and .sha256.
 """
 from __future__ import annotations
 
@@ -301,6 +306,53 @@ def archive(ref: str, out_dir: str) -> tuple[str, str]:
     return path, digest
 
 
+# ---------------------------------------------------------------------- publish
+TITLES = {"tools": "sr-core {}", "schema": "scene-render schema {}"}
+
+
+def notes(text: str, version: str) -> str:
+    """The changelog section of a released version: the entries under its `## version — date` heading."""
+    m = re.search(rf"^## {re.escape(version)}(?=\s)[^\n]*\n", text, re.M)
+    if not m:
+        raise ReleaseError(f"no '## {version}' section in the changelog")
+    nxt = re.search(r"^## ", text[m.end():], re.M)
+    end = m.end() + nxt.start() if nxt else len(text)
+    return text[m.end():end].strip("\n") + "\n"
+
+
+def publish(component: str, version: str | None, run=None, out_dir: str | None = None) -> str:
+    """Create the GitHub Release of a tagged version with `gh`: the title names the component and the version, the
+    notes are the version's changelog section at the tag, and a schema release carries its tarball and .sha256.
+    Refuses a tag that does not exist, is not on origin, or already has a release. Returns the release URL."""
+    run = run or subprocess.run                  # resolved per call, so a test can replace subprocess.run
+    c = COMPONENTS[component]
+    version = version or c["get"]()
+    tag = f"{c['tag']}{version}"
+    try:
+        _git("rev-parse", "--verify", "--quiet", f"refs/tags/{tag}")
+    except subprocess.CalledProcessError:
+        raise ReleaseError(f"no tag {tag}: cut the release and tag it first")
+    if not _git("ls-remote", "--tags", "origin", tag).strip():
+        raise ReleaseError(f"tag {tag} is not on origin: git push origin {tag}")
+    body = notes(_git("show", f"{tag}:{c['changelog']}").decode("utf-8"), version)
+    if run(["gh", "release", "view", tag], capture_output=True).returncode == 0:
+        raise ReleaseError(f"release {tag} exists on GitHub; delete it or publish the next version")
+    out_dir = out_dir or os.path.join(ROOT, "dist")
+    os.makedirs(out_dir, exist_ok=True)
+    notes_path = os.path.join(out_dir, f"{tag}.notes.md")
+    with open(notes_path, "w", encoding="utf-8") as f:
+        f.write(body)
+    cmd = ["gh", "release", "create", tag, "--verify-tag", "--title", TITLES[component].format(version),
+           "--notes-file", notes_path]
+    if component == "schema":
+        path, _ = archive(tag, out_dir)
+        cmd += [path, path + ".sha256"]
+    done = run(cmd, capture_output=True)
+    if done.returncode != 0:
+        raise ReleaseError(f"gh release create failed: {done.stderr.decode('utf-8', 'replace').strip()}")
+    return done.stdout.decode("utf-8").strip()
+
+
 # ------------------------------------------------------------------------ main
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="release.py", description=__doc__.split("\n\n")[0])
@@ -315,6 +367,10 @@ def main(argv=None) -> int:
     ar.add_argument("component", choices=["schema"])
     ar.add_argument("--ref", help="tag or commit (default: schema-<current version>)")
     ar.add_argument("-o", "--out", default=os.path.join(ROOT, "dist"))
+    pub = sub.add_parser("publish")
+    pub.add_argument("component", choices=COMPONENTS)
+    pub.add_argument("--version", help="the released version (default: the current one)")
+    pub.add_argument("-o", "--out", default=None, help="where the notes and the schema tarball are written (default: dist)")
     a = ap.parse_args(argv)
     try:
         if a.cmd == "check":
@@ -324,6 +380,9 @@ def main(argv=None) -> int:
             if not problems:
                 print(f"ok: tools {tools_version()}, schema {schema_version()}")
             return 1 if problems else 0
+        if a.cmd == "publish":
+            print(publish(a.component, a.version, out_dir=a.out))
+            return 0
         if a.cmd == "archive":
             path, digest = archive(a.ref or f"schema-{schema_version()}", a.out)
             print(f"wrote {path}\n{digest}")
@@ -350,8 +409,8 @@ def main(argv=None) -> int:
             raise ReleaseError("--date must be YYYY-MM-DD")
         _write(c["changelog"], cut(_read(c["changelog"]), new, a.date))
         c["set"](new)
-        after = f" && python3 tools/release.py archive schema" if a.component == "schema" else ""
-        print(f"{a.component}: {cur} -> {new}. Commit, then: git tag -a {c['tag']}{new} -m ...{after}")
+        print(f"{a.component}: {cur} -> {new}. Commit, then: git tag -a {c['tag']}{new} -m ... && git push origin "
+              f"{c['tag']}{new} && python3 tools/release.py publish {a.component}")
         return 0
     except ReleaseError as e:
         print(f"release.py: {e}", file=sys.stderr)

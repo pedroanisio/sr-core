@@ -2,6 +2,7 @@
 import importlib.util
 import os
 import re
+import subprocess
 
 import pytest
 
@@ -261,3 +262,158 @@ def test_release_tools_needs_no_sdk_entry(release_root, capsys):
     root, _ = release_root
     (root / "CHANGELOG.md").write_text(TOOLS_LOG.replace("### Fixed\n\n", "### Fixed\n\n- a fix\n\n", 1))
     assert release.main(["release", "tools", "--date", "2026-10-13"]) == 0
+
+
+# ---------------------------------------------------------------------------------------------- publish
+RELEASED_LOG = """# Changelog
+
+## Unreleased
+
+### Breaking
+
+### Added
+
+### Fixed
+
+## 1.8.0 — 2026-10-20
+
+### Added
+
+- `publish`
+- second entry
+
+### Fixed
+
+- a fix
+
+## 1.7.0 — 2026-10-12
+
+### Added
+
+- older
+"""
+
+
+def test_notes_are_the_versions_changelog_section():
+    assert release.notes(RELEASED_LOG, "1.8.0") == "### Added\n\n- `publish`\n- second entry\n\n### Fixed\n\n- a fix\n"
+    assert release.notes(RELEASED_LOG, "1.7.0") == "### Added\n\n- older\n"
+
+
+def test_notes_of_an_unreleased_version_are_an_error():
+    with pytest.raises(release.ReleaseError, match="no '## 1.9.0' section"):
+        release.notes(RELEASED_LOG, "1.9.0")
+    with pytest.raises(release.ReleaseError, match="no '## 1.8' section"):
+        release.notes(RELEASED_LOG, "1.8")      # a prefix is not a version
+
+
+class FakeGit:
+    """`git` answers for a tag that exists locally and on origin, with RELEASED_LOG at it."""
+    def __init__(self, local=("v1.8.0", "schema-1.7.1"), remote=("v1.8.0", "schema-1.7.1")):
+        self.local, self.remote, self.calls = set(local), set(remote), []
+
+    def __call__(self, *args):
+        self.calls.append(args)
+        if args[0] == "rev-parse":
+            tag = args[-1].removeprefix("refs/tags/")
+            if tag not in self.local:
+                raise subprocess.CalledProcessError(128, args)
+            return b"0123456789abcdef\n"
+        if args[0] == "ls-remote":
+            return (f"0123456789abcdef\trefs/tags/{args[-1]}\n" if args[-1] in self.remote else "").encode()
+        if args[0] == "show":
+            return RELEASED_LOG.replace("1.8.0", args[1].split(":")[0].lstrip("v").removeprefix("schema-")).encode()
+        raise AssertionError(args)
+
+
+class FakeGh:
+    """`gh` answers: `release view` fails for a tag without a release; `release create` prints the URL."""
+    def __init__(self, existing=()):
+        self.existing, self.calls = set(existing), []
+
+    def __call__(self, args, **kw):
+        self.calls.append(list(args))
+        if args[:3] == ["gh", "release", "view"]:
+            rc = 0 if args[3] in self.existing else 1
+            return subprocess.CompletedProcess(args, rc, b"", b"release not found\n")
+        if args[:3] == ["gh", "release", "create"]:
+            return subprocess.CompletedProcess(args, 0, f"https://github.com/x/y/releases/tag/{args[3]}\n".encode(), b"")
+        raise AssertionError(args)
+
+
+@pytest.fixture
+def publish_env(monkeypatch, tmp_path):
+    git, gh = FakeGit(), FakeGh()
+    monkeypatch.setattr(release, "_git", git)
+    monkeypatch.setattr(release.subprocess, "run", gh)      # no test may reach the real gh
+    monkeypatch.setattr(release, "archive", lambda ref, out: (str(tmp_path / f"scene-render-schema-{ref.removeprefix('schema-')}.tar.gz"), "ab" * 32))
+    monkeypatch.setattr(release, "tools_version", lambda: "1.8.0")
+    monkeypatch.setattr(release, "schema_version", lambda: "1.7.1")
+    return git, gh
+
+
+def test_publish_tools_creates_the_release_from_the_changelog(publish_env, tmp_path):
+    git, gh = publish_env
+    url = release.publish("tools", None, run=gh, out_dir=str(tmp_path))
+    assert url == "https://github.com/x/y/releases/tag/v1.8.0"
+    create = [c for c in gh.calls if c[:3] == ["gh", "release", "create"]]
+    assert len(create) == 1
+    cmd = create[0]
+    assert cmd[3] == "v1.8.0" and "--verify-tag" in cmd
+    assert cmd[cmd.index("--title") + 1] == "sr-core 1.8.0"
+    notes_file = cmd[cmd.index("--notes-file") + 1]
+    assert open(notes_file, encoding="utf-8").read() == release.notes(RELEASED_LOG, "1.8.0")
+    assert not any(a.endswith(".tar.gz") for a in cmd)
+    assert ("ls-remote", "--tags", "origin", "v1.8.0") in git.calls
+
+
+def test_publish_schema_attaches_the_archive_and_its_sha256(publish_env, tmp_path):
+    git, gh = publish_env
+    url = release.publish("schema", "1.7.1", run=gh, out_dir=str(tmp_path))
+    assert url.endswith("/schema-1.7.1")
+    cmd = [c for c in gh.calls if c[:3] == ["gh", "release", "create"]][0]
+    assert cmd[cmd.index("--title") + 1] == "scene-render schema 1.7.1"
+    tarball = str(tmp_path / "scene-render-schema-1.7.1.tar.gz")
+    assert cmd[-2:] == [tarball, tarball + ".sha256"]
+
+
+def test_publish_refuses_a_tag_that_is_not_on_origin(publish_env, tmp_path, monkeypatch):
+    git, gh = publish_env
+    git.remote.discard("v1.8.0")
+    with pytest.raises(release.ReleaseError, match="v1.8.0 is not on origin"):
+        release.publish("tools", None, run=gh, out_dir=str(tmp_path))
+    assert not any(c[:3] == ["gh", "release", "create"] for c in gh.calls)
+
+
+def test_publish_refuses_a_missing_tag(publish_env, tmp_path):
+    git, gh = publish_env
+    with pytest.raises(release.ReleaseError, match="no tag v1.9.0"):
+        release.publish("tools", "1.9.0", run=gh, out_dir=str(tmp_path))
+    assert gh.calls == []
+
+
+def test_publish_refuses_an_existing_release(publish_env, tmp_path, monkeypatch):
+    git, gh = publish_env
+    gh.existing.add("v1.8.0")
+    with pytest.raises(release.ReleaseError, match="release v1.8.0 exists"):
+        release.publish("tools", None, run=gh, out_dir=str(tmp_path))
+    assert not any(c[:3] == ["gh", "release", "create"] for c in gh.calls)
+
+
+def test_publish_reports_gh_failures(publish_env, tmp_path):
+    git, gh = publish_env
+
+    def failing(args, **kw):
+        if args[:3] == ["gh", "release", "create"]:
+            return subprocess.CompletedProcess(args, 1, b"", b"HTTP 403: forbidden\n")
+        return gh(args, **kw)
+    with pytest.raises(release.ReleaseError, match="gh release create failed: HTTP 403"):
+        release.publish("tools", None, run=failing, out_dir=str(tmp_path))
+
+
+def test_publish_command_prints_the_url(publish_env, tmp_path, monkeypatch, capsys):
+    git, gh = publish_env
+    assert release.main(["publish", "tools", "-o", str(tmp_path)]) == 0
+    assert capsys.readouterr().out.strip() == "https://github.com/x/y/releases/tag/v1.8.0"
+    git.remote.discard("v1.8.0")
+    assert release.main(["publish", "tools", "-o", str(tmp_path)]) == 2
+    assert "not on origin" in capsys.readouterr().err
