@@ -21,6 +21,17 @@ version:
 
 ### Added
 
+- Draft SREP "Add erosion processes to the terrain grid" (`srep/srep-0000-erosion.md`, T1 of SREP 12):
+  `erode` children of the terrain-grid draft's `terrain` with `kind` one of `fluvial` (the linear stream power
+  law with `uplift`, `erodibility`, `m` solved in closed form along the D8 flow paths by travel time, at the
+  geological time `time` + `timeScale` · t, so every frame renders alone), `thermal` (Musgrave talus relaxation
+  of a solid `layer` at `talus` and `rate`, mass conserved) and `hydraulic` (the virtual pipes of Mei et al. on
+  the `water`, `sediment`, `flow` and `loose` layers: `rain` varied by `rainVariation` through the random-streams
+  draft at pack(i, j, 0), fluxes bounded by the Torricelli discharge, `pipeArea`, `capacity` with `minTilt` and
+  Šťava's `maxDepth` limiter, `erodeRate` into `loose` then `bedrock` scaled by 1 − `hardness`, `depositRate`,
+  sediment carried by the fluxes, `evaporation`, `boundary` open or closed), stepped processes replayed at `step`
+  under `maxSteps`; rules ER1–ER5 and V17 inside the draft, the schema files unchanged. Reference
+  `conformance/tools/erosion_reference.py` (28-row numeric table), `tests/test_erosion.py`. Engine card SR-104.
 - Draft SREP "Add spectral seas, caustics and flow maps to the ocean" (`srep/srep-0000-ocean.md`, A4 of
   SREP 12): one `sea` child of `ocean`, a statistical wave field over SREP 40's solver with `model` one of
   `phillips`, `piersonMoskowitz`, `jonswap`, `tma` (`windSpeed`, `windDirection`, `fetch`, `gamma`, `spread`,
