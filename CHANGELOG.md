@@ -21,6 +21,18 @@ version:
 
 ### Added
 
+- Draft SREP "Add vector-field layers to the map" (`srep/srep-0000-vector-field.md`, M4 of SREP 12): a `uvGrid`
+  asset names GRIB2 or classic NetCDF files holding the two components of a wind or current field and pins the
+  resolved flow cache (a 64-bit offset classic NetCDF file, CF-1.8) by `cacheSha256`; the resolve step pairs U
+  and V by valid time (W-VF2 for an unpaired step); a `flow` map child advects `particles` through the cache
+  after webgl-wind (ISC): quantised trail fade floor(255 c fade)/255, the `colors` ramp at the speed fraction,
+  a midpoint step of `speedup`/fps data seconds in metres mapped through cos(latitude), drop and respawn from
+  the random-streams draft's addressed draws (purposes spawnX, spawnY, drop; step = frame), replay from frame 0
+  for the seek check; validation VF1-VF4 and V20, warning W-VF1 past the cache's time span. The reference
+  `conformance/tools/vector_field_reference.py` carries the GRIB2 writer and reader (edition 2, templates 3.0,
+  4.0 and 5.0 simple packing, bitmaps, scanning modes) and the classic NetCDF writer and reader (CDF 1 and 2,
+  the specification's examples byte for byte, `_FillValue`, `scale_factor`, `add_offset`); tests
+  `tests/test_vector_field.py`. Engine card SR-115.
 - Draft SREP "Add time-series layers to the map" (`srep/srep-0000-time-series.md`, M3 of SREP 12): every timed
   element has a data time T = `timeOrigin` (seconds, or an ISO 8601 date-time read as seconds since 1970) plus its
   animatable `time`; `geoLayer` gains `timeBy`, `timeEndBy`, `trail` and `fade` (a feature is drawn from its time
