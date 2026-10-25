@@ -21,6 +21,16 @@ version:
 
 ### Added
 
+- Draft SREP "Add time-series layers to the map" (`srep/srep-0000-time-series.md`, M3 of SREP 12): every timed
+  element has a data time T = `timeOrigin` (seconds, or an ISO 8601 date-time read as seconds since 1970) plus its
+  animatable `time`; `geoLayer` gains `timeBy`, `timeEndBy`, `trail` and `fade` (a feature is drawn from its time
+  until its end or the trail's end, fading linearly; states visible/pending/expired/ended/unreadable); `route` over a
+  geo asset gains `timeBy` per-vertex timestamps with deck.gl TripsLayer's trail 120 and fade (the window from
+  T − trail to the head interpolated by time, per-point alpha 1 − (T − τ)/trail, round-capped strokes, the head dot
+  by `headRadius`/`headFill`; states pending/running/complete/gone); `basemap` gains `timeOrigin`/`time` so
+  `["global-state", "time"]` is T in style filters; rules TS1–TS4, warnings W-TS1/W-TS2, the version gate V19.
+  Reference `conformance/tools/time_series_reference.py` (numpy; prints the draft's 31-row table),
+  `tests/test_time_series.py` (35 tests). Engine card SR-114.
 - Draft SREP "Add data layers to the map" (`srep/srep-0000-data-layers.md`, M2 of SREP 12): basemap styles draw the
   MapLibre `heatmap` layer (every feature vertex a Gaussian kernel centre per MapLibre's heatmap shaders, the quad
   cut-off 1/4080, a ramp over `heatmap-density` interpolated in straight RGBA then premultiplied), the
