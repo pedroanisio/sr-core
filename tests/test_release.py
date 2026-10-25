@@ -346,8 +346,10 @@ def publish_env(monkeypatch, tmp_path):
     monkeypatch.setattr(release, "_git", git)
     monkeypatch.setattr(release.subprocess, "run", gh)      # no test may reach the real gh
     monkeypatch.setattr(release, "archive", lambda ref, out: (str(tmp_path / f"scene-render-schema-{ref.removeprefix('schema-')}.tar.gz"), "ab" * 32))
-    monkeypatch.setattr(release, "tools_version", lambda: "1.8.0")
-    monkeypatch.setattr(release, "schema_version", lambda: "1.7.1")
+    # COMPONENTS captured the version readers at import: patch the table entries, not the module names, so the
+    # tests do not depend on the checkout's versions
+    monkeypatch.setitem(release.COMPONENTS["tools"], "get", lambda: "1.8.0")
+    monkeypatch.setitem(release.COMPONENTS["schema"], "get", lambda: "1.7.1")
     return git, gh
 
 
