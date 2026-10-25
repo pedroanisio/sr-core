@@ -523,3 +523,163 @@ def test_the_draft_settles_the_engine_vendoring_points(draft):
                    "`srep-<n>-space-no-asset.xml`",
                    "45ff742"):
         assert phrase in text, phrase
+
+
+# ------------------------------------------------------------------------------------ the kit (time_frames_kit.py)
+
+KIT = os.path.join(ROOT, "conformance", "tools", "time_frames_kit.py")
+tk = _load("time_frames_kit", KIT)
+
+
+def _kit_rows(draft):
+    body = draft.split("### Kit cases", 1)[1].split("\n## ", 1)[0]
+    return re.findall(r"^\| `srep-<n>-(space-[a-z-]+)\.xml` \|", body, re.M)
+
+
+def test_the_kit_writes_the_cases_the_draft_names(draft, tmp_path):
+    import xml.etree.ElementTree as ET
+    assert _kit_rows(draft) == tk.NAMES
+    paths = tk.write(str(tmp_path))
+    assert list(paths) == tk.NAMES
+    assert os.path.exists(os.path.join(str(tmp_path), "assets", "de440s-excerpt.bsp"))
+    for name, path in paths.items():
+        root = ET.parse(path).getroot()
+        assert root.get("version") == "1.8"
+        space = root.find("space")
+        assert space is not None, name
+        cam = root.find("composition/camera")
+        assert cam is not None and cam.get("projection") == "orthographic", name
+        assert cam.get("orthoHeight") == root.find("project").get("height"), name
+        eph = root.find("assets/ephemeris")
+        if name in ("space-no-asset",):
+            assert eph is None and space.get("ephemeris") not in (None, "approximate")
+        elif name == "space-approximate":
+            assert eph is None and space.get("ephemeris", "approximate") == "approximate"
+        else:
+            assert eph is not None and eph.get("src") == "assets/de440s-excerpt.bsp"
+            digest = eph.get("digest")
+            assert digest == "sha256:" + tf.EXCERPT_DIGEST or name == "space-digest"
+            if name == "space-digest":
+                assert digest != "sha256:" + tf.EXCERPT_DIGEST and len(digest) == 71
+        objs = root.findall("composition/object3D")
+        assert objs, name
+        for o in objs:
+            assert o.get("body") is not None, name
+            assert o.get("positionFrom") == "ephemeris" or o.get("orientation") == "bodyFixed", name
+
+
+def test_the_kit_expectations_come_from_the_reference():
+    exp = tk.expectations()
+    w, h = tk.FRAME["space-earth-moon"]
+    px = tf.place_body(tf.excerpt(), tf.space("2451545.0", "tdb", origin=399), 301, 0, 24.0, 1e-6)["position"]
+    assert _close(exp["space-earth-moon"]["centre"], (w / 2 + px[0], h / 2 + px[1]))
+    sp = tf.space("2451545.0", "tdb", rate=3600.0, origin=399)
+    a = tf.place_body(tf.excerpt(), sp, 301, 0, 24.0, 1e-6)["position"]
+    b = tf.place_body(tf.excerpt(), sp, 301, 48, 24.0, 1e-6)["position"]
+    assert _close(exp["space-rate"]["arc"], (b[0] - a[0], b[1] - a[1]))
+    assert 4.0 < math.dist(exp["space-rate"]["arc"], (0.0, 0.0)) < 9.0
+    sun = exp["space-body-fixed"]["centre"]
+    assert abs(sun[0] - tk.FRAME["space-body-fixed"][0] / 2) < 20.0       # the frame has turned about 90 degrees
+    assert exp["space-mars"]["centre"] == exp["space-approximate"]["reference"]
+    widths = exp["space-orientation"]["widths"]
+    assert abs(widths["0"] - widths["24"]) < 0.5 and abs(widths["6"] - widths["0"]) > 50.0
+    assert _close(tk.box_width(((1.0, 0.0, 0.0), (0.0, 1.0, 0.0), (0.0, 0.0, 1.0))), 200.0)
+
+
+def _disc(w, h, centre, radius):
+    from PIL import Image, ImageDraw
+    im = Image.new("RGB", (w, h), (0, 0, 0))
+    d = ImageDraw.Draw(im)
+    x, y = centre
+    # PIL's bbox is inclusive: the pixels x - r to x + r - 1 are the disc [x - r, x + r) of continuous coordinates
+    d.ellipse([x - radius, y - radius, x + radius - 1, y + radius - 1], fill=(255, 255, 255))
+    return im
+
+
+def test_the_kit_measures_a_centroid_a_psnr_and_identity(tmp_path):
+    import numpy as np
+    a = np.asarray(_disc(100, 80, (40.0, 30.0), 8.0)).astype(float)
+    assert _close(tk.centroid(a), (40.0, 30.0), 0.05)
+    b = np.asarray(_disc(100, 80, (46.0, 30.0), 8.0)).astype(float)
+    assert tk.identical(a, a) and not tk.identical(a, b)
+    assert tk.psnr(a, a) == math.inf and tk.psnr(a, b) < 25.0
+
+
+def _box(w, h, width):
+    from PIL import Image, ImageDraw
+    im = Image.new("RGB", (w, h), (0, 0, 0))
+    x0 = round(w / 2 - width / 2)
+    ImageDraw.Draw(im).rectangle([x0, h / 2 - 50, x0 + round(width) - 1, h / 2 + 49], fill=(255, 255, 255))
+    return im
+
+
+def _fake_engine(tmp_path, positions, refuse=(), widths=None):
+    """An exec that writes a disc at the reference position of each document (a box of the given width per
+    frame for the orientation case) and refuses the named cases."""
+    widths = widths or tk.expectations()["space-orientation"]["widths"]
+
+    def exec(cmd, capture_output, text):
+        class R:
+            returncode = 0
+            stdout = ""
+            stderr = ""
+        doc = cmd[2]
+        name = os.path.basename(doc)[len("srep-0000-"):-len(".xml")]
+        if name in refuse:
+            R.returncode, R.stderr = 1, "error[%s]: refused\n" % refuse[name]
+            return R
+        w, h = tk.FRAME[name]
+        frame = cmd[cmd.index("-f") + 1] if "-f" in cmd else None
+        out = cmd[cmd.index("-o") + 1]
+        frames = [int(frame)] if frame else list(range(0, int(cmd[cmd.index("--frames") + 1].split("..=")[1]) + 1))
+        for f in frames:
+            path = out % f if "%" in out else out
+            if name == "space-orientation":
+                _box(w, h, widths[str(f)]).save(path)
+            else:
+                _disc(w, h, positions(name, f), 8.0).save(path)
+        return R
+    return exec
+
+
+def test_the_kit_runs_an_engine_and_reports_every_case(tmp_path):
+    exp = tk.expectations()
+
+    def positions(name, frame):
+        if name == "space-rate" or name == "space-seek":
+            c, arc = exp["space-rate"]["centre"], exp["space-rate"]["arc"]
+            return (c[0] + arc[0] * frame / 48.0, c[1] + arc[1] * frame / 48.0)
+        if name == "space-orientation":
+            w, h = tk.FRAME[name]
+            return (w / 2, h / 2)
+        if name == "space-approximate":
+            return exp[name]["reference"]
+        return exp[name]["centre"]
+    out = str(tmp_path / "kit")
+    report = tk.run("engine", out, exec=_fake_engine(tmp_path, positions, refuse={"space-digest": "TF1", "space-no-asset": "TF5"}))
+    assert list(report) == tk.NAMES
+    assert all(r["pass"] for r in report.values()), report
+    bad = tk.run("engine", out, exec=_fake_engine(tmp_path, lambda n, f: (10.0, 10.0), refuse={"space-digest": "TF1"},
+                                                   widths={"0": 84.0, "6": 84.0, "24": 84.0}))
+    assert not bad["space-earth-moon"]["pass"] and not bad["space-no-asset"]["pass"]
+    assert not bad["space-orientation"]["pass"]               # frame 6 equals frame 0: nothing turned
+    assert "| space-earth-moon |" in tk.table(report)
+
+
+def test_the_draft_describes_the_kit_and_orientation_without_a_position(draft):
+    text = re.sub(r"\n +", " ", draft)
+    for phrase in ("`conformance/tools/time_frames_kit.py`", "`srep-<n>-space-mars.xml`",
+                   "`orientation=\"bodyFixed\"` needs `body` with rotation elements (rule 6), with or without a position",
+                   "2451545.25", "frame 6 differs from frame 0"):
+        assert phrase in text, phrase
+
+
+def test_the_draft_records_every_kit_case_measured_on_one_engine_commit(draft):
+    body = draft.split("### Kit cases", 1)[1].split("\n## ", 1)[0]
+    cells = re.findall(r"^\| `srep-<n>-space-[a-z-]+\.xml` \| (?:[^|]|\\\|)* \| ([^|]*) \|$", body, re.M)
+    assert len(cells) == len(tk.NAMES)
+    for cell in cells:
+        assert cell.startswith("measured on scene-render feat/sr-67-fields f9319f0 (0.8.0, llvmpipe): "), cell
+        assert cell.endswith("; pass"), cell
+    assert "to be measured" not in body
+    assert "the Moon 0.05 px off" in cells[0] and "TF1" in cells[1] and "TF5" in cells[2]

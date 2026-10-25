@@ -78,8 +78,8 @@ files are not changed by this draft.
     rule 5's tables).
   - **TF3** `frame="bodyFixed"` needs `frameBody` with rotation elements (rule 6 lists the bodies).
   - **TF4** `positionFrom="ephemeris"` or `orientation="bodyFixed"` on an `object3D` needs `body` and a
-    `space`; the body is in the ephemeris file (or in the approximate tables: 1 to 8), and `orientation`
-    needs rotation elements for it.
+    `space`; `positionFrom="ephemeris"` needs the body in the ephemeris file (or in the approximate tables:
+    1 to 8); `orientation="bodyFixed"` needs `body` with rotation elements (rule 6), with or without a position.
   - **TF5** `rate` is finite and non-negative; `ephemeris` is `approximate` or the `id` of an `ephemeris`
     asset; `origin` and `frameBody`, when the ephemeris is a file, are in that file or are the barycentre 0;
     with `approximate`, `origin` is 0, 10 or a body 1 to 8 (the elements are heliocentric: the barycentre 0
@@ -243,19 +243,28 @@ digest in the module.
 
 ### Kit cases
 
-The cases are described here and added to `conformance/srep_cases/` once the SREP has a number; they are
-measurable after SR-87 lands.
+The cases are described here and added to `conformance/srep_cases/` once the SREP has a number.
+`conformance/tools/time_frames_kit.py` writes them (as `srep-0000-…`, with the excerpt copied to `assets/`)
+and measures an engine's render of each (`--engine BIN`): the centroid of the lit pixels (the mean pixel index
+plus a half) against the reference's `place_body`, the PSNR between frames, the seek check, and the refusal
+codes of the two invalid documents; the status column records the measurement and the engine commit. Every
+document has an orthographic camera at the origin with `orthoHeight` the frame height, so scene (x, y) is the
+pixel (W/2 + x, H/2 + y), and an unlit white sphere of radius 8 px for a body.
+The 2026-10-25 run: `SR_GPU_BACKEND=vulkan SR_GPU_ADAPTER=llvmpipe python3 conformance/tools/time_frames_kit.py
+--engine scene-render` on a release build of the engine's feat/sr-67-fields at f9319f0 (which vendors the draft as of
+5083745); every case passes, the centroids within 0.1 px of the reference.
 
 | Case | Checks | Status |
 |---|---|---|
-| `srep-<n>-space-earth-moon.xml` | `space` at J2000 TDB about the Earth in the ICRF with the excerpt as ephemeris and `pixelsPerMeter="1e-6"`: the Moon's sphere is centred within 1 px of the reference's scene position (402448.64 km from the origin) | to be measured |
-| `srep-<n>-space-digest.xml` | the same document with one hex digit of `digest` changed: the engine refuses the document (TF1) | to be measured |
-| `srep-<n>-space-no-asset.xml` | the same document with `ephemeris="de441"`, the `id` of no `ephemeris` asset: the engine refuses the document (TF5) | to be measured |
-| `srep-<n>-space-approximate.xml` | `ephemeris="approximate"` with Mars at the 2025 epoch: Mars's centre within 2 px of the ephemeris case at the same scale (12.9″ at 1 px per 10⁴ km is under a pixel) | to be measured |
-| `srep-<n>-space-body-fixed.xml` | `frame="bodyFixed" frameBody="399"` with the Sun at J2000: the Sun's direction is 1.14° east of the scene's +x axis | to be measured |
-| `srep-<n>-space-rate.xml` | `rate="3600"` over 48 frames at 24 fps: the Moon moves by its two-hour arc (about 1.1°) between the first and last frame within 1 px | to be measured |
-| `srep-<n>-space-orientation.xml` | the Earth with `orientation="bodyFixed"` over one sidereal day at `rate="86164.0962"`: frame 24 at 24 fps repeats frame 0, PSNR ≥ 60 dB | to be measured |
-| `srep-<n>-space-seek.xml` | the rate case at frame 30 rendered alone equals the frame played from 0 (SREP 14) | to be measured |
+| `srep-<n>-space-earth-moon.xml` | `space` at J2000 TDB about the Earth (399) in the ICRF with the excerpt as ephemeris and `pixelsPerMeter="1e-6"`: the Moon's sphere (`body="301" positionFrom="ephemeris"`) is centred within 1 px of the reference's scene position (402448.64 km from the origin, 402 px) | measured on scene-render feat/sr-67-fields f9319f0 (0.8.0, llvmpipe): the Moon 0.05 px off; pass |
+| `srep-<n>-space-digest.xml` | the same document with one hex digit of `digest` changed: the engine refuses the document (TF1) | measured on scene-render feat/sr-67-fields f9319f0 (0.8.0, llvmpipe): refused, TF1 in the diagnostics; pass |
+| `srep-<n>-space-no-asset.xml` | the same document with `ephemeris="de441"` and no `ephemeris` asset: the engine refuses the document (TF5) | measured on scene-render feat/sr-67-fields f9319f0 (0.8.0, llvmpipe): refused, TF5 in the diagnostics; pass |
+| `srep-<n>-space-mars.xml` | Mars (4) about the Sun (10) from the excerpt at 2460977.5 TDB, `pixelsPerMeter="5e-10"` in a 480 × 480 frame: Mars's centre within 1 px of the reference's scene position | measured on scene-render feat/sr-67-fields f9319f0 (0.8.0, llvmpipe): Mars 0.09 px off; pass |
+| `srep-<n>-space-approximate.xml` | the Mars document with `ephemeris="approximate"` and no asset: Mars's centre within 2 px of the ephemeris case (12.9″ of direction at 2.4 × 10⁸ km is 0.02 px at this scale, so the two agree to the centroid's precision) | measured on scene-render feat/sr-67-fields f9319f0 (0.8.0, llvmpipe): Mars 0.08 px from the ephemeris case; pass |
+| `srep-<n>-space-body-fixed.xml` | `frame="bodyFixed" frameBody="399"` about the Earth with the Sun (10) at 2451545.25 TDB and `pixelsPerMeter="1e-9"`: six hours after J2000 the Earth-fixed frame has turned about 90°, so the Sun's scene x is sensitive to the prime meridian (2.4 px per degree); the Sun's centre is within 1 px of the reference's scene position (at J2000 itself the Sun is 1.14° east of the frame's +x axis, the `sun longitude earth-fixed` row, but that angle lies in the scene's x–z plane, which a frontal camera cannot see) | measured on scene-render feat/sr-67-fields f9319f0 (0.8.0, llvmpipe): the Sun 0.08 px off; pass |
+| `srep-<n>-space-rate.xml` | the Earth-Moon document with `rate="3600"` over 48 frames at 24 fps: the Moon's centre moves between frame 0 and frame 48 by the reference's two-hour arc (about 1.1°; 5.2 px in the frame plane at this scale) within 1 px, and frame 0 is within 1 px of the reference | measured on scene-render feat/sr-67-fields f9319f0 (0.8.0, llvmpipe): arc (4.70, 2.17) px, 0.02 px from the reference's, frame 0 0.05 px off; pass |
+| `srep-<n>-space-orientation.xml` | the Earth (399) as a 200 × 100 × 50 box with `orientation="bodyFixed"` about itself, the excerpt as ephemeris and `rate="86164.0962"` at 24 fps, one sidereal day in 24 frames: frame 24 equals frame 0 (identical or PSNR ≥ 60 dB), frame 6 differs from frame 0 (a quarter turn: PSNR < 20 dB), and the box's silhouette width at frames 0 and 6 is the reference's projection of its axes along scene x (rule 6) within 2 px | measured on scene-render feat/sr-67-fields f9319f0 (0.8.0, llvmpipe): frame 24 identical to frame 0, frame 6 at 12.76 dB, silhouettes 84 and 206 px, 0.45 px from the reference's; pass |
+| `srep-<n>-space-seek.xml` | the rate document at frame 30 rendered alone equals frame 30 played from 0 (SREP 14), pixel-identical | measured on scene-render feat/sr-67-fields f9319f0 (0.8.0, llvmpipe): frame 30 alone pixel-identical to frame 30 played; pass |
 
 ## Open issues
 
@@ -298,3 +307,7 @@ measurable after SR-87 lands.
   that names no asset (kit case `space-no-asset`); TF2 bounds a UTC offset to 23:59, checks 1972-01-01 after
   it and reads a TT or TDB epoch with the lexical of `xs:decimal`; rule 5 chooses the table by year, so TF2's
   bound is the years −3000 to 3000 (`element_table`, `approximate_relative`, five table rows).
+- 2026-10-25: `conformance/tools/time_frames_kit.py` writes the kit cases and measures an engine's renders; the
+  table gains `space-mars` and states the measurements (the body-fixed case at 2451545.25, where the frame's
+  turn makes x sensitive to the prime meridian; the orientation case checks a quarter turn differs); TF4 says
+  that `orientation="bodyFixed"` needs rotation elements only, with or without a position (SR-87's reading).
