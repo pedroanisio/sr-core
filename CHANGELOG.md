@@ -21,6 +21,15 @@ version:
 
 ### Added
 
+- Draft SREP "Add lava to the terrain grid" (`srep/srep-0000-lava.md`, T4 of SREP 12): a `lavaFlow` child of
+  `terrain` erupts lava from a vent (`ventX`, `ventY`, an animatable `effusion` varied through the random streams
+  at purpose 2³¹ + 2¹⁷) into the terrain's `lava` layer and moves it over the surface as a Bingham fluid in a
+  cellular automaton after MAGFLOW (Vicari et al. 2007): Dragoni's steady flux between the eight neighbours by
+  the surface slope, zero under the critical thickness τ / (ρ g sin θ) and never past the plug, mixing by volume,
+  Stefan–Boltzmann cooling through the lava's or the `crust`'s thermal mass, solidification into `bedrock` below
+  the `solidus`; log-linear `viscosity` and `yieldStrength` in the temperature; the terrain's `temperature` layer
+  as the surface temperature; LV1–LV4, V17. Reference `conformance/tools/lava_reference.py` with its numeric
+  table; `tests/test_lava.py`. Engine card SR-108.
 - Draft SREP "Add a weather state" (`srep/srep-0000-weather.md`, A5 of SREP 12): `weather` elements of `physics`
   beside `wind`, holding one animatable state (`temperature`, `humidity`, `precipitation`, `cloudiness`,
   `visibility`, `lightning`) and a `wind`, that drives the elements naming it instead of their own attributes:
