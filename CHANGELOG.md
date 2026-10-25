@@ -21,6 +21,17 @@ version:
 
 ### Added
 
+- Draft SREP "Add data layers to the map" (`srep/srep-0000-data-layers.md`, M2 of SREP 12): basemap styles draw the
+  MapLibre `heatmap` layer (every feature vertex a Gaussian kernel centre per MapLibre's heatmap shaders, the quad
+  cut-off 1/4080, a ramp over `heatmap-density` interpolated in straight RGBA then premultiplied), the
+  `fill-extrusion` layer (roofs lit by the style's root `light` per MapLibre's fill_extrusion vertex shader on a 2D
+  map; the features become SREP 10's `@buildings` prisms on a 3D map) and `symbol` icons from sprite sheets declared
+  as `sprite` children of `basemap` (`name`, `index`, `image` assets; MapLibre's shapeIcon box times `icon-size`,
+  `icon-offset` in icon pixels, rotation about the anchor, `icon-text-fit`, overlap modes never/always/cooperative,
+  ignore-placement, the icon-optional/text-optional pairing with SREP 9's labels, SDF icons coloured by `icon-color`
+  with a halo per the symbol_sdf shader, bilinear sampling) and `basemap/@icons`; rules DL1–DL7, warning W-DL1 and
+  the version gate V18. Reference `conformance/tools/data_layers_reference.py` (numpy; prints the draft's 48-row
+  table), `tests/test_data_layers.py` (51 tests). Engine card SR-113.
 - Draft SREP "Add relief layers to the map" (`srep/srep-0000-relief.md`, M1 of SREP 12): basemap styles draw the
   MapLibre `raster` (opacity, hue rotation, brightness, saturation, contrast, resampling per MapLibre's raster
   shader), `hillshade` (standard from MapLibre's legacy formula; basic, combined, igor and multidirectional from
