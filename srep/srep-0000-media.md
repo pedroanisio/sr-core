@@ -80,7 +80,8 @@ Three attributes on `mediumType`, after `scatterBounces` (schema 1.7.1, `schema/
    </xs:complexType>
 ```
 
-Three Schematron rules in the `object3D` rule that holds VOL10 (`schema/scene-render.sch:517`):
+Three Schematron rules in the `object3D` rule that holds VOL10 (`schema/scene-render.sch:517`), and a version
+gate after V8's rule in the same `cinematic-volume` pattern:
 
 ```diff
 --- a/schema/scene-render.sch
@@ -91,6 +92,12 @@ Three Schematron rules in the `object3D` rule that holds VOL10 (`schema/scene-re
 +      <sch:assert id="MED2" test="not(medium/@dropletDiameter) or medium/@phase='fog'">medium dropletDiameter applies only with phase="fog".</sch:assert>
 +      <sch:assert id="MED3" test="not(medium[@phase='rayleigh' or @phase='fog']/@anisotropy) or number(medium/@anisotropy)=0">medium anisotropy is absent or 0 with phase="rayleigh" and phase="fog", whose shapes are fixed.</sch:assert>
      </sch:rule>
+@@ -510,2 +513,5 @@
+       <sch:assert id="V8" test="not(assets/volume|.//medium|.//pyro|.//object3D[@primitive='volume' or @volume])">volumetric assets and media require version="1.3" or later.</sch:assert>
+     </sch:rule>
++    <sch:rule context="/scene[@version='1.0' or @version='1.1' or @version='1.2' or @version='1.3' or @version='1.4' or @version='1.5' or @version='1.6' or @version='1.7']">
++      <sch:assert id="MED4" test="not(.//medium[@phase or @phaseAlpha or @dropletDiameter])">medium phase, phaseAlpha and dropletDiameter require version="1.8" or later.</sch:assert>
++    </sch:rule>
 ```
 
 The `medium` attributes of SREP 40 and 79 are unchanged. `phase`, `phaseAlpha` and `dropletDiameter` are not
@@ -218,8 +225,11 @@ exactly, so that the phase function and the pdf cancel and β is unchanged:
 #### 7. Version gate
 
 24. The three attributes carry "Version 1.8" in their documentation, as the schema marks every attribute's
-    version. A document of version 1.7 or earlier cannot carry them (the XSD of its version has none) and renders
-    as it did: `phase` absent is `hg`, which is rule 12 with today's `anisotropy`.
+    version, and the gate is a Schematron rule, as for every versioned feature: every document validates against
+    the one vendored XSD, so MED4 refuses `phase`, `phaseAlpha` or `dropletDiameter` on a `medium` of a document
+    whose `scene/@version` is 1.3 to 1.7 (a document of 1.0 to 1.2 with any `medium` is already refused by V8,
+    which precedes MED4 in the pattern and is the rule Schematron fires). A 1.7 document renders as it did:
+    `phase` absent is `hg`, which is rule 12 with today's `anisotropy`.
 
 #### 8. SREP 14 rules
 
@@ -271,7 +281,8 @@ exactly, so that the phase function and the pdf cancel and β is unchanged:
 - Every 1.7.1 document validates and renders unchanged: the new attributes have defaults that reproduce rule 12
   with the existing `anisotropy`, and no existing rule changes.
 - A 1.8 document with `phase="rayleigh"`, `draine` or `fog` is refused by a 1.7 validator (unknown attribute),
-  as every added attribute is.
+  as every added attribute is; a 1.7 document that carries the attributes is refused here by MED4 (rule 24),
+  so the attributes never change the look of a document that predates them.
 - SREP 79's walk is unchanged for `hg`; for the other phases its direction sampling follows rules 19 and 20.
   Its bounds (rule 7) and its invariants (rule 8: no change to transmittance or alpha) hold for every phase.
 
@@ -279,7 +290,7 @@ exactly, so that the phase function and the pdf cancel and β is unchanged:
 
 | Engine | Status | Work | Tracking |
 |---|---|---|---|
-| Rust (`rs-scene-render`), reference | rules 1 to 12, 18, 22 and 23: implemented at 67a661a (`crates/sr-volume/src/medium.rs`, `crates/sr-gpu/src/volume.wgsl`, `volume_grid.wgsl`, `pathtrace_scatter.wgsl`, `pathtrace.rs:80-87`, `three.wgsl:581-585`); rules 13 to 17, 19 and 20: pending | parse the three attributes and MED1 to MED3; carry the phase kind and its parameters in the medium record; evaluate `volume_phase` and `phase_hg` by kind; mark non-`hg` media anisotropic for the dome grids; sample the Draine cumulative in `scatter_direction`; the numeric table and the kit cases as tests | SR-62 |
+| Rust (`rs-scene-render`), reference | rules 1 to 12, 18, 22 and 23: implemented at 67a661a (`crates/sr-volume/src/medium.rs`, `crates/sr-gpu/src/volume.wgsl`, `volume_grid.wgsl`, `pathtrace_scatter.wgsl`, `pathtrace.rs:80-87`, `three.wgsl:581-585`); rules 13 to 17, 19 and 20: pending | parse the three attributes and MED1 to MED4; carry the phase kind and its parameters in the medium record; evaluate `volume_phase` and `phase_hg` by kind; mark non-`hg` media anisotropic for the dome grids; sample the Draine cumulative in `scatter_direction`; the numeric table and the kit cases as tests | SR-62 |
 
 ## Conformance
 
@@ -380,3 +391,5 @@ to 20 (there is no engine to measure the first two against before that).
 ## History
 
 - 2026-10-24: draft, with the reference module and tests; engine work filed as SR-62.
+- 2026-10-25: MED4 version gate added (engine review on SR-62: the repository gates versions in Schematron,
+  not per-version XSDs); rule 24 and Backwards compatibility reworded.

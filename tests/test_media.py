@@ -280,6 +280,18 @@ def test_sampling_rejects_a_unit_draw_outside_the_half_open_interval(xi):
         mr.sample_draine(xi, 0.5, 1.0)
 
 
+# --- the SREP's version gate --------------------------------------------------------------------------------------
+
+def test_the_draft_gates_the_phase_attributes_by_version():
+    text = open(DRAFT, encoding="utf-8").read()
+    gate = text.index('<sch:assert id="MED4"')
+    assert "not(.//medium[@phase or @phaseAlpha or @dropletDiameter])" in text[gate:gate + 200]
+    rule = text.rfind("<sch:rule context=", 0, gate)
+    assert "@version='1.7'" in text[rule:gate] and "@version='1.8'" not in text[rule:gate]
+    assert "MED1 to MED4" in text
+    assert "already refused by V8" in text
+
+
 # --- the SREP's numeric-test table ------------------------------------------------------------------------------
 
 def _numeric_rows():
