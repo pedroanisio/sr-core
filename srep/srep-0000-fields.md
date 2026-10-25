@@ -73,7 +73,7 @@ the schema editor; the schema files are not changed by this draft.
 | `stroke`, `strokeWidth` | `paintType`, `positiveDecimal` | `#FFFFFFFF`, 2 | the paint and width (pixels) of every stroked presentation that gives none of its own |
 
 Exactly one source among `u`/`v`, `function`, `w`, `grid`, `forceField` and the source children is given
-(FLD1). Its content is `(charge | current | dipole)*` then `(arrows | streamlines | lic | portrait | lines |
+(FLD1). Its content is `(charge | current | dipole | wire)*` then `(arrows | streamlines | lic | portrait | lines |
 contours)*`:
 
 | Child | Attributes | Meaning |
@@ -81,7 +81,8 @@ contours)*`:
 | `charge` | `x`, `y`, `q` (`xs:double`) | a point charge at (x, y) of charge q (rule 2) |
 | `current` | `x`, `y`, `i` | a straight current out of the plane (rule 2) |
 | `dipole` | `x`, `y`, `mx`, `my` | a point dipole of moment (mx, my) (rule 2) |
-| `arrows` | `cols`, `rows` (`xs:positiveInteger`, at most 1000, default 10), `scale` (`positiveDecimal`, default 1), `maxLength` (`positiveDecimal`, default 40 px), `headLength` (default 0.3), `headWidth` (default 0.5), `stroke`, `strokeWidth` (the field's when absent), `strokeStyle` | glyphs on a grid (rule 5) |
+| `wire` | `x1`, `y1`, `x2`, `y2`, `q` (`xs:double`, default 0), `i` (`xs:double`, default 0) | a straight wire in the plane from (x1, y1) to (x2, y2) carrying the charge q per unit length and the current i from the first point to the second (rule 2) |
+| `arrows` | `cols`, `rows` (`xs:positiveInteger`, at most 1000, default 10), `show` (`field` | `poynting`, default `field`), `scale` (`positiveDecimal`, default 1), `maxLength` (`positiveDecimal`, default 40 px), `headLength` (default 0.3), `headWidth` (default 0.5), `stroke`, `strokeWidth` (the field's when absent), `strokeStyle` | glyphs on a grid (rule 5) |
 | `streamlines` | `separation` (`positiveDecimal`, pixels, default 20), `test` (default `separation` / 2), `step` (default `separation` / 4), `maxSteps` (default 10000, at most 1,000,000), `maxLines` (default 10000, at most 1,000,000), `seedX`, `seedY` (data; default the box centre), `stroke`, `strokeWidth` (the field's when absent), `strokeStyle`, `strokeMarkers` | evenly spaced streamlines (rule 6) |
 | `lic` | `length` (`positiveDecimal`, pixels, default 10), `step` (default 1), `resolution` (`xs:positiveInteger`, at most 4096, default the box's pixel size capped the same), `seed` (`xs:unsignedLong`), `opacity` | line integral convolution (rule 7) |
 | `portrait` | `modulus` (`xs:boolean`, default true), `base` (`xs:double` with `minExclusive` 1, default 2), `opacity` | the phase portrait of a complex field (rule 8) |
@@ -95,7 +96,7 @@ anything the document animates.
 **3. Schematron.** A pattern `p-srep-fields` after `p-srep75` (sch:851):
 
 - `FLD1` on `field`: exactly one of `@u`, `@function`, `@w`, `@grid`, `@forceField` and `(charge | current |
-  dipole)` is present, and the source fits the kind: `vector` (the default) takes `@u` with `@v`, `@grid`,
+  dipole | wire)` is present, and the source fits the kind: `vector` (the default) takes `@u` with `@v`, `@grid`,
   `@forceField` or the source children; `scalar` takes `@u` without `@v`, or `@grid`; `complex` takes
   `@function` or `@w`; `@coefficients` appears with `@function='mobius'` only and then holds eight numbers,
   as SPT1 of the space-transforms draft states for the `complex` modifier.
@@ -106,6 +107,8 @@ anything the document animates.
   `contours` `@kind='scalar'`, `lines` a `charge` child of the parent. `FLD4`: `@test <= @separation`,
   `@maxSteps <= 1000000`, `@maxLines <= 1000000`.
 - `FLD5` on `field`: `ancestor::axes or (@width and @height)`: a field outside an `axes` states its box.
+- `FLD6` on `field/arrows[@show='poynting']`: `../wire[@i != 0] and (../charge or ../dipole or ../wire[@q != 0])`:
+  Poynting arrows need a current-carrying wire and a charge.
 - `V17`, the shared 1.8 gate of SREP 12 on `/scene[@version` 1.0 to 1.7`]` (one pattern after `p-srep75`,
   sch:851, one assert), gains the clause `not(.//field)`: "field nodes need version 1.8".
 
@@ -130,8 +133,17 @@ Outside an `axes` the box is `width` × `height` pixels at the node's origin (FL
    +y flipped, at composition time. Charges, currents and dipoles sum (the constant of each law is 1):
    E = Σ q r / |r|³ (Coulomb, in the plane of the charges), B = i / (2π |r|) counterclockwise (a straight
    current out of the plane), D = (3 (m·r̂) r̂ − m) / |r|³ (a point dipole in the plane of its axis); the
-   field is (0, 0) at a source. The **Poynting** vector of an in-plane E and the out-of-plane B of a current
-   is (E_y B, −E_x B) (`poynting`), stated for shot 2.
+   field is (0, 0) at a source. A `wire` from a to b carrying the charge q per unit length and the current i
+   (`line_field`) adds to F the in-plane field of the finite line charge, E = q (φ n̂ + (1/√(s² + d²) −
+   1/√((L − s)² + d²)) t̂) with t̂ the direction a → b, n̂ its left normal, s the position along the wire, d
+   the signed distance from its line (positive on the left) and φ = ((L − s)/√((L − s)² + d²) +
+   s/√(s² + d²)) / d (Griffiths example 2.1, constant 1); its magnetic field is out of the plane,
+   B_z = i φ / (4π) (Biot–Savart for a segment, Griffiths example 5.5, constant 1; a long wire gives i / (2π d),
+   the point current's magnitude); both are 0 on the wire's line. The **Poynting** vector of an in-plane E
+   and an out-of-plane B is (E_y B, −E_x B) (`poynting`); `arrows show="poynting"` draws it with E the sum of
+   the charges, dipoles and charged wires and B_z the sum of the wires' (`poynting_at`), shot 2's picture: a
+   loop of two wires of opposite charge carrying the current round the loop, where S runs along the loop
+   from the source toward the load (`SHOT2_WIRES`).
 3. **Operators** (`divergence`, `curl`). ∂u/∂x + ∂v/∂y and ∂v/∂x − ∂u/∂y by central differences of step
    10⁻⁴ data units; the kit reports them at named points.
 4. **Streamlines** (`rk4_step`, `streamline`). A streamline through p₀ is the polyline of Runge–Kutta 4 steps
@@ -140,7 +152,7 @@ Outside an `axes` the box is `width` × `height` pixels at the node's origin (FL
    were taken each way. A step whose point meets a stop condition (rules 6 and 10) ends the line.
 5. **Arrows** (`arrow`, `arrow_grid`). At each node of the `cols` × `rows` grid spanning the box (edges
    included, row by row from yMin), the glyph is a shaft from the node of length min(|F| · `scale`,
-   `maxLength`) along F and a head (tip, left, right) of length `headLength` × shaft and half-width
+   `maxLength`) along F, or along the Poynting vector S of rule 2 when `show="poynting"`, and a head (tip, left, right) of length `headLength` × shaft and half-width
    `headWidth` × that, in the presentation's stroke; a zero vector draws nothing.
 6. **Evenly spaced streamlines** (`evenly_spaced_streamlines`, `min_separation`), after Jobard and Lefer
    1997. Let d = `separation`, d_t = `test`, h = `step`. The first streamline starts at the seed. A queue holds
@@ -221,6 +233,9 @@ Outside an `axes` the box is `width` × `height` pixels at the node's origin (FL
 |---|---|---|---|
 | Rust (`rs-scene-render`), reference | nothing of this SREP at 67a661a; the building blocks exist: `crates/sr-eval/src/sim.rs` (`FieldSrc`, `to_pixels`, the seven `FieldKind`s), the expression VM (`crates/sr-eval/src/expr/vm.rs`), `crates/sr-vector` strokes and markers (`strokeMarkers`, xsd:378), the `fractal` asset's per-pixel raster path (`crates/sr-eval/src/fractal.rs`) for LIC and portraits | the node and its sources; arrows; the queue of rule 6 with buckets; LIC and portrait rasters; charge lines; contours through the plots work (SR-63); the kit's winding and separation measures | SR-67 |
 
+The `wire` source and `arrows/@show="poynting"` (2026-10-25) are engine work after SR-67:
+[SR-117](https://faz-ai.atlassian.net/browse/SR-117).
+
 ## Conformance
 
 ### Numeric tests
@@ -246,6 +261,13 @@ rule 10 (eight rays at 45° steps; r / sin²θ = 2√2 at (1, 1)).
 | dipole on the equator | `dipole_field((2.0, 0.0))` | `(0.0, -0.125)` |
 | wire field | `tuple(round(c, 12) + 0.0 for c in wire_field((2.0, 0.0)))` | `(0.0, 0.079577471546)` |
 | poynting | `poynting((1.0, 0.0), 1.0)` | `(0.0, -1.0)` |
+| wire B at the midpoint | `round(line_field((0.0, 1.0), (-1.0, 0.0), (1.0, 0.0), i=1.0)[2], 12)` | `0.11253953952` |
+| wire E at the midpoint | `tuple(round(c, 12) + 0.0 for c in line_field((0.0, 1.0), (-1.0, 0.0), (1.0, 0.0), q=1.0)[:2])` | `(0.0, 1.414213562373)` |
+| long wire is the point current | `round(line_field((0.0, 1.0), (-1e9, 0.0), (1e9, 0.0), i=1.0)[2], 12)` | `0.159154943092` |
+| below the wire the signs flip | `tuple(round(c, 12) + 0.0 for c in line_field((0.0, -1.0), (-1.0, 0.0), (1.0, 0.0), q=1.0, i=1.0))` | `(0.0, -1.414213562373, -0.11253953952)` |
+| on the wire | `line_field((0.5, 0.0), (-1.0, 0.0), (1.0, 0.0), q=1.0, i=1.0)` | `(0.0, 0.0, 0.0)` |
+| shot 2 poynting at the centre | `tuple(round(c, 6) + 0.0 for c in poynting_at((0.0, 0.0), (), (), SHOT2_WIRES))` | `(4.074367, 0.0)` |
+| shot 2 arrows within 5 degrees | `round(max(abs(poynting_angle((x, y), (), (), SHOT2_WIRES)) for x in (-0.5, -0.25, 0.0, 0.25, 0.5) for y in (-0.25, 0.0, 0.25)), 6)` | `3.740344` |
 | divergence of a source | `round(divergence(lambda x, y: (x, y), (0.3, 0.7)), 6)` | `2.0` |
 | curl of a rotation | `round(curl(lambda x, y: (-y, x), (0.3, 0.7)), 6)` | `2.0` |
 | divergence of a point source | `round(divergence(lambda x, y: source_field((x, y)), (1.0, 0.0)), 6) + 0.0` | `0.0` |
@@ -282,17 +304,20 @@ rule 10 (eight rays at 45° steps; r / sin²θ = 2√2 at (1, 1)).
 
 ### Kit cases
 
-The cases are described here and added to `conformance/srep_cases/` once the SREP has a number; they are not
-measurable on an engine before SR-67 lands.
+The cases are described here and added to `conformance/srep_cases/` once the SREP has a number.
+`conformance/tools/fields_kit.py` writes them (as `srep-0000-…`) and measures an engine's render of each
+(`--engine BIN`); the status column records the measurement and the engine commit. The 2026-10-25 run:
+`SR_GPU_BACKEND=vulkan SR_GPU_ADAPTER=llvmpipe python3 conformance/tools/fields_kit.py --engine scene-render` on a
+release build of the engine's feat/sr-67-fields at 9a40270 (which vendors the draft as of 5186b0c).
 
 | Case | Checks | Status |
 |---|---|---|
-| `srep-<n>-field-uniform.xml` | `u="1" v="0"` over a 400 × 400 box with `streamlines separation="80"`: five white horizontal lines whose centroids are 80 px apart within 0.5 px | to be measured |
-| `srep-<n>-field-vortex.xml` | `u="-y" v="x"` with `arrows cols="5" rows="5"`: every arrow's shaft is perpendicular to the radius from the centre within 1°, and the frame alone equals the frame played (SREP 14) | to be measured |
-| `srep-<n>-field-dipole.xml` | a `dipole` with `lines perCharge="8"`-style streamlines from seeds on the equator: along each line sampled at 20 points, r / sin²θ changes by less than 10⁻³ relative | to be measured |
-| `srep-<n>-field-portrait.xml` | `kind="complex" w="x*x - y*y - 1; 2*x*y"` divided by z as a `portrait`: the hue around the circle of radius 2 turns once (winding 1) and around radius 0.5 turns once backwards (−1), measured from the rendered pixels | to be measured |
-| `srep-<n>-field-lic.xml` | a horizontal field's `lic` over a 4 × 2 raster of a stated seed: each rendered row is constant within 1/255 | to be measured |
-| `srep-<n>-field-poynting.xml` | a `current` and two `charge`s of shot 2 with `arrows` of `poynting`: the arrows between the wires point from the source toward the load within 5° | to be measured |
+| `srep-<n>-field-uniform.xml` | `u="1" v="0"` over a 400 × 400 box with `streamlines separation="80"`: five white horizontal lines whose centroids are 80 px apart within 0.5 px | measured on scene-render feat/sr-67-fields 9a40270 (0.8.0, llvmpipe): centroids 80, 160, 240, 320 and 400 px, every gap 80.0 px; pass |
+| `srep-<n>-field-vortex.xml` | `u="-y" v="x"` with `arrows cols="5" rows="5"`: every arrow's shaft is perpendicular to the radius from the centre within 1°, and the frame alone equals the frame played (SREP 14) | measured on scene-render feat/sr-67-fields 9a40270 (0.8.0, llvmpipe): 24 arrows, the worst 0.43° off perpendicular; frame 2 alone equals frame 2 of 0..=2; pass |
+| `srep-<n>-field-dipole.xml` | a `dipole` of moment (0, 1) at the origin with one streamline (`streamlines maxLines="1" step="2"`) seeded at (0.5, 0) on the equator, 200 px per unit: at 20 angles θ from 30° to 150° off the axis, the lit pixel nearest the point r = 0.5 sin²θ is within 1.5 px of it | measured on scene-render feat/sr-67-fields 9a40270 (0.8.0, llvmpipe): the farthest 0.67 px; pass |
+| `srep-<n>-field-portrait.xml` | `kind="complex" w="x*x - y*y - 1; 2*x*y"` divided by z as a `portrait`: the hue around the circle of radius 2 turns once (winding 1) and around radius 0.5 turns once backwards (−1), measured from the rendered pixels | measured on scene-render feat/sr-67-fields 9a40270 (0.8.0, llvmpipe): winding 1 at r = 2 and −1 at r = 0.5; pass |
+| `srep-<n>-field-lic.xml` | a horizontal field's `lic` over a 4 × 2 raster of a stated seed: each rendered row is constant within 1/255 | measured on scene-render feat/sr-67-fields 9a40270 (0.8.0, llvmpipe): every row constant (spread 0 code values, 8 distinct rows); pass |
+| `srep-<n>-field-poynting.xml` | shot 2 as two `wire`s of charge +1 and −1 carrying the current 1 round the loop ((−1, 0.5) → (1, 0.5) and (1, −0.5) → (−1, −0.5)) with `arrows show="poynting"` on a 9 × 9 grid: the 15 arrows between the wires with \|x\| ≤ 0.5 point along +x, from the source toward the load, within 5° (the reference gives 3.74° at most) | the engine at 9a40270 refuses the document (FLD1, and S02 for `wire`): its vendored diff predates the wire source; engine card SR-117 |
 
 ## Open issues
 
@@ -320,7 +345,8 @@ measurable on an engine before SR-67 lands.
   r = C sin²θ, problem 3.33; Biot–Savart for a straight wire, example 5.5).
 - Veritasium, *The Big Misconception About Electricity* (shot 2); 3Blue1Brown, *Divergence and curl*
   (shot 12).
-- `conformance/tools/fields_reference.py`, `tests/test_fields.py`.
+- `conformance/tools/fields_reference.py`, `conformance/tools/fields_kit.py` (the kit cases and their measurement),
+  `tests/test_fields.py`.
 
 ## History
 
@@ -329,3 +355,7 @@ measurable on an engine before SR-67 lands.
   V17 as a clause of the shared gate; `stroke` and `strokeWidth` on the field and its stroked presentations;
   maxima on `cols`, `rows`, `perCharge` and `resolution`; FLD1 ties the source to the kind and
   `coefficients` to `mobius`; `base` above 1; FLD5 for the box outside an `axes`.
+- 2026-10-25: the `wire` source and `arrows/@show="poynting"` (shot 2 was promised without a syntax: a point
+  `current` has an in-plane B, and the Poynting vector of a loop needs the wires in the plane), with FLD6; the
+  dipole kit case measured as pixel distances to r = C sin²θ; `conformance/tools/fields_kit.py` writes the six
+  cases and measures a render.

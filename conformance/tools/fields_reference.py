@@ -105,6 +105,54 @@ def poynting(e, b):
     return (e[1] * b, -e[0] * b)
 
 
+def line_field(p, a, b, q=0.0, i=0.0):
+    """A straight wire in the plane from a to b carrying the charge q per unit length and the current i (from a
+    to b): the in-plane E of the finite line charge (Griffiths example 2.1, constant 1) and the out-of-plane B
+    of the segment (Biot-Savart, Griffiths example 5.5, constant 1), as (Ex, Ey, Bz); (0, 0, 0) on the wire's
+    line. With t the direction a -> b, n its left normal, s the position along the wire and d the signed
+    distance from its line (positive on the left), the perpendicular factor is
+    ((L - s) / sqrt((L - s)^2 + d^2) + s / sqrt(s^2 + d^2)) / d: E = q (factor n + (1 / sqrt(s^2 + d^2) -
+    1 / sqrt((L - s)^2 + d^2)) t) and Bz = i factor / (4 pi), so a long wire gives i / (2 pi d), the point
+    current's magnitude."""
+    tx, ty = b[0] - a[0], b[1] - a[1]
+    length = math.sqrt(tx * tx + ty * ty)
+    tx, ty = tx / length, ty / length
+    nx, ny = -ty, tx
+    px, py = p[0] - a[0], p[1] - a[1]
+    s, d = px * tx + py * ty, px * nx + py * ny
+    if d == 0.0:
+        return (0.0, 0.0, 0.0)
+    r1, r2 = math.sqrt(s * s + d * d), math.sqrt((length - s) * (length - s) + d * d)
+    perp = ((length - s) / r2 + s / r1) / d
+    par = 1.0 / r1 - 1.0 / r2
+    return (q * (perp * nx + par * tx), q * (perp * ny + par * ty), i * perp / (4.0 * math.pi))
+
+
+# shot 2 (Veritasium): a loop of two wires, the top one charged +1 carrying the current 1 to the right, the
+# bottom one charged -1 carrying it back; each wire is (a, b, q, i)
+SHOT2_WIRES = (((-1.0, 0.5), (1.0, 0.5), 1.0, 1.0), ((1.0, -0.5), (-1.0, -0.5), -1.0, 1.0))
+
+
+def poynting_at(p, charges, dipoles, wires):
+    """The Poynting vector at p: E the sum of the charges ((x, y, q)), dipoles ((x, y, mx, my)) and the wires'
+    line charges, Bz the sum of the wires' currents (line_field), as poynting(E, Bz)."""
+    ex, ey = charge_field(charges, p) if charges else (0.0, 0.0)
+    for x, y, mx, my in dipoles:
+        dx, dy = dipole_field(p, (mx, my), (x, y))
+        ex, ey = ex + dx, ey + dy
+    bz = 0.0
+    for a, b, q, i in wires:
+        wx, wy, wb = line_field(p, a, b, q, i)
+        ex, ey, bz = ex + wx, ey + wy, bz + wb
+    return poynting((ex, ey), bz)
+
+
+def poynting_angle(p, charges, dipoles, wires):
+    """The direction of the Poynting vector at p in degrees from +x."""
+    sx, sy = poynting_at(p, charges, dipoles, wires)
+    return math.degrees(math.atan2(sy, sx))
+
+
 # --- rule 3: operators -------------------------------------------------------------------------------------------
 
 def divergence(f, p, h=DIFF_H):
@@ -519,6 +567,13 @@ TABLE = [
     ("dipole on the equator", "dipole_field((2.0, 0.0))"),
     ("wire field", "tuple(round(c, 12) + 0.0 for c in wire_field((2.0, 0.0)))"),
     ("poynting", "poynting((1.0, 0.0), 1.0)"),
+    ("wire B at the midpoint", "round(line_field((0.0, 1.0), (-1.0, 0.0), (1.0, 0.0), i=1.0)[2], 12)"),
+    ("wire E at the midpoint", "tuple(round(c, 12) + 0.0 for c in line_field((0.0, 1.0), (-1.0, 0.0), (1.0, 0.0), q=1.0)[:2])"),
+    ("long wire is the point current", "round(line_field((0.0, 1.0), (-1e9, 0.0), (1e9, 0.0), i=1.0)[2], 12)"),
+    ("below the wire the signs flip", "tuple(round(c, 12) + 0.0 for c in line_field((0.0, -1.0), (-1.0, 0.0), (1.0, 0.0), q=1.0, i=1.0))"),
+    ("on the wire", "line_field((0.5, 0.0), (-1.0, 0.0), (1.0, 0.0), q=1.0, i=1.0)"),
+    ("shot 2 poynting at the centre", "tuple(round(c, 6) + 0.0 for c in poynting_at((0.0, 0.0), (), (), SHOT2_WIRES))"),
+    ("shot 2 arrows within 5 degrees", "round(max(abs(poynting_angle((x, y), (), (), SHOT2_WIRES)) for x in (-0.5, -0.25, 0.0, 0.25, 0.5) for y in (-0.25, 0.0, 0.25)), 6)"),
     ("divergence of a source", "round(divergence(lambda x, y: (x, y), (0.3, 0.7)), 6)"),
     ("curl of a rotation", "round(curl(lambda x, y: (-y, x), (0.3, 0.7)), 6)"),
     ("divergence of a point source", "round(divergence(lambda x, y: source_field((x, y)), (1.0, 0.0)), 6) + 0.0"),

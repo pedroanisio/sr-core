@@ -9,15 +9,20 @@ import math
 import os
 import re
 
+import numpy as np
 import pytest
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODULE = os.path.join(ROOT, "conformance", "tools", "fields_reference.py")
+KIT = os.path.join(ROOT, "conformance", "tools", "fields_kit.py")
 DRAFT = os.path.join(ROOT, "srep", "srep-0000-fields.md")
 
 spec = importlib.util.spec_from_file_location("fields_reference", MODULE)
 fr = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(fr)
+kspec = importlib.util.spec_from_file_location("fields_kit", KIT)
+fk = importlib.util.module_from_spec(kspec)
+kspec.loader.exec_module(fk)
 
 UNIFORM = lambda x, y: (1.0, 0.0)          # noqa: E731
 CIRCLE = lambda x, y: (-y, x)              # noqa: E731
@@ -381,3 +386,180 @@ def test_the_table_is_what_the_module_prints(capsys):
     out = capsys.readouterr().out
     printed = re.findall(r"^\| ([^|]+?) \| `([^`]+)` \| `([^`]+)` \|$", out, re.M)
     assert printed == _numeric_rows()
+
+
+# ------------------------------------------------------------------------------------------------ wires (shot 2)
+
+SEG = ((-1.0, 0.0), (1.0, 0.0))
+
+
+def test_a_long_wire_has_the_point_current_field_out_of_the_plane():
+    far = ((-1e9, 0.0), (1e9, 0.0))
+    assert math.isclose(fr.line_field((0.0, 1.0), *far, i=1.0)[2], 1.0 / (2.0 * math.pi), rel_tol=1e-9)
+    assert math.isclose(fr.line_field((0.0, -1.0), *far, i=1.0)[2], -1.0 / (2.0 * math.pi), rel_tol=1e-9)
+    assert fr.line_field((0.0, 1.0), *far, i=1.0)[:2] == (0.0, 0.0)
+
+
+def test_a_finite_wire_follows_biot_savart_and_the_line_charge_law():
+    ex, ey, bz = fr.line_field((0.0, 1.0), *SEG, q=1.0, i=1.0)
+    assert math.isclose(bz, math.sqrt(2.0) / (4.0 * math.pi), rel_tol=1e-12)        # Griffiths example 5.5
+    assert math.isclose(ey, 2.0 * 1.0 / (1.0 * math.sqrt(2.0)), rel_tol=1e-12)      # Griffiths example 2.1
+    assert abs(ex) < 1e-15
+    ex2, ey2, bz2 = fr.line_field((0.0, -1.0), *SEG, q=1.0, i=1.0)
+    assert math.isclose(ey2, -ey, rel_tol=1e-12) and math.isclose(bz2, -bz, rel_tol=1e-12)
+    assert fr.line_field((0.5, 0.0), *SEG, q=1.0, i=1.0) == (0.0, 0.0, 0.0)          # on the wire
+
+
+def test_the_shot_2_poynting_vector_points_from_the_source_to_the_load():
+    sx, sy = fr.poynting_at((0.0, 0.0), (), (), fr.SHOT2_WIRES)
+    assert sx > 0 and abs(sy) < 1e-12
+    angles = [abs(fr.poynting_angle((x, y), (), (), fr.SHOT2_WIRES)) for x in (-0.5, -0.25, 0.0, 0.25, 0.5)
+              for y in (-0.25, 0.0, 0.25)]
+    assert max(angles) < 5.0 and max(angles) > 3.0
+    assert abs(fr.poynting_angle((1.0, 0.25), (), (), fr.SHOT2_WIRES)) > 20.0      # the fringe past the window
+
+
+def test_the_draft_declares_the_wire_source_and_the_poynting_presentation():
+    text = open(DRAFT, encoding="utf-8").read()
+    flat = re.sub(r"\n +", " ", text)
+    assert "| `wire` | `x1`, `y1`, `x2`, `y2`, `q` (`xs:double`, default 0), `i` (`xs:double`, default 0) |" in flat
+    assert "`show` (`field` | `poynting`, default `field`)" in flat
+    assert "`FLD6` on `field/arrows[@show='poynting']`" in flat
+    assert "(charge | current | dipole | wire)*" in flat
+    assert "15 arrows" in flat and "within 5°" in flat
+    assert "2026-10-25: the `wire` source and `arrows/@show=\"poynting\"`" in flat
+
+
+# ------------------------------------------------------------------------------------------------ the kit cases
+
+def _kit_rows():
+    text = open(DRAFT, encoding="utf-8").read()
+    body = text.split("### Kit cases", 1)[1].split("\n## ", 1)[0]
+    return re.findall(r"^\| `srep-<n>-(field-[a-z]+)\.xml` \|", body, re.M)
+
+
+def test_the_kit_writes_the_six_cases_the_draft_names():
+    import xml.etree.ElementTree as ET
+    docs = fk.documents()
+    assert list(docs) == _kit_rows() == fk.NAMES
+    for name, xml in docs.items():
+        root = ET.fromstring(xml)
+        assert root.get("version") == "1.8"
+        fields = root.findall(".//field")
+        assert len(fields) == 1, name
+        f = fields[0]
+        assert f.get("width") and f.get("height") and f.get("xMin") and f.get("yMax"), name
+    u = ET.fromstring(docs["field-uniform"]).find(".//field")
+    assert (u.get("u"), u.get("v"), u.get("width"), u.get("height")) == ("1", "0", "400", "400")
+    assert u.find("streamlines").get("separation") == "80"
+    v = ET.fromstring(docs["field-vortex"]).find(".//field")
+    assert (v.get("u"), v.get("v")) == ("-y", "x") and v.find("arrows").get("cols") == "5" == v.find("arrows").get("rows")
+    d = ET.fromstring(docs["field-dipole"]).find(".//field")
+    assert d.find("dipole") is not None and d.find("streamlines").get("maxLines") == "1"
+    p = ET.fromstring(docs["field-portrait"]).find(".//field")
+    assert p.get("kind") == "complex" and p.get("w") and p.find("portrait") is not None
+    lic = ET.fromstring(docs["field-lic"]).find(".//field")
+    assert (lic.get("u"), lic.get("v")) == ("1", "0") and lic.find("lic").get("resolution") == "4"
+    assert lic.find("lic").get("seed") and (int(lic.get("width")), int(lic.get("height"))) == (400, 200)
+    poy = ET.fromstring(docs["field-poynting"]).find(".//field")
+    assert len(poy.findall("wire")) == 2 and poy.find("arrows").get("show") == "poynting"
+
+
+def _blank(w=480, h=480):
+    return np.zeros((h, w, 3), dtype=np.uint8)
+
+
+def test_row_lines_finds_the_centroid_of_each_horizontal_line():
+    a = _blank()
+    for r in (119, 199, 279, 359, 439):
+        a[r:r + 2, 40:440] = 255
+    assert fk.row_lines(fk.lit(a)) == [120.0, 200.0, 280.0, 360.0, 440.0]
+    assert fk.row_lines(fk.lit(_blank())) == []
+
+
+def test_arrow_directions_run_from_the_node_to_the_glyph_centroid():
+    from PIL import Image, ImageDraw
+    S = 8                                                         # supersampled, then box-filtered: antialiased
+    im = Image.new("RGB", (480 * S, 480 * S))
+    dr = ImageDraw.Draw(im)
+    nodes = [(100.0, 100.0), (300.0, 100.0), (100.0, 300.0), (300.0, 300.0)]
+    angles = [0.0, 90.0, 225.0, -30.0]
+    for (px, py), ang in zip(nodes, angles):
+        dx, dy = math.cos(math.radians(ang)), -math.sin(math.radians(ang))
+        tip = (px + 30 * dx, py + 30 * dy)
+        dr.line([(px * S, py * S), (tip[0] * S, tip[1] * S)], fill=(255, 255, 255), width=2 * S)
+        base = (tip[0] - 9 * dx, tip[1] - 9 * dy)
+        left = (base[0] - 4.5 * dy, base[1] + 4.5 * dx)
+        right = (base[0] + 4.5 * dy, base[1] - 4.5 * dx)
+        dr.polygon([(x * S, y * S) for x, y in (tip, left, right)], fill=(255, 255, 255))
+    im = im.resize((480, 480), Image.BOX)
+    got = fk.arrow_directions(fk.lit(np.asarray(im)), nodes + [(200.0, 200.0)])
+    assert got[-1] is None                                        # no glyph at the last node
+    for g, want in zip(got, angles):
+        assert abs((g - want + 180.0) % 360.0 - 180.0) < 1.0, (g, want)
+
+
+def test_hue_winding_counts_the_turns_of_the_rendered_hue():
+    import colorsys
+    a = _blank(240, 240)
+    c = (120.0, 120.0)
+    for sign in (1, -1):
+        for yy in range(240):
+            for xx in range(240):
+                ang = math.atan2(-(yy + 0.5 - c[1]), xx + 0.5 - c[0]) * sign
+                r, g, b = colorsys.hls_to_rgb((ang / (2 * math.pi)) % 1.0, 0.5, 1.0)
+                a[yy, xx] = (int(r * 255), int(g * 255), int(b * 255))
+        assert fk.hue_winding(a, c, 80.0) == sign
+    a[:] = 200
+    assert fk.hue_winding(a, c, 80.0) == 0
+
+
+def test_row_spread_reports_the_largest_spread_of_a_row_and_the_distinct_rows():
+    a = _blank(480, 280)
+    a[40:140, 40:440] = 60
+    a[140:240, 40:440] = 180
+    assert fk.row_spread(a, (40, 40, 400, 200)) == (0, 2)
+    a[100, 300] = 63
+    assert fk.row_spread(a, (40, 40, 400, 200)) == (3, 3)
+
+
+def test_curve_distance_measures_the_lit_pixels_against_r_equals_c_sine_squared():
+    from PIL import Image, ImageDraw
+    im = Image.new("RGB", (480, 480))
+    dr = ImageDraw.Draw(im)
+    c, ppu = (240.0, 240.0), 200.0
+    pts = []
+    for k in range(1, 180):
+        th = math.radians(k)
+        r = 0.5 * math.sin(th) ** 2
+        pts.append((c[0] + r * math.sin(th) * ppu, c[1] - r * math.cos(th) * ppu))   # theta from the +y axis
+    dr.line(pts, fill=(255, 255, 255), width=2)
+    angles = [30 + 120 * k / 19 for k in range(20)]
+    assert fk.curve_distance(fk.lit(np.asarray(im)), c, ppu, 0.5, angles) < 1.5
+    im2 = Image.new("RGB", (480, 480))
+    ImageDraw.Draw(im2).ellipse([140, 140, 340, 340], outline=(255, 255, 255), width=2)
+    assert fk.curve_distance(fk.lit(np.asarray(im2)), c, ppu, 0.5, angles) > 5.0
+
+
+def test_the_kit_runs_an_engine_and_reports_every_case(tmp_path):
+    from PIL import Image
+    calls = []
+
+    def fake_exec(cmd, **kw):
+        calls.append(cmd)
+        out = cmd[cmd.index("-o") + 1]
+        if "poynting" in cmd[2]:
+            return type("R", (), {"returncode": 1, "stdout": "", "stderr": "error[E0001]: unknown attribute show"})()
+        for path in ([out] if "%04d" not in out else [out % k for k in range(3)]):
+            Image.new("RGB", (480, 480)).save(path)
+        return type("R", (), {"returncode": 0, "stdout": "", "stderr": ""})()
+
+    report = fk.run("fake-engine", str(tmp_path), exec=fake_exec)
+    assert list(report) == fk.NAMES
+    assert all(c[0] == "fake-engine" and c[1] == "render" for c in calls)
+    assert report["field-poynting"]["error"].startswith("error[E0001]")
+    assert report["field-uniform"]["pass"] is False and report["field-uniform"]["lines"] == []
+    assert report["field-vortex"]["seek"] is True            # frame 2 alone equals frame 2 of 0..2
+    assert os.path.exists(os.path.join(str(tmp_path), "srep-0000-field-uniform.xml"))
+    table = fk.table(report)
+    assert table.count("\n") == len(fk.NAMES) + 1 and "| field-poynting |" in table
