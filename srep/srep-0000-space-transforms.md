@@ -83,7 +83,13 @@ effects and clip.
 **3. Schematron.** In the `modifier` rule (sch:100), after C26:
 **SPT1** `type="map"` has `x` and `y`; `type="complex"` has `function`; `function="mobius"` has
 `coefficients` with eight numbers, and no other function has `coefficients`; `x`, `y`, `function` and
-`coefficients` appear on no other type. **SPT2** a `mobius` with literal `coefficients` has a d − b c ≠ 0
+`coefficients` appear on no other type:
+
+```xml
+<sch:assert id="SPT1" test="(not(@type='map') or (@x and @y)) and (not(@type='complex') or @function) and (not(@function='mobius') or (@coefficients and count(str:tokenize(normalize-space(@coefficients), ' '))=8)) and (not(@coefficients) or @function='mobius') and (@type='map' or not(@x or @y)) and (@type='complex' or not(@function or @coefficients))">a map modifier has x and y, a complex one a function, a mobius eight coefficients; no other modifier has them.</sch:assert>
+```
+
+**SPT2** a `mobius` with literal `coefficients` has a d − b c ≠ 0
 (computed on the complex numbers in the validator's 64-bit floats; `coefficients` never animate, so they are
 always literal). With a, b, c, d read as the pairs (t₁, t₂), (t₃, t₄), (t₅, t₆), (t₇, t₈) of the tokenised
 list, Re(a d − b c) = t₁t₇ − t₂t₈ − t₃t₅ + t₄t₆ and Im(a d − b c) = t₁t₈ + t₂t₇ − t₃t₆ − t₄t₅; the assert, with
@@ -303,3 +309,5 @@ measurable on an engine before SR-64 lands.
 - 2026-10-25: from the engine review on SR-64: Syntax 2 names `deform` alone (the `bodyBehaviour` group would
   have admitted `rigidBody` and `softBody` on a group with no semantics), SPT2's XPath is written out, and the
   gate is stated as the shared V17 of SREP 12 rather than a pattern of its own.
+- 2026-10-25: SPT1's XPath written out, clause for clause from its prose, as the engine's Schematron asserts it
+  (scene-render feat/sr-64-space-transforms, f709581).

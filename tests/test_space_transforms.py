@@ -300,3 +300,14 @@ def test_the_draft_answers_the_engine_review():
     assert "gains `bodyBehaviour`" not in text
     assert 'id="SPT2"' in text and "str:tokenize(normalize-space(@coefficients), ' ')" in text
     assert "shared 1.8 gate" in text and "V17" in text
+
+
+def test_the_draft_writes_out_spt1():
+    """SPT1's XPath is in the draft (the engine's assert, adopted verbatim), not prose alone."""
+    text = open(DRAFT, encoding="utf-8").read()
+    assert 'id="SPT1"' in text
+    for clause in ("(not(@type='map') or (@x and @y))", "(not(@type='complex') or @function)",
+                   "(not(@function='mobius') or (@coefficients and count(str:tokenize(normalize-space(@coefficients), ' '))=8))",
+                   "(not(@coefficients) or @function='mobius')", "(@type='map' or not(@x or @y))",
+                   "(@type='complex' or not(@function or @coefficients))"):
+        assert clause in text, clause

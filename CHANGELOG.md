@@ -401,9 +401,9 @@ version:
   the same slot (SR-64).
 - The space-transforms draft (`srep/srep-0000-space-transforms.md`) names `deform` alone as the element a
   `group` gains (its Syntax 2 said the `bodyBehaviour` group, which would have admitted `rigidBody` and
-  `softBody` on a group with no semantics), writes out SPT2's XPath (the complex determinant of a `mobius`
-  modifier's eight `coefficients` with EXSLT `str:tokenize`) and states its gate as the shared V17. Found by the
-  engine review on SR-64.
+  `softBody` on a group with no semantics), writes out SPT1's and SPT2's XPaths (the attribute pairing per
+  modifier type; the complex determinant of a `mobius` modifier's eight `coefficients` with EXSLT
+  `str:tokenize`) and states its gate as the shared V17. Found by the engine review on SR-64.
 - The media draft's Draine cumulative (`conformance/tools/media_reference.py`, rule 19 of
   `srep/srep-0000-media.md`) is written in a form that never divides by g: the antiderivative in t lost
   every digit for |g| below about 1e-4 (F(1) = 5.7 at g = 2e-6), and `anisotropy` admits such a g. The
