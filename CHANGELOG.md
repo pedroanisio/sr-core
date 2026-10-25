@@ -21,6 +21,16 @@ version:
 
 ### Added
 
+- Draft SREP "Add scattering and vegetation to the terrain grid" (`srep/srep-0000-vegetation.md`, G1 of
+  SREP 12): `tree` prototypes of `terrain` grown by an L-system (3D turtle, stochastic rules from the streams,
+  bounded `iterations` and `maxSymbols`), by space colonisation (Runions et al. 2007, stream-drawn attractors in a
+  crown ellipsoid, Murray's-law radii) or by the parametric model of Weber and Penn 1995; `scatter` elements
+  placing a prototype by Bridson's Poisson-disk sampling over a terrain `mask` with every draw from the streams,
+  exported and imported as a USD PointInstancer or a glTF node with EXT_mesh_gpu_instancing; sway as a cantilever
+  under crown drag in the wind-field draft's `wind` at each instance; one `ecosystem` from a scatter with
+  logistic growth, death by age, offspring from maturity and the self-thinning of Deussen et al. 1998, replayed per
+  frame; VG1–VG5, V17. Reference `conformance/tools/vegetation_reference.py` with its numeric table;
+  `tests/test_vegetation.py`. Engine card SR-110.
 - Draft SREP "Add wildfire to the terrain grid" (`srep/srep-0000-wildfire.md`, T5 of SREP 12): a `wildfire` child
   of `terrain` lights a surface fire at (`ignitionX`, `ignitionY`, `ignitionTime`) and spreads it by Rothermel's
   surface fire spread model (Rothermel 1972, Albini 1976, as Andrews 2018 lays it out) on one of the forty
