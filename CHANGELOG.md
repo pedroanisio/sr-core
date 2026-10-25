@@ -21,6 +21,14 @@ version:
 
 ### Added
 
+- Draft SREP "Define the random streams derived from the D24 hash" (`srep/srep-0000-random-streams.md`, F1 of
+  SREP 12), recorded here with its first amendment: the unit and normal draws, permutations, the packing of 2D
+  and 3D lattice indices, value and gradient noise, the octave sum, 3D Perlin noise, the element seed as the
+  CRC-32 of `project:id:seed:purpose` (the seed text is the attribute's schema default when the schema declares
+  one, `particles3D/@seed` reads `0` when absent) and the stream draws S, S_signed and S_normal addressed by
+  element seed, purpose, step and index, under the 1.8 gate; open issues for the legacy seeds of agents, program
+  nodes and clay and for the ejecta purposes 41 and 42. Reference `conformance/tools/random_streams_reference.py`;
+  `tests/test_random_streams.py`. Engine card SR-61.
 - Draft SREP "Add the wind field" (`srep/srep-0000-wind.md`, F4 of SREP 12): a `wind` element under
   `physics`, a velocity field in m/s over the physics space with a mean (`speed`, `direction`, `speedZ`), a
   stochastic gust factor (`gustiness`, `gustPeriod`, `gustOctaves`: an octave sum of the random-streams
