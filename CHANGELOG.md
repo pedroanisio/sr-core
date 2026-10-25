@@ -21,6 +21,16 @@ version:
 
 ### Added
 
+- Draft SREP "Add wildfire to the terrain grid" (`srep/srep-0000-wildfire.md`, T5 of SREP 12): a `wildfire` child
+  of `terrain` lights a surface fire at (`ignitionX`, `ignitionY`, `ignitionTime`) and spreads it by Rothermel's
+  surface fire spread model (Rothermel 1972, Albini 1976, as Andrews 2018 lays it out) on one of the forty
+  standard fuel models of Scott and Burgan 2005 (`fuelModel`, dynamic `curing`, five moistures), the midflame
+  wind the wind-field draft's `wind` times `windAdjustment`, wind and slope combined as vectors into an effective
+  wind, Anderson's length-to-breadth ellipse, the arrival time of every cell by minimum travel time over the
+  eight neighbours (Finney 2002) with the wind read at departure; the terrain's `burn` layer is the burn fraction
+  (crossing plus residence time), its `fuel` layer scales the loads and is consumed (zero is a firebreak), the
+  flame length Byram's; WF1–WF5, V17. Reference `conformance/tools/wildfire_reference.py` with its numeric
+  table (Rothermel's table 17, BehavePlus's GR2 and SH8 curves); `tests/test_wildfire.py`. Engine card SR-109.
 - Draft SREP "Add lava to the terrain grid" (`srep/srep-0000-lava.md`, T4 of SREP 12): a `lavaFlow` child of
   `terrain` erupts lava from a vent (`ventX`, `ventY`, an animatable `effusion` varied through the random streams
   at purpose 2³¹ + 2¹⁷) into the terrain's `lava` layer and moves it over the surface as a Bingham fluid in a
