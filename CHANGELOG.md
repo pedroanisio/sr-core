@@ -21,6 +21,19 @@ version:
 
 ### Added
 
+- Draft SREP "Add 3D Tiles to the map" (`srep/srep-0000-tiles3d.md`, M5 of SREP 12): a `tileset3d` asset
+  names an OGC 3D Tiles 1.1 (or 1.0) tileset and pins the resolved archive (a stored ZIP of the root tileset,
+  the external tilesets and subtree files loaded and every glb or b3dm any frame selects; sorted, 1980
+  timestamps) by `cacheSha256`, so rendering never fetches; a `tiles3d` map child walks the tileset from the
+  camera alone (screen-space error geometricError times pixels per metre on a 2D map, times scale times
+  focal length over distance for a perspective camera; REPLACE and ADD refinement; viewer request volumes;
+  external tilesets always refined; implicit tiling through subtree files in Morton order; a `maxTiles` and
+  32-level bound), places glb and legacy b3dm content through the node hierarchy, the y-up to z-up rotation and
+  the composed tile transform into SREP 10's ground frame, and paints a 2D map from above with a north-west
+  shade; validation TL1-TL4 and V21, warnings W-TL1 (tile bound), W-TL2 (unsupported content), W-TL3 (content
+  missing from the archive). The reference `conformance/tools/tiles3d_reference.py` carries the subtree, glb
+  and b3dm writers and readers and reproduces the CesiumGS SparseImplicitQuadtree root subtree (352 bytes, tile
+  bits 0d 32 01); tests `tests/test_tiles3d.py`. Engine card SR-116.
 - Draft SREP "Add vector-field layers to the map" (`srep/srep-0000-vector-field.md`, M4 of SREP 12): a `uvGrid`
   asset names GRIB2 or classic NetCDF files holding the two components of a wind or current field and pins the
   resolved flow cache (a 64-bit offset classic NetCDF file, CF-1.8) by `cacheSha256`; the resolve step pairs U
