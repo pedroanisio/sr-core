@@ -290,3 +290,13 @@ def test_the_table_is_what_the_module_prints(capsys):
     out = capsys.readouterr().out
     printed = re.findall(r"^\| ([^|]+?) \| `([^`]+)` \| `([^`]+)` \|$", out, re.M)
     assert printed == _numeric_rows()
+
+
+def test_the_draft_answers_the_engine_review():
+    """SR-64's review: a group gains deform alone (the bodyBehaviour group would admit rigidBody and softBody on a
+    group with no semantics), SPT2's XPath is written out, and the gate is SREP 12's shared V17."""
+    text = open(DRAFT, encoding="utf-8").read()
+    assert "gains `deform` (`deformType`, xsd:2826)" in text
+    assert "gains `bodyBehaviour`" not in text
+    assert 'id="SPT2"' in text and "str:tokenize(normalize-space(@coefficients), ' ')" in text
+    assert "shared 1.8 gate" in text and "V17" in text

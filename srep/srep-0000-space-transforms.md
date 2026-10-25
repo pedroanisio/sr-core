@@ -74,8 +74,9 @@ the schema editor; the schema files are not changed by this draft.
 `a` to `f`, `unit`, `centerX` and `centerY` animate through `animate` and `expression` children as the
 modifier's other numeric attributes do; `x`, `y`, `function` and `coefficients` do not.
 
-**2. `deform` on a group.** `groupType` (xsd:4570) gains `bodyBehaviour` (xsd:3385), as `layerType` (3403)
-and `shapeType` (3601) have it. On a group, the modifiers act on the flattened outlines of all its descendants in
+**2. `deform` on a group.** `groupType` (xsd:4570) gains `deform` (`deformType`, xsd:2826) in its child choice:
+the one element of the `bodyBehaviour` group (xsd:3385, which `layerType` and `shapeType` reference) that has a
+meaning on a group; `rigidBody` and `softBody` stay off groups. On a group, the modifiers act on the flattened outlines of all its descendants in
 the group's local space, after each descendant's own transform and deform and before the group's own transform,
 effects and clip.
 
@@ -83,9 +84,19 @@ effects and clip.
 **SPT1** `type="map"` has `x` and `y`; `type="complex"` has `function`; `function="mobius"` has
 `coefficients` with eight numbers, and no other function has `coefficients`; `x`, `y`, `function` and
 `coefficients` appear on no other type. **SPT2** a `mobius` with literal `coefficients` has a d − b c ≠ 0
-(computed on the complex numbers). A pattern `p-srep<n>` after `p-srep75` (sch:851) with **V17**: documents of
-version 1.0 to 1.7 contain no `modifier[@type='matrix' or @type='map' or @type='complex']` and no
-`group/deform`.
+(computed on the complex numbers in the validator's 64-bit floats; `coefficients` never animate, so they are
+always literal). With a, b, c, d read as the pairs (t₁, t₂), (t₃, t₄), (t₅, t₆), (t₇, t₈) of the tokenised
+list, Re(a d − b c) = t₁t₇ − t₂t₈ − t₃t₅ + t₄t₆ and Im(a d − b c) = t₁t₈ + t₂t₇ − t₃t₆ − t₄t₅; the assert, with
+the EXSLT `str:tokenize` the file already uses (C26), passes when either part is non-zero and defers a list of
+the wrong length to SPT1:
+
+```xml
+<sch:assert id="SPT2" test="not(@function='mobius') or count(str:tokenize(normalize-space(@coefficients), ' ')) != 8 or number(str:tokenize(normalize-space(@coefficients), ' ')[1]) * number(str:tokenize(normalize-space(@coefficients), ' ')[7]) - number(str:tokenize(normalize-space(@coefficients), ' ')[2]) * number(str:tokenize(normalize-space(@coefficients), ' ')[8]) - number(str:tokenize(normalize-space(@coefficients), ' ')[3]) * number(str:tokenize(normalize-space(@coefficients), ' ')[5]) + number(str:tokenize(normalize-space(@coefficients), ' ')[4]) * number(str:tokenize(normalize-space(@coefficients), ' ')[6]) != 0 or number(str:tokenize(normalize-space(@coefficients), ' ')[1]) * number(str:tokenize(normalize-space(@coefficients), ' ')[8]) + number(str:tokenize(normalize-space(@coefficients), ' ')[2]) * number(str:tokenize(normalize-space(@coefficients), ' ')[7]) - number(str:tokenize(normalize-space(@coefficients), ' ')[3]) * number(str:tokenize(normalize-space(@coefficients), ' ')[6]) - number(str:tokenize(normalize-space(@coefficients), ' ')[4]) * number(str:tokenize(normalize-space(@coefficients), ' ')[5]) != 0">a mobius modifier's coefficients have a d - b c != 0.</sch:assert>
+```
+
+The shared 1.8 gate of SREP 12 (**V17**: one pattern after `p-srep75`, sch:851, one assert whose test is the
+conjunction of every 1.8 draft's clause) gains the clause: documents of version 1.0 to 1.7 contain no
+`modifier[@type='matrix' or @type='map' or @type='complex']` and no `group/deform`.
 
 ### Semantics
 
@@ -289,3 +300,6 @@ measurable on an engine before SR-64 lands.
 ## History
 
 - 2026-10-24: draft, with the reference module and tests; engine work filed as SR-64.
+- 2026-10-25: from the engine review on SR-64: Syntax 2 names `deform` alone (the `bodyBehaviour` group would
+  have admitted `rigidBody` and `softBody` on a group with no semantics), SPT2's XPath is written out, and the
+  gate is stated as the shared V17 of SREP 12 rather than a pattern of its own.
