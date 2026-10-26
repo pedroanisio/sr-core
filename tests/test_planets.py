@@ -214,8 +214,13 @@ def test_day_and_night_weights():
     assert _close(pl.night_weight(below, s, 6.0), 1.0, 1e-9)
     half = pl.unit((math.cos(math.radians(-3.0)), 0.0, math.sin(math.radians(-3.0))))
     assert _close(pl.night_weight(half, s, 6.0), 0.75, 1e-9)
+    # no band: a step at the horizon, 1/2 on it (the engine's limit; the schema allows twilight="0")
+    assert pl.night_weight((0.0, 0.0, -1.0), s, 0.0) == 1.0 and pl.night_weight((0.0, 0.0, 1.0), s, 0.0) == 0.0
+    assert pl.night_weight((1.0, 0.0, 0.0), s, 0.0) == 0.5
+    above = pl.unit((math.cos(math.radians(3.0)), 0.0, math.sin(math.radians(3.0))))
+    assert pl.night_weight(half, s, 0.0) == 1.0 and pl.night_weight(above, s, 0.0) == 0.0
     with pytest.raises(pl.PlanetError):
-        pl.night_weight(s, s, 0.0)
+        pl.night_weight(s, s, -1.0)
 
 
 def test_hestroffer_magnan_limb_darkening():
@@ -928,12 +933,13 @@ def test_the_draft_describes_the_kit(draft):  # noqa: E501
     for phrase in ("`conformance/tools/planets_kit.py`", "`srep-<n>-planet-limb.xml`", "synthetic textures",
                    "`limb_pixel_extents`", "`isophote_points`", "`pixel_surface_point`", "36 sectors",
                    "orthographic", "`QSTRIP`", "spheroid", "`segments=\"256\"`", "`specular=\"0\"`",
-                   "frame 600 rendered alone", "with flattening f the\n   meridian ellipse"):
+                   "frame 600 rendered alone", "with flattening f the\n   meridian ellipse", "no night side",
+                   "whole surface is night", '`twilight="0"`', "projection's axis"):
         assert phrase in draft, phrase
 
 
 KIT_ROW = re.compile(r"^\| `srep-<n>-planet-([a-z]+)\.xml` \| (?:[^|]|\\\|)* \| ([^|]*) \|$")
-ENGINE_COMMIT = "43ddbeb"
+ENGINE_COMMIT = "cde7262"
 
 
 def test_the_draft_records_the_kit_cases_measured_so_far(draft):
@@ -943,7 +949,7 @@ def test_the_draft_records_the_kit_cases_measured_so_far(draft):
     measured = {name for name, status in rows.items() if status.startswith(prefix)}
     for name, status in rows.items():
         if name in measured:
-            assert status.endswith("; pass"), (name, status)
+            assert status.endswith("; pass") or status.endswith("; fail"), (name, status)
         else:
             assert status == "to be measured", (name, status)
-    assert "limb" in measured
+    assert measured == {"limb", "night", "sun"} and all(rows[name].endswith("; pass") for name in measured)

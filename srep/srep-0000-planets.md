@@ -109,14 +109,21 @@ and the scene's axes follow the time-frames draft (scene (x, y, z) = body (x, �
    multiplied by `night_weight(normal, sun, twilight)`: 1 when the Sun is `twilight` degrees or more below the
    horizon, 0 when as far above it, 1/2 on the terminator and linear in the Sun's elevation between; the sun
    direction is the scene's physical sun when the dome light has `sky="physical"`, else the first directional
-   light, else the Sun's ephemeris direction when a `space` element is present. With `limbDarkening="solar"`
-   the emissive map is multiplied per channel by `limb_darkening(mu, alpha)` = μ^α, where μ is the cosine of
-   the angle between the surface normal and the line of sight (`disc_mu`) and α is `limb_alpha(nm)`, Hestroffer
+   light, else the Sun's ephemeris direction when a `space` element is present (from the body's ephemeris
+   position with `positionFrom="ephemeris"`, else from the space's origin); without any of the three the
+   whole surface is night and the map is unmasked (weight 1). The Sun itself (`body="10"`) has no night side:
+   `nightLights` is ignored on it. With `twilight="0"` the band is a step: 1 below the horizon, 0 above, 1/2
+   on it. With `limbDarkening="solar"` the emission (`emissive`, with or without a map) is multiplied per
+   channel by `limb_darkening(mu, alpha)` = μ^α, where μ is the cosine of the angle between the surface normal
+   and the line of sight (`disc_mu`; clamped to [0, 1]; under an orthographic camera the line of sight is the
+   projection's axis for every pixel) and α is `limb_alpha(nm)`, Hestroffer
    and Magnan's (1998) eq. 5 fit: α = −0.023 + 0.292 / λ for 1 / λ ≤ 2.4 µm⁻¹ and α = −0.507 + 0.441 / λ for
    1 / λ ≥ 2.8 µm⁻¹ (λ in µm, valid from 303 to 1100 nm; the gap between 357 and 417 nm is Open issue 2),
    at 610, 550 and 465 nm for the red, green and blue channels (`CHANNEL_WAVELENGTHS_NM`): the limb is redder
    than the centre. The disc-averaged intensity over the central one is `disc_average(alpha)` = 2 / (α + 2)
    (0.797 at 550 nm), so an author who sets `emissive` to the Sun's mean radiance divides it by this factor.
+   A body with `limbDarkening="solar"` has no night mask (PL5 binds the attribute to the Sun or to a body
+   without IAU radii).
 4. **Clouds.** The cloud shell is a second sphere of radius 1 + `cloudHeight` times the body's, drawn with
    `cloudMap` as an alpha-blended surface lit like the ground, turned eastward by `cloud_longitude(seconds,
    cloudRotation)` degrees (`clouds_uv`). With `cloudShadow="true"` the ground at a lit point p is darkened by
@@ -209,7 +216,7 @@ are refused below version 1.8 (V17).
 
 | Engine | Status | Work | Tracking |
 |---|---|---|---|
-| Rust (`rs-scene-render`), reference | feat/sr-67-fields 43ddbeb (SR-89 in progress): the primitive and its attributes parse (PL1–PL5, V17) and `prim::spheroid(a, f, segs)` draws the body from `RADII` or `radius`/`flattening` with geodetic vertices and the texture offset (rules 1–2); `sky.rs` has a sun disc without limb darkening; no night mask, cloud shell, rings or atmosphere shell yet (main 67a661a had `sphere(r, segs)` with poles on y and `u = 0` at +x) | the night mask and the solar limb darkening (rule 3); the cloud shell with its shadow (rule 4); the ring annulus with both shadows (rule 5); the atmosphere shell through the physical-sky implementation (rule 6); the seek check (rule 7) | [SR-89](https://faz-ai.atlassian.net/browse/SR-89) |
+| Rust (`rs-scene-render`), reference | feat/sr-67-fields cde7262 (SR-89 in progress): the primitive and its attributes parse (PL1–PL5, V17), `prim::spheroid(a, f, segs)` draws the body from `RADII` or `radius`/`flattening` with geodetic vertices and the texture offset (rules 1–2), the night mask and the solar limb darkening are drawn (rule 3; at 2fc3024 the limb darkening read μ toward the camera's position under an orthographic camera, found by the sun kit row and fixed at cde7262 for every material); no cloud shell, rings or atmosphere shell yet (main 67a661a had `sphere(r, segs)` with poles on y and `u = 0` at +x) | the cloud shell with its shadow (rule 4); the ring annulus with both shadows (rule 5); the atmosphere shell through the physical-sky implementation (rule 6); the seek check (rule 7) | [SR-89](https://faz-ai.atlassian.net/browse/SR-89) |
 
 ## Conformance
 
@@ -251,6 +258,7 @@ and `STRIP` a four-texel ring strip.
 | lit fraction of the disc at 45 degrees | `lit_fraction((0.0, -200.0 * EARTH, 0.0), SUN45, EARTH, 200)` | `0.85497` |
 | day weight at 45 degrees | `day_weight(unit((1.0, 0.0, 1.0)), (0.0, 0.0, 1.0))` | `0.707107` |
 | night weight 3 degrees below the horizon | `night_weight(body_direction(93.0, 0.0), (1.0, 0.0, 0.0), 6.0)` | `0.75` |
+| night weight on the horizon with no band | `night_weight(body_direction(90.0, 0.0), (1.0, 0.0, 0.0), 0.0)` | `0` |
 | limb-darkening exponent at 610 nm | `limb_alpha(610.0)` | `0.455689` |
 | limb-darkening exponent at 550 nm | `limb_alpha(550.0)` | `0.507909` |
 | limb-darkening exponent at 465 nm | `limb_alpha(465.0)` | `0.604957` |
@@ -293,18 +301,19 @@ the scene direction away from the Sun; emissive cases set `emissive="#FFFFFFFF"`
 by the map; the Sun is seen through an orthographic camera (`orthoHeight` for a disc radius of 1500 px). The
 terminator, phase, night and cloud cases set `radius` without `body`, a sphere on which the shading is exact;
 the limb, texture, rings, atmosphere and seek cases set `body`, the spheroid. Status: run on a release build of
-scene-render feat/sr-67-fields 43ddbeb (0.8.0, llvmpipe; SR-89's schema half and the spheroid mesh): the limb
-case passes; the other nine wait for the night mask, clouds, rings and the atmosphere shell, which 43ddbeb
-does not draw.
+scene-render feat/sr-67-fields cde7262 (0.8.0, llvmpipe; SR-89's schema half, spheroid mesh, night mask and limb
+darkening, the orthographic line of sight fixed): the limb, night and sun cases pass (the sun case failed on
+2fc3024, where μ was taken toward the camera's position under the orthographic camera); the other seven wait
+for clouds, rings and the atmosphere shell, which cde7262 does not draw.
 
 | Case | Checks | Status |
 |---|---|---|
-| `srep-<n>-planet-limb.xml` | the Earth (`body="399"`, unlit white) from 4 radii at the frame's centre, and Saturn (`body="699"`, companion `-saturn`, with `radius="1"` to show `pixelsPerMeter` wins) from 4 of its radii: the disc's edge within 0.5 px of the ellipse of half-extents `limb_pixel_extents` over 36 sectors of 10°, each sector's radius the root of twice its lit pixel count over its angle, against the same root-mean-square radius of the ellipse | measured on scene-render feat/sr-67-fields 43ddbeb (0.8.0, llvmpipe): the Earth's disc within 0.12 px of the ellipse over the 36 sectors (half-extents by moments 143.11 × 142.63 px against 143.11 × 142.63, 64,128 pixels), Saturn's within 0.14 px (143.12 × 129.07 against 143.11 × 129.09); pass |
+| `srep-<n>-planet-limb.xml` | the Earth (`body="399"`, unlit white) from 4 radii at the frame's centre, and Saturn (`body="699"`, companion `-saturn`, with `radius="1"` to show `pixelsPerMeter` wins) from 4 of its radii: the disc's edge within 0.5 px of the ellipse of half-extents `limb_pixel_extents` over 36 sectors of 10°, each sector's radius the root of twice its lit pixel count over its angle, against the same root-mean-square radius of the ellipse | measured on scene-render feat/sr-67-fields cde7262 (0.8.0, llvmpipe): the Earth's disc within 0.12 px of the ellipse over the 36 sectors (half-extents by moments 143.11 × 142.63 px against 143.11 × 142.63, 64,128 pixels), Saturn's within 0.14 px (143.12 × 129.07 against 143.11 × 129.09); pass |
 | `srep-<n>-planet-terminator.xml` | a sphere of the Earth's radius (`radius`, no `body`) under a Lambert material (`specular="0"`) with a directional light 45° from the line of sight: the shading's crossings of the 0.1 isophote within 1 px of `isophote_points` (read along the radius about each visible point of the circle) and both cusps of that isophote on the circle 3 px inside the limb within 1 px of `cusps` with that cone | to be measured |
 | `srep-<n>-planet-phase.xml` | the sphere from 200 radii through a 1.2° lens at phase angles 0, 60, 90 and 120 (companions `-60`, `-90`, `-120`): the lit pixel count over the full disc's within 1 % of `lit_fraction` (the camera's sample of `illuminated_fraction`), the full disc's count within 2 % of π r² | to be measured |
 | `srep-<n>-planet-texture.xml` | the Earth with the marks map as its unlit `baseColorMap` (red at longitude 0, green at 90° E, blue at 45° E, 45° N), seen from over 45° E: each mark's centroid within 1 px of `project(surface_point)`; east to the right and north up | to be measured |
-| `srep-<n>-planet-night.xml` | a black sphere whose white `emissiveMap` is masked with `twilight="6"`, the sun over the pole: the emissive weight read along the prime meridian from 12° S to 12° N, over the full-night mean, within 0.02 of `night_weight` | to be measured |
-| `srep-<n>-planet-sun.xml` | the Sun (`body="10"`, `limbDarkening="solar"`) under an orthographic camera at 1500 px of disc radius with the limb at column 620 (companion `-centre` on the disc's centre): the red, green and blue radiances at μ 0.5, 0.25 and 0.1 over the centre's within 2 % of `solar_disc` | to be measured |
+| `srep-<n>-planet-night.xml` | a black sphere whose white `emissiveMap` is masked with `twilight="6"`, the sun over the pole: the emissive weight read along the prime meridian from 12° S to 12° N, over the full-night mean, within 0.02 of `night_weight` | measured on scene-render feat/sr-67-fields cde7262 (0.8.0, llvmpipe): the weight along the prime meridian within 0.011 of `night_weight` (1/2 on the terminator, 0.916 at 5° S, 0.083 at 5° N; the 0.011 at ±6° is the 3 × 3 window over the ramp's kinks); pass |
+| `srep-<n>-planet-sun.xml` | the Sun (`body="10"`, `limbDarkening="solar"`) under an orthographic camera at 1500 px of disc radius with the limb at column 620 (companion `-centre` on the disc's centre): the red, green and blue radiances at μ 0.5, 0.25 and 0.1 over the centre's within 2 % of `solar_disc` | measured on scene-render feat/sr-67-fields cde7262 (0.8.0, llvmpipe): the ratios at μ 0.5, 0.25 and 0.1 read (0.7293, 0.7032, 0.6575), (0.5313, 0.4945, 0.4321) and (0.3498, 0.3101, 0.2480) against `solar_disc` (0.7292, 0.7032, 0.6575), (0.5317, 0.4945, 0.4323) and (0.3502, 0.3105, 0.2483), 0.14 % at worst (on 2fc3024 the engine took μ toward the camera's position under the orthographic camera, 49 % off at μ 0.1, reproduced to three digits and fixed at cde7262); pass |
 | `srep-<n>-planet-clouds.xml` | a grey sphere with a 4096 × 2048 `cloudMap` holding one opaque texel at 60° N on the prime meridian, `cloudHeight="0.004"` and `cloudShadow="true"`, the sun over the pole, a 2° camera along the texel's normal: the shadow's centre, read back to the ground by `pixel_surface_point`, 0.13° toward the equator from the cloud's within 0.02° (`cloud_shadow_point`) | to be measured |
 | `srep-<n>-planet-rings.xml` | Saturn with `QSTRIP` as its ring at β 26.7°, seen from 45° above the plane on the night side: the shadow's edge within 1 px of the spheroid's half-ellipse at 12 points (`planet_shadow_on_rings` with the flattening); from 30° below the plane (companion `-ground`) the ground at 20° S over 5° S within 2 % of `ring_shadow` | to be measured |
 | `srep-<n>-planet-atmosphere.xml` | `atmosphere="earth"` with `atmosphereHeight="100000"` from 400 km over a black unlit ground, a 10° camera across the limb, the sun 48° from the zenith: the shell's brightest column, its 1 % edge and the limb within 0.1° of the physical-sky reference's `sky_radiance` and `aerial_perspective` profile between 70.19° and 72.87° from the nadir (`shell_band`) | to be measured |
@@ -344,3 +353,8 @@ does not draw.
   (Saturn 2.053 radii, not a sphere's 2.226); rule 7 gains `isophote_points`, `cusps` on an isophote and a
   cone, `pixel_surface_point` and `limb_pixel_extents`; the limb case measured on scene-render feat/sr-67-fields
   43ddbeb (SR-89's schema half and spheroid mesh): pass; the kit rows reworded to the kit's protocols.
+- 2026-10-26: SR-89's rule 3 at cde7262: the sun source's ephemeris fallback, no sun means night everywhere, the Sun
+  has no night side, `twilight="0"` is a step (the reference defines it instead of refusing it), the limb
+  darkening applies to `emissive` with or without a map and replaces the night mask; the night and sun cases
+  measured on cde7262: pass (the sun case found 2fc3024 taking μ toward the camera's position under the
+  orthographic camera, fixed at cde7262); the limb case re-measured on cde7262 with the same numbers.

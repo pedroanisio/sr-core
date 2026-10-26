@@ -415,10 +415,13 @@ def day_weight(normal, sun):
 
 def night_weight(normal, sun, twilight):
     """The weight of the night-lights map: 1 when the Sun is `twilight` degrees or more below the horizon, 0 when
-    as far above it, 1/2 at the terminator, linear in the Sun's elevation between."""
-    if not (twilight > 0.0):
-        raise PlanetError("the twilight band is positive")
+    as far above it, 1/2 at the terminator, linear in the Sun's elevation between; with no band (twilight 0) a
+    step at the horizon, 1/2 on it."""
+    if not (twilight >= 0.0):
+        raise PlanetError("the twilight band is not negative")
     e = math.degrees(math.asin(max(-1.0, min(1.0, dot(normal, sun)))))
+    if twilight == 0.0:
+        return 1.0 if e < 0.0 else 0.0 if e > 0.0 else 0.5
     return max(0.0, min(1.0, 0.5 - e / (2.0 * twilight)))
 
 
@@ -636,6 +639,7 @@ TABLE = [
     ("lit fraction of the disc at 45 degrees", "lit_fraction((0.0, -200.0 * EARTH, 0.0), SUN45, EARTH, 200)", "0.85497"),
     ("day weight at 45 degrees", "day_weight(unit((1.0, 0.0, 1.0)), (0.0, 0.0, 1.0))", "0.707107"),
     ("night weight 3 degrees below the horizon", "night_weight(body_direction(93.0, 0.0), (1.0, 0.0, 0.0), 6.0)", "0.75"),
+    ("night weight on the horizon with no band", "night_weight(body_direction(90.0, 0.0), (1.0, 0.0, 0.0), 0.0)", "0.5"),
     ("limb-darkening exponent at 610 nm", "limb_alpha(610.0)", "0.455689"),
     ("limb-darkening exponent at 550 nm", "limb_alpha(550.0)", "0.507909"),
     ("limb-darkening exponent at 465 nm", "limb_alpha(465.0)", "0.604957"),
