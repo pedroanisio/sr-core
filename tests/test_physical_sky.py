@@ -718,3 +718,344 @@ def test_the_draft_states_where_a_surface_segment_samples_start(draft):
                    "`orbit_segment_test`: 16 samples within 10⁻⁴ of 1,024",
                    "the default camera's position and lens, its `far` raised past a grey wall at y = 330, 500,000 px (5 km) away"):
         assert phrase in text, phrase
+
+
+# ------------------------------------------------------------------------------------ the kit (SR-86)
+
+KIT = os.path.join(ROOT, "conformance", "tools", "physical_sky_kit.py")
+_kspec = importlib.util.spec_from_file_location("physical_sky_kit", KIT)
+pk = importlib.util.module_from_spec(_kspec)
+_kspec.loader.exec_module(pk)
+import numpy as np  # noqa: E402
+from PIL import Image  # noqa: E402
+
+ALL_KEYS = sorted(k for keys in pk.DOCUMENTS.values() for k in keys)
+GREY = (0.5, 0.5, 0.5)                # the synthetic engine's grey: what its near box radiates
+
+
+def test_the_kit_camera_aims_projects_and_unprojects():
+    for d in ((0.0, 0.0, 1.0), (0.3, -0.5, 0.8), (-0.9, 0.1, 0.2), (0.0, -1.0, 0.001), (0.2, 0.7, -0.6)):
+        d = ps.unit(d)
+        yaw, pitch = pk.aim(d)
+        assert _close(pk.project(10.0, yaw, pitch, d), (pk.W / 2.0, pk.H / 2.0), 1e-6)
+        for fov in (10.0, 20.0, 60.0):
+            for at in ((320.5, 180.5), (10.0, 350.0), (600.25, 2.75), (0.0, 0.0)):
+                back = pk.unproject(fov, yaw, pitch, at)
+                assert _close(pk.project(fov, yaw, pitch, back), at, 1e-6), (d, fov, at)
+    # the frame's axes: +x right, +y down; a degree is pixels_per_degree at the centre
+    right = pk.project(10.0, 0.0, 0.0, ps.unit((math.tan(math.radians(1.0)), 0.0, 1.0)))
+    assert _close(right, (pk.W / 2.0 + pk.pixels_per_degree(10.0), pk.H / 2.0), 1e-9)
+    up = pk.project(10.0, 0.0, 0.0, ps.unit((0.0, -math.tan(math.radians(1.0)), 1.0)))
+    assert up[1] < pk.H / 2.0 and _close(up[0], pk.W / 2.0, 1e-9)
+    assert math.isnan(pk.project(10.0, 0.0, 0.0, (0.0, 0.0, -1.0))[0])
+    # scene axes to the atmosphere's: up is +z there, east +x, north +y; the sun's direction maps to the sun's
+    assert _close(pk.to_atmosphere((0.0, -1.0, 0.0)), (0.0, 0.0, 1.0))
+    assert _close(pk.to_atmosphere((1.0, 0.0, 0.0)), (1.0, 0.0, 0.0)) and _close(pk.to_atmosphere((0.0, 0.0, 1.0)), (0.0, 1.0, 0.0))
+    z, a = math.radians(50.0), math.radians(194.0)
+    assert _close(pk.to_atmosphere(ps.sun_direction(50.0, 194.0)), (math.sin(z) * math.sin(a), math.sin(z) * math.cos(a), math.cos(z)))
+    assert _close(pk.to_scene(pk.to_atmosphere((0.3, -0.4, 0.5))), (0.3, -0.4, 0.5))
+    assert _close(pk.DEFAULT_EYE, (320.0, 180.0, -554.2562584), 1e-6)
+
+
+def test_the_kit_writes_the_cases_the_draft_names(tmp_path):
+    import xml.etree.ElementTree as ET
+    paths = pk.write(str(tmp_path))
+    assert sorted(paths) == ALL_KEYS and len(ALL_KEYS) == 15
+    assert all(name in pk.DOCUMENTS and pk.DOCUMENTS[name][0] == name for name in pk.NAMES) and len(pk.NAMES) == 8
+    docs = {}
+    for key, path in paths.items():
+        assert os.path.basename(path) == f"srep-0000-{key}.xml"
+        root = ET.parse(path).getroot()
+        docs[key] = root
+        assert root.tag == "scene" and root.get("version") == "1.8"
+        assert root.find("output").get("codec") == "exr-sequence" and root.find("output").get("path") == f"out/{key}_%04d.exr"
+        light = root.find("lights/light")
+        assert light.get("type") == "dome" and light.get("sky") == "physical" and light.get("environmentVisible") == "true"
+        assert light.get("moon") == ("true" if key.startswith("sky-moon") else "false")
+        cam = root.find("composition/camera")
+        assert cam.get("x") is not None and cam.get("y") is not None and cam.get("z") is not None   # never the implicit eye
+        assert cam.get("projection") is None
+        for box in root.findall("composition/object3D"):
+            assert box.get("primitive") == "box" and box.get("material") == "grey"
+        if root.findall("composition/object3D"):
+            material = root.find("materials/material")
+            assert material.get("id") == "grey" and material.get("unlit") == "true" and material.get("baseColor") == pk.GREY
+    spa = docs["sky-spa"].find("lights/light")
+    assert spa.get("date") == "2003-10-17T12:30:30-07:00" and spa.get("latitude") == "39.742476"
+    assert spa.get("longitude") == "-105.1786" and spa.get("altitude") == "1830.14" and spa.get("pressure") == "820.0"
+    assert spa.get("temperature") == "11.0" and spa.get("deltaT") == "67.0"
+    assert docs["sky-day"].find("lights/light").get("date") == pk.DAY_DATE
+    assert float(docs["sky-day"].find("composition/camera").get("pitch")) == pk.DAY_PITCH
+    assert float(docs["sky-day-horizon"].find("composition/camera").get("yaw")) == 180.0
+    for key, elevation in (("sky-sunset", 1.0), ("sky-sunset-below", -1.0)):
+        light = docs[key].find("lights/light")
+        sun = ps.sun_from_document(light.get("date"), float(light.get("latitude")), float(light.get("longitude")))
+        assert abs(90.0 - sun["zenith"] - elevation) < 0.002, (key, sun["zenith"])
+        assert light.get("date").startswith(pk.SUNSET_DAY + "T18:")
+    assert docs["sky-sunset-noon"].find("lights/light").get("date") == pk.NOON_DATE
+    orbit = docs["sky-orbit"]
+    assert orbit.find("lights/light").get("altitude") == "400000.0" and orbit.find("physics").get("pixelsPerMeter") == "1"
+    assert [float(orbit.find("composition/camera").get(c)) for c in "xyz"] == [0.0, 0.0, 0.0]
+    aerial = docs["sky-aerial"]
+    assert aerial.find("physics").get("pixelsPerMeter") == "1" and len(aerial.findall("composition/object3D")) == 6
+    assert float(aerial.find("composition/camera").get("far")) > max(pk.AERIAL_DISTANCES)
+    zs = sorted(float(b.get("z")) - pk.BOX_DEPTH / 2.0 for b in aerial.findall("composition/object3D"))
+    assert zs == sorted([pk.NEAR] + list(pk.AERIAL_DISTANCES))
+    default = docs["sky-aerial-default"]
+    cam = default.find("composition/camera")
+    assert default.find("physics") is None and cam.get("fov") is None and cam.get("far") == "600000"
+    assert (float(cam.get("x")), float(cam.get("y"))) == (320.0, 180.0) and _close(float(cam.get("z")), pk.DEFAULT_EYE[2])
+    wall = [b for b in default.findall("composition/object3D") if b.get("id") == "wall"][0]
+    assert float(wall.get("y")) == 330.0 and abs(float(wall.get("z")) - pk.BOX_DEPTH / 2.0 - float(cam.get("z")) - 500000.0) < 1e-6
+    for key in ("sky-fog", "sky-fog-high", "sky-fog-aerial"):
+        light = docs[key].find("lights/light")
+        assert light.get("fogDensity") == "0.001" and light.get("fogHeight") == "100.0" and light.get("altitude") == "0.0"
+        assert light.get("aerialPerspective") == ("true" if key == "sky-fog-aerial" else "false")
+        assert docs[key].find("physics").get("pixelsPerMeter") == "1"
+        wall = [b for b in docs[key].findall("composition/object3D") if b.get("id") == "wall"][0]
+        assert float(wall.get("z")) - pk.BOX_DEPTH / 2.0 == 1000.0
+        assert float(wall.get("y")) == float(docs[key].find("composition/camera").get("y")) == (-500.0 if key == "sky-fog-high" else 0.0)
+    assert docs["sky-moon"].find("lights/light").get("date") == pk.FULL_MOON
+    assert docs["sky-moon-new"].find("lights/light").get("date") == pk.NEW_MOON
+    seek = docs["sky-seek"]
+    assert seek.find("project").get("fps") == "24" and seek.find("project").get("duration") == "2"
+    keys = seek.findall("lights/light/animate/key")
+    assert seek.find("lights/light/animate").get("property") == "date" and len(keys) == 49
+    assert keys[0].get("value") == "2026-06-20T18:00:00Z" and keys[-1].get("value") == "2026-06-21T18:00:00Z"
+    assert keys[40].get("value") == "2026-06-21T14:00:00Z" and abs(float(keys[40].get("time")) - 39.5 / 24.0) < 1e-6
+    assert float(keys[0].get("time")) == 0.0 and abs(float(keys[1].get("time")) - 0.5 / 24.0) < 1e-6
+    assert float(keys[-1].get("time")) < 2.0 and all(float(k.get("time")) < float(n.get("time")) for k, n in zip(keys, keys[1:]))
+    assert seek.find("lights/light").get("date") == keys[0].get("value")
+    assert pk.documents() == pk.documents()
+
+
+def test_the_kit_expectations_come_from_the_reference():
+    a = ps.atmosphere()
+    exp = pk.expectations()
+    spa = exp["sky-spa"]
+    assert round(spa["zenith"], 5) == 50.11162 and round(spa["azimuth"], 5) == 194.34024
+    assert _close(spa["at"], (pk.W / 2.0, pk.H / 2.0), 1e-6)
+    day = exp["sky-day"]
+    light = pk.lights()["sky-day"]
+    sun = pk.to_atmosphere(ps.sun_from_document(pk.DAY_DATE, 0.0, 0.0)["direction"])
+    assert _close(day["zenith"], ps.sky_radiance(a, (0.0, 0.0, a["planet_radius"]), pk.to_atmosphere(day["zenith_direction"]), sun))
+    assert math.degrees(math.acos(-day["zenith_direction"][1])) < 1.1 and abs(-day["horizon_direction"][1]) < 0.02
+    assert day["zenith"][2] / day["zenith"][0] > day["horizon"][2] / day["horizon"][0]
+    assert sum(day["horizon"]) > sum(day["zenith"])
+    assert light["latitude"] == 0.0 and light["longitude"] == 0.0
+    sunset = exp["sky-sunset"]
+    assert abs(sunset["sky-sunset"]["elevation"] - 1.0) < 0.002 and abs(sunset["sky-sunset-below"]["elevation"] + 1.0) < 0.002
+    assert sunset["sky-sunset-noon"]["elevation"] > 88.0
+    disc, noon = sunset["sky-sunset"]["disc"], sunset["sky-sunset-noon"]["disc"]
+    assert disc[0] / disc[2] > 10.0 * noon[0] / noon[2] and noon[0] > 1000.0
+    assert sunset["sky-sunset-below"]["disc"] == (0.0, 0.0, 0.0)
+    orbit = exp["sky-orbit"]
+    obs = (0.0, 0.0, a["planet_radius"] + pk.ORBIT_ALTITUDE)
+    limb = ps.limb_direction(a, obs)
+    assert _close(orbit["ground"], math.degrees(math.acos(-limb[2])), 1e-9)
+    assert _close(orbit["top"], math.degrees(math.asin(a["top_radius"] / ps._norm(obs))), 1e-9)
+    assert orbit["ground"] < orbit["edge"] < orbit["top"] and orbit["peak"] > 0.1
+    assert min(orbit["angles"]) < orbit["ground"] - 1.0 and max(orbit["angles"]) > orbit["top"] + 1.0
+    aerial = exp["sky-aerial"]
+    row = aerial["sky-aerial"]
+    assert row["fog"] is None and row["aerial"] and _close(row["observer"], (0.0, 0.0, a["planet_radius"]))
+    assert [round(b["length"]) for b in row["boxes"].values()] == [10, 100, 5003, 10000, 20012, 50122]
+    colours = [pk.seen(a, row, b, GREY) for n, b in row["boxes"].items() if n != "near"]
+    horizon = [ps.sky_radiance(a, row["observer"], (b["direction"][0], b["direction"][1], 0.0), row["sun"])
+               for n, b in row["boxes"].items() if n != "near"]
+    gaps = [math.dist(c, h) for c, h in zip(colours, horizon)]
+    assert all(x > y for x, y in zip(gaps, gaps[1:]))
+    default = aerial["sky-aerial-default"]
+    assert _close(default["observer"], (3.2, -5.542562584, a["planet_radius"] - 1.8), 1e-6)
+    wall = default["boxes"]["wall"]
+    assert _close(wall["length"], 5000.0, 1e-6) and _close(wall["direction"], (0.0, 1.0, 0.0))
+    shift = [1.0 - c / 0.5 for c in pk.seen(a, default, wall, GREY)]
+    assert all(0.05 < s < 0.09 for s in shift), shift
+    assert _close(pk.material_grey(a, default, pk.seen(a, default, default["boxes"]["near"], GREY)), GREY, 1e-9)
+    fog = exp["sky-fog"]
+    f = ps.fog(0.001, 100.0)
+    for key, h in (("sky-fog", 0.0), ("sky-fog-high", 500.0)):
+        wall = fog[key]["boxes"]["wall"]
+        assert wall["h0"] == wall["h1"] == h and wall["length"] == 1000.0 and not fog[key]["aerial"]
+        expected = ps.fogged(GREY, f, h, h, 1000.0, wall["horizon"])
+        assert _close(pk.seen(a, fog[key], wall, GREY), expected)
+        t = math.exp(-1.0) if h == 0.0 else math.exp(-0.001 * 1000.0 * math.exp(-5.0))
+        assert _close(expected, tuple(0.5 * t + (1.0 - t) * wall["horizon"][c] for c in range(3)))
+    wall = fog["sky-fog-aerial"]["boxes"]["wall"]
+    assert fog["sky-fog-aerial"]["aerial"]
+    assert _close(pk.seen(a, fog["sky-fog-aerial"], wall, GREY),
+                  ps.aerial_perspective(a, fog["sky-fog-aerial"]["observer"], wall["direction"], 1000.0, GREY,
+                                        fog["sky-fog-aerial"]["sun"], fog=f, horizon=wall["horizon"]))
+    moon = exp["sky-moon"]
+    assert abs(moon["sky-moon"]["angular_diameter"] - 0.50) < 0.02 and moon["sky-moon"]["illuminated"] > 0.999
+    assert round(moon["sky-moon"]["zenith"], 3) == 27.717 and round(moon["sky-moon"]["azimuth"], 3) == 307.748
+    assert moon["sky-moon-new"]["illuminated"] < 1e-3 and max(moon["sky-moon-new"]["radiance"]) < 1e-6
+    assert all(_close(m["at"], (pk.W / 2.0, pk.H / 2.0), 1e-6) for m in moon.values())
+    assert exp["sky-seek"] == {}
+
+
+def _fill_disc(frame, at, radius_px, rgb):
+    h, w, _ = frame.shape
+    ys, xs = np.mgrid[0:h, 0:w]
+    frame[(xs + 0.5 - at[0]) ** 2 + (ys + 0.5 - at[1]) ** 2 <= radius_px ** 2] = rgb
+
+
+def _square(frame, at, half, rgb):
+    x, y = int(math.floor(at[0])), int(math.floor(at[1]))
+    frame[max(0, y - half):y + half + 1, max(0, x - half):x + half + 1] = rgb
+
+
+def _frames(exp):
+    """Synthetic frames of every document from the expectations (what a correct engine renders)."""
+    a = ps.atmosphere()
+    f = {}
+
+    def blank(value=0.0):
+        return np.full((pk.H, pk.W, 3), value, dtype=np.float64)
+    f["sky-spa"] = blank(0.05)
+    _fill_disc(f["sky-spa"], exp["sky-spa"]["at"], ps.SUN_RADIUS_DEG * pk.pixels_per_degree(pk.FOV["sky-spa"]), (50.0,) * 3)
+    f["sky-day"], f["sky-day-horizon"] = blank(), blank()
+    f["sky-day"][:] = exp["sky-day"]["zenith"]
+    f["sky-day-horizon"][:] = exp["sky-day"]["horizon"]
+    ppd = pk.pixels_per_degree(pk.FOV["sky-sunset"])
+    for key in pk.DOCUMENTS["sky-sunset"]:
+        e = exp["sky-sunset"][key]
+        f[key] = blank()
+        horizon_row = pk.H / 2.0 + e["elevation"] * ppd            # the horizon lies below a sun above it
+        rows = np.arange(pk.H)[:, None, None] + 0.5
+        f[key][:] = np.where(rows < horizon_row, np.array([0.1, 0.15, 0.3]), 0.0)
+        if e["elevation"] > 0.0:
+            _fill_disc(f[key], e["at"], ps.SUN_RADIUS_DEG * ppd, e["disc"])
+    o = exp["sky-orbit"]
+    fov, yaw, pitch, _ = pk.cameras(pk.lights())["sky-orbit"]
+    angles = [math.degrees(math.acos(pk.unproject(fov, yaw, pitch, (pk.W / 2.0 + 0.5, row + 0.5))[1])) for row in range(pk.H)]
+    order = np.argsort(o["angles"])
+    lum = np.interp(angles, np.asarray(o["angles"])[order], np.asarray(o["luminance"])[order])
+    f["sky-orbit"] = np.repeat(np.repeat(lum[:, None, None], pk.W, axis=1), 3, axis=2)
+    for name in ("sky-aerial", "sky-fog"):
+        for key in pk.DOCUMENTS[name]:
+            seg = exp[name][key]
+            f[key] = blank()
+            for box_name, box in seg["boxes"].items():
+                _square(f[key], box["at"], 3, pk.seen(a, seg, box, GREY))
+    m = exp["sky-moon"]["sky-moon"]
+    f["sky-moon"] = blank()
+    _fill_disc(f["sky-moon"], m["at"], m["angular_diameter"] / 2.0 * pk.pixels_per_degree(pk.FOV["sky-moon"]), m["radiance"])
+    f["sky-moon-new"] = blank(0.3)
+    f["sky-moon-new"][:, :, 2] = 0.4
+    gradient = np.linspace(0, 255, pk.W)[None, :, None].repeat(pk.H, axis=0).repeat(3, axis=2)
+    f["seek-alone"] = np.concatenate([gradient, np.full((pk.H, pk.W, 1), 255.0)], axis=2)
+    f["seek-played"] = f["seek-alone"].copy()
+    return f
+
+
+def test_the_kit_measures_each_case():
+    exp = pk.expectations()
+    frames = _frames(exp)
+    for name in pk.NAMES:
+        r = pk.measure(name, frames, exp)
+        assert r["pass"], (name, r)
+    good = pk.measure("sky-moon", frames, exp)
+    assert abs(good["diameter_deg"] - 0.4912) < 0.01 and good["off_deg"] < 0.01, good
+    assert pk.measure("sky-orbit", frames, exp)["edge_off_deg"] < 0.01
+    assert pk.measure("sky-aerial", frames, exp)["sky-aerial"]["worst_rel"] < 1e-9
+    bad = dict(frames)
+    bad["sky-spa"] = np.roll(frames["sky-spa"], 5, axis=1)                   # the disc 0.16 degrees off
+    assert not pk.measure("sky-spa", bad, exp)["pass"]
+    bad["sky-day"] = frames["sky-day"] * 1.05
+    assert not pk.measure("sky-day", bad, exp)["pass"]
+    swapped = dict(frames, **{"sky-day": frames["sky-day-horizon"], "sky-day-horizon": frames["sky-day"]})
+    assert not pk.measure("sky-day", swapped, exp)["pass"]
+    with_disc = dict(frames)
+    with_disc["sky-sunset-below"] = frames["sky-sunset-below"].copy()
+    _fill_disc(with_disc["sky-sunset-below"], exp["sky-sunset"]["sky-sunset-below"]["at"], 10.0, exp["sky-sunset"]["sky-sunset"]["disc"])
+    assert not pk.measure("sky-sunset", with_disc, exp)["pass"]
+    white = dict(frames, **{"sky-sunset": frames["sky-sunset-noon"]})          # a sunset disc as white as noon's
+    assert not pk.measure("sky-sunset", white, exp)["pass"]
+    bad["sky-orbit"] = np.roll(frames["sky-orbit"], 20, axis=0)                # the shell 0.3 degrees off
+    assert not pk.measure("sky-orbit", bad, exp)["pass"]
+    glow = dict(frames)
+    glow["sky-orbit"] = frames["sky-orbit"] + 1e-3                              # light above the atmosphere
+    assert not pk.measure("sky-orbit", glow, exp)["pass"]
+    bad["sky-aerial"] = frames["sky-aerial"] * 1.03
+    assert not pk.measure("sky-aerial", bad, exp)["pass"]
+    bare = dict(frames)
+    bare["sky-aerial-default"] = frames["sky-aerial-default"].copy()           # the wall as grey as the near box
+    _square(bare["sky-aerial-default"], exp["sky-aerial"]["sky-aerial-default"]["boxes"]["wall"]["at"], 3, GREY)
+    assert not pk.measure("sky-aerial", bare, exp)["pass"]
+    clear = dict(frames)
+    clear["sky-fog"] = frames["sky-fog"].copy()
+    _square(clear["sky-fog"], exp["sky-fog"]["sky-fog"]["boxes"]["wall"]["at"], 3, GREY)
+    assert not pk.measure("sky-fog", clear, exp)["pass"]
+    big = dict(frames)
+    big["sky-moon"] = np.zeros_like(frames["sky-moon"])
+    m = exp["sky-moon"]["sky-moon"]
+    _fill_disc(big["sky-moon"], m["at"], (m["angular_diameter"] / 2.0 + 0.02) * pk.pixels_per_degree(10.0), m["radiance"])
+    assert not pk.measure("sky-moon", big, exp)["pass"]
+    bad["sky-moon"] = np.roll(frames["sky-moon"], 20, axis=1)                  # 0.3 degrees off
+    assert not pk.measure("sky-moon", bad, exp)["pass"]
+    lit = dict(frames)
+    lit["sky-moon-new"] = frames["sky-moon-new"].copy()
+    _fill_disc(lit["sky-moon-new"], exp["sky-moon"]["sky-moon-new"]["at"], 15.0, (2.0, 2.0, 2.0))
+    assert not pk.measure("sky-moon", lit, exp)["pass"]
+    bad["seek-played"] = np.roll(frames["seek-played"], 1, axis=1)
+    assert not pk.measure("sky-seek", bad, exp)["pass"]
+    with pytest.raises(ValueError):
+        pk.measure("sky-nothing", frames, exp)
+
+
+def _fake_engine(frames, refuse=()):
+    """An exec that writes the synthetic frame of each document the kit encodes or renders, and refuses the named
+    documents with the given code."""
+    def exec(cmd, capture_output, text):
+        class R:
+            returncode = 0
+            stdout = ""
+            stderr = ""
+        doc = cmd[2]
+        key = os.path.basename(doc)[len("srep-0000-"):-len(".xml")]
+        if key in refuse:
+            R.returncode, R.stderr = 1, "error[%s] (dome): refused\n" % refuse[key]
+            return R
+        if cmd[1] == "encode":
+            out_dir = cmd[cmd.index("--out-dir") + 1]
+            os.makedirs(os.path.join(out_dir, "out"), exist_ok=True)
+            pk.sk.write_exr(os.path.join(out_dir, "out", f"{key}_0000.exr"), frames[key])
+            return R
+        assert cmd[1] == "render" and key == "sky-seek"
+        out = cmd[cmd.index("-o") + 1]
+        if "-f" in cmd:
+            targets = [out]
+        else:
+            last = int(cmd[cmd.index("--frames") + 1].split("..=")[1])
+            targets = [out % f for f in range(last + 1)]
+        img = Image.fromarray(frames["seek-alone"].astype(np.uint8), "RGBA")
+        for path in targets:
+            img.save(path)
+        return R
+    return exec
+
+
+def test_the_kit_runs_an_engine_and_reports_every_case(tmp_path):
+    exp = pk.expectations()
+    frames = _frames(exp)
+    report = pk.run("engine", str(tmp_path / "ok"), exec=_fake_engine(frames))
+    assert list(report) == pk.NAMES and all(r["pass"] for r in report.values()), report
+    assert os.path.exists(tmp_path / "ok" / "sky-seek-seq-0040.png") and os.path.exists(tmp_path / "ok" / "srep-0000-sky-fog-high.xml")
+    refused = pk.run("engine", str(tmp_path / "refused"), exec=_fake_engine(frames, refuse={"sky-moon-new": "S06", "sky-seek": "S01"}))
+    assert not refused["sky-moon"]["pass"] and "S06" in refused["sky-moon"]["error"] and "sky-moon-new" in refused["sky-moon"]["error"]
+    assert not refused["sky-seek"]["pass"] and "S01" in refused["sky-seek"]["error"]
+    assert sum(r["pass"] for r in refused.values()) == 6
+    text = pk.table(report)
+    assert text.splitlines()[0] == "| Case | Measured | Pass |" and "| sky-spa |" in text and text.count("| yes |") == 8
+    assert pk.main(["--write", str(tmp_path / "written")]) == 0 and os.path.exists(tmp_path / "written" / "srep-0000-sky-seek.xml")
+
+
+def test_the_draft_describes_the_kit(draft):
+    text = re.sub(r"\n +", " ", draft)
+    for phrase in ("`conformance/tools/physical_sky_kit.py`", "`scene-render encode`", "exr-sequence", "`sky-day-horizon`",
+                   "`sky-sunset-noon`", "`sky-sunset-below`", "`sky-aerial-default`", "`sky-fog-high`", "`sky-fog-aerial`",
+                   "`sky-moon-new`", '`environmentVisible="true"`', "near box", "`unproject`", "(320, 180, −554.26",
+                   "one key per frame", "14:00 UTC", "strings are discrete", "1 % of its peak"):
+        assert phrase in text, phrase
+    assert "SREP 4's" not in text            # SREP 4 is semantic versioning, not animation

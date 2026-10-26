@@ -64,7 +64,8 @@ files are not changed by this draft.
   value and a physical sky without the attribute would be lit by a sun of 0.
 - New dome light attributes, read when `sky="physical"` (PSKY1: each is ignored, with a warning, under the
   other two values):
-  - `date` (`xs:string`, required with `physical`, animatable through the fields of SREP 4's values: an ISO
+  - `date` (`xs:string`, required with `physical`, animatable with `animate` keys written as strings, which
+    the schema holds discrete, a key's string standing until the next key: an ISO
     8601 date and time with seconds and either `Z` or a `+hh:mm` offset, for example
     `2003-10-17T12:30:30-07:00`; the year is −2000 to 6000, PSKY2), `latitude` (`xs:double`, degrees north,
     −90 to 90, default 0), `longitude` (`xs:double`, degrees east, −180 to 180, default 0), `altitude`
@@ -207,8 +208,9 @@ The reference module names the function of each rule. Angles are degrees unless 
     scale. In an atmosphere without air the march reproduces the closed form within 2 × 10⁻⁴ at 1 km, the
     sphere's curvature against the tangent plane. The fog is not applied to the sky itself, only to surface
     segments.
-12. **Frames and seek.** The dome light at a frame is evaluated from that frame's `date` (after SREP 4's
-    animation of the string) and the document's constants, with no state carried between frames
+12. **Frames and seek.** The dome light at a frame is evaluated from that frame's `date` (after any
+    `animate` on it: a string key holds until the next key) and the document's constants, with no state
+    carried between frames
     (`sky_frame`); the multiple-scattering table depends only on the atmosphere's parameters, so a frame
     rendered alone equals the frame reached by playing (`seek_test`).
 
@@ -224,7 +226,7 @@ The reference module names the function of each rule. Angles are degrees unless 
   engine's tables something to be compared with.
 - **Why a date on the dome light and not a clock element.** SREP 71 placed the sun on the dome light; the
   date is its missing input. A scene clock is SP1's (SREP 12) and when it lands `date` can be fed from it
-  through SREP 4's value fields without a change here.
+  through its `animate` keys without a change here.
 - **Why the moon is low precision.** Montenbruck and Pfleger's series is a page long and good to 0.1°, five
   moon diameters below what a frame resolves; the full theory (ELP) is thousands of terms for no visible
   gain.
@@ -348,18 +350,40 @@ from its `main()`.
 ### Kit cases
 
 The cases are described here and added to `conformance/srep_cases/` once the SREP has a number; they are
-measurable after SR-86 lands.
+measurable after SR-86 lands. `conformance/tools/physical_sky_kit.py` writes them (as `srep-0000-…`,
+`--write DIR`) and renders and measures an engine's frames of each (`--engine BIN`). A case that compares
+two settings or views has a companion document named with a suffix: `sky-day-horizon` (the horizon camera),
+`sky-sunset-noon` and `sky-sunset-below` (the disc at noon and at −1°), `sky-aerial-default` (the
+default-camera companion), `sky-fog-high` and `sky-fog-aerial`, `sky-moon-new`. Every document is 640 × 360
+and sets `environmentVisible="true"` (its default, false, lights the scene without drawing the sky) and
+`moon="false"` except the moon case; every camera's position is written explicitly, since an explicit
+`camera` without x, y, z stands at the origin: the default-camera companion is placed at the implicit
+camera's position (320, 180, −554.26 for 640 × 360) with the schema's default `fov` of 60 and its `far`
+raised to 600,000 px. The camera is aimed by yaw and pitch at a direction (`aim`); `project` maps a
+direction to continuous frame coordinates and `unproject` a frame position back to a direction, so a
+measured centroid becomes an angle. Radiance is read from linear EXR frames (`scene-render encode`, the
+document's `exr-sequence` output); the seek case compares PNG frames of `scene-render render`. Every
+expectation comes from `physical_sky_reference.py` at the document's own observer, date and camera: the sun
+and moon directions, `sky_radiance` at the centre pixel's direction, `aerial_perspective` and `fogged` along
+each box's ray. The grey a wall is drawn with is not assumed: a near box of the same material 10 px from the
+camera gives it in the same frame (the air between shifts it by 10⁻⁵), and the expectation is
+`aerial_perspective` or `fogged` of that grey, so no colour encoding of the material enters a check. The
+orbit case reads the shell along the frame's centre column: its brightest row within 0.2° of the
+reference's, its upper edge (where the radiance falls to 1 % of its peak) within 0.2°, and nothing above the
+top's grazing direction. The seek case animates `date` with one key per frame (strings are discrete, so a
+key holds until the next; each key sits half a frame before its frame), 30 minutes a frame from 2026-06-20
+18:00 UTC; frame 40 is 14:00 UTC the next day, in daylight.
 
 | Case | Checks | Status |
 |---|---|---|
 | `srep-<n>-sky-spa.xml` | the report's example as a dome light (`date="2003-10-17T12:30:30-07:00"`, Golden, Colorado, 1830.14 m, 820 hPa, 11 °C, `deltaT="67"`): the brightest sky pixel's direction is within 0.1° of zenith 50.11162°, azimuth 194.34024° | to be measured |
 | `srep-<n>-sky-day.xml` | a ground observer at noon: the zenith is bluer than the horizon (blue over red ratio higher), the horizon brighter than the zenith, and the pixel radiance at the zenith within 2 % per channel of `sky_radiance` toward the zenith at the case's own observer and sun direction (`sun_from_document` at its date and place) with the atmosphere's `sun_irradiance` the effective irradiance; the table's `zenith_radiance()` has the sun at 45° and is not this case's value | to be measured |
-| `srep-<n>-sky-sunset.xml` | the sun at 1° elevation: the sun disc's red over blue ratio exceeds the noon disc's, and the disc below the horizon is not drawn | to be measured |
-| `srep-<n>-sky-orbit.xml` | `altitude="400000"` with the camera at the origin (`physics pixelsPerMeter="1"`) looking at the limb: the scattering shell spans the limb's angular band from `limb_direction` to the top's grazing direction, black above it | to be measured |
+| `srep-<n>-sky-sunset.xml` | the sun at 1° elevation (its companions `sky-sunset-noon` and `sky-sunset-below`, the sun at −1°): the sun disc's red over blue ratio exceeds the noon disc's, and the disc below the horizon is not drawn | to be measured |
+| `srep-<n>-sky-orbit.xml` | `altitude="400000"` with the camera at the origin (`physics pixelsPerMeter="1"`) looking at the limb: the scattering shell spans the limb's angular band from `limb_direction` to the top's grazing direction, black above it (the kit reads the centre column: the brightest row and the 1 % edge within 0.2° of the reference, nothing above the top's grazing direction) | to be measured |
 | `srep-<n>-sky-aerial.xml` | a row of grey boxes to 50 km (`physics pixelsPerMeter="1"`, 50,000 px) with `aerialPerspective="true"`: each box's colour is closer to the horizon sky than the previous within the reference's `aerial_perspective` to 2 %; a companion with no `physics` element and the default camera's position and lens, its `far` raised past a grey wall at y = 330, 500,000 px (5 km) away, shows the wall within 2 % per channel of `aerial_perspective` from the camera's mapped point, 1.8 m below the sphere (the air shifts the grey by 5 to 9 % per channel there) | to be measured |
 | `srep-<n>-sky-fog.xml` | `fogDensity="0.001" fogHeight="100"` with `physics pixelsPerMeter="1"` and `aerialPerspective="false"`: a grey wall 1,000 px away at y = 0 (ground level, `altitude="0"`) is attenuated by e⁻¹ toward `horizon_radiance`, a wall at y = −500 (500 m altitude) by e^(−0.0067); a companion with `aerialPerspective="true"` shows the ground-level wall within 2 % per channel of `aerial_perspective` with the fog | to be measured |
 | `srep-<n>-sky-moon.xml` | the full moon of 2003-11-09 01:13 UTC: a lit disc of angular diameter 0.50° ± 0.02° at the reference's zenith and azimuth within 0.2°; the new moon of 2003-10-25 draws no lit disc | to be measured |
-| `srep-<n>-sky-seek.xml` | a day's time-lapse (`date` animated over 24 hours): frame 40 rendered alone equals the frame played from 0 (SREP 14) | to be measured |
+| `srep-<n>-sky-seek.xml` | a day's time-lapse (`date` animated over 24 hours, one key per frame): frame 40 rendered alone equals the frame played from 0 (SREP 14) | to be measured |
 
 ## Open issues
 
@@ -403,7 +427,7 @@ measurable after SR-86 lands.
 - Hošek, L. and Wilkie, A. (2012). An analytic model for full spectral sky-dome radiance. *ACM Transactions
   on Graphics* 31(4). Wilkie, A. et al. (2021). A fitted radiance and attenuation model for realistic
   atmospheres (the Prague sky model). *ACM Transactions on Graphics* 40(4).
-- [SREP 4](srep-0004.md), [SREP 12](srep-0012.md), [SREP 14](srep-0014.md), [SREP 71](srep-0071.md), the
+- [SREP 12](srep-0012.md), [SREP 14](srep-0014.md), [SREP 71](srep-0071.md), the
   media draft (`srep-0000-media.md`).
 
 ## History
@@ -439,3 +463,8 @@ measurable after SR-86 lands.
   (SR-86: from 400 km straight down, 16 samples clustered at the vacuum end were 0.5 % off the converged
   march; now within 10⁻⁴); the default-camera companion's wall moves to 5 km with the camera's `far`
   raised (at 500 m the air shifted the grey under 1 %, below the row's tolerance). Two table rows.
+- 2026-10-26: `conformance/tools/physical_sky_kit.py` writes the eight cases (fifteen documents) and
+  measures them (SR-86 asked for the tool); the kit paragraph states the documents' conventions (explicit
+  camera positions, `environmentVisible="true"`, the near-box grey, the orbit shell's edge, one `date` key
+  per frame); the `date` attribute's animation cites the schema's discrete string keys, not SREP 4
+  (semantic versioning). Not yet measured on an engine.
