@@ -551,3 +551,44 @@ def test_the_draft_drops_the_sun_intensity_schema_default(draft):
     with open(os.path.join(ROOT, "schema", "scene-render.xsd"), encoding="utf-8") as f:
         xsd = f.read()
     assert '<xs:attribute name="sunIntensity" type="nonNegativeDecimal" default="0">' in xsd  # the draft's diff base
+
+
+# -------------------------------------------------------------------- rules 10 and 11: scale and origin (SR-86)
+
+
+def test_scene_points_map_to_the_atmosphere_through_pixels_per_meter():
+    a = ps.atmosphere()
+    r = a["planet_radius"]
+    assert ps.atmosphere_position(a, (0.0, 0.0, 0.0)) == (0.0, 0.0, r)
+    assert ps.atmosphere_position(a, (0.0, 0.0, 0.0), 400000.0, 1.0) == (0.0, 0.0, r + 400000.0)
+    assert ps.atmosphere_position(a, (100.0, -5000.0, 250.0), 10.0, 1.0) == (100.0, 250.0, r + 5010.0)
+    assert ps.atmosphere_position(a, (100.0, -5000.0, 250.0)) == (1.0, 2.5, r + 50.0)        # default 100 px/m
+    assert ps.scene_altitude(-500.0, 0.0, 1.0) == 500.0 and ps.scene_altitude(0.0, 1830.14, 1.0) == 1830.14
+    assert ps.scene_altitude(-50000.0) == 500.0
+    obs = ps.atmosphere_position(a, (0.0, 0.0, 0.0), 0.0, 1.0)
+    wall = ps.atmosphere_position(a, (0.0, 0.0, 1000.0), 0.0, 1.0)
+    assert _close(math.dist(obs, wall), 1000.0, 1e-9)
+    f = ps.fog(0.001, 100.0)
+    assert _close(ps.fog_transmittance(f, ps.scene_altitude(0.0, 0.0, 1.0), ps.scene_altitude(0.0, 0.0, 1.0), 1000.0),
+                  math.exp(-1.0), 1e-12)
+    assert _close(ps.fog_transmittance(f, ps.scene_altitude(-500.0, 0.0, 1.0), ps.scene_altitude(-500.0, 0.0, 1.0), 1000.0),
+                  math.exp(-math.exp(-5.0)), 1e-12)                                          # e^(-0.0067)
+    for bad_k in (0.0, -1.0, math.nan):
+        with pytest.raises(ps.SkyError):
+            ps.atmosphere_position(a, (0.0, 0.0, 0.0), 0.0, bad_k)
+        with pytest.raises(ps.SkyError):
+            ps.scene_altitude(0.0, 0.0, bad_k)
+    with pytest.raises(ps.SkyError):
+        ps.atmosphere_position(a, (0.0, math.inf, 0.0))
+    with pytest.raises(ps.SkyError):
+        ps.atmosphere_position(a, (0.0, 0.0))
+
+
+def test_the_draft_states_the_scale_and_origin_of_rules_10_and_11(draft):
+    text = re.sub(r"\n +", " ", draft)
+    for phrase in ("a metre is `physics/@pixelsPerMeter` pixels (SREP 14 rule 4", "the scene's origin is rule 9's observer at `altitude`",
+                   "`atmosphere_position(a, p, altitude, pixelsPerMeter)`", "`scene_altitude(y, altitude, pixelsPerMeter)`",
+                   "**A scale of the draft's own for rules 10 and 11.**", "`physics pixelsPerMeter=\"1\"`",
+                   "a grey wall 1,000 px away at y = 0", "a wall at y = −500 (500 m altitude)"):
+        assert phrase in text, phrase
+    assert "a grey wall 1 km away at ground level" not in text

@@ -876,6 +876,27 @@ def sky_irradiance(a, obs, sun, zenith_steps=6, azimuth_steps=12):
     return tuple(out)
 
 
+def atmosphere_position(a, p, altitude=0.0, pixels_per_meter=100.0):
+    """A scene point (x, y, z) in pixels placed in the atmosphere's frame (rules 10 and 11): the scene's origin is
+    rule 9's observer at `altitude` on the z axis, a metre is `physics/@pixelsPerMeter` pixels (SREP 14 rule 4), scene
+    up (−y) is +z and the scene's x and z span the tangent plane."""
+    if not (math.isfinite(pixels_per_meter) and pixels_per_meter > 0.0):
+        raise SkyError("pixelsPerMeter is a positive number")
+    if len(p) != 3 or not all(math.isfinite(c) for c in p) or not math.isfinite(altitude):
+        raise SkyError("a scene point and the altitude are finite")
+    k = float(pixels_per_meter)
+    return (p[0] / k, p[2] / k, a["planet_radius"] + altitude - p[1] / k)
+
+
+def scene_altitude(y, altitude=0.0, pixels_per_meter=100.0):
+    """The altitude of rule 11's fog at scene height y (pixels, +y down): `altitude` − y / pixelsPerMeter."""
+    if not (math.isfinite(pixels_per_meter) and pixels_per_meter > 0.0):
+        raise SkyError("pixelsPerMeter is a positive number")
+    if not (math.isfinite(y) and math.isfinite(altitude)):
+        raise SkyError("a scene height and the altitude are finite")
+    return altitude - y / float(pixels_per_meter)
+
+
 def aerial_perspective(a, obs, d, distance, colour, sun, samples=16):
     """Rule 10: a surface of the colour at the distance along d is seen through the atmosphere as colour
     times the transmittance plus the in-scattering up to it; at distance 0 the colour itself."""
@@ -1052,6 +1073,8 @@ TABLE = (
     ("multiple scattering factor", "tuple(round(x, 4) for x in multiple_scattering_factor(atmosphere(), 1.0, 0.5))", "(0.073, 0.1338, 0.2306)"),
     ("energy test", "energy_test()", "(True, True)"),
     ("aerial test", "aerial_test()", "(True, True)"),
+    ("scene point", "atmosphere_position(atmosphere(), (100.0, -5000.0, 250.0), 10.0, 1.0)", "(100.0, 250.0, 6365010.0)"),
+    ("scene altitude", "(scene_altitude(-50000.0, 0.0, 100.0), scene_altitude(0.0, 1830.14, 1.0))", "(500.0, 1830.14)"),
     ("fog", "round(fog_transmittance(fog(0.001, 100.0), 0.0, 50.0, 1000.0), 9)", "0.455236288"),
     ("fog test", "fog_test()", "(True, True)"),
     ("limb", "tuple(round(c, 6) for c in limb_direction(atmosphere(), (0.0, 0.0, 6760000.0)))", "(0.940828, 0.0, -0.338883)"),
