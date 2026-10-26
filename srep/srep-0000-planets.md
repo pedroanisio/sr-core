@@ -103,7 +103,10 @@ and the scene's axes follow the time-frames draft (scene (x, y, z) = body (x, �
    the centre and the north pole the top. The engine's UV sphere (prim.rs: n = (sin πw cos 2πu, −cos πw,
    sin πw sin 2πu), u = 0 at +x, the north pole at w = 0) reads the map at u + 1/2 (`engine_uv`,
    `engine_normal`): a texture's centre lands on the scene's +x at the body's equator and 90° E on the
-   scene's +z. The texture is not mirrored: east is to the right when the north pole is up.
+   scene's +z. The texture is not mirrored: east is to the right when the north pole is up. A surface point's
+   texel is read at its geodetic latitude, `geodetic_latitude(p, f)` = atan2(z, (1 − f)² √(x² + y²)) in the
+   body frame (the elevation of `surface_normal`, the inverse of `surface_point`; with f = 0 the geocentric
+   latitude), which on the Earth exceeds the geocentric latitude by 0.19° at 45° (Open issue 6).
 3. **Shading, night lights and limb darkening.** The day side is lit by the scene's lights as any surface
    (`day_weight`: Lambert's cosine of the sun direction). With `nightLights="true"` the emissive map is
    multiplied by `night_weight(normal, sun, twilight)`: 1 when the Sun is `twilight` degrees or more below the
@@ -137,16 +140,21 @@ and the scene's axes follow the time-frames draft (scene (x, y, z) = body (x, �
    casts no other shadow and the term is independent of the light's own shadow casting.
 5. **Rings.** The ring is an annulus in the body's equatorial plane from `ringInner` to `ringOuter`
    equatorial radii, both faces drawn, its colour and alpha `ring_sample(strip, rho, inner, outer)`: the
-   linear interpolation of `ringMap` across the radius. A ring point is in the planet's shadow when its ray
-   toward the Sun hits the spheroid (`ring_shadowed_by_planet(q, sun, radius, flattening)`); the shadow is
+   linear interpolation of `ringMap` across the radius. The ring is an alpha-blended diffuse surface (the
+   strip's colour times its alpha, roughness 1, no specular) lit on both faces alike by the scene's lights with
+   the cosine `ring_cosine(sun)` = |n · s|, n the plane's normal (the unlit face shows the same strip: Open
+   issue 5). A ring point is in the planet's shadow when its ray toward the Sun hits the spheroid
+   (`ring_shadowed_by_planet(q, sun, radius, flattening)`): there rule 3's sun (under a physical sky, the
+   sky's sun) contributes nothing, and no other light is shadowed by the planet; the shadow is
    the half of the ellipse with semi-axes `planet_shadow_on_rings` = (R √(sin² β + (1 − f)² cos² β) / |sin β|,
    R) on the side away from the Sun, β the Sun's elevation above the ring plane: with flattening f the
    meridian ellipse x² + z² / (1 − f)² = R² has its tangent of slope tan β at that distance from the centre
    on the plane (Saturn at its solstice, β 26.7°: 2.053 radii along the Sun's direction; a sphere of the
    equatorial radius would cast 2.226, and the ring at 2.1 radii is lit, not shadowed). The planet is
    shadowed by the ring where the ray from a surface point toward the Sun crosses the ring plane ahead of it at
-   a radius inside the annulus (`ring_crossing`); the light through is 1 − alpha there (`ring_shadow`). Points
-   with the Sun on their own side of the plane are not shadowed.
+   a radius inside the annulus (`ring_crossing`); the light through is 1 − alpha there (`ring_shadow`), a
+   factor on rule 3's sun alone, independent of the light's own shadow casting, as rule 4's cloud shadow is.
+   Points with the Sun on their own side of the plane are not shadowed.
 6. **Atmosphere.** With `atmosphere="earth"` the body carries the physical-sky draft's atmosphere
    (`atmosphere(planet_radius, top_radius)` there, with the body's equatorial radius in metres and
    `atmosphereHeight` above it); its transmittance and in-scattering apply to every ray toward or past the
@@ -238,6 +246,8 @@ and `STRIP` a four-texel ring strip.
 | Saturn radii (km) | `RADII[699]` | `(60268, 54364)` |
 | Sun radius (km) | `RADII[10][0]` | `696000` |
 | Earth flattening | `flattening(399)` | `0.00335281` |
+| geodetic latitude of the Earth's surface point at 45 N (deg) | `rounded(geodetic_latitude(surface_point(EARTH, flattening(399), 0.0, 45.0), flattening(399)), 6)` | `45` |
+| the same point read as a sphere's, its geocentric latitude (deg) | `rounded(geodetic_latitude(surface_point(EARTH, flattening(399), 0.0, 45.0), 0.0), 4)` | `44.8076` |
 | Saturn flattening | `flattening(699)` | `0.0979624` |
 | Earth scene radius at 1e-6 px/m | `scene_radius(399, 1e-6)` | `6.37814` |
 | Sun scene radius at 1e-9 px/m | `scene_radius(10, 1e-9)` | `0.696` |
@@ -278,6 +288,7 @@ and `STRIP` a four-texel ring strip.
 | ring sample between the first two texels | `ring_sample(STRIP, 1.239 + (2.269 - 1.239) / 6.0, 1.239, 2.269)` | `(0.7, 0.675, 0.55, 0.55)` |
 | Saturn's shadow on the rings as a sphere, semi-axes over the radius | `tuple(x / SATURN for x in planet_shadow_on_rings(SATURN_SUN, SATURN))` | `(2.22559, 1)` |
 | Saturn's shadow on the rings as its spheroid, semi-axes over the radius | `tuple(x / SATURN for x in planet_shadow_on_rings(SATURN_SUN, SATURN, flattening(699)))` | `(2.05345, 1)` |
+| the ring's lit cosine at Saturn's solstice | `rounded(ring_cosine(SATURN_SUN), 6)` | `0.449319` |
 | the ring at 2.1 radii behind a spherical Saturn is shadowed | `ring_shadowed_by_planet((-2.1 * SATURN, 0.0, 0.0), SATURN_SUN, SATURN)` | `True` |
 | the ring at 2.1 radii behind the spheroid is lit | `ring_shadowed_by_planet((-2.1 * SATURN, 0.0, 0.0), SATURN_SUN, SATURN, flattening(699))` | `False` |
 | ring crossing from 20 S on the noon meridian, over the radius | `ring_crossing(surface_point(SATURN, 0.0, 0.0, -20.0), SATURN_SUN) / SATURN` | `1.61972` |
@@ -322,7 +333,7 @@ e21a482 does not draw.
 | `srep-<n>-planet-night.xml` | a black sphere whose white `emissiveMap` is masked with `twilight="6"`, the sun over the pole: the emissive weight read along the prime meridian from 12° S to 12° N, over the full-night mean, within 0.02 of `night_weight` | measured on scene-render feat/sr-67-fields e21a482 (0.8.0, llvmpipe): the weight along the prime meridian within 0.011 of `night_weight` (1/2 on the terminator, 0.916 at 5° S, 0.083 at 5° N; the 0.011 at ±6° is the 3 × 3 window over the ramp's kinks); pass |
 | `srep-<n>-planet-sun.xml` | the Sun (`body="10"`, `limbDarkening="solar"`) under an orthographic camera at 1500 px of disc radius with the limb at column 620 (companion `-centre` on the disc's centre): the red, green and blue radiances at μ 0.5, 0.25 and 0.1 over the centre's within 2 % of `solar_disc` | measured on scene-render feat/sr-67-fields e21a482 (0.8.0, llvmpipe): the ratios at μ 0.5, 0.25 and 0.1 read (0.7293, 0.7032, 0.6575), (0.5313, 0.4945, 0.4321) and (0.3498, 0.3101, 0.2480) against `solar_disc` (0.7292, 0.7032, 0.6575), (0.5317, 0.4945, 0.4323) and (0.3502, 0.3105, 0.2483), 0.14 % at worst (on 2fc3024 the engine took μ toward the camera's position under the orthographic camera, 49 % off at μ 0.1, reproduced to three digits and fixed at cde7262); pass |
 | `srep-<n>-planet-clouds.xml` | a grey sphere with a 4096 × 2048 `cloudMap` holding one opaque texel at 45° N on the prime meridian, `cloudHeight="0.004"` and `cloudShadow="true"`, the sun over the pole, a 2° camera along the texel's normal: the cloud's and the shadow's centroids within 1 px of their projections, the shadow's centre, read back to the ground by `pixel_surface_point`, 0.23° toward the equator from the cloud's within 0.02° (`cloud_shadow_point`; at 60° N the shadow sat inside the cloud's bilinear fringe) | measured on scene-render feat/sr-67-fields e21a482 (0.8.0, llvmpipe): the cloud's centroid 0.02 px and the shadow's 0.13 px off their projections, the shift 0.2288° against 0.2300°; pass |
-| `srep-<n>-planet-rings.xml` | Saturn with `QSTRIP` as its ring at β 26.7°, seen from 45° above the plane on the night side: the shadow's edge within 1 px of the spheroid's half-ellipse at 12 points (`planet_shadow_on_rings` with the flattening); from 30° below the plane (companion `-ground`) the ground at 20° S over 5° S within 2 % of `ring_shadow` | to be measured |
+| `srep-<n>-planet-rings.xml` | Saturn with `QSTRIP` as its ring at β 26.7°, seen from 45° above the plane on the night side: the shadow's edge, read along the radius at half the lit level outside it (strip × alpha × `ring_cosine`, 0.449, against nothing from the sun), within 1 px of the spheroid's half-ellipse at 12 points (`planet_shadow_on_rings` with the flattening); from 30° below the plane (companion `-ground`) the ground at 20° S over 5° S within 2 % of `ring_shadow` | to be measured |
 | `srep-<n>-planet-atmosphere.xml` | `atmosphere="earth"` with `atmosphereHeight="100000"` from 400 km over a black unlit ground, a 10° camera across the limb, the sun 48° from the zenith: the shell's brightest column, its 1 % edge and the limb within 0.1° of the physical-sky reference's `sky_radiance` and `aerial_perspective` profile between 70.19° and 72.87° from the nadir (`shell_band`) | to be measured |
 | `srep-<n>-planet-seek.xml` | a spinning Earth (`orientation="bodyFixed"`, `space` with `rate="60"`) with the marks map as drifting clouds (`cloudRotation="0.01"`) over 600 frames: frame 600 rendered alone equals the frame played from 0 (SREP 14) | to be measured |
 
@@ -373,3 +384,7 @@ e21a482 does not draw.
   gated at 1 px like the cloud's); the limb, night and sun rows re-measured on e21a482 with the same numbers.
 - 2026-10-26: the terminator, phase and texture cases measured on e21a482 (rules 1, 2 and 7 as drawn since 43ddbeb):
   pass; seven of ten rows measured.
+- 2026-10-26: rule 5 states the ring's lighting on SR-89's question: an alpha-blended diffuse surface lit on both
+  faces alike (`ring_cosine`), the planet's shadow on it and its shadow on the ground acting on rule 3's sun
+  alone; rule 2 names `geodetic_latitude(p, f)`, the latitude a surface point's texel is read at (45° N
+  geodetic is 44.81° geocentric on the Earth).

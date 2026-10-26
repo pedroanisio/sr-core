@@ -103,6 +103,24 @@ def test_surface_points_of_the_spheroid():
         pl.surface_point(a, 1.0, 0.0, 0.0)
 
 
+def test_the_geodetic_latitude_of_a_surface_point():
+    # the inverse of surface_point on the spheroid: atan2(z, (1 - f)^2 sqrt(x^2 + y^2)), the normal's elevation
+    f = pl.flattening(399)
+    for lat in (-90.0, -60.0, -0.5, 0.0, 30.0, 45.0, 89.0, 90.0):
+        for lon in (0.0, 90.0, -135.0):
+            p = pl.surface_point(EARTH, f, lon, lat)
+            assert _close(pl.geodetic_latitude(p, f), lat, 1e-9), (lon, lat)
+    p = pl.surface_point(EARTH, f, 0.0, 45.0)
+    assert _close(math.degrees(math.asin(pl.surface_normal(EARTH, f, p)[2])), pl.geodetic_latitude(p, f), 1e-9)
+    # read as a sphere's the same point is 0.19 degrees nearer the equator (Open issue 6)
+    geocentric = pl.geodetic_latitude(p, 0.0)
+    assert _close(geocentric, math.degrees(math.atan2(p[2], math.hypot(p[0], p[1]))), 1e-12)
+    assert _close(geocentric, 44.8076, 5e-5) and 0.19 < 45.0 - geocentric < 0.2
+    for bad in (1.0, -0.1):
+        with pytest.raises(pl.PlanetError):
+            pl.geodetic_latitude(p, bad)
+
+
 # ------------------------------------------------------------------------------------ rule 2: limb and terminator
 
 
@@ -336,6 +354,16 @@ def test_ring_geometry_and_shadows():
         pl.ring_sample(strip, 1.5, 2.0, 1.0)
 
 
+def test_the_ring_is_lit_on_both_faces_alike():
+    # the lit cosine is |n . s| for the plane's normal: the same from either side, zero with the sun in the plane
+    assert _close(pl.ring_cosine(pl.SATURN_SUN), math.sin(math.radians(26.7)))
+    assert pl.ring_cosine((1.0, 0.0, -1.0)) == pl.ring_cosine((1.0, 0.0, 1.0))
+    assert _close(pl.ring_cosine((1.0, 0.0, 1.0)), math.sqrt(0.5))
+    assert pl.ring_cosine((3.0, 4.0, 0.0)) == 0.0
+    with pytest.raises(pl.PlanetError):
+        pl.ring_cosine((0.0, 0.0, 0.0))
+
+
 def test_the_saturn_shadow_ellipse():
     R = pl.RADII[699][0]
     beta = 26.7
@@ -503,6 +531,17 @@ def test_the_draft_has_the_srep_sections(draft):
     assert "Status:          Draft" in draft
     assert "Schema-Version:  1.8" in draft
     assert "... no" not in draft
+
+
+def test_the_draft_states_the_rings_lighting_and_the_geodetic_texel(draft):
+    rule5 = " ".join(draft[draft.index("5. **Rings.**"):draft.index("6. **Atmosphere.**")].split())
+    for phrase in ("alpha-blended diffuse surface", "no specular", "lit on both faces alike", "`ring_cosine(sun)`",
+                   "rule 3's sun (under a physical sky, the sky's sun)", "no other light is shadowed by the planet",
+                   "independent of the light's own shadow casting"):
+        assert phrase in rule5, phrase
+    rule2 = " ".join(draft[draft.index("2. **Textures and the mesh.**"):draft.index("3. **Shading")].split())
+    assert "`geodetic_latitude(p, f)`" in rule2 and "(1 − f)² √(x² + y²)" in rule2 and "Open issue 6" in rule2
+    assert "half the lit level" in draft
 
 
 def test_the_draft_names_the_engine_card_and_the_elements(draft):

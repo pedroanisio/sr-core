@@ -4,8 +4,8 @@
 Standard library only. The module gives:
 
 - the bodies: the IAU 2009 equatorial and polar radii of the Sun, the eight planets and the Moon from NAIF's
-  pck00010.tpc, the flattening, the scene radius under pixelsPerMeter and the spheroid's surface points and
-  normals;
+  pck00010.tpc, the flattening, the scene radius under pixelsPerMeter and the spheroid's surface points,
+  normals and the geodetic latitude a surface point's texel is read at;
 - the texture mapping: an equirectangular day texture with longitude -180 at the left edge and the prime meridian
   at the centre, and its relation to the engine's UV sphere (u = 0 at +x, the north pole at w = 0);
 - the limb and the terminator as circles on the sphere, their cusps, the phase angle and illuminated fraction,
@@ -187,6 +187,14 @@ def surface_normal(a, f, p):
     """The outward unit normal of the spheroid at a surface point (the gradient of its implicit equation)."""
     c = a * (1.0 - f)
     return unit((p[0] / (a * a), p[1] / (a * a), p[2] / (c * c)))
+
+
+def geodetic_latitude(p, f):
+    """The geodetic latitude (degrees) of a point of the spheroid's surface: the elevation of its normal,
+    atan2(z, (1 - f)^2 sqrt(x^2 + y^2)), the inverse of `surface_point`; with f = 0 the geocentric latitude."""
+    if not (0.0 <= f < 1.0):
+        raise PlanetError("the flattening is within [0, 1)")
+    return math.degrees(math.atan2(p[2], (1.0 - f) ** 2 * math.hypot(p[0], p[1])))
 
 
 # ------------------------------------------------------------------------------------ rule 2: limb and terminator
@@ -511,6 +519,14 @@ def ring_sample(strip, rho, inner, outer):
     return tuple(a * (1.0 - f) + b * f for a, b in zip(strip[i], strip[i + 1]))
 
 
+def ring_cosine(sun):
+    """The ring's lit cosine: |n . s| for the plane's normal, the same on both faces (the unlit face shows
+    the same strip, Open issue 5)."""
+    if norm(sun) == 0.0:
+        raise PlanetError("the sun direction is not zero")
+    return abs(unit(sun)[2])
+
+
 def ring_shadowed_by_planet(q, sun, radius, flattening=0.0):
     """Whether a point of the ring plane lies in the planet's shadow: its ray toward the Sun hits the spheroid
     (the sphere once z is stretched by 1 / (1 - f))."""
@@ -619,6 +635,10 @@ TABLE = [
     ("Saturn radii (km)", "RADII[699]", "(60268, 54364)"),
     ("Sun radius (km)", "RADII[10][0]", "696000"),
     ("Earth flattening", "flattening(399)", "0.00335281"),
+    ("geodetic latitude of the Earth's surface point at 45 N (deg)",
+     "rounded(geodetic_latitude(surface_point(EARTH, flattening(399), 0.0, 45.0), flattening(399)), 6)", "45"),
+    ("the same point read as a sphere's, its geocentric latitude (deg)",
+     "rounded(geodetic_latitude(surface_point(EARTH, flattening(399), 0.0, 45.0), 0.0), 4)", "44.8076"),
     ("Saturn flattening", "flattening(699)", "0.0979624"),
     ("Earth scene radius at 1e-6 px/m", "scene_radius(399, 1e-6)", "6.37814"),
     ("Sun scene radius at 1e-9 px/m", "scene_radius(10, 1e-9)", "0.696"),
@@ -665,6 +685,7 @@ TABLE = [
     ("ring sample between the first two texels", "ring_sample(STRIP, 1.239 + (2.269 - 1.239) / 6.0, 1.239, 2.269)", "(0.7, 0.675, 0.55, 0.55)"),
     ("Saturn's shadow on the rings as a sphere, semi-axes over the radius", "tuple(x / SATURN for x in planet_shadow_on_rings(SATURN_SUN, SATURN))", "(2.22559, 1)"),
     ("Saturn's shadow on the rings as its spheroid, semi-axes over the radius", "tuple(x / SATURN for x in planet_shadow_on_rings(SATURN_SUN, SATURN, flattening(699)))", "(2.05345, 1)"),
+    ("the ring's lit cosine at Saturn's solstice", "rounded(ring_cosine(SATURN_SUN), 6)", "0.449319"),
     ("the ring at 2.1 radii behind a spherical Saturn is shadowed", "ring_shadowed_by_planet((-2.1 * SATURN, 0.0, 0.0), SATURN_SUN, SATURN)", "True"),
     ("the ring at 2.1 radii behind the spheroid is lit", "ring_shadowed_by_planet((-2.1 * SATURN, 0.0, 0.0), SATURN_SUN, SATURN, flattening(699))", "False"),
     ("ring crossing from 20 S on the noon meridian, over the radius", "ring_crossing(surface_point(SATURN, 0.0, 0.0, -20.0), SATURN_SUN) / SATURN", "1.61972"),
