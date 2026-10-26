@@ -225,8 +225,20 @@ def terminator_half_angle(radius, sun_distance):
 def terminator_points(sun, radius, n, sun_distance=None):
     """`n` points of the terminator: the great circle normal to the sun direction, or the small circle of the
     lit cap for a point Sun at `sun_distance`."""
-    s = unit(sun)
     half = 90.0 if sun_distance is None else terminator_half_angle(radius, sun_distance)
+    return _small_circle(sun, radius, n, half)
+
+
+def isophote_points(sun, radius, n, weight):
+    """`n` points of the isophote where Lambert's cosine (`day_weight`) is `weight`: the small circle
+    acos(weight) from the subsolar point; the terminator at 0."""
+    if not (0.0 <= weight <= 1.0):
+        raise PlanetError("the weight is within [0, 1]")
+    return _small_circle(sun, radius, n, math.degrees(math.acos(weight)))
+
+
+def _small_circle(sun, radius, n, half):
+    s = unit(sun)
     e1, e2 = _basis(s)
     ch, sh = math.cos(math.radians(half)), math.sin(math.radians(half))
     out = []
@@ -254,18 +266,33 @@ def illuminated_fraction(phase):
     return (1.0 + math.cos(math.radians(phase))) / 2.0
 
 
-def cusps(eye, sun, radius):
+def cusps(eye, sun, radius, weight=0.0, cone=None):
     """The two points where the terminator meets the limb, or None when the visible disc is wholly lit or
-    wholly dark (the Sun within the limb's angular radius of the line of sight or its opposite)."""
+    wholly dark (the Sun within the limb's angular radius of the line of sight or its opposite). With `weight`
+    the isophote of that Lambert cosine stands in for the terminator, and with `cone` (degrees from the line of
+    sight toward the centre, inside the limb's angular radius) the circle of surface points seen on that cone
+    stands in for the limb: the two planes s . p = weight R and e . p = depth cut the sphere."""
     d = norm(eye)
     if not (d > radius > 0.0):
         raise PlanetError("the eye is outside the sphere")
+    if not (0.0 <= weight <= 1.0):
+        raise PlanetError("the weight is within [0, 1]")
     e, s = unit(eye), unit(sun)
+    if cone is None:
+        depth = radius * radius / d
+    else:
+        alpha = math.radians(cone)
+        if not (0.0 <= cone < 90.0) or d * math.sin(alpha) >= radius:
+            raise PlanetError("the cone is inside the limb's angular radius")
+        t = d * math.cos(alpha) - math.sqrt(radius * radius - (d * math.sin(alpha)) ** 2)
+        depth = d - t * math.cos(alpha)
     c = dot(e, s)
     if 1.0 - c * c < 1e-12:
         return None
-    a = radius * radius / (d * (1.0 - c * c))
-    p0 = add(mul(e, a), mul(s, -a * c))
+    level = weight * radius
+    x = (depth - level * c) / (1.0 - c * c)
+    y = (level - depth * c) / (1.0 - c * c)
+    p0 = add(mul(e, x), mul(s, y))
     t2 = radius * radius - dot(p0, p0)
     if t2 <= 0.0:
         return None
@@ -298,6 +325,21 @@ def limb_pixel_radius(cam, eye, radius):
     return cam["focal"] * math.tan(math.radians(limb(eye, radius)["angular_radius"]))
 
 
+def limb_pixel_extents(cam, eye, a, c):
+    """The half-extents in pixels, along the equator and toward the pole, of the silhouette of the spheroid of
+    radii `a` and `c` at the frame's centre, seen from an eye in its equatorial plane at distance d: the
+    tangent cone's f a / sqrt(d^2 - a^2) and the meridian ellipse's tangent f c / sqrt(d^2 - a^2)."""
+    if not (a >= c > 0.0):
+        raise PlanetError("the equatorial radius is the larger")
+    if abs(eye[2]) > 1e-9 * norm(eye):
+        raise PlanetError("the eye is in the equatorial plane")
+    d = norm(eye)
+    if not (d > a):
+        raise PlanetError("the eye is outside the spheroid")
+    s = math.sqrt(d * d - a * a)
+    return (cam["focal"] * a / s, cam["focal"] * c / s)
+
+
 def visible(eye, p, radius):
     """Whether a point of the sphere faces the eye (eye . p > radius^2)."""
     return dot(eye, p) > radius * radius
@@ -326,14 +368,19 @@ def _pixel_ray(cam, x, y):
     return unit(d)
 
 
-def disc_mu(cam, eye, radius, x, y):
-    """cos of the angle between the surface normal and the line of sight at a pixel of the disc, or None off it."""
+def pixel_surface_point(cam, eye, radius, x, y):
+    """The point of the sphere seen at a pixel offset from the frame's centre, or None off the disc."""
     d = _pixel_ray(cam, x, y)
     t = _ray_sphere(eye, d, radius)
-    if t is None:
+    return None if t is None else add(eye, mul(d, t))
+
+
+def disc_mu(cam, eye, radius, x, y):
+    """cos of the angle between the surface normal and the line of sight at a pixel of the disc, or None off it."""
+    p = pixel_surface_point(cam, eye, radius, x, y)
+    if p is None:
         return None
-    p = add(eye, mul(d, t))
-    return max(0.0, min(1.0, -dot(unit(p), d)))
+    return max(0.0, min(1.0, -dot(unit(p), _pixel_ray(cam, x, y))))
 
 
 def lit_fraction(eye, sun, radius, n):
@@ -457,18 +504,27 @@ def ring_sample(strip, rho, inner, outer):
     return tuple(a * (1.0 - f) + b * f for a, b in zip(strip[i], strip[i + 1]))
 
 
-def ring_shadowed_by_planet(q, sun, radius):
-    """Whether a point of the ring plane lies in the planet's shadow: its ray toward the Sun hits the sphere."""
-    return _ray_sphere(q, unit(sun), radius) is not None
+def ring_shadowed_by_planet(q, sun, radius, flattening=0.0):
+    """Whether a point of the ring plane lies in the planet's shadow: its ray toward the Sun hits the spheroid
+    (the sphere once z is stretched by 1 / (1 - f))."""
+    if not (0.0 <= flattening < 1.0):
+        raise PlanetError("the flattening is within [0, 1)")
+    k = 1.0 / (1.0 - flattening)
+    return _ray_sphere((q[0], q[1], q[2] * k), unit((sun[0], sun[1], sun[2] * k)), radius) is not None
 
 
-def planet_shadow_on_rings(sun, radius):
+def planet_shadow_on_rings(sun, radius, flattening=0.0):
     """Semi-axes of the ellipse the planet's shadow cuts in the ring plane (z = 0), along and across the Sun's
-    projected direction, or None when the Sun is in the plane."""
+    projected direction, or None when the Sun is in the plane: for a sphere R / |sin beta| and R, beta the
+    Sun's elevation above the plane; for the spheroid of flattening f the meridian ellipse's tangent parallel
+    to the Sun gives R sqrt(sin^2 beta + (1 - f)^2 cos^2 beta) / |sin beta| along, R across."""
+    if not (0.0 <= flattening < 1.0):
+        raise PlanetError("the flattening is within [0, 1)")
     s = unit(sun)
     if s[2] == 0.0:
         return None
-    return (radius / abs(s[2]), radius)
+    sin2 = s[2] * s[2]
+    return (radius * math.sqrt(sin2 + (1.0 - flattening) ** 2 * (1.0 - sin2)) / abs(s[2]), radius)
 
 
 def ring_crossing(p, sun):
@@ -569,10 +625,14 @@ TABLE = [
     ("limb angular radius from 4 Earth radii (deg)", "limb(EYE4, EARTH)['angular_radius']", "14.4775"),
     ("limb circle radius from 4 Earth radii (km)", "limb(EYE4, EARTH)['radius']", "6175.6"),
     ("limb pixel radius from 4 Earth radii", "limb_pixel_radius(camera(EYE4, (0.0, 0.0, 0.0), (0.0, 0.0, 1.0), F), EYE4, EARTH)", "143.108"),
+    ("limb half-extents of the Earth's spheroid from 4 radii (px)", "limb_pixel_extents(camera(EYE4, (0.0, 0.0, 0.0), (0.0, 0.0, 1.0), F), EYE4, EARTH, RADII[399][1])", "(143.108, 142.629)"),
+    ("surface point seen at the frame's centre from 4 radii (km)", "rounded(pixel_surface_point(camera(EYE4, (0.0, 0.0, 0.0), (0.0, 0.0, 1.0), F), EYE4, EARTH, 0.0, 0.0), 4)", "(0, -6378.14, 0)"),
     ("terminator half-angle, Earth from the Sun (deg)", "terminator_half_angle(EARTH, 149597870.7)", "89.9976"),
     ("phase angle at 45 degrees", "phase_angle(EYE5, SUN45)", "45"),
     ("illuminated fraction at 60 degrees", "illuminated_fraction(60.0)", "0.75"),
     ("cusp height over the radius", "cusps(EYE5, SUN45, EARTH)[0][2] / EARTH", "0.959166"),
+    ("isophote at weight 0.5, degrees from the subsolar point", "math.degrees(angle(isophote_points(SUN45, EARTH, 8, 0.5)[0], SUN45))", "60"),
+    ("cusp of the 0.1 isophote on the 10 degree cone, height over the radius", "cusps(EYE5, SUN45, EARTH, 0.1, 10.0)[0][2] / EARTH", "0.585871"),
     ("lit fraction of the disc at 45 degrees", "lit_fraction((0.0, -200.0 * EARTH, 0.0), SUN45, EARTH, 200)", "0.85497"),
     ("day weight at 45 degrees", "day_weight(unit((1.0, 0.0, 1.0)), (0.0, 0.0, 1.0))", "0.707107"),
     ("night weight 3 degrees below the horizon", "night_weight(body_direction(93.0, 0.0), (1.0, 0.0, 0.0), 6.0)", "0.75"),
@@ -589,7 +649,10 @@ TABLE = [
      "0.131704"),
     ("cloud drift after 100 s at 1.5 deg/s", "cloud_longitude(100.0, 1.5)", "150"),
     ("ring sample between the first two texels", "ring_sample(STRIP, 1.239 + (2.269 - 1.239) / 6.0, 1.239, 2.269)", "(0.7, 0.675, 0.55, 0.55)"),
-    ("Saturn's shadow on the rings, semi-axes over the radius", "tuple(x / SATURN for x in planet_shadow_on_rings(SATURN_SUN, SATURN))", "(2.22559, 1)"),
+    ("Saturn's shadow on the rings as a sphere, semi-axes over the radius", "tuple(x / SATURN for x in planet_shadow_on_rings(SATURN_SUN, SATURN))", "(2.22559, 1)"),
+    ("Saturn's shadow on the rings as its spheroid, semi-axes over the radius", "tuple(x / SATURN for x in planet_shadow_on_rings(SATURN_SUN, SATURN, flattening(699)))", "(2.05345, 1)"),
+    ("the ring at 2.1 radii behind a spherical Saturn is shadowed", "ring_shadowed_by_planet((-2.1 * SATURN, 0.0, 0.0), SATURN_SUN, SATURN)", "True"),
+    ("the ring at 2.1 radii behind the spheroid is lit", "ring_shadowed_by_planet((-2.1 * SATURN, 0.0, 0.0), SATURN_SUN, SATURN, flattening(699))", "False"),
     ("ring crossing from 20 S on the noon meridian, over the radius", "ring_crossing(surface_point(SATURN, 0.0, 0.0, -20.0), SATURN_SUN) / SATURN", "1.61972"),
     ("light through the rings at 20 S", "ring_shadow(surface_point(SATURN, 0.0, 0.0, -20.0), SATURN_SUN, STRIP, 1.239 * SATURN, 2.269 * SATURN)", "0.198014"),
     ("atmosphere band from 400 km (deg)", "shell_band(6360.0 + 400.0, 6360.0, 100.0)", "{'planet': 70.1911, 'shell': 72.8666}"),

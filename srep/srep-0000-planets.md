@@ -127,9 +127,12 @@ and the scene's axes follow the time-frames draft (scene (x, y, z) = body (x, �
 5. **Rings.** The ring is an annulus in the body's equatorial plane from `ringInner` to `ringOuter`
    equatorial radii, both faces drawn, its colour and alpha `ring_sample(strip, rho, inner, outer)`: the
    linear interpolation of `ringMap` across the radius. A ring point is in the planet's shadow when its ray
-   toward the Sun hits the body (`ring_shadowed_by_planet`); the shadow is the half of the ellipse with
-   semi-axes `planet_shadow_on_rings` = (R / |sin β|, R) on the side away from the Sun, β the Sun's elevation
-   above the ring plane (Saturn at its solstice, β 26.7°: 2.226 radii along the Sun's direction). The planet is
+   toward the Sun hits the spheroid (`ring_shadowed_by_planet(q, sun, radius, flattening)`); the shadow is
+   the half of the ellipse with semi-axes `planet_shadow_on_rings` = (R √(sin² β + (1 − f)² cos² β) / |sin β|,
+   R) on the side away from the Sun, β the Sun's elevation above the ring plane: with flattening f the
+   meridian ellipse x² + z² / (1 − f)² = R² has its tangent of slope tan β at that distance from the centre
+   on the plane (Saturn at its solstice, β 26.7°: 2.053 radii along the Sun's direction; a sphere of the
+   equatorial radius would cast 2.226, and the ring at 2.1 radii is lit, not shadowed). The planet is
    shadowed by the ring where the ray from a surface point toward the Sun crosses the ring plane ahead of it at
    a radius inside the annulus (`ring_crossing`); the light through is 1 − alpha there (`ring_shadow`). Points
    with the Sun on their own side of the plane are not shadowed.
@@ -147,7 +150,15 @@ and the scene's axes follow the time-frames draft (scene (x, y, z) = body (x, �
    `terminator_half_angle` = 90° − asin(R / d☉) about it; a surface point is lit when its normal faces the Sun
    (`lit`). The cusps are where the two circles meet (`cusps`), two points symmetric about the plane of the
    eye and the Sun, absent when the Sun is within the limb's angular radius of the line of sight or its
-   opposite. The phase angle is the Sun–body–eye angle (`phase_angle`) and the lit fraction of the disc
+   opposite. `cusps(eye, sun, radius, weight, cone)` generalises both circles: the terminator to the
+   isophote of Lambert weight `weight` (`isophote_points`, the small circle acos(weight) from the subsolar
+   point: a kit reads the 0.1 isophote, where a frame's shading is still above its noise) and the limb to the
+   cone of half-angle `cone` degrees about the line of sight (a circle inside the limb, clear of the edge's
+   pixels); it refuses a cone outside the limb. `pixel_surface_point(cam, eye, radius, x, y)` is the surface
+   point seen at a pixel offset from the frame's centre (the first hit of the pixel's ray; `disc_mu` reads
+   it), and `limb_pixel_extents(cam, eye, a, c)` the spheroid's silhouette half-extents from an eye in the
+   equatorial plane: F a / √(d² − a²) across and F c / √(d² − a²) along the pole, the Earth from 4 radii
+   143.108 × 142.629 px. The phase angle is the Sun–body–eye angle (`phase_angle`) and the lit fraction of the disc
    (1 + cos i) / 2 (`illuminated_fraction`); `lit_fraction` samples it through the pinhole camera of
    `camera`, `project` and `limb_pixel_radius`, and agrees to 0.2 % from 200 radii. Spin and cloud drift are
    `frame_state(frame, fps, rate, cloudRotation, body)`, pure functions of the frame index, the frame rate and
@@ -198,7 +209,7 @@ are refused below version 1.8 (V17).
 
 | Engine | Status | Work | Tracking |
 |---|---|---|---|
-| Rust (`rs-scene-render`), reference | `crates/sr-3d/src/prim.rs` at 67a661a: `sphere(r, segs)` with poles on y and `u = 0` at +x; `sky.rs` has a sun disc without limb darkening; no body radii, night mask, cloud shell or rings | parse the primitive and the attributes (PL1–PL5, V17); the spheroid from `RADII` or `radius`/`flattening` and the texture offset (rules 1–2); the night mask and the solar limb darkening (rule 3); the cloud shell with its shadow (rule 4); the ring annulus with both shadows (rule 5); the atmosphere shell through the physical-sky implementation (rule 6); the seek check (rule 7) | [SR-89](https://faz-ai.atlassian.net/browse/SR-89) |
+| Rust (`rs-scene-render`), reference | feat/sr-67-fields 43ddbeb (SR-89 in progress): the primitive and its attributes parse (PL1–PL5, V17) and `prim::spheroid(a, f, segs)` draws the body from `RADII` or `radius`/`flattening` with geodetic vertices and the texture offset (rules 1–2); `sky.rs` has a sun disc without limb darkening; no night mask, cloud shell, rings or atmosphere shell yet (main 67a661a had `sphere(r, segs)` with poles on y and `u = 0` at +x) | the night mask and the solar limb darkening (rule 3); the cloud shell with its shadow (rule 4); the ring annulus with both shadows (rule 5); the atmosphere shell through the physical-sky implementation (rule 6); the seek check (rule 7) | [SR-89](https://faz-ai.atlassian.net/browse/SR-89) |
 
 ## Conformance
 
@@ -229,10 +240,14 @@ and `STRIP` a four-texel ring strip.
 | limb angular radius from 4 Earth radii (deg) | `limb(EYE4, EARTH)['angular_radius']` | `14.4775` |
 | limb circle radius from 4 Earth radii (km) | `limb(EYE4, EARTH)['radius']` | `6175.6` |
 | limb pixel radius from 4 Earth radii | `limb_pixel_radius(camera(EYE4, (0.0, 0.0, 0.0), (0.0, 0.0, 1.0), F), EYE4, EARTH)` | `143.108` |
+| limb half-extents of the Earth's spheroid from 4 radii (px) | `limb_pixel_extents(camera(EYE4, (0.0, 0.0, 0.0), (0.0, 0.0, 1.0), F), EYE4, EARTH, RADII[399][1])` | `(143.108, 142.629)` |
+| surface point seen at the frame's centre from 4 radii (km) | `rounded(pixel_surface_point(camera(EYE4, (0.0, 0.0, 0.0), (0.0, 0.0, 1.0), F), EYE4, EARTH, 0.0, 0.0), 4)` | `(0, -6378.14, 0)` |
 | terminator half-angle, Earth from the Sun (deg) | `terminator_half_angle(EARTH, 149597870.7)` | `89.9976` |
 | phase angle at 45 degrees | `phase_angle(EYE5, SUN45)` | `45` |
 | illuminated fraction at 60 degrees | `illuminated_fraction(60.0)` | `0.75` |
 | cusp height over the radius | `cusps(EYE5, SUN45, EARTH)[0][2] / EARTH` | `0.959166` |
+| isophote at weight 0.5, degrees from the subsolar point | `math.degrees(angle(isophote_points(SUN45, EARTH, 8, 0.5)[0], SUN45))` | `60` |
+| cusp of the 0.1 isophote on the 10 degree cone, height over the radius | `cusps(EYE5, SUN45, EARTH, 0.1, 10.0)[0][2] / EARTH` | `0.585871` |
 | lit fraction of the disc at 45 degrees | `lit_fraction((0.0, -200.0 * EARTH, 0.0), SUN45, EARTH, 200)` | `0.85497` |
 | day weight at 45 degrees | `day_weight(unit((1.0, 0.0, 1.0)), (0.0, 0.0, 1.0))` | `0.707107` |
 | night weight 3 degrees below the horizon | `night_weight(body_direction(93.0, 0.0), (1.0, 0.0, 0.0), 6.0)` | `0.75` |
@@ -247,7 +262,10 @@ and `STRIP` a four-texel ring strip.
 | cloud shadow shift at 60 N, sun over the pole (deg) | `math.degrees(angle(surface_point(EARTH, 0.0, 0.0, 60.0), cloud_shadow_point(surface_point(EARTH, 0.0, 0.0, 60.0), (0.0, 0.0, 1.0), EARTH, 0.004)))` | `0.131704` |
 | cloud drift after 100 s at 1.5 deg/s | `cloud_longitude(100.0, 1.5)` | `150` |
 | ring sample between the first two texels | `ring_sample(STRIP, 1.239 + (2.269 - 1.239) / 6.0, 1.239, 2.269)` | `(0.7, 0.675, 0.55, 0.55)` |
-| Saturn's shadow on the rings, semi-axes over the radius | `tuple(x / SATURN for x in planet_shadow_on_rings(SATURN_SUN, SATURN))` | `(2.22559, 1)` |
+| Saturn's shadow on the rings as a sphere, semi-axes over the radius | `tuple(x / SATURN for x in planet_shadow_on_rings(SATURN_SUN, SATURN))` | `(2.22559, 1)` |
+| Saturn's shadow on the rings as its spheroid, semi-axes over the radius | `tuple(x / SATURN for x in planet_shadow_on_rings(SATURN_SUN, SATURN, flattening(699)))` | `(2.05345, 1)` |
+| the ring at 2.1 radii behind a spherical Saturn is shadowed | `ring_shadowed_by_planet((-2.1 * SATURN, 0.0, 0.0), SATURN_SUN, SATURN)` | `True` |
+| the ring at 2.1 radii behind the spheroid is lit | `ring_shadowed_by_planet((-2.1 * SATURN, 0.0, 0.0), SATURN_SUN, SATURN, flattening(699))` | `False` |
 | ring crossing from 20 S on the noon meridian, over the radius | `ring_crossing(surface_point(SATURN, 0.0, 0.0, -20.0), SATURN_SUN) / SATURN` | `1.61972` |
 | light through the rings at 20 S | `ring_shadow(surface_point(SATURN, 0.0, 0.0, -20.0), SATURN_SUN, STRIP, 1.239 * SATURN, 2.269 * SATURN)` | `0.198014` |
 | atmosphere band from 400 km (deg) | `shell_band(6360.0 + 400.0, 6360.0, 100.0)` | `{'planet': 70.1911, 'shell': 72.8666}` |
@@ -258,21 +276,39 @@ and `STRIP` a four-texel ring strip.
 
 ### Kit cases
 
-The cases are described here and added to `conformance/srep_cases/` once the SREP has a number; they are
-measurable after SR-89 lands.
+The cases are described here and added to `conformance/srep_cases/` once the SREP has a number.
+`conformance/tools/planets_kit.py` writes them (as `srep-0000-…`, `--write DIR`) with their synthetic textures
+(`assets/planet-marks.png`, a 1024 × 512 map with a 4 × 4 mark per channel; `planet-white.png`;
+`planet-cloud.png`, 4096 × 2048 with one opaque texel; `planet-strip.png`, `STRIP` quantised to 8 bits,
+`QSTRIP`) and renders and measures an engine's frames of each (`--engine BIN`, `--only CASE`). A case that
+compares two bodies, phases or views has a companion document named with a suffix: `planet-limb-saturn`,
+`planet-phase-60`, `planet-phase-90` and `planet-phase-120`, `planet-sun-centre`, `planet-rings-ground`. Every
+document is 640 × 360 over a black background with `segments="256"` (the schema's most: the mesh's sag is
+7.5 × 10⁻⁵ of the radius); the planet stands at the scene's origin, the camera is placed in the body frame
+(x toward the prime meridian, z toward the pole, km, scaled by `pixelsPerMeter`) and aimed by yaw and pitch as
+the physical-sky kit aims its cameras, so the reference's `camera` and `project` give the expected pixel of a
+surface point. Lit cases use a Lambert material (`metallic="0"`, `roughness="1"`, `specular="0"`: the engine's
+specular weight is `specular` mixed to 1 by `metallic`) under one directional light of intensity 1 whose +z is
+the scene direction away from the Sun; emissive cases set `emissive="#FFFFFFFF"`, which the engine multiplies
+by the map; the Sun is seen through an orthographic camera (`orthoHeight` for a disc radius of 1500 px). The
+terminator, phase, night and cloud cases set `radius` without `body`, a sphere on which the shading is exact;
+the limb, texture, rings, atmosphere and seek cases set `body`, the spheroid. Status: run on a release build of
+scene-render feat/sr-67-fields 43ddbeb (0.8.0, llvmpipe; SR-89's schema half and the spheroid mesh): the limb
+case passes; the other nine wait for the night mask, clouds, rings and the atmosphere shell, which 43ddbeb
+does not draw.
 
 | Case | Checks | Status |
 |---|---|---|
-| `srep-<n>-planet-limb.xml` | the Earth (`body="399"`) from 4 radii at the frame's centre: the disc's edge is a circle of radius `limb_pixel_radius` within 0.5 pixel over 36 directions | to be measured |
-| `srep-<n>-planet-terminator.xml` | the same with a sun 45° from the line of sight: the terminator's projected points within 1 pixel of `project(terminator_points)` and both cusps within 1 pixel of `project(cusps)` | to be measured |
-| `srep-<n>-planet-phase.xml` | from 200 radii at phase angles 0, 60, 90, 120: the lit pixel fraction within 1 % of `illuminated_fraction` | to be measured |
-| `srep-<n>-planet-texture.xml` | a test texture with a mark at longitude 0 and one at 90° E: the marks on the scene's +x and +z surface points within 1 pixel | to be measured |
-| `srep-<n>-planet-night.xml` | night lights with `twilight="6"`: the emissive weight sampled along a meridian within 0.02 of `night_weight` | to be measured |
-| `srep-<n>-planet-sun.xml` | the Sun (`body="10"`, `limbDarkening="solar"`) filling the frame: the red, green and blue radiances at μ 0.1, 0.25 and 0.5 within 2 % of `solar_disc` times the centre's | to be measured |
-| `srep-<n>-planet-clouds.xml` | a one-texel cloud at 60° N with the sun over the pole: the shadow's centre displaced 0.13° toward the equator within 0.02° | to be measured |
-| `srep-<n>-planet-rings.xml` | Saturn with `STRIP` as its ring at β 26.7°: the planet's shadow edge on the ring within 1 pixel of the half-ellipse, the light at 20° S within 2 % of `ring_shadow` | to be measured |
-| `srep-<n>-planet-atmosphere.xml` | `atmosphere="earth"` from 400 km: the shell's band between 70.19° and 72.87° from the nadir within 0.1° | to be measured |
-| `srep-<n>-planet-seek.xml` | a spinning Earth with drifting clouds over 600 frames: frame 600 rendered alone equals the frame played from 0 (SREP 14) | to be measured |
+| `srep-<n>-planet-limb.xml` | the Earth (`body="399"`, unlit white) from 4 radii at the frame's centre, and Saturn (`body="699"`, companion `-saturn`, with `radius="1"` to show `pixelsPerMeter` wins) from 4 of its radii: the disc's edge within 0.5 px of the ellipse of half-extents `limb_pixel_extents` over 36 sectors of 10°, each sector's radius the root of twice its lit pixel count over its angle, against the same root-mean-square radius of the ellipse | measured on scene-render feat/sr-67-fields 43ddbeb (0.8.0, llvmpipe): the Earth's disc within 0.12 px of the ellipse over the 36 sectors (half-extents by moments 143.11 × 142.63 px against 143.11 × 142.63, 64,128 pixels), Saturn's within 0.14 px (143.12 × 129.07 against 143.11 × 129.09); pass |
+| `srep-<n>-planet-terminator.xml` | a sphere of the Earth's radius (`radius`, no `body`) under a Lambert material (`specular="0"`) with a directional light 45° from the line of sight: the shading's crossings of the 0.1 isophote within 1 px of `isophote_points` (read along the radius about each visible point of the circle) and both cusps of that isophote on the circle 3 px inside the limb within 1 px of `cusps` with that cone | to be measured |
+| `srep-<n>-planet-phase.xml` | the sphere from 200 radii through a 1.2° lens at phase angles 0, 60, 90 and 120 (companions `-60`, `-90`, `-120`): the lit pixel count over the full disc's within 1 % of `lit_fraction` (the camera's sample of `illuminated_fraction`), the full disc's count within 2 % of π r² | to be measured |
+| `srep-<n>-planet-texture.xml` | the Earth with the marks map as its unlit `baseColorMap` (red at longitude 0, green at 90° E, blue at 45° E, 45° N), seen from over 45° E: each mark's centroid within 1 px of `project(surface_point)`; east to the right and north up | to be measured |
+| `srep-<n>-planet-night.xml` | a black sphere whose white `emissiveMap` is masked with `twilight="6"`, the sun over the pole: the emissive weight read along the prime meridian from 12° S to 12° N, over the full-night mean, within 0.02 of `night_weight` | to be measured |
+| `srep-<n>-planet-sun.xml` | the Sun (`body="10"`, `limbDarkening="solar"`) under an orthographic camera at 1500 px of disc radius with the limb at column 620 (companion `-centre` on the disc's centre): the red, green and blue radiances at μ 0.5, 0.25 and 0.1 over the centre's within 2 % of `solar_disc` | to be measured |
+| `srep-<n>-planet-clouds.xml` | a grey sphere with a 4096 × 2048 `cloudMap` holding one opaque texel at 60° N on the prime meridian, `cloudHeight="0.004"` and `cloudShadow="true"`, the sun over the pole, a 2° camera along the texel's normal: the shadow's centre, read back to the ground by `pixel_surface_point`, 0.13° toward the equator from the cloud's within 0.02° (`cloud_shadow_point`) | to be measured |
+| `srep-<n>-planet-rings.xml` | Saturn with `QSTRIP` as its ring at β 26.7°, seen from 45° above the plane on the night side: the shadow's edge within 1 px of the spheroid's half-ellipse at 12 points (`planet_shadow_on_rings` with the flattening); from 30° below the plane (companion `-ground`) the ground at 20° S over 5° S within 2 % of `ring_shadow` | to be measured |
+| `srep-<n>-planet-atmosphere.xml` | `atmosphere="earth"` with `atmosphereHeight="100000"` from 400 km over a black unlit ground, a 10° camera across the limb, the sun 48° from the zenith: the shell's brightest column, its 1 % edge and the limb within 0.1° of the physical-sky reference's `sky_radiance` and `aerial_perspective` profile between 70.19° and 72.87° from the nadir (`shell_band`) | to be measured |
+| `srep-<n>-planet-seek.xml` | a spinning Earth (`orientation="bodyFixed"`, `space` with `rate="60"`) with the marks map as drifting clouds (`cloudRotation="0.01"`) over 600 frames: frame 600 rendered alone equals the frame played from 0 (SREP 14) | to be measured |
 
 ## Open issues
 
@@ -304,3 +340,7 @@ measurable after SR-89 lands.
 ## History
 
 - 2026-10-24: draft from SRC-46 (SP3 of SREP 12); engine card SR-89.
+- 2026-10-26: `conformance/tools/planets_kit.py` with its tests; rule 5's shadow on the rings is the spheroid's
+  (Saturn 2.053 radii, not a sphere's 2.226); rule 7 gains `isophote_points`, `cusps` on an isophote and a
+  cone, `pixel_surface_point` and `limb_pixel_extents`; the limb case measured on scene-render feat/sr-67-fields
+  43ddbeb (SR-89's schema half and spheroid mesh): pass; the kit rows reworded to the kit's protocols.
