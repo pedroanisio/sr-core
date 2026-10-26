@@ -462,3 +462,263 @@ def test_the_draft_settles_rule_5(draft):
                    "`srep-<n>-stars-boundaries.xml`", "c64c4bf"):
         assert phrase in text, phrase
     assert "precessed from 1875 to the frame's epoch" not in text
+
+
+# ------------------------------------------------------------------------------------ the kit (SR-88)
+
+KIT = os.path.join(ROOT, "conformance", "tools", "star_fields_kit.py")
+_kspec = importlib.util.spec_from_file_location("star_fields_kit", KIT)
+sk = importlib.util.module_from_spec(_kspec)
+_kspec.loader.exec_module(sk)
+import numpy as np  # noqa: E402
+from PIL import Image  # noqa: E402
+
+ALL_KEYS = sorted(k for keys in sk.DOCUMENTS.values() for k in keys)
+
+
+def test_the_kit_camera_aims_and_projects():
+    for ra, dec in ((90.0, 0.0), (101.28708, -16.71611), (279.23458, 38.78361), (178.245, 37.71861), (10.0, -80.0)):
+        d = sf.scene_direction(sf.direction(ra, dec))
+        yaw, pitch = sk.aim(d)
+        w, h = sk.FRAME["stars-sirius"]
+        assert _close(sk.project("stars-sirius", yaw, pitch, d), (w / 2.0, h / 2.0), 1e-6)
+    yaw, pitch = sk.aim(sf.scene_direction(sf.direction(90.0, 0.0)))
+    east = sk.project("stars-scale", yaw, pitch, sf.scene_direction(sf.direction(91.0, 0.0)))
+    w, h = sk.FRAME["stars-scale"]
+    assert _close(east, (w / 2.0 - sk.pixels_per_degree("stars-scale"), h / 2.0), 1e-6)   # right ascension grows leftward
+    north = sk.project("stars-scale", yaw, pitch, sf.scene_direction(sf.direction(90.0, 1.0)))
+    assert north[1] < h / 2.0 and _close(north[0], w / 2.0, 1e-6)                          # north is up the frame
+    assert math.isnan(sk.project("stars-scale", yaw, pitch, sf.scene_direction(sf.direction(270.0, 0.0)))[0])
+
+
+def test_the_kit_writes_the_cases_the_draft_names(tmp_path, catalogue):
+    import xml.etree.ElementTree as ET
+    paths = sk.write(str(tmp_path), catalogue)
+    assert sorted(paths) == ALL_KEYS and len(ALL_KEYS) == 18
+    assert all(name in sk.DOCUMENTS and sk.DOCUMENTS[name][0] == name for name in sk.NAMES)
+    for key, path in paths.items():
+        assert os.path.basename(path) == f"srep-0000-{key}.xml"
+        root = ET.parse(path).getroot()
+        assert root.tag == "scene" and root.get("version") == "1.8"
+        asset = root.find("assets/catalogue")
+        with open(os.path.join(tmp_path, asset.get("src")), "rb") as f:
+            assert asset.get("digest") == "sha256:" + hashlib.sha256(f.read()).hexdigest()
+        field = root.find("lights/light/starField")
+        assert field.get("catalogue") == asset.get("id") and root.find("lights/light").get("type") == "dome"
+        assert root.find("output").get("codec") == "exr-sequence"
+        assert root.find("composition/camera").get("projection") is None
+    docs = {k: ET.parse(p).getroot() for k, p in paths.items()}
+    assert docs["stars-sirius"].find("lights/light/starField").get("limitMagnitude") == "-1"
+    assert docs["stars-scale-4px"].find("lights/light/starField").get("pointSize") == "4"
+    assert docs["stars-motion-2100"].find("lights/light/starField").get("epoch") == "2100"
+    assert docs["stars-space"].find("space").get("timeScale") == "tt" and docs["stars-space"].find("space").get("epoch") == sk.SPACE_EPOCH_TT
+    assert docs["stars-space"].find("lights/light/starField").get("epoch") is None
+    assert all(docs[k].find("lights/light/starField").get("constellations") == "labels" for k in sk.LABELS)
+    assert docs["stars-labels-limit3"].find("lights/light/starField").get("limitMagnitude") == "3"
+    assert docs["stars-boundaries-none"].find("lights/light/starField").get("constellations") == "none"
+    assert docs["stars-sky"].find("lights/light").get("sky") == "physical" and docs["stars-sky-none"].find("lights/light").get("sky") is None
+    assert docs["stars-sky-noon"].find("lights/light").get("date") == sk.SKY_NOON
+    assert docs["stars-seek"].find("space").get("rate") == f"{sk.SEEK_RATE:.0f}" and docs["stars-seek"].find("project").get("fps") == "24"
+    assert sk.synthetic_catalogues() == sk.synthetic_catalogues()       # deterministic bytes
+    with gzip.open(os.path.join(tmp_path, "assets", "stars-colour.csv.gz"), "rt") as f:
+        rows = f.read().splitlines()
+    assert rows[0] == ",".join(sf.COLUMNS) and len(rows) == 4 and rows[2].split(",")[5] == "0.65"
+
+
+def test_the_kit_expectations_come_from_the_reference(catalogue):
+    exp = sk.expectations(catalogue)
+    sirius = next(s for s in catalogue if s.hr == sk.SIRIUS)
+    assert exp["stars-sirius"]["flux"] == sf.flux(sirius.vmag, sk.SIRIUS_ZERO) and exp["stars-sirius"]["centre"] == (160.0, 120.0)
+    assert _close(exp["stars-scale"]["ratio"], 100.0, 1e-9)
+    assert abs(exp["stars-scale"]["at"][0][0] - exp["stars-scale"]["at"][1][0] - sk.pixels_per_degree("stars-scale")) < 0.01
+    assert exp["stars-colour"]["colours"] == [sf.colour(sf.temperature(bv)) for bv in sk.COLOUR_BV]
+    assert abs(exp["stars-motion"]["shift_deg"] - 0.196) < 0.0005                   # the draft's century of HR 4550
+    assert _close(exp["stars-motion"]["at"][0.0], (320.0, 240.0), 1e-6)
+    assert abs(exp["stars-motion"]["shift_px"] - 0.196 * sk.pixels_per_degree("stars-motion")) < 0.1
+    for key in sk.LABELS:
+        assert _close(exp["stars-labels"]["centres"][key], (240.0, 240.0), 1e-6)
+    a = sk.ps.atmosphere()
+    vega = next(s for s in catalogue if s.hr == sk.VEGA)
+    e = math.radians(vega.dec)
+    assert exp["stars-sky"]["transmittance"] == sk.ps.transmittance(a, sk.ps._ground_observer(a), (math.cos(e), 0.0, math.sin(e)))
+    assert 0.6 < exp["stars-sky"]["transmittance"][2] < exp["stars-sky"]["transmittance"][0] < 0.95
+
+
+def test_exr_frames_round_trip(tmp_path):
+    rng = np.random.default_rng(7)
+    rgb = rng.random((5, 9, 3)).astype(np.float32) * 3.0
+    path = str(tmp_path / "f.exr")
+    sk.write_exr(path, rgb)
+    back = sk.read_exr(path)
+    assert back.shape == (5, 9, 3) and np.array_equal(back, rgb.astype(np.float64))
+    with open(path, "r+b") as f:
+        f.seek(0)
+        f.write(b"\0\0\0\0")
+    with pytest.raises(ValueError):
+        sk.read_exr(path)
+
+
+def _splat(frame, at, rgb):
+    """Spread rgb over the four pixels about a continuous position so the weighted centroid is exactly `at`."""
+    x, y = at[0] - 0.5, at[1] - 0.5
+    i, j = int(math.floor(x)), int(math.floor(y))
+    fx, fy = x - i, y - j
+    for di, wx in ((0, 1.0 - fx), (1, fx)):
+        for dj, wy in ((0, 1.0 - fy), (1, fy)):
+            frame[j + dj, i + di] += np.asarray(rgb) * wx * wy
+
+
+def _ink_box(frame, centre, size=(30, 14), value=sk.sf.LABEL_GREY):
+    cx, cy = centre
+    x0, y0 = int(round(cx - size[0] / 2.0)), int(round(cy - size[1] / 2.0))
+    frame[y0:y0 + size[1], x0:x0 + size[0]] = value
+
+
+def _frames(exp, transmittance=None):
+    """Synthetic frames of every document from the expectations (what a correct engine renders)."""
+    f = {}
+
+    def blank(name):
+        w, h = sk.FRAME[name]
+        return np.zeros((h, w, 3))
+    e = exp["stars-sirius"]
+    f["stars-sirius"] = blank("stars-sirius")
+    _splat(f["stars-sirius"], e["centre"], (e["flux"],) * 3)
+    for key in ("stars-scale", "stars-scale-4px"):
+        f[key] = blank("stars-scale")
+        for at, flux in zip(exp["stars-scale"]["at"], (1.0, 0.01)):
+            _splat(f[key], at, (flux,) * 3)
+    f["stars-colour"] = blank("stars-colour")
+    for at, colour in zip(exp["stars-colour"]["at"], exp["stars-colour"]["colours"]):
+        _splat(f["stars-colour"], at, colour)
+    for key, years in (("stars-motion", 0.0), ("stars-motion-2100", sk.MOTION_YEARS)):
+        f[key] = blank("stars-motion")
+        _splat(f[key], exp["stars-motion"]["at"][years], (0.002,) * 3)
+        _splat(f[key], (100.0, 100.0), (0.001,) * 3)                     # another star that does not move
+    f["stars-space"] = f["stars-motion-2100"].copy()
+    for key in sk.LABELS:
+        f[key] = blank("stars-labels")
+        _ink_box(f[key], exp["stars-labels"]["centres"][key])
+    _splat(f["stars-labels-limit3"], (100.0, 300.0), (0.004, 0.005, 0.006))  # a faint star beside the label
+    for key in ("stars-boundaries", "stars-boundaries-2100", "stars-boundaries-none"):
+        f[key] = blank("stars-boundaries")
+        if key != "stars-boundaries-none":
+            w, h = sk.FRAME["stars-boundaries"]
+            f[key][:, w // 2 - 1] = sk.sf.LABEL_GREY
+    t = transmittance or exp["stars-sky"]["transmittance"]
+    w, h = sk.FRAME["stars-sky"]
+    star = tuple(sk.SKY_ZERO * 0.97 * c for c in (1.0, 1.0, 1.0))
+    f["stars-sky-none"] = blank("stars-sky")
+    _splat(f["stars-sky-none"], (w / 2.0, h / 2.0), star)
+    f["stars-sky"] = blank("stars-sky")
+    _splat(f["stars-sky"], (w / 2.0, h / 2.0), tuple(s * k for s, k in zip(star, t)))
+    f["stars-sky-noon"] = np.full((h, w, 3), 0.03)
+    _splat(f["stars-sky-noon"], (w / 2.0, h / 2.0), tuple(s * k for s, k in zip(star, t)))
+    seek = np.zeros((sk.FRAME["stars-seek"][1], sk.FRAME["stars-seek"][0], 4), np.uint8)
+    seek[10:12, 20:22] = 255
+    f["seek-alone"], f["seek-played"] = seek.astype(np.float64), seek.astype(np.float64)
+    return f
+
+
+def test_the_kit_measures_each_case(catalogue):
+    exp = sk.expectations(catalogue)
+    frames = _frames(exp)
+    for name in sk.NAMES:
+        r = sk.measure(name, frames, exp)
+        assert r["pass"], (name, r)
+    bad = dict(frames)
+    bad["stars-sirius"] = frames["stars-sirius"] * 0.98
+    assert not sk.measure("stars-sirius", bad, exp)["pass"]
+    bad["stars-scale-4px"] = frames["stars-scale-4px"] * 1.02
+    assert not sk.measure("stars-scale", bad, exp)["pass"]
+    bad["stars-colour"] = frames["stars-colour"] * np.array([1.0, 1.0, 1.05])
+    assert not sk.measure("stars-colour", bad, exp)["pass"]
+    bad["stars-motion-2100"] = np.roll(frames["stars-motion-2100"], 1, axis=1)
+    assert not sk.measure("stars-motion", bad, exp)["pass"]
+    assert not sk.measure("stars-space", bad, exp)["pass"]
+    bad["stars-labels-ori"] = np.roll(frames["stars-labels-ori"], 40, axis=0)
+    assert not sk.measure("stars-labels", bad, exp)["pass"]
+    bad["stars-boundaries-none"] = frames["stars-boundaries"]
+    assert not sk.measure("stars-boundaries", bad, exp)["pass"]
+    assert not sk.measure("stars-sky", dict(frames, **{"stars-sky": frames["stars-sky-none"]}), exp)["pass"]
+    assert not sk.measure("stars-sky", dict(frames, **{"stars-sky-noon": frames["stars-sky-noon"] + frames["stars-sky-none"] * 400}), exp)["pass"]
+    bad["seek-played"] = np.roll(frames["seek-played"], 1, axis=1)
+    assert not sk.measure("stars-seek", bad, exp)["pass"]
+    with pytest.raises(ValueError):
+        sk.measure("stars-nothing", frames, exp)
+
+
+def _fake_engine(frames, refuse=()):
+    """An exec that writes the synthetic frame of each document the kit encodes or renders, and refuses the named
+    documents with the given code."""
+    def exec(cmd, capture_output, text):
+        class R:
+            returncode = 0
+            stdout = ""
+            stderr = ""
+        doc = cmd[2]
+        key = os.path.basename(doc)[len("srep-0000-"):-len(".xml")]
+        if key in refuse:
+            R.returncode, R.stderr = 1, "error[%s] (dome): refused\n" % refuse[key]
+            return R
+        if cmd[1] == "encode":
+            out_dir = cmd[cmd.index("--out-dir") + 1]
+            os.makedirs(os.path.join(out_dir, "out"), exist_ok=True)
+            sk.write_exr(os.path.join(out_dir, "out", f"{key}_0000.exr"), frames[key])
+            return R
+        assert cmd[1] == "render" and key == "stars-seek"
+        out = cmd[cmd.index("-o") + 1]
+        if "-f" in cmd:
+            targets = [out]
+        else:
+            last = int(cmd[cmd.index("--frames") + 1].split("..=")[1])
+            targets = [out % f for f in range(last + 1)]
+        img = Image.fromarray(frames["seek-alone"].astype(np.uint8), "RGBA")
+        for path in targets:
+            img.save(path)
+        return R
+    return exec
+
+
+def test_the_kit_runs_an_engine_and_reports_every_case(tmp_path, catalogue):
+    exp = sk.expectations(catalogue)
+    frames = _frames(exp)
+    report = sk.run("engine", str(tmp_path / "ok"), exec=_fake_engine(frames), catalogue=catalogue)
+    assert list(report) == sk.NAMES and all(r["pass"] for r in report.values()), report
+    assert os.path.exists(tmp_path / "ok" / "stars-seek-seq-0600.png")
+    refused = sk.run("engine", str(tmp_path / "refused"), exec=_fake_engine(frames, refuse={"stars-sky": "S06", "stars-seek": "S01"}),
+                     catalogue=catalogue)
+    assert not refused["stars-sky"]["pass"] and "S06" in refused["stars-sky"]["error"]
+    assert not refused["stars-seek"]["pass"] and "S01" in refused["stars-seek"]["error"]
+    assert sum(r["pass"] for r in refused.values()) == 7
+    text = sk.table(report)
+    assert text.splitlines()[0] == "| Case | Measured | Pass |" and "| stars-sirius |" in text and text.count("| yes |") == 9
+
+
+def test_the_draft_describes_the_kit(draft):
+    text = re.sub(r"\n +", " ", draft)
+    for phrase in ("`conformance/tools/star_fields_kit.py`", "`scene-render encode`", "exr-sequence", "clips at 1.0",
+                   "`stars-scale-4px`", "`stars-motion-2100`", "`stars-labels-limit3`", "`stars-boundaries-none`",
+                   "`stars-sky-noon`", "`stars-sky-none`", "yaw and pitch", "`aim`", "`project`", "ced8ff0", "SR-86"):
+        assert phrase in text, phrase
+
+
+KIT_ROW = re.compile(r"^\| `srep-<n>-stars-([a-z]+)\.xml` \| (?:[^|]|\\\|)* \| ([^|]*) \|$")
+ENGINE_COMMIT = "ced8ff0"
+
+
+def _kit_rows(draft):
+    return {m.group(1): m.group(2) for m in (KIT_ROW.match(line) for line in draft.splitlines()) if m}
+
+
+def test_the_draft_records_every_kit_case_measured_on_one_engine_commit(draft):
+    rows = _kit_rows(draft)
+    assert sorted(rows) == sorted(name[len("stars-"):] for name in sk.NAMES)
+    prefix = f"measured on scene-render feat/sr-67-fields {ENGINE_COMMIT} (0.8.0, llvmpipe): "
+    for name, status in rows.items():
+        assert status.startswith(prefix) or (name == "sky" and ENGINE_COMMIT in status), (name, status)
+        if name == "sky":
+            assert "S06" in status and "SR-86" in status and status.endswith("; not measured"), status
+        else:
+            assert status.endswith("; pass"), (name, status)
+    assert "0.7671" in rows["sirius"] and "100.46" in rows["scale"] and "31.40" in rows["motion"] and "0.017°" in rows["labels"]
