@@ -57,15 +57,15 @@ A diff for schema 1.8 against `schema/scene-render.xsd` at 1.7.1 (line numbers o
 files are not changed by this draft.
 
 - `sky` on `lightType` (5962, read for dome lights) gains the value `physical` beside `none` and `gradient`.
-- New dome light attributes, read when `sky="physical"` (SKY1: each is ignored, with a warning, under the
+- New dome light attributes, read when `sky="physical"` (PSKY1: each is ignored, with a warning, under the
   other two values):
   - `date` (`xs:string`, required with `physical`, animatable through the fields of SREP 4's values: an ISO
     8601 date and time with seconds and either `Z` or a `+hh:mm` offset, for example
-    `2003-10-17T12:30:30-07:00`; the year is −2000 to 6000, SKY2), `latitude` (`xs:double`, degrees north,
+    `2003-10-17T12:30:30-07:00`; the year is −2000 to 6000, PSKY2), `latitude` (`xs:double`, degrees north,
     −90 to 90, default 0), `longitude` (`xs:double`, degrees east, −180 to 180, default 0), `altitude`
     (`xs:double`, metres above the ellipsoid, default 0), `pressure` (`nonNegativeDecimal`, hPa, default
     1013.25), `temperature` (`xs:double`, °C, above −273, default 10), `deltaT` (`xs:double`, seconds of
-    TT − UT, −8000 to 8000; default 69 for dates in 1900 to 2100 and required outside them, SKY2).
+    TT − UT, −8000 to 8000; default 69 for dates in 1900 to 2100 and required outside them, PSKY2).
   - `moon` (`xs:boolean`, default true: the moon's disc and its light are drawn), `moonIntensity`
     (`nonNegativeDecimal`, default 1: a multiplier on the moon's physical radiance).
   - `atmosphere` (one of `earth`, `none`; default `earth`), `aerosol` (`nonNegativeDecimal`, default 1: a
@@ -73,19 +73,27 @@ files are not changed by this draft.
     layer), `planetRadius` (`positiveDecimal`, metres, default 6360000), `atmosphereHeight`
     (`positiveDecimal`, metres, default 100000), `groundAlbedo` (`xs:double`, 0 to 1, default 0.3),
     `sunIrradiance` (`colorType`, default white; the sun's irradiance at the top of the atmosphere in the
-    scene's linear units, scaled by the existing `sunIntensity`).
+    scene's linear units). The sun's effective irradiance is `sunIrradiance` times SREP 71's `sunIntensity`,
+    which under `physical` reads as 1 when absent (`effective_sun_irradiance`): SREP 71's default 0 removes
+    the gradient sky's decorative sun, but a physical sky is lit by the sun (rule 9) and a date never asks for
+    a black one, and `colorType` channels are in [0, 1], so `sunIntensity` is the document's only scalar
+    above white. An explicit `sunIntensity="0"` under `physical` removes the sun's light and disc (a black sky
+    and a dark moon); `sunSize="0"` removes the disc alone, as SREP 71 says.
   - `aerialPerspective` (`xs:boolean`, default true: surfaces are seen through the atmosphere by rule 10),
     `fogDensity` (`nonNegativeDecimal`, per metre at sea level, default 0), `fogHeight` (`positiveDecimal`,
     metres, the fog's scale height, default 100).
-- Schematron:
-  - **SKY1** `date`, `latitude`, `longitude`, `altitude`, `pressure`, `temperature`, `deltaT`, `moon`,
+- Warning (a native check, not a Schematron assert, as the star-fields draft's SF4):
+  - **PSKY1** `date`, `latitude`, `longitude`, `altitude`, `pressure`, `temperature`, `deltaT`, `moon`,
     `moonIntensity`, `atmosphere`, `aerosol`, `ozone`, `planetRadius`, `atmosphereHeight`, `groundAlbedo`,
-    `sunIrradiance`, `aerialPerspective`, `fogDensity` and `fogHeight` are read only with `sky="physical"`.
-  - **SKY2** `date` parses as rule 1 says; its year is −2000 to 6000; `deltaT` is present when the year is
+    `sunIrradiance`, `aerialPerspective`, `fogDensity` and `fogHeight` are read only with `sky="physical"`;
+    written under `none` or `gradient`, each is ignored with a warning.
+- Schematron (pattern `p-srep-physical-sky`; the ids are prefixed because SREP 71's pattern already owns
+  `SKY1` and `SKY2`, and assert ids are unique across the schema):
+  - **PSKY2** `date` parses as rule 1 says; its year is −2000 to 6000; `deltaT` is present when the year is
     outside 1900 to 2100.
-  - **SKY3** `latitude` is −90 to 90, `longitude` −180 to 180, `pressure` at least 0, `temperature` above
+  - **PSKY3** `latitude` is −90 to 90, `longitude` −180 to 180, `pressure` at least 0, `temperature` above
     −273, `deltaT` −8000 to 8000, `groundAlbedo` 0 to 1, `atmosphereHeight` and `fogHeight` positive.
-  - **SKY4** `sunAzimuth` and `sunElevation` are not written with `sky="physical"`: the sun comes from the
+  - **PSKY4** `sunAzimuth` and `sunElevation` are not written with `sky="physical"`: the sun comes from the
     date.
   - **V17** `sky="physical"` needs `scene/@version="1.8"` or later.
 
@@ -120,17 +128,24 @@ The reference module names the function of each rule. Angles are degrees unless 
    topocentric hour angle, whose printed 11.10629 differs from the report's own printed H − Δα by 2 × 10⁻⁵.
 6. **The sun in the scene.** `sun_direction` turns zenith z and azimuth a into the unit vector
    (sin z sin a, −cos z, sin z cos a) in scene axes, the frame of SREP 71 (up is −y, azimuth 0 is +z,
-   azimuth 90° is +x); `sun_from_document` applies SKY2 and SKY3 and returns the direction. SREP 71's
-   `sunSize`, `sunColor` and `sunIntensity` keep their meaning; the disc's radiance is rule 9's
-   `sun_radiance` times `sunIntensity`.
+   azimuth 90° is +x); `sun_from_document` applies PSKY2 and PSKY3 and returns the direction. SREP 71's
+   `sunSize` keeps its meaning and `sunColor` tints the disc alone, not the sky or the lighting (the light's
+   colour is `sunIrradiance`); the disc's radiance is `sun_disc_radiance`: `sunColor` times rule 9's
+   `sun_radiance` (the effective irradiance `sunIrradiance` × `sunIntensity`, scaled once, through the
+   transmittance) over the disc's solid angle `disc_solid_angle(sunSize)` = 2π(1 − cos(`sunSize`/2)), so
+   the disc's power over its solid angle is the transmitted irradiance whatever `sunSize` says, and
+   `sunSize="0"` draws no disc.
 7. **The moon.** `moon_position` is the low-precision lunar theory of Montenbruck and Pfleger (geocentric
    ecliptic longitude and latitude of the date, better than 0.1° over the 20th and 21st centuries) with the
    Almanac's four-term horizontal parallax for the distance; `moon_from_document` adds the nutation in
    longitude, converts with rule 4's obliquity and sidereal time, applies the topocentric shift with the
    moon's own parallax, and returns zenith, azimuth, the angular diameter from a 1737.4 km radius and the
-   illuminated fraction from the phase angle (Meeus 48.2 and 48.3). The moon's disc is drawn at
-   `moonIntensity` times the sun's irradiance times the Earth-moon geometric factor, through rule 9's
-   transmittance; with `moon="false"` nothing is drawn.
+   illuminated fraction from the phase angle (Meeus 48.2 and 48.3). The moon's disc is drawn uniform at
+   `moon_radiance`: `moonIntensity` times the geometric albedo `MOON_ALBEDO` 0.12 times the Lambert sphere's
+   phase law `lambert_phase` at the phase angle, (sin α + (π − α) cos α)/π, times the sun's effective
+   irradiance over π, through rule 9's transmittance along the moon's direction (zero below the horizon);
+   the full moon is 0.12/π of the transmitted irradiance, quadrature 1/π of that, the new moon nothing. The
+   disc's shape is not phased (open issue 6). With `moon="false"` nothing is drawn.
 8. **The atmosphere.** `atmosphere()` is Hillaire's Earth: planet radius 6360 km, top 100 km above it,
    Rayleigh scattering (5.802, 13.558, 33.1) × 10⁻⁶ m⁻¹ with scale height 8 km, Mie scattering 3.996 × 10⁻⁶
    and absorption 4.4 × 10⁻⁶ m⁻¹ with scale height 1.2 km and Henyey–Greenstein anisotropy 0.8, ozone
@@ -204,7 +219,7 @@ attributes are read only with `physical`. The value is refused below version 1.8
 
 | Engine | Status | Work | Tracking |
 |---|---|---|---|
-| Rust (`rs-scene-render`), reference | `crates/sr-3d/src/sky.rs` at 67a661a: a gradient sky and a sun placed by `sun_direction(azimuth, elevation)` (line 165); no date, observer, moon, scattering or fog | parse the attributes (SKY1–SKY4, V17); the SPA from the report (rules 1–6) and the moon (rule 7); the transmittance, sky-view and multiple-scattering tables of rule 9; aerial perspective and height fog in the rasterizer and path tracer (rules 10–11); the kit cases | [SR-86](https://fazai.atlassian.net/browse/SR-86) |
+| Rust (`rs-scene-render`), reference | `crates/sr-3d/src/sky.rs` at 67a661a: a gradient sky and a sun placed by `sun_direction(azimuth, elevation)` (line 165); no date, observer, moon, scattering or fog | parse the attributes (PSKY1–PSKY4, V17); the SPA from the report (rules 1–6) and the moon (rule 7); the transmittance, sky-view and multiple-scattering tables of rule 9; aerial perspective and height fog in the rasterizer and path tracer (rules 10–11); the kit cases | [SR-86](https://fazai.atlassian.net/browse/SR-86) |
 
 ## Conformance
 
@@ -241,6 +256,11 @@ from its `main()`.
 | moon diameter | `round(moon_from_document('2003-10-17T12:30:30-07:00', 39.742476, -105.1786, altitude=1830.14, delta_t=67.0)['angular_diameter'], 4)` | `0.4991` |
 | full moon | `round(moon_from_document('2003-11-09T01:13:00Z', 0.0, 0.0)['illuminated'], 4)` | `1.0` |
 | new moon | `round(moon_from_document('2003-10-25T12:50:00Z', 0.0, 0.0)['illuminated'], 4)` | `0.0002` |
+| lambert phase | `tuple(round(lambert_phase(x), 6) for x in (0.0, 90.0, 180.0))` | `(1.0, 0.31831, 0.0)` |
+| full moon radiance | `tuple(round(x, 6) for x in moon_radiance(atmosphere(), _ground_observer(atmosphere()), moon_from_document('2003-11-09T01:13:00Z', 0.0, 0.0)))` | `(0.035444, 0.032365, 0.027965)` |
+| new moon radiance | `tuple(round(x, 6) for x in moon_radiance(atmosphere(), _ground_observer(atmosphere()), moon_from_document('2003-10-25T12:50:00Z', 0.0, 0.0)))` | `(0.0, 0.0, 0.0)` |
+| sun disc | `tuple(round(x, 4) for x in sun_disc_radiance(atmosphere(), _ground_observer(atmosphere()), (0.0, 0.0, 1.0)))` | `(13926.5031, 12849.2701, 11289.9575)` |
+| sun disc power | `tuple(round(x, 6) for x in (sun_disc_radiance(atmosphere(), _ground_observer(atmosphere()), (0.0, 0.0, 1.0), 2.0)[c] * disc_solid_angle(2.0) for c in range(3)))` | `(0.935918, 0.863523, 0.758731)` |
 | ozone profile | `(ozone_density(atmosphere(), 25000.0), ozone_density(atmosphere(), 17500.0), ozone_density(atmosphere(), 40000.0))` | `(1.0, 0.5, 0.0)` |
 | vertical transmittance | `tuple(round(x, 6) for x in transmittance(atmosphere(), (0.0, 0.0, 6360000.0), (0.0, 0.0, 1.0)))` | `(0.935904, 0.863504, 0.7587)` |
 | transmittance test | `transmittance_test()` | `(True, True, True)` |
@@ -265,7 +285,7 @@ measurable after SR-86 lands.
 | Case | Checks | Status |
 |---|---|---|
 | `srep-<n>-sky-spa.xml` | the report's example as a dome light (`date="2003-10-17T12:30:30-07:00"`, Golden, Colorado, 1830.14 m, 820 hPa, 11 °C, `deltaT="67"`): the brightest sky pixel's direction is within 0.1° of zenith 50.11162°, azimuth 194.34024° | to be measured |
-| `srep-<n>-sky-day.xml` | a ground observer at noon: the zenith is bluer than the horizon (blue over red ratio higher), the horizon brighter than the zenith, and the pixel radiance at the zenith within 2 % per channel of `zenith_radiance()` scaled by `sunIrradiance` | to be measured |
+| `srep-<n>-sky-day.xml` | a ground observer at noon: the zenith is bluer than the horizon (blue over red ratio higher), the horizon brighter than the zenith, and the pixel radiance at the zenith within 2 % per channel of `sky_radiance` toward the zenith at the case's own observer and sun direction (`sun_from_document` at its date and place) with the atmosphere's `sun_irradiance` the effective irradiance; the table's `zenith_radiance()` has the sun at 45° and is not this case's value | to be measured |
 | `srep-<n>-sky-sunset.xml` | the sun at 1° elevation: the sun disc's red over blue ratio exceeds the noon disc's, and the disc below the horizon is not drawn | to be measured |
 | `srep-<n>-sky-orbit.xml` | the camera 400 km up looking at the limb: the scattering shell spans the limb's angular band from `limb_direction` to the top's grazing direction, black above it | to be measured |
 | `srep-<n>-sky-aerial.xml` | a row of grey boxes to 50 km with `aerialPerspective="true"`: each box's colour is closer to the horizon sky than the previous within the reference's `aerial_perspective` to 2 % | to be measured |
@@ -291,6 +311,9 @@ measurable after SR-86 lands.
 5. **Dates before 1582.** The Julian calendar switch is the report's; documents with proleptic Gregorian
    dates before 1582-10-15 would be off by the calendar difference. The schema could state which calendar
    `date` is in.
+6. **The moon's disc.** Rule 7 draws a uniform disc whose radiance follows the Lambert phase law; the
+   crescent's shape, the real moon's opposition surge and its darker quadrature (about a tenth of full, not
+   a third) are not modelled.
 
 ## References
 
@@ -316,3 +339,13 @@ measurable after SR-86 lands.
 
 - 2026-10-24: draft, with the reference module, 41 numeric tests and the eight kit cases described; the engine
   work filed as SR-86.
+- 2026-10-26: `sunIntensity` under `physical` reads as 1 when absent and scales the sun's irradiance once,
+  for the sky, the disc and the moonlight alike (SR-86's schema question: the literal reading, SREP 71's
+  default 0, would black out every physical sky; `effective_sun_irradiance` in the reference). The rules are
+  renamed PSKY1–PSKY4: SREP 71's Schematron pattern already owns `SKY1` and `SKY2`; PSKY1 is a warning,
+  as its attribute text always said, not an assert (both found by SR-88's peer vendoring the draft).
+- 2026-10-26: three gaps from SR-86's renderer: rule 7's moon radiance defined (`moon_radiance`, geometric
+  albedo 0.12, the Lambert phase law, uniform disc; open issue 6); rule 6's disc is `sun_disc_radiance`,
+  `sunColor` times the transmitted irradiance over `disc_solid_angle(sunSize)`, `sunColor` tinting the disc
+  alone; the sky-day kit row compares the zenith to `sky_radiance` at the case's own sun, not to the
+  table's `zenith_radiance()` (sun at 45°). Five table rows.

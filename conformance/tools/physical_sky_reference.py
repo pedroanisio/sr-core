@@ -22,6 +22,7 @@ MAX_SAMPLES = 65536
 AU_KM = 149597870.7
 EARTH_RADIUS_KM = 6378.14
 MOON_RADIUS_KM = 1737.4
+MOON_ALBEDO = 0.12                   # the moon's geometric albedo (rule 7)
 SUN_RADIUS_DEG = 0.26667
 DEFAULT_DELTA_T = 69.0
 DELTA_T_RANGE = (-8000.0, 8000.0)
@@ -800,10 +801,61 @@ def sky_radiance(a, obs, d, sun, multiple=True, samples=32):
     return _inscatter(a, obs, d, sun, samples, multiple)[0]
 
 
+def effective_sun_irradiance(sun_irradiance=(1.0, 1.0, 1.0), sun_intensity=None):
+    """The sun's irradiance a physical sky is lit by: `sunIrradiance` times `sunIntensity`, which reads as 1 when
+    the document leaves it out (SREP 71's default 0 is the gradient sky's sunless decoration)."""
+    if len(sun_irradiance) != 3 or any(not (0.0 <= c <= 1.0) for c in sun_irradiance):
+        raise SkyError("sunIrradiance is three channels in [0, 1]")
+    k = 1.0 if sun_intensity is None else sun_intensity
+    if not (math.isfinite(k) and k >= 0.0):
+        raise SkyError("sunIntensity is a finite non-negative number")
+    return tuple(float(c) * k for c in sun_irradiance)
+
+
 def sun_radiance(a, obs, d):
     """The sun disc seen along d: the irradiance times the transmittance; zero through the ground."""
     t = transmittance(a, obs, d)
     return tuple(a["sun_irradiance"][c] * t[c] for c in range(3))
+
+
+def disc_solid_angle(angular_diameter_deg):
+    """The solid angle of a disc of the given angular diameter, 2π(1 − cos(θ/2))."""
+    if not (math.isfinite(angular_diameter_deg) and 0.0 <= angular_diameter_deg <= 180.0):
+        raise SkyError("a disc's angular diameter is 0 to 180 degrees")
+    return 2.0 * math.pi * (1.0 - math.cos(math.radians(angular_diameter_deg) / 2.0))
+
+
+def sun_disc_radiance(a, obs, d, sun_size=0.53, sun_color=(1.0, 1.0, 1.0)):
+    """The sun disc's radiance (rule 6): `sunColor` times `sun_radiance` over the disc's solid angle, so that the
+    disc's power over `sunSize` is the transmitted irradiance whatever the size; no disc (zeros) at `sunSize` 0."""
+    if len(sun_color) != 3 or any(not (0.0 <= c <= 1.0) for c in sun_color):
+        raise SkyError("sunColor is three channels in [0, 1]")
+    omega = disc_solid_angle(sun_size)
+    if omega == 0.0:
+        return (0.0, 0.0, 0.0)
+    e = sun_radiance(a, obs, d)
+    return tuple(float(sun_color[c]) * e[c] / omega for c in range(3))
+
+
+def lambert_phase(phase_angle_deg):
+    """The Lambert sphere's phase law: 1 at full phase, 1/π at quadrature, 0 at new."""
+    if not (math.isfinite(phase_angle_deg) and 0.0 <= phase_angle_deg <= 180.0):
+        raise SkyError("a phase angle is 0 to 180 degrees")
+    alpha = math.radians(phase_angle_deg)
+    return (math.sin(alpha) + (math.pi - alpha) * math.cos(alpha)) / math.pi
+
+
+def moon_radiance(a, obs, moon, moon_intensity=1.0):
+    """The moon disc's radiance (rule 7), uniform over the disc: `moonIntensity` times the geometric albedo times
+    the Lambert phase law at the phase angle times the sun's effective irradiance over π, through the transmittance
+    along the moon's direction (zero below the horizon). `moon` is `moon_from_document`'s result; only its zenith
+    angle matters to an observer on the atmosphere's z axis."""
+    if not (math.isfinite(moon_intensity) and moon_intensity >= 0.0):
+        raise SkyError("moonIntensity is a finite non-negative number")
+    z = math.radians(moon["zenith"])
+    t = transmittance(a, obs, (math.sin(z), 0.0, math.cos(z)))
+    k = moon_intensity * MOON_ALBEDO * lambert_phase(moon["phase_angle"]) / math.pi
+    return tuple(k * a["sun_irradiance"][c] * t[c] for c in range(3))
 
 
 def sky_irradiance(a, obs, sun, zenith_steps=6, azimuth_steps=12):
@@ -984,6 +1036,11 @@ TABLE = (
     ("moon diameter", "round(moon_from_document('2003-10-17T12:30:30-07:00', 39.742476, -105.1786, altitude=1830.14, delta_t=67.0)['angular_diameter'], 4)", "0.4991"),
     ("full moon", "round(moon_from_document('2003-11-09T01:13:00Z', 0.0, 0.0)['illuminated'], 4)", "1.0"),
     ("new moon", "round(moon_from_document('2003-10-25T12:50:00Z', 0.0, 0.0)['illuminated'], 4)", "0.0002"),
+    ("lambert phase", "tuple(round(lambert_phase(x), 6) for x in (0.0, 90.0, 180.0))", "(1.0, 0.31831, 0.0)"),
+    ("full moon radiance", "tuple(round(x, 6) for x in moon_radiance(atmosphere(), _ground_observer(atmosphere()), moon_from_document('2003-11-09T01:13:00Z', 0.0, 0.0)))", "(0.035444, 0.032365, 0.027965)"),
+    ("new moon radiance", "tuple(round(x, 6) for x in moon_radiance(atmosphere(), _ground_observer(atmosphere()), moon_from_document('2003-10-25T12:50:00Z', 0.0, 0.0)))", "(0.0, 0.0, 0.0)"),
+    ("sun disc", "tuple(round(x, 4) for x in sun_disc_radiance(atmosphere(), _ground_observer(atmosphere()), (0.0, 0.0, 1.0)))", "(13926.5031, 12849.2701, 11289.9575)"),
+    ("sun disc power", "tuple(round(x, 6) for x in (sun_disc_radiance(atmosphere(), _ground_observer(atmosphere()), (0.0, 0.0, 1.0), 2.0)[c] * disc_solid_angle(2.0) for c in range(3)))", "(0.935918, 0.863523, 0.758731)"),
     ("ozone profile", "(ozone_density(atmosphere(), 25000.0), ozone_density(atmosphere(), 17500.0), ozone_density(atmosphere(), 40000.0))", "(1.0, 0.5, 0.0)"),
     ("vertical transmittance", "tuple(round(x, 6) for x in transmittance(atmosphere(), (0.0, 0.0, 6360000.0), (0.0, 0.0, 1.0)))", "(0.935904, 0.863504, 0.7587)"),
     ("transmittance test", "transmittance_test()", "(True, True, True)"),

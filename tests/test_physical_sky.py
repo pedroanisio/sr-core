@@ -395,7 +395,7 @@ def test_the_draft_names_the_engine_card_and_the_elements(draft):
     for word in ("physical", "date", "latitude", "longitude", "altitude", "pressure", "temperature", "deltaT",
                  "Reda and Andreas", "50.11162", "194.34024", "nutation", "topocentric", "refraction", "moon",
                  "Montenbruck", "Hillaire", "Bruneton", "Rayleigh", "Mie", "ozone", "transmittance", "quadrature",
-                 "multiple scattering", "aerial perspective", "height fog", "fogDensity", "fogHeight", "SKY3", "V17",
+                 "multiple scattering", "aerial perspective", "height fog", "fogDensity", "fogHeight", "PSKY3", "V17",
                  "seek check", "physical_sky_reference.py", "Hosek", "Prague", "BSD-3-Clause", "pvlib",
                  "media draft", "limb", "SREP 71"):
         assert word in draft, word
@@ -431,3 +431,110 @@ def test_the_table_is_what_the_module_prints(draft, capsys):
     for line in printed:
         assert line in draft, line
     assert len(printed) == len(_draft_rows())
+
+
+# ------------------------------------------------------------------------- the sun's scale under physical (SR-86)
+
+
+def test_an_absent_sun_intensity_reads_as_one_under_physical():
+    assert ps.effective_sun_irradiance() == (1.0, 1.0, 1.0)
+    assert ps.effective_sun_irradiance((1.0, 0.5, 0.25)) == (1.0, 0.5, 0.25)
+    assert ps.effective_sun_irradiance((1.0, 0.5, 0.25), 2.0) == (2.0, 1.0, 0.5)
+    assert ps.effective_sun_irradiance((1.0, 1.0, 1.0), 0.0) == (0.0, 0.0, 0.0)      # an explicit 0: no sun
+    a = ps.atmosphere(sun_irradiance=ps.effective_sun_irradiance((1.0, 1.0, 1.0), 2.0))
+    obs = ps._ground_observer(a)
+    up = (0.0, 0.0, 1.0)
+    assert all(abs(x - 2.0 * y) < 1e-12 for x, y in zip(ps.sun_radiance(a, obs, up), ps.sun_radiance(ps.atmosphere(), obs, up)))
+    for bad_colour in ((1.0, 1.0), (1.5, 1.0, 1.0), (-0.1, 0.0, 0.0)):
+        with pytest.raises(ps.SkyError):
+            ps.effective_sun_irradiance(bad_colour)
+    for bad_k in (-1.0, math.nan, math.inf):
+        with pytest.raises(ps.SkyError):
+            ps.effective_sun_irradiance((1.0, 1.0, 1.0), bad_k)
+
+
+def test_the_draft_settles_the_sun_intensity_default(draft):
+    text = re.sub(r"\n +", " ", draft)
+    for phrase in ("under `physical` reads as 1 when absent", "`effective_sun_irradiance`",
+                   "`colorType` channels are in [0, 1]", "scaled once", "the sun's effective irradiance",
+                   "An explicit `sunIntensity=\"0\"` under `physical` removes the sun's light and disc"):
+        assert phrase in text, phrase
+    assert "`sun_radiance` times `sunIntensity`" not in text
+
+
+def test_the_draft_prefixes_its_rule_ids_and_warns_for_psky1(draft):
+    text = re.sub(r"\n +", " ", draft)
+    assert re.search(r"(?<![A-Z`])SKY[1-4]", draft) is None, "SREP 71 owns SKY1 and SKY2 in schema/scene-render.sch"
+    for phrase in ("**PSKY1**", "**PSKY2**", "**PSKY3**", "**PSKY4**", "`p-srep-physical-sky`",
+                   "already owns `SKY1` and `SKY2`", "each is ignored with a warning",
+                   "a native check, not a Schematron assert"):
+        assert phrase in text, phrase
+    with open(os.path.join(ROOT, "schema", "scene-render.sch"), encoding="utf-8") as f:
+        sch = f.read()
+    assert 'id="SKY1"' in sch and 'id="SKY2"' in sch and "PSKY" not in sch
+
+
+# -------------------------------------------------------------------- the moon's and the sun disc's radiance (SR-86)
+
+
+def test_the_moon_disc_follows_the_lambert_phase_law():
+    assert ps.lambert_phase(0.0) == 1.0 and _close(ps.lambert_phase(90.0), 1.0 / math.pi, 1e-12)
+    assert abs(ps.lambert_phase(180.0)) < 1e-15
+    assert ps.lambert_phase(30.0) > ps.lambert_phase(60.0) > ps.lambert_phase(120.0) > 0.0
+    for bad in (-1.0, 181.0, math.nan):
+        with pytest.raises(ps.SkyError):
+            ps.lambert_phase(bad)
+    a = ps.atmosphere()
+    obs = ps._ground_observer(a)
+    full = ps.moon_from_document("2003-11-09T01:13:00Z", 0.0, 0.0)
+    new = ps.moon_from_document("2003-10-25T12:50:00Z", 0.0, 0.0)
+    z = math.radians(full["zenith"])
+    t = ps.transmittance(a, obs, (math.sin(z), 0.0, math.cos(z)))
+    radiance = ps.moon_radiance(a, obs, full)
+    assert all(_close(radiance[c], ps.MOON_ALBEDO * ps.lambert_phase(full["phase_angle"]) * t[c] / math.pi, 1e-12)
+               for c in range(3))
+    assert all(0.0 < x < ps.MOON_ALBEDO / math.pi for x in radiance) and radiance[0] > radiance[2]  # reddened
+    assert all(x < 1e-6 for x in ps.moon_radiance(a, obs, new))
+    assert ps.moon_radiance(a, obs, dict(full, zenith=100.0)) == (0.0, 0.0, 0.0)              # below the horizon
+    assert ps.moon_radiance(a, obs, full, 2.0) == tuple(2.0 * x for x in radiance)
+    assert ps.moon_radiance(a, obs, full, 0.0) == (0.0, 0.0, 0.0)
+    scaled = ps.atmosphere(sun_irradiance=ps.effective_sun_irradiance((1.0, 1.0, 1.0), 3.0))
+    assert all(_close(x, 3.0 * y, 1e-12) for x, y in zip(ps.moon_radiance(scaled, obs, full), radiance))
+    for bad in (-1.0, math.inf):
+        with pytest.raises(ps.SkyError):
+            ps.moon_radiance(a, obs, full, bad)
+
+
+def test_the_sun_disc_carries_the_transmitted_irradiance_whatever_its_size():
+    a = ps.atmosphere()
+    obs = ps._ground_observer(a)
+    up = (0.0, 0.0, 1.0)
+    e = ps.sun_radiance(a, obs, up)
+    assert _close(ps.disc_solid_angle(0.53), 2.0 * math.pi * (1.0 - math.cos(math.radians(0.265))), 1e-15)
+    for size in (0.53, 2.0, 10.0):
+        disc = ps.sun_disc_radiance(a, obs, up, size)
+        assert all(_close(disc[c] * ps.disc_solid_angle(size), e[c], 1e-12) for c in range(3)), size
+    assert ps.sun_disc_radiance(a, obs, up, 0.0) == (0.0, 0.0, 0.0)
+    tinted = ps.sun_disc_radiance(a, obs, up, 0.53, (1.0, 0.5, 0.0))
+    plain = ps.sun_disc_radiance(a, obs, up)
+    assert tinted == (plain[0], 0.5 * plain[1], 0.0)
+    assert ps.sun_disc_radiance(a, obs, ps.unit((1.0, 0.0, -0.1))) == (0.0, 0.0, 0.0)          # through the ground
+    for bad_size in (-0.1, 181.0, math.nan):
+        with pytest.raises(ps.SkyError):
+            ps.sun_disc_radiance(a, obs, up, bad_size)
+    for bad_colour in ((1.0, 1.0), (2.0, 1.0, 1.0)):
+        with pytest.raises(ps.SkyError):
+            ps.sun_disc_radiance(a, obs, up, 0.53, bad_colour)
+
+
+def test_the_draft_defines_the_moon_and_sun_disc_radiance_and_the_sky_day_expectation(draft):
+    text = re.sub(r"\n +", " ", draft)
+    for phrase in ("`moon_radiance`", "`MOON_ALBEDO` 0.12", "`lambert_phase`", "(sin α + (π − α) cos α)/π",
+                   "The disc's shape is not phased (open issue 6)", "`sun_disc_radiance`",
+                   "`disc_solid_angle(sunSize)`", "`sunColor` tints the disc alone",
+                   "the disc's power over its solid angle is the transmitted irradiance whatever `sunSize` says",
+                   "`sky_radiance` toward the zenith at the case's own observer and sun direction",
+                   "6. **The moon's disc.**"):
+        assert phrase in text, phrase
+    assert "Earth-moon geometric factor" not in text
+    assert "`zenith_radiance()` scaled by `sunIrradiance`" not in text
