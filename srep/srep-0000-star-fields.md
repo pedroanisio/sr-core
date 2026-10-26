@@ -122,9 +122,19 @@ The reference module names the function of each rule. Angles are degrees unless 
    whose declination is at or below the position's and whose right-ascension arc holds it; Octans closes the
    table at −90°, so every position has a constellation, and Serpens' two parts share `Ser`. Roman's eight
    printed examples at equinox 1950 reproduce. With `constellations="labels"` the engine draws each
-   abbreviation at the centroid of the catalogue stars it holds; with `boundaries` it draws the table's arcs
-   (each row is an arc of constant declination from `RA_low` to `RA_up`, and the vertical edges follow from
-   consecutive rows) precessed from 1875 to the frame's epoch.
+   abbreviation, centred on its point, at `label_centroid(catalogue, abbreviation, years)`: the normalised mean
+   of the directions, moved to the frame's epoch (rule 4), of every catalogue star whose J2000 position the
+   lookup assigns to the constellation, whatever `limitMagnitude` says, so a label does not move when the
+   limit changes. A label is the three-letter abbreviation in the engine's default sans-serif face,
+   `LABEL_HEIGHT_PX` (14) output pixels high, in the linear grey `label_value(intensity, exposure, color)` =
+   `LABEL_GREY` (0.18) × the dome's `intensity` × 2^`exposure` × the largest component of its `color` (the
+   stars' scale without their tint), under the camera's exposure and behind every surface, as the stars are.
+   With `boundaries` it draws the table's arcs (each row is an arc of constant declination from `RA_low` to
+   `RA_up`) and the meridian segments between consecutive arcs, `BOUNDARY_WIDTH_PX` (1) output pixel wide in
+   the labels' grey. Every point of a line is `boundary_direction`, precessed from 1875 to J2000 and no
+   further, whatever the frame's epoch: the field is in the ICRF and is not precessed (open issue 5), so the
+   lines are the locus at which `constellation` changes and a star near an edge is on the side the lookup
+   names (lines precessed to the frame's epoch would drift 1.4° a century off their stars).
 6. **The field.** `star_field(catalogue, limit, years, zero)` is the list, in HR order, of the stars with
    V ≤ `limitMagnitude`, each with its direction (rule 4), flux (rule 2), colour (rule 3) and constellation
    (rule 5); at most `MAX_STARS` (16,384) stars are drawn (SF1 bounds the catalogue). The engine draws the
@@ -233,6 +243,10 @@ matrix products are written out.
 | Roman: 6.2222h -81.1234 (1950) | `constellation(6.2222 * 15, -81.1234, 1950.0)` | `'Men'` |
 | Sirius, Polaris, Vega | `star_constellation(_hr(2491)), star_constellation(_hr(424)), star_constellation(_hr(7001))` | `('CMa', 'UMi', 'Lyr')` |
 | Serpens' two parts | `constellation(236.0, 7.0), constellation(272.0, -5.0)` | `('Ser', 'Ser')` |
+| CMa, Ori and UMi labels at J2000 | `label_centroid(cat, 'CMa', 0.0), label_centroid(cat, 'Ori', 0.0), label_centroid(cat, 'UMi', 0.0)` | `((103.59, -23.0889), (84.2191, 3.66242), (227.947, 77.487))` |
+| the labels fall in their constellations | `tuple(constellation(*label_centroid(cat, c, 0.0)) for c in ('CMa', 'Ori', 'UMi'))` | `('CMa', 'Ori', 'UMi')` |
+| Orion's southern arc at 5.4583h -11 (1875) in the ICRF | `radec(boundary_direction(81.875, -11.0))` | `(83.342, -10.9105)` |
+| label grey under intensity 2, exposure 1, color (1, 0.5, 0.5) | `label_value(2.0, 1.0, (1.0, 0.5, 0.5))` | `0.72` |
 | named stars agreeing with the lookup | `name_agreement(cat)` | `(3143, 3143)` |
 | field to V 6.5 at J2000 + 25 years | `len(star_field(cat, 6.5, 25.0, 1.0))` | `8404` |
 | field digest at J2000 + 25 years | `_field_digest(star_field(cat, 6.5, 25.0, 1.0))` | `'4d9539e19c1f5a15'` |
@@ -250,7 +264,8 @@ measurable after SR-88 lands.
 | `srep-<n>-stars-colour.xml` | stars of B−V 0.00, 0.65 and 1.85: the linear pixel colours, normalised to Y = 1, are within 2 % per channel of `colour(temperature(bv))` | to be measured |
 | `srep-<n>-stars-motion.xml` | HR 4550 at `epoch="2100"` against `epoch="2000"`: the point moves by 0.196° of the camera's field within 0.5 pixel | to be measured |
 | `srep-<n>-stars-space.xml` | the same field under a `space` element whose epoch is 2100-01-01 TT: identical to the previous case's second frame | to be measured |
-| `srep-<n>-stars-labels.xml` | `constellations="labels"`: the labels `CMa`, `Ori`, `UMi` are drawn, each at the centroid of its catalogue stars within 1° | to be measured |
+| `srep-<n>-stars-labels.xml` | `constellations="labels"`: the labels `CMa`, `Ori`, `UMi` are drawn, each centred within 1° of `label_centroid` at the frame's epoch, and at the same place at `limitMagnitude="3"` | to be measured |
+| `srep-<n>-stars-boundaries.xml` | `constellations="boundaries"` with the camera on `boundary_direction(81.875, -11.0)`, the middle of Orion's southern arc, at `epoch="2000"` and at `epoch="2100"`: a line pixel within 1 pixel of the frame's centre in both frames, and none there with `constellations="none"` | to be measured |
 | `srep-<n>-stars-sky.xml` | the field under `sky="physical"` at noon and at midnight: no star is visible at noon, the field at midnight matches the field without a sky to 5 % after the transmittance toward each star | to be measured |
 | `srep-<n>-stars-seek.xml` | a century of proper motion over 600 frames: frame 600 rendered alone equals the frame played from 0 (SREP 14) | to be measured |
 
@@ -297,3 +312,9 @@ measurable after SR-88 lands.
   not refused); SF5 withdrawn (rule 1 reads every catalogue as J2000, so there was nothing for it to read);
   SF1 requires B−V empty or finite and proper motions finite and at most 100″ a year (rule 4 overflows on
   unbounded motion); the reference refuses such rows.
+- 2026-10-26: rule 5 settled on the engine's four points drawing labels and boundaries (SR-88, scene-render
+  feat/sr-67-fields c64c4bf): label style (14 output pixels, grey 0.18 under the dome's gain), boundary
+  style (one pixel, the same grey), the centroid over every catalogue star the lookup assigns, moved to the
+  frame's epoch (`label_centroid`), and boundaries precessed from 1875 to J2000 only (`boundary_direction`:
+  the field is not precessed, so lines precessed to the frame's epoch would drift off their stars); kit case
+  stars-boundaries added; four table rows.

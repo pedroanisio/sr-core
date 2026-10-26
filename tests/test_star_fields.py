@@ -410,3 +410,55 @@ def test_the_draft_settles_the_engine_vendoring_gaps(draft):
                    "b206136"):
         assert phrase in text, phrase
     assert "**SF5**" not in draft          # withdrawn; the History line records why
+
+
+# ------------------------------------------------------------------------------------ rule 5's four points (SR-88)
+
+
+def test_a_label_sits_at_the_centroid_of_every_star_the_lookup_gives_it(catalogue):
+    ra, dec = sf.label_centroid(catalogue, "CMa", 0.0)
+    assert sf.constellation(ra, dec) == "CMa"
+    members = [s for s in catalogue if sf.star_constellation(s) == "CMa"]
+    total = [0.0, 0.0, 0.0]
+    for s in members:                                     # every member, whatever the magnitude limit
+        d = sf.direction(s.ra, s.dec)
+        total = [total[0] + d[0], total[1] + d[1], total[2] + d[2]]
+    assert _close((ra, dec), sf.radec(tuple(total)), 1e-9)
+    assert any(s.vmag > 6.5 for s in members)
+    ra2, dec2 = sf.label_centroid(catalogue, "CMa", 100.0)   # moved to the frame's epoch by rule 4
+    assert (ra2, dec2) != (ra, dec) and abs(ra2 - ra) < 0.01 and abs(dec2 - dec) < 0.01
+    for abbreviation, years in (("Xyz", 0.0), ("CMa", float("nan")), ("CMa", 1e5)):
+        with pytest.raises(sf.StarError):
+            sf.label_centroid(catalogue, abbreviation, years)
+
+
+def test_a_boundary_is_drawn_in_the_icrf_precessed_from_1875_only():
+    d = sf.boundary_direction(81.875, -11.0)              # the middle of Orion's southern arc
+    assert _close(d, sf.direction(*sf.precess(81.875, -11.0, 1875.0, 2000.0)))
+    assert not _close(d, sf.direction(81.875, -11.0), 1e-4)
+    ra, dec = sf.radec(d)
+    assert sf.constellation(ra, dec - 0.01) == "Lep" and sf.constellation(ra, dec + 0.01) == "Ori"
+    with pytest.raises(sf.StarError):
+        sf.boundary_direction(0.0, 91.0)
+
+
+def test_the_label_grey_follows_the_dome_gain():
+    assert (sf.LABEL_HEIGHT_PX, sf.LABEL_GREY, sf.BOUNDARY_WIDTH_PX) == (14, 0.18, 1)
+    assert sf.label_value(1.0, 0.0, (1.0, 1.0, 1.0)) == 0.18
+    assert _close(sf.label_value(2.0, 1.0, (1.0, 0.5, 0.5)), 0.72)
+    assert _close(sf.label_value(1.0, -1.0, (0.5, 0.25, 0.0)), 0.045)
+    for bad in ((-1.0, 0.0, (1.0, 1.0, 1.0)), (1.0, float("nan"), (1.0, 1.0, 1.0)), (1.0, 0.0, (1.0, -1.0, 1.0)),
+                (1.0, 0.0, (0.0, 0.0, 0.0)), (float("inf"), 0.0, (1.0, 1.0, 1.0))):
+        with pytest.raises(sf.StarError):
+            sf.label_value(*bad)
+
+
+def test_the_draft_settles_rule_5(draft):
+    text = re.sub(r"\n +", " ", draft)
+    for phrase in ("`label_centroid(catalogue, abbreviation, years)`", "whatever `limitMagnitude` says",
+                   "`LABEL_HEIGHT_PX` (14)", "`LABEL_GREY` (0.18)", "`BOUNDARY_WIDTH_PX` (1)",
+                   "`label_value(intensity, exposure, color)`", "`boundary_direction`",
+                   "precessed from 1875 to J2000 and no further", "the locus at which `constellation` changes",
+                   "`srep-<n>-stars-boundaries.xml`", "c64c4bf"):
+        assert phrase in text, phrase
+    assert "precessed from 1875 to the frame's epoch" not in text

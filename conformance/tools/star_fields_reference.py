@@ -838,6 +838,43 @@ def star_constellation(star):
     return constellation(star.ra, star.dec, 2000.0)
 
 
+LABEL_HEIGHT_PX = 14      # a label's height in output pixels
+LABEL_GREY = 0.18         # the labels' and boundaries' linear grey before the dome's gain
+BOUNDARY_WIDTH_PX = 1     # a boundary line's width in output pixels
+
+
+def label_centroid(catalogue, abbreviation, years):
+    """ICRF right ascension and declination of a constellation's label at J2000 + years: the normalised mean of
+    the directions, moved by rule 4, of every catalogue star whose J2000 position the lookup assigns to the
+    constellation, whatever limitMagnitude says, so a label does not move when the limit changes."""
+    x = y = z = 0.0
+    count = 0
+    for star in catalogue:
+        if star_constellation(star) == abbreviation:
+            d = moved(star, years)
+            x, y, z = x + d[0], y + d[1], z + d[2]
+            count += 1
+    if count == 0:
+        raise StarError(f"no catalogue star is in {abbreviation!r}")
+    return radec((x, y, z))
+
+
+def boundary_direction(ra_1875_deg, dec_1875_deg):
+    """ICRF direction of a point of a boundary line: precessed from equinox 1875 to J2000 and no further,
+    whatever the frame's epoch, since the field itself is not precessed."""
+    return direction(*precess(ra_1875_deg, dec_1875_deg, 1875.0, 2000.0))
+
+
+def label_value(intensity, exposure, color):
+    """The linear grey of labels and boundaries: LABEL_GREY times the dome's gain, intensity x 2^exposure x the
+    largest component of color (the stars' scale without their tint)."""
+    if not (math.isfinite(intensity) and intensity >= 0.0) or not math.isfinite(exposure):
+        raise StarError("the dome's intensity is finite and non-negative and its exposure finite")
+    if len(color) != 3 or not all(math.isfinite(c) and c >= 0.0 for c in color) or max(color) == 0.0:
+        raise StarError("the dome's color has three finite non-negative components, not all zero")
+    return LABEL_GREY * intensity * 2.0 ** exposure * max(color)
+
+
 _ABBREVIATIONS = frozenset(row[3] for row in BOUNDARIES)
 
 
@@ -959,6 +996,10 @@ TABLE = [
     ("Roman: 6.2222h -81.1234 (1950)", "constellation(6.2222 * 15, -81.1234, 1950.0)", "'Men'"),
     ("Sirius, Polaris, Vega", "star_constellation(_hr(2491)), star_constellation(_hr(424)), star_constellation(_hr(7001))", "('CMa', 'UMi', 'Lyr')"),
     ("Serpens' two parts", "constellation(236.0, 7.0), constellation(272.0, -5.0)", "('Ser', 'Ser')"),
+    ("CMa, Ori and UMi labels at J2000", "label_centroid(cat, 'CMa', 0.0), label_centroid(cat, 'Ori', 0.0), label_centroid(cat, 'UMi', 0.0)", "((103.59, -23.0889), (84.2191, 3.66242), (227.947, 77.487))"),
+    ("the labels fall in their constellations", "tuple(constellation(*label_centroid(cat, c, 0.0)) for c in ('CMa', 'Ori', 'UMi'))", "('CMa', 'Ori', 'UMi')"),
+    ("Orion's southern arc at 5.4583h -11 (1875) in the ICRF", "radec(boundary_direction(81.875, -11.0))", "(83.342, -10.9105)"),
+    ("label grey under intensity 2, exposure 1, color (1, 0.5, 0.5)", "label_value(2.0, 1.0, (1.0, 0.5, 0.5))", "0.72"),
     ("named stars agreeing with the lookup", "name_agreement(cat)", '(3143, 3143)'),
     ("field to V 6.5 at J2000 + 25 years", "len(star_field(cat, 6.5, 25.0, 1.0))", '8404'),
     ("field digest at J2000 + 25 years", "_field_digest(star_field(cat, 6.5, 25.0, 1.0))", "'4d9539e19c1f5a15'"),
