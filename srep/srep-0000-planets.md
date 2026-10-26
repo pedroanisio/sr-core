@@ -160,8 +160,14 @@ and the scene's axes follow the time-frames draft (scene (x, y, z) = body (x, �
    `atmosphereHeight` above it); its transmittance and in-scattering apply to every ray toward or past the
    body, so the shell is seen from orbit as a band between the planet's limb and the top of the atmosphere:
    `shell_band(distance, radius, height)` gives both angles from the nadir (from 400 km above the Earth,
-   70.19° and 72.87°), and the physical-sky draft's `limb_direction` agrees with the first. From inside the
-   atmosphere the shell has no outer edge and the sky of that draft is what is seen.
+   70.19° and 72.87°), and the physical-sky draft's `limb_direction` agrees with the first. The shell's sun
+   is rule 3's sun and its irradiance the light's colour times its intensity in the scene's linear units (as
+   that draft's `effective_sun_irradiance` scales `sunIrradiance` by `sunIntensity`; the kit's white light
+   at intensity 1 is the reference's default `sun_irradiance`): the air scatters the light that shades the
+   ground. With only the ephemeris direction (no directional light) the irradiance is zero and the shell has
+   transmittance alone. A document composes one atmosphere: under a dome with `sky="physical"` the planet's
+   shell is not drawn and the engine reports it. From inside the atmosphere the shell has no outer edge and
+   the sky of that draft is what is seen.
 7. **Limb, terminator and phase.** From an eye at distance d the limb is the circle where the sphere's
    tangent lines through the eye touch it: angular radius asin(R / d), centre R² / d along the eye direction,
    radius R √(1 − (R / d)²) (`limb`, `limb_points`). The terminator is the great circle normal to the sun
@@ -388,3 +394,6 @@ e21a482 does not draw.
   faces alike (`ring_cosine`), the planet's shadow on it and its shadow on the ground acting on rule 3's sun
   alone; rule 2 names `geodetic_latitude(p, f)`, the latitude a surface point's texel is read at (45° N
   geodetic is 44.81° geocentric on the Earth).
+- 2026-10-26: rule 6 names the shell's irradiance on SR-89's question: rule 3's sun, the light's colour times its
+  intensity, zero (transmittance alone) with only the ephemeris direction; one atmosphere per document, the
+  shell not drawn under a physical dome.

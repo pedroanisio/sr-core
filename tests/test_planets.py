@@ -544,6 +544,13 @@ def test_the_draft_states_the_rings_lighting_and_the_geodetic_texel(draft):
     assert "half the lit level" in draft
 
 
+def test_the_draft_states_the_shells_irradiance(draft):
+    rule6 = " ".join(draft[draft.index("6. **Atmosphere.**"):draft.index("7. **Limb, terminator and phase.**")].split())
+    for phrase in ("rule 3's sun", "the light's colour times its intensity", "`effective_sun_irradiance`",
+                   "transmittance alone", "one atmosphere", "not drawn"):
+        assert phrase in rule6, phrase
+
+
 def test_the_draft_names_the_engine_card_and_the_elements(draft):
     assert "SR-89" in draft
     for word in ("planet", "flattening", "cloudMap", "cloudHeight", "cloudRotation", "cloudShadow", "ringMap",
