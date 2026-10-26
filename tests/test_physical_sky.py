@@ -815,6 +815,12 @@ def test_the_kit_writes_the_cases_the_draft_names(tmp_path):
         wall = [b for b in docs[key].findall("composition/object3D") if b.get("id") == "wall"][0]
         assert float(wall.get("z")) - pk.BOX_DEPTH / 2.0 == 1000.0
         assert float(wall.get("y")) == float(docs[key].find("composition/camera").get("y")) == (-500.0 if key == "sky-fog-high" else 0.0)
+    for key in ("sky-aerial", "sky-aerial-default", "sky-fog", "sky-fog-high", "sky-fog-aerial"):
+        cam = docs[key].find("composition/camera")
+        k = pk.zoom(float(cam.get("fov") or pk.DEFAULT_FOV))
+        for box in docs[key].findall("composition/object3D"):     # every measured face covers the window with margin
+            dist = float(box.get("z")) - pk.BOX_DEPTH / 2.0 - float(cam.get("z"))
+            assert min(float(box.get("width")), float(box.get("height"))) * k / dist >= 2 * pk.WINDOW + 5, (key, box.get("id"))
     assert docs["sky-moon"].find("lights/light").get("date") == pk.FULL_MOON
     assert docs["sky-moon-new"].find("lights/light").get("date") == pk.NEW_MOON
     seek = docs["sky-seek"]
