@@ -592,3 +592,52 @@ def test_the_draft_states_the_scale_and_origin_of_rules_10_and_11(draft):
                    "a grey wall 1,000 px away at y = 0", "a wall at y = −500 (500 m altitude)"):
         assert phrase in text, phrase
     assert "a grey wall 1 km away at ground level" not in text
+
+
+# ------------------------------------------------------------------- rule 11 joins rule 10's march (SR-86)
+
+
+def test_fog_joins_the_aerial_march_and_has_a_closed_form_without_it():
+    a = ps.atmosphere()
+    obs = ps._ground_observer(a)
+    d, sun, colour = (1.0, 0.0, 0.0), ps.unit((1.0, 0.0, 0.5)), (0.5, 0.5, 0.5)
+    horizon = ps.horizon_radiance(a, obs, d, sun)
+    assert horizon == ps.sky_radiance(a, obs, (1.0, 0.0, 0.0), sun)
+    assert ps.horizon_radiance(a, obs, ps.unit((1.0, 0.0, 0.3)), sun) == horizon              # elevation dropped
+    assert ps.horizon_radiance(a, obs, (0.0, 0.0, 1.0), sun) == horizon                       # vertical: +x
+    assert ps.horizon_radiance(a, obs, (0.0, 1.0, 0.0), sun) != horizon                       # another azimuth
+    assert all(x > 0.0 for x in horizon)
+    with pytest.raises(ps.SkyError):
+        ps.horizon_radiance(a, (1.0, 0.0, a["planet_radius"]), d, sun)
+    f = ps.fog(0.001, 100.0)
+    plain = ps.aerial_perspective(a, obs, d, 1000.0, colour, sun)
+    assert ps.aerial_perspective(a, obs, d, 1000.0, colour, sun, fog=ps.fog(0.0, 100.0), horizon=horizon) == plain
+    with pytest.raises(ps.SkyError):
+        ps.aerial_perspective(a, obs, d, 1000.0, colour, sun, fog=f)
+    assert ps.aerial_perspective(a, obs, d, 0.0, colour, sun, fog=f, horizon=horizon) == colour
+    still = ps.atmosphere(rayleigh_scattering=(0.0, 0.0, 0.0), mie_scattering=0.0, mie_absorption=0.0,
+                          ozone_absorption=(0.0, 0.0, 0.0))
+    end = ps._height(still, ps.march(obs, d, 1000.0))
+    marched = ps.aerial_perspective(still, obs, d, 1000.0, colour, sun, fog=f, horizon=(0.1, 0.2, 0.3))
+    closed = ps.fogged(colour, f, ps._height(still, obs), end, 1000.0, (0.1, 0.2, 0.3))
+    assert all(_close(m, c, 2e-4 * c) for m, c in zip(marched, closed))      # the sphere's curvature
+    assert not all(_close(m, c, 1e-5 * c) for m, c in zip(marched, closed))
+    assert _close(ps.fogged(colour, f, 0.0, 0.0, 1000.0, (0.0, 0.0, 0.0))[0], 0.5 * math.exp(-1.0), 1e-12)
+    assert _close(ps.fogged((0.0, 0.0, 0.0), f, 0.0, 0.0, 1000.0, (1.0, 1.0, 1.0))[0], 1.0 - math.exp(-1.0), 1e-12)
+    assert ps.fogged(colour, f, 0.0, 0.0, 0.0, (1.0, 1.0, 1.0)) == colour
+    thin = ps.aerial_perspective(a, obs, d, 1000.0, colour, sun, fog=f, horizon=horizon)
+    thick = ps.aerial_perspective(a, obs, d, 1000.0, colour, sun, fog=ps.fog(0.003, 100.0), horizon=horizon)
+    assert all(abs(t2 - h) < abs(t1 - h) < abs(p - h) or abs(t2 - h) < abs(t1 - h) for t2, t1, p, h in zip(thick, thin, plain, horizon))
+    assert ps.fog_march_test() == (True, True, True)
+    assert ps.fog_transmittance(f, 100.0, 100.0 + 1e-12, 1000.0) == ps.fog_transmittance(f, 100.0, 100.0, 1000.0)
+
+
+def test_the_draft_states_how_the_fog_joins_the_aerial_march(draft):
+    text = re.sub(r"\n +", " ", draft)
+    for phrase in ("joins rule 10's march over every surface segment", "σ_f(h) × L_h", "one march, so no order of the two media arises",
+                   "`horizon_radiance`; a vertical ray takes azimuth +x", "The media draft's `fog` phase is for declared media, not this fog",
+                   "c × T_f + (1 − T_f) × L_h (`fogged`)", "The fog is not applied to the sky itself", "reproduces the closed form within 2 × 10⁻⁴ at 1 km",
+                   "`aerialPerspective=\"false\"`: a grey wall", "within 2 % per channel of `aerial_perspective` with the fog",
+                   "**Applying the fog at one end of a surface segment.**"):
+        assert phrase in text, phrase
+    assert "consistent with the media draft's fog phase" not in text

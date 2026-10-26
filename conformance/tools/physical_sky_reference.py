@@ -748,9 +748,18 @@ def multiple_scattering_factor(a, h, mu_s):
     return _ms_cell(a, h, mu_s)[1]
 
 
-def _inscatter(a, p, d, sun, samples, multiple, length=None):
+def _fog_depth_along(f, a, q, d, s_a, s_b):
+    """Rule 11's optical depth of the fog between two distances along the ray from q: the closed form over the
+    sphere's altitudes at the two ends."""
+    if f is None or s_b <= s_a:
+        return 0.0
+    return _fog_depth(f, _height(a, march(q, d, s_a)), _height(a, march(q, d, s_b)), s_b - s_a)
+
+
+def _inscatter(a, p, d, sun, samples, multiple, length=None, fog=None, horizon=None):
     """The in-scattered radiance along d from p (to `length` or the atmosphere's end) and the transmittance
-    to that end."""
+    to that end; with `fog` (rule 11) the fog's extinction joins the air's at every node and its isotropic
+    source is the fog's extinction times `horizon`."""
     if not (1 <= samples <= MAX_SAMPLES):
         raise SkyError("samples is 1 to %d" % MAX_SAMPLES)
     start, total, ground = _path_end(a, p, d)
@@ -778,14 +787,17 @@ def _inscatter(a, p, d, sun, samples, multiple, length=None):
             t_sun = transmittance(a, y, sun, samples=8)
             mu_s = _dot(unit(y), sun)
             psi = _ms_lookup(a, hy, mu_s) if multiple else (0.0, 0.0, 0.0)
+            fog_node = _fog_depth_along(fog, a, q, d, s0, s) if s > s0 else 0.0
+            sigma_f = fog["density"] * math.exp(-hy / fog["height"]) if fog is not None else 0.0
             for c in range(3):
-                t_node = trans[c] * math.exp(-node_depth[c])
+                t_node = trans[c] * math.exp(-node_depth[c] - fog_node)
                 single = (sr[c] * pr + sm * pm) * a["sun_irradiance"][c] * t_sun[c]
-                inner[c] += w * t_node * (single + (sr[c] + sm) * psi[c])
+                inner[c] += w * t_node * (single + (sr[c] + sm) * psi[c] + (sigma_f * horizon[c] if fog is not None else 0.0))
         seg = _depth(a, q, d, s0, s1)
+        fog_seg = _fog_depth_along(fog, a, q, d, s0, s1)
         for c in range(3):
             out[c] += inner[c] * half
-            trans[c] *= math.exp(-seg[c])
+            trans[c] *= math.exp(-seg[c] - fog_seg)
     return tuple(out), tuple(trans)
 
 
@@ -897,13 +909,26 @@ def scene_altitude(y, altitude=0.0, pixels_per_meter=100.0):
     return altitude - y / float(pixels_per_meter)
 
 
-def aerial_perspective(a, obs, d, distance, colour, sun, samples=16):
+def aerial_perspective(a, obs, d, distance, colour, sun, samples=16, fog=None, horizon=None):
     """Rule 10: a surface of the colour at the distance along d is seen through the atmosphere as colour
-    times the transmittance plus the in-scattering up to it; at distance 0 the colour itself."""
+    times the transmittance plus the in-scattering up to it; at distance 0 the colour itself. With `fog`
+    (rule 11) the one march carries the fog's extinction and its source, `horizon` (`horizon_radiance`)."""
+    if fog is not None and horizon is None:
+        raise SkyError("fog is marched with the horizon radiance as its source")
     if distance <= 0.0:
         return tuple(colour)
-    inscatter, trans = _inscatter(a, obs, d, sun, samples, True, length=distance)
+    inscatter, trans = _inscatter(a, obs, d, sun, samples, True, length=distance, fog=fog, horizon=horizon)
     return tuple(colour[c] * trans[c] + inscatter[c] for c in range(3))
+
+
+def horizon_radiance(a, obs, d, sun, samples=32):
+    """Rule 11's L_h: the sky's radiance at elevation 0 in the view direction's azimuth, from an observer on the
+    z axis; a vertical ray takes azimuth +x."""
+    if obs[0] != 0.0 or obs[1] != 0.0:
+        raise SkyError("the horizon is evaluated at an observer on the z axis")
+    n = math.hypot(d[0], d[1])
+    level = (1.0, 0.0, 0.0) if n < 1e-12 else (d[0] / n, d[1] / n, 0.0)
+    return sky_radiance(a, obs, level, sun, samples=samples)
 
 
 def limb_direction(a, obs, degrees=0.0):
@@ -926,17 +951,27 @@ def fog(density, height):
     return {"density": float(density), "height": float(height)}
 
 
-def fog_transmittance(f, h0, h1, length):
-    """Transmittance of a segment of the length from altitude h0 to h1 through fog of density
-    `density` e^(-h / height): closed form."""
+def _fog_depth(f, h0, h1, length):
+    """Optical depth of a segment of the length from altitude h0 to h1 through fog of density
+    `density` e^(-h / height): closed form (the level form within a nanometre of level)."""
     if length <= 0.0:
-        return 1.0
+        return 0.0
     hs = f["height"]
-    if h0 == h1:
-        depth = f["density"] * length * math.exp(-h0 / hs)
-    else:
-        depth = f["density"] * length * hs / (h1 - h0) * (math.exp(-h0 / hs) - math.exp(-h1 / hs))
-    return math.exp(-depth)
+    if abs(h1 - h0) < 1e-9:
+        return f["density"] * length * math.exp(-h0 / hs)
+    return f["density"] * length * hs / (h1 - h0) * (math.exp(-h0 / hs) - math.exp(-h1 / hs))
+
+
+def fog_transmittance(f, h0, h1, length):
+    """Transmittance of a segment of the length from altitude h0 to h1 through the fog: e^(-_fog_depth)."""
+    return math.exp(-_fog_depth(f, h0, h1, length))
+
+
+def fogged(colour, f, h0, h1, length, horizon):
+    """Rule 11 without rule 10's march (aerialPerspective="false" or atmosphere="none"): the colour through the
+    fog's closed-form transmittance plus the horizon radiance over the rest."""
+    t = fog_transmittance(f, h0, h1, length)
+    return tuple(colour[c] * t + (1.0 - t) * horizon[c] for c in range(3))
 
 
 # ------------------------------------------------------------------------------------ the frame and the checks
@@ -1016,6 +1051,25 @@ def fog_test():
             abs(fog_transmittance(f, 0.0, 50.0, 1000.0) - math.exp(-0.001 * 1000.0 * 2.0 * (1 - math.exp(-0.5)))) <= 1e-12)
 
 
+def fog_march_test():
+    a = atmosphere()
+    obs = _ground_observer(a)
+    d, sun, colour = (1.0, 0.0, 0.0), unit((1.0, 0.0, 0.5)), (0.5, 0.5, 0.5)
+    horizon = horizon_radiance(a, obs, d, sun)
+    plain = aerial_perspective(a, obs, d, 1000.0, colour, sun)
+    no_fog = aerial_perspective(a, obs, d, 1000.0, colour, sun, fog=fog(0.0, 100.0), horizon=horizon)
+    # The march on the sphere and the closed form on the tangent plane differ by the sphere's curvature.
+    still = atmosphere(rayleigh_scattering=(0.0, 0.0, 0.0), mie_scattering=0.0, mie_absorption=0.0,
+                       ozone_absorption=(0.0, 0.0, 0.0))
+    f = fog(0.001, 100.0)
+    marched = aerial_perspective(still, obs, d, 1000.0, colour, sun, fog=f, horizon=(0.1, 0.2, 0.3))
+    closed = fogged(colour, f, _height(still, obs), _height(still, march(obs, d, 1000.0)), 1000.0, (0.1, 0.2, 0.3))
+    thin = aerial_perspective(a, obs, d, 1000.0, colour, sun, fog=f, horizon=horizon)
+    thick = aerial_perspective(a, obs, d, 1000.0, colour, sun, fog=fog(0.003, 100.0), horizon=horizon)
+    return (no_fog == plain, all(abs(marched[c] - closed[c]) <= 2e-4 * closed[c] for c in range(3)),
+            all(abs(thick[c] - horizon[c]) < abs(thin[c] - horizon[c]) for c in range(3)))
+
+
 def seek_test():
     args = ("2003-10-17T12:30:30-07:00", 39.742476, -105.1786, (0.0, 0.0, 1.0))
     first = sky_frame(*args)
@@ -1077,6 +1131,10 @@ TABLE = (
     ("scene altitude", "(scene_altitude(-50000.0, 0.0, 100.0), scene_altitude(0.0, 1830.14, 1.0))", "(500.0, 1830.14)"),
     ("fog", "round(fog_transmittance(fog(0.001, 100.0), 0.0, 50.0, 1000.0), 9)", "0.455236288"),
     ("fog test", "fog_test()", "(True, True)"),
+    ("horizon radiance", "tuple(round(x, 6) for x in horizon_radiance(atmosphere(), _ground_observer(atmosphere()), unit((1.0, 0.0, 0.3)), unit((1.0, 0.0, 0.5))))", "(0.152102, 0.191532, 0.254174)"),
+    ("fog closed form", "tuple(round(x, 6) for x in fogged((0.5, 0.5, 0.5), fog(0.001, 100.0), 1.0, 1.0, 1000.0, (0.1, 0.2, 0.3)))", "(0.248623, 0.311467, 0.374312)"),
+    ("fog march", "tuple(round(x, 6) for x in aerial_perspective(atmosphere(), _ground_observer(atmosphere()), (1.0, 0.0, 0.0), 1000.0, (0.5, 0.5, 0.5), unit((1.0, 0.0, 0.5)), fog=fog(0.001, 100.0), horizon=(0.1, 0.2, 0.3)))", "(0.247111, 0.308912, 0.370049)"),
+    ("fog march test", "fog_march_test()", "(True, True, True)"),
     ("limb", "tuple(round(c, 6) for c in limb_direction(atmosphere(), (0.0, 0.0, 6760000.0)))", "(0.940828, 0.0, -0.338883)"),
     ("seek test", "seek_test()", "(True, True)"),
 )

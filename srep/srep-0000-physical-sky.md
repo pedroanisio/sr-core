@@ -181,14 +181,22 @@ The reference module names the function of each rule. Angles are degrees unless 
     length in pixels over `pixelsPerMeter`. Rule 10 walks the straight ray through the real sphere between
     the two mapped points; the drop of the sphere below the tangent plane is not applied to the points
     themselves (196 m at 50 km).
-11. **Height fog.** With `fogDensity` > 0, a fog of extinction `fogDensity` × e^(−h / `fogHeight`) is added
-    to rule 10's transmittance over every surface segment; `fog_transmittance(fog, h0, h1, length)` is the
-    closed form of a straight segment from altitude h0 to h1, density × length × H / (h1 − h0) ×
-    (e^(−h0/H) − e^(−h1/H)), and density × length × e^(−h0/H) when h0 = h1. A segment end at scene height y
-    has the altitude `scene_altitude(y, altitude, pixelsPerMeter)` = `altitude` − y / `pixelsPerMeter`
-    (rule 10's scale and origin; the tangent-plane altitude, 8 cm off the sphere's at 1 km), and the length
-    is in metres by the same scale. The fog's in-scattered colour is
-    the sky's radiance at the horizon (its albedo is 1), consistent with the media draft's fog phase.
+11. **Height fog.** With `fogDensity` > 0, a fog of extinction σ_f(h) = `fogDensity` × e^(−h / `fogHeight`)
+    joins rule 10's march over every surface segment: at each sample the extinction is the air's plus σ_f(h),
+    h the sphere's altitude there, and the source is the air's in-scatter plus σ_f(h) × L_h, both attenuated
+    by the combined transmittance to the eye (`aerial_perspective` with `fog` and `horizon`; one march, so
+    no order of the two media arises). The fog's source is isotropic and its albedo 1; L_h is rule 9's sky
+    radiance at elevation 0 in the view direction's azimuth at the observer (`horizon_radiance`; a vertical
+    ray takes azimuth +x), so fog at sunset is warm toward the sun. The media draft's `fog` phase is for
+    declared media, not this fog. With `aerialPerspective="false"`, or `atmosphere="none"` (L_h is then 0),
+    a segment is the closed form c × T_f + (1 − T_f) × L_h (`fogged`), T_f =
+    `fog_transmittance(fog, h0, h1, length)` = e^(−density × length × H / (h1 − h0) × (e^(−h0/H) −
+    e^(−h1/H))), and e^(−density × length × e^(−h0/H)) when h0 = h1, with the segment ends' altitudes
+    `scene_altitude(y, altitude, pixelsPerMeter)` = `altitude` − y / `pixelsPerMeter` (rule 10's scale and
+    origin; the tangent-plane altitude, 8 cm off the sphere's at 1 km) and the length in metres by the same
+    scale. In an atmosphere without air the march reproduces the closed form within 2 × 10⁻⁴ at 1 km, the
+    sphere's curvature against the tangent plane. The fog is not applied to the sky itself, only to surface
+    segments.
 12. **Frames and seek.** The dome light at a frame is evaluated from that frame's `date` (after SREP 4's
     animation of the string) and the document's constants, with no state carried between frames
     (`sky_frame`); the multiple-scattering table depends only on the atmosphere's parameters, so a frame
@@ -220,6 +228,11 @@ The reference module names the function of each rule. Angles are degrees unless 
   `metresPerUnit` on the dome light, were both put forward by SR-86. SREP 14 rule 4 already maps physical
   lengths through `physics/@pixelsPerMeter`, the time-frames draft follows it, and two scales in one scene
   would disagree; the draft reuses it, with the scene's origin at rule 9's observer.
+- **Applying the fog at one end of a surface segment.** Fog applied after rule 10's march (at the surface end)
+  or before it (at the eye end) is a product of two transmittances with the fog's source either unattenuated
+  by the air or attenuating all of the air's in-scatter; both are off by the fog's optical depth over the
+  segment, and SR-86 asked which. One march with the combined extinction and source is the exact answer
+  and costs nothing beyond a fog term per sample.
 - **Keeping `sunIntensity`'s schema default.** A default of 1 for `physical` alone is not expressible (an
   XSD default is per attribute, not per sibling value), and reading an explicit 0 as 1 under `physical`
   would remove the only scalar that switches the sun's light off while keeping the atmosphere. The default
@@ -306,6 +319,10 @@ from its `main()`.
 | scene altitude | `(scene_altitude(-50000.0, 0.0, 100.0), scene_altitude(0.0, 1830.14, 1.0))` | `(500.0, 1830.14)` |
 | fog | `round(fog_transmittance(fog(0.001, 100.0), 0.0, 50.0, 1000.0), 9)` | `0.455236288` |
 | fog test | `fog_test()` | `(True, True)` |
+| horizon radiance | `tuple(round(x, 6) for x in horizon_radiance(atmosphere(), _ground_observer(atmosphere()), unit((1.0, 0.0, 0.3)), unit((1.0, 0.0, 0.5))))` | `(0.152102, 0.191532, 0.254174)` |
+| fog closed form | `tuple(round(x, 6) for x in fogged((0.5, 0.5, 0.5), fog(0.001, 100.0), 1.0, 1.0, 1000.0, (0.1, 0.2, 0.3)))` | `(0.248623, 0.311467, 0.374312)` |
+| fog march | `tuple(round(x, 6) for x in aerial_perspective(atmosphere(), _ground_observer(atmosphere()), (1.0, 0.0, 0.0), 1000.0, (0.5, 0.5, 0.5), unit((1.0, 0.0, 0.5)), fog=fog(0.001, 100.0), horizon=(0.1, 0.2, 0.3)))` | `(0.247111, 0.308912, 0.370049)` |
+| fog march test | `fog_march_test()` | `(True, True, True)` |
 | limb | `tuple(round(c, 6) for c in limb_direction(atmosphere(), (0.0, 0.0, 6760000.0)))` | `(0.940828, 0.0, -0.338883)` |
 | seek test | `seek_test()` | `(True, True)` |
 
@@ -321,7 +338,7 @@ measurable after SR-86 lands.
 | `srep-<n>-sky-sunset.xml` | the sun at 1° elevation: the sun disc's red over blue ratio exceeds the noon disc's, and the disc below the horizon is not drawn | to be measured |
 | `srep-<n>-sky-orbit.xml` | `altitude="400000"` with the camera at the origin (`physics pixelsPerMeter="1"`) looking at the limb: the scattering shell spans the limb's angular band from `limb_direction` to the top's grazing direction, black above it | to be measured |
 | `srep-<n>-sky-aerial.xml` | a row of grey boxes to 50 km (`physics pixelsPerMeter="1"`, 50,000 px) with `aerialPerspective="true"`: each box's colour is closer to the horizon sky than the previous within the reference's `aerial_perspective` to 2 % | to be measured |
-| `srep-<n>-sky-fog.xml` | `fogDensity="0.001" fogHeight="100"` with `physics pixelsPerMeter="1"`: a grey wall 1,000 px away at y = 0 (ground level, `altitude="0"`) is attenuated by e⁻¹ toward the fog colour, a wall at y = −500 (500 m altitude) by e^(−0.0067) | to be measured |
+| `srep-<n>-sky-fog.xml` | `fogDensity="0.001" fogHeight="100"` with `physics pixelsPerMeter="1"` and `aerialPerspective="false"`: a grey wall 1,000 px away at y = 0 (ground level, `altitude="0"`) is attenuated by e⁻¹ toward `horizon_radiance`, a wall at y = −500 (500 m altitude) by e^(−0.0067); a companion with `aerialPerspective="true"` shows the ground-level wall within 2 % per channel of `aerial_perspective` with the fog | to be measured |
 | `srep-<n>-sky-moon.xml` | the full moon of 2003-11-09 01:13 UTC: a lit disc of angular diameter 0.50° ± 0.02° at the reference's zenith and azimuth within 0.2°; the new moon of 2003-10-25 draws no lit disc | to be measured |
 | `srep-<n>-sky-seek.xml` | a day's time-lapse (`date` animated over 24 hours): frame 40 rendered alone equals the frame played from 0 (SREP 14) | to be measured |
 
@@ -388,3 +405,7 @@ measurable after SR-86 lands.
   pixels (SREP 14 rule 4), the scene's origin is the observer at `altitude`, scene points map by
   `atmosphere_position` and fog altitudes by `scene_altitude`; the orbit, aerial and fog kit rows write
   `physics pixelsPerMeter="1"`. Two table rows.
+- 2026-10-26: rule 11 states how the fog joins rule 10 (SR-86): one march with the fog's extinction and its
+  isotropic source σ_f × L_h at every sample (`aerial_perspective` with `fog`), L_h the sky at elevation 0 in
+  the view azimuth (`horizon_radiance`); the closed form `fogged` without aerial perspective; the fog kit row
+  measures both. Four table rows.
