@@ -352,8 +352,9 @@ def test_atmosphere_errors_and_bounds():
         ps.transmittance(a, (0.0, 0.0, a["planet_radius"]), (0.0, 0.0, 1.0), samples=0)
     with pytest.raises(ps.SkyError):
         ps.transmittance(a, (0.0, 0.0, a["planet_radius"]), (0.0, 0.0, 1.0), samples=ps.MAX_SAMPLES + 1)
-    with pytest.raises(ps.SkyError):
-        ps.sky_radiance(a, (0.0, 0.0, a["planet_radius"] - 1.0), (0.0, 0.0, 1.0), (0.0, 0.0, 1.0))
+    # An observer below the sphere is lifted onto it (rule 10), not refused.
+    assert ps.sky_radiance(a, (0.0, 0.0, a["planet_radius"] - 1.0), (0.0, 0.0, 1.0), (0.0, 0.0, 1.0)) == \
+        ps.sky_radiance(a, (0.0, 0.0, a["planet_radius"]), (0.0, 0.0, 1.0), (0.0, 0.0, 1.0))
     with pytest.raises(ps.SkyError):
         ps.fog(density=-1.0, height=100.0)
 
@@ -641,3 +642,54 @@ def test_the_draft_states_how_the_fog_joins_the_aerial_march(draft):
                    "**Applying the fog at one end of a surface segment.**"):
         assert phrase in text, phrase
     assert "consistent with the media draft's fog phase" not in text
+
+
+# ------------------------------------------------------------------- rule 10 below the sphere (SR-86)
+
+
+def test_surface_segments_march_below_the_sphere_and_observers_are_lifted_onto_it():
+    a = ps.atmosphere()
+    r = a["planet_radius"]
+    sun, d, colour = ps.unit((1.0, 0.0, 0.5)), (1.0, 0.0, 0.0), (0.2, 0.4, 0.1)
+    camera = (0.0, 0.0, r - 1.8)
+    assert ps._lift(a, camera) == (0.0, 0.0, r)
+    assert ps._lift(a, (0.0, 0.0, r + 5.0)) == (0.0, 0.0, r + 5.0)
+    assert _close(ps._norm(ps._lift(a, (3.0, 4.0, r - 100.0))), r, 1e-6)
+    below = ps.aerial_perspective(a, camera, d, 10000.0, colour, sun)
+    over = ps.aerial_perspective(a, ps._ground_observer(a), d, 10000.0, colour, sun)
+    assert all(_close(b, o, 2e-3 * o) for b, o in zip(below, over)) and below != colour
+    # Fully below the sphere over the whole segment the air is sea-level air: two depths agree to rounding.
+    deep = ps.aerial_perspective(a, (0.0, 0.0, r - 1000.0), d, 1000.0, colour, sun)
+    shallow = ps.aerial_perspective(a, camera, d, 1000.0, colour, sun)
+    assert all(_close(x, y, 1e-9 * y) for x, y in zip(deep, shallow)) and deep != colour
+    # The planet does not occlude a surface segment: a ray dipping through the sphere keeps marching.
+    through = ps.aerial_perspective(a, ps._ground_observer(a), ps.unit((1.0, 0.0, -0.01)), 5000.0, colour, sun)
+    level = ps.aerial_perspective(a, ps._ground_observer(a), d, 5000.0, colour, sun)
+    assert all(_close(t, l, 2e-3 * l) for t, l in zip(through, level)) and through != colour
+    # The fog's altitude is clamped too: wholly below the sphere, two depths see the same sea-level fog.
+    f = ps.fog(0.001, 100.0)
+    fog_deep = ps.aerial_perspective(a, (0.0, 0.0, r - 1000.0), d, 1000.0, colour, sun, fog=f, horizon=(0.1, 0.2, 0.3))
+    fog_shallow = ps.aerial_perspective(a, camera, d, 1000.0, colour, sun, fog=f, horizon=(0.1, 0.2, 0.3))
+    assert all(_close(x, y, 1e-9 * y) for x, y in zip(fog_deep, fog_shallow)) and fog_deep != shallow
+    # Rule 9's observer and L_h are lifted, never refused.
+    assert ps.sky_radiance(a, camera, (0.0, 0.0, 1.0), sun) == ps.sky_radiance(a, (0.0, 0.0, r), (0.0, 0.0, 1.0), sun)
+    assert ps.horizon_radiance(a, camera, d, sun) == ps.horizon_radiance(a, (0.0, 0.0, r), d, sun)
+    assert ps.sun_radiance(a, camera, sun) == ps.sun_radiance(a, (0.0, 0.0, r), sun)
+    assert ps.sky_irradiance(a, camera, sun, 2, 4) == ps.sky_irradiance(a, (0.0, 0.0, r), sun, 2, 4)
+    assert ps.hits_ground(a, camera, (0.0, 0.0, -1.0)) and not ps.hits_ground(a, camera, (0.0, 0.0, 1.0))
+    with pytest.raises(ps.SkyError):
+        ps._inscatter(a, camera, d, sun, 4, True, surface=True)
+    with pytest.raises(ps.SkyError):
+        ps._path_end(a, camera, d)
+    assert ps.below_ground_test() == (True, True, True)
+
+
+def test_the_draft_walks_surface_segments_below_the_sphere(draft):
+    text = re.sub(r"\n +", " ", draft)
+    for phrase in ("A surface segment is walked between its two mapped ends wherever they lie",
+                   "the planet's sphere does not occlude it (the scene's own geometry does)",
+                   "an altitude below 0 along it reads as 0", "the sample is lifted to the sphere",
+                   "never refused (`below_ground_test`)", "The same lift applies to rule 9's observer and to rule 11's L_h",
+                   "**Refusing segments below the sphere.**", "7. **Observers below sea level.**",
+                   "a companion with the default camera and no `physics` element"):
+        assert phrase in text, phrase

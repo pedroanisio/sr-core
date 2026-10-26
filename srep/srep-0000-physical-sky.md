@@ -180,7 +180,14 @@ The reference module names the function of each rule. Angles are degrees unless 
     `pixelsPerMeter` (the planet's radius R added to the third), the camera included, and s is the segment's
     length in pixels over `pixelsPerMeter`. Rule 10 walks the straight ray through the real sphere between
     the two mapped points; the drop of the sphere below the tangent plane is not applied to the points
-    themselves (196 m at 50 km).
+    themselves (196 m at 50 km). A surface segment is walked between its two mapped ends wherever they lie:
+    the planet's sphere does not occlude it (the scene's own geometry does), and an altitude below 0 along
+    it reads as 0 for the air's and the fog's densities and for the sun's transmittance to the sample (the
+    sample is lifted to the sphere), so the default camera at the canvas centre (1.8 m below the observer at
+    the default scale) and the content below it are seen through sea-level air, never refused
+    (`below_ground_test`). The same lift applies to rule 9's observer and to rule 11's L_h: a point below
+    the sphere reads as the point on it along its radius (`altitude` below 0 is the ellipsoid's; the model's
+    ground is the sphere, open issue 7).
 11. **Height fog.** With `fogDensity` > 0, a fog of extinction σ_f(h) = `fogDensity` × e^(−h / `fogHeight`)
     joins rule 10's march over every surface segment: at each sample the extinction is the air's plus σ_f(h),
     h the sphere's altitude there, and the source is the air's in-scatter plus σ_f(h) × L_h, both attenuated
@@ -228,6 +235,11 @@ The reference module names the function of each rule. Angles are degrees unless 
   `metresPerUnit` on the dome light, were both put forward by SR-86. SREP 14 rule 4 already maps physical
   lengths through `physics/@pixelsPerMeter`, the time-frames draft follows it, and two scales in one scene
   would disagree; the draft reuses it, with the scene's origin at rule 9's observer.
+- **Refusing segments below the sphere.** The reference refused any march from below the planet's sphere,
+  so a scene with the default camera (the canvas centre, 1.8 m below the observer at the default scale) and
+  a physical sky lost its aerial perspective to an error; SR-86 raised it. Defaulting `aerialPerspective`
+  to false without a `physics` element would hide the case, not settle it, and content below the observer
+  exists at every scale. Rule 10 walks the segment and reads an altitude below 0 as 0.
 - **Applying the fog at one end of a surface segment.** Fog applied after rule 10's march (at the surface end)
   or before it (at the eye end) is a product of two transmittances with the fog's source either unattenuated
   by the air or attenuating all of the air's in-scatter; both are off by the fog's optical depth over the
@@ -323,6 +335,8 @@ from its `main()`.
 | fog closed form | `tuple(round(x, 6) for x in fogged((0.5, 0.5, 0.5), fog(0.001, 100.0), 1.0, 1.0, 1000.0, (0.1, 0.2, 0.3)))` | `(0.248623, 0.311467, 0.374312)` |
 | fog march | `tuple(round(x, 6) for x in aerial_perspective(atmosphere(), _ground_observer(atmosphere()), (1.0, 0.0, 0.0), 1000.0, (0.5, 0.5, 0.5), unit((1.0, 0.0, 0.5)), fog=fog(0.001, 100.0), horizon=(0.1, 0.2, 0.3)))` | `(0.247111, 0.308912, 0.370049)` |
 | fog march test | `fog_march_test()` | `(True, True, True)` |
+| aerial below ground | `tuple(round(x, 6) for x in aerial_perspective(atmosphere(), (0.0, 0.0, 6359998.2), (1.0, 0.0, 0.0), 10000.0, (0.2, 0.4, 0.1), unit((1.0, 0.0, 0.5))))` | `(0.194808, 0.358261, 0.151398)` |
+| below ground test | `below_ground_test()` | `(True, True, True)` |
 | limb | `tuple(round(c, 6) for c in limb_direction(atmosphere(), (0.0, 0.0, 6760000.0)))` | `(0.940828, 0.0, -0.338883)` |
 | seek test | `seek_test()` | `(True, True)` |
 
@@ -337,7 +351,7 @@ measurable after SR-86 lands.
 | `srep-<n>-sky-day.xml` | a ground observer at noon: the zenith is bluer than the horizon (blue over red ratio higher), the horizon brighter than the zenith, and the pixel radiance at the zenith within 2 % per channel of `sky_radiance` toward the zenith at the case's own observer and sun direction (`sun_from_document` at its date and place) with the atmosphere's `sun_irradiance` the effective irradiance; the table's `zenith_radiance()` has the sun at 45° and is not this case's value | to be measured |
 | `srep-<n>-sky-sunset.xml` | the sun at 1° elevation: the sun disc's red over blue ratio exceeds the noon disc's, and the disc below the horizon is not drawn | to be measured |
 | `srep-<n>-sky-orbit.xml` | `altitude="400000"` with the camera at the origin (`physics pixelsPerMeter="1"`) looking at the limb: the scattering shell spans the limb's angular band from `limb_direction` to the top's grazing direction, black above it | to be measured |
-| `srep-<n>-sky-aerial.xml` | a row of grey boxes to 50 km (`physics pixelsPerMeter="1"`, 50,000 px) with `aerialPerspective="true"`: each box's colour is closer to the horizon sky than the previous within the reference's `aerial_perspective` to 2 % | to be measured |
+| `srep-<n>-sky-aerial.xml` | a row of grey boxes to 50 km (`physics pixelsPerMeter="1"`, 50,000 px) with `aerialPerspective="true"`: each box's colour is closer to the horizon sky than the previous within the reference's `aerial_perspective` to 2 %; a companion with the default camera and no `physics` element shows a grey wall at y = 330, 50,000 px (500 m) away, within 2 % per channel of `aerial_perspective` from the camera's mapped point, 1.8 m below the sphere | to be measured |
 | `srep-<n>-sky-fog.xml` | `fogDensity="0.001" fogHeight="100"` with `physics pixelsPerMeter="1"` and `aerialPerspective="false"`: a grey wall 1,000 px away at y = 0 (ground level, `altitude="0"`) is attenuated by e⁻¹ toward `horizon_radiance`, a wall at y = −500 (500 m altitude) by e^(−0.0067); a companion with `aerialPerspective="true"` shows the ground-level wall within 2 % per channel of `aerial_perspective` with the fog | to be measured |
 | `srep-<n>-sky-moon.xml` | the full moon of 2003-11-09 01:13 UTC: a lit disc of angular diameter 0.50° ± 0.02° at the reference's zenith and azimuth within 0.2°; the new moon of 2003-10-25 draws no lit disc | to be measured |
 | `srep-<n>-sky-seek.xml` | a day's time-lapse (`date` animated over 24 hours): frame 40 rendered alone equals the frame played from 0 (SREP 14) | to be measured |
@@ -363,6 +377,9 @@ measurable after SR-86 lands.
 6. **The moon's disc.** Rule 7 draws a uniform disc whose radiance follows the Lambert phase law; the
    crescent's shape, the real moon's opposition surge and its darker quadrature (about a tenth of full, not
    a third) are not modelled.
+7. **Observers below sea level.** `altitude` is metres above the ellipsoid and may be negative (the Dead
+   Sea, −430 m), but the model's ground is the sphere of `planetRadius`, so rule 10 lifts such an observer
+   onto it; the denser air of a real depression (5 % at −430 m) is not modelled.
 
 ## References
 
@@ -409,3 +426,7 @@ measurable after SR-86 lands.
   isotropic source σ_f × L_h at every sample (`aerial_perspective` with `fog`), L_h the sky at elevation 0 in
   the view azimuth (`horizon_radiance`); the closed form `fogged` without aerial perspective; the fog kit row
   measures both. Four table rows.
+- 2026-10-26: rule 10 walks a surface segment wherever its ends lie (SR-86: the default camera is 1.8 m
+  below the observer at the default scale and the reference refused it): no planet occlusion, an altitude
+  below 0 reads as 0, points below the sphere are lifted onto it for rule 9 and L_h (`_lift`,
+  `below_ground_test`); the aerial kit row gains the default-camera companion; open issue 7. Two table rows.

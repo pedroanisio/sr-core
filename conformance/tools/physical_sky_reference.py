@@ -567,9 +567,19 @@ def _sphere_hit(p, d, radius):
     return t0 if t0 >= 0.0 else t1
 
 
+def _lift(a, p):
+    """Rule 10: a point below the planet's sphere reads as the point on the sphere along its radius; the
+    model's ground is the sphere and an `altitude` below 0 is the ellipsoid's."""
+    r = _norm(p)
+    if r >= a["planet_radius"] or r == 0.0:
+        return p
+    k = a["planet_radius"] / r
+    return (p[0] * k, p[1] * k, p[2] * k)
+
+
 def hits_ground(a, p, d):
     """Whether the ray from p along d meets the planet before leaving the atmosphere."""
-    return _path_end(a, p, d)[2]
+    return _path_end(a, _lift(a, p), d)[2]
 
 
 def _path_end(a, p, d):
@@ -608,13 +618,15 @@ def _segments(length, samples, cluster):
     return [length * i / samples for i in range(samples + 1)]
 
 
-def _depth(a, p, d, s0, s1):
-    """Optical depth of the segment [s0, s1] along d from p by 4-point Gauss-Legendre."""
+def _depth(a, p, d, s0, s1, floor=False):
+    """Optical depth of the segment [s0, s1] along d from p by 4-point Gauss-Legendre; with `floor` (a surface
+    segment of rule 10) an altitude below 0 reads as 0."""
     half = (s1 - s0) / 2.0
     mid = (s1 + s0) / 2.0
     out = [0.0, 0.0, 0.0]
     for x, w in _GL:
-        e = _extinction(a, _height(a, march(p, d, mid + half * x)))
+        h = _height(a, march(p, d, mid + half * x))
+        e = _extinction(a, max(h, 0.0) if floor else h)
         for c in range(3):
             out[c] += w * e[c]
     return tuple(o * half for o in out)
@@ -625,6 +637,7 @@ def transmittance(a, p, d, samples=64, length=None, cluster=True):
     `length`); zero when the ray meets the ground first."""
     if not (1 <= samples <= MAX_SAMPLES):
         raise SkyError("samples is 1 to %d" % MAX_SAMPLES)
+    p = _lift(a, p)
     start, total, ground = _path_end(a, p, d)
     if ground and (length is None or length >= start + total):
         return (0.0, 0.0, 0.0)
@@ -750,21 +763,27 @@ def multiple_scattering_factor(a, h, mu_s):
 
 def _fog_depth_along(f, a, q, d, s_a, s_b):
     """Rule 11's optical depth of the fog between two distances along the ray from q: the closed form over the
-    sphere's altitudes at the two ends."""
+    sphere's altitudes at the two ends, an altitude below 0 reading as 0."""
     if f is None or s_b <= s_a:
         return 0.0
-    return _fog_depth(f, _height(a, march(q, d, s_a)), _height(a, march(q, d, s_b)), s_b - s_a)
+    return _fog_depth(f, max(_height(a, march(q, d, s_a)), 0.0), max(_height(a, march(q, d, s_b)), 0.0), s_b - s_a)
 
 
-def _inscatter(a, p, d, sun, samples, multiple, length=None, fog=None, horizon=None):
+def _inscatter(a, p, d, sun, samples, multiple, length=None, fog=None, horizon=None, surface=False):
     """The in-scattered radiance along d from p (to `length` or the atmosphere's end) and the transmittance
     to that end; with `fog` (rule 11) the fog's extinction joins the air's at every node and its isotropic
-    source is the fog's extinction times `horizon`."""
+    source is the fog's extinction times `horizon`. A `surface` segment (rule 10) is walked over its whole
+    `length` wherever its ends lie: the planet does not occlude it and an altitude below 0 reads as 0."""
     if not (1 <= samples <= MAX_SAMPLES):
         raise SkyError("samples is 1 to %d" % MAX_SAMPLES)
-    start, total, ground = _path_end(a, p, d)
-    if length is not None:
-        total = max(0.0, min(total, length - start))
+    if surface:
+        if length is None:
+            raise SkyError("a surface segment has a length")
+        start, total = 0.0, max(0.0, length)
+    else:
+        start, total, ground = _path_end(a, p, d)
+        if length is not None:
+            total = max(0.0, min(total, length - start))
     if total <= 0.0:
         return (0.0, 0.0, 0.0), (1.0, 1.0, 1.0)
     q = march(p, d, start)
@@ -780,9 +799,9 @@ def _inscatter(a, p, d, sun, samples, multiple, length=None, fog=None, horizon=N
         for x, w in _GL:
             # Transmittance from the segment start to the node, then the scattering at the node.
             s = mid + half * x
-            node_depth = _depth(a, q, d, s0, s) if s > s0 else (0.0, 0.0, 0.0)
+            node_depth = _depth(a, q, d, s0, s, surface) if s > s0 else (0.0, 0.0, 0.0)
             y = march(q, d, s)
-            hy = _height(a, y)
+            hy = max(_height(a, y), 0.0) if surface else _height(a, y)
             sr, sm = _scattering(a, hy)
             t_sun = transmittance(a, y, sun, samples=8)
             mu_s = _dot(unit(y), sun)
@@ -793,7 +812,7 @@ def _inscatter(a, p, d, sun, samples, multiple, length=None, fog=None, horizon=N
                 t_node = trans[c] * math.exp(-node_depth[c] - fog_node)
                 single = (sr[c] * pr + sm * pm) * a["sun_irradiance"][c] * t_sun[c]
                 inner[c] += w * t_node * (single + (sr[c] + sm) * psi[c] + (sigma_f * horizon[c] if fog is not None else 0.0))
-        seg = _depth(a, q, d, s0, s1)
+        seg = _depth(a, q, d, s0, s1, surface)
         fog_seg = _fog_depth_along(fog, a, q, d, s0, s1)
         for c in range(3):
             out[c] += inner[c] * half
@@ -804,9 +823,7 @@ def _inscatter(a, p, d, sun, samples, multiple, length=None, fog=None, horizon=N
 def sky_radiance(a, obs, d, sun, multiple=True, samples=32):
     """Rule 9: the sky's radiance in the unit direction d from the observer; zero for directions that meet
     the ground (rule 10's aerial perspective covers what is seen there) or miss the atmosphere."""
-    r = _norm(obs)
-    if r < a["planet_radius"] - 1e-6:
-        raise SkyError("the observer is below the ground")
+    obs = _lift(a, obs)
     start, total, ground = _path_end(a, obs, d)
     if ground or total <= 0.0:
         return (0.0, 0.0, 0.0)
@@ -917,7 +934,8 @@ def aerial_perspective(a, obs, d, distance, colour, sun, samples=16, fog=None, h
         raise SkyError("fog is marched with the horizon radiance as its source")
     if distance <= 0.0:
         return tuple(colour)
-    inscatter, trans = _inscatter(a, obs, d, sun, samples, True, length=distance, fog=fog, horizon=horizon)
+    inscatter, trans = _inscatter(a, obs, d, sun, samples, True, length=distance, fog=fog, horizon=horizon,
+                                  surface=True)
     return tuple(colour[c] * trans[c] + inscatter[c] for c in range(3))
 
 
@@ -1070,6 +1088,21 @@ def fog_march_test():
             all(abs(thick[c] - horizon[c]) < abs(thin[c] - horizon[c]) for c in range(3)))
 
 
+def below_ground_test():
+    a = atmosphere()
+    sun, d, colour = unit((1.0, 0.0, 0.5)), (1.0, 0.0, 0.0), (0.2, 0.4, 0.1)
+    camera = (0.0, 0.0, a["planet_radius"] - 1.8)              # the default camera at the default scale
+    above = _ground_observer(a)
+    below = aerial_perspective(a, camera, d, 10000.0, colour, sun)
+    over = aerial_perspective(a, above, d, 10000.0, colour, sun)
+    through = aerial_perspective(a, above, unit((1.0, 0.0, -0.01)), 5000.0, colour, sun)
+    level = aerial_perspective(a, above, d, 5000.0, colour, sun)
+    return (all(abs(below[c] - over[c]) < 2e-3 * over[c] and below[c] != colour[c] for c in range(3)),
+            all(abs(through[c] - level[c]) < 2e-3 * level[c] and through[c] != colour[c] for c in range(3)),
+            sky_radiance(a, camera, (0.0, 0.0, 1.0), sun) == sky_radiance(a, (0.0, 0.0, a["planet_radius"]), (0.0, 0.0, 1.0), sun)
+            and sun_radiance(a, camera, sun) == sun_radiance(a, (0.0, 0.0, a["planet_radius"]), sun))
+
+
 def seek_test():
     args = ("2003-10-17T12:30:30-07:00", 39.742476, -105.1786, (0.0, 0.0, 1.0))
     first = sky_frame(*args)
@@ -1135,6 +1168,8 @@ TABLE = (
     ("fog closed form", "tuple(round(x, 6) for x in fogged((0.5, 0.5, 0.5), fog(0.001, 100.0), 1.0, 1.0, 1000.0, (0.1, 0.2, 0.3)))", "(0.248623, 0.311467, 0.374312)"),
     ("fog march", "tuple(round(x, 6) for x in aerial_perspective(atmosphere(), _ground_observer(atmosphere()), (1.0, 0.0, 0.0), 1000.0, (0.5, 0.5, 0.5), unit((1.0, 0.0, 0.5)), fog=fog(0.001, 100.0), horizon=(0.1, 0.2, 0.3)))", "(0.247111, 0.308912, 0.370049)"),
     ("fog march test", "fog_march_test()", "(True, True, True)"),
+    ("aerial below ground", "tuple(round(x, 6) for x in aerial_perspective(atmosphere(), (0.0, 0.0, 6359998.2), (1.0, 0.0, 0.0), 10000.0, (0.2, 0.4, 0.1), unit((1.0, 0.0, 0.5))))", "(0.194808, 0.358261, 0.151398)"),
+    ("below ground test", "below_ground_test()", "(True, True, True)"),
     ("limb", "tuple(round(c, 6) for c in limb_direction(atmosphere(), (0.0, 0.0, 6760000.0)))", "(0.940828, 0.0, -0.338883)"),
     ("seek test", "seek_test()", "(True, True)"),
 )
