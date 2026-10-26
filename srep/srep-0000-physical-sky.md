@@ -57,6 +57,11 @@ A diff for schema 1.8 against `schema/scene-render.xsd` at 1.7.1 (line numbers o
 files are not changed by this draft.
 
 - `sky` on `lightType` (5962, read for dome lights) gains the value `physical` beside `none` and `gradient`.
+- `sunIntensity` on `lightType` (5990) loses its XSD `default="0"`; its documentation states the defaults
+  instead: an absent value reads as 0 under `none` and `gradient` (SREP 71's sunless sky, which renderers
+  already apply as their fallback) and as 1 under `physical`. A schema default is filled before any
+  consumer of the validated infoset sees the document, so with it absence and an explicit 0 are the same
+  value and a physical sky without the attribute would be lit by a sun of 0.
 - New dome light attributes, read when `sky="physical"` (PSKY1: each is ignored, with a warning, under the
   other two values):
   - `date` (`xs:string`, required with `physical`, animatable through the fields of SREP 4's values: an ISO
@@ -74,7 +79,8 @@ files are not changed by this draft.
     (`positiveDecimal`, metres, default 100000), `groundAlbedo` (`xs:double`, 0 to 1, default 0.3),
     `sunIrradiance` (`colorType`, default white; the sun's irradiance at the top of the atmosphere in the
     scene's linear units). The sun's effective irradiance is `sunIrradiance` times SREP 71's `sunIntensity`,
-    which under `physical` reads as 1 when absent (`effective_sun_irradiance`): SREP 71's default 0 removes
+    which under `physical` reads as 1 when absent (`effective_sun_irradiance`; the schema carries no default
+    for it, see Syntax): SREP 71's default 0 removes
     the gradient sky's decorative sun, but a physical sky is lit by the sun (rule 9) and a date never asks for
     a black one, and `colorType` channels are in [0, 1], so `sunIntensity` is the document's only scalar
     above white. An explicit `sunIntensity="0"` under `physical` removes the sun's light and disc (a black sky
@@ -199,6 +205,11 @@ The reference module names the function of each rule. Angles are degrees unless 
 
 ## Rejected alternatives
 
+- **Keeping `sunIntensity`'s schema default.** A default of 1 for `physical` alone is not expressible (an
+  XSD default is per attribute, not per sibling value), and reading an explicit 0 as 1 under `physical`
+  would remove the only scalar that switches the sun's light off while keeping the atmosphere. The default
+  goes, and the two readings are stated in the documentation (SR-86 found the contradiction: its typed
+  model fills every schema default, and a physical sky without the attribute rendered black).
 - **Hosek–Wilkie or Prague sky models.** Both are analytic fits for a ground observer under a clear sky
   with turbidity as the knob; neither gives the atmosphere from altitude or orbit (shot 36), the
   transmittance along a surface ray, or a moon. They remain comparison baselines (Open issue 2).
@@ -213,7 +224,11 @@ The reference module names the function of each rule. Angles are degrees unless 
 ## Backwards compatibility
 
 Every document at 1.7.1 keeps its meaning: `sky` defaults to `none`, `gradient` is untouched, and the new
-attributes are read only with `physical`. The value is refused below version 1.8 (V17).
+attributes are read only with `physical`. The value is refused below version 1.8 (V17). The one change to
+an existing attribute is `sunIntensity` losing its schema default: a 1.7.1 document with `gradient` and no
+`sunIntensity` keeps its sunless sky, since renderers fall back to 0 and `sr_core.scene`'s generated model
+leaves an absent optional attribute `None`; a consumer that relied on the schema supplying the 0 applies it
+itself.
 
 ## Engine impact
 
@@ -349,3 +364,6 @@ measurable after SR-86 lands.
   `sunColor` times the transmitted irradiance over `disc_solid_angle(sunSize)`, `sunColor` tinting the disc
   alone; the sky-day kit row compares the zenith to `sky_radiance` at the case's own sun, not to the
   table's `zenith_radiance()` (sun at 45°). Five table rows.
+- 2026-10-26: `sunIntensity` loses its XSD default (SR-86: a schema default is filled before a consumer can
+  see absence, so "reads as 1 when absent" could not hold with `default="0"`); absent reads as 0 under
+  `none` and `gradient`, 1 under `physical`.

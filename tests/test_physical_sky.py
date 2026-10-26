@@ -538,3 +538,16 @@ def test_the_draft_defines_the_moon_and_sun_disc_radiance_and_the_sky_day_expect
         assert phrase in text, phrase
     assert "Earth-moon geometric factor" not in text
     assert "`zenith_radiance()` scaled by `sunIrradiance`" not in text
+
+
+def test_the_draft_drops_the_sun_intensity_schema_default(draft):
+    text = re.sub(r"\n +", " ", draft)
+    for phrase in ("`sunIntensity` on `lightType` (5990) loses its XSD `default=\"0\"`",
+                   "an absent value reads as 0 under `none` and `gradient`", "and as 1 under `physical`",
+                   "A schema default is filled before any consumer of the validated infoset sees the document",
+                   "**Keeping `sunIntensity`'s schema default.**", "the schema carries no default for it, see Syntax",
+                   "`sunIntensity` losing its schema default"):
+        assert phrase in text, phrase
+    with open(os.path.join(ROOT, "schema", "scene-render.xsd"), encoding="utf-8") as f:
+        xsd = f.read()
+    assert '<xs:attribute name="sunIntensity" type="nonNegativeDecimal" default="0">' in xsd  # the draft's diff base
