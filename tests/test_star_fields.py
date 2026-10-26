@@ -378,3 +378,35 @@ def test_the_digest_path_uses_no_built_in_float_sum():
     import inspect
     for fn in (sf.xyz_to_linear_srgb, sf.scene_direction, sf.precess):
         assert "sum(" not in inspect.getsource(fn), fn.__name__
+
+
+# ------------------------------------------------------------------------------------ the engine's three gaps (SR-88)
+
+
+def test_non_finite_or_runaway_catalogue_values_are_rejected(tmp_path):
+    bad = tmp_path / "bad.csv.gz"
+    header = "HR,Name,RA,Dec,V,B-V,pmRA,pmDE,SpType\n"
+    for row in ("1,,0.0,0.0,1.0,nan,0.0,0.0,A0", "1,,0.0,0.0,1.0,inf,0.0,0.0,A0", "1,,0.0,0.0,1.0,0.0,inf,0.0,A0",
+                "1,,0.0,0.0,1.0,0.0,nan,0.0,A0", "1,,0.0,0.0,1.0,0.0,0.0,-inf,A0", "1,,0.0,0.0,1.0,0.0,0.0,nan,A0",
+                "1,,0.0,0.0,1.0,0.0,100.5,0.0,A0", "1,,0.0,0.0,1.0,0.0,0.0,-1e300,A0", "1,,nan,0.0,1.0,0.0,0.0,0.0,A0",
+                "1,,0.0,inf,1.0,0.0,0.0,0.0,A0", "1,,0.0,0.0,nan,0.0,0.0,0.0,A0"):
+        with gzip.open(bad, "wt", encoding="ascii") as f:
+            f.write(header + row + "\n")
+        with pytest.raises(sf.StarError):
+            sf.load_catalogue(str(bad), None)
+    with gzip.open(bad, "wt", encoding="ascii") as f:
+        f.write(header + "1,,0.0,0.0,1.0,,100.0,-100.0,A0\n")
+    cat = sf.load_catalogue(str(bad), None)
+    assert (cat[0].bv, cat[0].pm_ra, cat[0].pm_dec) == (None, 100.0, -100.0)
+    assert sf.MAX_PROPER_MOTION == 100.0
+
+
+def test_the_draft_settles_the_engine_vendoring_gaps(draft):
+    text = re.sub(r"\n +", " ", draft)
+    for phrase in ("B−V empty or finite, pmRA and pmDE finite and at most 100 arcseconds per Julian year in magnitude",
+                   "every catalogue is read as J2000",
+                   "a written `epoch` is ignored with a warning",
+                   "SF1–SF4, V17",
+                   "b206136"):
+        assert phrase in text, phrase
+    assert "**SF5**" not in draft          # withdrawn; the History line records why

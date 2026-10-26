@@ -71,14 +71,16 @@ files are not changed by this draft.
     `boundaries`; default `none`).
 - Schematron:
   - **SF1** a `catalogue` asset's file is a gzipped CSV with exactly the nine columns above, HR numbers
-    strictly increasing, right ascension in [0, 360), declination in [−90, 90], V in [−5, 30], and whose
-    sha256 digest equals `digest`; a mismatch is an error, not a warning.
+    strictly increasing, right ascension in [0, 360), declination in [−90, 90], V in [−5, 30], B−V empty or
+    finite, pmRA and pmDE finite and at most 100 arcseconds per Julian year in magnitude (Barnard's star, the
+    fastest known, moves 10.4″ a year), and whose sha256 digest equals `digest`; a mismatch is an error, not a
+    warning. The format carries no equinox column: every catalogue is read as J2000 (rule 1), from which
+    rule 5 precesses.
   - **SF2** `starField` is written only on a dome light.
   - **SF3** `magnitudeZero` and `pointSize` are positive; `limitMagnitude` is finite.
-  - **SF4** `epoch` is within 10,000 years of 2000.0; it is not written when the scene has a `space` element
-    (the time-frames draft), whose clock gives the epoch.
-  - **SF5** `constellations` other than `none` needs the catalogue to be the Bright Star Catalogue fixture
-    or another catalogue in J2000 (Roman's table is precessed from J2000 by rule 5).
+  - **SF4** `epoch` is within 10,000 years of 2000.0. When the scene has a `space` element (the time-frames
+    draft) its clock gives the epoch and a written `epoch` is ignored with a warning, as `x`, `y`, `z` are
+    under `positionFrom="ephemeris"` there (rule 7 of that draft).
   - **V17** `catalogue` and `starField` need `scene/@version="1.8"` or later.
 
 ### Semantics
@@ -176,7 +178,7 @@ kind is new. The element is refused below version 1.8 (V17).
 
 | Engine | Status | Work | Tracking |
 |---|---|---|---|
-| Rust (`rs-scene-render`), reference | `crates/sr-3d/src/sky.rs` at 67a661a: a gradient sky and a sun; no catalogue asset, star points or constellation lookup | parse the asset and the element (SF1–SF5, V17); load and pin the catalogue (rule 1); the point field with flux, colour and proper motion (rules 2–4, 6) behind surfaces and through the physical sky; labels and boundaries (rule 5); the seek check (rule 7) | [SR-88](https://faz-ai.atlassian.net/browse/SR-88) |
+| Rust (`rs-scene-render`), reference | `crates/sr-3d/src/sky.rs` at 67a661a: a gradient sky and a sun; no catalogue asset, star points or constellation lookup | parse the asset and the element (SF1–SF4, V17); load and pin the catalogue (rule 1); the point field with flux, colour and proper motion (rules 2–4, 6) behind surfaces and through the physical sky; labels and boundaries (rule 5); the seek check (rule 7) | [SR-88](https://faz-ai.atlassian.net/browse/SR-88) |
 
 ## Conformance
 
@@ -290,3 +292,8 @@ measurable after SR-88 lands.
 - 2026-10-24: draft from SRC-45 (SP2 of SREP 12); engine card SR-88.
 - 2026-10-25: the field digest hashes six-decimal values (it hashed float reprs, which differ on macOS and on
   Python 3.10: CI's matrix was red); the digest row refilled (SRC-77).
+- 2026-10-26: the three gaps the engine found vendoring the draft (SR-88, scene-render feat/sr-67-fields
+  b206136): SF4 agrees with the attribute text (a written `epoch` under a `space` is ignored with a warning,
+  not refused); SF5 withdrawn (rule 1 reads every catalogue as J2000, so there was nothing for it to read);
+  SF1 requires B−V empty or finite and proper motions finite and at most 100″ a year (rule 4 overflows on
+  unbounded motion); the reference refuses such rows.

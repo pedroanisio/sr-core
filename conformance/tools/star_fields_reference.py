@@ -29,6 +29,7 @@ CATALOGUE_DIGEST = "cd18b1c9b8c009d922edfed020ba718aa14a577416fb625bf01ddd9cbdaa
 CATALOGUE_SKIPPED = 14  # records of the 9110 without a J2000 position (novae and non-stellar entries)
 COLUMNS = ("HR", "Name", "RA", "Dec", "V", "B-V", "pmRA", "pmDE", "SpType")
 MAX_STARS = 16384
+MAX_PROPER_MOTION = 100.0  # arcseconds per Julian year; Barnard's star, the fastest known, moves 10.4
 MAX_YEARS = 10000.0
 JULIAN_YEAR_S = 31557600.0
 BV_RANGE = (-0.4, 2.0)
@@ -160,6 +161,11 @@ def _parse_compact(text):
             raise StarError(f"catalogue row {len(stars) + 1}: {e}") from None
         if hr <= last or not (0.0 <= ra < 360.0) or not (-90.0 <= dec <= 90.0) or not (-5.0 <= vmag <= 30.0):
             raise StarError(f"catalogue row {len(stars) + 1}: HR {hr} out of order or out of range")
+        if bv is not None and not math.isfinite(bv):
+            raise StarError(f"catalogue row {len(stars) + 1}: HR {hr} B-V is not finite")
+        if not all(math.isfinite(pm) and abs(pm) <= MAX_PROPER_MOTION for pm in (pm_ra, pm_dec)):
+            raise StarError(f"catalogue row {len(stars) + 1}: HR {hr} proper motion is not finite or above "
+                            f"{MAX_PROPER_MOTION} arcseconds per year")
         if len(stars) >= MAX_STARS:
             raise StarError(f"catalogue has more than {MAX_STARS} stars")
         stars.append(Star(hr, row[1], ra, dec, vmag, bv, pm_ra, pm_dec, row[8]))
