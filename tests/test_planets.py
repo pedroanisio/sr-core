@@ -984,4 +984,5 @@ def test_the_draft_records_the_kit_cases_measured_so_far(draft):
             assert status.endswith("; pass") or status.endswith("; fail"), (name, status)
         else:
             assert status == "to be measured", (name, status)
-    assert measured == {"limb", "night", "sun", "clouds"} and all(rows[name].endswith("; pass") for name in measured)
+    assert measured == {"limb", "terminator", "phase", "texture", "night", "sun", "clouds"}
+    assert all(rows[name].endswith("; pass") for name in measured)
