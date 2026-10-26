@@ -773,13 +773,19 @@ def _inscatter(a, p, d, sun, samples, multiple, length=None, fog=None, horizon=N
     """The in-scattered radiance along d from p (to `length` or the atmosphere's end) and the transmittance
     to that end; with `fog` (rule 11) the fog's extinction joins the air's at every node and its isotropic
     source is the fog's extinction times `horizon`. A `surface` segment (rule 10) is walked over its whole
-    `length` wherever its ends lie: the planet does not occlude it and an altitude below 0 reads as 0."""
+    `length` wherever its ends lie: the planet does not occlude it and an altitude below 0 reads as 0; its
+    samples start where the segment enters the atmosphere and cluster toward its lower end."""
     if not (1 <= samples <= MAX_SAMPLES):
         raise SkyError("samples is 1 to %d" % MAX_SAMPLES)
     if surface:
         if length is None:
             raise SkyError("a surface segment has a length")
         start, total = 0.0, max(0.0, length)
+        if _norm(p) > a["top_radius"]:
+            t_in = _sphere_hit(p, d, a["top_radius"])
+            if t_in is None or t_in >= total:
+                return (0.0, 0.0, 0.0), (1.0, 1.0, 1.0)
+            start, total = t_in, total - t_in
     else:
         start, total, ground = _path_end(a, p, d)
         if length is not None:
@@ -788,6 +794,8 @@ def _inscatter(a, p, d, sun, samples, multiple, length=None, fog=None, horizon=N
         return (0.0, 0.0, 0.0), (1.0, 1.0, 1.0)
     q = march(p, d, start)
     ends = _segments(total, samples, True)
+    if surface and _height(a, march(q, d, total)) < _height(a, q):
+        ends = [total - e for e in reversed(ends)]
     mu = _dot(d, sun)
     pr, pm = rayleigh_phase(mu), hg_phase(mu, a["mie_anisotropy"])
     trans = [1.0, 1.0, 1.0]
@@ -1088,6 +1096,19 @@ def fog_march_test():
             all(abs(thick[c] - horizon[c]) < abs(thin[c] - horizon[c]) for c in range(3)))
 
 
+def orbit_segment_test():
+    """A surface segment from orbit: 16 samples agree with 1024 within 1e-4 (SR-86's 0.5 % before the samples
+    started at the atmosphere's entry and clustered toward the lower end)."""
+    a = atmosphere()
+    obs = (0.0, 0.0, a["planet_radius"] + 400000.0)
+    sun, colour = unit((0.3, 0.2, 0.9)), (0.2, 0.3, 0.4)
+    down = (0.0, 0.0, -1.0)
+    coarse = aerial_perspective(a, obs, down, 400000.0, colour, sun)
+    fine = aerial_perspective(a, obs, down, 400000.0, colour, sun, samples=1024)
+    vacuum = aerial_perspective(a, obs, down, 50000.0, colour, sun)
+    return (all(abs(coarse[c] - fine[c]) <= 1e-4 * fine[c] for c in range(3)), vacuum == colour)
+
+
 def below_ground_test():
     a = atmosphere()
     sun, d, colour = unit((1.0, 0.0, 0.5)), (1.0, 0.0, 0.0), (0.2, 0.4, 0.1)
@@ -1170,6 +1191,8 @@ TABLE = (
     ("fog march test", "fog_march_test()", "(True, True, True)"),
     ("aerial below ground", "tuple(round(x, 6) for x in aerial_perspective(atmosphere(), (0.0, 0.0, 6359998.2), (1.0, 0.0, 0.0), 10000.0, (0.2, 0.4, 0.1), unit((1.0, 0.0, 0.5))))", "(0.194808, 0.358261, 0.151398)"),
     ("below ground test", "below_ground_test()", "(True, True, True)"),
+    ("aerial from orbit", "tuple(round(x, 6) for x in aerial_perspective(atmosphere(), (0.0, 0.0, 6760000.0), (0.0, 0.0, -1.0), 400000.0, (0.2, 0.3, 0.4), unit((0.3, 0.2, 0.9))))", "(0.196691, 0.286413, 0.399554)"),
+    ("orbit segment test", "orbit_segment_test()", "(True, True)"),
     ("limb", "tuple(round(c, 6) for c in limb_direction(atmosphere(), (0.0, 0.0, 6760000.0)))", "(0.940828, 0.0, -0.338883)"),
     ("seek test", "seek_test()", "(True, True)"),
 )

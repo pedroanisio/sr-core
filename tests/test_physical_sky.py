@@ -691,5 +691,30 @@ def test_the_draft_walks_surface_segments_below_the_sphere(draft):
                    "an altitude below 0 along it reads as 0", "the sample is lifted to the sphere",
                    "never refused (`below_ground_test`)", "The same lift applies to rule 9's observer and to rule 11's L_h",
                    "**Refusing segments below the sphere.**", "7. **Observers below sea level.**",
-                   "a companion with the default camera and no `physics` element"):
+                   "a companion with no `physics` element and the default camera's position and lens"):
+        assert phrase in text, phrase
+
+
+def test_surface_segments_from_orbit_converge_with_the_default_samples():
+    a = ps.atmosphere()
+    obs = (0.0, 0.0, a["planet_radius"] + 400000.0)
+    sun, colour, down = ps.unit((0.3, 0.2, 0.9)), (0.2, 0.3, 0.4), (0.0, 0.0, -1.0)
+    coarse = ps.aerial_perspective(a, obs, down, 400000.0, colour, sun)
+    fine = ps.aerial_perspective(a, obs, down, 400000.0, colour, sun, samples=1024)
+    assert all(_close(c, f, 1e-4 * f) for c, f in zip(coarse, fine)) and coarse != colour
+    assert ps.aerial_perspective(a, obs, down, 50000.0, colour, sun) == colour                # wholly in vacuum
+    assert ps.aerial_perspective(a, obs, (0.0, 0.0, 1.0), 400000.0, colour, sun) == colour     # away from the planet
+    # A rising segment from the ground clusters toward the ground end, a falling one toward the far end.
+    g = ps._ground_observer(a)
+    up = ps.aerial_perspective(a, g, ps.unit((1.0, 0.0, 1.0)), 50000.0, colour, sun)
+    up_fine = ps.aerial_perspective(a, g, ps.unit((1.0, 0.0, 1.0)), 50000.0, colour, sun, samples=1024)
+    assert all(_close(c, f, 1e-4 * f) for c, f in zip(up, up_fine))
+    assert ps.orbit_segment_test() == (True, True)
+
+
+def test_the_draft_states_where_a_surface_segment_samples_start(draft):
+    text = re.sub(r"\n +", " ", draft)
+    for phrase in ("The segment's samples start where it enters the atmosphere", "cluster toward its lower end",
+                   "`orbit_segment_test`: 16 samples within 10⁻⁴ of 1,024",
+                   "the default camera's position and lens, its `far` raised past a grey wall at y = 330, 500,000 px (5 km) away"):
         assert phrase in text, phrase
