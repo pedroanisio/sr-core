@@ -184,7 +184,7 @@ def documents(catalogue=None):
     synth = synthetic_catalogues()
     scale_src, colour_src = "assets/stars-scale.csv.gz", "assets/stars-colour.csv.gz"
     scale_digest, colour_digest = _digest(synth[scale_src]), _digest(synth[colour_src])
-    sky = f' sky="physical" latitude="0" longitude="0" moon="false"'
+    sky = f' sky="physical" environmentVisible="true" latitude="0" longitude="0" moon="false"'   # the default draws no sky
     docs = {
         "stars-sirius": _doc("stars-sirius", "stars-sirius", d["stars-sirius"],
                              f' limitMagnitude="-1" magnitudeZero="{SIRIUS_ZERO}"'),

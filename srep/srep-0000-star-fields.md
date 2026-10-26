@@ -260,7 +260,9 @@ synthetic catalogues under `assets/`) and measures an engine's render of each (`
 compares two settings has a companion document named with a suffix: `stars-scale-4px` (`pointSize="4"`),
 `stars-motion-2100` (`epoch="2100"`), `stars-labels-ori`, `stars-labels-umi` and `stars-labels-limit3`
 (`limitMagnitude="3"`, `magnitudeZero="0.001"` so the stars stay below the label grey), `stars-boundaries-2100`
-and `stars-boundaries-none`, `stars-sky-noon` and `stars-sky-none`. The camera is the engine's perspective
+and `stars-boundaries-none`, `stars-sky-noon` and `stars-sky-none`. The sky documents set
+`environmentVisible="true"`: its default, false, lights the field without drawing the sky behind it (SR-86),
+so a noon frame without it shows the stars dimmed and no sky to dim them. The camera is the engine's perspective
 camera aimed by yaw and pitch at a direction (`aim`), which `project` maps back to continuous frame
 coordinates (a pixel i covers [i, i + 1), so a direction on the axis lands at (W/2, H/2) and the measured
 centroid is the luminance-weighted mean pixel index plus 0.5); a label is the bounding box of the grey ink in
@@ -341,3 +343,5 @@ SR-86, since c6eb55c refuses `sky="physical"`.
   Sirius at the default `magnitudeZero`; the space case's clock corrected to J2100.0 (Julian day 2488070.0; it
   read midnight, half a day short, which showed as one half-float ulp in four pixels once the output kept
   full float and which the 16-bit output had hidden).
+- 2026-10-26: the sky documents set `environmentVisible="true"` (SR-86: the attribute defaults to false and
+  draws no sky behind the field, so `stars-sky-noon` measured no sky at c6eb55c).

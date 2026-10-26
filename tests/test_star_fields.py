@@ -519,6 +519,8 @@ def test_the_kit_writes_the_cases_the_draft_names(tmp_path, catalogue):
     assert docs["stars-boundaries-none"].find("lights/light/starField").get("constellations") == "none"
     assert docs["stars-sky"].find("lights/light").get("sky") == "physical" and docs["stars-sky-none"].find("lights/light").get("sky") is None
     assert docs["stars-sky-noon"].find("lights/light").get("date") == sk.SKY_NOON
+    assert all(docs[k].find("lights/light").get("environmentVisible") == "true" for k in ("stars-sky", "stars-sky-noon"))
+    assert docs["stars-sky-none"].find("lights/light").get("environmentVisible") is None
     assert docs["stars-seek"].find("space").get("rate") == f"{sk.SEEK_RATE:.0f}" and docs["stars-seek"].find("project").get("fps") == "24"
     assert sk.synthetic_catalogues() == sk.synthetic_catalogues()       # deterministic bytes
     with gzip.open(os.path.join(tmp_path, "assets", "stars-colour.csv.gz"), "rt") as f:
@@ -710,6 +712,7 @@ def test_the_kit_runs_an_engine_and_reports_every_case(tmp_path, catalogue):
 def test_the_draft_describes_the_kit(draft):
     text = re.sub(r"\n +", " ", draft)
     for phrase in ("`conformance/tools/star_fields_kit.py`", "`scene-render encode`", "exr-sequence", "clipped them at 1.0", "before 2efa4fa",
+                   '`environmentVisible="true"`', "draws no sky",
                    "`stars-scale-4px`", "`stars-motion-2100`", "`stars-labels-limit3`", "`stars-boundaries-none`",
                    "`stars-sky-noon`", "`stars-sky-none`", "yaw and pitch", "`aim`", "`project`", "2efa4fa", "SR-86",
                    "J2100.0", "Julian day 2488070.0", "half a day short"):
