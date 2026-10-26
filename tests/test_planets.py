@@ -1025,7 +1025,7 @@ def test_the_draft_describes_the_kit(draft):  # noqa: E501
 
 
 KIT_ROW = re.compile(r"^\| `srep-<n>-planet-([a-z]+)\.xml` \| (?:[^|]|\\\|)* \| ([^|]*) \|$")
-ENGINE_COMMIT = "ca2c8d0"
+ENGINE_COMMIT = "e107893"
 
 
 def test_the_draft_records_the_kit_cases_measured_so_far(draft):
@@ -1038,5 +1038,5 @@ def test_the_draft_records_the_kit_cases_measured_so_far(draft):
             assert status.endswith("; pass") or status.endswith("; fail"), (name, status)
         else:
             assert status == "to be measured", (name, status)
-    assert measured == {"limb", "terminator", "phase", "texture", "night", "sun", "clouds", "rings", "seek"}
+    assert measured == set(name[len("planet-"):] for name in kit.NAMES)   # every row measured
     assert all(rows[name].endswith("; pass") for name in measured)
