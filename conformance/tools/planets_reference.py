@@ -468,17 +468,21 @@ def solar_disc(mu):
 # ------------------------------------------------------------------------------------ rule 4: clouds
 
 
-def cloud_shadow_point(p, sun, radius, height):
-    """The point of the cloud shell (radius * (1 + height)) whose texel shadows the surface point `p`, or None
-    when the Sun is below p's horizon."""
+def cloud_shadow_point(p, sun, radius, height, flattening=0.0):
+    """The point of the cloud shell (the body's spheroid scaled by 1 + height) whose texel shadows the surface
+    point `p`, or None when the Sun is below p's horizon."""
     if not (height > 0.0):
         raise PlanetError("the cloud height is a positive fraction of the radius")
+    if not (0.0 <= flattening < 1.0):
+        raise PlanetError("the flattening is in [0, 1)")
     s = unit(sun)
-    if not lit(p, s):
+    if dot(surface_normal(radius, flattening, p), s) <= 0.0:
         return None
     shell = radius * (1.0 + height)
-    b = dot(p, s)
-    t = -b + math.sqrt(b * b - dot(p, p) + shell * shell)
+    k = 1.0 / (1.0 - flattening)                      # stretch the pole so the shell is a sphere
+    q, d = (p[0], p[1], p[2] * k), (s[0], s[1], s[2] * k)
+    a, b, c = dot(d, d), dot(q, d), dot(q, q) - shell * shell
+    t = (-b + math.sqrt(b * b - a * c)) / a
     return add(p, mul(s, t))
 
 
@@ -651,6 +655,12 @@ TABLE = [
     ("cloud shadow shift at 60 N, sun over the pole (deg)",
      "math.degrees(angle(surface_point(EARTH, 0.0, 0.0, 60.0), cloud_shadow_point(surface_point(EARTH, 0.0, 0.0, 60.0), (0.0, 0.0, 1.0), EARTH, 0.004)))",
      "0.131704"),
+    ("cloud shadow shift at 60 N on the Earth's spheroid (deg)",
+     "math.degrees(angle(surface_point(EARTH, flattening(399), 0.0, 60.0), cloud_shadow_point(surface_point(EARTH, flattening(399), 0.0, 60.0), (0.0, 0.0, 1.0), EARTH, 0.004, flattening(399))))",
+     "0.132368"),
+    ("cloud shell height over the pole of the spheroid (km)",
+     "rounded(cloud_shadow_point(surface_point(EARTH, flattening(399), 0.0, 90.0), (0.0, 0.0, 1.0), EARTH, 0.004, flattening(399))[2] - RADII[399][1], 4)",
+     "25.427"),
     ("cloud drift after 100 s at 1.5 deg/s", "cloud_longitude(100.0, 1.5)", "150"),
     ("ring sample between the first two texels", "ring_sample(STRIP, 1.239 + (2.269 - 1.239) / 6.0, 1.239, 2.269)", "(0.7, 0.675, 0.55, 0.55)"),
     ("Saturn's shadow on the rings as a sphere, semi-axes over the radius", "tuple(x / SATURN for x in planet_shadow_on_rings(SATURN_SUN, SATURN))", "(2.22559, 1)"),

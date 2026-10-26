@@ -278,6 +278,31 @@ def test_cloud_shell_and_shadow_parallax():
         pl.cloud_shadow_point(top, s, EARTH, 0.0)
 
 
+def test_the_cloud_shell_is_the_spheroid_scaled():
+    # the shell is the body's spheroid scaled by 1 + height: over the pole it is height x the polar radius up,
+    # not the equatorial sphere's a (1 + h) - c (47 km on the Earth)
+    f = pl.flattening(399)
+    s = (0.0, 0.0, 1.0)
+    pole = pl.surface_point(EARTH, f, 0.0, 90.0)
+    q = pl.cloud_shadow_point(pole, s, EARTH, 0.004, f)
+    assert _close(q[2] - pole[2], 0.004 * pl.RADII[399][1], 1e-6)
+    assert _close(q[2] - pole[2], 25.427, 1e-3) and EARTH * 1.004 - pl.RADII[399][1] > 46.0
+    # a lit point's shadow texel lies on the scaled spheroid, along the sun's direction from the point
+    p = pl.surface_point(EARTH, f, 30.0, 60.0)
+    q = pl.cloud_shadow_point(p, s, EARTH, 0.004, f)
+    shell = EARTH * 1.004
+    assert _close(q[0] ** 2 + q[1] ** 2 + (q[2] / (1.0 - f)) ** 2, shell * shell, 1e-6 * shell * shell)
+    assert _close(pl.unit(pl.sub(q, p)), s, 1e-12)
+    # a sphere (flattening 0) is the old function
+    assert pl.cloud_shadow_point(p, s, EARTH, 0.004, 0.0) == pl.cloud_shadow_point(p, s, EARTH, 0.004)
+    # the day side is judged by the geodetic normal: a point at the equator with the sun just over its horizon
+    sun = pl.unit((math.cos(math.radians(89.9)), 0.0, math.sin(math.radians(89.9))))
+    assert pl.cloud_shadow_point(pl.surface_point(EARTH, f, 0.0, 0.0), sun, EARTH, 0.004, f) is not None
+    assert pl.cloud_shadow_point(pl.surface_point(EARTH, f, 0.0, -0.2), sun, EARTH, 0.004, f) is None
+    with pytest.raises(pl.PlanetError):
+        pl.cloud_shadow_point(p, s, EARTH, 0.004, 1.0)
+
+
 # ------------------------------------------------------------------------------------ rule 5: rings
 
 
@@ -532,6 +557,10 @@ np = pytest.importorskip("numpy")
 Image = pytest.importorskip("PIL.Image")
 
 
+def _dist(a, b):
+    return math.hypot(a[0] - b[0], a[1] - b[1])
+
+
 def _kit_rows(draft):
     return [m.group(1) for m in (re.match(r"^\| `srep-<n>-(planet-[a-z]+)\.xml` \|", line)
                                  for line in draft.splitlines()) if m]
@@ -605,7 +634,7 @@ def test_the_kit_writes_the_cases_the_draft_names(draft, tmp_path):
     cloud = np.asarray(Image.open(tmp_path / "assets" / "planet-cloud.png"))
     col, row, lon, lat = kit.cloud_texel()
     assert cloud.shape == (2048, 4096, 4) and cloud.sum() == 4 * 255 and (cloud[row, col] == 255).all()
-    assert (col, row) == (2048, 341) and _close((lon, lat), (0.0439453125, 59.98535156), 1e-6)
+    assert (col, row) == (2048, 512) and _close((lon, lat), (0.0439453125, 44.9560546875), 1e-9)
     strip = np.asarray(Image.open(tmp_path / "assets" / "planet-strip.png"))
     assert strip.shape == (1, 4, 4) and strip[0, 1].tolist() == [204, 191, 153, 230]
     assert _close(kit.QSTRIP[1], (204 / 255, 191 / 255, 153 / 255, 230 / 255), 1e-12)
@@ -643,7 +672,8 @@ def test_the_kit_expectations_come_from_the_reference():
     assert [m["mu"] for m in s["mus"]] == [0.5, 0.25, 0.1] and s["mus"][2]["factor"] == pl.solar_disc(0.1)
     assert _close(s["limb_column"], 620.0, 1e-9) and 612 < s["mus"][2]["column"] < 613
     c = e["planet-clouds"]
-    assert _close(c["shift_deg"], 0.1317, 2e-3)
+    assert _close(c["shift_deg"], math.degrees(kit.CLOUD_HEIGHT * math.tan(math.radians(45.0))), 2e-3)   # 0.229 degrees
+    assert _dist(c["shadow_at"], c["cloud_at"]) > 20.0     # clear of the cloud's bilinear fringe (a texel is 10 px tall)
     assert _close(pl.cloud_shadow_point(c["shadow"], kit.POLE_SUN, pl.EARTH, kit.CLOUD_HEIGHT), c["shell"], 1e-3)
     assert c["shadow"][2] < c["ground"][2] and c["shadow_at"][1] > c["cloud_at"][1]   # toward the equator: down the frame
     r = e["planet-rings"]
@@ -835,6 +865,7 @@ def test_the_kit_measures_each_case(synthetic):
     assert sun["worst_rel"] <= 0.01
     clouds = kit.measure("planet-clouds", frames, exp)
     assert abs(clouds["shift_deg"] - exp["planet-clouds"]["shift_deg"]) <= 0.01 and clouds["toward_equator"]
+    assert clouds["shadow_off_px"] <= 0.5 and clouds["cloud_off_px"] <= 0.5
     rings = kit.measure("planet-rings", frames, exp)
     assert rings["worst_edge_off_px"] <= kit.RING_EDGE_TOL_PX and abs(rings["mean_edge_off_px"]) <= 0.3
     assert rings["light_rel_off"] <= 1e-6
@@ -934,12 +965,13 @@ def test_the_draft_describes_the_kit(draft):  # noqa: E501
                    "`limb_pixel_extents`", "`isophote_points`", "`pixel_surface_point`", "36 sectors",
                    "orthographic", "`QSTRIP`", "spheroid", "`segments=\"256\"`", "`specular=\"0\"`",
                    "frame 600 rendered alone", "with flattening f the\n   meridian ellipse", "no night side",
-                   "whole surface is night", '`twilight="0"`', "projection's axis"):
+                   "whole surface is night", '`twilight="0"`', "projection's axis",
+                   "spheroid scaled by 1 + `cloudHeight`", "white diffuse surface", "uniform scale"):
         assert phrase in draft, phrase
 
 
 KIT_ROW = re.compile(r"^\| `srep-<n>-planet-([a-z]+)\.xml` \| (?:[^|]|\\\|)* \| ([^|]*) \|$")
-ENGINE_COMMIT = "cde7262"
+ENGINE_COMMIT = "e21a482"
 
 
 def test_the_draft_records_the_kit_cases_measured_so_far(draft):
@@ -952,4 +984,4 @@ def test_the_draft_records_the_kit_cases_measured_so_far(draft):
             assert status.endswith("; pass") or status.endswith("; fail"), (name, status)
         else:
             assert status == "to be measured", (name, status)
-    assert measured == {"limb", "night", "sun"} and all(rows[name].endswith("; pass") for name in measured)
+    assert measured == {"limb", "night", "sun", "clouds"} and all(rows[name].endswith("; pass") for name in measured)

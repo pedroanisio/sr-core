@@ -72,7 +72,8 @@ MARK = 4                              # texels; a mark is centred on a texel cor
 MARKS = {"red": (0.0, 0.0), "green": (90.0, 0.0), "blue": (45.0, 45.0)}   # channel: (longitude, latitude)
 TEXTURE_EYE_LONGITUDE = 45.0          # the camera over the meridian between the equatorial marks
 CLOUD_TEXTURE = (4096, 2048)
-CLOUD_LATITUDE = 60.0                 # the one-texel cloud's texel holds this latitude on the prime meridian
+CLOUD_LATITUDE = 45.0                 # the one-texel cloud's texel holds this latitude on the prime meridian: the shadow
+                                      # (0.23 degrees, 73 px toward the equator) clears the cloud's bilinear fringe
 CLOUD_HEIGHT = 0.004
 CLOUD_GROUND = "#808080FF"            # the ground under the cloud is grey, the cloud white: the shadow and the cloud stand out
 TWILIGHT = 6.0
@@ -691,10 +692,13 @@ def measure(name, frames, exp):
         toward_equator = p is not None and p[2] < e["ground"][2]
         shift_off = abs(shift - e["shift_deg"])
         cloud_off = _dist(cloud_at, e["cloud_at"]) if not math.isnan(cloud_at[0]) else math.inf
-        return {"pass": shift_off <= CLOUD_TOL_DEG and toward_equator and cloud_off <= CLOUD_POSITION_TOL_PX,
+        shadow_off = _dist(shadow_at, e["shadow_at"]) if not math.isnan(shadow_at[0]) else math.inf
+        return {"pass": shift_off <= CLOUD_TOL_DEG and toward_equator and cloud_off <= CLOUD_POSITION_TOL_PX
+                and shadow_off <= CLOUD_POSITION_TOL_PX,
                 "shift_deg": round(shift, 4), "expected_shift_deg": round(e["shift_deg"], 4),
                 "toward_equator": toward_equator, "shadow_at": _r(shadow_at, 2),
                 "expected_shadow_at": _r(e["shadow_at"], 2), "cloud_off_px": round(cloud_off, 3),
+                "shadow_off_px": round(shadow_off, 3),
                 "shadow_pixels": int((dark > 0).sum()), "cloud_pixels": int((bright > 0).sum())}
     if name == "planet-rings":
         lum = sk.luminance(frames["planet-rings"])
