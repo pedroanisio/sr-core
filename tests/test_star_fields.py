@@ -512,6 +512,7 @@ def test_the_kit_writes_the_cases_the_draft_names(tmp_path, catalogue):
     assert docs["stars-scale-4px"].find("lights/light/starField").get("pointSize") == "4"
     assert docs["stars-motion-2100"].find("lights/light/starField").get("epoch") == "2100"
     assert docs["stars-space"].find("space").get("timeScale") == "tt" and docs["stars-space"].find("space").get("epoch") == sk.SPACE_EPOCH_TT
+    assert sk.SPACE_EPOCH_TT == "2488070.0" and float(sk.SPACE_EPOCH_TT) == 2451545.0 + sk.MOTION_YEARS * 365.25  # J2100.0, noon
     assert docs["stars-space"].find("lights/light/starField").get("epoch") is None
     assert all(docs[k].find("lights/light/starField").get("constellations") == "labels" for k in sk.LABELS)
     assert docs["stars-labels-limit3"].find("lights/light/starField").get("limitMagnitude") == "3"
@@ -636,6 +637,17 @@ def test_the_kit_measures_each_case(catalogue):
     bad["stars-motion-2100"] = np.roll(frames["stars-motion-2100"], 1, axis=1)
     assert not sk.measure("stars-motion", bad, exp)["pass"]
     assert not sk.measure("stars-space", bad, exp)["pass"]
+    rounded = dict(frames)                                   # one half-float ulp off: not identical, reported
+    rounded["stars-space"] = frames["stars-motion-2100"] * (1.0 + 2.0 ** -11)
+    r = sk.measure("stars-space", rounded, exp)
+    assert not r["pass"] and not r["identical"] and r["centroid_off_px"] == 0.0 and 0 < r["max_abs_diff"] < 1e-5, r
+    shifted = dict(frames)                                   # HR 4550 a twentieth of a pixel off: the centroid says so
+    shifted["stars-space"] = np.zeros_like(frames["stars-motion-2100"])
+    at = exp["stars-motion"]["at"][sk.MOTION_YEARS]
+    _splat(shifted["stars-space"], (at[0] + 0.05, at[1]), (0.002,) * 3)
+    _splat(shifted["stars-space"], (100.0, 100.0), (0.001,) * 3)
+    r = sk.measure("stars-space", shifted, exp)
+    assert not r["pass"] and abs(r["centroid_off_px"] - 0.05) < 0.005, r
     bad["stars-labels-ori"] = np.roll(frames["stars-labels-ori"], 40, axis=0)
     assert not sk.measure("stars-labels", bad, exp)["pass"]
     bad["stars-boundaries-none"] = frames["stars-boundaries"]
@@ -697,14 +709,15 @@ def test_the_kit_runs_an_engine_and_reports_every_case(tmp_path, catalogue):
 
 def test_the_draft_describes_the_kit(draft):
     text = re.sub(r"\n +", " ", draft)
-    for phrase in ("`conformance/tools/star_fields_kit.py`", "`scene-render encode`", "exr-sequence", "clips at 1.0",
+    for phrase in ("`conformance/tools/star_fields_kit.py`", "`scene-render encode`", "exr-sequence", "clipped them at 1.0", "before 2efa4fa",
                    "`stars-scale-4px`", "`stars-motion-2100`", "`stars-labels-limit3`", "`stars-boundaries-none`",
-                   "`stars-sky-noon`", "`stars-sky-none`", "yaw and pitch", "`aim`", "`project`", "ced8ff0", "SR-86"):
+                   "`stars-sky-noon`", "`stars-sky-none`", "yaw and pitch", "`aim`", "`project`", "2efa4fa", "SR-86",
+                   "J2100.0", "Julian day 2488070.0", "half a day short"):
         assert phrase in text, phrase
 
 
 KIT_ROW = re.compile(r"^\| `srep-<n>-stars-([a-z]+)\.xml` \| (?:[^|]|\\\|)* \| ([^|]*) \|$")
-ENGINE_COMMIT = "ced8ff0"
+ENGINE_COMMIT = "c6eb55c"
 
 
 def _kit_rows(draft):
@@ -721,4 +734,5 @@ def test_the_draft_records_every_kit_case_measured_on_one_engine_commit(draft):
             assert "S06" in status and "SR-86" in status and status.endswith("; not measured"), status
         else:
             assert status.endswith("; pass"), (name, status)
-    assert "0.7671" in rows["sirius"] and "100.46" in rows["scale"] and "31.40" in rows["motion"] and "0.017°" in rows["labels"]
+    assert "3.8359" in rows["sirius"] and "100.04" in rows["scale"] and "31.40" in rows["motion"] and "0.017°" in rows["labels"]
+    assert rows["space"].startswith(prefix + "pixel-identical")

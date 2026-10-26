@@ -5,9 +5,9 @@ the SREP has a number. `--write DIR` writes them now as srep-0000-stars-*.xml, w
 synthetic catalogues under DIR/assets/; `--engine BIN` writes them, renders each with scene-render and measures
 the frames. A case that compares two settings (point size, epoch, magnitude limit, a sky or none) has a companion
 document named with a suffix. Radiance is read from linear EXR frames (`scene-render encode`, the document's
-exr-sequence output); the seek case compares PNG frames of `scene-render render`. Every expectation comes
-from star_fields_reference.py (and physical_sky_reference.py for the transmittance toward a star), none is
-written here as a number.
+exr-sequence output, which the engine clipped at 1.0 before 2efa4fa); the seek case compares PNG frames of
+`scene-render render`. Every expectation comes from star_fields_reference.py (and physical_sky_reference.py for
+the transmittance toward a star), none is written here as a number.
 """
 import argparse
 import gzip
@@ -54,14 +54,14 @@ SIRIUS, GROOMBRIDGE, VEGA = 2491, 4550, 7001
 LABELS = {"stars-labels": "CMa", "stars-labels-ori": "Ori", "stars-labels-umi": "UMi", "stars-labels-limit3": "CMa"}
 ORION_ARC = (81.875, -11.0)          # the middle of Orion's southern arc at 1875, the draft's boundary row
 MOTION_YEARS = 100.0                 # epoch="2100" against epoch="2000"
-SPACE_EPOCH_TT = "2488069.5"         # 2100-01-01T00:00:00 TT as a Julian day: J2000 + 100 Julian years
+SPACE_EPOCH_TT = "2488070.0"         # J2100.0 = 2100-01-01T12:00:00 TT as a Julian day: J2000.0 + 36525 days
 SEEK_FRAMES = 600                    # a century of proper motion over 600 frames at 24 fps
 SEEK_RATE = MOTION_YEARS * sf.JULIAN_YEAR_S / (SEEK_FRAMES / 24.0)
 SKY_NIGHT = "2026-06-21T00:00:00Z"   # the sun 67 degrees below the horizon at latitude 0, longitude 0
 SKY_NOON = "2026-06-21T12:00:00Z"    # the sun 67 degrees up
 SKY_ZERO = 1e-4                      # magnitudeZero of the sky case: a star far below the noon sky
-SIRIUS_ZERO = 0.2                    # magnitudeZero of the Sirius case: its blue channel stays below 1 (the engine's
-                                     # exr-sequence output clips at 1.0)
+SIRIUS_ZERO = 1.0                    # magnitudeZero of the Sirius case: the default, so its blue channel peaks above 1
+                                     # (the engine's exr-sequence output clipped at 1.0 before 2efa4fa)
 LABEL_ZERO = 1e-3                    # magnitudeZero of the limit-3 label frame: stars far below the label grey
 SCALE_MAGNITUDES = (0.0, 5.0)
 COLOUR_BV = (0.0, 0.65, 1.85)
@@ -416,6 +416,15 @@ def identical(a, b):
     return a.shape == b.shape and bool(np.array_equal(a, b))
 
 
+def window_centroid(rgb, centre, half=WINDOW):
+    """The luminance-weighted centre of the lit pixels in the (2 half + 1)-pixel square about a frame position."""
+    h, w, _ = rgb.shape
+    cx, cy = int(math.floor(centre[0])), int(math.floor(centre[1]))
+    x0, y0 = max(cx - half, 0), max(cy - half, 0)
+    x, y = centroid(rgb[y0:min(cy + half + 1, h), x0:min(cx + half + 1, w)])
+    return (x + x0, y + y0)
+
+
 def psnr(a, b, peak):
     mse = float(np.mean((a - b) ** 2))
     return math.inf if mse == 0.0 else 10.0 * math.log10(peak ** 2 / mse)
@@ -488,7 +497,10 @@ def measure(name, frames, exp):
     if name == "stars-space":
         a, b = frames["stars-space"], frames["stars-motion-2100"]
         same = identical(a, b)
-        return {"pass": same, "identical": same, "psnr": round(psnr(a, b, 1.0), 2)}
+        at = exp["stars-motion"]["at"][MOTION_YEARS]
+        off = math.dist(window_centroid(a, at), window_centroid(b, at))
+        return {"pass": same, "identical": same, "max_abs_diff": float(np.abs(a - b).max()),
+                "centroid_off_px": round(off, 3), "psnr": round(psnr(a, b, 1.0), 2)}
     if name == "stars-labels":
         offs = {}
         for key in ("stars-labels", "stars-labels-ori", "stars-labels-umi"):

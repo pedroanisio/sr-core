@@ -265,24 +265,25 @@ camera aimed by yaw and pitch at a direction (`aim`), which `project` maps back 
 coordinates (a pixel i covers [i, i + 1), so a direction on the axis lands at (W/2, H/2) and the measured
 centroid is the luminance-weighted mean pixel index plus 0.5); a label is the bounding box of the grey ink in
 a frame whose field is empty (`limitMagnitude="-5"`) or far dimmer than the ink. Radiance is read from
-linear EXR frames (`scene-render encode`, the document's `exr-sequence` output), which the engine clips at 1.0
-and quantises to 16 bits, so every case keeps its pixel values under 1 (Sirius at `magnitudeZero="0.2"`); the
-seek case compares the PNG frames of `scene-render render`. Every expectation comes from the reference module
-(the transmittance toward a star from the physical-sky draft's reference). Status: run on scene-render
-feat/sr-67-fields ced8ff0 (0.8.0, llvmpipe; SR-88, which vendors the draft as of 5e6f46a); the sky case waits
-for the physical-sky draft's engine card SR-86, since ced8ff0 refuses `sky="physical"`.
+linear EXR frames (`scene-render encode`, the document's `exr-sequence` output; the engine clipped them at 1.0
+before 2efa4fa, which sends an opaque sequence to FFmpeg as three float planes, so Sirius renders at the
+default `magnitudeZero` and its blue channel peaks above 1); the seek case compares the PNG frames of
+`scene-render render`. Every expectation comes from the reference module (the transmittance toward a star from
+the physical-sky draft's reference). Status: run on scene-render feat/sr-67-fields c6eb55c (0.8.0, llvmpipe;
+SR-88, which vendors the draft as of 5e6f46a); the sky case waits for the physical-sky draft's engine card
+SR-86, since c6eb55c refuses `sky="physical"`.
 
 | Case | Checks | Status |
 |---|---|---|
-| `srep-<n>-stars-sirius.xml` | the fixture at `limitMagnitude="-1"` with a camera on Sirius' scene direction: one point at the frame's centre within 0.5 pixel, its summed radiance within 1 % of `flux(-1.46)` × `magnitudeZero` | measured on scene-render feat/sr-67-fields ced8ff0 (0.8.0, llvmpipe): centre (160.0, 120.0), 0.0 px off; summed radiance 0.7671 against 0.7674 (0.04 %); pass |
-| `srep-<n>-stars-scale.xml` | two synthetic catalogue stars of V 0 and V 5 side by side: the summed radiances are in the ratio 100 ± 1 % and independent of `pointSize` | measured on scene-render feat/sr-67-fields ced8ff0 (0.8.0, llvmpipe): ratio 100.46 at `pointSize` 1.5 and 100.15 at 4; the two sizes' sums 0.33 % apart; pass |
-| `srep-<n>-stars-colour.xml` | stars of B−V 0.00, 0.65 and 1.85: the linear pixel colours, normalised to Y = 1, are within 2 % per channel of `colour(temperature(bv))` | measured on scene-render feat/sr-67-fields ced8ff0 (0.8.0, llvmpipe): the three normalised colours within 0.1 % per channel of `colour(temperature(bv))`; pass |
-| `srep-<n>-stars-motion.xml` | HR 4550 at `epoch="2100"` against `epoch="2000"`: the point moves by 0.196° of the camera's field within 0.5 pixel | measured on scene-render feat/sr-67-fields ced8ff0 (0.8.0, llvmpipe): HR 4550 0.044 px off its predicted positions; the shift 31.40 px against 31.36 (0.1961°); pass |
-| `srep-<n>-stars-space.xml` | the same field under a `space` element whose epoch is 2100-01-01 TT: identical to the previous case's second frame | measured on scene-render feat/sr-67-fields ced8ff0 (0.8.0, llvmpipe): pixel-identical to the `epoch="2100"` frame; pass |
-| `srep-<n>-stars-labels.xml` | `constellations="labels"`: the labels `CMa`, `Ori`, `UMi` are drawn, each centred within 1° of `label_centroid` at the frame's epoch, and at the same place at `limitMagnitude="3"` | measured on scene-render feat/sr-67-fields ced8ff0 (0.8.0, llvmpipe): `CMa` 0.000°, `Ori` 0.017°, `UMi` 0.000° off `label_centroid`; the limit-3 frame's label 0.0 px off; pass |
-| `srep-<n>-stars-boundaries.xml` | `constellations="boundaries"` with the camera on `boundary_direction(81.875, -11.0)`, the middle of Orion's southern arc, at `epoch="2000"` and at `epoch="2100"`: a line pixel within 1 pixel of the frame's centre in both frames, and none there with `constellations="none"` | measured on scene-render feat/sr-67-fields ced8ff0 (0.8.0, llvmpipe): a line pixel at the centre at 2000 and at 2100, no ink with `none`; pass |
-| `srep-<n>-stars-sky.xml` | the field under `sky="physical"` at noon and at midnight: no star is visible at noon, the field at midnight matches the field without a sky to 5 % after the transmittance toward each star | on scene-render feat/sr-67-fields ced8ff0 (0.8.0, llvmpipe) the documents are refused with S06 (`sky="physical"` is not one of none, gradient): waits for the physical-sky draft's engine card SR-86; not measured |
-| `srep-<n>-stars-seek.xml` | a century of proper motion over 600 frames: frame 600 rendered alone equals the frame played from 0 (SREP 14) | measured on scene-render feat/sr-67-fields ced8ff0 (0.8.0, llvmpipe): frame 600 alone pixel-identical to frame 600 played from 0; pass |
+| `srep-<n>-stars-sirius.xml` | the fixture at `limitMagnitude="-1"` with a camera on Sirius' scene direction: one point at the frame's centre within 0.5 pixel, its summed radiance within 1 % of `flux(-1.46)` × `magnitudeZero` | measured on scene-render feat/sr-67-fields c6eb55c (0.8.0, llvmpipe): centre (160.0, 120.0), 0.0 px off; summed radiance 3.8359 against 3.8371 (0.03 %); pass |
+| `srep-<n>-stars-scale.xml` | two synthetic catalogue stars of V 0 and V 5 side by side: the summed radiances are in the ratio 100 ± 1 % and independent of `pointSize` | measured on scene-render feat/sr-67-fields c6eb55c (0.8.0, llvmpipe): ratio 100.04 at `pointSize` 1.5 and 100.02 at 4; the two sizes' sums 0.04 % apart; pass |
+| `srep-<n>-stars-colour.xml` | stars of B−V 0.00, 0.65 and 1.85: the linear pixel colours, normalised to Y = 1, are within 2 % per channel of `colour(temperature(bv))` | measured on scene-render feat/sr-67-fields c6eb55c (0.8.0, llvmpipe): the three normalised colours within 0.02 % per channel of `colour(temperature(bv))`; pass |
+| `srep-<n>-stars-motion.xml` | HR 4550 at `epoch="2100"` against `epoch="2000"`: the point moves by 0.196° of the camera's field within 0.5 pixel | measured on scene-render feat/sr-67-fields c6eb55c (0.8.0, llvmpipe): HR 4550 0.045 px off its predicted positions; the shift 31.40 px against 31.36 (0.1961°); pass |
+| `srep-<n>-stars-space.xml` | the same field under a `space` element whose epoch is J2100.0 (2100-01-01T12:00 TT, Julian day 2488070.0): identical to the previous case's second frame | measured on scene-render feat/sr-67-fields c6eb55c (0.8.0, llvmpipe): pixel-identical to the `epoch="2100"` frame; pass |
+| `srep-<n>-stars-labels.xml` | `constellations="labels"`: the labels `CMa`, `Ori`, `UMi` are drawn, each centred within 1° of `label_centroid` at the frame's epoch, and at the same place at `limitMagnitude="3"` | measured on scene-render feat/sr-67-fields c6eb55c (0.8.0, llvmpipe): `CMa` 0.000°, `Ori` 0.017°, `UMi` 0.000° off `label_centroid`; the limit-3 frame's label 0.0 px off; pass |
+| `srep-<n>-stars-boundaries.xml` | `constellations="boundaries"` with the camera on `boundary_direction(81.875, -11.0)`, the middle of Orion's southern arc, at `epoch="2000"` and at `epoch="2100"`: a line pixel within 1 pixel of the frame's centre in both frames, and none there with `constellations="none"` | measured on scene-render feat/sr-67-fields c6eb55c (0.8.0, llvmpipe): a line pixel at the centre at 2000 and at 2100, no ink with `none`; pass |
+| `srep-<n>-stars-sky.xml` | the field under `sky="physical"` at noon and at midnight: no star is visible at noon, the field at midnight matches the field without a sky to 5 % after the transmittance toward each star | on scene-render feat/sr-67-fields c6eb55c (0.8.0, llvmpipe) the documents are refused with S06 (`sky="physical"` is not one of none, gradient): waits for the physical-sky draft's engine card SR-86; not measured |
+| `srep-<n>-stars-seek.xml` | a century of proper motion over 600 frames: frame 600 rendered alone equals the frame played from 0 (SREP 14) | measured on scene-render feat/sr-67-fields c6eb55c (0.8.0, llvmpipe): frame 600 alone pixel-identical to frame 600 played from 0; pass |
 
 ## Open issues
 
@@ -336,3 +337,7 @@ for the physical-sky draft's engine card SR-86, since ced8ff0 refuses `sky="phys
 - 2026-10-26: `conformance/tools/star_fields_kit.py` writes the nine cases (eighteen documents) and measures
   them; eight pass on scene-render feat/sr-67-fields ced8ff0 (SR-88), the sky case waits for SR-86; the
   labels and boundaries rows name their companions; the engine's exr-sequence output clips at 1.0 (reported).
+- 2026-10-26: re-measured on c6eb55c, where the engine's exr-sequence output no longer clips at 1.0 (2efa4fa):
+  Sirius at the default `magnitudeZero`; the space case's clock corrected to J2100.0 (Julian day 2488070.0; it
+  read midnight, half a day short, which showed as one half-float ulp in four pixels once the output kept
+  full float and which the 16-bit output had hidden).
