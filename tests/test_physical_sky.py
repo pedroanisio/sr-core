@@ -1065,3 +1065,17 @@ def test_the_draft_describes_the_kit(draft):
                    "one key per frame", "14:00 UTC", "strings are discrete", "1 % of its peak"):
         assert phrase in text, phrase
     assert "SREP 4's" not in text            # SREP 4 is semantic versioning, not animation
+
+
+KIT_ROW = re.compile(r"^\| `srep-<n>-sky-([a-z]+)\.xml` \| (?:[^|]|\\\|)* \| ([^|]*) \|$")
+ENGINE_COMMIT = "81a2b96"
+
+
+def test_the_draft_records_every_kit_case_measured_on_one_engine_commit(draft):
+    rows = {m.group(1): m.group(2) for m in (KIT_ROW.match(line) for line in draft.splitlines()) if m}
+    assert sorted(rows) == sorted(name[len("sky-"):] for name in pk.NAMES)
+    prefix = f"measured on scene-render feat/sr-67-fields {ENGINE_COMMIT} (0.8.0, llvmpipe): "
+    for name, status in rows.items():
+        assert status.startswith(prefix) and status.endswith("; pass"), (name, status)
+    assert "0.06 %" in rows["day"] and "0.019°" in rows["orbit"] and "0.495°" in rows["moon"] and "0.2158" in rows["aerial"]
+    assert f"Status: run on a release build of scene-render\nfeat/sr-67-fields {ENGINE_COMMIT}" in draft

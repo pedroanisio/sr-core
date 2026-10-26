@@ -720,7 +720,7 @@ def test_the_draft_describes_the_kit(draft):
 
 
 KIT_ROW = re.compile(r"^\| `srep-<n>-stars-([a-z]+)\.xml` \| (?:[^|]|\\\|)* \| ([^|]*) \|$")
-ENGINE_COMMIT = "c6eb55c"
+ENGINE_COMMIT = "81a2b96"
 
 
 def _kit_rows(draft):
@@ -732,10 +732,6 @@ def test_the_draft_records_every_kit_case_measured_on_one_engine_commit(draft):
     assert sorted(rows) == sorted(name[len("stars-"):] for name in sk.NAMES)
     prefix = f"measured on scene-render feat/sr-67-fields {ENGINE_COMMIT} (0.8.0, llvmpipe): "
     for name, status in rows.items():
-        assert status.startswith(prefix) or (name == "sky" and ENGINE_COMMIT in status), (name, status)
-        if name == "sky":
-            assert "S06" in status and "SR-86" in status and status.endswith("; not measured"), status
-        else:
-            assert status.endswith("; pass"), (name, status)
+        assert status.startswith(prefix) and status.endswith("; pass"), (name, status)
     assert "3.8359" in rows["sirius"] and "100.04" in rows["scale"] and "31.40" in rows["motion"] and "0.017°" in rows["labels"]
     assert rows["space"].startswith(prefix + "pixel-identical")
