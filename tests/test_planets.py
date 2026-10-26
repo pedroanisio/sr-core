@@ -541,7 +541,7 @@ def test_the_draft_states_the_rings_lighting_and_the_geodetic_texel(draft):
         assert phrase in rule5, phrase
     rule2 = " ".join(draft[draft.index("2. **Textures and the mesh.**"):draft.index("3. **Shading")].split())
     assert "`geodetic_latitude(p, f)`" in rule2 and "(1 − f)² √(x² + y²)" in rule2 and "Open issue 6" in rule2
-    assert "half the lit level" in draft
+    assert "crosses one half" in draft and "`planet-rings-lit`" in draft
 
 
 def test_the_draft_states_the_shells_irradiance(draft):
@@ -638,7 +638,7 @@ def test_the_kit_writes_the_cases_the_draft_names(draft, tmp_path):
     assert _kit_rows(draft) == kit.NAMES
     assert [k for keys in kit.DOCUMENTS.values() for k in keys] == list(kit.documents())
     paths = kit.write(str(tmp_path))
-    assert len(paths) == 16
+    assert len(paths) == 17
     docs = {k: open(p, encoding="utf-8").read() for k, p in paths.items()}
     for key, text in docs.items():
         assert os.path.basename(paths[key]) == f"srep-0000-{key}.xml"
@@ -664,6 +664,13 @@ def test_the_kit_writes_the_cases_the_draft_names(draft, tmp_path):
     assert 'fov="2"' in docs["planet-clouds"] and 'baseColor="#808080FF"' in docs["planet-clouds"]
     for key in kit.DOCUMENTS["planet-rings"]:
         assert 'body="699" ringMap="assets/planet-strip.png" ringInner="1.239" ringOuter="2.269"' in docs[key]
+    # the lit companion: the same view, the light's azimuth turned by 180 degrees, the planet black
+    assert 'baseColor="#000000FF"' in docs["planet-rings-lit"] and 'baseColor="#FFFFFFFF"' in docs["planet-rings"]
+    camera = re.search(r"<camera [^>]*/>", docs["planet-rings"]).group(0)
+    assert camera in docs["planet-rings-lit"]
+    light = re.compile(r'<light id="sun" type="directional" intensity="1" yaw="([^"]*)" pitch="([^"]*)"/>')
+    (yaw, pitch), (yaw_lit, pitch_lit) = (light.search(docs[k]).groups() for k in ("planet-rings", "planet-rings-lit"))
+    assert pitch == pitch_lit and abs(abs(float(yaw) - float(yaw_lit)) - 180.0) < 1e-6
     assert 'atmosphere="earth" atmosphereHeight="100000"' in docs["planet-atmosphere"] and 'fov="10"' in docs["planet-atmosphere"]
     assert 'x="6.7781366"' in docs["planet-atmosphere"]
     seek = docs["planet-seek"]
@@ -843,7 +850,7 @@ def _ground_frame(c, exp, scale=0.3):
     rgb = np.zeros((kit.H, kit.W, 3))
     for lat, row in exp["ground"].items():
         x, y = (int(v) for v in row["at"])
-        rgb[y - 1:y + 2, x - 1:x + 2, :] = scale * row["light"] * row["weight"]
+        rgb[y - 3:y + 4, x - 3:x + 4, :] = scale * row["light"] * row["weight"]   # covers the bilinear window
     return rgb
 
 
@@ -875,6 +882,7 @@ def _frames(exp, g):
     shadow_lat = math.degrees(math.asin(exp["planet-clouds"]["shadow"][2] / pl.EARTH))
     f["planet-clouds"] = _clouds(g["planet-clouds"], shadow_lat)
     f["planet-rings"] = _rings(g["planet-rings"], pl.flattening(699))
+    f["planet-rings-lit"] = _rings(g["planet-rings-lit"], pl.flattening(699))
     f["planet-rings-ground"] = _ground_frame(g["planet-rings-ground"], exp["planet-rings"])
     f["planet-atmosphere"] = _atmosphere_frame(g["planet-atmosphere"], exp["planet-atmosphere"])
     seek = np.zeros((kit.H, kit.W, 3), dtype=np.uint8)
@@ -952,7 +960,7 @@ def test_the_kit_fails_a_wrong_frame(synthetic):
     bad = dict(frames)
     bad["planet-rings-ground"] = _ground_frame(g["planet-rings-ground"], exp["planet-rings"])
     x, y = (int(v) for v in exp["planet-rings"]["ground"][-20.0]["at"])
-    bad["planet-rings-ground"][y - 1:y + 2, x - 1:x + 2, :] *= 1.1                 # the shadowed ground 10 % too bright
+    bad["planet-rings-ground"][y - 3:y + 4, x - 3:x + 4, :] *= 1.1                 # the shadowed ground 10 % too bright
     assert not kit.measure("planet-rings", bad, exp)["pass"]
     bad = dict(frames)
     bad["planet-atmosphere"] = _atmosphere_frame(g["planet-atmosphere"], exp["planet-atmosphere"], shift=0.3)
@@ -1017,7 +1025,7 @@ def test_the_draft_describes_the_kit(draft):  # noqa: E501
 
 
 KIT_ROW = re.compile(r"^\| `srep-<n>-planet-([a-z]+)\.xml` \| (?:[^|]|\\\|)* \| ([^|]*) \|$")
-ENGINE_COMMIT = "e21a482"
+ENGINE_COMMIT = "ca2c8d0"
 
 
 def test_the_draft_records_the_kit_cases_measured_so_far(draft):
@@ -1030,5 +1038,5 @@ def test_the_draft_records_the_kit_cases_measured_so_far(draft):
             assert status.endswith("; pass") or status.endswith("; fail"), (name, status)
         else:
             assert status == "to be measured", (name, status)
-    assert measured == {"limb", "terminator", "phase", "texture", "night", "sun", "clouds"}
+    assert measured == {"limb", "terminator", "phase", "texture", "night", "sun", "clouds", "rings", "seek"}
     assert all(rows[name].endswith("; pass") for name in measured)

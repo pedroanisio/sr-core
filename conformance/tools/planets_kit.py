@@ -4,8 +4,8 @@ The draft (srep/srep-0000-planets.md, Kit cases) describes ten cases that join c
 SREP has a number. `--write DIR` writes them now as srep-0000-planet-*.xml with their synthetic textures under
 DIR/assets/ (marks at known longitudes, a uniform white night map, a one-texel cloud, the draft's STRIP ring);
 `--engine BIN` writes them, renders each with scene-render and measures the frames. A case that compares two
-views or settings (Saturn's radii, the phase angles, the Sun's centre, the ring's two shadows) has companion
-documents named with a suffix. Radiance is read from linear EXR frames (`scene-render encode`, the document's
+views or settings (Saturn's radii, the phase angles, the Sun's centre, the ring lit beside its shadow and its
+two shadows) has companion documents named with a suffix. Radiance is read from linear EXR frames (`scene-render encode`, the document's
 exr-sequence output); the seek case compares PNG frames of `scene-render render`. Every expectation comes from
 planets_reference.py (and physical_sky_reference.py for the atmosphere shell), none is written here as a number.
 
@@ -44,7 +44,7 @@ DOCUMENTS = {
     "planet-night": ["planet-night"],
     "planet-sun": ["planet-sun", "planet-sun-centre"],
     "planet-clouds": ["planet-clouds"],
-    "planet-rings": ["planet-rings", "planet-rings-ground"],
+    "planet-rings": ["planet-rings", "planet-rings-lit", "planet-rings-ground"],
     "planet-atmosphere": ["planet-atmosphere"],
     "planet-seek": ["planet-seek"],
 }
@@ -110,6 +110,7 @@ SUN_TOL = 0.02
 CLOUD_TOL_DEG = 0.02
 CLOUD_POSITION_TOL_PX = 1.0
 RING_EDGE_TOL_PX = 1.0
+RING_LIT_FLOOR = 1e-4                 # of the lit companion's profile peak: below it there is no ring to divide by
 RING_LIGHT_TOL = 0.02
 ATMOSPHERE_TOL_DEG = 0.1
 LUMA = sk.LUMA
@@ -249,6 +250,8 @@ def geometry():
     g["planet-rings"] = {"body": 699, "a": SATURN, "c": pl.RADII[699][1], "f": pl.flattening(699), "eye": eye,
                          "cam": cam, "yaw": yaw, "pitch": pitch, "fov": DEFAULT_FOV, "attrs": ring_attrs,
                          "sun": pl.SATURN_SUN}
+    # the sun's azimuth turned by 180 degrees puts the planet's shadow on the near half: the same pixels lit
+    g["planet-rings-lit"] = dict(g["planet-rings"], sun=(-pl.SATURN_SUN[0], pl.SATURN_SUN[1], pl.SATURN_SUN[2]))
     eye = elevated(RING_GROUND_ELEVATION, RING_GROUND_RADII, SATURN)
     cam, yaw, pitch = view(eye, ORIGIN, DEFAULT_FOV)
     g["planet-rings-ground"] = {"body": 699, "a": SATURN, "c": pl.RADII[699][1], "f": pl.flattening(699),
@@ -288,6 +291,7 @@ MATERIALS = {
     "planet-texture": TEXTURED, "planet-night": NIGHT, "planet-sun": PHOTOSPHERE, "planet-sun-centre": PHOTOSPHERE,
     "planet-clouds": LAMBERT.format(colour=CLOUD_GROUND),
     "planet-rings": LAMBERT.format(colour="#FFFFFFFF"), "planet-rings-ground": LAMBERT.format(colour="#FFFFFFFF"),
+    "planet-rings-lit": LAMBERT.format(colour="#000000FF"),     # a black planet: the ring over its disc blends with nothing
     "planet-atmosphere": '<material id="m" baseColor="#000000FF" unlit="true"/>', "planet-seek": TEXTURED,
 }
 for _key in DOCUMENTS["planet-phase"]:
@@ -321,7 +325,7 @@ def _doc(key, g, fps=1, duration=1.0, space=""):
 
 
 def documents():
-    """The sixteen documents of the ten cases, by document key."""
+    """The seventeen documents of the ten cases, by document key."""
     g = geometry()
     docs = {}
     for key in (k for keys in DOCUMENTS.values() for k in keys):
@@ -701,22 +705,27 @@ def measure(name, frames, exp):
                 "shadow_off_px": round(shadow_off, 3),
                 "shadow_pixels": int((dark > 0).sum()), "cloud_pixels": int((bright > 0).sum())}
     if name == "planet-rings":
-        lum = sk.luminance(frames["planet-rings"])
-        offs = []
+        lum, lit = sk.luminance(frames["planet-rings"]), sk.luminance(frames["planet-rings-lit"])
+        offs, tails = [], []
         for edge in e["edge"]:
             values, step = _line_profile(lum, edge["inside_at"], edge["outside_at"])
-            outside = sum(values[-len(values) // 4:]) / (len(values) // 4)
-            found = crossings(values, 0.5 * outside) if outside > 0.0 else []
+            lit_values, _ = _line_profile(lit, edge["inside_at"], edge["outside_at"])
+            floor = RING_LIT_FLOOR * max(lit_values)
+            # shadowed over lit: the strip's own radial ramp cancels, so the edge is where the ratio crosses one half
+            ratio = [v / w if w > floor else 0.0 for v, w in zip(values, lit_values)]
+            found = crossings(ratio, 0.5)
             expected = _dist(edge["inside_at"], edge["at"])
             offs.append(min((i * step - expected for i in found), key=abs) if found else math.inf)   # outward positive
+            tails.extend(ratio[-len(ratio) // 4:])
         ground = frames["planet-rings-ground"]
-        shadowed, clear = (_luminance_of(window_mean(ground, e["ground"][lat]["at"])) for lat in RING_LATITUDES)
+        # read at the projected points: the shadow ramps across the rows, which a window of whole pixels misreads
+        shadowed, clear = (_luminance_of(bilinear_mean(ground, e["ground"][lat]["at"])) for lat in RING_LATITUDES)
         ratio = shadowed / clear if clear > 0.0 else math.inf
         ratio_off = abs(ratio - e["ratio"]) / e["ratio"]
         worst = max(abs(v) for v in offs)
         mean = sum(offs) / len(offs) if worst < math.inf else math.inf   # a binary edge reads +-0.9 px per point
         return {"pass": worst <= RING_EDGE_TOL_PX and ratio_off <= RING_LIGHT_TOL, "edge_points": len(offs),
-                "mean_edge_off_px": round(mean, 3),
+                "mean_edge_off_px": round(mean, 3), "lit_ratio_outside": (round(min(tails), 4), round(max(tails), 4)),
                 "worst_edge_off_px": round(worst, 3), "light_ratio": round(ratio, 4),
                 "expected_light_ratio": round(e["ratio"], 4), "light_rel_off": round(ratio_off, 4)}
     if name == "planet-atmosphere":
