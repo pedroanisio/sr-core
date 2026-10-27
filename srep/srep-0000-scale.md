@@ -61,7 +61,9 @@ files are not changed by this draft.
     2), `label` (`xs:boolean`, default true).
 - Schematron:
   - **SC1** `camera/@far` divided by `camera/@near` is at most 1e20, and `near` is positive.
-  - **SC2** a `geometric` key and the key before it have non-zero values of one sign.
+  - **SC2** a `geometric` key and the key after it have non-zero values of one sign (a key's `interpolation`
+    is the curve of the segment it leaves, as `keyType` reads every per-key curve attribute; a last key that is
+    `geometric` governs no segment and is not checked).
   - **SC3** `scaleBar/@maxWidth` is at most the scene width and `units` is `auto` or `si`.
   - **SC4** `scaleBar/@distance`, when present, lies between the camera's `near` and `far`.
   - **V17** `camera/@depth`, `geometric`, `scaleBar` and its attributes need `scene/@version="1.8"` or later.
@@ -84,10 +86,12 @@ scene pixels (SREP 4: `physics/@pixelsPerMeter` pixels per metre, default 100) u
    `resolvable_gap` at that distance never swap order (no depth fighting), and must not clamp `near` or `far`
    inside the document's values when SC1 holds. Under `reversed` with a binary32 buffer the relative resolution
    is 2⁻²³ at every decade for any ratio, so the default resolves 10²⁰; under `logarithmic` it is
-   ulp(d) ln(f / n), 2.7e-6 with 24 bits at 10²⁰; `reversed` with a fixed buffer fails beyond n × 10⁵. An
-   engine whose buffer is fixed-point must use `logarithmic` whatever the document says and report it.
-2. **Geometric keys.** Between two keys of values v₀ and v₁ with `interpolation="geometric"` the value at
-   fraction u of the key interval is `geometric(v0, v1, u)` = v₀ (v₁ / v₀)ᵘ (`interpolate(v0, v1, u, mode)`
+   ulp(d) ln(f / n), 2.7e-6 with 24 bits at 10²⁰; `reversed` with a fixed 24-bit buffer gains nothing over
+   the standard mapping, its relative resolution at the far plane is about 2⁻²⁴ f / n, so it holds 10⁻⁵ only up to
+   f / n = 168 (`resolves(1, 168, 'reversed', 'fixed')` is true, 169 false). An engine whose buffer is
+   fixed-point must use `logarithmic` whatever the document says and report it.
+2. **Geometric keys.** Between two keys of values v₀ and v₁, the first with `interpolation="geometric"`
+   (the curve of the segment it leaves), the value at fraction u of the key interval is `geometric(v0, v1, u)` = v₀ (v₁ / v₀)ᵘ (`interpolate(v0, v1, u, mode)`
    dispatches `linear` and `geometric`). The powers of ten camera is a camera distance keyed geometrically:
    `powers_of_ten(t, t0, t1, d0, d1)` holds d₀ before t₀ and d₁ after t₁, and `time_at(d, t0, t1, d0, d1)` is
    its inverse, so a key pair from 10 to 10²⁰ over 38 s passes one decade every 2 s (`decades(v0, v1)` =
@@ -244,11 +248,11 @@ measurable after SR-91 lands.
 | `srep-<n>-scale-depth.xml` | twenty concentric spheres of radii 10ᵏ, k = 1 … 20, each one part in 10⁴ thinner than the next, `near="0.1" far="1e19"`: at every frame the visible colour at the frame centre is the innermost sphere's and no pixel of a farther sphere shows through a nearer one (no depth fighting across 10²⁰) | to be measured |
 | `srep-<n>-scale-depth-log.xml` | the same scene with `depth="logarithmic"`: the same image within 1 level | to be measured |
 | `srep-<n>-scale-powers.xml` | a camera distance keyed `geometric` from 10 to 1e20 over 38 s at 24 fps: the sphere of radius 10ᵏ subtends the same pixel radius at frame 48 + 48 k for every k within 0.5 pixel | to be measured |
-| `srep-<n>-scale-bar.xml` | the powers of ten camera with a `scaleBar`: at frames 0, 96, 480 and 960 the bar's pixel length and label equal `scale_bar_frame` (1 m, 10 m, 5 au, 2 pc) | to be measured |
+| `srep-<n>-scale-bar.xml` | the powers of ten camera with a `scaleBar`: at frames 0, 96, 480 and 960 the bar's pixel length and label equal `scale_bar_frame` (10 mm, 100 mm, 10 Mm, 2 pc: the distances are 10, 100, 10¹⁰ and 10²⁰ px) | to be measured |
 | `srep-<n>-scale-bar-ortho.xml` | an orthographic camera with `orthoHeight="2000"` over 1080 rows: the bar is `scale_bar(54, 200)` | to be measured |
 | `srep-<n>-scale-origin.xml` | two spheres 2¹⁷ pixels apart at 10²⁰ pixels from the origin with the camera between them: their pixel centres are where a camera at the origin would put spheres at ±2¹⁶, within 0.5 pixel, and do not move between frames | to be measured |
 | `srep-<n>-scale-seek.xml` | the powers of ten camera over 960 frames: frame 960 rendered alone equals the frame played from 0 (SREP 14) | to be measured |
-| `srep-<n>-scale-invalid.xml` | `far / near` of 2e20 (SC1), a `geometric` key from −1 to 10 (SC2), `maxWidth` wider than the scene (SC3), a `distance` beyond `far` (SC4) and a 1.7 scene using `scaleBar` (V17) are refused | to be measured |
+| `srep-<n>-scale-invalid.xml` | `far / near` of 2e20 (SC1), a `geometric` key from −1 to 10 (SC2; the −1 key carries the interpolation), `maxWidth` wider than the scene (SC3), a `distance` beyond `far` (SC4) and a 1.7 scene using `scaleBar` (V17) are refused | to be measured |
 
 ## Open issues
 
@@ -280,3 +284,7 @@ measurable after SR-91 lands.
 ## History
 
 - 2026-10-24: draft from SRC-48 (SP5 of SREP 12); engine card SR-91.
+- 2026-10-27: three statements corrected on SR-91's reading of the reference and the schema: the fixed-buffer
+  bound under `reversed` is f / n = 168, not n × 10⁵ (rule 1); the scale-bar case's labels are the reference's
+  10 mm, 100 mm, 10 Mm and 2 pc; SC2 pairs a `geometric` key with the key after it, since a key's
+  `interpolation` is the curve of the segment it leaves (rule 2, the invalid case's −1 key).

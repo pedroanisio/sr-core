@@ -523,6 +523,23 @@ def test_the_draft_names_the_engine_card_and_the_elements(draft):
         assert word in draft, word
 
 
+def test_the_draft_states_the_fixed_buffer_bound_the_bar_labels_and_the_key_the_curve_leaves(draft):
+    # the fixed-point buffer under `reversed`: 2^-24 f / n at the far plane, so one part in 1e5 holds to f / n = 168
+    assert sc.resolves(1.0, 168.0, "reversed", "fixed") and not sc.resolves(1.0, 169.0, "reversed", "fixed")
+    assert abs(sc.relative_resolution(168.0, 1.0, 168.0, "reversed", "fixed") / (168.0 / 2 ** 24) - 1.0) < 0.02
+    assert "f / n = 168" in draft and "fails beyond n × 10⁵" not in draft
+    # the scale-bar case's labels are the reference's
+    labels = [sc.scale_bar_frame(f, 24, 2, 40, 10, 1e20, sc.focal_pixels(60, 1920), 100, 200)["label"]
+              for f in (0, 96, 480, 960)]
+    assert labels == ["10 mm", "100 mm", "10 Mm", "2 pc"]
+    assert "(10 mm, 100 mm, 10 Mm, 2 pc" in draft and "(1 m, 10 m, 5 au, 2 pc)" not in draft
+    # a key's interpolation is the curve of the segment it leaves (the schema's keyType), so SC2 pairs a geometric
+    # key with the key after it
+    assert "**SC2** a `geometric` key and the key after it have non-zero values of one sign" in draft
+    assert "the key before it" not in draft and "the segment it leaves" in draft
+    assert "the −1 key carries" in draft
+
+
 ROW = re.compile(r"\|\s*([^|]+?)\s*\|\s*`([^`]+)`\s*\|\s*`([^`]+)`\s*\|")
 
 
