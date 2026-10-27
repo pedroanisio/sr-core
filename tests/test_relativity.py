@@ -155,6 +155,20 @@ def test_grid_lines_of_the_boosted_frame():
     lines = rl.boosted_grid(0.6, 3, 2.0)
     assert len(lines["x"]) == 7 and len(lines["t"]) == 7
     assert all(len(seg) == 2 for seg in lines["x"] + lines["t"])
+    # the diagram drawn in the frame at beta shows the box frame's lines x = k and t = k where the boost
+    # carries them: in the drawn frame they are the lines of a frame moving at -beta, mapped with no further boost
+    drawn = rl.diagram_grid(0.6, 3, 2.0)
+    assert drawn == rl.boosted_grid(-0.6, 3, 2.0)
+    for k in (-3, 0, 2):
+        for t in (-2.0, 0.3, 2.0):
+            x_line = rl.boost(k, t, 0.6)  # the event (k, t) of the box frame, drawn at beta 0.6
+            assert _close(x_line, rl.grid_x_line(-0.6, k, x_line[1]), 1e-12)
+            t_line = rl.boost(t, k, 0.6)
+            assert _close(t_line, rl.grid_t_line(-0.6, k, t_line[0]), 1e-12)
+    # boosting the boosted frame's own lines again makes them axis-aligned, which is not the grid
+    assert _close(rl.boost(*rl.grid_x_line(0.6, 2.0, 1.0), 0.6)[0], 2.0, 1e-12)
+    assert rl.diagram_grid(0.0, 1, 1.0) == rl.boosted_grid(0.0, 1, 1.0)
+    assert _close(rl.grid_x_line(-0.6, 2.0, 1.0), (1.0, 1.0), 1e-12)
 
 
 # ------------------------------------------------------------------------------------ compactification
@@ -595,3 +609,13 @@ def test_the_draft_settles_the_schema_readings(draft):
         assert phrase in draft, phrase
     assert "`markerType` for the point" not in draft
     assert "| embedding radii of a potential sheet from a hole of mass 3 | `embedding_radii('potential', None, 3)` | `(6, 1.5)` |" in draft
+
+
+def test_the_draft_states_whose_grid_the_diagram_draws(draft):
+    for phrase in ("draw the lines x = k and t = k of the box's frame", "where the boost carries them",
+                   "The grid the diagram draws is `diagram_grid(β, n, extent)`",
+                   "since from the drawn frame the box frame moves", "mapped by the axes with no further boost",
+                   "x' = k/γ − βt'", "`boosted_grid(β, n, extent)` is the same picture from the other side"):
+        assert phrase in draft, phrase
+    assert "| the box's line x = 2 drawn at beta 0.6, at t' = 1 | `grid_x_line(-0.6, 2, 1)` | `(1, 1)` |" in draft
+    assert "draw the lines x' = k and t' = k of the boosted frame" not in draft

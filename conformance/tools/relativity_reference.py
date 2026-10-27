@@ -196,10 +196,18 @@ def grid_t_line(beta, k, x):
 
 
 def boosted_grid(beta, n, extent):
-    """Segments of the lines x' = k and t' = k, k = -n .. n, across +-extent."""
+    """Segments of the lines x' = k and t' = k, k = -n .. n, across +-extent, in the coordinates of the frame
+    the primed one moves through at beta."""
     xs = [(grid_x_line(beta, k, -extent), grid_x_line(beta, k, extent)) for k in range(-n, n + 1)]
     ts = [(grid_t_line(beta, k, -extent), grid_t_line(beta, k, extent)) for k in range(-n, n + 1)]
     return {"x": xs, "t": ts}
+
+
+def diagram_grid(beta, n, extent):
+    """The grid a diagram drawn in the frame at beta shows: the box frame's lines x = k and t = k where the boost
+    carries them. From the drawn frame the box frame moves at -beta, so these are boosted_grid(-beta) in the
+    drawn frame's own coordinates, which the axes map with no further boost."""
+    return boosted_grid(-_beta(beta), n, extent)
 
 
 # ------------------------------------------------------------------------------------ compactification
@@ -642,6 +650,7 @@ TABLE = (
     ("Rindler event at a 2, tau 1", "worldline_accelerated(2, 1)", "(1.3811, 1.81343)"),
     ("Rindler speed at a 2, tau 1", "accelerated_beta(2, 1)", "0.964028"),
     ("x' = 2 line at t = 1, beta 0.6", "grid_x_line(0.6, 2, 1)", "(2.2, 1)"),
+    ("the box's line x = 2 drawn at beta 0.6, at t' = 1", "grid_x_line(-0.6, 2, 1)", "(1, 1)"),
     ("Penrose of (1, 0)", "penrose(1, 0)", "(0.785398, 0)"),
     ("Penrose of (1e6, 0)", "penrose(1e6, 0)", "(1.5708, 0)"),
     ("Penrose null slope from (2, -1)", "penrose_slope((2, -1), 1)", "1"),

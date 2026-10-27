@@ -58,8 +58,8 @@ space-transforms drafts; the schema files are not changed by this draft.
     drawn in the units where it is 1 and the tick labels of the y axis are divided by it), `boost` (`xs:double`,
     default 0: β = v/c of the frame the diagram is drawn in; every child's events are Lorentz-transformed by it
     before the axes map them; it animates through `animate` and `expression` children in rapidity, rule 5),
-    `grid` (`xs:boolean`, default false: draw the lines x' = k and t' = k of the boosted frame at the tick
-    step), `compact` (one of `none`, `minkowski`, `schwarzschild`, default `none`: rule 2), `blackHole`
+    `grid` (`xs:boolean`, default false: draw the lines x = k and t = k of the box's frame at the tick step
+    where the boost carries them, rule 1), `compact` (one of `none`, `minkowski`, `schwarzschild`, default `none`: rule 2), `blackHole`
     (`xs:IDREF`, required when `compact="schwarzschild"`: the hole whose r_s = 2 `mass` the diagram uses).
   - `event`, zero or more: `x`, `t` (`xs:double`, required), `label` (`xs:string`), `lightCone` (`xs:boolean`,
     default false), `extent` (`positiveDecimal`, default the box's `yMax` − `yMin`: how far the cones reach),
@@ -123,10 +123,17 @@ coordinates are the box's data units with c = 1; embedding coordinates are scene
    is `worldline_inertial(x0, t0, β, t)`, the Rindler hyperbola `worldline_accelerated(a, τ)` =
    ((cosh aτ − 1)/a, sinh aτ/a) from rest at (`x0`, `t0`) whose speed is `accelerated_beta` = tanh aτ and
    whose proper time is τ, or `worldline_parametric(x, t, τ)` whose tangent must be timelike and future
-   directed (an error otherwise). A `lightRay` is the segment from its event along (`direction`, 1). The grid
-   of the boosted frame is `boosted_grid(β, n, extent)`: the lines x' = k are `grid_x_line` (x = k/γ + βt) and
-   t' = k are `grid_t_line`. The axes then map every point as the plots draft's rule 9 does
-   (`diagram_pixel(x, t, box, β, compact)`), after the boost and the compactification.
+   directed (an error otherwise). A `lightRay` is the segment from its event along (`direction`, 1). The lines
+   x' = k and t' = k of a frame moving at β, in the coordinates of the frame it moves through, are
+   `grid_x_line` (x = k/γ + βt) and `grid_t_line`, collected by `boosted_grid(β, n, extent)`. The axes map
+   every child's point as the plots draft's rule 9 does (`diagram_pixel(x, t, box, β, compact)`), after the
+   boost and the compactification. The grid the diagram draws is `diagram_grid(β, n, extent)`: the box frame's
+   lines x = k and t = k where the boost carries them, which, since from the drawn frame the box frame moves
+   at −β, are `boosted_grid(−β, n, extent)` in the drawn frame's own coordinates (x = k is x' = k/γ − βt'
+   there), mapped by the axes with no further boost and compactified like everything else; at β = 0 they
+   are the axes' own grid, and under an animated boost they shear while the light cones keep their 45°.
+   (`boosted_grid(β, n, extent)` is the same picture from the other side: boosting its points by β makes them
+   axis-aligned, so a diagram must not send them through the boost.)
 2. **Compactification.** `compact="minkowski"` draws every point at `penrose(x, t)`: U = atan(t − x),
    V = atan(t + x), X = (V − U)/2, T = (U + V)/2, the diamond |X| + |T| < π/2 whose corners are
    `penrose_infinity` (spacelike i⁰ at (π/2, 0), future and past timelike infinity at (0, ±π/2)); null rays keep
@@ -246,6 +253,7 @@ and the box of the last row is 400 × 300 pixels at (100, 50) over x ∈ [−2, 
 | Rindler event at a 2, tau 1 | `worldline_accelerated(2, 1)` | `(1.3811, 1.81343)` |
 | Rindler speed at a 2, tau 1 | `accelerated_beta(2, 1)` | `0.964028` |
 | x' = 2 line at t = 1, beta 0.6 | `grid_x_line(0.6, 2, 1)` | `(2.2, 1)` |
+| the box's line x = 2 drawn at beta 0.6, at t' = 1 | `grid_x_line(-0.6, 2, 1)` | `(1, 1)` |
 | Penrose of (1, 0) | `penrose(1, 0)` | `(0.785398, 0)` |
 | Penrose of (1e6, 0) | `penrose(1e6, 0)` | `(1.5708, 0)` |
 | Penrose null slope from (2, -1) | `penrose_slope((2, -1), 1)` | `1` |
@@ -338,3 +346,6 @@ measurable after SR-92 lands.
   and the event's dot, the strain's reuse of `frequency` and `phase`, RD1's one `spacetime` per `axes`, RD2's
   attribute map, RD3's `rs` fallback, `rMin` defaults and `rMin` ≥ `rs` for `flamm` (`embedding_radii`, a table
   row), RD4's positive `frequency`, and SREP 76's undrawn-hole warning not reporting a named hole.
+- 2026-10-27: SR-92's rule 1 reading settled: the diagram's `grid` is the box frame's lines where the boost
+  carries them (`diagram_grid` = `boosted_grid(−β)` in the drawn frame, mapped with no further boost), not the
+  boosted frame's own lines, which a second boost would make axis-aligned; a table row pins it.
