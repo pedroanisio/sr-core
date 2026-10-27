@@ -63,8 +63,8 @@ space-transforms drafts; the schema files are not changed by this draft.
     (`xs:IDREF`, required when `compact="schwarzschild"`: the hole whose r_s = 2 `mass` the diagram uses).
   - `event`, zero or more: `x`, `t` (`xs:double`, required), `label` (`xs:string`), `lightCone` (`xs:boolean`,
     default false), `extent` (`positiveDecimal`, default the box's `yMax` − `yMin`: how far the cones reach),
-    `future`, `past` (`paintType`, defaults `#FFCC0040` and `#4080FF40`: the cone fills), plus `strokeStyle`
-    and `markerType` for the point.
+    `future`, `past` (`paintType`, defaults `#FFCC0040` and `#4080FF40`: the cone fills), plus `strokeStyle`;
+    the point is a dot `markerSize` (`positiveDecimal`, default 8) pixels across in the stroke's paint.
   - `worldline`, zero or more: `kind` (one of `inertial`, `accelerated`, `parametric`, required), `x0`, `t0`
     (`xs:double`, default 0: the event the line passes), `velocity` (`xs:double`, `inertial`: β), `acceleration`
     (`positiveDecimal`, `accelerated`: the proper acceleration in units of c per data unit of t; the line is
@@ -73,6 +73,9 @@ space-transforms drafts; the schema files are not changed by this draft.
     `extent`), `samples` (2 to 1000000, default 256), `label` (`xs:string`), plus `strokeStyle`.
   - `lightRay`, zero or more: `x`, `t` (`xs:double`, required: the emission event), `direction` (`1` or `−1`,
     default 1), `length` (`positiveDecimal`, default the box's extent), plus `strokeStyle`.
+  - the `strokeStyle` of these three is the `strokeStyle` attribute group with `stroke` (`paintType`, default
+    `#FFCC00FF`) and `strokeWidth` (`positiveDecimal`, default 3) beside it, as an attribute group of their
+    own, since `strokeStyle` holds neither.
 - `object3DType/@primitive` (4133) gains the value `embedding`, and the child choice (4113) gains `embedding`,
   one per such object (RD3, the pattern of SREP 70's PAR2):
   - `kind` (one of `flamm`, `potential`, required), `rs` (`positiveDecimal`, scene units: the Schwarzschild
@@ -83,20 +86,26 @@ space-transforms drafts; the schema files are not changed by this draft.
     spoke), `lineWidth` (`positiveDecimal`, default 0.01 `rMax`), `color` (`paintType`, default white),
     `surface` (`xs:boolean`, default false: also fill the sheet as a `parametricSurface`).
 - `modifierType/@type` (2777) gains the value `strain`; `modifierType` gains `hPlus`, `hCross` (`xs:double`,
-  default 0: the polarisation amplitudes), `frequency` (`positiveDecimal`, Hz of scene time), `chirpMass`
-  (`positiveDecimal`, solar masses: with it the frequency follows rule 4's chirp and `merger` is the scene time
-  of coalescence), `merger` (`xs:double`, seconds), `phase` (`xs:double`, radians, default 0); `centerX` and
-  `centerY` keep their meaning (the ring's centre).
+  default 0: the polarisation amplitudes), `chirpMass` (`positiveDecimal`, solar masses: with it the frequency
+  follows rule 4's chirp and `merger` is the scene time of coalescence) and `merger` (`xs:double`, seconds); a
+  strain reads `modifierType`'s existing `frequency` (`xs:double`, Hz of scene time, whose default of 1 does not
+  apply to a strain: RD4 wants it written, and positive, or `chirpMass`) and `phase` (`xs:double`, radians,
+  default 0); `centerX` and `centerY` keep their meaning (the ring's centre).
 - Schematron:
-  - **RD1** `c` is positive; `boost` as a literal lies strictly between −1 and 1; `compact="schwarzschild"`
-    has `blackHole`.
-  - **RD2** an `inertial` worldline has `velocity` strictly between −1 and 1; an `accelerated` one has
-    `acceleration`; a `parametric` one has `x` and `t`; no other attributes of another kind.
+  - **RD1** an `axes` has at most one `spacetime`; `c` is positive; `boost` as a literal lies strictly between
+    −1 and 1 (a keyed `boost` is the build's, rule 5); `compact="schwarzschild"` has `blackHole`.
+  - **RD2** an `inertial` worldline has `velocity` strictly between −1 and 1; an `accelerated` one has a
+    positive `acceleration`; a `parametric` one has `x` and `t`; no other attributes of another kind, as a map:
+    `velocity` is written only on an `inertial` worldline, `acceleration` on an `accelerated` one, `x` and `t`
+    on a `parametric` one, `tau0` and `tau1` on an `accelerated` or a `parametric` one.
   - **RD3** `primitive="embedding"` has exactly one `embedding`, and only such an object has one; `rs` or
-    `blackHole` is present for `flamm`, `k` for `potential`; `rMin` is positive and below `rMax`; `rings` is at
-    least 1 and `spokes` at least 3.
+    `blackHole` is present for `flamm` (with `blackHole`, r_s = 2 `mass`), `k` for `potential`; `rMin` (its
+    default `rs` for `flamm` and `rs`/4 for `potential`, so a `potential` sheet without `rMin` needs `rs` or
+    `blackHole`; `embedding_radii`) is positive, below `rMax` and, for `flamm`, at least `rs` (the Flamm height
+    is not real inside the throat); `spokes` is at least 3 (`rings` ≥ 1 is its type's).
   - **RD4** a `strain` modifier has |`hPlus`| and |`hCross`| at most 1 and exactly one of `frequency` and
-    `chirpMass`; `chirpMass` comes with `merger`.
+    `chirpMass`, `frequency` positive; `chirpMass` comes with `merger` (`merger` beside `frequency` is allowed
+    and unused).
   - **V17** `spacetime`, `embedding`, `type="strain"` and their attributes need `scene/@version="1.8"` or later.
 
 ### Semantics
@@ -154,8 +163,10 @@ coordinates are the box's data units with c = 1; embedding coordinates are scene
    compose to the keyed value and the diagram at a frame is a pure function of the frame (SREP 14; `seek_test`
    plays 240 frames by composition and compares every frame with the direct value to 1e-12 while checking the
    interval). Embeddings and strain are pure functions of their attributes and of scene time.
-6. **Validation.** `validate_spacetime` is RD1, `validate_worldline` RD2, `validate_embedding` RD3 and
-   `validate_strain` RD4.
+6. **Validation.** `validate_spacetime` is RD1, `validate_worldline` RD2, `validate_embedding` RD3 (after
+   `embedding_radii` resolves `rs` and `rMin`) and `validate_strain` RD4. A `blackHole` that a `spacetime` or
+   an `embedding` names is drawn by the diagram or the sheet, so SREP 76's undrawn-hole warning does not report
+   it; an `accretionDisk` of such a hole is still reported, since neither draws the disk.
 
 ## Rationale
 
@@ -202,7 +213,7 @@ the plots and space-transforms drafts for `axes` and modifier subdivision and on
 
 | Engine | Status | Work | Tracking |
 |---|---|---|---|
-| Rust (`rs-scene-render`), reference | feat/sr-67-fields 011b842 (SR-92 reports; main 67a661a had nothing of this SREP, with the building blocks the `axes` box (plots draft, SR-63), `map` modifiers (space-transforms draft), `parametricSurface` (SREP 70) and `blackHole` (SREP 76)): the kernel `sr_3d::relativity` matches every row of the numeric table; reading the reference, SR-92 found and this draft fixed four places where the reference differed from the text: the potential sheet's point was a hill (y = −k/r; now k/r, downward, a table row), `embedding_grid` took `rMin` for the sheet's r_s or k (now a parameter), `validate_strain` enforced neither of RD4's clauses on `frequency`, `chirpMass` and `merger` (now both), and the seek check's interval test lacked its absolute value (`boost_keeps_interval`) | parse the elements (RD1–RD4, V17); the boost, cones, worldlines, rays and grid before the axes mapping (rule 1); the Penrose and Kruskal maps (rule 2); the embedding primitive as rings, spokes and an optional surface (rule 3); the strain modifier with the chirp (rule 4); rapidity keys and the seek check (rule 5) | [SR-92](https://faz-ai.atlassian.net/browse/SR-92) |
+| Rust (`rs-scene-render`), reference | feat/sr-67-fields 011b842 (SR-92 reports; main 67a661a had nothing of this SREP, with the building blocks the `axes` box (plots draft, SR-63), `map` modifiers (space-transforms draft), `parametricSurface` (SREP 70) and `blackHole` (SREP 76)): the kernel `sr_3d::relativity` matches every row of the numeric table; reading the reference, SR-92 found and this draft fixed four places where the reference differed from the text: the potential sheet's point was a hill (y = −k/r; now k/r, downward, a table row), `embedding_grid` took `rMin` for the sheet's r_s or k (now a parameter), `validate_strain` enforced neither of RD4's clauses on `frequency`, `chirpMass` and `merger` (now both), and the seek check's interval test lacked its absolute value (`boost_keeps_interval`); the schema at 9b5a2fb (SR-92 reports: `spacetime`, `embedding`, the strain modifier, RD1–RD4 and V17's clause, corpus 883 agreeing with the lxml oracle), whose eight readings where the text left a choice this draft settles in its Syntax (the stroke group and the event's dot, the strain's reuse of `frequency` and `phase`, RD1's one diagram per `axes`, RD2's map, RD3's defaults and throat, RD4's positive `frequency`, the undrawn-hole warning) | the boost, cones, worldlines, rays and grid before the axes mapping (rule 1); the Penrose and Kruskal maps (rule 2); the embedding primitive as rings, spokes and an optional surface (rule 3); the strain modifier with the chirp (rule 4); rapidity keys and the seek check (rule 5) | [SR-92](https://faz-ai.atlassian.net/browse/SR-92) |
 
 ## Conformance
 
@@ -254,6 +265,7 @@ and the box of the last row is 400 × 300 pixels at (100, 50) over x ∈ [−2, 
 | potential sheet at r 2, k 4 | `potential(2, 4)` | `-2` |
 | embedding point r 4, phi 0 | `embedding_point('flamm', 4, 0, 2)` | `(4, -4, 0)` |
 | embedding point of the potential sheet r 2, k 4 | `embedding_point('potential', 2, 0, 4)` | `(2, 2, 0)` |
+| embedding radii of a potential sheet from a hole of mass 3 | `embedding_radii('potential', None, 3)` | `(6, 1.5)` |
 | strain of (1, 0) under h+ 0.2 | `strain_displacement(1, 0, 0.2, 0)` | `(0.1, 0)` |
 | ring axes under h+ 0.2 | `ring_axes(0.2, 0)` | `(1.1, 0.9)` |
 | cross polarisation on the diagonal | `math.hypot(*strain_point(2 ** -0.5, 2 ** -0.5, 0, 0.2, 1, 0, 0))` | `1.1` |
@@ -322,3 +334,7 @@ measurable after SR-92 lands.
   (the potential sheet's sign, `embedding_grid`'s scale, RD4's two clauses in `validate_strain`, the seek
   check's absolute value), none changing a table value; one table row added for the potential sheet's
   point; the potential kit case restated in scene y.
+- 2026-10-27: SR-92's schema at 9b5a2fb recorded; its eight readings settled: the stroke of a diagram's children
+  and the event's dot, the strain's reuse of `frequency` and `phase`, RD1's one `spacetime` per `axes`, RD2's
+  attribute map, RD3's `rs` fallback, `rMin` defaults and `rMin` ≥ `rs` for `flamm` (`embedding_radii`, a table
+  row), RD4's positive `frequency`, and SREP 76's undrawn-hole warning not reporting a named hole.

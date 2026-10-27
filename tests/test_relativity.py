@@ -453,17 +453,36 @@ def test_validation_rd1_to_rd4():
             rl.validate_spacetime(*args)
     rl.validate_worldline("inertial", 0.5, None)
     rl.validate_worldline("accelerated", None, 2.0)
-    rl.validate_worldline("parametric", None, None)
-    for args in (("inertial", 1.0, None), ("accelerated", None, 0.0), ("geodesic", None, None),
-                 ("inertial", None, None)):
+    rl.validate_worldline("accelerated", None, 2.0, tau0=-1.0, tau1=1.0)
+    rl.validate_worldline("parametric", None, None, "tau", "tau", 0.0, 2.0)
+    # RD2 as a map: each kind takes only its own attributes
+    for args, kw in ((("inertial", 1.0, None), {}), (("accelerated", None, 0.0), {}),
+                     (("geodesic", None, None), {}), (("inertial", None, None), {}),
+                     (("parametric", None, None), {}), (("parametric", None, None), {"x": "tau"}),
+                     (("inertial", 0.5, 2.0), {}), (("accelerated", 0.5, 2.0), {}),
+                     (("inertial", 0.5, None), {"x": "tau"}), (("accelerated", None, 2.0), {"t": "tau"}),
+                     (("inertial", 0.5, None), {"tau0": 0.0}), (("inertial", 0.5, None), {"tau1": 1.0})):
         with pytest.raises(rl.RelativityError):
-            rl.validate_worldline(*args)
+            rl.validate_worldline(*args, **kw)
     rl.validate_embedding("flamm", 2.0, 10.0, 4, 8)
+    rl.validate_embedding("flamm", 2.0, 10.0, 4, 8, 2.0)
     rl.validate_embedding("potential", 1.0, 10.0, 1, 3)
     for args in (("flamm", 0.0, 10.0, 4, 8), ("flamm", 2.0, 2.0, 4, 8), ("flamm", 2.0, 10.0, 0, 8),
-                 ("flamm", 2.0, 10.0, 4, 2), ("sheet", 2.0, 10.0, 4, 8)):
+                 ("flamm", 2.0, 10.0, 4, 2), ("sheet", 2.0, 10.0, 4, 8), ("flamm", 1.0, 10.0, 4, 8, 2.0)):
         with pytest.raises(rl.RelativityError):
             rl.validate_embedding(*args)
+    # RD3 defaults: rs from the hole's mass, rMin rs for flamm and rs / 4 for potential
+    assert rl.embedding_radii("flamm", 2.0) == (2.0, 2.0)
+    assert rl.embedding_radii("flamm", None, 3.0) == (6.0, 6.0)
+    assert rl.embedding_radii("potential", None, 3.0) == (6.0, 1.5)
+    assert rl.embedding_radii("potential", 2.0, None, 0.1) == (2.0, 0.1)
+    assert rl.embedding_radii("potential", None, None, 0.1) == (None, 0.1)
+    assert rl.embedding_radii("flamm", 2.0, 3.0, 5.0) == (2.0, 5.0)
+    for args in (("flamm", None, None), ("potential", None, None), ("flamm", 0.0), ("flamm", None, 0.0),
+                 ("flamm", None, 3.0, 5.0), ("sheet", 2.0)):
+        with pytest.raises(rl.RelativityError):
+            rl.embedding_radii(*args)
+    assert (rl.SPACETIME_STROKE, rl.SPACETIME_STROKE_WIDTH, rl.EVENT_MARKER_SIZE) == ("#FFCC00FF", 3.0, 8.0)
     rl.validate_strain(0.2, 0.0, 2.0, None)
     rl.validate_strain(0.2, 0.1, None, 28.0, 1.0)
     rl.validate_strain(0.2, 0.0, 2.0, None, 1.0)
@@ -554,7 +573,25 @@ def test_the_draft_records_the_engine_state(draft):
     row = next(line for line in draft.splitlines() if line.startswith("| Rust (`rs-scene-render`), reference |"))
     done, remaining = row.split(" | ")[1:3]
     assert done.startswith("feat/sr-67-fields 011b842") and "`sr_3d::relativity`" in done and "SR-92" in row
+    assert "9b5a2fb" in done and "corpus 883" in done and "eight readings" in done
     assert "nothing of this SREP at 67a661a" not in done
-    assert remaining.startswith("parse the elements") and "the seek check (rule 5)" in remaining
+    assert remaining.startswith("the boost, cones") and "the seek check (rule 5)" in remaining
+    assert "parse the elements" not in remaining
     assert "| embedding point of the potential sheet r 2, k 4 | `embedding_point('potential', 2, 0, 4)` | `(2, 2, 0)` |" in draft
     assert "the sheet's y at `rMin` is k/`rMin`" in draft
+
+
+def test_the_draft_settles_the_schema_readings(draft):
+    # the readings SR-92 took at 9b5a2fb where the text left a choice, each now stated by the draft
+    for phrase in ("with `stroke` (`paintType`, default", "`#FFCC00FF`) and `strokeWidth` (`positiveDecimal`, default 3)",
+                   "a dot `markerSize` (`positiveDecimal`, default 8) pixels across",
+                   "reads `modifierType`'s existing `frequency`", "whose default of 1 does not", "apply to a strain: RD4 wants it written",
+                   "an `axes` has at most one `spacetime`", "a keyed `boost` is the build's",
+                   "`velocity` is written only on an `inertial` worldline", "`tau0` and `tau1` on an `accelerated` or a",
+                   "so a `potential` sheet without `rMin` needs `rs` or", "for `flamm`, at least `rs`",
+                   "`rings` ≥ 1 is its type's", "`frequency` positive; `chirpMass` comes with `merger`",
+                   "`merger` beside `frequency` is allowed", "undrawn-hole warning does not report",
+                   "an `accretionDisk` of such a hole is still reported", "`embedding_radii`"):
+        assert phrase in draft, phrase
+    assert "`markerType` for the point" not in draft
+    assert "| embedding radii of a potential sheet from a hole of mass 3 | `embedding_radii('potential', None, 3)` | `(6, 1.5)` |" in draft

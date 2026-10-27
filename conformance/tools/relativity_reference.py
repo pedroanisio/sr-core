@@ -533,6 +533,33 @@ def diagram_pixel(x, t, box, beta=0.0, compact="none", rs=None):
 # ------------------------------------------------------------------------------------ validation
 
 
+# the schema readings of the engine's SR-92 (9b5a2fb), settled by the draft: the stroke of a diagram's children, an
+# event's dot and the embedding's default radii
+SPACETIME_STROKE = "#FFCC00FF"
+SPACETIME_STROKE_WIDTH = 3.0
+EVENT_MARKER_SIZE = 8.0
+
+
+def embedding_radii(kind, rs=None, hole_mass=None, r_min=None):
+    """RD3's defaults: (rs, rMin) of a sheet, rs falling back to 2 mass of its blackHole and rMin to rs for flamm
+    and rs / 4 for potential; None for a potential sheet's rs when it needs none."""
+    if kind not in EMBEDDINGS:
+        raise RelativityError("RD3: kind is flamm or potential")
+    if rs is None and hole_mass is not None:
+        rs = 2.0 * hole_mass
+    if rs is not None and not rs > 0.0:
+        raise RelativityError("RD3: rs (2 mass of the blackHole) must be positive")
+    if kind == "flamm" and rs is None:
+        raise RelativityError("RD3: a flamm sheet has rs or a blackHole")
+    if r_min is None:
+        if rs is None:
+            raise RelativityError("RD3: a potential sheet without rMin needs rs or a blackHole")
+        r_min = rs if kind == "flamm" else rs / 4.0
+    if kind == "flamm" and r_min < rs:
+        raise RelativityError("RD3: a flamm sheet's rMin is at least rs")
+    return (rs, r_min)
+
+
 def validate_spacetime(c, beta, compact, rs=None):
     """RD1: c positive, |beta| below 1, compact in the enumeration, rs positive for schwarzschild."""
     if not c > 0.0:
@@ -544,8 +571,9 @@ def validate_spacetime(c, beta, compact, rs=None):
         raise RelativityError("RD1: schwarzschild needs a positive rs")
 
 
-def validate_worldline(kind, beta, a):
-    """RD2: inertial has |velocity| below 1; accelerated has a positive acceleration."""
+def validate_worldline(kind, beta, a, x=None, t=None, tau0=None, tau1=None):
+    """RD2: inertial has |velocity| below 1, accelerated a positive acceleration, parametric x and t; each
+    attribute is written only on its kind (tau0 and tau1 on accelerated or parametric)."""
     if kind not in WORLDLINES:
         raise RelativityError("RD2: kind is inertial, accelerated or parametric")
     if kind == "inertial":
@@ -554,14 +582,24 @@ def validate_worldline(kind, beta, a):
         _beta(beta)
     if kind == "accelerated" and (a is None or not a > 0.0):
         raise RelativityError("RD2: an accelerated worldline needs a positive acceleration")
+    if kind == "parametric" and (x is None or t is None):
+        raise RelativityError("RD2: a parametric worldline needs x and t")
+    owners = ((beta, ("inertial",)), (a, ("accelerated",)), (x, ("parametric",)), (t, ("parametric",)),
+              (tau0, ("accelerated", "parametric")), (tau1, ("accelerated", "parametric")))
+    if any(value is not None and kind not in kinds for value, kinds in owners):
+        raise RelativityError("RD2: velocity is inertial's, acceleration accelerated's, x and t parametric's, "
+                              "tau0 and tau1 accelerated's and parametric's")
 
 
-def validate_embedding(kind, r_min, r_max, rings, spokes):
-    """RD3: kind in the enumeration, 0 < rMin < rMax, rings >= 1, spokes >= 3."""
+def validate_embedding(kind, r_min, r_max, rings, spokes, rs=None):
+    """RD3: kind in the enumeration, 0 < rMin < rMax (rMin at least rs for flamm when rs is given), rings >= 1,
+    spokes >= 3; embedding_radii resolves the defaults first."""
     if kind not in EMBEDDINGS:
         raise RelativityError("RD3: kind is flamm or potential")
     if not (r_min > 0.0 and r_max > r_min):
         raise RelativityError("RD3: rMax must exceed a positive rMin (rs)")
+    if kind == "flamm" and rs is not None and r_min < rs:
+        raise RelativityError("RD3: a flamm sheet's rMin is at least rs")
     if rings < 1 or spokes < 3:
         raise RelativityError("RD3: rings >= 1 and spokes >= 3")
 
@@ -623,6 +661,7 @@ TABLE = (
     ("potential sheet at r 2, k 4", "potential(2, 4)", "-2"),
     ("embedding point r 4, phi 0", "embedding_point('flamm', 4, 0, 2)", "(4, -4, 0)"),
     ("embedding point of the potential sheet r 2, k 4", "embedding_point('potential', 2, 0, 4)", "(2, 2, 0)"),
+    ("embedding radii of a potential sheet from a hole of mass 3", "embedding_radii('potential', None, 3)", "(6, 1.5)"),
     ("strain of (1, 0) under h+ 0.2", "strain_displacement(1, 0, 0.2, 0)", "(0.1, 0)"),
     ("ring axes under h+ 0.2", "ring_axes(0.2, 0)", "(1.1, 0.9)"),
     ("cross polarisation on the diagonal", "math.hypot(*strain_point(2 ** -0.5, 2 ** -0.5, 0, 0.2, 1, 0, 0))", "1.1"),
