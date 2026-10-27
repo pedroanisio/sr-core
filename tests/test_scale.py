@@ -506,6 +506,19 @@ def test_the_draft_allows_a_lattice_origin_and_names_the_anchor_and_world_quanti
     assert "evaluated from the binary64 world position" in draft and "`altitude`" in draft
 
 
+def test_the_draft_states_the_bars_drawing_order_frame_and_label(draft):
+    assert "after all of the frame's content" in draft and "post effects never" in draft
+    assert "the frame the camera draws into (the viewport for a" in draft and "`viewport3D`" in draft
+    assert "a label no font can draw is an error" in draft
+    assert "no bar on a 360 face" in draft
+    # the engine's reported bars are the reference's
+    bar = sc.scale_bar_at(5000.0, sc.focal_pixels(60, 320), 100, 200)
+    assert bar["label"] == "20 m" and _close(bar["pixels"], 110.85125168440814, 1e-9)
+    assert sc.scale_bar(sc.pixels_per_metre_ortho(2000, 1080, 100), 200) == sc.scale_bar(54, 200)
+    assert sc.scale_bar(sc.pixels_per_metre_ortho(1080, 1080, 100), 200) == sc.scale_bar(100, 200)
+    assert sc.lattice_origin((-512.0, -1536.0, 512.0), 1024.0) == (0.0, -1024.0, 1024.0)
+
+
 # ------------------------------------------------------------------------------------ validation
 
 
@@ -616,7 +629,8 @@ def test_the_draft_records_the_engine_state(draft):
     assert "685d380" in done and "`Depth32Float`" in done and "1 − d" in done
     assert "69867ab" in done and "`far` above `near`" in done and "848" in done
     assert "2a724ef" in done and "`lattice_origin(eye, 1024)`" in done and "12 mutants" in done
-    assert remaining.startswith("rendering:") and "scale bar" in remaining and "rule 4" not in remaining
+    assert "b620676" in done and "96b4a70" in done and "`scale_bar_frame`" in done and "`render --stats`" in done
+    assert remaining.startswith("the kit's eight cases") and "scale bar" not in remaining and "rule 4" not in remaining
     assert "2.5D" in remaining and "joint look-at" in remaining
     assert "no `near` clamp" not in remaining and "logarithmic mapping" not in remaining
     assert "lacks `far` above `near`" not in remaining and "SC1" not in remaining
