@@ -560,6 +560,7 @@ def test_the_draft_names_the_engine_card_and_the_elements(draft):
     assert "both tracers" not in remaining and "orthographic camera" not in remaining
     assert "a7dcc73" in done and "physical sky's sun" in done and "0b750e8" in done
     assert remaining.startswith("none; the ten kit cases pass")
+    assert "(SR-89 Done at 346ea2d" in done and "in progress" not in done
     for word in ("planet", "flattening", "cloudMap", "cloudHeight", "cloudRotation", "cloudShadow", "ringMap",
                  "ringInner", "ringOuter", "limbDarkening", "twilight", "nightLights", "atmosphere",
                  "atmosphereHeight", "equirectangular", "prime meridian", "terminator", "limb", "cusp",
