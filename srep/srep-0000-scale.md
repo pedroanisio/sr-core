@@ -51,7 +51,10 @@ files are not changed by this draft.
 - `cameraType` (4423): a new attribute `depth`, one of `reversed` (default) and `logarithmic`: the depth
   mapping of rule 1. `near` (4468) and `far` (4471) keep their types; SC1 bounds their ratio.
 - `curveType` (232): a new enumeration value `geometric` (rule 2); `keyType` (421) is unchanged, the value
-  pair of a `geometric` key is checked by SC2.
+  pair of a `geometric` key is checked by SC2. `geometric` is a key curve: on the `curveType` consumers that
+  ease a progress from 0 to 1 (`motionPath/@interpolation`, `flyTo/@easing`, `transition/@curve`, `sizeCurve`
+  and `colorCurve` of `particleEmitter` and `particles3D`) the implicit pair 0 → 1 fails SC2 and the value is
+  refused, never mapped to `linear` (a document would then mean something other than what it wrote).
 - `scaleBar`, a new optional child element of `cameraType` (the choice at 4430), at most one:
   - `maxWidth` (`xs:positiveInteger`, pixels, default 200: the bar never exceeds it), `units` (one of `auto`
     and `si`, default `auto`: rule 3's unit ladder or metres only), `distance` (`positiveDecimal`, scene
@@ -62,10 +65,17 @@ files are not changed by this draft.
 - Schematron:
   - **SC1** `camera/@far` divided by `camera/@near` is at most 1e20, and `near` is positive.
   - **SC2** a `geometric` key and the key after it have non-zero values of one sign (a key's `interpolation`
-    is the curve of the segment it leaves, as `keyType` reads every per-key curve attribute; a last key that is
-    `geometric` governs no segment and is not checked).
-  - **SC3** `scaleBar/@maxWidth` is at most the scene width and `units` is `auto` or `si`.
-  - **SC4** `scaleBar/@distance`, when present, lies between the camera's `near` and `far`.
+    is the curve of the segment it leaves, as `keyType` reads every per-key curve attribute; a key with no
+    curve of its own under `defaultInterpolation="geometric"` is checked too, `timeRemap` keys included; a
+    last key that is `geometric` governs no segment and is not checked). The static check applies when both
+    values are plain numbers (XPath `number()` finite); a pair whose value is an expression or carries a unit
+    is the engine's to check with the same rule on the magnitudes at build time, a build error of the engine
+    as the reactive-values draft's E1 and E2 are, and two lengths of one unit interpolate geometrically; the
+    `curveType` consumers that ease a progress (the `curveType` entry above) refuse `geometric` outright.
+  - **SC3** a camera has at most one `scaleBar`, `scaleBar/@maxWidth` (default 200) is at most
+    `project/@width`, and `units` is `auto` or `si`.
+  - **SC4** `scaleBar/@distance`, when present, lies between the camera's `near` and `far` inclusive (their
+    defaults 0.1 and 10 000 when absent).
   - **V17** `camera/@depth`, `geometric`, `scaleBar` and its attributes need `scene/@version="1.8"` or later.
 
 ### Semantics
@@ -288,3 +298,9 @@ measurable after SR-91 lands.
   bound under `reversed` is f / n = 168, not n × 10⁵ (rule 1); the scale-bar case's labels are the reference's
   10 mm, 100 mm, 10 Mm and 2 pc; SC2 pairs a `geometric` key with the key after it, since a key's
   `interpolation` is the curve of the segment it leaves (rule 2, the invalid case's −1 key).
+- 2026-10-27: SR-91's schema-step readings ruled on: `geometric` refused on the curves that ease a progress
+  from 0 to 1 and never mapped to `linear`; SC2 reaches keys under `defaultInterpolation="geometric"`,
+  `timeRemap` keys included; SC2's static check reads plain numbers, an expression or a unit-suffixed value
+  being the engine's build error with the same rule (the reactive-values draft's convention; SR-91 read a
+  Schematron refusal there, refuted: the validator would refuse what the evaluator handles); SC3 and SC4
+  restated as checked, with the camera's defaults.

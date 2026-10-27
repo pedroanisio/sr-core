@@ -540,6 +540,27 @@ def test_the_draft_states_the_fixed_buffer_bound_the_bar_labels_and_the_key_the_
     assert "the −1 key carries" in draft
 
 
+def test_the_draft_states_sc2s_reach_and_the_scale_bar_checks(draft):
+    # SC2 refuses `geometric` where a curve eases a progress from 0 to 1 (the implicit pair 0 -> 1 fails it)
+    for consumer in ("`motionPath/@interpolation`", "`flyTo/@easing`", "`transition/@curve`", "`sizeCurve`", "`colorCurve`"):
+        assert consumer in draft, consumer
+    assert "a progress from 0 to 1" in draft and "never mapped to `linear`" in draft
+    # a key that takes geometric from its animation's defaultInterpolation is checked too, timeRemap keys included
+    assert '`defaultInterpolation="geometric"`' in draft and "`timeRemap`" in draft
+    # the static check reads plain numbers; expressions and unit-suffixed values are the engine's build error
+    assert "values are plain numbers" in draft and "build error of the engine" in draft
+    assert "two lengths of one unit" in draft
+    assert sc.validate_keys(2.0, 2000.0, "geometric") is None
+    with pytest.raises(sc.ScaleError):
+        sc.validate_keys(0.0, 1.0, "geometric")           # a progress curve's pair
+    # SC3 and SC4 as checked, with the camera's defaults
+    assert "at most one `scaleBar`" in draft and "`project/@width`" in draft
+    assert "defaults 0.1 and 10 000 when absent" in draft
+    with pytest.raises(sc.ScaleError):
+        sc.validate_scale_bar(200, "auto", 20000.0, 0.1, 10000.0, 1920)
+    sc.validate_scale_bar(200, "auto", 10000.0, 0.1, 10000.0, 1920)
+
+
 ROW = re.compile(r"\|\s*([^|]+?)\s*\|\s*`([^`]+)`\s*\|\s*`([^`]+)`\s*\|")
 
 
