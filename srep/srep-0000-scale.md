@@ -126,7 +126,16 @@ scene pixels (SREP 4: `physics/@pixelsPerMeter` pixels per metre, default 100) u
    (`scale_bar_at`, `scale_bar_frame`) as the measured depth changes.
 4. **The floating origin.** Before any binary32 arithmetic the engine subtracts the eye position from every
    world position in binary64 and converts the differences (`floating_origin(positions, eye)`); it never
-   converts world positions to binary32 first (`world_positions`, the error it avoids). The error of a gap g
+   converts world positions to binary32 first (`world_positions`, the error it avoids). The origin may be
+   the eye itself or a point the engine keeps within a fixed distance of it, `lattice_origin(eye, cell)`,
+   the eye rounded to a lattice so that still geometry keeps the same rebased coordinates from frame to
+   frame; the error of a point at gap g from the eye is then at most `rebased_error_bound(g, cell)`, half
+   the binary32 spacing at g + cell / 2: 2⁻¹⁵ units at the eye for a 1024-unit cell and below
+   `RESOLUTION` × g beyond 3.1 units. Geometry the engine builds in binary32 (a trail's tube, a particle
+   system, a mesh) is built about a binary64 anchor of its own and placed by a binary64 transform, so the
+   rebasing applies to the anchor; a quantity the document defines in world coordinates (the sky's
+   `altitude` above the observer at the scene origin) is evaluated from the binary64 world position, not
+   the rebased one, so nothing changes where the origin moves. The error of a gap g
    between a point and the eye is `world_error(p, eye)` in world coordinates and `rebased_error(p, eye)` after
    rebasing: the first is up to the binary32 spacing at |p|, 2⁴³ ≈ 8.8e12 units at 10²⁰, the second is at most
    half the spacing at g. `rebase_needed(p, eye)` is true when the world error exceeds `RESOLUTION` × g, and
@@ -184,7 +193,7 @@ is invalid under SC1 where it validated before: at 67a661a the engine clamps `ne
 
 | Engine | Status | Work | Tracking |
 |---|---|---|---|
-| Rust (`rs-scene-render`), reference | feat/sr-67-fields bba6158 (SR-91 reports; main 67a661a built a binary32 reversed projection with `near` clamped at 1e-4 over a `Depth32Float` buffer, with no `geometric` curve, no scale bar and world positions converted to binary32 before the view transform): the kernel at 07a5ea3 (depth resolution, geometric keys, the scale bar and the floating origin in `sr_3d::scale`); at 685d380 and bba6158 rule 1 is drawn: the buffer stays `Depth32Float` in both modes, the reversed mapping built in binary64 and resolving one part in 10⁵ at every decade from 0.1 to 10¹⁹, the logarithmic mapping stored as 1 − d so the reverse-Z conventions hold (the draft's d is what the camera's depth value returns), the AO/SSR prepass unchanged on its own reverse-Z buffer, `near` and `far` clamped only outside SC1 (a NaN, infinite or non-positive `near`, or `far` not above `near`: the fallback `near` ≥ 1e-4 and `far` ≥ `near` + 1e-3) and the document's own values within it; evidence SR-91 reports: spheres one part in 10⁴ apart at 10ᵏ for k in 1, 4, 8, 12, 16, 18 under both modes, logarithmic against reversed images within 1/255 plain, with depth of field and with AO and SSR; at f408760 `depth`, `geometric` and `scaleBar` parse (SC1–SC4, V17), SC2's assert guarded to two finite numbers, `geometric` refused on the curves that ease a progress from 0 to 1, a geometric pair the Schematron cannot read refused at the build as E04 unless two finite numbers or two lengths of one unit, non-zero and of one sign, with no linear fallback; the evaluator's geometric segment equals `geometric`, 960 frames of the powers of ten camera (z −10 to −1e20 over 40 s at 24 fps) bit-equal to `powers_of_ten` and a frame evaluated alone equal to the frame played to (rule 2, the seek check); corpus 847 documents with oracle agreement, 7 of 7 evaluator mutants killed; at 69867ab SC1's assert requires `far` above `near` (the clause this draft and the reference's `depth_ratio_valid` require; `near` 10 with `far` 10 or 5 refused, corpus 848) | rendering: binary64 rebasing about the eye before the view transform (rule 4), the scale bar with its depth measurement, unit ladder and label (rule 3); the kit's four cases once they render | [SR-91](https://faz-ai.atlassian.net/browse/SR-91) |
+| Rust (`rs-scene-render`), reference | feat/sr-67-fields bba6158 (SR-91 reports; main 67a661a built a binary32 reversed projection with `near` clamped at 1e-4 over a `Depth32Float` buffer, with no `geometric` curve, no scale bar and world positions converted to binary32 before the view transform): the kernel at 07a5ea3 (depth resolution, geometric keys, the scale bar and the floating origin in `sr_3d::scale`); at 685d380 and bba6158 rule 1 is drawn: the buffer stays `Depth32Float` in both modes, the reversed mapping built in binary64 and resolving one part in 10⁵ at every decade from 0.1 to 10¹⁹, the logarithmic mapping stored as 1 − d so the reverse-Z conventions hold (the draft's d is what the camera's depth value returns), the AO/SSR prepass unchanged on its own reverse-Z buffer, `near` and `far` clamped only outside SC1 (a NaN, infinite or non-positive `near`, or `far` not above `near`: the fallback `near` ≥ 1e-4 and `far` ≥ `near` + 1e-3) and the document's own values within it; evidence SR-91 reports: spheres one part in 10⁴ apart at 10ᵏ for k in 1, 4, 8, 12, 16, 18 under both modes, logarithmic against reversed images within 1/255 plain, with depth of field and with AO and SSR; at f408760 `depth`, `geometric` and `scaleBar` parse (SC1–SC4, V17), SC2's assert guarded to two finite numbers, `geometric` refused on the curves that ease a progress from 0 to 1, a geometric pair the Schematron cannot read refused at the build as E04 unless two finite numbers or two lengths of one unit, non-zero and of one sign, with no linear fallback; the evaluator's geometric segment equals `geometric`, 960 frames of the powers of ten camera (z −10 to −1e20 over 40 s at 24 fps) bit-equal to `powers_of_ten` and a frame evaluated alone equal to the frame played to (rule 2, the seek check); corpus 847 documents with oracle agreement, 7 of 7 evaluator mutants killed; at 69867ab SC1's assert requires `far` above `near` (the clause this draft and the reference's `depth_ratio_valid` require; `near` 10 with `far` 10 or 5 refused, corpus 848); at 2a724ef rule 4 is drawn: every 3D pass rebased about `lattice_origin(eye, 1024)` (a non-finite axis kept at 0), world transforms composed in binary64 and the differences rounded to binary32, an orbit trail's tube built about its newest point, the sky's aerial perspective from the world altitude; evidence SR-91 reports: a scene moved 3e9 px along x and z (camera target, depth-of-field target, parented moon, particles, shadowed point light, look-at spot, a parented camera with a trail) within 2/255 of its image at the origin, air through fog and a volume and a geodesic black hole 5 px either side of a cell boundary within 1 % and 2/255, 12 mutants killed | rendering: the scale bar with its depth measurement, unit ladder and label (rule 3); the kit's four cases once they render; rebasing not yet pinned by a test for the 2.5D projection, fracture and voxel pieces and joint look-at targets (SR-91 reports) | [SR-91](https://faz-ai.atlassian.net/browse/SR-91) |
 
 ## Conformance
 
@@ -252,6 +261,9 @@ spacing there is 2¹⁴.
 | rebase needed at 1e6 | `rebase_needed(1e6 + 0.25, 1e6)` | `False` |
 | world extent for a 1 unit gap | `world_extent(1)` | `16777216` |
 | world extent for a 1e13 gap | `world_extent(1e13)` | `1.47574e+20` |
+| lattice origin of an eye at 2^40 + 300 | `lattice_origin((2 ** 40 + 300, 700, -600), 1024)` | `(1099511627776.0, 1024.0, -1024.0)` |
+| rebased error bound at the eye with 1024 cells | `rebased_error_bound(0, 1024)` | `3.05176e-05` |
+| rebased error bound 1e9 from the eye with 1024 cells | `rebased_error_bound(1e9, 1024)` | `32` |
 
 ### Kit cases
 
@@ -320,3 +332,8 @@ measurable after SR-91 lands.
   `near` would have been clamped inside SC1 as written; sent to SR-91 and closed at 69867ab); the AO/SSR
   prepass's own buffer (open issue 3); the Engine impact row records rule 1 as drawn and SC1 as closed,
   remaining the floating origin and the scale bar.
+- 2026-10-27: SR-91's rule 4 readings at 2a724ef ruled on: rule 4 allows the origin to be a lattice point
+  within a fixed distance of the eye (`lattice_origin`, `rebased_error_bound`: 2⁻¹⁵ units at the eye for a
+  1024-unit cell, below `RESOLUTION` × g beyond 3.1 units), states that geometry built in binary32 has a
+  binary64 anchor of its own and that world-defined quantities such as the sky's altitude are evaluated
+  before rebasing; the Engine impact row records rule 4 as drawn, remaining the scale bar.

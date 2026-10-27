@@ -391,9 +391,30 @@ def _vec3(v):
     return tuple(float(c) for c in v)
 
 
-def floating_origin(positions, eye):
-    """Every position rebased about the eye in binary64 and rounded to binary32."""
+def lattice_origin(eye, cell):
+    """The eye rounded to the nearest multiple of cell on each axis (a tie goes up); cell 0 is the eye."""
     e = _vec3(eye)
+    if any(not math.isfinite(c) for c in e):
+        raise ScaleError("the eye is finite")
+    c = float(cell)
+    if not c >= 0.0:
+        raise ScaleError("cell is zero or positive")
+    if c == 0.0:
+        return e
+    return tuple(math.floor(x / c + 0.5) * c for x in e)
+
+
+def rebased_error_bound(gap, cell):
+    """The largest error after rebasing about a lattice origin: half the binary32 spacing at gap + cell / 2."""
+    g = float(gap)
+    if not g >= 0.0 or not float(cell) >= 0.0:
+        raise ScaleError("gap and cell are zero or positive")
+    return f32_ulp(g + float(cell) / 2.0) / 2.0
+
+
+def floating_origin(positions, eye, cell=0.0):
+    """Every position rebased about the eye (or its lattice origin) in binary64 and rounded to binary32."""
+    e = lattice_origin(eye, cell)
     return tuple(tuple(f32(c - ec) for c, ec in zip(_vec3(p), e)) for p in positions)
 
 
@@ -492,6 +513,9 @@ TABLE = (
     ("rebase needed at 1e6", "rebase_needed(1e6 + 0.25, 1e6)", "False"),
     ("world extent for a 1 unit gap", "world_extent(1)", "16777216"),
     ("world extent for a 1e13 gap", "world_extent(1e13)", "1.47574e+20"),
+    ("lattice origin of an eye at 2^40 + 300", "lattice_origin((2 ** 40 + 300, 700, -600), 1024)", "(1099511627776.0, 1024.0, -1024.0)"),
+    ("rebased error bound at the eye with 1024 cells", "rebased_error_bound(0, 1024)", "3.05176e-05"),
+    ("rebased error bound 1e9 from the eye with 1024 cells", "rebased_error_bound(1e9, 1024)", "32"),
 )
 
 

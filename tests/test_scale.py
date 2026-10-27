@@ -459,6 +459,53 @@ def test_world_extent_is_where_binary32_stops_resolving_the_gap():
         sc.world_extent(0.0)
 
 
+def test_a_lattice_origin_stays_within_half_a_cell_of_the_eye():
+    # the eye rounded to the nearest multiple of the cell on each axis; a tie goes up; cell 0 is the eye itself
+    assert sc.lattice_origin((2.0 ** 40 + 300.0, 700.0, -600.0), 1024.0) == (2.0 ** 40, 1024.0, -1024.0)
+    assert sc.lattice_origin((512.0, -512.0, 0.0), 1024.0) == (1024.0, 0.0, 0.0)
+    assert sc.lattice_origin((1.0e20, 1.0, -1.0), 1024.0) == (1.0e20, 0.0, 0.0)
+    assert sc.lattice_origin((0.3, -0.7, 2.5), 0.0) == (0.3, -0.7, 2.5)
+    eye = (2.0 ** 66 + 123456.0, -(2.0 ** 64) + 999.0, 777.0)
+    for e, o in zip(eye, sc.lattice_origin(eye, 1024.0)):
+        assert abs(e - o) <= 512.0 and o % 1024.0 == 0.0
+    for bad in ((float("nan"), 0.0, 0.0), (0.0, float("inf"), 0.0)):
+        with pytest.raises(sc.ScaleError):
+            sc.lattice_origin(bad, 1024.0)
+    with pytest.raises(sc.ScaleError):
+        sc.lattice_origin((0.0, 0.0, 0.0), -1.0)
+    with pytest.raises(sc.ScaleError):
+        sc.lattice_origin((0.0, 0.0), 1024.0)
+
+
+def test_the_rebased_error_bound_is_half_the_spacing_at_the_gap_plus_half_a_cell():
+    assert sc.rebased_error_bound(0.0, 1024.0) == 2.0 ** -15
+    assert sc.rebased_error_bound(1.0e9, 1024.0) == 32.0
+    assert sc.rebased_error_bound(2.0 ** 17, 0.0) == sc.f32_ulp(2.0 ** 17) / 2.0
+    assert sc.rebased_error_bound(3.1, 1024.0) < sc.RESOLUTION * 3.1
+    assert sc.rebased_error_bound(3.0, 1024.0) > sc.RESOLUTION * 3.0
+    for gap in (512.0, 1.0e3, 1.0e6, 1.0e9, 1.0e13, 1.0e20):
+        assert sc.rebased_error_bound(gap, 1024.0) <= 2.0 ** -23 * gap
+    with pytest.raises(sc.ScaleError):
+        sc.rebased_error_bound(-1.0, 1024.0)
+    # rebasing about the lattice origin keeps every error within the bound
+    eye = (2.0 ** 40 + 300.0, -(2.0 ** 38) - 200.0, 2.0 ** 36 + 100.0)    # offsets below half a cell
+    positions = (eye, (eye[0] + 2.0 ** 17 + 0.25, eye[1] - 2.0 ** 18, eye[2] + 1.0e9 + 0.001))
+    rebased = sc.floating_origin(positions, eye, 1024.0)
+    origin = sc.lattice_origin(eye, 1024.0)
+    assert rebased[0] == (300.0, -200.0, 100.0)
+    for p, r in zip(positions, rebased):
+        for c, oc, rc, ec in zip(p, origin, r, eye):
+            assert abs(rc - (c - oc)) <= sc.rebased_error_bound(abs(c - ec), 1024.0)
+    assert sc.floating_origin(positions, eye) == sc.floating_origin(positions, eye, 0.0)
+
+
+def test_the_draft_allows_a_lattice_origin_and_names_the_anchor_and_world_quantities(draft):
+    assert "`lattice_origin(eye, cell)`" in draft and "`rebased_error_bound(g, cell)`" in draft
+    assert "2⁻¹⁵ units at the eye for a 1024-unit cell" in draft
+    assert "built about a binary64 anchor of its own" in draft
+    assert "evaluated from the binary64 world position" in draft and "`altitude`" in draft
+
+
 # ------------------------------------------------------------------------------------ validation
 
 
@@ -568,7 +615,9 @@ def test_the_draft_records_the_engine_state(draft):
     assert "E04" in done and "guarded" in done and "`powers_of_ten`" in done
     assert "685d380" in done and "`Depth32Float`" in done and "1 − d" in done
     assert "69867ab" in done and "`far` above `near`" in done and "848" in done
-    assert remaining.startswith("rendering:") and "scale bar" in remaining and "rule 4" in remaining
+    assert "2a724ef" in done and "`lattice_origin(eye, 1024)`" in done and "12 mutants" in done
+    assert remaining.startswith("rendering:") and "scale bar" in remaining and "rule 4" not in remaining
+    assert "2.5D" in remaining and "joint look-at" in remaining
     assert "no `near` clamp" not in remaining and "logarithmic mapping" not in remaining
     assert "lacks `far` above `near`" not in remaining and "SC1" not in remaining
     assert "at 67a661a `camera.rs` builds" not in done
