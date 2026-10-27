@@ -630,8 +630,9 @@ def test_the_draft_records_the_engine_state(draft):
     assert "69867ab" in done and "`far` above `near`" in done and "848" in done
     assert "2a724ef" in done and "`lattice_origin(eye, 1024)`" in done and "12 mutants" in done
     assert "b620676" in done and "96b4a70" in done and "`scale_bar_frame`" in done and "`render --stats`" in done
-    assert remaining.startswith("the kit's eight cases") and "scale bar" not in remaining and "rule 4" not in remaining
-    assert "2.5D" in remaining and "joint look-at" in remaining
+    assert "b525913" in done and "joint look-at" in done
+    assert remaining.startswith("none; the eight kit cases pass with the values below")
+    assert "2.5D" not in remaining and "scale bar" not in remaining
     assert "no `near` clamp" not in remaining and "logarithmic mapping" not in remaining
     assert "lacks `far` above `near`" not in remaining and "SC1" not in remaining
     assert "at 67a661a `camera.rs` builds" not in done
@@ -683,3 +684,293 @@ def test_the_table_is_what_the_module_prints(draft, capsys):
     for line in printed:
         assert line in draft, line
     assert len(printed) == len(_draft_rows())
+
+
+# ------------------------------------------------------------------------------------ the kit
+
+KIT = os.path.join(ROOT, "conformance", "tools", "scale_kit.py")
+
+
+def _load(path, name):
+    spec = importlib.util.spec_from_file_location(name, path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+kit = _load(KIT, "scale_kit")
+np = pytest.importorskip("numpy")
+Image = pytest.importorskip("PIL.Image")
+CASE = r"(scale-[a-z-]+)"
+
+
+def test_the_kit_camera_puts_a_scene_point_on_its_pixel():
+    # fov 60 over 640 columns: focal 554.26 px; y runs down the frame
+    f = kit.focal()
+    assert _close(f, sc.focal_pixels(60, 640), 1e-12)
+    assert _close(kit.pixel((0.0, 0.0, 1000.0)), (320.0, 180.0), 1e-12)
+    assert _close(kit.pixel((100.0, 50.0, 1000.0)), (320.0 + f * 0.1, 180.0 + f * 0.05), 1e-9)
+    with pytest.raises(ValueError):
+        kit.pixel((0.0, 0.0, -1.0))
+    d = kit.direction(320.0 + f * 0.1, 180.0 + f * 0.05)
+    assert _close(math.sqrt(sum(c * c for c in d)), 1.0, 1e-12)
+    assert _close(kit.pixel(tuple(1000.0 * c for c in d)), (320.0 + f * 0.1, 180.0 + f * 0.05), 1e-9)
+    assert _close(kit.sphere_pixels(2.0, 10.0, f), f * 0.2 / math.sqrt(0.96), 1e-12)
+    with pytest.raises(ValueError):
+        kit.sphere_pixels(10.0, 10.0, f)
+
+
+def test_the_kit_geometry_follows_the_draft():
+    g = kit.geometry()
+    assert list(g) == kit.NAMES
+    # 19 pairs one decade apart from 1 to 1e18 pixels, the farther sphere one part in 1e4 behind, all in frame
+    pairs = g["scale-depth"]["pairs"]
+    assert sorted(pairs) == list(range(19)) and g["scale-depth"]["far"] / g["scale-depth"]["near"] == 1e20
+    for k, p in pairs.items():
+        assert _close(p["distance"], 10.0 ** k, 1e-9 * 10.0 ** k) and p["radius"] == kit.DEPTH_SIZE * p["distance"]
+        near_d = math.sqrt(sum(c * c for c in p["near"]))
+        far_d = math.sqrt(sum(c * c for c in p["far"]))
+        assert _close(near_d, p["distance"], 1e-6 * p["distance"])
+        assert _close(far_d - near_d, (p["distance"] + p["radius"]) * 1e-4, 1e-6 * p["distance"])
+        px, py = kit.pixel(p["near"])
+        assert 40.0 < px < 600.0 and 40.0 < py < 320.0 and _close((px, py), kit.depth_slots()[k], 1e-6)
+    # the powers of ten camera is 10^(k + 1) pixels away at frame 48 + 48 k and the sphere 2 x 10^k is a fifth of that
+    assert g["scale-powers"]["frames"] == tuple(48 + 48 * k for k in range(19))
+    for k, fr in enumerate(g["scale-powers"]["frames"]):
+        d = g["scale-powers"]["distances"][fr]
+        assert _close(d, 10.0 ** (k + 1), 1e-9 * d) and g["scale-powers"]["radii"][k] == 2.0 * 10.0 ** k
+        assert _close(g["scale-powers"]["pixels"][fr], kit.focal() * 0.2 / math.sqrt(0.96), 1e-6)
+    # the bar's frames and labels are the reference's; the orthographic bar is scale_bar(54, 200)
+    bars = g["scale-bar"]["bars"]
+    assert [bars[f]["label"] for f in (0, 96, 480, 960)] == ["10 mm", "100 mm", "10 Mm", "2 pc"]
+    assert bars[0] == sc.scale_bar_frame(0, 24, 2, 40, 10, 1e20, sc.focal_pixels(60, 1920), 100, 200)
+    assert g["scale-bar"]["rows"] == (1054, 1056) and g["scale-bar-ortho"]["bar"] == sc.scale_bar(54, 200)
+    # two spheres 2^17 apart, 2^14 wide, seen from between them 200 000 pixels away
+    c = g["scale-origin"]["centres"]
+    assert _close(c[0][1], 180.0, 1e-9) and _close(c[1][0] - c[0][0], 2 * kit.focal() * 65536.0 / 200000.0, 1e-6)
+    assert 30.0 < g["scale-origin"]["pixel_radius"] < 60.0
+    assert g["scale-invalid"]["documents"] == [f"scale-invalid-{c}" for c in ("sc1", "sc2", "sc3", "sc4", "v17")]
+
+
+def test_the_kit_documents_are_the_drafts(tmp_path):
+    import xml.etree.ElementTree as ET
+    docs = kit.documents()
+    assert set(docs) == {k for keys in kit.DOCUMENTS.values() for k in keys} and len(docs) == 12
+    trees = {k: ET.fromstring(t) for k, t in docs.items()}
+    for k, root in trees.items():
+        assert root.get("version") == ("1.7" if k == "scale-invalid-v17" else "1.8"), k
+        assert root.find("physics").get("pixelsPerMeter") == "100.0"
+    cam = trees["scale-depth"].find("composition/camera")
+    assert (cam.get("near"), cam.get("far"), cam.get("depth")) == ("0.1", "1e+19", "reversed")
+    assert trees["scale-depth-log"].find("composition/camera").get("depth") == "logarithmic"
+    assert len(trees["scale-depth"].findall("composition/object3D")) == 38
+    keys = trees["scale-powers"].findall("composition/camera/animate/key")
+    assert [(k.get("time"), k.get("value"), k.get("interpolation")) for k in keys] == [
+        ("2", "-10.0", "geometric"), ("40", "-1e+20", None)]
+    assert len(trees["scale-powers"].findall("composition/object3D")) == 19
+    bar = trees["scale-bar"].find("composition/camera")
+    assert bar.get("target") == "ball" and bar.find("scaleBar") is not None and bar.find("animate") is not None
+    assert trees["scale-bar"].find("project").get("width") == "1920"
+    ortho = trees["scale-bar-ortho"].find("composition/camera")
+    assert ortho.get("projection") == "orthographic" and ortho.get("orthoHeight") == "2000.0"
+    assert trees["scale-bar-ortho"].find("project").get("height") == "1080"
+    far = trees["scale-origin-far"]
+    assert far.find("composition/camera").get("x") == "1e+20"
+    assert [o.get("x") for o in far.findall("composition/object3D")] == [repr(1e20 - 65536.0), repr(1e20 + 65536.0)]
+    assert trees["scale-invalid-sc1"].find("composition/camera").get("far") == "2e19"
+    assert trees["scale-invalid-sc3"].find("composition/camera/scaleBar").get("maxWidth") == "700"
+    assert trees["scale-invalid-sc4"].find("composition/camera/scaleBar").get("distance") == "2e6"
+    paths = kit.write(str(tmp_path))
+    assert all(os.path.exists(p) for p in paths.values()) and paths["scale-depth"].endswith("srep-0000-scale-depth.xml")
+
+
+def _stats_line(frame, bars):
+    import json
+    return json.dumps({"frame": frame, "stats": {"scale_bars": bars}, "gpu": None, "paths": {}})
+
+
+@pytest.fixture(scope="module")
+def synthetic():
+    exp, g = kit.expectations(), kit.geometry()
+    frames, stats = {}, {}
+    depth = kit.paint_discs(list(kit.depth_slots().values()), 20.0, "red")
+    frames["scale-depth@0"], frames["scale-depth-log@0"] = depth, depth.copy()
+    for k, fr in zip(kit.POWERS_DECADES, kit.POWERS_FRAMES):
+        frames[f"scale-powers@{fr}"] = kit.paint_discs([(320.0, 180.0)], g["scale-powers"]["pixels"][fr],
+                                                        kit.PARITY[k % 2])
+    for fr, bar in g["scale-bar"]["bars"].items():
+        frame = np.zeros((1080, 1920, 3), dtype=np.uint8)
+        frames[f"scale-bar@{fr}"] = kit.paint_bar(frame, g["scale-bar"]["rows"], 24, bar["pixels"])
+        stats[f"scale-bar@{fr}"] = [{"camera": "eye", "measured": "target", "depth": kit.powers_distance(fr),
+                                     "pixels": bar["pixels"], "label": bar["label"]}]
+    frame = np.zeros((1080, 640, 3), dtype=np.uint8)
+    bar = g["scale-bar-ortho"]["bar"]
+    frames["scale-bar-ortho@0"] = kit.paint_bar(frame, g["scale-bar-ortho"]["rows"], 24, bar["pixels"])
+    stats["scale-bar-ortho@0"] = [{"camera": "eye", "measured": "orthoHeight", "depth": 2000.0,
+                                   "pixels": bar["pixels"], "label": bar["label"]}]
+    origin = kit.paint_discs(g["scale-origin"]["centres"], g["scale-origin"]["pixel_radius"], "red")
+    frames["scale-origin-here@0"] = origin
+    frames["scale-origin-far@0"], frames["scale-origin-far@12"] = origin.copy(), origin.copy()
+    frames["seek-alone"] = frames[f"scale-powers@{kit.POWERS_FRAMES[-1]}"]
+    frames["seek-played"] = frames["seek-alone"].copy()
+    refusals = {f"scale-invalid-{c}": f"error[{c.upper()}] (eye): refused" for c in kit.INVALID}
+    return exp, g, frames, stats, refusals
+
+
+def test_the_kit_measures_the_synthetic_frames(synthetic):
+    exp, g, frames, stats, refusals = synthetic
+    depth = kit.measure("scale-depth", frames, exp)
+    assert depth["pass"] and depth["decades"] == 19 and depth["farther_pixels"] == 0 and depth["worst_window_fill"] == 1.0
+    log = kit.measure("scale-depth-log", frames, exp)
+    assert log["pass"] and log["worst_level"] == 0.0
+    powers = kit.measure("scale-powers", frames, exp)
+    assert powers["pass"] and powers["worst_off_px"] <= 0.3 and powers["spread_px"] == 0.0 and powers["centre_hits"] == 19
+    bar = kit.measure("scale-bar", frames, exp, stats=stats)
+    assert bar["pass"] and bar["bars"].startswith("0: 10 mm 166.28 px; 96: 100 mm") and bar["worst_run_end_px"] <= 0.5
+    ortho = kit.measure("scale-bar-ortho", frames, exp, stats=stats)
+    assert ortho["pass"] and ortho["bars"] == "0: 2 m 108.0 px"
+    origin = kit.measure("scale-origin", frames, exp)
+    assert origin["pass"] and origin["worst_off_px"] == 0.0 and origin["motion_px"] == 0.0
+    assert kit.measure("scale-seek", frames, exp)["identical"]
+    invalid = kit.measure("scale-invalid", frames, exp, refusals=refusals)
+    assert invalid["pass"] and invalid["refused"] == 5 and invalid["sc1"] == "SC1" and invalid["v17"] == "V17"
+    assert kit.diagnostic_code("error: something else entirely") == "error: something else entirely"
+    with pytest.raises(ValueError):
+        kit.measure("scale-moons", frames, exp)
+
+
+def test_the_kit_fails_a_wrong_frame(synthetic):
+    exp, g, frames, stats, refusals = synthetic
+
+    def with_frame(key, frame):
+        bad = dict(frames)
+        bad[key] = frame
+        return bad
+
+    # a farther sphere showing through a nearer one
+    leak = frames["scale-depth@0"].copy()
+    cx, cy = kit.depth_slots()[18]
+    leak[int(cy), int(cx)] = (0, 255, 0)
+    assert not kit.measure("scale-depth", with_frame("scale-depth@0", leak), exp)["pass"]
+    # a missing pair
+    gone = kit.paint_discs(list(kit.depth_slots().values())[:-1], 20.0, "red")
+    assert not kit.measure("scale-depth", with_frame("scale-depth@0", gone), exp)["pass"]
+    # the logarithmic image two levels off
+    off = frames["scale-depth-log@0"].copy()
+    off[0, 0] = (2, 0, 0)
+    assert not kit.measure("scale-depth-log", with_frame("scale-depth-log@0", off), exp)["pass"]
+    # a disc 2 px too wide at one decade: the radii no longer agree
+    fr = kit.POWERS_FRAMES[5]
+    wide = kit.paint_discs([(320.0, 180.0)], g["scale-powers"]["pixels"][fr] + 2.0, kit.PARITY[5 % 2])
+    assert not kit.measure("scale-powers", with_frame(f"scale-powers@{fr}", wide), exp)["pass"]
+    # a reported bar a part in 1e6 off, a wrong label, a wrong source and a run 3 px short
+    bad = {k: [dict(v[0])] for k, v in stats.items()}
+    bad["scale-bar@96"][0]["pixels"] *= 1.0 + 1e-6
+    assert not kit.measure("scale-bar", frames, exp, stats=bad)["pass"]
+    bad = {k: [dict(v[0])] for k, v in stats.items()}
+    bad["scale-bar@960"][0]["label"] = "1 pc"
+    assert not kit.measure("scale-bar", frames, exp, stats=bad)["pass"]
+    bad = {k: [dict(v[0])] for k, v in stats.items()}
+    bad["scale-bar-ortho@0"][0]["measured"] = "far"
+    assert not kit.measure("scale-bar-ortho", frames, exp, stats=bad)["pass"]
+    short = frames["scale-bar@480"].copy()
+    short[1054:1056, 24 + 163:24 + 170] = 0
+    assert not kit.measure("scale-bar", with_frame("scale-bar@480", short), exp, stats=stats)["pass"]
+    # the far spheres a pixel off, and moving between frames
+    shifted = np.roll(frames["scale-origin-far@0"], 1, axis=1)
+    assert not kit.measure("scale-origin", with_frame("scale-origin-far@0", shifted), exp)["pass"]
+    moved = with_frame("scale-origin-far@12", shifted)
+    assert not kit.measure("scale-origin", moved, exp)["pass"]
+    # a seek frame that differs by one pixel, and an invalid document the engine rendered
+    played = frames["seek-played"].copy()
+    played[10, 10] = (1, 1, 1)
+    assert not kit.measure("scale-seek", with_frame("seek-played", played), exp)["pass"]
+    rendered = dict(refusals)
+    rendered["scale-invalid-sc3"] = None
+    assert kit.measure("scale-invalid", frames, exp, refusals=rendered) == {
+        "pass": False, "refused": 4, "sc1": "SC1", "sc2": "SC2", "sc3": "rendered", "sc4": "SC4", "v17": "V17"}
+
+
+def _fake_engine(frames, stats, refuse=()):
+    class Result:
+        def __init__(self, code, err=""):
+            self.returncode, self.stderr, self.stdout = code, err, ""
+
+    def exec(cmd, capture_output, text):
+        assert cmd[1] == "render"
+        key = os.path.basename(cmd[2])[len("srep-0000-"):-len(".xml")]
+        if key.startswith("scale-invalid-"):
+            return Result(1, f"warning: a software adapter\nerror[{key[-3:].upper()}] (eye): refused\n")
+        if key in refuse:
+            return Result(1, f"error: {key} refused\n")
+        target = cmd[cmd.index("-o") + 1]
+        err = ""
+        if "-f" in cmd:
+            frame = int(cmd[cmd.index("-f") + 1])
+            name = "seek-alone" if frame == kit.SEEK_FRAMES and key == "scale-powers" else f"{key}@{frame}"
+            Image.fromarray(frames[name], "RGB").save(target)
+            if "--stats" in cmd:
+                err = _stats_line(frame, stats.get(f"{key}@{frame}", [])) + "\n"
+        else:
+            first, last = (int(v) for v in cmd[cmd.index("--frames") + 1].split("..="))
+            assert (first, last) == (0, kit.SEEK_FRAMES) and key == "scale-powers"
+            Image.fromarray(frames["seek-played"], "RGB").save(target % last)
+        return Result(0, err)
+
+    return exec
+
+
+def test_the_kit_parses_an_engines_stats_lines():
+    text = "warning: slow\n" + _stats_line(7, [{"camera": "eye", "measured": "far", "depth": 1e6, "pixels": 1.0,
+                                                  "label": "1 m"}]) + "\nwrote x.png\n{not json\n"
+    assert kit.parse_stats(text) == {7: [{"camera": "eye", "measured": "far", "depth": 1e6, "pixels": 1.0, "label": "1 m"}]}
+    assert kit.parse_stats("") == {}
+
+
+def test_the_kit_plans_single_frames_a_seek_run_and_refusals():
+    plan = kit.plan()
+    assert list(plan) == kit.NAMES
+    assert plan["scale-depth"] == [("scale-depth", (0,), "single")]
+    assert plan["scale-depth-log"] == [("scale-depth", (0,), "single"), ("scale-depth-log", (0,), "single")]
+    assert plan["scale-bar"] == [("scale-bar", (0, 96, 480, 960), "single")]
+    assert plan["scale-origin"] == [("scale-origin-here", (0,), "single"), ("scale-origin-far", (0, 12), "single")]
+    assert plan["scale-seek"] == [("scale-powers", (960,), "seek")]
+    assert plan["scale-invalid"] == [(f"scale-invalid-{c}", (0,), "refuse") for c in kit.INVALID]
+
+
+def test_the_kit_runs_an_engine_and_reports_every_case(synthetic, tmp_path):
+    exp, g, frames, stats, refusals = synthetic
+    report = kit.run("scene-render", str(tmp_path / "kit"), exec=_fake_engine(frames, stats))
+    assert list(report) == kit.NAMES and all(r["pass"] for r in report.values()), report
+    assert os.path.exists(tmp_path / "kit" / "srep-0000-scale-invalid-v17.xml")
+    lines = kit.table(report).splitlines()
+    assert lines[0] == "| Case | Measured | Pass |" and len(lines) == 2 + len(kit.NAMES)
+    assert all(line.endswith("| yes |") for line in lines[2:])
+    report = kit.run("scene-render", str(tmp_path / "kit2"),
+                     exec=_fake_engine(frames, stats, refuse=("scale-origin-far", "scale-powers")),
+                     only=["scale-depth", "scale-origin", "scale-seek"])
+    assert list(report) == ["scale-depth", "scale-origin", "scale-seek"]
+    assert report["scale-depth"]["pass"] and not report["scale-origin"]["pass"] and not report["scale-seek"]["pass"]
+    assert report["scale-origin"]["error"] == "scale-origin-far: error: scale-origin-far refused"
+    assert report["scale-seek"]["error"] == "scale-powers: error: scale-powers refused"
+    assert "| scale-seek | error scale-powers: error: scale-powers refused | no |" in kit.table(report)
+
+
+def test_the_draft_describes_the_kit(draft):
+    for phrase in ("`conformance/tools/scale_kit.py`", "`srep-<n>-scale-depth.xml`", "`sphere_pixels(r, d, focal)`",
+                   "single-sided", "`--stats`", "19 pairs", "one part in 10⁴ farther", "2 × 10ᵏ", "48 + 48 k",
+                   "2¹⁷ pixels apart", "frame 960 rendered alone", "`scale_bar(54, 200)`", "SC1", "V17"):
+        assert phrase in draft, phrase
+    assert "twenty concentric spheres" not in draft and "to be measured" not in draft
+
+
+KIT_ROW = re.compile(r"^\| `srep-<n>-" + CASE + r"\.xml` \| (?:[^|]|\\\|)* \| ([^|]*) \|$")
+ENGINE_COMMIT = "96b4a70"
+
+
+def test_the_draft_records_every_kit_case_measured(draft):
+    rows = {m.group(1): m.group(2) for m in (KIT_ROW.match(line) for line in draft.splitlines()) if m}
+    assert sorted(rows) == sorted(kit.NAMES)
+    prefix = f"measured on scene-render feat/sr-67-fields {ENGINE_COMMIT} (0.8.0, llvmpipe): "
+    for name, status in rows.items():
+        assert status.startswith(prefix) and status.endswith("; pass"), (name, status)
