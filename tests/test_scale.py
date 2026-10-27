@@ -564,10 +564,30 @@ def test_the_draft_states_sc2s_reach_and_the_scale_bar_checks(draft):
 def test_the_draft_records_the_engine_state(draft):
     row = next(line for line in draft.splitlines() if line.startswith("| Rust (`rs-scene-render`), reference |"))
     done, remaining = row.split(" | ")[1:3]
-    assert done.startswith("feat/sr-67-fields f408760") and "07a5ea3" in done and "SR-91" in row
+    assert done.startswith("feat/sr-67-fields bba6158") and "07a5ea3" in done and "f408760" in done and "SR-91" in row
     assert "E04" in done and "guarded" in done and "`powers_of_ten`" in done
+    assert "685d380" in done and "`Depth32Float`" in done and "1 − d" in done
+    assert "69867ab" in done and "`far` above `near`" in done and "848" in done
     assert remaining.startswith("rendering:") and "scale bar" in remaining and "rule 4" in remaining
+    assert "no `near` clamp" not in remaining and "logarithmic mapping" not in remaining
+    assert "lacks `far` above `near`" not in remaining and "SC1" not in remaining
     assert "at 67a661a `camera.rs` builds" not in done
+
+
+def test_the_draft_states_the_stored_depth_sc1s_order_and_the_prepass(draft):
+    # the engine may store 1 - d (the reverse-Z convention); the worst relative resolution is the same either way
+    assert "may store 1 − d" in draft and "mirrored" in draft
+    n, f = 0.1, 1.0e19
+    worst = sc.worst_resolution(n, f, "logarithmic", "float")
+    assert _close(worst, 2.0 ** -24 * math.log(f / n), 1e-12) and worst < sc.RESOLUTION    # 2.74e-6 at the far decades
+    assert sc.resolves(n, f, "reversed", "float") and sc.relative_resolution(1.0e8, n, f, "reversed", "float") < 2e-7
+    # SC1 states far > near, as depth_ratio_valid does
+    assert "**SC1** `near` is positive, `far` exceeds `near`" in draft
+    assert not sc.depth_ratio_valid(1.0, 1.0) and sc.depth_ratio_valid(1.0, 1.0001)
+    with pytest.raises(sc.ScaleError):
+        sc.validate_camera(1.0, 0.5)
+    # the AO/SSR prepass keeps its own reverse-Z buffer
+    assert "AO/SSR prepass" in draft
 
 
 ROW = re.compile(r"\|\s*([^|]+?)\s*\|\s*`([^`]+)`\s*\|\s*`([^`]+)`\s*\|")

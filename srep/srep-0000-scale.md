@@ -63,7 +63,8 @@ files are not changed by this draft.
     default 24 and 24), `color` (`colorType`, default white), `thickness` (`positiveDecimal`, pixels, default
     2), `label` (`xs:boolean`, default true).
 - Schematron:
-  - **SC1** `camera/@far` divided by `camera/@near` is at most 1e20, and `near` is positive.
+  - **SC1** `near` is positive, `far` exceeds `near`, and `camera/@far` divided by `camera/@near` is at most
+    1e20 (`depth_ratio_valid`).
   - **SC2** a `geometric` key and the key after it have non-zero values of one sign (a key's `interpolation`
     is the curve of the segment it leaves, as `keyType` reads every per-key curve attribute; a key with no
     curve of its own under `defaultInterpolation="geometric"` is checked too, `timeRemap` keys included; a
@@ -99,7 +100,11 @@ scene pixels (SREP 4: `physics/@pixelsPerMeter` pixels per metre, default 100) u
    ulp(d) ln(f / n), 2.7e-6 with 24 bits at 10²⁰; `reversed` with a fixed 24-bit buffer gains nothing over
    the standard mapping, its relative resolution at the far plane is about 2⁻²⁴ f / n, so it holds 10⁻⁵ only up to
    f / n = 168 (`resolves(1, 168, 'reversed', 'fixed')` is true, 169 false). An engine whose buffer is
-   fixed-point must use `logarithmic` whatever the document says and report it.
+   fixed-point must use `logarithmic` whatever the document says and report it. An engine may store 1 − d in
+   either mode (the reverse-Z convention: a greater-or-equal compare, a clear to 0); the gap the buffer resolves
+   then reads ulp(1 − d) in place of ulp(d), the resolution profile is mirrored over the range and its worst
+   case is unchanged (under `logarithmic` with a binary32 buffer, 2⁻²⁴ ln(f / n) = 2.74 × 10⁻⁶ at f / n =
+   10²⁰, at the far decades for d and at the near ones for 1 − d).
 2. **Geometric keys.** Between two keys of values v₀ and v₁, the first with `interpolation="geometric"`
    (the curve of the segment it leaves), the value at fraction u of the key interval is `geometric(v0, v1, u)` = v₀ (v₁ / v₀)ᵘ (`interpolate(v0, v1, u, mode)`
    dispatches `linear` and `geometric`). The powers of ten camera is a camera distance keyed geometrically:
@@ -179,7 +184,7 @@ is invalid under SC1 where it validated before: at 67a661a the engine clamps `ne
 
 | Engine | Status | Work | Tracking |
 |---|---|---|---|
-| Rust (`rs-scene-render`), reference | feat/sr-67-fields f408760 (SR-91 reports; main 67a661a built a binary32 reversed projection with `near` clamped at 1e-4 over a `Depth32Float` buffer, with no `geometric` curve, no scale bar and world positions converted to binary32 before the view transform): the kernel at 07a5ea3 (depth resolution, geometric keys, the scale bar and the floating origin in `sr_3d::scale`); at f408760 `depth`, `geometric` and `scaleBar` parse (SC1–SC4, V17), SC2's assert guarded to two finite numbers, `geometric` refused on the curves that ease a progress from 0 to 1, a geometric pair the Schematron cannot read refused at the build as E04 unless two finite numbers or two lengths of one unit, non-zero and of one sign, with no linear fallback; the evaluator's geometric segment equals `geometric`, 960 frames of the powers of ten camera (z −10 to −1e20 over 40 s at 24 fps) bit-equal to `powers_of_ten` and a frame evaluated alone equal to the frame played to (rule 2, the seek check); corpus 847 documents with oracle agreement, 7 of 7 evaluator mutants killed | rendering: no `near` clamp within SC1 and the logarithmic mapping (rule 1), binary64 rebasing about the eye before the view transform (rule 4), the scale bar with its depth measurement, unit ladder and label (rule 3); the kit's four cases once they render | [SR-91](https://faz-ai.atlassian.net/browse/SR-91) |
+| Rust (`rs-scene-render`), reference | feat/sr-67-fields bba6158 (SR-91 reports; main 67a661a built a binary32 reversed projection with `near` clamped at 1e-4 over a `Depth32Float` buffer, with no `geometric` curve, no scale bar and world positions converted to binary32 before the view transform): the kernel at 07a5ea3 (depth resolution, geometric keys, the scale bar and the floating origin in `sr_3d::scale`); at 685d380 and bba6158 rule 1 is drawn: the buffer stays `Depth32Float` in both modes, the reversed mapping built in binary64 and resolving one part in 10⁵ at every decade from 0.1 to 10¹⁹, the logarithmic mapping stored as 1 − d so the reverse-Z conventions hold (the draft's d is what the camera's depth value returns), the AO/SSR prepass unchanged on its own reverse-Z buffer, `near` and `far` clamped only outside SC1 (a NaN, infinite or non-positive `near`, or `far` not above `near`: the fallback `near` ≥ 1e-4 and `far` ≥ `near` + 1e-3) and the document's own values within it; evidence SR-91 reports: spheres one part in 10⁴ apart at 10ᵏ for k in 1, 4, 8, 12, 16, 18 under both modes, logarithmic against reversed images within 1/255 plain, with depth of field and with AO and SSR; at f408760 `depth`, `geometric` and `scaleBar` parse (SC1–SC4, V17), SC2's assert guarded to two finite numbers, `geometric` refused on the curves that ease a progress from 0 to 1, a geometric pair the Schematron cannot read refused at the build as E04 unless two finite numbers or two lengths of one unit, non-zero and of one sign, with no linear fallback; the evaluator's geometric segment equals `geometric`, 960 frames of the powers of ten camera (z −10 to −1e20 over 40 s at 24 fps) bit-equal to `powers_of_ten` and a frame evaluated alone equal to the frame played to (rule 2, the seek check); corpus 847 documents with oracle agreement, 7 of 7 evaluator mutants killed; at 69867ab SC1's assert requires `far` above `near` (the clause this draft and the reference's `depth_ratio_valid` require; `near` 10 with `far` 10 or 5 refused, corpus 848) | rendering: binary64 rebasing about the eye before the view transform (rule 4), the scale bar with its depth measurement, unit ladder and label (rule 3); the kit's four cases once they render | [SR-91](https://faz-ai.atlassian.net/browse/SR-91) |
 
 ## Conformance
 
@@ -271,7 +276,8 @@ measurable after SR-91 lands.
 2. **The bar's position in a stereo or dome output.** `x` and `y` are frame pixels; a dome projection has no
    bottom left. Left to the output drafts.
 3. **Shadow maps at 10²⁰.** Rule 1 covers the main depth buffer; the cascaded shadow maps keep their own
-   near/far per cascade and are not bounded here.
+   near/far per cascade and are not bounded here, and an AO/SSR prepass that outputs view depth from its own
+   reverse-Z buffer is unchanged by the mode.
 4. **Geometric keys through zero.** SC2 refuses a sign change; a two-key work-around (geometric to a small
    value, linear through zero) is possible and may deserve a note in the keys SREP.
 5. **A `units="imperial"` ladder.** Not proposed; the schema editor may want it for a US classroom.
@@ -308,3 +314,9 @@ measurable after SR-91 lands.
   SC2 guarded to finite numbers with the unread pair a build error E04, the evaluator's geometric segment
   and the 960-frame powers of ten match, SR-91 reports) after the kernel at 07a5ea3; remaining: rendering and
   the scale bar.
+- 2026-10-27: SR-91's rule 1 readings at 685d380 and bba6158 ruled on: the stored value may be 1 − d under
+  either mode with the worst resolution unchanged (rule 1); SC1 states `far` above `near`, as the reference's
+  `depth_ratio_valid` always did (the engine's assert at f408760 lacked it, so a document with `far` not above
+  `near` would have been clamped inside SC1 as written; sent to SR-91 and closed at 69867ab); the AO/SSR
+  prepass's own buffer (open issue 3); the Engine impact row records rule 1 as drawn and SC1 as closed,
+  remaining the floating origin and the scale bar.
