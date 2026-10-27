@@ -556,7 +556,9 @@ def test_the_draft_names_the_engine_card_and_the_elements(draft):
     row = next(line for line in draft.splitlines() if line.startswith("| Rust (`rs-scene-render`), reference |"))
     done, remaining = row.split(" | ")[1:3]
     assert "a905705" in done and "path tracer" in done and "SR-89 reports" in done
-    assert "both tracers" not in remaining and "orthographic camera" in remaining and "physical sky's sun" in remaining
+    assert "9119130" in done and "orthographic camera" in done and "impact radius" in done
+    assert "both tracers" not in remaining and "orthographic camera" not in remaining
+    assert "physical sky's sun" in remaining
     for word in ("planet", "flattening", "cloudMap", "cloudHeight", "cloudRotation", "cloudShadow", "ringMap",
                  "ringInner", "ringOuter", "limbDarkening", "twilight", "nightLights", "atmosphere",
                  "atmosphereHeight", "equirectangular", "prime meridian", "terminator", "limb", "cusp",
