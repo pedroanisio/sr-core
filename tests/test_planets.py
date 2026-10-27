@@ -558,7 +558,8 @@ def test_the_draft_names_the_engine_card_and_the_elements(draft):
     assert "a905705" in done and "path tracer" in done and "SR-89 reports" in done
     assert "9119130" in done and "orthographic camera" in done and "impact radius" in done
     assert "both tracers" not in remaining and "orthographic camera" not in remaining
-    assert "physical sky's sun" in remaining
+    assert "a7dcc73" in done and "physical sky's sun" in done and "0b750e8" in done
+    assert remaining.startswith("none; the ten kit cases pass")
     for word in ("planet", "flattening", "cloudMap", "cloudHeight", "cloudRotation", "cloudShadow", "ringMap",
                  "ringInner", "ringOuter", "limbDarkening", "twilight", "nightLights", "atmosphere",
                  "atmosphereHeight", "equirectangular", "prime meridian", "terminator", "limb", "cusp",
