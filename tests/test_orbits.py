@@ -828,3 +828,9 @@ def test_the_draft_records_the_engine_state(draft):
     done, remaining = row.split(" | ")[1:3]
     assert done.startswith(f"feat/sr-67-fields {ENGINE_COMMIT}") and "SR-90" in row
     assert remaining.startswith("none; the eight kit cases pass with the values below")
+
+
+def test_the_draft_records_the_engine_release(draft):
+    row = next(line for line in draft.splitlines() if line.startswith("| Rust (`rs-scene-render`), reference |"))
+    done, remaining = row.split(" | ")[1:3]
+    assert "; released in scene-render v0.9.0 (" in done and done.rstrip().endswith(")")

@@ -735,3 +735,11 @@ def test_the_draft_records_every_kit_case_measured_on_one_engine_commit(draft):
         assert status.startswith(prefix) and status.endswith("; pass"), (name, status)
     assert "3.8359" in rows["sirius"] and "100.04" in rows["scale"] and "31.40" in rows["motion"] and "0.017°" in rows["labels"]
     assert rows["space"].startswith(prefix + "pixel-identical")
+
+
+def test_the_draft_records_the_engine_release(draft):
+    row = next(line for line in draft.splitlines() if line.startswith("| Rust (`rs-scene-render`), reference |"))
+    done, remaining = row.split(" | ")[1:3]
+    assert done.startswith("feat/sr-67-fields 81a2b96 (SR-88 Done") and "nine cases pass on 81a2b96" in done
+    assert "ced8ff0" in done and "released in scene-render v0.9.0 (" in done and "67a661a" in done
+    assert remaining.startswith("none that the kit measures") and "seek check (rule 7)" in remaining

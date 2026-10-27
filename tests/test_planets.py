@@ -1048,3 +1048,9 @@ def test_the_draft_records_the_kit_cases_measured_so_far(draft):
             assert status == "to be measured", (name, status)
     assert measured == set(name[len("planet-"):] for name in kit.NAMES)   # every row measured
     assert all(rows[name].endswith("; pass") for name in measured)
+
+
+def test_the_draft_records_the_engine_release(draft):
+    row = next(line for line in draft.splitlines() if line.startswith("| Rust (`rs-scene-render`), reference |"))
+    done, remaining = row.split(" | ")[1:3]
+    assert "; released in scene-render v0.9.0 (" in done and done.rstrip().endswith(")")

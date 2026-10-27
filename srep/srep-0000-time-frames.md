@@ -182,7 +182,7 @@ Every document at 1.7.1 keeps its meaning: `space` is absent, no asset is an eph
 
 | Engine | Status | Work | Tracking |
 |---|---|---|---|
-| Rust (`rs-scene-render`), reference | nothing at 67a661a: no clock in a time scale, no celestial frame, no ephemeris reader in `crates/` | parse `space`, `ephemeris` and the `object3D` attributes (TF1–TF5, V17); the DAF/SPK reader of rule 3 with the digest check; positions and light time (rule 4); the approximate elements (rule 5); the IAU frames and the pixel mapping (rule 6); body placement (rule 7); the kit cases | [SR-87](https://fazai.atlassian.net/browse/SR-87) |
+| Rust (`rs-scene-render`), reference | feat/sr-67-fields f9319f0 (SR-87 Done 2026-10-25, SR-87 reports): the kit's nine cases pass on f9319f0 (below); released in scene-render v0.9.0 (af179e4). Main 67a661a had nothing: no clock in a time scale, no celestial frame, no ephemeris reader in `crates/` | none that the kit measures; SR-87's report covers what this row listed (parse `space`, `ephemeris` and the `object3D` attributes (TF1–TF5, V17); the DAF/SPK reader of rule 3 with the digest check; positions and light time (rule 4); the approximate elements (rule 5); the IAU frames and the pixel mapping (rule 6); body placement (rule 7)) | [SR-87](https://fazai.atlassian.net/browse/SR-87) |
 
 ## Conformance
 
@@ -311,3 +311,5 @@ The 2026-10-25 run: `SR_GPU_BACKEND=vulkan SR_GPU_ADAPTER=llvmpipe python3 confo
   table gains `space-mars` and states the measurements (the body-fixed case at 2451545.25, where the frame's
   turn makes x sensitive to the prime meridian; the orientation case checks a quarter turn differs); TF4 says
   that `orientation="bodyFixed"` needs rotation elements only, with or without a position (SR-87's reading).
+- 2026-10-27: released in scene-render v0.9.0 (af179e4); the Engine impact row, still at 67a661a, records SR-87's landing (f9319f0) and the
+  kit's nine passes.

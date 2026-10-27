@@ -231,7 +231,7 @@ Outside an `axes` the box is `width` × `height` pixels at the node's origin (FL
 
 | Engine | Status | Work | Tracking |
 |---|---|---|---|
-| Rust (`rs-scene-render`), reference | nothing of this SREP at 67a661a; the building blocks exist: `crates/sr-eval/src/sim.rs` (`FieldSrc`, `to_pixels`, the seven `FieldKind`s), the expression VM (`crates/sr-eval/src/expr/vm.rs`), `crates/sr-vector` strokes and markers (`strokeMarkers`, xsd:378), the `fractal` asset's per-pixel raster path (`crates/sr-eval/src/fractal.rs`) for LIC and portraits | the node and its sources; arrows; the queue of rule 6 with buckets; LIC and portrait rasters; charge lines; contours through the plots work (SR-63); the kit's winding and separation measures | SR-67 |
+| Rust (`rs-scene-render`), reference | feat/sr-67-fields da42e9b (SR-67 Done 2026-10-25, SR-67 reports): the kit's six cases pass on 4f086d9 (below); released in scene-render v0.9.0 (af179e4). Main 67a661a had nothing of this SREP; the building blocks existed: `crates/sr-eval/src/sim.rs` (`FieldSrc`, `to_pixels`, the seven `FieldKind`s), the expression VM (`crates/sr-eval/src/expr/vm.rs`), `crates/sr-vector` strokes and markers (`strokeMarkers`, xsd:378), the `fractal` asset's per-pixel raster path (`crates/sr-eval/src/fractal.rs`) for LIC and portraits | none that the kit measures; SR-67's report covers what this row listed (the node and its sources; arrows; the queue of rule 6 with buckets; LIC and portrait rasters; charge lines; contours through the plots work (SR-63); the kit's winding and separation measures) | SR-67 |
 
 The `wire` source and `arrows/@show="poynting"` (2026-10-25) are engine work after SR-67:
 [SR-117](https://faz-ai.atlassian.net/browse/SR-117).
@@ -363,3 +363,5 @@ measurements and refused the Poynting document (FLD1, and S02 for `wire`).
   cases and measures a render.
 - 2026-10-25: all six kit cases measured on the engine's feat/sr-67-fields at 4f086d9 (SR-117 implemented the
   `wire` source and the Poynting arrows): the Poynting arrows between the wires are within 3.51° of +x.
+- 2026-10-27: released in scene-render v0.9.0 (af179e4); the Engine impact row, still at 67a661a, records SR-67's landing (da42e9b) and the
+  kit's six passes on 4f086d9.

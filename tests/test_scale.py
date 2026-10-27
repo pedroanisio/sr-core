@@ -974,3 +974,9 @@ def test_the_draft_records_every_kit_case_measured(draft):
     prefix = f"measured on scene-render feat/sr-67-fields {ENGINE_COMMIT} (0.8.0, llvmpipe): "
     for name, status in rows.items():
         assert status.startswith(prefix) and status.endswith("; pass"), (name, status)
+
+
+def test_the_draft_records_the_engine_release(draft):
+    row = next(line for line in draft.splitlines() if line.startswith("| Rust (`rs-scene-render`), reference |"))
+    done, remaining = row.split(" | ")[1:3]
+    assert "; released in scene-render v0.9.0 (" in done and done.rstrip().endswith(")")

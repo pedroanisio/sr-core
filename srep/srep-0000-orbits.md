@@ -217,7 +217,7 @@ Every document at 1.7.1 keeps its meaning: the three elements are new. They are 
 
 | Engine | Status | Work | Tracking |
 |---|---|---|---|
-| Rust (`rs-scene-render`), reference | feat/sr-67-fields 105c036 (SR-90, SR-90 reports; main 67a661a moved objects by keys, the rigid-body solver or the ephemeris, with no Kepler propagation, no N-body integrator and no trails): the elements parse (OR1–OR5, V17; the schema half at 6c4b61c), universal-variable propagation places an `orbit` at its centre's place plus the state (rules 1–2), the system with the three integrators, the step rule and the adaptive IAS15 under `tolerance` integrating from the epoch at every frame (rules 3 and 6), the Plummer cluster from the random streams drawn as spheres of `radius` (rule 4), trails as unlit, blended, double-sided tubes of eight segments with per-vertex alpha, a member's past place walked along the step grid plus one step of the remainder (rule 5; the GPU tube at f5d30c1), the scene mapping and the seek check (rule 6); the kit's eight cases measured on 105c036 below | none; the eight kit cases pass with the values below | [SR-90](https://faz-ai.atlassian.net/browse/SR-90) |
+| Rust (`rs-scene-render`), reference | feat/sr-67-fields 105c036 (SR-90, SR-90 reports; main 67a661a moved objects by keys, the rigid-body solver or the ephemeris, with no Kepler propagation, no N-body integrator and no trails): the elements parse (OR1–OR5, V17; the schema half at 6c4b61c), universal-variable propagation places an `orbit` at its centre's place plus the state (rules 1–2), the system with the three integrators, the step rule and the adaptive IAS15 under `tolerance` integrating from the epoch at every frame (rules 3 and 6), the Plummer cluster from the random streams drawn as spheres of `radius` (rule 4), trails as unlit, blended, double-sided tubes of eight segments with per-vertex alpha, a member's past place walked along the step grid plus one step of the remainder (rule 5; the GPU tube at f5d30c1), the scene mapping and the seek check (rule 6); the kit's eight cases measured on 105c036 below; released in scene-render v0.9.0 (af179e4) | none; the eight kit cases pass with the values below | [SR-90](https://faz-ai.atlassian.net/browse/SR-90) |
 
 ## Conformance
 
@@ -343,3 +343,4 @@ trail case) it decodes the engine's sRGB PNG to linear light.
   double-sided (rule 5). The kit rows reworded to the kit's protocols: the pair at one step per frame (OR3 at
   24 fps), the eight at 480 steps per period, the hyperbola read as a chord of its outgoing leg, the cluster
   read on its isolated bodies and its centroid, the trail's levels in linear light against 1 − (1 − α)².
+- 2026-10-27: released in scene-render v0.9.0 (af179e4); the Engine impact row records it.

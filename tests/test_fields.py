@@ -576,3 +576,13 @@ def test_the_draft_records_every_kit_case_measured_on_one_engine_commit():
     assert "refuses" not in body
     assert "feat/sr-67-fields at 4f086d9 (which vendors the draft as of f6cf12f, with the" in body
     assert "the worst 3.51°" in cells[-1]
+
+
+def test_the_draft_records_the_engine_release():
+    with open(DRAFT, encoding="utf-8") as f:
+        draft = f.read()
+    row = next(line for line in draft.splitlines() if line.startswith("| Rust (`rs-scene-render`), reference |"))
+    done, remaining = row.split(" | ")[1:3]
+    assert done.startswith("feat/sr-67-fields da42e9b (SR-67 Done") and "six cases pass on 4f086d9" in done
+    assert "released in scene-render v0.9.0 (" in done and "67a661a" in done
+    assert remaining.startswith("none that the kit measures") and "winding and separation" in remaining

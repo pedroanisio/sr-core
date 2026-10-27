@@ -640,3 +640,10 @@ def test_the_draft_settles_the_rendering_readings(draft):
                    "τ ± 10⁻⁶"):
         assert phrase in draft, phrase
     assert "default the box's extent), plus `strokeStyle`" not in draft
+
+
+def test_the_draft_records_the_engine_release(draft):
+    row = next(line for line in draft.splitlines() if line.startswith("| Rust (`rs-scene-render`), reference |"))
+    done, remaining = row.split(" | ")[1:3]
+    assert "not in scene-render v0.9.0 (" in done and "cuts at b525913" in done and "not yet published" in done
+    assert "released in" not in done

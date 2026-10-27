@@ -279,7 +279,7 @@ itself.
 
 | Engine | Status | Work | Tracking |
 |---|---|---|---|
-| Rust (`rs-scene-render`), reference | `crates/sr-3d/src/sky.rs` at 67a661a: a gradient sky and a sun placed by `sun_direction(azimuth, elevation)` (line 165); no date, observer, moon, scattering or fog | parse the attributes (PSKY1–PSKY4, V17); the SPA from the report (rules 1–6) and the moon (rule 7); the transmittance, sky-view and multiple-scattering tables of rule 9; aerial perspective and height fog in the rasterizer and path tracer (rules 10–11); the kit cases | [SR-86](https://fazai.atlassian.net/browse/SR-86) |
+| Rust (`rs-scene-render`), reference | feat/sr-67-fields 91d21e5 (SR-86 Done 2026-10-26, SR-86 reports): the kit's eight cases pass on 81a2b96 (below); released in scene-render v0.9.0 (af179e4). Main 67a661a: `crates/sr-3d/src/sky.rs` had a gradient sky and a sun placed by `sun_direction(azimuth, elevation)` (line 165); no date, observer, moon, scattering or fog | none that the kit measures; SR-86's report covers what this row listed (parse the attributes (PSKY1–PSKY4, V17); the SPA from the report (rules 1–6) and the moon (rule 7); the transmittance, sky-view and multiple-scattering tables of rule 9; aerial perspective and height fog in the rasterizer and path tracer (rules 10–11)) | [SR-86](https://fazai.atlassian.net/browse/SR-86) |
 
 ## Conformance
 
@@ -472,3 +472,5 @@ feat/sr-67-fields 81a2b96 (0.8.0, llvmpipe; SR-86 vendors the draft): all eight 
 - 2026-10-26: measured on scene-render feat/sr-67-fields 81a2b96 (SR-86): all eight cases pass; the default-camera
   companion's wall, 2.2 px wide through the 60° lens on the first run, is 20,000 px square so the measurement
   window reads the wall alone. Status column filled.
+- 2026-10-27: released in scene-render v0.9.0 (af179e4); the Engine impact row, still at 67a661a, records SR-86's landing (91d21e5) and the
+  kit's eight passes on 81a2b96.

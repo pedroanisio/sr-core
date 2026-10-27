@@ -1079,3 +1079,11 @@ def test_the_draft_records_every_kit_case_measured_on_one_engine_commit(draft):
         assert status.startswith(prefix) and status.endswith("; pass"), (name, status)
     assert "0.06 %" in rows["day"] and "0.019°" in rows["orbit"] and "0.495°" in rows["moon"] and "0.2158" in rows["aerial"]
     assert f"Status: run on a release build of scene-render\nfeat/sr-67-fields {ENGINE_COMMIT}" in draft
+
+
+def test_the_draft_records_the_engine_release(draft):
+    row = next(line for line in draft.splitlines() if line.startswith("| Rust (`rs-scene-render`), reference |"))
+    done, remaining = row.split(" | ")[1:3]
+    assert done.startswith("feat/sr-67-fields 91d21e5 (SR-86 Done") and "eight cases pass on 81a2b96" in done
+    assert "released in scene-render v0.9.0 (" in done and "67a661a" in done
+    assert remaining.startswith("none that the kit measures") and "(rules 10–11)" in remaining

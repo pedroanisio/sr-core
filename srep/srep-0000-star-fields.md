@@ -188,7 +188,7 @@ kind is new. The element is refused below version 1.8 (V17).
 
 | Engine | Status | Work | Tracking |
 |---|---|---|---|
-| Rust (`rs-scene-render`), reference | `crates/sr-3d/src/sky.rs` at 67a661a: a gradient sky and a sun; no catalogue asset, star points or constellation lookup | parse the asset and the element (SF1–SF4, V17); load and pin the catalogue (rule 1); the point field with flux, colour and proper motion (rules 2–4, 6) behind surfaces and through the physical sky; labels and boundaries (rule 5); the seek check (rule 7) | [SR-88](https://faz-ai.atlassian.net/browse/SR-88) |
+| Rust (`rs-scene-render`), reference | feat/sr-67-fields 81a2b96 (SR-88 Done 2026-10-26, SR-88 reports): the kit's nine cases pass on 81a2b96 (below; eight on ced8ff0 before SR-86's sky); released in scene-render v0.9.0 (af179e4). Main 67a661a: `crates/sr-3d/src/sky.rs` had a gradient sky and a sun; no catalogue asset, star points or constellation lookup | none that the kit measures; SR-88's report covers what this row listed (parse the asset and the element (SF1–SF4, V17); load and pin the catalogue (rule 1); the point field with flux, colour and proper motion (rules 2–4, 6) behind surfaces and through the physical sky; labels and boundaries (rule 5); the seek check (rule 7)) | [SR-88](https://faz-ai.atlassian.net/browse/SR-88) |
 
 ## Conformance
 
@@ -347,3 +347,5 @@ refused with S06 (`sky="physical"` was not one of none, gradient) and the other 
   draws no sky behind the field, so `stars-sky-noon` measured no sky at c6eb55c).
 - 2026-10-26: re-measured on 81a2b96 (SR-86 draws the physical sky and dims the field by rule 9's transmittance,
   zero below the horizon): all nine cases pass; the sky row filled, the other eight unchanged to the digit.
+- 2026-10-27: released in scene-render v0.9.0 (af179e4); the Engine impact row, still at 67a661a, records SR-88's landing (81a2b96) and the
+  kit's nine passes.
