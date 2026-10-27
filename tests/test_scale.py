@@ -561,6 +561,15 @@ def test_the_draft_states_sc2s_reach_and_the_scale_bar_checks(draft):
     sc.validate_scale_bar(200, "auto", 10000.0, 0.1, 10000.0, 1920)
 
 
+def test_the_draft_records_the_engine_state(draft):
+    row = next(line for line in draft.splitlines() if line.startswith("| Rust (`rs-scene-render`), reference |"))
+    done, remaining = row.split(" | ")[1:3]
+    assert done.startswith("feat/sr-67-fields f408760") and "07a5ea3" in done and "SR-91" in row
+    assert "E04" in done and "guarded" in done and "`powers_of_ten`" in done
+    assert remaining.startswith("rendering:") and "scale bar" in remaining and "rule 4" in remaining
+    assert "at 67a661a `camera.rs` builds" not in done
+
+
 ROW = re.compile(r"\|\s*([^|]+?)\s*\|\s*`([^`]+)`\s*\|\s*`([^`]+)`\s*\|")
 
 

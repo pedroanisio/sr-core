@@ -179,7 +179,7 @@ is invalid under SC1 where it validated before: at 67a661a the engine clamps `ne
 
 | Engine | Status | Work | Tracking |
 |---|---|---|---|
-| Rust (`rs-scene-render`), reference | at 67a661a `camera.rs` builds a binary32 reversed projection with `near` clamped at 1e-4 and `three.rs` uses a `Depth32Float` buffer; no `geometric` curve, no scale bar, world positions converted to binary32 before the view transform | parse `depth`, `geometric` and `scaleBar` (SC1–SC4, V17); keep the reversed mapping and drop the clamps within SC1, add the logarithmic mapping (rule 1); the geometric curve (rule 2); the scale bar with its depth measurement, unit ladder and label (rule 3); binary64 rebasing about the eye before the view transform (rule 4); the seek check | [SR-91](https://faz-ai.atlassian.net/browse/SR-91) |
+| Rust (`rs-scene-render`), reference | feat/sr-67-fields f408760 (SR-91 reports; main 67a661a built a binary32 reversed projection with `near` clamped at 1e-4 over a `Depth32Float` buffer, with no `geometric` curve, no scale bar and world positions converted to binary32 before the view transform): the kernel at 07a5ea3 (depth resolution, geometric keys, the scale bar and the floating origin in `sr_3d::scale`); at f408760 `depth`, `geometric` and `scaleBar` parse (SC1–SC4, V17), SC2's assert guarded to two finite numbers, `geometric` refused on the curves that ease a progress from 0 to 1, a geometric pair the Schematron cannot read refused at the build as E04 unless two finite numbers or two lengths of one unit, non-zero and of one sign, with no linear fallback; the evaluator's geometric segment equals `geometric`, 960 frames of the powers of ten camera (z −10 to −1e20 over 40 s at 24 fps) bit-equal to `powers_of_ten` and a frame evaluated alone equal to the frame played to (rule 2, the seek check); corpus 847 documents with oracle agreement, 7 of 7 evaluator mutants killed | rendering: no `near` clamp within SC1 and the logarithmic mapping (rule 1), binary64 rebasing about the eye before the view transform (rule 4), the scale bar with its depth measurement, unit ladder and label (rule 3); the kit's four cases once they render | [SR-91](https://faz-ai.atlassian.net/browse/SR-91) |
 
 ## Conformance
 
@@ -304,3 +304,7 @@ measurable after SR-91 lands.
   being the engine's build error with the same rule (the reactive-values draft's convention; SR-91 read a
   Schematron refusal there, refuted: the validator would refuse what the evaluator handles); SC3 and SC4
   restated as checked, with the camera's defaults.
+- 2026-10-27: the Engine impact row records SR-91's schema step at f408760 (SC1–SC4 and V17 as ruled above,
+  SC2 guarded to finite numbers with the unread pair a build error E04, the evaluator's geometric segment
+  and the 960-frame powers of ten match, SR-91 reports) after the kernel at 07a5ea3; remaining: rendering and
+  the scale bar.
