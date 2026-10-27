@@ -62,17 +62,19 @@ space-transforms drafts; the schema files are not changed by this draft.
     where the boost carries them, rule 1), `compact` (one of `none`, `minkowski`, `schwarzschild`, default `none`: rule 2), `blackHole`
     (`xs:IDREF`, required when `compact="schwarzschild"`: the hole whose r_s = 2 `mass` the diagram uses).
   - `event`, zero or more: `x`, `t` (`xs:double`, required), `label` (`xs:string`), `lightCone` (`xs:boolean`,
-    default false), `extent` (`positiveDecimal`, default the box's `yMax` − `yMin`: how far the cones reach),
+    default false), `extent` (`positiveDecimal`, units of t, default the box's extent: how far the cones reach),
     `future`, `past` (`paintType`, defaults `#FFCC0040` and `#4080FF40`: the cone fills), plus `strokeStyle`;
     the point is a dot `markerSize` (`positiveDecimal`, default 8) pixels across in the stroke's paint.
   - `worldline`, zero or more: `kind` (one of `inertial`, `accelerated`, `parametric`, required), `x0`, `t0`
     (`xs:double`, default 0: the event the line passes), `velocity` (`xs:double`, `inertial`: β), `acceleration`
     (`positiveDecimal`, `accelerated`: the proper acceleration in units of c per data unit of t; the line is
     the Rindler hyperbola from rest at (`x0`, `t0`)), `x`, `t` (`expressionString` of `tau`, `parametric`),
-    `tau0`, `tau1` (`xs:double`, `parametric` and `accelerated`: the proper-time range, default −`extent` and
-    `extent`), `samples` (2 to 1000000, default 256), `label` (`xs:string`), plus `strokeStyle`.
+    `tau0`, `tau1` (`xs:double`, `parametric` and `accelerated`: the proper-time range in units of t, default
+    minus and plus the box's extent), `samples` (2 to 1000000, default 256), `label` (`xs:string`), plus
+    `strokeStyle`.
   - `lightRay`, zero or more: `x`, `t` (`xs:double`, required: the emission event), `direction` (`1` or `−1`,
-    default 1), `length` (`positiveDecimal`, default the box's extent), plus `strokeStyle`.
+    default 1), `length` (`positiveDecimal`, units of t along the ray's t, default the box's extent), plus
+    `strokeStyle`.
   - the `strokeStyle` of these three is the `strokeStyle` attribute group with `stroke` (`paintType`, default
     `#FFCC00FF`) and `strokeWidth` (`positiveDecimal`, default 3) beside it, as an attribute group of their
     own, since `strokeStyle` holds neither.
@@ -133,7 +135,23 @@ coordinates are the box's data units with c = 1; embedding coordinates are scene
    there), mapped by the axes with no further boost and compactified like everything else; at β = 0 they
    are the axes' own grid, and under an animated boost they shear while the light cones keep their 45°.
    (`boosted_grid(β, n, extent)` is the same picture from the other side: boosting its points by β makes them
-   axis-aligned, so a diagram must not send them through the boost.)
+   axis-aligned, so a diagram must not send them through the boost.) With `compact="none"` the grid runs k
+   over the box's rest-frame range at the tick step; under a compactification it runs k = −8 … 8 in data units
+   and samples each line at 512 points at the tangents of equally spaced angles in (−π/2, π/2), so the lines
+   reach the diamond's edge. Units: the diagram is drawn in units where c = 1, so a child's x is drawn as it
+   is and every time a child states (`t`, `t0`, `extent`, `length`, `tau0`, `tau1`) is in units of t and is
+   drawn at T = c t; the box's extent (`yMax` − `yMin`)/c units of t is the default `extent`, `length` and
+   ±`tau` range, and the y axis's tick labels are the ticks divided by c (the plots draft's text rules). An
+   inertial worldline spans the box's rest-frame T range; an accelerated one is drawn at (`x0` + c x(τ),
+   c `t0` + c t(τ)) from the hyperbola; a parametric one's tangent is checked at τ ± 10⁻⁶ of each sample and
+   a spacelike or past-directed tangent is an error at the frame. An event's point is a disc `markerSize`
+   pixels across in its stroke's paint, drawn when its centre lies in the box; the cones are filled triangles
+   (their edges sampled under a compactification) clipped to the box. An event's `label` is set as written
+   below and to the right of the point, `markerSize`/2 + 4 px from it; a worldline's at its last drawn vertex
+   plus 4 px; a label the engine's text path cannot set (an unpaired brace, in a TeX path) is an error at the
+   frame, never a silent omission. The paint order inside the axes is the axes' grid, axes, ticks and plots,
+   then the spacetime grid, the cones (future, then past) of each event, the worldlines, the light rays, the
+   events, the content and the labels.
 2. **Compactification.** `compact="minkowski"` draws every point at `penrose(x, t)`: U = atan(t − x),
    V = atan(t + x), X = (V − U)/2, T = (U + V)/2, the diamond |X| + |T| < π/2 whose corners are
    `penrose_infinity` (spacelike i⁰ at (π/2, 0), future and past timelike infinity at (0, ±π/2)); null rays keep
@@ -169,7 +187,10 @@ coordinates are the box's data units with c = 1; embedding coordinates are scene
    `frame_beta(frame, fps, β₀, β₁, t₀, t₁)` = tanh of the linear rapidity, so that the per-frame increments
    compose to the keyed value and the diagram at a frame is a pure function of the frame (SREP 14; `seek_test`
    plays 240 frames by composition and compares every frame with the direct value to 1e-12 while checking the
-   interval). Embeddings and strain are pure functions of their attributes and of scene time.
+   interval). A `boost` key is atanh'd, eased and tanh'd back; a key outside (−1, 1) or an `additive="true"`
+   animation of `boost` is an error at build time; an `expression` on `boost` gives β directly, and a value
+   outside (−1, 1) is an error at the frame. Embeddings and strain are pure functions of their attributes and
+   of scene time.
 6. **Validation.** `validate_spacetime` is RD1, `validate_worldline` RD2, `validate_embedding` RD3 (after
    `embedding_radii` resolves `rs` and `rMin`) and `validate_strain` RD4. A `blackHole` that a `spacetime` or
    an `embedding` names is drawn by the diagram or the sheet, so SREP 76's undrawn-hole warning does not report
@@ -220,7 +241,7 @@ the plots and space-transforms drafts for `axes` and modifier subdivision and on
 
 | Engine | Status | Work | Tracking |
 |---|---|---|---|
-| Rust (`rs-scene-render`), reference | feat/sr-67-fields 011b842 (SR-92 reports; main 67a661a had nothing of this SREP, with the building blocks the `axes` box (plots draft, SR-63), `map` modifiers (space-transforms draft), `parametricSurface` (SREP 70) and `blackHole` (SREP 76)): the kernel `sr_3d::relativity` matches every row of the numeric table; reading the reference, SR-92 found and this draft fixed four places where the reference differed from the text: the potential sheet's point was a hill (y = −k/r; now k/r, downward, a table row), `embedding_grid` took `rMin` for the sheet's r_s or k (now a parameter), `validate_strain` enforced neither of RD4's clauses on `frequency`, `chirpMass` and `merger` (now both), and the seek check's interval test lacked its absolute value (`boost_keeps_interval`); the schema at 9b5a2fb (SR-92 reports: `spacetime`, `embedding`, the strain modifier, RD1–RD4 and V17's clause, corpus 883 agreeing with the lxml oracle), whose eight readings where the text left a choice this draft settles in its Syntax (the stroke group and the event's dot, the strain's reuse of `frequency` and `phase`, RD1's one diagram per `axes`, RD2's map, RD3's defaults and throat, RD4's positive `frequency`, the undrawn-hole warning) | the boost, cones, worldlines, rays and grid before the axes mapping (rule 1); the Penrose and Kruskal maps (rule 2); the embedding primitive as rings, spokes and an optional surface (rule 3); the strain modifier with the chirp (rule 4); rapidity keys and the seek check (rule 5) | [SR-92](https://faz-ai.atlassian.net/browse/SR-92) |
+| Rust (`rs-scene-render`), reference | feat/sr-67-fields 011b842 (SR-92 reports; main 67a661a had nothing of this SREP, with the building blocks the `axes` box (plots draft, SR-63), `map` modifiers (space-transforms draft), `parametricSurface` (SREP 70) and `blackHole` (SREP 76)): the kernel `sr_3d::relativity` matches every row of the numeric table; reading the reference, SR-92 found and this draft fixed four places where the reference differed from the text: the potential sheet's point was a hill (y = −k/r; now k/r, downward, a table row), `embedding_grid` took `rMin` for the sheet's r_s or k (now a parameter), `validate_strain` enforced neither of RD4's clauses on `frequency`, `chirpMass` and `merger` (now both), and the seek check's interval test lacked its absolute value (`boost_keeps_interval`); the schema at 9b5a2fb (SR-92 reports: `spacetime`, `embedding`, the strain modifier, RD1–RD4 and V17's clause, corpus 883 agreeing with the lxml oracle), whose eight readings where the text left a choice this draft settles in its Syntax (the stroke group and the event's dot, the strain's reuse of `frequency` and `phase`, RD1's one diagram per `axes`, RD2's map, RD3's defaults and throat, RD4's positive `frequency`, the undrawn-hole warning); rules 1 and 5 at 7ee1b04 and 3caceef (SR-92 reports: the diagram in the evaluator with the grid as `diagram_grid`, boost keys in rapidity, frame alone equal to frame played; at 3caceef a ray's `length` in units of t and an expression's β at the speed of light a frame problem, both pinned by a test), whose readings where the draft was silent (time units and defaults, the grid's range, the event's disc and cones' clipping, labels, the rapidity keys' errors, the paint order) rule 1 and rule 5 now state | the Penrose and Kruskal maps (rule 2); the embedding primitive as rings, spokes and an optional surface (rule 3); the strain modifier with the chirp (rule 4) | [SR-92](https://faz-ai.atlassian.net/browse/SR-92) |
 
 ## Conformance
 
@@ -349,3 +370,8 @@ measurable after SR-92 lands.
 - 2026-10-27: SR-92's rule 1 reading settled: the diagram's `grid` is the box frame's lines where the boost
   carries them (`diagram_grid` = `boosted_grid(−β)` in the drawn frame, mapped with no further boost), not the
   boosted frame's own lines, which a second boost would make axis-aligned; a table row pins it.
+- 2026-10-27: SR-92's rules 1 and 5 at 7ee1b04 recorded (3caceef follows the two points below); the readings
+  where the draft was silent settled in rules 1 and 5: every time a child states is in units of t (drawn at c t;
+  `length` corrected from drawn units), the defaults from the box's extent, the grid's range under a
+  compactification, the event's disc and the cones' clipping, label placement and failure, the rapidity keys'
+  errors, the paint order.

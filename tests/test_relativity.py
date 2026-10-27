@@ -589,8 +589,9 @@ def test_the_draft_records_the_engine_state(draft):
     assert done.startswith("feat/sr-67-fields 011b842") and "`sr_3d::relativity`" in done and "SR-92" in row
     assert "9b5a2fb" in done and "corpus 883" in done and "eight readings" in done
     assert "nothing of this SREP at 67a661a" not in done
-    assert remaining.startswith("the boost, cones") and "the seek check (rule 5)" in remaining
-    assert "parse the elements" not in remaining
+    assert "7ee1b04" in done and "3caceef" in done and "rules 1 and 5" in done
+    assert remaining.startswith("the Penrose and Kruskal maps (rule 2)") and "rule 5" not in remaining
+    assert "parse the elements" not in remaining and "rule 1" not in remaining
     assert "| embedding point of the potential sheet r 2, k 4 | `embedding_point('potential', 2, 0, 4)` | `(2, 2, 0)` |" in draft
     assert "the sheet's y at `rMin` is k/`rMin`" in draft
 
@@ -619,3 +620,23 @@ def test_the_draft_states_whose_grid_the_diagram_draws(draft):
         assert phrase in draft, phrase
     assert "| the box's line x = 2 drawn at beta 0.6, at t' = 1 | `grid_x_line(-0.6, 2, 1)` | `(1, 1)` |" in draft
     assert "draw the lines x' = k and t' = k of the boosted frame" not in draft
+
+
+def test_the_draft_settles_the_rendering_readings(draft):
+    # SR-92's readings at 7ee1b04 where the draft was silent: time units, defaults, labels, the paint order
+    for phrase in ("every time a child states (`t`, `t0`, `extent`, `length`, `tau0`, `tau1`) is in units of t",
+                   "drawn at T = c t", "the box's extent (`yMax` − `yMin`)/c units of t",
+                   "the y axis's tick labels are the ticks divided by c",
+                   "over the box's rest-frame range at the tick step", "k = −8 … 8 in data units",
+                   "512 points at the tangents of equally spaced angles",
+                   "drawn when its centre lies in the box", "clipped to the box",
+                   "below and to the right of the point", "4 px",
+                   "its last drawn vertex", "a label the engine's text path cannot set",
+                   "never a silent omission", "a key outside (−1, 1)",
+                   "`additive=\"true\"`", "an `expression` on `boost` gives β directly",
+                   "outside (−1, 1) is an error at the frame",
+                   "the axes' grid, axes, ticks and plots",
+                   "events, the content and the labels",
+                   "τ ± 10⁻⁶"):
+        assert phrase in draft, phrase
+    assert "default the box's extent), plus `strokeStyle`" not in draft
