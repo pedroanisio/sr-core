@@ -484,3 +484,347 @@ def test_the_table_is_what_the_module_prints(draft, capsys):
     for line in printed:
         assert line in draft, line
     assert len(printed) == len(_draft_rows())
+
+
+def test_a_members_trail_walks_the_step_grid_then_one_step_of_the_remainder():
+    # rule 5 for a member: whole steps along the step grid from the epoch, then one step of the remainder
+    s = ob._pair()
+    out = ob.member_trail(s, "leapfrog", 0.1, (0.0, 0.25, 0.3, 0.3))
+    assert out[0]["positions"] == s["positions"] and out[0]["t"] == 0.0
+    two = ob.integrate(s, "leapfrog", 0.1, 0.2)
+    assert _close(out[1]["positions"][1], ob.integrate(two, "leapfrog", 0.05, 0.05)["positions"][1], 1e-12)
+    assert _close(out[2]["positions"][1], ob.integrate(s, "leapfrog", 0.1, 0.3)["positions"][1], 1e-12)
+    assert out[3]["positions"] == out[2]["positions"]
+    # the remainder step is one step, not a finer grid
+    assert not _close(out[1]["positions"][1], ob.integrate(s, "leapfrog", 0.05, 0.25)["positions"][1], 1e-9)
+    # grid times are reached exactly, with no remainder step
+    assert _close(ob.member_trail(s, "ias15", 0.1, (0.2,))[0]["positions"][1],
+                  ob.integrate(s, "ias15", 0.1, 0.2)["positions"][1], 1e-12)
+    for integrator, step, times in (("leapfrog", 0.1, (0.3, 0.25)), ("leapfrog", 0.0, (0.0,)), ("leapfrog", 0.1, (-0.1,)),
+                                    ("euler", 0.1, (0.1,))):
+        with pytest.raises(ob.OrbitError):
+            ob.member_trail(s, integrator, step, times)
+
+
+# ------------------------------------------------------------------------------------ the kit
+
+KIT = os.path.join(ROOT, "conformance", "tools", "orbits_kit.py")
+kit = _load(KIT, "orbits_kit")
+np = pytest.importorskip("numpy")
+Image = pytest.importorskip("PIL.Image")
+CASE = r"((?:orbit|nbody)-[a-z]+|trail)"
+
+
+def _kit_rows(draft):
+    return [m.group(1) for m in (re.match(r"^\| `srep-<n>-" + CASE + r"\.xml` \|", line)
+                                 for line in draft.splitlines()) if m]
+
+
+def test_the_kit_camera_puts_a_scene_point_on_its_pixel():
+    # orthoHeight equal to the frame's height: one scene unit per pixel, the origin at the frame's centre; the
+    # time-frames axes put space x to the right, space z up the frame and space y along the view
+    assert kit.pixel(ob.ZERO, 1.0) == (320.0, 180.0)
+    assert kit.pixel((100.0, 0.0, 0.0), 1.0) == (420.0, 180.0)
+    assert kit.pixel((0.0, 0.0, 50.0), 1.0) == (320.0, 130.0)
+    assert kit.pixel((0.0, 7.0, 0.0), 1.0) == (320.0, 180.0)
+    assert kit.pixel((1e9, 0.0, 0.0), 1e-7) == (420.0, 180.0)
+    assert _close(kit.frame_time(24, 2.0), 2.0, 1e-12) and kit.frame_time(0, 2.0) == 0.0
+    # a reference system in the x-y plane turned into the space x-z plane, the kit's orbit plane
+    s = kit.swapped(ob._pair())
+    assert s["positions"][1] == (1.0, 0.0, 0.0) and s["velocities"][1][1] == 0.0 and s["velocities"][1][2] != 0.0
+    assert kit.swap((1.0, 2.0, 3.0)) == (1.0, 3.0, 2.0)
+    # linear light of the engine's sRGB PNG and the tube seen through both walls
+    assert _close(float(kit.linear(255)), 1.0, 1e-12) and _close(float(kit.linear(0)), 0.0, 1e-12)
+    assert _close(float(kit.linear(188)), 0.5029, 1e-3)
+    assert kit.tube_opacity(0.0) == 0.0 and kit.tube_opacity(1.0) == 1.0 and _close(kit.tube_opacity(0.5), 0.75, 1e-12)
+
+
+def test_the_kit_geometry_follows_the_draft():
+    g = kit.geometry()
+    assert list(g) == kit.NAMES
+    c = g["orbit-ellipse"]
+    assert c["e"] == 0.3 and _close(c["rate"], ob.period(kit.MU, kit.A_M), 1e-9) and kit.A_M * kit.ORBIT_PPM == 100.0
+    h = g["orbit-hyperbola"]
+    assert h["e"] == 1.5 and h["a"] < 0.0 and 0.0 < h["pericentre_frame"] < kit.ORBIT_FRAMES
+    assert _close(math.hypot(*h["asymptote"]), 1.0, 1e-9) and h["rate"] > 0.0
+    assert _close(kit.hyperbola_time(kit.MU, -kit.HYPERBOLA_A_M, kit.HYPERBOLA_E, 0.0), 0.0, 1e-9)
+    assert kit.hyperbola_time(kit.MU, -kit.HYPERBOLA_A_M, kit.HYPERBOLA_E, -110.0) < 0.0
+    # OR3: the pair's frame interval is one step, the eight's 20 steps; the seek case's one step too
+    p = g["nbody-pair"]
+    assert ob.steps_to(p["rate"] / kit.FPS, p["step"]) == 1 and p["duration"] * kit.FPS > max(p["frames"])
+    assert p["frames"] == (0, 240, 480) and _close(p["rate"], ob.TWO_PI, 1e-12)
+    e = g["nbody-eight"]
+    assert ob.steps_to(e["rate"] / kit.FPS, e["step"]) == kit.EIGHT_STEPS_PER_FRAME and e["rate"] == ob.EIGHT_PERIOD
+    a = g["nbody-adaptive"]
+    assert a["tolerance"] == 1e-9 and _close(a["rate"], ob.period(1.0 + 1e-3, 1.0), 1e-12) and a["frames"] == (0, 12, 24)
+    pos, vel, masses = a["system"]["positions"], a["system"]["velocities"], a["system"]["masses"]
+    assert _close(math.dist(pos[0], pos[1]), 1.0 + kit.ADAPTIVE_E, 1e-12)              # apocentre at frame 0
+    assert _close(ob.add(ob.mul(pos[0], masses[0]), ob.mul(pos[1], masses[1])), ob.ZERO, 1e-12)   # barycentric
+    assert _close(ob.add(ob.mul(vel[0], masses[0]), ob.mul(vel[1], masses[1])), ob.ZERO, 1e-12)
+    t = g["trail"]
+    assert _close(t["length"] * 4.0, t["rate"], 1e-9) and t["samples"] == 16 and t["frames"] == (12,)
+    s = g["nbody-seek"]
+    assert ob.steps_to(s["rate"] / kit.FPS, s["step"]) == 1 and s["duration"] * kit.FPS > kit.SEEK_FRAMES
+    assert g["nbody-cluster"]["scale"] * kit.CLUSTER_PPM == 40.0 and g["nbody-cluster"]["seed"] == 42
+
+
+def test_the_kit_writes_the_cases_the_draft_names(draft, tmp_path):
+    assert _kit_rows(draft) == kit.NAMES
+    assert [k for keys in kit.DOCUMENTS.values() for k in keys] == list(kit.documents())
+    paths = kit.write(str(tmp_path))
+    assert len(paths) == 10
+    docs = {k: open(p, encoding="utf-8").read() for k, p in paths.items()}
+    for key, text in docs.items():
+        assert os.path.basename(paths[key]) == f"srep-0000-{key}.xml"
+        assert '<scene version="1.8">' in text and 'width="640" height="360" fps="24"' in text
+        assert '<camera id="cam" projection="orthographic" orthoHeight="360" x="0" y="0" z="-1000"/>' in text
+        assert '<space epoch="2451545.0" timeScale="tdb" rate=' in text and 'unlit="true"' in text
+        assert "<lights>" not in text and "<physics pixelsPerMeter=" in text
+    assert '<orbit around="centre" mu="1e+20" a="1000000000.0" e="0.3" i="90" anomaly="0"/>' in docs["orbit-ellipse"]
+    assert 'pixelsPerMeter="1e-07"' in docs["orbit-ellipse"] and '<object3D id="centre" primitive="sphere" radius="6"' in docs["orbit-ellipse"]
+    assert 'a="-500000000.0" e="1.5" i="90" anomaly="-110"' in docs["orbit-hyperbola"]
+    for i in ob.INTEGRATORS:
+        text = docs[f"nbody-pair-{i}"]
+        assert f'<nbody G="1" integrator="{i}" step=' in text and text.count("<member ") == 2
+        assert '<member ref="a" mass="1.0" x="0.0" y="0.0" z="0.0" vx="0.0" vy="0.0" vz="' in text
+        assert 'duration="21"' in text and 'pixelsPerMeter="100.0"' in text
+    assert 'integrator="ias15"' in docs["nbody-eight"] and docs["nbody-eight"].count("<member ") == 3
+    assert ('<nbody><cluster count="400" mass="2e+32" scale="1000000000000.0" seed="42" prefix="c" radius="1"/></nbody>'
+            in docs["nbody-cluster"]) and 'pixelsPerMeter="4e-11"' in docs["nbody-cluster"]
+    assert 'integrator="ias15" step=' in docs["nbody-adaptive"] and 'tolerance="1e-09"' in docs["nbody-adaptive"]
+    assert '<trail length=' in docs["trail"] and 'samples="16" width="3" color="#0000FFFF"/>' in docs["trail"]
+    assert 'integrator="leapfrog"' in docs["nbody-seek"] and 'duration="26"' in docs["nbody-seek"]
+    assert "<orbit" not in docs["nbody-seek"] and "<trail" not in docs["orbit-ellipse"] and "<nbody" not in docs["trail"]
+
+
+def test_the_kit_expectations_come_from_the_reference():
+    g, e = kit.geometry(), kit.expectations()
+    c = g["orbit-ellipse"]
+    orb = ob.orbit(c["mu"], c["a"], c["e"], kit.INCLINATION, 0.0, 0.0, 0.0, 0.0)
+    assert e["orbit-ellipse"]["body"][5] == kit.pixel(ob.orbit_state(orb, kit.frame_time(5, c["rate"]))[0], c["ppm"])
+    assert _close(e["orbit-ellipse"]["body"][0], (390.0, 180.0), 1e-6)         # pericentre: a (1 - e) = 70 px right
+    assert _close(e["orbit-ellipse"]["body"][12], (190.0, 180.0), 1e-6)        # apocentre half a period later
+    assert _close(e["orbit-ellipse"]["body"][24], e["orbit-ellipse"]["body"][0], 1e-6)
+    assert e["orbit-ellipse"]["body"][1][1] < 180.0                             # up the frame from pericentre
+    h = e["orbit-hyperbola"]
+    nearest = min(math.dist(p, (320.0, 180.0)) for p in h["body"].values())
+    assert len(h["body"]) == 25 and 25.0 <= nearest < 30.0                      # |a| (e - 1) = 25 px at pericentre
+    assert _close(math.hypot(*h["asymptote"]), 1.0, 1e-9) and h["asymptote"][0] < 0.0
+    assert h["body"][24][0] < 320.0 and h["body"][0][0] < 320.0                 # both legs leave to the left
+    assert h["body"][0][1] > 180.0 > h["body"][24][1]                         # in from below, out above the x axis
+    p = e["nbody-pair"]
+    for i in ob.INTEGRATORS:
+        assert _close(p[i][0], [(320.0, 180.0), (420.0, 180.0)], 1e-9)
+        assert [f for f in p[i]] == list(kit.PAIR_FRAMES)
+        assert p[i][480] == [kit.pixel(q, g["nbody-pair"]["ppm"]) for q in
+                             ob.integrate(g["nbody-pair"]["system"], i, g["nbody-pair"]["step"],
+                                          kit.frame_time(480, g["nbody-pair"]["rate"]))["positions"]]
+    assert max(math.dist(a, b) for a, b in zip(p["ias15"][480], p["wisdomHolman"][480])) < 0.05
+    eight = e["nbody-eight"]
+    assert len(eight[0]) == 3 and max(math.dist(a, b) for a, b in zip(eight[0], eight[24])) < 0.05
+    k = e["nbody-cluster"]["bodies"]
+    assert len(k) == 400 and k[3] == kit.pixel(ob.plummer(42, 400, 2e32, 1e12)["positions"][3], kit.CLUSTER_PPM)
+    mean = (sum(q[0] for q in k) / 400.0, sum(q[1] for q in k) / 400.0)
+    assert _close(mean, (320.0, 180.0), 1e-6)                                   # recentred
+    a = e["nbody-adaptive"]
+    assert _close(math.dist(*a[0]), 190.0, 1e-6) and _close(math.dist(*a[12]), 10.0, 1e-3)
+    assert max(math.dist(x, y) for x, y in zip(a[0], a[24])) < 1e-3
+    t = e["trail"]
+    assert len(t["samples"]) == 16 and t["samples"][-1] == e["orbit-ellipse"]["body"][12]
+    assert _close(t["alphas"], [kk / 15.0 for kk in range(16)], 1e-12)
+    assert e["nbody-seek"] == {}
+
+
+# ---------------------------------------------------------------- synthetic frames: the bodies painted where expected
+
+def _srgb8(value):
+    c = 12.92 * value if value <= 0.0031308 else 1.055 * value ** (1.0 / 2.4) - 0.055
+    return int(round(c * 255.0))
+
+
+def _paint(frame, discs):
+    """Discs of pure colours (colour -> [(point, radius)]) onto an RGB frame."""
+    for colour, items in discs.items():
+        for at, radius in items:
+            mask = kit.paint_discs([at], radius) > 0.0
+            frame[mask] = 0
+            if colour == "white":
+                frame[mask] = 255
+            else:
+                frame[mask, kit.CHANNEL[colour]] = 255
+    return frame
+
+
+@pytest.fixture(scope="module")
+def synthetic():
+    exp, g = kit.expectations(), kit.geometry()
+    rc, rb, rs = kit.RADIUS["centre"], kit.RADIUS["body"], kit.RADIUS["small"]
+    centre = kit.pixel(ob.ZERO, 1.0)
+
+    def blank():
+        return np.zeros((kit.H, kit.W, 3), dtype=np.uint8)
+
+    frames = {}
+    for name in ("orbit-ellipse", "orbit-hyperbola"):
+        for f, at in exp[name]["body"].items():
+            frames[f"{name}@{f}"] = _paint(blank(), {"red": [(centre, rc)], "green": [(at, rb)]})
+    for i in ob.INTEGRATORS:
+        for f, (a, b) in exp["nbody-pair"][i].items():
+            frames[f"nbody-pair-{i}@{f}"] = _paint(blank(), {"red": [(a, rc)], "green": [(b, rb)]})
+    for f, pts in exp["nbody-eight"].items():
+        frames[f"nbody-eight@{f}"] = _paint(blank(), {c: [(p, rb)] for c, p in zip(("red", "green", "blue"), pts)})
+    frames["nbody-cluster@0"] = _paint(blank(), {"white": [(p, kit.CLUSTER["radius"]) for p in exp["nbody-cluster"]["bodies"]]})
+    for f, (a, b) in exp["nbody-adaptive"].items():
+        frames[f"nbody-adaptive@{f}"] = _paint(blank(), {"red": [(a, rb)], "green": [(b, rs)]})
+    trail = blank()
+    for at, alpha in zip(exp["trail"]["samples"][:-1], exp["trail"]["alphas"][:-1]):
+        mask = kit.paint_discs([at], kit.TRAIL_WIDTH / 2.0) > 0.0
+        trail[mask, 2] = _srgb8(kit.tube_opacity(alpha))
+    frames[f"trail@{kit.TRAIL_FRAME}"] = _paint(trail, {"red": [(centre, rc)], "green": [(exp["trail"]["samples"][-1], rb)]})
+    seek = blank()
+    seek[100:200, 300:400] = 200
+    frames["seek-alone"], frames["seek-played"] = seek, seek.copy()
+    return exp, g, frames
+
+
+def test_the_kit_measures_each_case(synthetic):
+    exp, g, frames = synthetic
+    for name in kit.NAMES:
+        r = kit.measure(name, frames, exp)
+        assert r["pass"], (name, r)
+    ellipse = kit.measure("orbit-ellipse", frames, exp)
+    assert ellipse["frames"] == 25 and ellipse["worst_off_px"] <= 0.2 and ellipse["closure_px"] <= 0.2
+    hyper = kit.measure("orbit-hyperbola", frames, exp)
+    assert hyper["frames"] >= 20 and hyper["chord_off_deg"] <= 0.2 and hyper["chord_to_asymptote_deg"] < 3.0
+    assert hyper["chord_frames"][0] > exp["orbit-hyperbola"]["pericentre_frame"]
+    pair = kit.measure("nbody-pair", frames, exp)
+    assert all(f in pair[i] for i in ob.INTEGRATORS for f in kit.PAIR_FRAMES) and pair["worst_off_px"] <= 0.2
+    eight = kit.measure("nbody-eight", frames, exp)
+    assert max(eight["return_px"]) <= 0.2 and eight["worst_off_px"] <= 0.2
+    cluster = kit.measure("nbody-cluster", frames, exp)
+    assert cluster["in_frame"] >= 380 and cluster["isolated"] >= 50 and cluster["body_3"].startswith("isolated")
+    assert cluster["centroid_off_px"] <= 0.5 and cluster["worst_off_px"] <= 0.6
+    adaptive = kit.measure("nbody-adaptive", frames, exp)
+    assert _close(adaptive["pericentre"], adaptive["expected_pericentre"], 0.2)
+    trail = kit.measure("trail", frames, exp)
+    assert trail["oldest"] == 0.0 and trail["newest"] >= 0.99 and trail["monotone"] and trail["read_samples"] == sum(1 for a in exp["trail"]["alphas"][:-1] if a >= 0.2)
+    assert trail["worst_level_off"] <= 0.01 and trail["worst_off_px"] <= 0.5     # the 1.5 px window's read bias on a 1.5 px tube
+    with pytest.raises(ValueError):
+        kit.measure("nbody-moons", frames, exp)
+
+
+def test_the_kit_fails_a_wrong_frame(synthetic):
+    exp, g, frames = synthetic
+
+    def shifted(key, dx):
+        bad = dict(frames)
+        bad[key] = np.roll(frames[key], dx, axis=1)
+        return bad
+
+    assert not kit.measure("orbit-ellipse", shifted("orbit-ellipse@6", 2), exp)["pass"]
+    assert not kit.measure("orbit-hyperbola", shifted("orbit-hyperbola@22", 3), exp)["pass"]
+    assert not kit.measure("nbody-pair", shifted("nbody-pair-ias15@480", 2), exp)["pass"]
+    assert not kit.measure("nbody-eight", shifted("nbody-eight@24", 2), exp)["pass"]
+    assert not kit.measure("nbody-cluster", shifted("nbody-cluster@0", 2), exp)["pass"]
+    assert not kit.measure("nbody-adaptive", shifted("nbody-adaptive@12", 2), exp)["pass"]
+    assert not kit.measure("trail", shifted(f"trail@{kit.TRAIL_FRAME}", 2), exp)["pass"]
+    # a trail that does not fade
+    flat = frames[f"trail@{kit.TRAIL_FRAME}"].copy()
+    blue = flat[..., 2]
+    blue[blue > 0] = 255
+    bad = dict(frames)
+    bad[f"trail@{kit.TRAIL_FRAME}"] = flat
+    assert not kit.measure("trail", bad, exp)["pass"]
+    # a hyperbola whose outgoing leg is straight but turned: the chord misses the expected direction
+    turned = dict(frames)
+    for f in range(18, 25):
+        turned[f"orbit-hyperbola@{f}"] = np.roll(frames[f"orbit-hyperbola@{f}"], (f - 17) * 1, axis=0)
+    assert not kit.measure("orbit-hyperbola", turned, exp)["pass"]
+    bad = dict(frames)
+    bad["seek-played"] = frames["seek-alone"].copy()
+    bad["seek-played"][150, 350] = 0
+    assert not kit.measure("nbody-seek", bad, exp)["pass"]
+
+
+def _fake_engine(frames, refuse=()):
+    class Result:
+        def __init__(self, code, err=""):
+            self.returncode, self.stderr, self.stdout = code, err, ""
+
+    def exec(cmd, capture_output, text):
+        assert cmd[1] == "render"
+        key = os.path.basename(cmd[2])[len("srep-0000-"):-len(".xml")]
+        if key in refuse:
+            return Result(1, f"error: OR3 {key} refused\n")
+        target = cmd[cmd.index("-o") + 1]
+        if "-f" in cmd:
+            frame = int(cmd[cmd.index("-f") + 1])
+            Image.fromarray(frames["seek-alone" if key == "nbody-seek" else f"{key}@{frame}"], "RGB").save(target)
+        else:
+            first, last = (int(v) for v in cmd[cmd.index("--frames") + 1].split("..="))
+            if key == "nbody-seek":
+                assert (first, last) == (0, kit.SEEK_FRAMES)
+                Image.fromarray(frames["seek-played"], "RGB").save(target % last)
+            else:
+                for f in range(first, last + 1):
+                    Image.fromarray(frames[f"{key}@{f}"], "RGB").save(target % f)
+        return Result(0)
+
+    return exec
+
+
+def test_the_kit_plans_sequences_for_the_orbits_and_single_frames_otherwise():
+    plan = kit.plan()
+    assert list(plan) == kit.NAMES
+    assert plan["orbit-ellipse"] == [("orbit-ellipse", tuple(range(25)), True)]
+    assert plan["nbody-pair"] == [(f"nbody-pair-{i}", (0, 240, 480), False) for i in ob.INTEGRATORS]
+    assert plan["nbody-seek"] == [("nbody-seek", (600,), False)] and plan["trail"] == [("trail", (12,), False)]
+
+
+def test_the_kit_runs_an_engine_and_reports_every_case(synthetic, tmp_path):
+    exp, g, frames = synthetic
+    report = kit.run("scene-render", str(tmp_path / "kit"), exec=_fake_engine(frames))
+    assert list(report) == kit.NAMES and all(r["pass"] for r in report.values()), report
+    assert os.path.exists(tmp_path / "kit" / "srep-0000-nbody-pair-ias15.xml")
+    lines = kit.table(report).splitlines()
+    assert lines[0] == "| Case | Measured | Pass |" and len(lines) == 2 + len(kit.NAMES)
+    assert all(line.endswith("| yes |") for line in lines[2:])
+    report = kit.run("scene-render", str(tmp_path / "kit2"),
+                     exec=_fake_engine(frames, refuse=("nbody-pair-wisdomHolman", "nbody-seek")),
+                     only=["orbit-ellipse", "nbody-pair", "nbody-seek"])
+    assert list(report) == ["orbit-ellipse", "nbody-pair", "nbody-seek"]
+    assert report["orbit-ellipse"]["pass"] and not report["nbody-pair"]["pass"] and not report["nbody-seek"]["pass"]
+    assert report["nbody-pair"]["error"] == "nbody-pair-wisdomHolman: error: OR3 nbody-pair-wisdomHolman refused"
+    assert report["nbody-seek"]["error"] == "nbody-seek: error: OR3 nbody-seek refused"
+    assert "| nbody-seek | error nbody-seek: error: OR3 nbody-seek refused | no |" in kit.table(report)
+
+
+def test_the_draft_describes_the_kit(draft):
+    for phrase in ("`conformance/tools/orbits_kit.py`", "`srep-<n>-orbit-ellipse.xml`", "seen by an orthographic camera",
+                   "(W / 2 + x, H / 2 + y)", "one scene unit is one pixel", "one pure colour", "centroid", "sRGB",
+                   "1 − (1 − α)²", "24 steps per orbit", "480 steps per period", "chord", "isolated",
+                   "frame 600 rendered alone", "`member_trail`", "eight segments", "scene units, default 2",
+                   "`radius` (`positiveDecimal`, scene units, default 2", "`approximate_relative`", "±60 s",
+                   "its centre's place at that time plus", "the engine integrates from the epoch"):
+        assert phrase in draft, phrase
+    assert "pixels, default 2" not in draft and "facing the camera" not in draft and "at 20 steps per orbit for 20 orbits" not in draft
+
+
+KIT_ROW = re.compile(r"^\| `srep-<n>-" + CASE + r"\.xml` \| (?:[^|]|\\\|)* \| ([^|]*) \|$")
+ENGINE_COMMIT = "105c036"
+
+
+def test_the_draft_records_every_kit_case_measured(draft):
+    rows = {m.group(1): m.group(2) for m in (KIT_ROW.match(line) for line in draft.splitlines()) if m}
+    assert sorted(rows) == sorted(kit.NAMES)
+    prefix = f"measured on scene-render feat/sr-67-fields {ENGINE_COMMIT} (0.8.0, llvmpipe): "
+    for name, status in rows.items():
+        assert status.startswith(prefix) and status.endswith("; pass"), (name, status)
+    assert "to be measured" not in draft
+
+
+def test_the_draft_records_the_engine_state(draft):
+    row = next(line for line in draft.splitlines() if line.startswith("| Rust (`rs-scene-render`), reference |"))
+    done, remaining = row.split(" | ")[1:3]
+    assert done.startswith(f"feat/sr-67-fields {ENGINE_COMMIT}") and "SR-90" in row
+    assert remaining.startswith("none; the eight kit cases pass with the values below")

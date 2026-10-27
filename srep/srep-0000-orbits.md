@@ -65,16 +65,18 @@ files are not changed by this draft.
   - `member`, one or more: `ref` (`xs:IDREF`, required: an `object3D`), `mass` (`positiveDecimal`, kg,
     required unless `body` gives it), `x`, `y`, `z`, `vx`, `vy`, `vz` (`xs:double`, metres and metres per
     second in the space frame at the space epoch, default 0), or `body` (`xs:int`, a NAIF id: the mass is
-    GM / G from rule 1's table and the state is the ephemeris state at the epoch, the time-frames draft's
-    `state`).
+    GM / G from rule 1's table and the state is the ephemeris state at the epoch in the space frame, the
+    time-frames draft's `state`, or without an SPK file `approximate_relative`'s position with its velocity
+    as the position difference over ±60 s).
   - `cluster`, zero or more: `count` (`xs:positiveInteger`, 2 to 4096), `mass` (`positiveDecimal`, kg, the
     total), `scale` (`positiveDecimal`, metres, the Plummer radius), `seed` (`xs:long`, default 0), `x`, `y`,
     `z`, `vx`, `vy`, `vz` (the cluster's centre and drift), `prefix` (`xs:string`: the bodies are drawn as
-    spheres named `prefix` + index, with `radius` in scene units).
+    spheres named `prefix` + index), `radius` (`positiveDecimal`, scene units, default 2: the spheres'
+    radius).
 - `trail`, a new optional child element of `object3DType`, at most one: `length` (`positiveDecimal`, seconds
   of the space clock, required), `samples` (`xs:positiveInteger`, default 64, at least 2), `width`
-  (`positiveDecimal`, pixels, default 2), `color` (`colorType`, default the object's base colour), `fade`
-  (`xs:boolean`, default true).
+  (`positiveDecimal`, scene units, default 2: the tube's diameter, rule 5), `color` (`colorType`, default the
+  object's base colour), `fade` (`xs:boolean`, default true).
 - Schematron:
   - **OR1** an `orbit` has a gravitational parameter: `mu`, or `around` names an object that is a `member`
     with `mass` or has a `body` in rule 1's GM table (10, 199, 299, 399, 499, 599, 699, 799, 899, 301).
@@ -107,7 +109,9 @@ are degrees unless a rule says radians.
    draft; `orbit_mu(mass, body)` is G × mass or that GM.
 2. **The orbit element.** `orbit(mu, a, e, i, raan, argp, anomaly, epoch)` is the state at the epoch;
    `orbit_state(orbit, t)` propagates it to the time t of the space clock, forward or back, with no state
-   carried between frames. The Earth's circular 1 au orbit has a period of 365.257 days from `GM_SUN`; an
+   carried between frames; the object's position is its centre's place at that time plus the state's position
+   mapped by rule 6, so an orbit about a `member` or about another orbit's object moves with it. The Earth's
+   circular 1 au orbit has a period of 365.257 days from `GM_SUN`; an
    orbit of e 0.3 is at true anomaly 122.543° a quarter period after pericentre.
 3. **The system and the integrators.** `system(masses, positions, velocities, G, softening)` validates the
    members (positive masses, no two coincident without softening, at most `MAX_BODIES`); `accelerations`
@@ -150,14 +154,23 @@ are degrees unless a rule says radians.
    one's bodies up to the recentring shift. A cluster of 400 has virial ratio 2K / |W| = 0.975 and median
    radius 1.33 scale radii (the Plummer half-mass radius is 1.305).
 5. **Trails.** `trail_times(t, length, samples)` are the sample times evenly spaced over the last `length`
-   seconds and clamped at the epoch; the ribbon joins the object's positions at those times (rule 2's
-   `orbit_state` or rule 3's frames) with `trail_alpha(age, length, fade)` = 1 − age / length when fading,
-   drawn `width` pixels wide facing the camera.
+   seconds and clamped at the epoch; the ribbon joins the object's places at those times: an orbit's is its
+   centre's place at that time plus the state (rule 2), a member's is the system walked along the step grid
+   from the epoch then one step of the remainder to the sample time (`member_trail(system, integrator, step,
+   times)`; under `tolerance` the adaptive integration from the epoch to each time), any other object's is
+   its place at the frame. Each sample's alpha is `trail_alpha(age, length, fade)` = 1 − age / length when
+   fading. The ribbon is a tube of radius `width` / 2 in scene units with eight segments about the path,
+   unlit, blended and double-sided, in the trail's `color` or the object's base colour, the alpha varying
+   along it per vertex; seen through both of its walls a sample's apparent opacity is 1 − (1 − α)².
 6. **Frames, seek and the scene.** `frame_state(system, integrator, step, frame, fps, rate)` integrates from
    the space epoch over frame / fps × `rate` seconds, which OR3 makes a whole number of steps; the state at a
    frame is therefore a pure function of the document and the frame index and a frame rendered alone equals
-   the frame reached by playing (`seek_test`: 240 frames, 600 steps). The engine may cache the state of the
-   last frame and step from it, since the step sequence is the same. `scene_position(p, origin, pixelsPerMeter)`
+   the frame reached by playing (`seek_test`: 240 frames, 600 steps). With `tolerance` the state at a frame
+   is `integrate_adaptive` from the epoch to the frame's time and the engine integrates from the epoch at
+   every frame, so the frame is again a pure function of the document and the frame index (the step sequence
+   to a frame does not depend on the frames rendered before it). Without `tolerance` the engine may cache
+   the state of the last frame and step from it, since the step sequence is the same.
+   `scene_position(p, origin, pixelsPerMeter)`
    maps metres to scene units by the time-frames axes (scene (x, y, z) = space (x, −z, y) × `pixelsPerMeter`,
    SREP 4) about the space origin.
 
@@ -204,7 +217,7 @@ Every document at 1.7.1 keeps its meaning: the three elements are new. They are 
 
 | Engine | Status | Work | Tracking |
 |---|---|---|---|
-| Rust (`rs-scene-render`), reference | at 67a661a objects move by keys, the rigid-body solver or (the time-frames draft) the ephemeris; no Kepler propagation, no N-body integrator, no trails | parse the elements (OR1–OR5, V17); universal-variable propagation (rules 1–2); the system and the three integrators with the step rule and the adaptive IAS15 (rule 3); the Plummer cluster from the random streams (rule 4); trails (rule 5); the scene mapping and the seek check (rule 6) | [SR-90](https://faz-ai.atlassian.net/browse/SR-90) |
+| Rust (`rs-scene-render`), reference | feat/sr-67-fields 105c036 (SR-90, SR-90 reports; main 67a661a moved objects by keys, the rigid-body solver or the ephemeris, with no Kepler propagation, no N-body integrator and no trails): the elements parse (OR1–OR5, V17; the schema half at 6c4b61c), universal-variable propagation places an `orbit` at its centre's place plus the state (rules 1–2), the system with the three integrators, the step rule and the adaptive IAS15 under `tolerance` integrating from the epoch at every frame (rules 3 and 6), the Plummer cluster from the random streams drawn as spheres of `radius` (rule 4), trails as unlit, blended, double-sided tubes of eight segments with per-vertex alpha, a member's past place walked along the step grid plus one step of the remainder (rule 5; the GPU tube at f5d30c1), the scene mapping and the seek check (rule 6); the kit's eight cases measured on 105c036 below | none; the eight kit cases pass with the values below | [SR-90](https://faz-ai.atlassian.net/browse/SR-90) |
 
 ## Conformance
 
@@ -258,22 +271,29 @@ body of 10⁻⁴ at radius 2, `_eight()` is the figure eight, `EARTH_R` and `EAR
 | steps in 600 frames | `steps_to(600 / 24 * TWO_PI / 10.0, TWO_PI / 240.0)` | `600` |
 | scene position of (1e9, 2e9, 3e9) m at 1e-6 px/m | `scene_position((1e9, 2e9, 3e9), ZERO, 1e-6)` | `(1000, -3000, 2000)` |
 | seek check | `seek_test()` | `True` |
+| a member's trail: the secondary at t 0.25 under leapfrog step 0.1 (two steps and one of 0.05) | `member_trail(_pair(), 'leapfrog', 0.1, (0.0, 0.25))[1]['positions'][1]` | `(0.968901, 0.247628, 0)` |
 
 ### Kit cases
 
-The cases are described here and added to `conformance/srep_cases/` once the SREP has a number; they are
-measurable after SR-90 lands.
+The cases are described here and added to `conformance/srep_cases/` once the SREP has a number;
+`conformance/tools/orbits_kit.py` writes them (as `srep-0000-…`, `--write DIR`), renders them with an engine
+(`--engine BIN`) and measures every case against the reference. Every case is seen by an orthographic camera
+at the scene origin with `orthoHeight` equal to the frame's height, so one scene unit is one pixel and a
+point at scene (x, y) lands on pixel (W / 2 + x, H / 2 + y); the bodies are unlit spheres of one pure colour
+each, read as the centroid of the pixels lit in that channel alone; orbits and pairs lie in the space x–z
+plane (an inclination of 90°), which rule 6 maps to the frame's plane. Where the kit reads a level (the
+trail case) it decodes the engine's sRGB PNG to linear light.
 
 | Case | Checks | Status |
 |---|---|---|
-| `srep-<n>-orbit-ellipse.xml` | an `orbit` of e 0.3 about a fixed central object, 24 frames over one period: the object's pixel position within 0.5 pixel of `scene_position(orbit_state)` at every frame, and frame 24 equal to frame 0 | to be measured |
-| `srep-<n>-orbit-hyperbola.xml` | an `orbit` of e 1.5 (a negative): the object leaves the frame along `state_from_elements`' asymptote direction within 0.5° | to be measured |
-| `srep-<n>-nbody-pair.xml` | `_pair()` under each integrator at 20 steps per orbit for 20 orbits: the secondary's pixel position within 1 pixel of the reference's `integrate` at frames 0, 240 and 480 | to be measured |
-| `srep-<n>-nbody-eight.xml` | the figure eight under `ias15` over one period: the three bodies return to their start within 1 pixel | to be measured |
-| `srep-<n>-nbody-cluster.xml` | a `cluster` of 400 with `seed="42"`: the body at index 3 is where `plummer_sample` and the recentring put it, within 1 pixel, and the frame's centroid is the cluster's centre | to be measured |
-| `srep-<n>-nbody-adaptive.xml` | the eccentric pair of rule 3 with `tolerance="1e-9"`: the frame at pericentre within 1 pixel of `integrate_adaptive` | to be measured |
-| `srep-<n>-trail.xml` | a `trail` of 16 samples over a quarter period: the ribbon's vertices within 1 pixel of `orbit_trail`, its alpha at the oldest vertex 0 and at the newest 1 | to be measured |
-| `srep-<n>-nbody-seek.xml` | `_pair()` under `leapfrog` over 600 frames: frame 600 rendered alone equals the frame played from 0 (SREP 14) | to be measured |
+| `srep-<n>-orbit-ellipse.xml` | an `orbit` of e 0.3 about a fixed central object (a 100 px, `pixelsPerMeter` 1e-7), 24 frames over one period: the object's pixel position within 0.5 pixel of `scene_position(orbit_state)` at every frame, and frame 24 equal to frame 0 | measured on scene-render feat/sr-67-fields 105c036 (0.8.0, llvmpipe): the 25 frames within 0.16 px of the reference, frame 24 at (390, 180) like frame 0 (closure 0 px); pass |
+| `srep-<n>-orbit-hyperbola.xml` | an `orbit` of e 1.5 (a −50 px, true anomaly −110° at the epoch, 24 frames over the passage to 118°): the frames in the picture within 1 pixel of `orbit_state`, and the chord from the first to the last outgoing frame at least 120 px from the centre within 0.5° of the reference's chord (the asymptote itself is still 2° from that chord at this distance) | measured on scene-render feat/sr-67-fields 105c036 (0.8.0, llvmpipe): 23 frames in the picture within 0.195 px, the chord over frames 17–22 at −129.58° against the reference's −129.75° (0.17° off; the asymptote at −131.81°); pass |
+| `srep-<n>-nbody-pair.xml` | `_pair()` under each integrator at 24 steps per orbit (one per frame, OR3) for 20 orbits: both bodies' pixel positions within 1 pixel of the reference's `integrate` at frames 0, 240 and 480 | measured on scene-render feat/sr-67-fields 105c036 (0.8.0, llvmpipe): within 0.19 px at worst (leapfrog 0.19 px at frame 240 and 0.14 px at frame 480, wisdomHolman and ias15 0.15 px at frame 240 and 0.02 px at frame 480); pass |
+| `srep-<n>-nbody-eight.xml` | the figure eight under `ias15` at 480 steps per period (20 per frame) over one period: the three bodies return to their start within 1 pixel, and both frames within 1 pixel of `integrate` | measured on scene-render feat/sr-67-fields 105c036 (0.8.0, llvmpipe): the three bodies return to their start to 0.0 px, both frames within 0.169 px; pass |
+| `srep-<n>-nbody-cluster.xml` | a `cluster` of 400 with `seed="42"` (Plummer radius 40 px, `radius="1"`): every body in the picture with no neighbour within 6 px, the body at index 3 among them, within 1 pixel of where `plummer` (`plummer_sample` and the recentring) puts it, and the lit pixels' centroid within 1 pixel of the centroid of the expected discs | measured on scene-render feat/sr-67-fields 105c036 (0.8.0, llvmpipe): 391 bodies in the picture, 105 isolated, within 0.486 px at worst, the body at index 3 0.203 px off; the lit centroid (315.85, 177.43) against (315.9, 177.57), 0.145 px; 1,161 lit pixels; pass |
+| `srep-<n>-nbody-adaptive.xml` | the eccentric pair of rule 3 (e 0.9, barycentric, at apocentre; `tolerance="1e-9"`, the first step 1/240 of the period) over one period: both bodies within 1 pixel of `integrate_adaptive` at frames 0, 12 (pericentre) and 24 | measured on scene-render feat/sr-67-fields 105c036 (0.8.0, llvmpipe): within 0.19 px at worst, the secondary at pericentre (310.0, 180.0) against (310.01, 180.0); pass |
+| `srep-<n>-trail.xml` | a `trail` of 16 samples over a quarter period, `width="3"`, blue, read at frame 12: the ribbon's centroid within 1.5 px of each sample of `orbit_trail` whose alpha is at least 0.2, within 1 pixel of it; its level in linear light at every sample within 0.06 of 1 − (1 − α)² for `trail_alpha` (the tube seen through both walls), 0 at the oldest sample, 1 at the newest and never falling along the trail | measured on scene-render feat/sr-67-fields 105c036 (0.8.0, llvmpipe): 11 samples read within 0.402 px, the levels 0.04 at the oldest sample to 1.0 at the newest within 0.037 of the model and rising; pass |
+| `srep-<n>-nbody-seek.xml` | `_pair()` under `leapfrog` (a step of 1/240 of the orbit, `rate` a tenth of it) over 600 frames: frame 600 rendered alone equals the frame played from 0 (SREP 14) | measured on scene-render feat/sr-67-fields 105c036 (0.8.0, llvmpipe): frame 600 alone pixel-identical to frame 600 played from 0; pass |
 
 ## Open issues
 
@@ -284,13 +304,14 @@ measurable after SR-90 lands.
    perihelion advance is not reproduced.
 3. **Collisions and close encounters.** Two members that meet are not merged; the softening is the only
    regularisation, and `wisdomHolman` has none.
-4. **The adaptive step and the frame interval.** With `tolerance`, the step sequence depends on every frame
-   time landed on, so rendering at a different `fps` changes the rounding of the result (within the
-   tolerance); a fixed step is exact across frame rates.
+4. **The adaptive step's cost.** With `tolerance` every frame integrates from the epoch (rule 6), so the work
+   grows with the frame index; a frame at a different `fps` lands on a different last step and differs
+   within the tolerance; a fixed step is exact across frame rates and steps from the cached frame.
 5. **Hierarchical systems in Wisdom–Holman.** The Jacobi chain follows document order; a moon listed before
    its planet is treated as orbiting the Sun. An explicit hierarchy attribute may follow.
-6. **Trails of N-body members.** Rule 5 reads the positions at the sample times; for a member that means
-   integrating to each sample time, which the engine may cache along the frame sequence.
+6. **Trails of N-body members.** Rule 5's walk along the step grid with one step of the remainder is a
+   convention: a sample between grid times is reached by one step of another size, whose error differs from
+   the grid's; a trail whose samples fall on grid times has none.
 
 ## References
 
@@ -312,3 +333,13 @@ measurable after SR-90 lands.
 ## History
 
 - 2026-10-24: draft from SRC-47 (SP4 of SREP 12); engine card SR-90.
+- 2026-10-27: `conformance/tools/orbits_kit.py` with its tests; the eight cases measured on scene-render
+  feat/sr-67-fields 105c036 (SR-90): pass. Five readings of SR-90 accepted into the text: `cluster/@radius`
+  declared (scene units, default 2); a `body` member's state without an SPK file from `approximate_relative`
+  with its velocity differenced over ±60 s; under `tolerance` every frame integrates from the epoch (rule 6,
+  open issue 4); an orbit's place is its centre's place plus the state and a member's past place is the step
+  grid plus one step of the remainder (rules 2 and 5, `member_trail` in the reference with a table row, open
+  issue 6); `trail/@width` in scene units, the ribbon a tube of eight segments, unlit, blended and
+  double-sided (rule 5). The kit rows reworded to the kit's protocols: the pair at one step per frame (OR3 at
+  24 fps), the eight at 480 steps per period, the hyperbola read as a chord of its outgoing leg, the cluster
+  read on its isolated bodies and its centroid, the trail's levels in linear light against 1 − (1 − α)².

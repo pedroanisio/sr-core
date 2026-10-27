@@ -825,6 +825,21 @@ def orbit_trail(orb, t, length, count):
     return [orbit_state(orb, tk)[0] for tk in trail_times(t, length, count)]
 
 
+def member_trail(s, integrator, step, times):
+    """The system at each of `times` (ascending from the epoch): whole steps along the step grid, then one step
+    of the remainder to a time between two grid times; a member's trail reads its positions there (rule 5)."""
+    if not (step > 0.0) or any(t < 0.0 for t in times) or any(b < a for a, b in zip(times, times[1:])):
+        raise OrbitError("the step is positive and the times ascend from the epoch")
+    grid, steps, out = s, 0, []
+    for t in times:
+        whole = max(steps, int(math.floor(t / step + 1e-9)))
+        grid = integrate(grid, integrator, step, (whole - steps) * step)
+        steps = whole
+        rest = t - whole * step
+        out.append(integrate(grid, integrator, rest, rest) if rest > 1e-9 * step else grid)
+    return out
+
+
 def frame_state(s, integrator, step, frame, fps, rate):
     """The system at a frame: integrated from the epoch over frame / fps * rate seconds, a whole number of steps."""
     if not isinstance(frame, int) or frame < 0 or not (fps > 0) or not (rate >= 0.0):
@@ -919,6 +934,7 @@ TABLE = [
     ("steps in 600 frames", "steps_to(600 / 24 * TWO_PI / 10.0, TWO_PI / 240.0)", "600"),
     ("scene position of (1e9, 2e9, 3e9) m at 1e-6 px/m", "scene_position((1e9, 2e9, 3e9), ZERO, 1e-6)", "(1000, -3000, 2000)"),
     ("seek check", "seek_test()", "True"),
+    ("a member's trail: the secondary at t 0.25 under leapfrog step 0.1 (two steps and one of 0.05)", "member_trail(_pair(), 'leapfrog', 0.1, (0.0, 0.25))[1]['positions'][1]", '(0.968901, 0.247628, 0)'),
 ]
 
 
