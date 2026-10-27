@@ -308,11 +308,14 @@ def test_the_potential_sheet_and_embedding_points():
     assert _close(p, (4.0, -4.0, 0.0), 1e-12)
     p = rl.embedding_point("flamm", 4.0, math.pi / 2.0, 2.0)
     assert _close(p, (0.0, -4.0, 4.0), 1e-12)
+    # the potential sheet sags downward: z = -k / r is the height and scene y = -z = k / r points down
     p = rl.embedding_point("potential", 2.0, math.pi, 4.0)
-    assert _close(p, (-2.0, -2.0, 0.0), 1e-12)
+    assert _close(p, (-2.0, 2.0, 0.0), 1e-12)
+    assert rl.embedding_point("potential", 1.0, 0.0, 4.0)[1] > rl.embedding_point("potential", 4.0, 0.0, 4.0)[1] > 0.0
+    assert rl.embedding_point("flamm", 2.0, 0.0, 2.0)[1] == 0.0 > rl.embedding_point("flamm", 4.0, 0.0, 2.0)[1]
     with pytest.raises(rl.RelativityError):
         rl.embedding_point("rubber", 4.0, 0.0, 2.0)
-    grid = rl.embedding_grid("flamm", 2.0, 10.0, 4, 8, 16)
+    grid = rl.embedding_grid("flamm", 2.0, 10.0, 4, 8, 16, 2.0)
     assert len(grid["rings"]) == 4 and len(grid["spokes"]) == 8
     assert all(len(ring) == 16 for ring in grid["rings"])
     assert all(len(spoke) == 16 for spoke in grid["spokes"])
@@ -320,8 +323,16 @@ def test_the_potential_sheet_and_embedding_points():
     assert _close(grid["rings"][-1][0], rl.embedding_point("flamm", 10.0, 0.0, 2.0), 1e-12)
     assert _close(grid["spokes"][0][-1], rl.embedding_point("flamm", 10.0, 0.0, 2.0), 1e-12)
     assert _close(grid["spokes"][1][0], rl.embedding_point("flamm", 2.0, 2.0 * math.pi / 8.0, 2.0), 1e-12)
-    with pytest.raises(rl.RelativityError):
-        rl.embedding_grid("flamm", 2.0, 1.0, 4, 8, 16)
+    # the sheet keeps its own rs or k, whatever rMin is
+    wide = rl.embedding_grid("flamm", 4.0, 10.0, 2, 3, 2, 2.0)
+    assert _close(wide["rings"][0][0], rl.embedding_point("flamm", 4.0, 0.0, 2.0), 1e-12)
+    assert wide["rings"][0][0][1] == -4.0
+    well = rl.embedding_grid("potential", 1.0, 10.0, 2, 3, 2, 4.0)
+    assert _close(well["rings"][0][0], (1.0, 4.0, 0.0), 1e-12) and _close(well["spokes"][0][-1], (10.0, 0.4, 0.0), 1e-12)
+    for args in (("flamm", 2.0, 1.0, 4, 8, 16, 2.0), ("flamm", 1.0, 10.0, 4, 8, 16, 2.0),
+                 ("potential", 1.0, 10.0, 4, 8, 16, 0.0)):
+        with pytest.raises(rl.RelativityError):
+            rl.embedding_grid(*args)
 
 
 # ------------------------------------------------------------------------------------ gravitational-wave strain
@@ -407,6 +418,10 @@ def test_a_keyed_boost_moves_in_rapidity_and_seeks():
     assert _close(rl.compose_beta(mid, mid), 0.8, 1e-12)
     assert rl.frame_beta(480, 24.0, 0.0, 0.8, 0.0, 10.0) == rl.frame_beta(240, 24.0, 0.0, 0.8, 0.0, 10.0)
     assert rl.seek_test() is True
+    # the seek check holds the interval on both sides
+    assert rl.boost_keeps_interval(3.0, 5.0, 0.6) and rl.boost_keeps_interval(3.0, 5.0, 0.0)
+    assert not rl.boost_keeps_interval(3.0, 5.0, 0.6, want=16.0 + 1e-6)
+    assert not rl.boost_keeps_interval(3.0, 5.0, 0.6, want=16.0 - 1e-6)
     with pytest.raises(rl.RelativityError):
         rl.frame_beta(-1, 24.0, 0.0, 0.8, 0.0, 10.0)
     with pytest.raises(rl.RelativityError):
@@ -450,9 +465,11 @@ def test_validation_rd1_to_rd4():
         with pytest.raises(rl.RelativityError):
             rl.validate_embedding(*args)
     rl.validate_strain(0.2, 0.0, 2.0, None)
-    rl.validate_strain(0.2, 0.1, None, 28.0)
+    rl.validate_strain(0.2, 0.1, None, 28.0, 1.0)
+    rl.validate_strain(0.2, 0.0, 2.0, None, 1.0)
+    # RD4: exactly one of frequency and chirpMass, and chirpMass comes with merger
     for args in ((1.5, 0.0, 2.0, None), (0.0, -1.5, 2.0, None), (0.2, 0.0, 0.0, None), (0.2, 0.0, None, None),
-                 (0.2, 0.0, None, 0.0)):
+                 (0.2, 0.0, None, 0.0, 1.0), (0.2, 0.0, 2.0, 28.0, 1.0), (0.2, 0.0, None, 28.0)):
         with pytest.raises(rl.RelativityError):
             rl.validate_strain(*args)
 
@@ -531,3 +548,13 @@ def test_the_table_is_what_the_module_prints(draft, capsys):
     for line in printed:
         assert line in draft, line
     assert len(printed) == len(_draft_rows())
+
+
+def test_the_draft_records_the_engine_state(draft):
+    row = next(line for line in draft.splitlines() if line.startswith("| Rust (`rs-scene-render`), reference |"))
+    done, remaining = row.split(" | ")[1:3]
+    assert done.startswith("feat/sr-67-fields 011b842") and "`sr_3d::relativity`" in done and "SR-92" in row
+    assert "nothing of this SREP at 67a661a" not in done
+    assert remaining.startswith("parse the elements") and "the seek check (rule 5)" in remaining
+    assert "| embedding point of the potential sheet r 2, k 4 | `embedding_point('potential', 2, 0, 4)` | `(2, 2, 0)` |" in draft
+    assert "the sheet's y at `rMin` is k/`rMin`" in draft

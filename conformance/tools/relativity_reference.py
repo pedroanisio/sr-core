@@ -379,19 +379,23 @@ def embedding_point(kind, r, phi, scale):
     """The scene point of a sheet at (r, phi): (r cos phi, -z, r sin phi), z the sheet's height (the sheet sags)."""
     if kind not in EMBEDDINGS:
         raise RelativityError(f"unknown embedding {kind!r}")
-    z = flamm(r, scale) if kind == "flamm" else -potential(r, scale)
+    z = flamm(r, scale) if kind == "flamm" else potential(r, scale)
     return (r * math.cos(phi), -z, r * math.sin(phi))
 
 
-def embedding_grid(kind, r_min, r_max, rings, spokes, samples):
-    """Rings at r_min .. r_max and spokes from r_min to r_max, as point lists."""
+def embedding_grid(kind, r_min, r_max, rings, spokes, samples, scale):
+    """Rings at r_min .. r_max and spokes from r_min to r_max, as point lists; scale is the sheet's own
+    rs (flamm, r_min at least rs) or k (potential)."""
     if kind not in EMBEDDINGS:
         raise RelativityError(f"unknown embedding {kind!r}")
     if not (r_min > 0.0 and r_max > r_min):
         raise RelativityError("r_max must exceed a positive r_min")
     if rings < 1 or spokes < 3 or samples < 2:
         raise RelativityError("rings >= 1, spokes >= 3, samples >= 2")
-    scale = r_min if kind == "flamm" else r_min
+    if not scale > 0.0:
+        raise RelativityError("rs or k must be positive")
+    if kind == "flamm" and r_min < scale:
+        raise RelativityError("rMin must not be below rs")
     ring_list = []
     for i in range(rings):
         r = r_min + (r_max - r_min) * i / (rings - 1) if rings > 1 else r_min
@@ -494,6 +498,12 @@ def frame_beta(frame, fps, beta0, beta1, t0, t1):
     return beta_from_rapidity(phi)
 
 
+def boost_keeps_interval(x, t, beta, want=None, tol=1e-9):
+    """|interval(boost(x, t, beta)) - want| <= tol, want the interval of (x, t) unless given."""
+    target = interval(x, t) if want is None else want
+    return abs(interval(*boost(x, t, beta)) - target) <= tol
+
+
 def seek_test():
     """Composing the per-frame boost increments reproduces the direct frame boost at every frame."""
     fps, b0, b1, t0, t1 = 24.0, 0.0, 0.8, 0.0, 10.0
@@ -503,7 +513,7 @@ def seek_test():
         direct = frame_beta(frame, fps, b0, b1, t0, t1)
         if abs(direct - played) > 1e-12:
             return False
-        if interval(*boost(3.0, 5.0, direct)) - 16.0 > 1e-9:
+        if not boost_keeps_interval(3.0, 5.0, direct, want=16.0):
             return False
         played = compose_beta(played, step)
     return True
@@ -556,12 +566,15 @@ def validate_embedding(kind, r_min, r_max, rings, spokes):
         raise RelativityError("RD3: rings >= 1 and spokes >= 3")
 
 
-def validate_strain(hplus, hcross, frequency, chirp):
-    """RD4: |h+| and |hx| at most 1; a positive frequency or a positive chirp mass."""
+def validate_strain(hplus, hcross, frequency, chirp, merger=None):
+    """RD4: |h+| and |hx| at most 1; exactly one of a positive frequency and a positive chirp mass, and
+    chirpMass comes with merger."""
     if abs(hplus) > MAX_STRAIN or abs(hcross) > MAX_STRAIN:
         raise RelativityError("RD4: |hPlus| and |hCross| are at most 1")
-    if frequency is None and chirp is None:
-        raise RelativityError("RD4: a strain needs frequency or chirpMass")
+    if (frequency is None) == (chirp is None):
+        raise RelativityError("RD4: a strain has exactly one of frequency and chirpMass")
+    if chirp is not None and merger is None:
+        raise RelativityError("RD4: chirpMass comes with merger")
     if frequency is not None and not frequency > 0.0:
         raise RelativityError("RD4: frequency must be positive")
     if chirp is not None and not chirp > 0.0:
@@ -609,6 +622,7 @@ TABLE = (
     ("Flamm curvature at r 4, rs 2", "flamm_curvature(4, 2)", "-0.015625"),
     ("potential sheet at r 2, k 4", "potential(2, 4)", "-2"),
     ("embedding point r 4, phi 0", "embedding_point('flamm', 4, 0, 2)", "(4, -4, 0)"),
+    ("embedding point of the potential sheet r 2, k 4", "embedding_point('potential', 2, 0, 4)", "(2, 2, 0)"),
     ("strain of (1, 0) under h+ 0.2", "strain_displacement(1, 0, 0.2, 0)", "(0.1, 0)"),
     ("ring axes under h+ 0.2", "ring_axes(0.2, 0)", "(1.1, 0.9)"),
     ("cross polarisation on the diagonal", "math.hypot(*strain_point(2 ** -0.5, 2 ** -0.5, 0, 0.2, 1, 0, 0))", "1.1"),

@@ -202,7 +202,7 @@ the plots and space-transforms drafts for `axes` and modifier subdivision and on
 
 | Engine | Status | Work | Tracking |
 |---|---|---|---|
-| Rust (`rs-scene-render`), reference | nothing of this SREP at 67a661a; the building blocks exist: the `axes` box (plots draft, SR-63), `map` modifiers (space-transforms draft), `parametricSurface` (SREP 70), `blackHole` (SREP 76) | parse the elements (RD1–RD4, V17); the boost, cones, worldlines, rays and grid before the axes mapping (rule 1); the Penrose and Kruskal maps (rule 2); the embedding primitive as rings, spokes and an optional surface (rule 3); the strain modifier with the chirp (rule 4); rapidity keys and the seek check (rule 5) | [SR-92](https://faz-ai.atlassian.net/browse/SR-92) |
+| Rust (`rs-scene-render`), reference | feat/sr-67-fields 011b842 (SR-92 reports; main 67a661a had nothing of this SREP, with the building blocks the `axes` box (plots draft, SR-63), `map` modifiers (space-transforms draft), `parametricSurface` (SREP 70) and `blackHole` (SREP 76)): the kernel `sr_3d::relativity` matches every row of the numeric table; reading the reference, SR-92 found and this draft fixed four places where the reference differed from the text: the potential sheet's point was a hill (y = −k/r; now k/r, downward, a table row), `embedding_grid` took `rMin` for the sheet's r_s or k (now a parameter), `validate_strain` enforced neither of RD4's clauses on `frequency`, `chirpMass` and `merger` (now both), and the seek check's interval test lacked its absolute value (`boost_keeps_interval`) | parse the elements (RD1–RD4, V17); the boost, cones, worldlines, rays and grid before the axes mapping (rule 1); the Penrose and Kruskal maps (rule 2); the embedding primitive as rings, spokes and an optional surface (rule 3); the strain modifier with the chirp (rule 4); rapidity keys and the seek check (rule 5) | [SR-92](https://faz-ai.atlassian.net/browse/SR-92) |
 
 ## Conformance
 
@@ -253,6 +253,7 @@ and the box of the last row is 400 × 300 pixels at (100, 50) over x ∈ [−2, 
 | Flamm curvature at r 4, rs 2 | `flamm_curvature(4, 2)` | `-0.015625` |
 | potential sheet at r 2, k 4 | `potential(2, 4)` | `-2` |
 | embedding point r 4, phi 0 | `embedding_point('flamm', 4, 0, 2)` | `(4, -4, 0)` |
+| embedding point of the potential sheet r 2, k 4 | `embedding_point('potential', 2, 0, 4)` | `(2, 2, 0)` |
 | strain of (1, 0) under h+ 0.2 | `strain_displacement(1, 0, 0.2, 0)` | `(0.1, 0)` |
 | ring axes under h+ 0.2 | `ring_axes(0.2, 0)` | `(1.1, 0.9)` |
 | cross polarisation on the diagonal | `math.hypot(*strain_point(2 ** -0.5, 2 ** -0.5, 0, 0.2, 1, 0, 0))` | `1.1` |
@@ -278,7 +279,7 @@ measurable after SR-92 lands.
 | `srep-<n>-penrose-minkowski.xml` | `compact="minkowski"` with `grid`: every grid line lies inside the diamond and null rays are at 45° within 0.1° | to be measured |
 | `srep-<n>-penrose-schwarzschild.xml` | `compact="schwarzschild"` with a `blackHole` of mass 1: the horizon rays on the diagonals, the singularity on the line T = π/4 within 0.5 px | to be measured |
 | `srep-<n>-embedding-flamm.xml` | `primitive="embedding" kind="flamm"` with `rs="2" rMax="10"`: ring vertices within 0.5 px of `embedding_grid`'s, and the spoke's polyline length within 0.1 % of `proper_radial_distance(2, 10, 2)` | to be measured |
-| `srep-<n>-embedding-potential.xml` | `kind="potential"`: the sheet's depth at `rMin` is −k/`rMin` within 0.5 px | to be measured |
+| `srep-<n>-embedding-potential.xml` | `kind="potential"`: the sheet's y at `rMin` is k/`rMin` (its height z = −k/`rMin`, downward in scene y) within 0.5 px | to be measured |
 | `srep-<n>-strain-ring.xml` | a circle under `type="strain" hPlus="0.2"` at frequency 1 Hz: the outline at t = 0 is the ellipse 1.1 × 0.9, at t = 0.25 s a circle, at t = 0.5 s the ellipse 0.9 × 1.1, within 0.5 px | to be measured |
 | `srep-<n>-strain-chirp.xml` | `chirpMass="28" merger="1"`: the ring's phase at t = 0.8 s equals 2π `chirp_cycles(1, 0.2)` within 0.01 cycle | to be measured |
 | `srep-<n>-spacetime-seek.xml` | the boosted diagram over 240 frames: frame 240 rendered alone equals the frame played from 0 (SREP 14) | to be measured |
@@ -317,3 +318,7 @@ measurable after SR-92 lands.
 ## History
 
 - 2026-10-24: draft from SRC-49 (SP6 of SREP 12); engine card SR-92.
+- 2026-10-27: SR-92's kernel at 011b842 recorded; four reference findings from SR-92 reproduced and fixed
+  (the potential sheet's sign, `embedding_grid`'s scale, RD4's two clauses in `validate_strain`, the seek
+  check's absolute value), none changing a table value; one table row added for the potential sheet's
+  point; the potential kit case restated in scene y.
